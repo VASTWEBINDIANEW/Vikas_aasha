@@ -1,0 +1,871 @@
+/* NillCom (Switching) — OperatorIndex-style modern UI */
+
+/* Page toolbar — make the card grouping (breadcrumb + Add button) clearly visible
+   and keep the button reliably pinned to the right edge at every width */
+.NillCom_Page .vm-ft-page-toolbar {
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08) !important;
+    flex-wrap: nowrap !important;
+}
+
+.NillCom_Page .vm-ft-page-hero {
+    min-width: 0 !important;
+}
+
+.NillCom_Page .vm-ft-search-wrap {
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
+}
+
+.NillCom_Page .vm-ft-search-wrap .btn {
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28) !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease !important;
+}
+
+.NillCom_Page .vm-ft-search-wrap .btn:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.34) !important;
+    filter: brightness(1.03) !important;
+}
+
+.NillCom_Page .vm-ft-search-wrap .btn:active {
+    transform: translateY(0) !important;
+}
+
+@media (max-width: 480px) {
+    .NillCom_Page .vm-ft-page-toolbar {
+        flex-wrap: wrap !important;
+    }
+    .NillCom_Page .vm-ft-search-wrap {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    .NillCom_Page .vm-ft-search-wrap .btn {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+}
+
+/* Hide legacy headers (we use vm-ft toolbar) */
+.NillCom_Page .nill-legacy-header-wrap,
+.NillCom_Page .page-title-box-fourde-admin,
+.NillCom_Page .page-header-third.pageheader-margin-third.four-noneclass-admin-only {
+    display: none !important;
+}
+
+/* Page shell spacing (match OperatorIndex) */
+.NillCom_Page .vm-ft-page-shell {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+
+/* Two panel layout */
+.NillCom_Page .vm-ft-layout.vm-ft-layout--full {
+    gap: 14px !important;
+}
+
+.NillCom_Page .bkpfull {
+    margin-top: 12px !important;
+}
+
+/* Cards */
+.NillCom_Page .nill-left-card,
+.NillCom_Page .nill-right-card {
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06) !important;
+    overflow: hidden !important;
+}
+
+/* Fixed desktop height like OperatorIndex */
+@media (min-width: 992px) {
+    .NillCom_Page .nill-left-card,
+    .NillCom_Page .nill-right-card {
+        height: 600px !important;
+        min-height: 600px !important;
+        max-height: 600px !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+}
+
+/* Mobile/tablet: auto height */
+@media (max-width: 991px) {
+    .NillCom_Page .nill-left-card,
+    .NillCom_Page .nill-right-card {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+    }
+}
+
+/* Right card header (like OperatorIndex) */
+.NillCom_Page .nill-right-head {
+    padding: 14px 16px 10px !important;
+    margin: 0 !important;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.NillCom_Page .nill-right-head .vm-ft-history-toolbar__head {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+}
+
+.NillCom_Page .nill-right-head .vm-ft-history-toolbar__head > i {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 10px !important;
+    background: #eef2ff !important;
+    color: #4f46e5 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+.NillCom_Page .nill-right-head .vm-ft-history-toolbar__title {
+    font-weight: 800 !important;
+}
+
+/* Left tabs */
+.NillCom_Page .nill-tabs {
+    margin: 10px 12px 0 !important;
+    padding: 4px !important;
+    width: calc(100% - 24px) !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+}
+
+.NillCom_Page .nill-tabs > li {
+    list-style: none !important;
+    flex: 1 1 auto !important;
+    min-width: 120px !important;
+    border-radius: 10px !important;
+    border: 1px solid transparent !important;
+    padding: 0 !important;
+    font-size: 0.74rem !important;
+    font-weight: 800 !important;
+    color: #334155 !important;
+    text-align: center !important;
+    background: #ffffff !important;
+    cursor: pointer !important;
+    overflow: hidden !important;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease !important;
+}
+
+.NillCom_Page .nill-tabs > li:hover {
+    background: #eef2ff !important;
+    border-color: #c7d2fe !important;
+    color: #2563eb !important;
+    transform: translateY(-1px) !important;
+}
+
+.NillCom_Page .nill-tabs > li.active,
+.NillCom_Page .nill-tabs > li.current,
+.NillCom_Page .nill-tabs > li.active a,
+.NillCom_Page .nill-tabs > li.current a {
+    color: #fff !important;
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.NillCom_Page .nill-tabs > li.active,
+.NillCom_Page .nill-tabs > li.current {
+    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.28) !important;
+    transform: translateY(-1px) !important;
+}
+
+.NillCom_Page .nill-tabs > li.active:hover,
+.NillCom_Page .nill-tabs > li.current:hover {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+}
+
+.NillCom_Page .nill-tabs > li a {
+    color: inherit !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    padding: 9px 10px !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.NillCom_Page .nill-tabs > li a i {
+    font-size: 0.78rem !important;
+    opacity: 0.85 !important;
+}
+
+/* Left panel scrolling area */
+.NillCom_Page .nill-left-body {
+    padding: 10px 12px 14px !important;
+    overflow: auto !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+}
+
+.NillCom_Page .nill-left-card .custom-district1 {
+    position: relative !important;
+}
+
+/* Right panel tab contents */
+.NillCom_Page .nill-right-body {
+    padding: 10px 12px 14px !important;
+    overflow: hidden !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+}
+
+.NillCom_Page .tab-contentt {
+    display: none;
+}
+.NillCom_Page .tab-contentt.current {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    height: 100% !important;
+    min-height: 0 !important;
+}
+
+/* Search/toolbars inside right tabs */
+.NillCom_Page .nillsearch-data {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 10px !important;
+    margin: 0 !important;
+}
+
+.NillCom_Page .nillsearch-data .roww {
+    display: grid !important;
+    grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) 130px !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+}
+
+.NillCom_Page .nillsearch-data .roww > div {
+    min-width: 0 !important;
+}
+
+.NillCom_Page .nillsearch-data .select2-container {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.NillCom_Page .nillsearch-data .buttonsearch-second,
+.NillCom_Page .nillsearch-data .col-md-2.buttonsearch-second {
+    width: auto !important;
+}
+
+.NillCom_Page .nillsearch-data select.form-control,
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single,
+.NillCom_Page .nillsearch-data button {
+    min-height: 38px !important;
+    height: 38px !important;
+    border-radius: 10px !important;
+}
+
+.NillCom_Page .nillsearch-data .select2-container {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+/* Select2 text vertical alignment fix inside Nillsearch */
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single {
+    display: flex !important;
+    align-items: center !important;
+    background: #fff !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    min-height: 38px !important;
+    height: 38px !important;
+}
+
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: normal !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    padding-right: 24px !important;
+}
+
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    right: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+/* Icon lane for filter selects (like OperatorIndex) */
+.NillCom_Page .nillsearch-data .roww > div {
+    position: relative !important;
+}
+
+/* Select2 height fix in nillsearch */
+.NillCom_Page .nillsearch-data select.form-control,
+.NillCom_Page .nillsearch-data input.form-control {
+    background-color: #fff !important;
+    padding-left: 12px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    text-align: left !important;
+}
+
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single {
+    background: #fff !important;
+    border: 1px solid #dbe2ea !important;
+    box-shadow: none !important;
+    border-radius: 10px !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 12px !important;
+    line-height: normal !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    padding-right: 24px !important;
+    width: 100% !important;
+    text-align: left !important;
+}
+
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    right: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    right: 8px !important;
+}
+
+.NillCom_Page .nillsearch-data .select2-container--default.select2-container--open .select2-selection--single,
+.NillCom_Page .nillsearch-data .select2-container--default.select2-container--focus .select2-selection--single,
+.NillCom_Page .nillsearch-data select.form-control:focus,
+.NillCom_Page .nillsearch-data input.form-control:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+    outline: none !important;
+    background: #fff !important;
+}
+
+.NillCom_Page .nillsearch-data button.search-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    padding: 0 14px !important;
+    border: 1px solid #dbe2ea !important;
+    background: #fff !important;
+    font-weight: 800 !important;
+    font-size: 0.76rem !important;
+}
+
+.NillCom_Page .nillsearch-data .buttonsearch-second button.search-icon {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 0 14px !important;
+    border: none !important;
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.NillCom_Page .nillsearch-data .buttonsearch-second button.search-icon i {
+    color: #fff !important;
+    font-size: 15px !important;
+    top: auto !important;
+}
+
+/* Make sure container widths are full */
+.NillCom_Page .nill-left-card .select2-container,
+.NillCom_Page .nillsearch-data .select2-container {
+    width: 100% !important;
+}
+
+.NillCom_Page .nill-left-card .select2-container .select2-selection--single,
+.NillCom_Page .nillsearch-data .select2-container .select2-selection--single {
+    height: 38px !important;
+}
+
+/* Fix right card Search input default text padding */
+.NillCom_Page .select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #475569;
+}
+
+/* Fix form inputs spacing in left cards */
+.NillCom_Page .nill-left-card .Same-design-form form {
+    display: block !important;
+}
+
+.NillCom_Page .nill-left-card .Same-design-form .col-md-12 {
+    margin-bottom: 5px !important;
+}
+
+.NillCom_Page .nill-left-card .Same-design-form label {
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    color: #475569 !important;
+    margin-bottom: 2px !important;
+    display: inline-block;
+}
+
+.NillCom_Page .nill-left-card .Same-design-form .form-group-spacing {
+    margin-bottom: 5px !important;
+}
+.NillCom_Page .nill-left-card .Same-design-form .padd-left {
+    padding-left: 0 !important;
+    padding-right: 5px !important;
+    margin-bottom: 5px !important;
+}
+
+.NillCom_Page .nill-left-card .Same-design-form .padd-right {
+    padding-right: 0 !important;
+    padding-left: 5px !important;
+    margin-bottom: 5px !important;
+}
+
+/* Gateway / Port-API rows use inline margin-bottom:12px — tighten to match */
+.NillCom_Page .nill-left-card .Same-design-form .col-md-5[style*="margin-bottom"],
+.NillCom_Page .nill-left-card .Same-design-form .col-md-7[style*="margin-bottom"] {
+    margin-bottom: 5px !important;
+}
+
+.NillCom_Page .nill-left-card .Same-design-form .button-seconddesign {
+    margin-top: 4px !important;
+}
+
+@media (max-width: 767px) {
+    .NillCom_Page .nill-left-card .Same-design-form .col-md-12 {
+        margin-bottom: 6px !important;
+    }
+    .NillCom_Page .nill-left-card .Same-design-form .form-group-spacing {
+        margin-bottom: 6px !important;
+    }
+    .NillCom_Page .nill-left-card .Same-design-form .padd-left,
+    .NillCom_Page .nill-left-card .Same-design-form .padd-right {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-bottom: 6px !important;
+    }
+}
+
+.NillCom_Page .nill-left-card .select2-container--default .select2-selection--single,
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.NillCom_Page .nill-left-card .select2-container--default .select2-selection--single .select2-selection__rendered,
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: normal !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+.NillCom_Page .nill-left-card .custom-district1,
+.NillCom_Page .nill-left-card .col-md-12 > div {
+    position: relative !important;
+}
+
+.NillCom_Page .nill-left-card select.form-control,
+.NillCom_Page .nill-left-card input.form-control {
+    background: #fff !important;
+    padding-left: 12px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    min-height: 38px !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    text-align: left !important;
+}
+
+.NillCom_Page .nill-left-card .custom-district1 {
+    position: relative !important;
+}
+
+.NillCom_Page .nill-left-card .custom-district1::before {
+    content: '' !important;
+    position: absolute !important;
+    right: 12px !important;
+    top: 50% !important;
+    transform: translateY(-50%) rotate(45deg) !important;
+    width: 7px !important;
+    height: 7px !important;
+    border-right: 2px solid #94a3b8 !important;
+    border-bottom: 2px solid #94a3b8 !important;
+    pointer-events: none !important;
+    z-index: 3 !important;
+}
+
+.NillCom_Page .nill-left-card .custom-district1 select {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+}
+
+/* Left panel Select2 */
+.NillCom_Page .nill-left-card .select2-container--default .select2-selection--single {
+    background: #fff !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.NillCom_Page .nill-left-card .select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 12px !important;
+    line-height: normal !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    width: 100% !important;
+    text-align: left !important;
+}
+
+.NillCom_Page .nill-left-card .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    right: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+.NillCom_Page .nill-left-card .select2-container--default .select2-selection--single,
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single {
+    display: flex !important;
+    align-items: center !important;
+    border-radius: 10px !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    background: #fff !important;
+    border: 1px solid #dbe2ea !important;
+}
+
+.NillCom_Page .nill-left-card .select2-container--default .select2-selection--single .select2-selection__rendered,
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: normal !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    color: #444 !important;
+    text-align: left !important;
+}
+
+.NillCom_Page .nillsearch-data .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    right: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+/* Button layouts */
+.NillCom_Page .nill-left-card .button-seconddesign {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    margin-top: 6px !important;
+}
+
+.NillCom_Page .nill-left-card .button-seconddesign .pull-right {
+    float: none !important;
+}
+
+/* Table area scroll */
+.NillCom_Page .nill-table-wrap {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+.NillCom_Page .nill-table-wrap .table-responsive {
+    height: 100% !important;
+    overflow: auto !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+.NillCom_Page .nill-table-wrap .table-responsive > table {
+    width: 100% !important;
+    margin-bottom: 0 !important;
+}
+
+.NillCom_Page .nill-table-wrap table td,
+.NillCom_Page .nill-table-wrap table th {
+    white-space: nowrap;
+    vertical-align: middle !important;
+}
+
+/* ============================================================
+   Buttons — modern system (page + table)
+   ============================================================ */
+.NillCom_Page button,
+.NillCom_Page .btn,
+.NillCom_Page input[type="button"],
+.NillCom_Page input[type="submit"] {
+    border-radius: 10px !important;
+    min-height: 38px !important;
+    padding: 0 14px !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    box-shadow: none !important;
+    border: 1px solid #dbe2ea !important;
+    background: #fff !important;
+    color: #334155 !important;
+}
+
+.NillCom_Page button:focus,
+.NillCom_Page .btn:focus,
+.NillCom_Page input[type="button"]:focus,
+.NillCom_Page input[type="submit"]:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+    border-color: #2563eb !important;
+}
+
+/* Primary */
+.NillCom_Page .fullbodydycolorbg,
+.NillCom_Page .btn-first,
+.NillCom_Page .button-seconddesign .btn-first {
+    border: none !important;
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22) !important;
+}
+
+.NillCom_Page .fullbodydycolorbg:hover,
+.NillCom_Page .btn-first:hover {
+    filter: brightness(0.98);
+}
+
+/* Secondary */
+.NillCom_Page .btn-second,
+.NillCom_Page button[type="reset"] {
+    background: #fff !important;
+    border: 1px solid #dbe2ea !important;
+    color: #475569 !important;
+}
+
+/* Table action buttons */
+.NillCom_Page .nill-table-wrap .switch-edit-button,
+.NillCom_Page .nill-table-wrap .deletebuttoback-second {
+    min-height: 30px !important;
+    height: 30px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    border: 1px solid #dbe2ea !important;
+    background: #fff !important;
+    color: #334155 !important;
+}
+
+.NillCom_Page .nill-table-wrap .switch-edit-button:hover {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+}
+
+/* Toggle pills inside tables */
+.NillCom_Page .nill-table-wrap .custom-off,
+.NillCom_Page .nill-table-wrap .costom-on {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 58px !important;
+    min-height: 30px !important;
+    padding: 0 12px !important;
+    border-radius: 999px !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+}
+
+.NillCom_Page .nill-table-wrap .costom-on {
+    background: #ecfdf5 !important;
+    border: 1px solid #86efac !important;
+    color: #15803d !important;
+}
+
+.NillCom_Page .nill-table-wrap .custom-off {
+    background: #fef2f2 !important;
+    border: 1px solid #fecaca !important;
+    color: #b91c1c !important;
+}
+
+/* Fix huge delete icons/buttons inside tables */
+.NillCom_Page .nill-table-wrap button#DeleteBtn,
+.NillCom_Page .nill-table-wrap button.confirm,
+.NillCom_Page .nill-table-wrap .btnssl.special-iii {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid #fecaca !important;
+    background: #fef2f2 !important;
+    box-shadow: none !important;
+}
+
+.NillCom_Page .nill-table-wrap button#DeleteBtn img,
+.NillCom_Page .nill-table-wrap button.confirm img,
+.NillCom_Page .nill-table-wrap .btnssl.special-iii img {
+    width: 16px !important;
+    height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    margin: 0 !important;
+}
+
+.NillCom_Page .nill-table-wrap button#DeleteBtn:hover,
+.NillCom_Page .nill-table-wrap button.confirm:hover,
+.NillCom_Page .nill-table-wrap .btnssl.special-iii:hover {
+    background: #fee2e2 !important;
+    border-color: #f87171 !important;
+}
+
+.NillCom_Page .nill-table-wrap .table-responsive thead th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+}
+
+/* ============================================================
+   Inline "edit mode" inputs inside table rows (Min/Max/Commission)
+   ============================================================ */
+.NillCom_Page .nill-table-wrap table td {
+    padding: 10px 12px !important;
+}
+
+.NillCom_Page .nill-table-wrap table input.form-control,
+.NillCom_Page .nill-table-wrap table input[type="text"],
+.NillCom_Page .nill-table-wrap table input[type="number"] {
+    display: block !important;
+    width: 100% !important;
+    min-width: 70px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    margin: 0 !important;
+    padding: 0 10px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    color: #1e293b !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+    box-sizing: border-box !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+.NillCom_Page .nill-table-wrap table input.form-control:focus,
+.NillCom_Page .nill-table-wrap table input[type="text"]:focus,
+.NillCom_Page .nill-table-wrap table input[type="number"]:focus {
+    outline: none !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14) !important;
+}
+
+.NillCom_Page .nill-table-wrap table td.clsnotshowdata {
+    white-space: normal !important;
+}
+
+/* Hide the original select dropdown arrow if the browser still shows it */
+.NillCom_Page select {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+}
+/* Select2 padding adjustment for long texts */
+.NillCom_Page .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #444 !important;
+    text-align: left !important;
+    padding-right: 28px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Responsive search grid */
+@media (max-width: 991px) {
+    .NillCom_Page .nillsearch-data .roww {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    .NillCom_Page .nillsearch-data .roww > .buttonsearch-second {
+        grid-column: 1 / -1 !important;
+    }
+}
+
+/* Phones: stack search filters in a single column so Select2 text isn't clipped */
+@media (max-width: 575px) {
+    .NillCom_Page .nillsearch-data .roww {
+        grid-template-columns: 1fr !important;
+    }
+    .NillCom_Page .nillsearch-data .roww > div {
+        grid-column: 1 / -1 !important;
+    }
+
+    .NillCom_Page .nill-tabs > li {
+        min-width: 0 !important;
+        flex: 1 1 calc(50% - 6px) !important;
+        font-size: 0.68rem !important;
+    }
+    .NillCom_Page .nill-tabs > li a {
+        padding: 7px 8px !important;
+        gap: 4px !important;
+    }
+    .NillCom_Page .nill-tabs > li a i {
+        font-size: 0.7rem !important;
+    }
+}
+
+/* Table horizontal-scroll affordance on small screens */
+@media (max-width: 767px) {
+    .NillCom_Page .nill-table-wrap .table-responsive {
+        background:
+            linear-gradient(to right, #fff 30%, rgba(255,255,255,0)),
+            linear-gradient(to right, rgba(255,255,255,0), #fff 70%) 100% 0,
+            linear-gradient(to right, rgba(15,23,42,0.12), rgba(15,23,42,0)),
+            linear-gradient(to left, rgba(15,23,42,0.12), rgba(15,23,42,0)) 100% 0 !important;
+        background-repeat: no-repeat !important;
+        background-size: 24px 100%, 24px 100%, 8px 100%, 8px 100% !important;
+        background-attachment: local, local, scroll, scroll !important;
+    }
+
+    .NillCom_Page .nill-table-wrap table td,
+    .NillCom_Page .nill-table-wrap table th {
+        padding: 8px 10px !important;
+        font-size: 0.76rem !important;
+    }
+}
+

@@ -1,450 +1,366 @@
 @model IEnumerable<Vastwebmulti.Models.api_name>
+@using System.Linq
 @{
     ViewBag.Title = "Api_nm";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var apiRows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.api_name>();
+    var rowIndex = 0;
 }
-<style>
 
-   /* new css */
-    .rtyfrty {
-        margin-bottom: 5px;
-    }
-    .col-md-9.rtyfrtyclass-third {
-        padding: 0;
-    }
-   
-   /* new css */
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=28" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-operator-modern.css?v=19" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-api-operator-page saas-api-nm-page">
+    <div class="container-fluid vm-opr-page-shell">
 
-    .table-bordered tbody tr td{padding:5px 10px;}
-     .bread-same-all-page li{margin:6px 0px;}
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+            <div class="saas-acc-toolbar-top vm-api-operator-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-api-operator-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li><a href="@Url.Action("Dashboard", "Home")#setting">Basic Setting</a></li>
+                    <li>Set {Get} API</li>
+                </ol>
+                <div class="vm-dmt-fin-nav-row vm-api-operator-nav-wrap">
+                    @Html.Partial("_menuapinm")
+                </div>
+            </div>
 
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media screen and (max-width: 992px) {
-        .col-md-9.rtyfrtyclass-third {
-            width: 100%;
-            padding: 0;
-        }
-
-
-        .rtyfrty{width: 100%;float: left;}
-        .rtyfrty ul li {
-            width: 33%;
-            float: left;
-            margin-bottom: 10px;
-        }
-
-            .rtyfrty ul li a {
-                margin-bottom: 0;
-            }
-
-        .vacrivet {
-            width: 50%;
-            float: left;
-            padding: 0 4px !important;
-        }
-    }
-
-    @@media only screen and (max-width:767px){
-        .rtyfrty ul li {
-            width: 33.333%;
-            margin-bottom: 6px;
-            margin-right: 0px !important;
-        }
-
-    }
-
-    @@media only screen and (max-width:500px){
-
-        .rtyfrtyclass-third #custnav ul li {
-            width: 50% !important;
-        }
-        div#custnav ul li a {
-            font-size: 12px;
-        }
-
-    }
-
-
-</style>
-<section class="content">
-    <div class="container-fluid">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>API Setting</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">API Setting</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="page-header-third pageheader-second-third">
-            <div class="bread-same-all-page breadsameall-second">
-                <ul class="padding-top-thirdclass four-noneclass-admin-only" style="margin:0px;">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        <a href="@Url.Action("Dashboard", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                            Basic&nbsp;Setting
-                        </a>&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Set {Get} API
-                    </li>
-                </ul>
-
+            <div class="vm-rpt-filters-panel vm-api-operator-filter-panel vm-api-nm-actions-panel">
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-api-operator-filter-row vm-rpt-filters-panel__bar">
+                    <div class="vm-api-operator-filter-group vm-api-nm-actions-group">
+                        <button type="button" class="saas-acc-btn saas-acc-btn--search vm-api-nm-add-btn" data-toggle="modal" data-target="#apiNmAddModal" title="Add New API">
+                            <i class="fas fa-plus" aria-hidden="true"></i><span>Add New Api</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
-       
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card page-header-third">
-                    <div class="col-md-12 rtyfrty" style="padding: 0;">
-                        <div class="">
-                            <div class="col-md-9 rtyfrtyclass-third">
-                                <div style="">
-                                    @Html.Partial("_menuapinm")
-                                </div>
-
-                            </div>
-                            <div class="col-md-3" style="padding-right:0px;">
-                                <button type="button" class="btn waves-effect fullbodydycolorbg for-margin" style="float:right;border:none;color:#fff;" data-toggle="modal" data-target="#largeModal">
-                                    <i class="fa fa-plus" style="top:1px;font-size:16px;color:#fff;"></i>
-                                    <span style="color:#fff;">Add New Api</span>
-                                </button>
-                            </div>
-                        </div>
-
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-download" aria-hidden="true"></i>
+                        <span>GET API configuration</span>
                     </div>
-
-                    <div class="" style="width:100%;float:left;">
-                        <div class=" table-responsive tablefourdesign-admin" style="position:inherit;">
-                            <table class="table table-bordered table-striped example-second exampletable-second whitetable-second" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
+                    <label class="vm-api-operator-table-search" for="apiNmSearch">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="text" id="apiNmSearch" placeholder="Search API..." autocomplete="off" />
+                    </label>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="apiNmTable" class="table vm-opr-data-table vm-api-nm-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.No</th>
+                                    <th>API Name</th>
+                                    <th>API Url Details</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in apiRows)
+                                {
+                                    rowIndex++;
+                                    var copyInputId = "apiNmUrlCopy" + rowIndex;
                                     <tr>
-                                        <th>Sr.No</th>
-                                        <th>API Name</th>
-                                        <th style="width:72%;">API&nbsp;Url Details</th>
-
-                                        <th><center>Action</center></th>
+                                        <td>@rowIndex</td>
+                                        <td class="vm-api-nm-name-cell">@item.apiname</td>
+                                        <td class="vm-api-nm-url-cell">
+                                            <div class="vm-api-nm-url-wrap">
+                                                <span class="vm-api-nm-url-text" title="@(item.api_url ?? "")">@(item.api_url ?? "")</span>
+                                                <input type="hidden" id="@copyInputId" value="@(item.api_url ?? "")" />
+                                                <button type="button"
+                                                        class="vm-api-nm-copy-btn"
+                                                        data-copy-target="@copyInputId"
+                                                        data-copy-text="@Html.AttributeEncode(item.api_url ?? "")"
+                                                        title="Copy URL">
+                                                    <i class="fas fa-copy" aria-hidden="true"></i>
+                                                    <span>Copy</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="vm-api-nm-action-cell">
+                                            <div class="vm-api-nm-action-group">
+                                                <button type="button"
+                                                        class="vm-api-operator-edit-btn vm-api-nm-edit-btn"
+                                                        data-id="@item.idno"
+                                                        data-apiname="@(item.apiname ?? "")"
+                                                        data-apiurl="@Html.AttributeEncode(item.api_url ?? "")"
+                                                        data-viewbill="@Html.AttributeEncode(item.viewbill ?? "")"
+                                                        data-heavyrefresh="@Html.AttributeEncode(item.heavyRefresh ?? "")"
+                                                        data-status-url="@Html.AttributeEncode(item.status_url ?? "")"
+                                                        data-report-url="@Html.AttributeEncode(item.Report_url ?? "")"
+                                                        data-ipaddress="@Html.AttributeEncode(item.ipaddress ?? "")"
+                                                        data-toggle="modal"
+                                                        data-target="#apiNmEditModal">
+                                                    <i class="fas fa-edit" aria-hidden="true"></i> Edit
+                                                </button>
+                                                <button type="button" class="vm-api-nm-delete-btn" data-id="@item.idno" title="Delete API" aria-label="Delete API">
+                                                    <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="vm-api-nm-delete-confirm-btn" data-id="@item.idno" title="Confirm delete" aria-label="Confirm delete" style="display:none;">
+                                                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @{ int i = 1;}
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>@i</td>
-                                            <td>@item.apiname</td>
-
-                                            <td><input type="text" value="@item.api_url" id="@i" name="myInput" class="input-set-api" style="height:34px; border:1px dashed #9E9E9E ;width:92%;float:left;" readonly=""><button onclick="myFunction('@i')" class="btn  waves-effect" style="margin-top:0px;border-top-left-radius:0px;border-bottom-left-radius:0px;background:#dedddd;border:1px solid #c7c2c2; height:34px;color:black;">Copy</button></td>
-
-
-                                            <td>
-                                                <button id="but" onclick="animation('@item.idno', '@item.apiname', '@item.api_url', '@item.viewbill', '@item.heavyRefresh', '@item.status_url','@item.Report_url','@item.ipaddress')" style="background-color:transparent;color:#03a9f4; border:none;float:left;margin-right:1px;" data-toggle="modal" data-target="#defaultModal1">
-                                                    <p class="deletebuttoback-second" style="padding:1px 11px 1px 11px;border:1px solid #dddddd;color:black;height: 34px;margin:0px; line-height: 32px;">Edit</p>
-                                                </button>
-                                                <button type="button" class="first-button" style="background-color:transparent; border:none;">
-                                                    <p class="deletebuttoback-second" style="padding:1px 11px 1px 11px;border:1px solid #dddddd;color:black;height: 34px;margin:0px; line-height: 32px;">Delete</p>
-                                                </button>
-
-                                                <button class="second-button" type="button" style=" border:none;display:none;width:63px;" onclick="deletedata('@item.idno')">
-                                                    <p class="fullbodydycolorbg" style="padding:1px 11px 1px 11px;border:1px solid #dddddd;color:#fff;height: 34px;margin:0px; line-height: 32px;">Sure ?</p>
-                                                </button>
-
-                                            </td>
-
-                                        </tr>
-                                        i++;
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!--Add New  modal-->
-<div class="modal fade" id="largeModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Add New API</h4>
-            </div>
-            @using (Html.BeginForm("Api_nm", "Home", FormMethod.Post))
-            {
-                <div class="modal-body" style="margin-top:0px;padding-bottom:0px;">
-                    <div class="body">
-                        <label for="email_address">API Name</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("apinm", "", new { @placeholder = "Enter Api Name", @maxlength = "10", @required = "required", @class = "form-control", @style = "text-transform: uppercase;" })
-                            </div>
-                        </div>
-                        <label for="password">API Url</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("apiurl", "", new { @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp&mno=mmm&op=ooo&amt=aaa&refid=iii", @required = "required", @class = "form-control" })
-                            </div>
-                        </div>
-                        <label for="password">Check Balance Url</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("CheckbalUrl", "", new { @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp&mno=mmm&op=ooo&amt=aaa&refid=iii", @class = "form-control" })
-                            </div>
-                        </div>
-                        <label for="password">Complain Url</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("Report_url", "", new { @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp&mno=mmm&op=ooo&amt=aaa&refid=iii", @class = "form-control" })
-                            </div>
-                        </div>
-                        <label for="password">DTH Heavy Refresh</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("dthheavyrefresh", "", new { @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp&mno=mmm&op=ooo&amt=aaa&refid=iii", @class = "form-control" })
-                            </div>
-                        </div>
-                        <label for="password">Status Check Url</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("status_url", "", new { @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp&mno=mmm&op=ooo&amt=aaa&refid=iii", @class = "form-control" })
-                            </div>
-                        </div>
-                        <label for="password">Callback IP Address</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                <input class="form-control" type="text" id="ipaddress" name="ipaddress" placeholder="Enter IP Address(Optional)" title="Please Enter Valid IP Format" pattern="^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$">
-                            </div>
-                        </div>
 
+<!-- Add API Modal -->
+<div class="modal fade saas-admin-modal vm-sm-modal vm-api-operator-modal vm-api-nm-modal" id="apiNmAddModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered saas-admin-modal-dialog vm-sm-modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("Api_nm", "Home", FormMethod.Post, new { id = "apiNmAddForm" }))
+            {
+                <div class="modal-header saas-admin-modal-header accent-sky">
+                    <div class="saas-admin-modal-head-main">
+                        <div class="saas-admin-modal-icon"><i class="fas fa-plus" aria-hidden="true"></i></div>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Add New API</h4>
+                            <p class="saas-admin-modal-subtitle">Configure GET API endpoints and callback settings</p>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body">
+                    <div class="vm-sm-modal-panel vm-api-operator-form-grid">
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="addApinm">API Name</label>
+                            @Html.TextBox("apinm", "", new { id = "addApinm", @placeholder = "Enter Api Name", maxlength = "10", @required = "required", @class = "form-control", style = "text-transform: uppercase;" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="addApiurl">API Url</label>
+                            @Html.TextBox("apiurl", "", new { id = "addApiurl", @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp&mno=mmm&op=ooo&amt=aaa&refid=iii", @required = "required", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="addCheckbalUrl">Check Balance Url</label>
+                            @Html.TextBox("CheckbalUrl", "", new { id = "addCheckbalUrl", @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="addReportUrl">Complain Url</label>
+                            @Html.TextBox("Report_url", "", new { id = "addReportUrl", @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="addDthRefresh">DTH Heavy Refresh</label>
+                            @Html.TextBox("dthheavyrefresh", "", new { id = "addDthRefresh", @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="addStatusUrl">Status Check Url</label>
+                            @Html.TextBox("status_url", "", new { id = "addStatusUrl", @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="addIpaddress">Callback IP Address</label>
+                            <input class="form-control" type="text" id="ipaddress" name="ipaddress" placeholder="Enter IP Address (Optional)" title="Please Enter Valid IP Format" pattern="^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$" />
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer" style="padding-bottom:15px;padding-right: 25px;">
-                    <button type="button" class="btn bg-grey waves-effect" style=" margin-right: 12px;  height:32px;" data-dismiss="modal">
-                        <span style="color:black;">Close</span>
-                    </button>
-                    <button type="submit" class="btn  waves-effect fullbodydycolorbg" style=" height:32px;">
-                        <span style="top:-2px;color:#fff;">Save Change</span>
-                    </button>
 
+                <div class="modal-footer saas-admin-modal-footer vm-sm-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                        <i class="fas fa-times" aria-hidden="true"></i> Cancel
+                    </button>
+                    <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save Changes
+                    </button>
                 </div>
             }
         </div>
     </div>
 </div>
 
-<!--Edit M  modal-->
-<div class="modal fade" id="defaultModal1" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="margin: 0px;float: right;width:50%;">
+<!-- Edit API Modal -->
+<div class="modal fade saas-admin-modal vm-sm-modal vm-api-operator-modal vm-api-nm-modal" id="apiNmEditModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered saas-admin-modal-dialog vm-sm-modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Edit API Url </h4>
-            </div>
-            @using (Html.BeginForm("Editapi_nm", "Home", FormMethod.Post))
+            @using (Html.BeginForm("Editapi_nm", "Home", FormMethod.Post, new { id = "apiNmEditForm" }))
             {
-                <div class="modal-body" style="margin-top:0px;padding-bottom:0px;">
-                    <div class="body">
-                        <label for="email_address">API Name</label>
-                        <div class="form-group">
-                            @Html.TextBox("txtid", "", new { style = "display:none;" })
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("txtapiname", "", new { @placeholder = "Enter Api Name", @required = "required", @class = "form-control", @readonly = "readonly" })
-                            </div>
+                <div class="modal-header saas-admin-modal-header accent-emerald">
+                    <div class="saas-admin-modal-head-main">
+                        <div class="saas-admin-modal-icon"><i class="fas fa-edit" aria-hidden="true"></i></div>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Edit API Url</h4>
+                            <p class="saas-admin-modal-subtitle">Update GET API endpoints and callback settings</p>
                         </div>
-                        <label for="password">API Url</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("txtapiurl", "", new { @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp&mno=mmm&op=ooo&amt=aaa&refid=iii", @required = "required", @class = "form-control" })
-                            </div>
-                        </div>
-                        <label for="password">Check Balance Url</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("viewurledit", "", new { @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp&mno=mmm&op=ooo&amt=aaa&refid=iii", @class = "form-control" })
-                            </div>
-                        </div>  
-                        <label for="password">Complain Url</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("Report_url1", "", new { @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp&mno=mmm&op=ooo&amt=aaa&refid=iii", @class = "form-control" })
-                            </div>
-                        </div>
-                        <label for="password">DTH Heavy Refresh</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("viewdthheavyrefresh", "", new { @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp&mno=mmm&op=ooo&amt=aaa&refid=iii", @class = "form-control" })
-                            </div>
-                        </div>
-                        <label for="password">Status Check Url</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                @Html.TextBox("status_url_edit", "", new { @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp&mno=mmm&op=ooo&amt=aaa&refid=iii", @class = "form-control" })
-                            </div>
-                        </div>
-                        <label for="password">Callback IP Address</label>
-                        <div class="form-group">
-                            <div class="" style="border:1px solid #dddddd;">
-                                <input class="form-control" type="text" id="ipaddress_edit" name="ipaddress_edit" placeholder="Enter IP Address(Optional)" title="Please Enter Valid IP Format" pattern="^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$">
-                            </div>
-                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
 
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body">
+                    @Html.TextBox("txtid", "", new { id = "editTxtid", style = "display:none" })
+                    <div class="vm-sm-modal-panel vm-api-operator-form-grid">
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="txtapiname">API Name</label>
+                            @Html.TextBox("txtapiname", "", new { id = "txtapiname", @placeholder = "Enter Api Name", @required = "required", @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="txtapiurl">API Url</label>
+                            @Html.TextBox("txtapiurl", "", new { id = "txtapiurl", @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp", @required = "required", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="viewurledit">Check Balance Url</label>
+                            @Html.TextBox("viewurledit", "", new { id = "viewurledit", @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="Report_url1">Complain Url</label>
+                            @Html.TextBox("Report_url1", "", new { id = "Report_url1", @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="viewdthheavyrefresh">DTH Heavy Refresh</label>
+                            @Html.TextBox("viewdthheavyrefresh", "", new { id = "viewdthheavyrefresh", @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="status_url_edit">Status Check Url</label>
+                            @Html.TextBox("status_url_edit", "", new { id = "status_url_edit", @placeholder = "http://sitedomainname/pagename?uid=uuu&pass=ppp", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="ipaddress_edit">Callback IP Address</label>
+                            <input class="form-control" type="text" id="ipaddress_edit" name="ipaddress_edit" placeholder="Enter IP Address (Optional)" title="Please Enter Valid IP Format" pattern="^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$" />
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer" style="padding-bottom:15px;padding-right: 25px;">
-                    <button type="button" class="btn bg-grey waves-effect" style=" margin-right: 12px;  height:32px;" data-dismiss="modal">
-                        <span style="color:black;">Close</span>
-                    </button>
-                    <button type="submit" class="btn  waves-effect fullbodydycolorbg" style=" height:32px;">
-                        <span style="top:-2px;color:#fff;">Save Change</span>
-                    </button>
 
+                <div class="modal-footer saas-admin-modal-footer vm-sm-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                        <i class="fas fa-times" aria-hidden="true"></i> Cancel
+                    </button>
+                    <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save Changes
+                    </button>
                 </div>
             }
-
         </div>
     </div>
 </div>
 
-<!-- Jquery Core Js -->
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-
-<script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
 <script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
+<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="~/AdminDesign/js/demo.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<!--Insert Popuop-->
-<script>
-    window.onload = function () {
-        var message = '@TempData["add"]'
-        if (message != "" && message != null) {
-            swal("Good job!", message, "success");
-
-        }
-        //Edit Message
-        var editdata = '@TempData["edit"]'
-        if (editdata != null && editdata != "") {
-            swal("Good job!", editdata, "success");
-        }
-
-    }
-</script>
-
-
-<script type="text/javascript">
-    var val1 = "";
-    function animation(id, apiname, apiurl, viewbillurl, heavyrefresh, status_url, reporturl, ipaddress) {
- 
-        console.log([id, apiname, apiurl, viewbillurl, heavyrefresh, status_url, ipaddress]);
-        $("#txtid").val(id);
-        $("#txtapiname").val(apiname);
-        $("#txtapiurl").val(apiurl);
-        $("#viewurledit").val(viewbillurl);
-        $("#viewdthheavyrefresh").val(heavyrefresh);
-        $("#status_url_edit").val(status_url);
-        $("#ipaddress_edit").val(ipaddress);
-        $("#Report_url1").val(reporturl);
-    }
-</script>
-
-<!--View View Bill javascript-->
-<script type="text/javascript">
-    function showviewbilldata(id, viewbillurl) {
-        $("#txtviewbillurlid").val(id);
-        $("#txtviewbillurl1").val(viewbillurl);
-        }
-</script>
-<!--Delete-->
-<script type="text/javascript">
-
-    function deletedata(e) {
-
-
-    $.ajax({
-        type: "POST", url: '@Url.Action("Delte_API_From_info", "Home")', data: { idno: e }, dataType: 'json', cache: false, success: function (result) {
-            if (result == "Success") {
-                //swal("Deleted!", "API Url Deleted Successfully.", "success");
-                var url = '@Url.Action("Api_nm", "Home")';
-                window.location.href = url;
-            }
-            else {
-                //swal("Failed!", "Something went wrong.", "error");
-                var url = '@Url.Action("Api_nm", "Home")';
-                window.location.href = url;
-            }
-        }
-    });
-
-    }
-
-
-</script>
-<!--Copy Url javascript-->
-<script>
-    function myFunction(p) {
-        var copyText = document.getElementById(p);
-       copyText.select();
-     document.execCommand('copy');
-         }
-</script>
-
-<script>
-    $('.first-button').click(function () {
-        $(this).hide();
-        $(this).next('.second-button').show();
-    })
-</script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 
 <script>
     $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
+        var addMsg = '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(Convert.ToString(TempData["add"])))';
+        if (addMsg) {
+            swal('Good job!', addMsg, 'success');
+        }
 
+        var editMsg = '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(Convert.ToString(TempData["edit"])))';
+        if (editMsg) {
+            swal('Good job!', editMsg, 'success');
+        }
 
-            paging: false
+        $('#apiNmSearch').on('keyup', function () {
+            var q = $(this).val().toLowerCase();
+            $('#apiNmTable tbody tr').each(function () {
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(text.indexOf(q) > -1);
+            });
         });
     });
 
+    function openApiNmEdit($btn) {
+        $('#editTxtid').val($btn.attr('data-id') || '');
+        $('#txtapiname').val($btn.attr('data-apiname') || '');
+        $('#txtapiurl').val($btn.attr('data-apiurl') || '');
+        $('#viewurledit').val($btn.attr('data-viewbill') || '');
+        $('#viewdthheavyrefresh').val($btn.attr('data-heavyrefresh') || '');
+        $('#status_url_edit').val($btn.attr('data-status-url') || '');
+        $('#Report_url1').val($btn.attr('data-report-url') || '');
+        $('#ipaddress_edit').val($btn.attr('data-ipaddress') || '');
+    }
+
+    $(document).on('click', '.vm-api-nm-edit-btn', function () {
+        openApiNmEdit($(this));
+    });
+
+    $(document).on('click', '.vm-api-nm-copy-btn', function () {
+        var text = $(this).attr('data-copy-text') || '';
+        if (!text) {
+            var targetId = $(this).data('copy-target');
+            var $input = $('#' + targetId);
+            text = $input.val() || '';
+        }
+
+        if (!text) {
+            return;
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function () {
+                swal('Copied!', 'API URL copied to clipboard.', 'success');
+            }).catch(function () {
+                copyTextFallback(text);
+            });
+        } else {
+            copyTextFallback(text);
+        }
+    });
+
+    function copyTextFallback(text) {
+        var $temp = $('<textarea readonly></textarea>').val(text).css({
+            position: 'fixed',
+            left: '-9999px',
+            top: '0'
+        }).appendTo('body');
+        $temp[0].select();
+        try {
+            document.execCommand('copy');
+            swal('Copied!', 'API URL copied to clipboard.', 'success');
+        } catch (e) {
+            swal('Error', 'Unable to copy URL.', 'error');
+        }
+        $temp.remove();
+    }
+
+    $(document).on('click', '.vm-api-nm-delete-btn', function () {
+        $('.vm-api-nm-action-group').each(function () {
+            $(this).find('.vm-api-nm-delete-btn').show();
+            $(this).find('.vm-api-nm-delete-confirm-btn').hide().prop('disabled', false);
+        });
+
+        var $group = $(this).closest('.vm-api-nm-action-group');
+        $group.find('.vm-api-nm-delete-btn').hide();
+        $group.find('.vm-api-nm-delete-confirm-btn').show();
+    });
+
+    $(document).on('click', '.vm-api-nm-delete-confirm-btn', function () {
+        var id = $(this).data('id');
+        var $btn = $(this);
+        $btn.prop('disabled', true);
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Delte_API_From_info", "Home")',
+            data: { idno: id },
+            dataType: 'json',
+            cache: false,
+            success: function (result) {
+                window.location.href = '@Url.Action("Api_nm", "Home")';
+            },
+            error: function () {
+                $btn.prop('disabled', false);
+                swal('Error', 'Unable to delete API. Please try again.', 'error');
+            }
+        });
+    });
 </script>

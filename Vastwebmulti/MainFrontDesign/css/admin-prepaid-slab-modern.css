@@ -161,6 +161,10 @@ body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table tbody td:first-chil
     left: 0;
     z-index: 3;
     box-shadow: 2px 0 8px rgba(15, 23, 42, 0.06);
+    min-width: 140px;
+    max-width: 220px;
+    white-space: normal;
+    word-break: break-word;
 }
 
 body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead th:first-child {
@@ -657,10 +661,66 @@ body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter .slab-master-
 
 /* Modern commission table */
 body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table-scroll {
+    display: block;
+    width: calc(100% - 32px);
+    max-width: calc(100% - 32px);
+    margin: 12px 16px 16px;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
     border: 1px solid #e2e8f0 !important;
     border-radius: 14px !important;
     box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05) !important;
-    overflow: hidden;
+    background: #fff;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table-scroll::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table {
+    display: table !important;
+    width: max-content !important;
+    min-width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    table-layout: auto !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead {
+    display: table-header-group !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table tbody.vm-pg-slab-tbody--view,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table tbody.vm-pg-slab-tbody--edit {
+    display: table-row-group !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table tbody.vm-pg-slab-tbody--hidden {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table tr {
+    display: table-row !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table th,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table td {
+    display: table-cell !important;
+    box-sizing: border-box;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    min-width: 78px;
+    white-space: nowrap;
 }
 
 body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead th,
@@ -753,4 +813,348 @@ body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-edit-cell {
         flex: 1 1 100%;
         min-width: 100%;
     }
+}
+
+/* CMS slab pages (Airtel / Fino) — normal table with horizontal scroll */
+body.saas-admin-ui .saas-cms-slab-page .vm-pg-slab-table-scroll {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+}
+
+body.saas-admin-ui .saas-cms-slab-page .vm-pg-slab-table-scroll::after {
+    content: "Scroll table for all columns \2192";
+    display: block;
+    padding: 6px 10px 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #64748b;
+    text-align: center;
+    background: #f8fafc;
+    border-top: 1px solid #eef2f6;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-cms-slab-page .vm-pg-slab-table-scroll::after {
+        display: none;
+    }
+}
+
+body.saas-admin-ui .saas-cms-slab-page .vm-pg-slab-table {
+    width: max-content !important;
+    min-width: 100% !important;
+    max-width: none !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-cms-slab-page .vm-pg-slab-table thead th:first-child,
+body.saas-admin-ui .saas-cms-slab-page .vm-pg-slab-table tbody td:first-child {
+    position: static !important;
+    left: auto !important;
+    z-index: auto !important;
+    box-shadow: none !important;
+    min-width: 180px !important;
+    max-width: none !important;
+    width: auto !important;
+    white-space: normal !important;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-cms-slab-page .vm-pg-slab-table thead th:not(:first-child),
+body.saas-admin-ui .saas-cms-slab-page .vm-pg-slab-table tbody td:not(:first-child) {
+    min-width: 100px !important;
+    width: auto !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-cms-slab-page .vm-pg-slab-table th,
+body.saas-admin-ui .saas-cms-slab-page .vm-pg-slab-table td {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-cms-slab-page .vm-pg-slab-table input.vm-pg-slab-cell-input {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 72px !important;
+}
+
+/* Retailer charge slab pages (AEPS / Credit Card) */
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-retailer-charge-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 16px 12px;
+    padding: 12px;
+    border: 1px solid var(--prepaid-slab-border, #e2e8f0);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 1px 8px rgba(15, 23, 42, 0.04);
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-retailer-charge-filter {
+    flex: 1 1 420px;
+    min-width: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-retailer-charge-filter .vm-prepaid-user-filter__row {
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-retailer-charge-search-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 38px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+    color: #fff !important;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-retailer-charge-search-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-retailer-charge-card__head {
+    border-bottom: 1px solid #eef2f6;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-retailer-charge-actions {
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-pg-slab-table-scroll.vm-retailer-charge-table-wrap {
+    margin: 0 16px 16px;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-pg-slab-table thead th:first-child,
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-pg-slab-table tbody td:first-child {
+    position: static !important;
+    left: auto !important;
+    z-index: auto !important;
+    box-shadow: none !important;
+    min-width: 140px !important;
+    max-width: none !important;
+    white-space: normal !important;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-pg-slab-table tbody td {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-pg-slab-table tbody td.vm-retailer-charge-name {
+    text-align: left !important;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-charge-view {
+    display: inline-block;
+    min-width: 64px;
+    font-weight: 700;
+    color: #1e40af;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-charge-edit {
+    display: none;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page.is-edit-mode .vm-charge-view {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page.is-edit-mode .vm-charge-edit {
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-charge-edit .vm-pg-slab-cell-input,
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-charge-edit input.form-control {
+    width: 100% !important;
+    max-width: 120px;
+    min-height: 34px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-retailer-charge-empty {
+    padding: 28px 16px !important;
+    text-align: center;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-pg-slab-save-btn.is-visible {
+    display: inline-flex !important;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-pg-slab-btn-edit.is-hidden,
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-prepaid-slab-action-btn.is-hidden {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-retailer-charge-bulk-form {
+    display: grid;
+    gap: 12px;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-retailer-charge-bulk-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+body.saas-admin-ui .saas-retailer-charge-slab-page .vm-retailer-charge-bulk-form .form-control {
+    min-height: 40px;
+    border-radius: 10px;
+    border-color: #dbe2ea;
+}
+
+/* AEPS retailer slab page */
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-retailer-charge-filter .vm-prepaid-user-filter__item--select {
+    flex: 1 1 220px;
+    min-width: 180px;
+    max-width: 280px;
+}
+
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-retailer-charge-filter .vm-prepaid-user-filter__item:last-child {
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-pg-slab-card__head.vm-retailer-charge-card__head {
+    padding: 14px 16px 12px;
+}
+
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-pg-slab-table#aepsChargeTable {
+    min-width: 640px;
+}
+
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-pg-slab-table#aepsChargeTable thead th,
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-pg-slab-table#aepsChargeTable tbody td {
+    min-width: 120px;
+}
+
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-pg-slab-table#aepsChargeTable thead th:first-child,
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-pg-slab-table#aepsChargeTable tbody td:first-child {
+    min-width: 160px;
+}
+
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-retailer-charge-toolbar {
+    align-items: stretch;
+    gap: 10px;
+}
+
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-aeps-charge-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-aeps-filter-row {
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-aeps-filter-search {
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-aeps-retailer-slab-page .vm-pg-slab-body {
+    padding-top: 0;
+}
+
+body.saas-admin-ui .saas-aeps-retailer-slab-page.saas-cms-slab-page .vm-pg-slab-table-scroll.vm-retailer-charge-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Credit Card retailer / bill payment slab pages */
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-retailer-charge-filter .vm-prepaid-user-filter__item--select,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-retailer-charge-filter .vm-prepaid-user-filter__item--select {
+    flex: 1 1 220px;
+    min-width: 180px;
+    max-width: 280px;
+}
+
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-retailer-charge-filter .vm-cc-filter-search,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-retailer-charge-filter .vm-cc-filter-search {
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-pg-slab-card__head.vm-retailer-charge-card__head,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-pg-slab-card__head.vm-retailer-charge-card__head {
+    padding: 14px 16px 12px;
+}
+
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-pg-slab-table#creditCardRetailerTable,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-pg-slab-table#creditBillPaymentTable {
+    min-width: 360px;
+}
+
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-pg-slab-table#creditCardRetailerTable thead th,
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-pg-slab-table#creditCardRetailerTable tbody td,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-pg-slab-table#creditBillPaymentTable thead th,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-pg-slab-table#creditBillPaymentTable tbody td {
+    min-width: 120px;
+}
+
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-pg-slab-table#creditCardRetailerTable thead th:first-child,
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-pg-slab-table#creditCardRetailerTable tbody td:first-child,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-pg-slab-table#creditBillPaymentTable thead th:first-child,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-pg-slab-table#creditBillPaymentTable tbody td:first-child {
+    min-width: 160px;
+}
+
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-retailer-charge-toolbar,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-retailer-charge-toolbar {
+    align-items: stretch;
+    gap: 10px;
+}
+
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-cc-charge-actions,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-cc-charge-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-cc-filter-row,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-cc-filter-row {
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-cc-retailer-slab-page .vm-pg-slab-body,
+body.saas-admin-ui .saas-cc-billpayment-slab-page .vm-pg-slab-body {
+    padding-top: 0;
+}
+
+body.saas-admin-ui .saas-cc-retailer-slab-page.saas-cms-slab-page .vm-pg-slab-table-scroll.vm-retailer-charge-table-wrap,
+body.saas-admin-ui .saas-cc-billpayment-slab-page.saas-cms-slab-page .vm-pg-slab-table-scroll.vm-retailer-charge-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }

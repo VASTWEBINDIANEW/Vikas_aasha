@@ -1,40 +1,45 @@
+@model IEnumerable<Vastwebmulti.Areas.ADMIN.Models.ApiCallBack>
+@using System.Linq
+@{
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Areas.ADMIN.Models.ApiCallBack>();
+}
 
-
-
-<table id="simple-table" class="table  table-bordered table-hover">
+<table id="rechargeApiCallbackTable" class="table vm-opr-data-table vm-recharge-api-data-table" cellspacing="0">
     <thead>
         <tr>
-            <th>Api Name</th>
-            <th>Request Type</th>
-            <th>Body Type</th>
-            <th>Key Status</th>
-            <th>Val Status Success</th>
-            <th>Val Status Failed</th>
-            <th>Key Rch ID</th>
-            <th>Key message</th>
-            <th>Key Operator ID</th>
-            <th>Key Balance</th>
-            <th>#</th>
+            <th class="vm-recharge-api-th--name">API Name</th>
+            <th class="vm-recharge-api-th--type">Request Type</th>
+            <th class="vm-recharge-api-th--req">Body Type</th>
+            <th class="vm-recharge-api-th--key">Key Status</th>
+            <th class="vm-recharge-api-th--val">Val Status Success</th>
+            <th class="vm-recharge-api-th--val">Val Status Failed</th>
+            <th class="vm-recharge-api-th--key">Key Rch ID</th>
+            <th class="vm-recharge-api-th--key">Key Message</th>
+            <th class="vm-recharge-api-th--key">Key Operator ID</th>
+            <th class="vm-recharge-api-th--key">Key Balance</th>
+            <th class="vm-recharge-api-th--action">Action</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in rows)
         {
-            <tr>
-                <td>@item.apiname</td>
-                <td>@item.Requesttype</td>
-                <td>@item.bodytype</td>
-                <td>@item.keystatus</td>
-                <td>@item.valstatussuccess</td>
-                <td>@item.valstatusfailed</td>
-                <td>@item.keyrchid</td>
-                <td>@item.keymsg</td>
-                <td>@item.keyoperatorid</td>
-                <td>@item.keybalance</td>
-                <td>
-                    <button style="background-color:transparent;border-color:transparent" onclick="Edit('@item.idno'); recharge_api_insert_otp('ApiCallbackUpdate')">
-                        <i class="fa fa-edit fa-2x" style="color:red"></i>
-                    </button>
+            <tr data-idno="@item.idno" data-api-name="@(item.apiname ?? "")">
+                <td class="vm-recharge-api-td--name">@item.apiname</td>
+                <td class="vm-recharge-api-td--type">@item.Requesttype</td>
+                <td class="vm-recharge-api-td--req">@item.bodytype</td>
+                <td class="vm-recharge-api-td--key">@item.keystatus</td>
+                <td class="vm-recharge-api-td--val">@item.valstatussuccess</td>
+                <td class="vm-recharge-api-td--val">@item.valstatusfailed</td>
+                <td class="vm-recharge-api-td--key">@item.keyrchid</td>
+                <td class="vm-recharge-api-td--key">@item.keymsg</td>
+                <td class="vm-recharge-api-td--key">@item.keyoperatorid</td>
+                <td class="vm-recharge-api-td--key">@item.keybalance</td>
+                <td class="vm-recharge-api-td--action vm-api-nm-action-cell">
+                    <div class="vm-api-nm-action-group">
+                        <button type="button" class="vm-api-operator-edit-btn vm-recharge-api-callback-edit-btn" data-idno="@item.idno" title="Edit Call Back">
+                            <i class="fas fa-edit" aria-hidden="true"></i> Edit
+                        </button>
+                    </div>
                 </td>
             </tr>
         }

@@ -3,91 +3,235 @@
     ViewBag.Title = "Ecommerce";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
-
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ecommerce-modern.css?v=7" rel="stylesheet" />
 <style>
-    /* new css  */
-    .bread-same-all-page li {
-        margin: 6px 0;
+    /* Inline safety net for the seller/product detail modal — kept in
+       the view itself (never edge/browser-cached like a static .css
+       file) with #id specificity so this always wins even if
+       admin-ecommerce-modern.css is ever served stale. */
+    #defaultModal1 .modal-dialog {
+        max-width: 640px;
     }
-    .ecommerce-left {
-        background: #fff;
+    #defaultModal1 .modal-body {
+        max-height: 78vh !important;
+        overflow-y: auto !important;
+        padding: 0 !important;
+        background: #fff !important;
     }
-
-    .Masterlist-page .left-first-tabs button.dropdown-toggle::after, .custom-district::after {
-       display:none;
+    #defaultModal1 .vm-ecom-modal-avatar-row {
+        background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 52%, #4f46e5 100%) !important;
+        padding: 22px 20px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 16px !important;
     }
-
-    
-    
-    /* new css  */
-
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
+    #defaultModal1 .thisLeft {
+        float: none !important;
+        display: inline-block !important;
+    }
+    #defaultModal1 .thisLeft img {
+        border: 3px solid rgba(255, 255, 255, 0.6) !important;
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25) !important;
+    }
+    #defaultModal1 .vm-ecom-modal-avatar-meta {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+    }
+    #defaultModal1 .vm-ecom-modal-avatar-meta__label {
+        color: rgba(255, 255, 255, 0.75) !important;
+        font-size: 0.7rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.04em !important;
+    }
+    #defaultModal1 .vm-ecom-onoff.onoffswitch {
+        width: auto !important;
+        border: none !important;
+        overflow: visible !important;
+    }
+    #defaultModal1 .costom-on,
+    #defaultModal1 .custom-off {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        float: none !important;
+        min-width: 56px !important;
+        min-height: 26px !important;
+        padding: 0 14px !important;
+        border-radius: 999px !important;
+        font-size: 0.7rem !important;
+        font-weight: 800 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.03em !important;
+        cursor: pointer !important;
+        user-select: none !important;
+        transition: filter 0.15s ease, transform 0.15s ease !important;
+    }
+    #defaultModal1 .costom-on {
+        background: linear-gradient(135deg, #4ade80, #22c55e) !important;
+        color: #06301a !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18) !important;
+    }
+    #defaultModal1 .custom-off {
+        background: linear-gradient(135deg, #f87171, #dc2626) !important;
+        color: #2d0808 !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18) !important;
+    }
+    #defaultModal1 .costom-on:hover,
+    #defaultModal1 .custom-off:hover {
+        filter: brightness(1.08) !important;
+        transform: translateY(-1px) !important;
+    }
+    #defaultModal1 .costom-on:focus,
+    #defaultModal1 .custom-off:focus {
+        outline: 2px solid rgba(255, 255, 255, 0.85) !important;
+        outline-offset: 2px !important;
+    }
+    #defaultModal1 .vm-ecom-modal-form {
+        padding: 18px 20px 4px !important;
+        display: block !important;
+    }
+    #defaultModal1 .vm-ecom-modal-row {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 12px !important;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    #defaultModal1 .vm-ecom-modal-row > .vm-ecom-modal-col {
+        flex: 1 1 calc(50% - 6px) !important;
+        max-width: calc(50% - 6px) !important;
+        min-width: 0 !important;
+        width: auto !important;
+        float: none !important;
+        padding: 0 !important;
+    }
+    #defaultModal1 .vm-ecom-modal-tile {
+        background: #f8fafc !important;
+        border: 1px solid #eef2f6 !important;
+        border-radius: 10px !important;
+        padding: 10px 12px !important;
+        margin-bottom: 12px !important;
+    }
+    #defaultModal1 .form-group label {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        font-size: 0.68rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.02em !important;
+        color: #64748b !important;
+        margin-bottom: 4px !important;
+    }
+    #defaultModal1 .form-group label i {
+        color: #94a3b8 !important;
+        font-size: 0.72rem !important;
+    }
+    #defaultModal1 .form-control {
+        height: auto !important;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        color: #1e293b !important;
+        font-weight: 700 !important;
+        font-size: 0.92rem !important;
+        box-shadow: none !important;
+    }
+    #defaultModal1 .vm-ecom-modal-section-title {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin: 4px 0 12px !important;
+        font-size: 0.78rem !important;
+        font-weight: 800 !important;
+        color: #1e3a8a !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.02em !important;
+        padding-top: 14px !important;
+        border-top: 1px dashed #e2e8f0 !important;
+    }
+    #defaultModal1 .vm-ecom-modal-section-title i {
+        color: #2563eb !important;
+    }
+    #defaultModal1 .modal-footer {
+        padding: 14px 20px 18px !important;
+        margin: 0 !important;
+        border-top: none !important;
+    }
+    /* Product table header — inline safety net (same reasoning as the
+       modal rules above): .table-bordered draws a border around every
+       header cell, giving a boxy vertical-grid-line look, so those
+       side borders are stripped here with #id specificity to guarantee
+       they're gone regardless of the external stylesheet's cache state. */
+    #ecomProductTable > thead > tr > th {
+        background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%) !important;
+        color: #1e3a8a !important;
+        font-weight: 800 !important;
+        font-size: 0.72rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.04em !important;
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+        border-bottom: 2px solid #dbe3ee !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 2 !important;
+        white-space: nowrap !important;
+        padding: 11px 14px !important;
+    }
+    #ecomProductTable > thead > tr > th:first-child {
+        border-top-left-radius: 10px !important;
+    }
+    #ecomProductTable > thead > tr > th:last-child {
+        border-top-right-radius: 10px !important;
+    }
+    @@media (max-width: 480px) {
+        #defaultModal1 .modal-dialog {
+            max-width: calc(100% - 20px);
+            margin: 10px auto;
+        }
+        #defaultModal1 .vm-ecom-modal-avatar-row {
+            flex-direction: column !important;
+            text-align: center !important;
+        }
+        #defaultModal1 .vm-ecom-modal-avatar-meta {
+            align-items: center !important;
+        }
+        #defaultModal1 .vm-ecom-modal-row > .vm-ecom-modal-col {
+            flex: 1 1 100% !important;
+            max-width: 100% !important;
+        }
+        #defaultModal1 .vm-ecom-modal-row > .vm-ecom-modal-col:empty {
+            display: none !important;
         }
     }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-        .ecomm-table-top ul li.two {
-            width: 50%;
-            margin-bottom: 5px;
-        }
-        .ecomm-table-top ul li.one {
-            width: 50%;
-            margin-bottom: 5px;
-        }
-        .ecomm-table-top ul li.first {
-            width: 100%;
-        }
-        .ecomm-table-top ul li.three {
-            width: 90%;
-        }
-        .ecomm-table-top ul li select, .for-category ul li select {
-            width: 98%;
-        }
-
-
-    }
-
-    @@media only screen and (max-width:480px){
-
-        .ecomm-table-top ul li.three {
-            width: 100%;
-        }
-        .ecomm-table-top ul li.four {
-            width: 11%;
-            margin-top: 5px;
-        }
-
-    }
-
-
 </style>
 
-<section class="content">
-    <div class="container-fluid">
+<section class="content Ecommerce_Page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium">
+    <div class="container-fluid vm-ft-page-shell">
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <ol class="vm-ft-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Basic Setting</li>
+                    <li>Ecommerce</li>
+                </ol>
+            </div>
+            <div class="vm-ft-search-wrap">
+                <input class="form-control" type="text" value="" id="txtsearch" placeholder="Search products, sellers..." name="txtsearch" autocomplete="off" />
+            </div>
+        </div>
+
+    <div class="container-fluid vm-ecom-legacy-header-wrap">
 
         <!--Four-Design-Admin-page-Header-Section-Start-->
         <div class="page-title-box-fourde-admin">
@@ -121,61 +265,80 @@
             </div>
         </div>
 
+    </div>
 
-        <div class="row clearfix">
-            <div class="col-md-4 col-sm-4 col-xs-12  ">
-                <div class="ecommerce-left page-header-third">
-                    <ul class="nav nav-pills  ecommerce-left-tab tab-seconddesign tab-third-design" style="background:var(--nav-tab-bg);">
-                        <li class="active"><a data-toggle="pill" href="#menu1">Category</a></li>
-                        <li><a data-toggle="pill" href="#menu2">Sub category</a></li>
+    <div class="col-md-12 vm-ft-layout-wrap">
+        <div class="row clearfix vm-ft-layout vm-ft-layout--full">
+            <div class="col-md-4 col-sm-12 col-xs-12 vm-ft-form-col">
+                <div class="ecommerce-left fund-trasfer-left vm-ecom-left-card vm-ft-form-card">
+                    <div class="vm-ft-form-card-header">
+                        <div class="vm-ft-form-card-header__icon" aria-hidden="true"><i class="fas fa-tags"></i></div>
+                        <div>
+                            <span class="vm-ft-form-card-header__title">Categories</span>
+                            <span class="vm-ft-form-card-header__sub">Manage catalog categories</span>
+                        </div>
+                    </div>
+                    <ul class="nav nav-pills ecommerce-left-tab tab-seconddesign tab-third-design vm-ft-role-tabs" id="tabs">
+                        <li class="active vm-ft-role-tab-li"><a data-toggle="pill" href="#menu1" class="vm-ft-role-tab"><span class="vm-ft-role-tab__icon"><i class="fas fa-folder" aria-hidden="true"></i></span><span class="vm-ft-role-tab__label">Category</span></a></li>
+                        <li class="vm-ft-role-tab-li"><a data-toggle="pill" href="#menu2" class="vm-ft-role-tab"><span class="vm-ft-role-tab__icon"><i class="fas fa-sitemap" aria-hidden="true"></i></span><span class="vm-ft-role-tab__label">Sub category</span></a></li>
 
                     </ul>
 
                     <div class="tab-content input-border-third apperancenone-third">
                         <div id="menu1" class="tab-pane fade in active width100 float-left ecommerce-left-first">
-                            <div class="row clearfix">
-                                <h2 class="ecommerce-left-first-top dmlsing-seconddesign">add new category name</h2>
-                                <div class="col-md-12 col-sm-12 col-xs-12 tabcurrent-seconddesign">
-                                    <label class="" for="email_address_2">Add Categorey</label>
-                                    <input type="text" placeholder="Enter Categorey" />
+                            <div class="vm-ecom-form-panel">
+                                <div class="row clearfix">
+                                    <h2 class="ecommerce-left-first-top dmlsing-seconddesign vm-ecom-section-title"><i class="fas fa-plus-circle" aria-hidden="true"></i>Add new category name</h2>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 tabcurrent-seconddesign vm-ecom-field-row">
+                                        <label class="vm-ecom-field-label" for="email_address_2">Add Categorey</label>
+                                        <div class="vm-ecom-input-group">
+                                            <i class="fas fa-folder vm-ecom-input-icon" aria-hidden="true"></i>
+                                            <input type="text" class="form-control vm-ecom-input vm-ecom-input--icon" placeholder="Enter Categorey" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row clearfix">
-                                <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign">
-                                    <button type="submit" class="fullbodydycolorbg btn-first button-third" style="color:#fff;margin-left:5px;"> <span style="color:#fff;position:relative;z-index:9;">Add Categorey</span></button>
-                                    <button type="button" class="in-category btn-second button-third-design"> Block History</button>
+                                <div class="row clearfix">
+                                    <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign vm-ecom-action-row">
+                                        <button type="submit" class="fullbodydycolorbg btn-first button-third vm-ecom-btn-primary" style="color:#fff;margin-left:5px;"> <span style="color:#fff;position:relative;z-index:9;"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Categorey</span></button>
+                                        <button type="button" class="in-category btn-second button-third-design vm-ecom-btn-secondary"><i class="fas fa-history" aria-hidden="true"></i>&nbsp;Block History</button>
+                                    </div>
                                 </div>
-                            </div>
+                            </div><!--.vm-ecom-form-panel-->
                         </div>
 
                         <div id="menu2" class="tab-pane fade in width100 float-left ecommerce-left-first">
-                            <div class="row clearfix">
-                                <h2 class="ecommerce-left-first-top">add new Sub category name</h2>
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <label for="email_address_2">Parent Categorey</label>
-                                    <div class="custom-district aapearnce-noneclass" style="width:100%;float:left;">
-                                        <select>
-                                            <option>hujguhvbj</option>
-                                            <option>hujguhvbj</option>
-                                            <option>hujguhvbj</option>
+                            <div class="vm-ecom-form-panel">
+                                <div class="row clearfix">
+                                    <h2 class="ecommerce-left-first-top vm-ecom-section-title"><i class="fas fa-plus-circle" aria-hidden="true"></i>Add new Sub category name</h2>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 vm-ecom-field-row">
+                                        <label class="vm-ecom-field-label" for="email_address_2">Parent Categorey</label>
+                                        <div class="custom-district aapearnce-noneclass vm-ecom-select-wrap" style="width:100%;float:left;">
+                                            <select class="vm-ecom-select">
+                                                <option>hujguhvbj</option>
+                                                <option>hujguhvbj</option>
+                                                <option>hujguhvbj</option>
 
-                                        </select>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row clearfix">
+                                <div class="row clearfix">
 
-                                <div class="col-md-12 col-sm-12 col-xs-12 tabcurrent-seconddesign">
-                                    <label for="email_address_2">Add Sub Categorey</label>
-                                    <input type="text" placeholder="Enter Sub Categorey" />
+                                    <div class="col-md-12 col-sm-12 col-xs-12 tabcurrent-seconddesign vm-ecom-field-row">
+                                        <label class="vm-ecom-field-label" for="email_address_2">Add Sub Categorey</label>
+                                        <div class="vm-ecom-input-group">
+                                            <i class="fas fa-sitemap vm-ecom-input-icon" aria-hidden="true"></i>
+                                            <input type="text" class="form-control vm-ecom-input vm-ecom-input--icon" placeholder="Enter Sub Categorey" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row clearfix">
-                                <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign">
-                                    <button type="submit" class="fullbodydycolorbg btn-first" style="color:#fff;margin-left:5px;"> <span style="color:#fff;position:relative;">Add Categorey</span></button>
-                                    <button type="button" class="in-sub-category btn-second"> Block History</button>
+                                <div class="row clearfix">
+                                    <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign vm-ecom-action-row">
+                                        <button type="submit" class="fullbodydycolorbg btn-first vm-ecom-btn-primary" style="color:#fff;margin-left:5px;"> <span style="color:#fff;position:relative;"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Categorey</span></button>
+                                        <button type="button" class="in-sub-category btn-second vm-ecom-btn-secondary"><i class="fas fa-history" aria-hidden="true"></i>&nbsp;Block History</button>
+                                    </div>
                                 </div>
-                            </div>
+                            </div><!--.vm-ecom-form-panel-->
                         </div>
 
 
@@ -186,58 +349,50 @@
 
 
 
-            <div class="col-md-8 col-sm-8 col-xs-12 for-position-relative ">
-
-                <div class="page-header-third">
-
-                    <div class="table-responsive" style="background:#fff;height: 80vh;padding: 10px;">
-                        <div class="ecomm-table-top aapearnce-noneclass apperancenone-third">
-
-                            <ul>
-                                <li class="first">  <h2>Product Detail</h2></li>
-                                <li class="one">
-                                    <div class="custom-district">
-                                        <select>
-                                            <option>Select Category</option>
-                                            <option>Electronics</option>
-                                        </select>
-                                    </div>
-                                </li>
-                                <li class="two">
-                                    <div class="custom-district">
-                                        <select>
-                                            <option>All Status</option>
-                                            <option>Pending</option>
-                                            <option>Approved</option>
-                                            <option>Rejected</option>
-
-                                        </select>
-                                    </div>
-                                </li>
-                                <li class="three">
-                                    <div class="input-daterange input-group">
-                                        <div class="for-date">
-                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            <input class="form-control" id="txt_frm_date" name="txt_frm_date" required="required" style="border:1px solid #dddddd; height:32px;padding-left: 25px;" type="text" value="">
-                                        </div>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-exchange" style="padding-top:6px;" aria-hidden="true"></i>
-                                        </span>
-                                        <div class="for-date">
-                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            <input class="form-control" id="txt_to_date" name="txt_to_date" required="required" style="border:1px solid #dddddd; height:32px;padding-left: 25px;" type="text" value="">
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="four buttonsearch-second">
-                                    <button type="submit" class="btn  waves-effect" style=" height:32px;float:right;">
-                                        <i class="fa fa-search" style="top:0px;font-size:16px;color:black;" aria-hidden="true"></i>
-
-                                    </button>
-                                </li>
-                            </ul>
+            <div class="col-md-8 col-sm-12 col-xs-12 for-position-relative vm-ft-history-col">
+                <div class="fund-trasfer-right vm-ecom-right-card vm-ft-history-panel">
+                <div class="vm-ft-history-body">
+                    <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium">
+                        <div class="vm-ft-history-toolbar__head">
+                            <i class="fas fa-store" aria-hidden="true"></i>
+                            <div>
+                                <span class="vm-ft-history-toolbar__title">Product Detail</span>
+                                <span class="vm-ft-history-toolbar__sub">Review &amp; approve seller product requests</span>
+                            </div>
                         </div>
-                        <table class="table table-bordered table-striped table-hover example-second exampletable-second whitetable-second" style="width:100%;">
+                        <div class="vm-ft-history-toolbar__filters vm-ecom-filter-row">
+                            <div class="vm-ecom-select-wrap custom-district">
+                                <select class="vm-ecom-select form-control">
+                                    <option>Select Category</option>
+                                    <option>Electronics</option>
+                                </select>
+                            </div>
+                            <div class="vm-ecom-select-wrap custom-district">
+                                <select class="vm-ecom-select form-control">
+                                    <option>All Status</option>
+                                    <option>Pending</option>
+                                    <option>Approved</option>
+                                    <option>Rejected</option>
+
+                                </select>
+                            </div>
+                            <div class="input-daterange vm-dmt-filter-search-group vm-ft-date-search-group">
+                                <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date for-date">
+                                    <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                    <input class="form-control saas-acc-dp-input" id="txt_frm_date" name="txt_frm_date" required="required" autocomplete="off" type="text" value="" placeholder="From">
+                                </div>
+                                <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date for-date">
+                                    <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                    <input class="form-control saas-acc-dp-input" id="txt_to_date" name="txt_to_date" required="required" autocomplete="off" type="text" value="" placeholder="To">
+                                </div>
+                                <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-ft-search-btn">
+                                    <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="vm-ecom-table-wrap table-responsive">
+                        <table id="ecomProductTable" class="table table-bordered table-striped table-hover example-second exampletable-second whitetable-second vm-ecom-table" style="width:100%;">
                             <thead>
                                 <tr>
                                     <th>Seller&nbsp;Firm</th>
@@ -254,209 +409,212 @@
                             <tbody>
                                 <tr data-toggle="modal" data-target="#defaultModal1">
                                     <td>
-                                        <span class="seller-status" style="padding-right:2px;">
-                                            <img src="~/ashok-images/correct.svg" style="width: 19px;background:green;border-radius: 50%;padding: 3px;" />
+                                        <span class="seller-status vm-ecom-status-icon vm-ecom-status-icon--ok">
+                                            <i class="fas fa-check" aria-hidden="true"></i>
                                         </span>
                                         <span class="seller-firm">fidbfvknfiuhfmn</span>
                                     </td>
-                                    <td>fvfbfg</td>
-                                    <td>fgfdggf</td>
-                                    <td>fgfgfd</td>
-                                    <td>5654</td>
-                                    <td>5645</td>
-                                    <td>565 <img src="~/ashok-images/rightaeps.svg" style="width:13px;margin-top:2px;float:right;"></td>
+                                    <td><span class="vm-ecom-badge vm-ecom-badge--cat">fvfbfg</span></td>
+                                    <td><span class="vm-ecom-badge vm-ecom-badge--subcat">fgfdggf</span></td>
+                                    <td><span class="vm-ecom-price">fgfgfd</span></td>
+                                    <td><span class="vm-ecom-price">5654</span></td>
+                                    <td><span class="vm-ecom-my-badge">5645</span></td>
+                                    <td>
+                                        <span class="vm-ecom-date"><i class="fas fa-calendar-day" aria-hidden="true"></i>&nbsp;565</span>
+                                        <span class="vm-ecom-row-btn"><i class="fas fa-chevron-right vm-ecom-row-arrow" aria-hidden="true"></i></span>
+                                    </td>
 
 
                                 </tr>
                                 <tr data-toggle="modal" data-target="#defaultModal1">
                                     <td>
-                                        <span class="seller-status" style="padding-right:2px;">
-                                            <img src="~/ashok-images/closes.svg" style="width: 19px;background:red;border-radius: 50%;padding: 3px;" />
+                                        <span class="seller-status vm-ecom-status-icon vm-ecom-status-icon--rejected">
+                                            <i class="fas fa-times" aria-hidden="true"></i>
                                         </span>
                                         <span class="seller-firm">fgrtshfghfgt</span>
                                     </td>
-                                    <td>fvfbfg</td>
-                                    <td>fgfdggf</td>
-                                    <td>fgfgfd</td>
-                                    <td>5654</td>
-                                    <td>5645</td>
-                                    <td>565 <img src="~/ashok-images/rightaeps.svg" style="width:13px;margin-top:2px;float:right;"></td>
+                                    <td><span class="vm-ecom-badge vm-ecom-badge--cat">fvfbfg</span></td>
+                                    <td><span class="vm-ecom-badge vm-ecom-badge--subcat">fgfdggf</span></td>
+                                    <td><span class="vm-ecom-price">fgfgfd</span></td>
+                                    <td><span class="vm-ecom-price">5654</span></td>
+                                    <td><span class="vm-ecom-my-badge">5645</span></td>
+                                    <td>
+                                        <span class="vm-ecom-date"><i class="fas fa-calendar-day" aria-hidden="true"></i>&nbsp;565</span>
+                                        <span class="vm-ecom-row-btn"><i class="fas fa-chevron-right vm-ecom-row-arrow" aria-hidden="true"></i></span>
+                                    </td>
 
 
                                 </tr>
                                 <tr data-toggle="modal" data-target="#defaultModal1">
                                     <td>
-                                        <span class="seller-status" style="padding-right:2px;">
-                                            <img src="~/ashok-images/clock.svg" style="width: 20px;" />
+                                        <span class="seller-status vm-ecom-status-icon vm-ecom-status-icon--pending">
+                                            <i class="fas fa-clock" aria-hidden="true"></i>
                                         </span><span class="seller-firm"></span>
                                     </td>
-                                    <td>fvfbfg</td>
-                                    <td>fgfdggf</td>
-                                    <td>fgfgfd</td>
-                                    <td>5654</td>
-                                    <td>5645</td>
-                                    <td>565 <img src="~/ashok-images/rightaeps.svg" style="width:13px;margin-top:2px;float:right;"></td>
+                                    <td><span class="vm-ecom-badge vm-ecom-badge--cat">fvfbfg</span></td>
+                                    <td><span class="vm-ecom-badge vm-ecom-badge--subcat">fgfdggf</span></td>
+                                    <td><span class="vm-ecom-price">fgfgfd</span></td>
+                                    <td><span class="vm-ecom-price">5654</span></td>
+                                    <td><span class="vm-ecom-my-badge">5645</span></td>
+                                    <td>
+                                        <span class="vm-ecom-date"><i class="fas fa-calendar-day" aria-hidden="true"></i>&nbsp;565</span>
+                                        <span class="vm-ecom-row-btn"><i class="fas fa-chevron-right vm-ecom-row-arrow" aria-hidden="true"></i></span>
+                                    </td>
 
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                        </div><!--.vm-ecom-table-wrap-->
+                        <div class="vm-ecom-table-footer">
+                            <span class="vm-ecom-table-footer__info"><i class="fas fa-circle-info" aria-hidden="true"></i>&nbsp;Showing <strong>3</strong> of <strong>3</strong> requests</span>
+                            <div class="vm-ecom-table-footer__pager">
+                                <button type="button" class="vm-ecom-pager-btn" disabled title="Previous"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+                                <span class="vm-ecom-pager-page">1</span>
+                                <button type="button" class="vm-ecom-pager-btn" disabled title="Next"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div><!--.vm-ft-history-body-->
+                </div><!--.vm-ft-history-panel-->
 
 
                     <!---pop-up for seller --->
 
-                    <div class="modal mastetr222Modal in" id="defaultModal1" tabindex="-1" role="dialog" style="display: none;">
-                        <div class="modal-dialog" role="document" style="margin:0px;">
+                    <div class="modal fade mastetr222Modal saas-admin-modal vm-ecom-modal" id="defaultModal1" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
 
                             <div class="modal-content width100 float-left">
-                                <div class="modal-header width100 float-left ecomm-pop-head">
-
-                                    <h5>Catogery</h5>
-                                    <h5 style="float:right;">Sub Catogery</h5>
+                                <div class="modal-header saas-admin-modal-header accent-sky width100 float-left ecomm-pop-head">
+                                    <div class="saas-admin-modal-head-main">
+                                        <span class="saas-admin-modal-icon"><i class="fas fa-box-open" aria-hidden="true"></i></span>
+                                        <div class="saas-admin-modal-title-wrap">
+                                            <h5 class="saas-admin-modal-title">Catogery <span style="opacity:.55;">/</span> Sub Catogery</h5>
+                                            <span class="saas-admin-modal-subtitle">Seller &amp; product request detail</span>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
 
 
 
 
                                 </div><!--.modal-header-->
-                                <div class="modal-body width100 float-left ecomm-pop-body">
-                                    <div class="background-kk width100 float-left">
+                                <div class="modal-body saas-admin-modal-body width100 float-left ecomm-pop-body vm-ecom-modal-body">
+                                    <div class="background-kk width100 float-left vm-ecom-modal-avatar-row">
                                         <div class="thisLeft float-left">
                                             <img src="~/AdminDesign/images/user.png" class="img-circle" alt="User" width="100" height="100">
                                         </div>
-
+                                        <div class="vm-ecom-modal-avatar-meta">
+                                            <span class="vm-ecom-modal-avatar-meta__label">Current Status</span>
+                                            <div class="onoffswitch vm-ecom-onoff">
+                                                <span class="costom-on" id="ecomModalStatusToggle" onclick="toggleEcomModalStatus(this)" role="button" tabindex="0" title="Click to toggle status">On</span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="float-left width100">
 
-                                        <form class="first-form">
+                                        <form class="first-form vm-ecom-modal-form">
 
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6 col-xs-6 col">
-                                                    <div class="form-group">
-                                                        <label>Status</label>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-6 col-xs-6 col-2">
-                                                    <div class="form-group">
-                                                        <label>
-                                                            <div class="onoffswitch">
-                                                                <span class="costom-on">on</span>
-                                                                @*<span class="custom-off">off</span>*@
-                                                            </div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div><!--.row-->
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                                    <div class="form-group">
-                                                        <label>Product Name</label>
+                                            <div class="vm-ecom-modal-row">
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-box" aria-hidden="true"></i>&nbsp;Product Name</label>
                                                         <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                                    <div class="form-group">
-                                                        <label>commission</label>
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-percentage" aria-hidden="true"></i>&nbsp;Commission</label>
                                                         <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
                                                     </div>
                                                 </div>
-                                            </div><!--.row-->
+                                            </div><!--.vm-ecom-modal-row-->
 
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                                    <div class="form-group">
-                                                        <label>Product HSN</label>
+                                            <div class="vm-ecom-modal-row">
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-barcode" aria-hidden="true"></i>&nbsp;Product HSN</label>
                                                         <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                                    <div class="form-group">
-                                                        <label>Cost Rate</label>
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-coins" aria-hidden="true"></i>&nbsp;Cost Rate</label>
                                                         <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
                                                     </div>
                                                 </div>
-                                            </div><!--.row-->
+                                            </div><!--.vm-ecom-modal-row-->
 
-
-
-                                            <div class="row">
-                                                <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                                    <div class="form-group">
-                                                        <label>Cost Rate</label>
-                                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-
-
-                                                    </div>
-                                                </div>
-
-                                            </div><!--.row-->
-
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                                    <div class="form-group">
-                                                        <label>List Price</label>
+                                            <div class="vm-ecom-modal-row">
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-rupee-sign" aria-hidden="true"></i>&nbsp;Cost Rate</label>
                                                         <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                                    <div class="form-group">
-                                                        <label>Actual Price</label>
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-tag" aria-hidden="true"></i>&nbsp;List Price</label>
                                                         <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
                                                     </div>
                                                 </div>
-                                            </div><!--.row-->
-                                            <div class="row">
-                                                <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                                    <div class="form-group">
-                                                        <label>Saller Name</label>
-                                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
+                                            </div><!--.vm-ecom-modal-row-->
 
-
-                                                    </div>
-                                                </div>
-
-                                            </div><!--.row-->
-
-                                            <div class="row">
-                                                <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                                    <div class="form-group">
-                                                        <label>Seller Email</label>
-                                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-
-
-                                                    </div>
-                                                </div>
-
-                                            </div><!--.row-->
-                                            <div class="row">
-                                                <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                                    <div class="form-group">
-                                                        <label>Seller Number</label>
-                                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-
-
-                                                    </div>
-                                                </div>
-
-                                            </div><!--.row-->
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                                    <div class="form-group">
-                                                        <label>Request Date</label>
+                                            <div class="vm-ecom-modal-row">
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;Actual Price</label>
                                                         <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                                    <div class="form-group">
-                                                        <label>Approval Date</label>
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-calendar-day" aria-hidden="true"></i>&nbsp;Request Date</label>
                                                         <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
                                                     </div>
                                                 </div>
-                                            </div><!--.row-->
+                                            </div><!--.vm-ecom-modal-row-->
 
-                                            <div class="modal-footer width100 float-left">
-                                                <button type="button" class="btn waves-effect fullbodydycolorbg" data-dismiss="modal" style="color:#fff;">
-                                                    Close
+                                            <div class="vm-ecom-modal-row">
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-calendar-check" aria-hidden="true"></i>&nbsp;Approval Date</label>
+                                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="vm-ecom-modal-col"></div>
+                                            </div><!--.vm-ecom-modal-row-->
+
+                                            <div class="vm-ecom-modal-section-title"><i class="fas fa-store" aria-hidden="true"></i>&nbsp;Seller Information</div>
+
+                                            <div class="vm-ecom-modal-row">
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-user" aria-hidden="true"></i>&nbsp;Saller Name</label>
+                                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-envelope" aria-hidden="true"></i>&nbsp;Seller Email</label>
+                                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
+                                                    </div>
+                                                </div>
+                                            </div><!--.vm-ecom-modal-row-->
+
+                                            <div class="vm-ecom-modal-row">
+                                                <div class="vm-ecom-modal-col">
+                                                    <div class="form-group vm-ecom-modal-tile">
+                                                        <label><i class="fas fa-phone" aria-hidden="true"></i>&nbsp;Seller Number</label>
+                                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="vm-ecom-modal-col"></div>
+                                            </div><!--.vm-ecom-modal-row-->
+
+                                            <div class="modal-footer saas-admin-modal-footer width100 float-left">
+                                                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                                                    <i class="fas fa-times" aria-hidden="true"></i>&nbsp;Close
                                                 </button>
                                             </div>
 
@@ -477,14 +635,14 @@
                     <!------ pop-up for category ---->
 
 
-                    <div class="for-category " style="display:none;">
-
-
-
-                        <button type="button" class="close-button category-top-close fullbodydycolorbg" name="close">Close</button>
+                    <div class="for-category vm-ecom-slide-panel" style="display:none;">
+                        <div class="vm-ecom-slide-panel__header">
+                            <span class="vm-ecom-slide-panel__title"><i class="fas fa-folder-open" aria-hidden="true"></i>&nbsp;Category Block History</span>
+                            <button type="button" class="close-button category-top-close vm-ecom-panel-close" name="close"><i class="fas fa-times" aria-hidden="true"></i>&nbsp;Close</button>
+                        </div>
                         <div class="table-data">
-                            <div class="table-responsive">
-                                <table id="mytble" class="table table-bordered" style="width:100%;">
+                            <div class="table-responsive vm-ecom-table-wrap">
+                                <table id="mytble" class="table table-bordered vm-ecom-table" style="width:100%;">
                                     <thead>
                                         <tr>
                                             <th>S/N</th>
@@ -499,22 +657,22 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td><input type="text" value="uyf7yg" readonly="readonly" /></td>
+                                            <td><input type="text" class="form-control vm-ecom-inline-input" value="uyf7yg" readonly="readonly" /></td>
                                             <td>
-                                                <div class="onoffswitch" style="width:84px;">
+                                                <div class="onoffswitch vm-ecom-onoff" style="width:84px;">
                                                     @*<span class="costom-on">active</span>*@
                                                     <span class="custom-off">Unactive</span>
                                                 </div>
                                             </td>
 
                                             <td>
-                                                <button class="for-edit">edit</button>
-                                                <button class="for-save">save</button>
+                                                <button class="for-edit vm-ecom-icon-btn vm-ecom-icon-btn--edit" title="Edit"><i class="fas fa-pen" aria-hidden="true"></i></button>
+                                                <button class="for-save vm-ecom-icon-btn vm-ecom-icon-btn--save" title="Save"><i class="fas fa-check" aria-hidden="true"></i></button>
                                             </td>
                                             <td>
-                                                <button style="border:0px;">
+                                                <button class="vm-ecom-icon-btn vm-ecom-icon-btn--delete" style="border:0px;">
                                                     <span class="for-delete">
-                                                        <img src="~/MainFrontDesign/images/delete.svg" style="width:14px;margin: auto;" />
+                                                        <i class="fas fa-trash-alt" aria-hidden="true"></i>
                                                     </span>
                                                     <span class="for-sure">SURE?</span>
                                                 </button>
@@ -532,15 +690,15 @@
                     </div>
 
                     <!------ pop-up for subcategory --->
-                    <div class="for-sub-category width100" style="display:none;">
-
-
-
-                        <button type="button" class="close-button sub-category-top-close fullbodydycolorbg" name="close">Close</button>
+                    <div class="for-sub-category width100 vm-ecom-slide-panel" style="display:none;">
+                        <div class="vm-ecom-slide-panel__header">
+                            <span class="vm-ecom-slide-panel__title"><i class="fas fa-sitemap" aria-hidden="true"></i>&nbsp;Sub Category Block History</span>
+                            <button type="button" class="close-button sub-category-top-close vm-ecom-panel-close" name="close"><i class="fas fa-times" aria-hidden="true"></i>&nbsp;Close</button>
+                        </div>
 
                         <div class="table-data">
-                            <div class="table-responsive">
-                                <table id="mytble" class="table table-bordered" style="width:100%;">
+                            <div class="table-responsive vm-ecom-table-wrap">
+                                <table id="mytble" class="table table-bordered vm-ecom-table" style="width:100%;">
                                     <thead>
                                         <tr>
                                             <th>Sr No.</th>
@@ -555,23 +713,22 @@
                                         <tr>
                                             <td>1</td>
                                             <td>sdgerg</td>
-                                            <td><input type="text" value="uyf7yg" readonly="readonly" /></td>
+                                            <td><input type="text" class="form-control vm-ecom-inline-input" value="uyf7yg" readonly="readonly" /></td>
                                             <td>
-                                                <div class="onoffswitch" style="width:84px;">
+                                                <div class="onoffswitch vm-ecom-onoff" style="width:84px;">
                                                     @*<span class="costom-on">active</span>*@
                                                     <span class="custom-off">Unactive</span>
                                                 </div>
                                             </td>
 
                                             <td>
-                                                <button class="for-edit">edit</button>
-                                                <button class="for-save">save</button>
+                                                <button class="for-edit vm-ecom-icon-btn vm-ecom-icon-btn--edit" title="Edit"><i class="fas fa-pen" aria-hidden="true"></i></button>
+                                                <button class="for-save vm-ecom-icon-btn vm-ecom-icon-btn--save" title="Save"><i class="fas fa-check" aria-hidden="true"></i></button>
                                             </td>
                                             <td>
-                                                <button style="border:0px;">
+                                                <button class="vm-ecom-icon-btn vm-ecom-icon-btn--delete" style="border:0px;">
                                                     <span class="for-delete">
-
-                                                        <img src="../../MainFrontDesign/images/delete.svg" style="width:14px;margin: auto;" />
+                                                        <i class="fas fa-trash-alt" aria-hidden="true"></i>
                                                     </span>
                                                     <span class="for-sure">SURE?</span>
                                                 </button>
@@ -664,4 +821,37 @@
         });
     });
 
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#txtsearch').on('keyup', function () {
+            var val = $(this).val().toLowerCase();
+            $('.vm-ecom-table-wrap .vm-ecom-table > tbody > tr').each(function () {
+                var rowText = $(this).text().toLowerCase();
+                $(this).toggle(rowText.indexOf(val) > -1);
+            });
+        });
+    });
+
+    function toggleEcomModalStatus(el) {
+        var $el = $(el);
+        if ($el.hasClass('costom-on')) {
+            $el.removeClass('costom-on').addClass('custom-off').text('Off');
+        } else {
+            $el.removeClass('custom-off').addClass('costom-on').text('On');
+        }
+    }
+
+    $(document).on('keydown', '#ecomModalStatusToggle', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleEcomModalStatus(this);
+        }
+    });
+
+    // Reset the demo toggle back to "On" each time the modal is reopened.
+    $('#defaultModal1').on('show.bs.modal', function () {
+        $('#ecomModalStatusToggle').removeClass('custom-off').addClass('costom-on').text('On');
+    });
 </script>

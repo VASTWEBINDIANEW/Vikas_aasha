@@ -1,940 +1,568 @@
 @model IEnumerable<Vastwebmulti.Models.RechargeapiInfo>
+@using System.Linq
 @{
     ViewBag.Title = "RechargeAPIUrl";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.RechargeapiInfo>();
 }
-<style>
 
-   /* new css */
-    .modal-body .row.clearfix {
-        margin: 3px 0px;
-    }
-    .modal .modal-footer {
-        padding: 26px 38px;
-        padding-top: 0;
-    }
-    #ul {
-        width: 100%;
-    }
-    #custnav1 #ul li {
-        width: 25%;
-    }
-    #custnav1 #ul {
-        margin-top: 6px;
-    }
-    .col-md-5.rtyfrty.rtyfrtyclass-third {
-        padding: 0;
-    }
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=28" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-operator-modern.css?v=31" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
-    .card.page-header-third .col-md-12 {
-        padding: 0;
-    }
-    #ul {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-api-operator-page saas-recharge-api-url-page">
+    <div class="container-fluid vm-opr-page-shell">
 
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+            <div class="saas-acc-toolbar-top vm-api-operator-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-api-operator-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li><a href="@Url.Action("Dashboard", "Home")#setting">Basic Setting</a></li>
+                    <li>Recharge API URL</li>
+                </ol>
+                <div class="vm-dmt-fin-nav-row vm-api-operator-nav-wrap">
+                    @Html.Partial("_menuapinm")
+                </div>
+            </div>
 
-   /* new css */
-
-    .col-md-7.rtyfrty.rtyfrtyclass-third {
-        width: 55% !important;
-        float: right;
-        padding: 0;
-    }
-
-    #ul li {
-        float: left;
-        margin-right: 3px;
-        background: #efefef;
-        width: 15%;
-    }
-
-        #ul li a {
-            display: block;
-            text-align: center;
-            padding: 5px 9px;
-            text-decoration: none;
-            border: 1px solid #b1a6a638;
-            position: initial;
-            font-size: 12px;
-        }
-
-    ul#ul {
-        float: right;
-    }
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    .form-inline .bootstrap-select.btn-group, .form-horizontal .bootstrap-select.btn-group, .form-group .bootstrap-select.btn-group {
-        height: 29px;
-    }
-
-    .form-control-label {
-        text-align: left;
-    }
-
-    .select2-selection.select2-selection--single {
-        border-radius: 0px !important;
-        height: 32px !important;
-        border-color: #ccc !important;
-    }
-
-   
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media screen and (max-width: 992px) {
-
-        #ul li {
-            margin-right: 0px !important;
-        }
-        #custnav1 #ul {
-            width: 100%;
-            display: flex;
-        }
-
-        .col-md-7.rtyfrty.rtyfrtyclass-third {
-            width: 100% !important;
-        }
-        .col-md-5.rtyfrty.rtyfrtyclass-third {
-            width: 100% !important;
-        }
-        .col-md-5.rtyfrty.rtyfrtyclass-third {
-            width: 100% !important;
-            margin: 0 !important;
-        }
-
-        .rtyfrty {
-            width: 100%;
-            float: left;
-        }
-
-            .rtyfrty ul li {
-                width: 33.333%;
-                float: left;
-                margin-bottom: 6px;
-            }
-
-                .rtyfrty ul li a {
-                    margin-bottom: 0;
-                }
-
-        .vacrivet {
-            width: 50%;
-            float: left;
-            padding: 0 4px !important;
-        }
-
-            .vacrivet button {
-                width: 100%;
-            }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media only screen and (max-width:580px){
-        #custnav1 #ul {
-            display: block;
-        }
-        .rtyfrty ul li {
-            width: 50%;
-        }
-        div#custnav ul li a {
-            font-size: 12px;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-        #ul {
-            display: block;
-        }
-        #custnav1 #ul li {
-            width: 50%;
-            display: table;
-        }
-
-        .modal-dialog {
-            width: 96% !important;
-        }
-        .bread-same-all-page {
-            display: block;
-        }
-        .padding-top-thirdclass {
-            width: 100%;
-            float: left;
-        }
-        .pageheader-second-third {
-            width: 100%;
-            float: left;
-            display: flex;
-            justify-content: center;
-            padding-top: 8px;
-        }
-        .rtyfrtyclass-third #custnav ul li {
-            width: 50% !important;
-        }
-
-    }
-    
-</style>
-<section class="content">
-    <div class="container-fluid">
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        @*<div class="page-title-box-fourde-admin">
-            <h3>API Setting</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Recharge API URL</a></li>
-            </ul>
-        </div>*@
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix four-noneclass-admin-only">
-            <div class="col-md-12">
-                <div class="page-header-third pageheader-second-third">
-                    <div class="bread-same-all-page breadsameall-second">
-                        <ul class="padding-top-thirdclass" style="margin:0px;">
-                            <li class="smli">
-                                <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                                </a>
-                            </li>
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                <a href="@Url.Action("Dashboard", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                                    Basic&nbsp;Setting
-                                </a>&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                            </li>
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                RechargeAPIUrl
-                            </li>
-                        </ul>
-
-                        <div class="pageheader-second-third">
-                            <div class="pull-right " >
-                                <button type="button" class="btn waves-effect fullbodydycolorbg" style="float:right; height:32px;float:right;border:1px solid #c7c2c2;background:#dedddd;" data-toggle="modal" data-target="#myModalAdd">
-                                    <i class="fa fa-plus" style="top:1px;font-size:16px;color:#fff;" aria-hidden="true"></i>
-                                    <span style="color:#fff;">Add New</span>
-                                </button>
-                                @*<button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModalAdd">
-                    <i class="ace-icon glyphicon glyphicon-plus"></i>
-                    <span class="bigger-110 no-text-shadow">Add New</span>
-                </button>*@
-                            </div>
-                            <div class="pull-right tableTools-container tableTools-containerapi">
-                            </div>
+            <div class="vm-rpt-filters-panel vm-api-operator-filter-panel">
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-api-operator-filter-row vm-rpt-filters-panel__bar">
+                    <div class="vm-api-operator-filter-group vm-recharge-api-filter-group">
+                        <div class="vm-recharge-api-sub-tabs" role="tablist" aria-label="Recharge API">
+                            <a href="@Url.Action("RechargeAPIUrl", "Home")" class="vm-recharge-api-sub-tab is-active" role="tab" aria-selected="true">Recharge API URL</a>
+                            <a href="@Url.Action("RechargeApiResponse", "Home")" class="vm-recharge-api-sub-tab" role="tab" aria-selected="false">Recharge API Response</a>
+                            <a href="@Url.Action("ApiCallBackUrl", "Home")" class="vm-recharge-api-sub-tab" role="tab" aria-selected="false">Recharge API Call Back</a>
+                            <a href="@Url.Action("ApiCallBack", "Home")" class="vm-recharge-api-sub-tab" role="tab" aria-selected="false">Call Back Page</a>
                         </div>
-
+                        <button type="button" class="saas-acc-btn saas-acc-btn--search vm-api-nm-add-btn vm-recharge-api-add-btn" title="Add New Recharge API">
+                            <i class="fas fa-plus" aria-hidden="true"></i><span>Add New</span>
+                        </button>
                     </div>
                 </div>
-
             </div>
         </div>
 
-        
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card page-header-third">
-                    <div class="col-md-12">
-                        <div class="col-md-12 rtyfrty rtyfrtyclass-third" style=" float:left; ">
-                            <div style="">
-                                @Html.Partial("_menuapinm")
-                            </div>
-
-                        </div>
-                        <div class="col-md-12 rtyfrty rtyfrtyclass-third" style="float: right;  ">
-                            <div style="">
-                                @Html.Partial("_menu_rch_Api")
-                            </div>
-
-                        </div>
-
-
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-link" aria-hidden="true"></i>
+                        <span>Recharge API URL configuration</span>
                     </div>
-
-                    <div class="" style="width: 100%; float: left; margin-top: 6px;">
-                        <div class="table-responsive tablefourdesign-admin" style="position:inherit;">
-                            <table class="table table-bordered table-striped example-second" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Api Name</th>
-                                        <th>Api URL</th>
-                                        <th>Api Type</th>
-                                        <th>Request Type</th>
-                                        <th>Key Userid</th>
-                                        <th>Val Userid</th>
-                                        <th>Key Password</th>
-                                        <th>Value Password</th>
-                                        <th>Key Recharge No</th>
-                                        <th>Key OptCode</th>
-                                        <th>Key Amount</th>
-                                        <th>Key RequestID</th>
-                                        <th>is STV</th>
-                                        <th>Key State Code</th>
-                                        <th>Key No Romaing</th>
-                                        <th>Status</th>
-                                        <th>Success To Failed</th>
-                                        <th>Failed To Success</th>
-                                        <th>#</th>
+                    <label class="vm-api-operator-table-search" for="rechargeApiSearch">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="text" id="rechargeApiSearch" placeholder="Search records..." autocomplete="off" />
+                    </label>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="rechargeApiUrlTable" class="table vm-opr-data-table vm-recharge-api-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th class="vm-recharge-api-th--name">API Name</th>
+                                    <th class="vm-recharge-api-th--url">API URL</th>
+                                    <th class="vm-recharge-api-th--type">API Type</th>
+                                    <th class="vm-recharge-api-th--req">Request Type</th>
+                                    <th class="vm-recharge-api-th--key">Key Userid</th>
+                                    <th class="vm-recharge-api-th--val">Val Userid</th>
+                                    <th class="vm-recharge-api-th--key">Key Password</th>
+                                    <th class="vm-recharge-api-th--val">Value Password</th>
+                                    <th class="vm-recharge-api-th--key">Key Recharge No</th>
+                                    <th class="vm-recharge-api-th--key">Key OptCode</th>
+                                    <th class="vm-recharge-api-th--key">Key Amount</th>
+                                    <th class="vm-recharge-api-th--key">Key RequestID</th>
+                                    <th class="vm-recharge-api-th--type">is STV</th>
+                                    <th class="vm-recharge-api-th--key">Key State Code</th>
+                                    <th class="vm-recharge-api-th--key">Key No Romaing</th>
+                                    <th class="vm-recharge-api-th--toggle">Status</th>
+                                    <th class="vm-recharge-api-th--toggle vm-recharge-api-th--s2f">Success To Failed</th>
+                                    <th class="vm-recharge-api-th--toggle vm-recharge-api-th--f2s">Failed To Success</th>
+                                    <th class="vm-recharge-api-th--action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in rows)
+                                {
+                                    <tr data-id="@item.id" data-api-name="@(item.apiname ?? "")">
+                                        <td class="vm-recharge-api-td--name">@item.apiname</td>
+                                        <td class="vm-recharge-api-td--url">@item.apiendpoint</td>
+                                        <td class="vm-recharge-api-td--type">@item.apitype</td>
+                                        <td class="vm-recharge-api-td--req">@item.Requesttype</td>
+                                        <td class="vm-recharge-api-td--key">@item.Keyuserid</td>
+                                        <td class="vm-recharge-api-td--val">@item.valuserid</td>
+                                        <td class="vm-recharge-api-td--key">@item.Keypasscode</td>
+                                        <td class="vm-recharge-api-td--val">@item.valpasscode</td>
+                                        <td class="vm-recharge-api-td--key">@item.Keyrechargeno</td>
+                                        <td class="vm-recharge-api-td--key">@item.Keyoptcode</td>
+                                        <td class="vm-recharge-api-td--key">@item.KeyAmount</td>
+                                        <td class="vm-recharge-api-td--key">@item.KeyReqid</td>
+                                        <td class="vm-recharge-api-td--type">@item.isstv</td>
+                                        <td class="vm-recharge-api-td--key">@item.keystatecode</td>
+                                        <td class="vm-recharge-api-td--key">@item.keynoromaing</td>
+                                        <td class="vm-recharge-api-td--toggle">
+                                            @if (item.Sts == true)
+                                            {
+                                                <button type="button" class="vm-money-api-stats-toggle vm-money-api-stats-toggle--on vm-recharge-api-status-toggle" data-id="@item.id" title="Turn off">
+                                                    <span class="onoffswitch"><span class="costom-on">on</span></span>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="vm-money-api-stats-toggle vm-money-api-stats-toggle--off vm-recharge-api-status-toggle" data-id="@item.id" title="Turn on">
+                                                    <span class="onoffswitch"><span class="custom-off">off</span></span>
+                                                </button>
+                                            }
+                                        </td>
+                                        <td class="vm-recharge-api-td--toggle vm-recharge-api-td--s2f">
+                                            @if (item.success_to_failed == true)
+                                            {
+                                                <button type="button" class="vm-money-api-stats-toggle vm-money-api-stats-toggle--on vm-recharge-api-flag-toggle" data-id="@item.id" data-type="success_to_failed" title="Turn off">
+                                                    <span class="onoffswitch"><span class="costom-on">on</span></span>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="vm-money-api-stats-toggle vm-money-api-stats-toggle--off vm-recharge-api-flag-toggle" data-id="@item.id" data-type="success_to_failed" title="Turn on">
+                                                    <span class="onoffswitch"><span class="custom-off">off</span></span>
+                                                </button>
+                                            }
+                                        </td>
+                                        <td class="vm-recharge-api-td--toggle vm-recharge-api-td--f2s">
+                                            @if (item.failed_to_success == true)
+                                            {
+                                                <button type="button" class="vm-money-api-stats-toggle vm-money-api-stats-toggle--on vm-recharge-api-flag-toggle" data-id="@item.id" data-type="failed_to_success" title="Turn off">
+                                                    <span class="onoffswitch"><span class="costom-on">on</span></span>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="vm-money-api-stats-toggle vm-money-api-stats-toggle--off vm-recharge-api-flag-toggle" data-id="@item.id" data-type="failed_to_success" title="Turn on">
+                                                    <span class="onoffswitch"><span class="custom-off">off</span></span>
+                                                </button>
+                                            }
+                                        </td>
+                                        <td class="vm-recharge-api-td--action vm-api-nm-action-cell">
+                                            <div class="vm-api-nm-action-group">
+                                                <button type="button" class="vm-api-operator-edit-btn vm-recharge-api-edit-btn" data-id="@item.id" title="Edit API">
+                                                    <i class="fas fa-edit" aria-hidden="true"></i> Edit
+                                                </button>
+                                                <button type="button" class="vm-api-nm-delete-btn vm-recharge-api-delete-btn" data-id="@item.id" title="Delete API">
+                                                    <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>@item.apiname</td>
-                                            <td>@item.apiendpoint</td>
-                                            <td>@item.apitype</td>
-                                            <td>@item.Requesttype</td>
-                                            <td>@item.Keyuserid</td>
-                                            <td>@item.valuserid</td>
-                                            <td>@item.Keypasscode</td>
-                                            <td>@item.valpasscode</td>
-                                            <td>@item.Keyrechargeno</td>
-                                            <td>@item.Keyoptcode</td>
-                                            <td>@item.KeyAmount</td>
-                                            <td>@item.KeyReqid</td>
-                                            <td>@item.isstv</td>
-                                            <td>@item.keystatecode</td>
-                                            <td>@item.keynoromaing</td>
-                                            <td>
-                                                @if (item.Sts == true)
-                                                {
-                                                    <button style="background-color:transparent;border-color:transparent" onclick="update('@item.id')">
-                                                        <i class="fa fa-toggle-on fa-2x" style="color:green"></i>
-                                                    </button>
-                                                }
-                                                else
-                                                {
-                                                    <button style="background-color:transparent;border-color:transparent" onclick="update('@item.id')">
-                                                        <i class="fa fa-toggle-off fa-2x" style="color:red"></i>
-                                                    </button>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (item.success_to_failed == true)
-                                                {
-                                                    <button style="background-color:transparent;border-color:transparent" onclick="success_failed_change('@item.id', 'success_to_failed')">
-                                                        <i class="fa fa-toggle-on fa-2x" style="color:green"></i>
-                                                    </button>
-                                                }
-                                                else
-                                                {
-                                                    <button style="background-color:transparent;border-color:transparent" onclick="success_failed_change('@item.id', 'success_to_failed')">
-                                                        <i class="fa fa-toggle-off fa-2x" style="color:red"></i>
-                                                    </button>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (item.failed_to_success == true)
-                                                {
-                                                    <button style="background-color:transparent;border-color:transparent" onclick="success_failed_change('@item.id', 'failed_to_success')">
-                                                        <i class="fa fa-toggle-on fa-2x" style="color:green"></i>
-                                                    </button>
-                                                }
-                                                else
-                                                {
-                                                    <button style="background-color:transparent;border-color:transparent" onclick="success_failed_change('@item.id', 'failed_to_success')">
-                                                        <i class="fa fa-toggle-off fa-2x" style="color:red"></i>
-                                                    </button>
-                                                }
-                                            </td>
-                                            <td style=" display: flex;">
-                                                <button style="background-color:transparent;border-color:transparent" onclick="Edit('@item.id')">
-                                                    <i class="fa fa-edit fa-2x" style="color:red"></i>
-                                                </button>
-                                                <button style="background-color:transparent;border-color:transparent;" onclick="Delete('@item.id')">
-                                                    <i class="fa fa-trash-o fa-2x" style="color:red"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!--add modal popup-->
-<div class="modal fade" id="myModalAdd" tabindex="-1"  role="dialog">
-    <div class="modal-dialog" role="document" >
-        <!-- Modal content-->
+
+<!-- Add Recharge API Modal -->
+<div class="modal fade saas-admin-modal vm-sm-modal vm-api-operator-modal vm-api-nm-modal vm-recharge-api-modal" id="rechargeApiAddModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered saas-admin-modal-dialog vm-sm-modal-dialog vm-sm-modal-dialog--editor" role="document">
         <div class="modal-content">
-            @using (Html.BeginForm("InsertAPI", "Home", FormMethod.Post))
+            @using (Html.BeginForm("InsertAPI", "Home", FormMethod.Post, new { id = "rechargeApiAddForm" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="modal-header" style="background-color:whitesmoke;">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add Recharge API Url's</h4>
+                <div class="modal-header saas-admin-modal-header accent-sky">
+                    <div class="saas-admin-modal-head-main">
+                        <div class="saas-admin-modal-icon"><i class="fas fa-plus" aria-hidden="true"></i></div>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Add Recharge API Url</h4>
+                            <p class="saas-admin-modal-subtitle">Configure recharge API endpoint and keys</p>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
-                <div class="modal-body">
-                    <div class="body">
-
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Enter Api Name</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("addApinm", "", new { @class = "form-control", placeholder = "Enter Api Name", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body">
+                    <div class="vm-sm-modal-panel vm-api-operator-form-grid">
+                        <div class="vm-sm-modal-field">
+                            <label for="addApinm">API Name</label>
+                            @Html.TextBox("addApinm", "", new { id = "addApinm", @class = "form-control", placeholder = "Enter API Name", required = "required" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Api URL</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextArea("addApiUrl", "", new { @style = "height:100px;", @class = "form-control", placeholder = "Enter Api URL", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="addApiUrl">API URL</label>
+                            @Html.TextArea("addApiUrl", "", new { id = "addApiUrl", @class = "form-control", placeholder = "Enter API URL", required = "required", rows = 3 })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Api Type</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.DropDownList("addapitype", new List<SelectListItem>
-                                   {
-                                          new SelectListItem{Text="Get", Value="Get"},
-                                          new SelectListItem{Text="Post", Value="Post"}
-                                   }, new { @class = "form-control", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addapitype">API Type</label>
+                            @Html.DropDownList("addapitype", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "Get", Value = "Get" },
+                                new SelectListItem { Text = "Post", Value = "Post" }
+                            }, new { id = "addapitype", @class = "form-control", required = "required" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Api Request Type</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.DropDownList("addapireqtype", new List<SelectListItem>
-                                   {
-                                          new SelectListItem{Text="Query String", Value="Query String"},
-                                       new SelectListItem{Text="Form", Value="Form"},
-                                       new SelectListItem{Text="JSON", Value="JSON"}
-                                   }, new { @class = "form-control", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addapireqtype">Request Type</label>
+                            @Html.DropDownList("addapireqtype", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "Query String", Value = "Query String" },
+                                new SelectListItem { Text = "Form", Value = "Form" },
+                                new SelectListItem { Text = "JSON", Value = "JSON" }
+                            }, new { id = "addapireqtype", @class = "form-control", required = "required" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key User ID</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("addkeyuserid", "", new { @class = "form-control", placeholder = "Enter Key USERID", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addkeyuserid">Key User ID</label>
+                            @Html.TextBox("addkeyuserid", "", new { id = "addkeyuserid", @class = "form-control", placeholder = "Enter Key USERID", required = "required" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Value Userid</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("addvalueuserid", "", new { @class = "form-control", placeholder = "Enter Userid" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addvalueuserid">Value Userid</label>
+                            @Html.TextBox("addvalueuserid", "", new { id = "addvalueuserid", @class = "form-control", placeholder = "Enter Userid" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key Passcode</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("addkeypasscode", "", new { @class = "form-control", placeholder = "Enter Key Pass code", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addkeypasscode">Key Passcode</label>
+                            @Html.TextBox("addkeypasscode", "", new { id = "addkeypasscode", @class = "form-control", placeholder = "Enter Key Pass code", required = "required" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Value Pass Code</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("addvalpasscode", "", new { @class = "form-control", placeholder = "Enter Value Pass Code", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addvalpasscode">Value Pass Code</label>
+                            @Html.TextBox("addvalpasscode", "", new { id = "addvalpasscode", @class = "form-control", placeholder = "Enter Value Pass Code", required = "required" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key Recharge Number</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("addrchnumber", "", new { @class = "form-control", placeholder = "Enter Key Recharge Number", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addrchnumber">Key Recharge Number</label>
+                            @Html.TextBox("addrchnumber", "", new { id = "addrchnumber", @class = "form-control", placeholder = "Enter Key Recharge Number", required = "required" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key Operator Code</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("addkeyoptcode", "", new { @class = "form-control", placeholder = "Enter Operator Code", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addkeyoptcode">Key Operator Code</label>
+                            @Html.TextBox("addkeyoptcode", "", new { id = "addkeyoptcode", @class = "form-control", placeholder = "Enter Operator Code", required = "required" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key Amount</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("addekyamount", "", new { @class = "form-control", placeholder = "Enter Key Amount", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addekyamount">Key Amount</label>
+                            @Html.TextBox("addekyamount", "", new { id = "addekyamount", @class = "form-control", placeholder = "Enter Key Amount", required = "required" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key Request ID</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("addrequestID", "", new { @class = "form-control", placeholder = "Enter Key Request ID", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addrequestID">Key Request ID</label>
+                            @Html.TextBox("addrequestID", "", new { id = "addrequestID", @class = "form-control", placeholder = "Enter Key Request ID", required = "required" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">is STV</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-
-                                        @Html.TextBox("addisstv", "", new { @class = "form-control", placeholder = "Enter is STV" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addisstv">is STV</label>
+                            @Html.TextBox("addisstv", "", new { id = "addisstv", @class = "form-control", placeholder = "Enter is STV" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key State Code</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-
-                                        @Html.TextBox("addstatecode", "", new { @class = "form-control", placeholder = "Enter State CODE" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addstatecode">Key State Code</label>
+                            @Html.TextBox("addstatecode", "", new { id = "addstatecode", @class = "form-control", placeholder = "Enter State CODE" })
                         </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key No Romaing</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-
-                                        @Html.TextBox("addkeynoromaing", "", new { @class = "form-control", placeholder = "Enter Key No Romaing" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="addkeynoromaing">Key No Romaing</label>
+                            @Html.TextBox("addkeynoromaing", "", new { id = "addkeynoromaing", @class = "form-control", placeholder = "Enter Key No Romaing" })
                         </div>
-
                     </div>
-                    </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn fullbodydycolorbg waves-effect" style=" height:32px;">
-                        <span style="color:#fff;">Insert API</span>
+                </div>
+                <div class="modal-footer saas-admin-modal-footer vm-sm-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                        <i class="fas fa-times" aria-hidden="true"></i> Cancel
                     </button>
-                  
-                </div>
-                    }
-                </div>
-    </div>
-</div>
-<!--end-->
-<!--Edit modal popup-->
-<div class="modal fade" id="myModalEdit" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <!-- Modal content-->
-        <div class="modal-content">
-            @using (Html.BeginForm("EDITAPI", "Home", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                @Html.Hidden("editid")
-                <div class="modal-header" style="background-color:whitesmoke;">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Edit Recharge API Url's</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="body">
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Enter Api Name</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("editApinm", "", new { @class = "form-control", placeholder = "Enter Api Name", required = "required", @disabled=true })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Api URL</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextArea("editApiUrl", "", new { @style = "height:100px;", @class = "form-control", placeholder = "Enter Api URL", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Api Type</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.DropDownList("editapitype", new List<SelectListItem>
-                                   {
-                                          new SelectListItem{Text="Get", Value="Get"},
-                                          new SelectListItem{Text="Post", Value="Post"}
-                                   }, new { @class = "form-control", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Api Request Type</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.DropDownList("editapireqtype", new List<SelectListItem>
-                                   {
-                                          new SelectListItem{Text="Query String", Value="Query String"},
-                                       new SelectListItem{Text="Form", Value="Form"},
-                                       new SelectListItem{Text="JSON", Value="JSON"}
-                                   }, new { @class = "form-control", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key User ID</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("Editkeyuserid", "", new { @class = "form-control", placeholder = "Enter Key USERID", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Value Userid</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("Editvalueuserid", "", new { @class = "form-control", placeholder = "Enter Userid" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key Passcode</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("editkeypasscode", "", new { @class = "form-control", placeholder = "Enter Key Pass code", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Value Pass Code</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("editvalpasscode", "", new { @class = "form-control", placeholder = "Enter Value Pass Code", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key Recharge Number</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("editrchnumber", "", new { @class = "form-control", placeholder = "Enter Key Recharge Number", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key Operator Code</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("editkeyoptcode", "", new { @class = "form-control", placeholder = "Enter Operator Code", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key Amount</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("editekyamount", "", new { @class = "form-control", placeholder = "Enter Key Amount", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key Request ID</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("editrequestID", "", new { @class = "form-control", placeholder = "Enter Key Request ID", required = "required" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">is STV</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-
-                                        @Html.TextBox("editisstv", "", new { @class = "form-control", placeholder = "Enter is STV" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key State Code</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-
-                                        @Html.TextBox("editstatecode", "", new { @class = "form-control", placeholder = "Enter State CODE" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Key No Romaing</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-
-                                        @Html.TextBox("editkeynoromaing", "", new { @class = "form-control", placeholder = "Enter Key No Romaing" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" onclick="return func()"  class="btn fullbodydycolorbg waves-effect" style=" height:32px;">
-                        <span style="color:#fff;">Submit</span>
+                    <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-save" aria-hidden="true"></i> Insert API
                     </button>
-
                 </div>
             }
         </div>
     </div>
 </div>
-<!--end-->
-<div id="loadredmodel" style="display:none; position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);" class="loadingio-spinner-ripple-92ar2pfqk5j">
-    <div class="ldio-zdyd6mf6t5">
-        <div></div><div></div>
+
+<!-- Edit Recharge API Modal -->
+<div class="modal fade saas-admin-modal vm-sm-modal vm-api-operator-modal vm-api-nm-modal vm-recharge-api-modal" id="rechargeApiEditModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered saas-admin-modal-dialog vm-sm-modal-dialog vm-sm-modal-dialog--editor" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("EDITAPI", "Home", FormMethod.Post, new { id = "rechargeApiEditForm" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("editid", "", new { id = "editid" })
+                <div class="modal-header saas-admin-modal-header accent-emerald">
+                    <div class="saas-admin-modal-head-main">
+                        <div class="saas-admin-modal-icon"><i class="fas fa-edit" aria-hidden="true"></i></div>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Edit Recharge API Url</h4>
+                            <p class="saas-admin-modal-subtitle">Update recharge API endpoint and keys</p>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body">
+                    <div class="vm-sm-modal-panel vm-api-operator-form-grid">
+                        <div class="vm-sm-modal-field">
+                            <label for="editApinm">API Name</label>
+                            @Html.TextBox("editApinm", "", new { id = "editApinm", @class = "form-control", placeholder = "Enter API Name", required = "required", @readonly = "readonly" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="editApiUrl">API URL</label>
+                            @Html.TextArea("editApiUrl", "", new { id = "editApiUrl", @class = "form-control", placeholder = "Enter API URL", required = "required", rows = 3 })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="editapitype">API Type</label>
+                            @Html.DropDownList("editapitype", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "Get", Value = "Get" },
+                                new SelectListItem { Text = "Post", Value = "Post" }
+                            }, new { id = "editapitype", @class = "form-control", required = "required" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="editapireqtype">Request Type</label>
+                            @Html.DropDownList("editapireqtype", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "Query String", Value = "Query String" },
+                                new SelectListItem { Text = "Form", Value = "Form" },
+                                new SelectListItem { Text = "JSON", Value = "JSON" }
+                            }, new { id = "editapireqtype", @class = "form-control", required = "required" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="Editkeyuserid">Key User ID</label>
+                            @Html.TextBox("Editkeyuserid", "", new { id = "Editkeyuserid", @class = "form-control", placeholder = "Enter Key USERID", required = "required" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="Editvalueuserid">Value Userid</label>
+                            @Html.TextBox("Editvalueuserid", "", new { id = "Editvalueuserid", @class = "form-control", placeholder = "Enter Userid" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="editkeypasscode">Key Passcode</label>
+                            @Html.TextBox("editkeypasscode", "", new { id = "editkeypasscode", @class = "form-control", placeholder = "Enter Key Pass code", required = "required" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="editvalpasscode">Value Pass Code</label>
+                            @Html.TextBox("editvalpasscode", "", new { id = "editvalpasscode", @class = "form-control", placeholder = "Enter Value Pass Code", required = "required" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="editrchnumber">Key Recharge Number</label>
+                            @Html.TextBox("editrchnumber", "", new { id = "editrchnumber", @class = "form-control", placeholder = "Enter Key Recharge Number", required = "required" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="editkeyoptcode">Key Operator Code</label>
+                            @Html.TextBox("editkeyoptcode", "", new { id = "editkeyoptcode", @class = "form-control", placeholder = "Enter Operator Code", required = "required" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="editekyamount">Key Amount</label>
+                            @Html.TextBox("editekyamount", "", new { id = "editekyamount", @class = "form-control", placeholder = "Enter Key Amount", required = "required" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="editrequestID">Key Request ID</label>
+                            @Html.TextBox("editrequestID", "", new { id = "editrequestID", @class = "form-control", placeholder = "Enter Key Request ID", required = "required" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="editisstv">is STV</label>
+                            @Html.TextBox("editisstv", "", new { id = "editisstv", @class = "form-control", placeholder = "Enter is STV" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="editstatecode">Key State Code</label>
+                            @Html.TextBox("editstatecode", "", new { id = "editstatecode", @class = "form-control", placeholder = "Enter State CODE" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="editkeynoromaing">Key No Romaing</label>
+                            @Html.TextBox("editkeynoromaing", "", new { id = "editkeynoromaing", @class = "form-control", placeholder = "Enter Key No Romaing" })
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer saas-admin-modal-footer vm-sm-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                        <i class="fas fa-times" aria-hidden="true"></i> Cancel
+                    </button>
+                    <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save Changes
+                    </button>
+                </div>
+            }
+        </div>
     </div>
 </div>
+
 <script>
-    update = (id) => {
-        var url = '@Url.Action("UpdateApiUrlSts","Home")'
-        var requ = { "idno": id }
-        var request = JSON.stringify(requ);
-        fetch(url, {
-            method: "Post",
-            headers: { "Content-Type": "application/json" },
-            body: request
-        }).then(Response => Response.json()).then(res => window.location.reload(true)).catch(err => alert(err));
-    }
-
-    success_failed_change = (id, type) => {
-        var url = '@Url.Action("success_failed_change", "Home")'
-        var requ = { "idno": id, type }
-        var request = JSON.stringify(requ);
-        fetch(url, {
-            method: "Post",
-            headers: { "Content-Type": "application/json" },
-            body: request
-        }).then(Response => Response.json()).then(res => window.location.reload(true)).catch(err => alert(err));
-    }
-</script>
-<script>
-    Edit = (id) => {
-        var url = '@Url.Action("EditRechargeAPIURLS","Home")'
-        var requ = { "idno": id }
-        var request = JSON.stringify(requ);
-        fetch(url, {
-            method: "Post",
-            headers: { "Content-Type": "application/json" },
-            body: request
-        }).then(Response => Response.json()).then(res => {
-            $('#editid').val(res[0].id);
-            $('#editApinm').val(res[0].apiname);
-            $('#editApiUrl').val(res[0].apiendpoint);
-            $('#editapitype').val(res[0].apitype).change();
-            $('#editapireqtype').val(res[0].Requesttype).change();
-            $('#Editkeyuserid').val(res[0].Keyuserid);
-            $('#Editvalueuserid').val(res[0].valuserid);
-            $('#editkeypasscode').val(res[0].Keypasscode);
-            $('#editvalpasscode').val(res[0].valpasscode);
-            $('#editrchnumber').val(res[0].Keyrechargeno);
-            $('#editkeyoptcode').val(res[0].Keyoptcode);
-            $('#editekyamount').val(res[0].KeyAmount)
-            $('#editrequestID').val(res[0].KeyReqid)
-            $('#editisstv').val(res[0].isstv);
-            $('#editstatecode').val(res[0].keystatecode);
-            $('#editkeynoromaing').val(res[0].keynoromaing);
-            $('#myModalEdit').modal()
-        }).catch(err => console.log(err));
-    }
-
-    function Delete(id) {
-        if (confirm('are you sure?')) {
-            fetch('@Url.Action("Delete_Recharge_Api")?id=' + id)
-            .then(res => res.json())
-            .then(data => {
-                if (data.status) {
-                    location.reload();
-                }
-            })
-            .catch(err => console.log(err));
-        }
-    }
-</script>
-<script type="text/javascript">
-    jQuery(function ($) {
-        var active_class = 'active';
-        $('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function () {
-            var th_checked = this.checked;//checkbox inside "TH" table header
-
-            $(this).closest('table').find('tbody > tr').each(function () {
-                var row = this;
-                if (th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-                else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+    (function () {
+        function applyRechargeApiSearch() {
+            var q = ($('#rechargeApiSearch').val() || '').trim().toLowerCase();
+            $('#rechargeApiUrlTable tbody tr').each(function () {
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(!q || text.indexOf(q) > -1);
             });
-        });
+        }
 
-        //select/deselect a row when the checkbox is checked/unchecked
-        $('#simple-table').on('click', 'td input[type=checkbox]', function () {
-            var $row = $(this).closest('tr');
-            if ($row.is('.detail-row ')) return;
-            if (this.checked) $row.addClass(active_class);
-            else $row.removeClass(active_class);
-        });
+        function postJson(url, payload) {
+            return fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(function (response) {
+                return response.json();
+            });
+        }
 
-        /***************/
+        function openRechargeApiModal(selector) {
+            if (typeof window.showAdminModal === 'function') {
+                window.showAdminModal(selector);
+            } else if (window.jQuery) {
+                window.jQuery(selector).modal('show');
+            }
+        }
 
-        $('.show-details-btn').on('click', function (e) {
+        function closeRechargeApiModal(selector) {
+            var target = selector;
+            if (selector && selector.jquery) {
+                target = '#' + selector.attr('id');
+            }
+            if (typeof window.hideAdminModal === 'function') {
+                window.hideAdminModal(target);
+            } else if (window.jQuery) {
+                window.jQuery(target).modal('hide');
+            }
+        }
 
-            e.preventDefault();
-            $(this).closest('tr').next().toggleClass('open');
-            $(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
-        });
-        /***************/
-    })
+        function openRechargeApiEditModal(id) {
+            postJson('@Url.Action("EditRechargeAPIURLS", "Home")', { idno: id })
+                .then(function (res) {
+                    if (!res || !res.length) {
+                        if (window.swal) {
+                            swal('Error', 'Unable to load API details.', 'error');
+                        }
+                        return;
+                    }
+
+                    var row = res[0];
+                    $('#editid').val(row.id);
+                    $('#editApinm').val(row.apiname || '');
+                    $('#editApiUrl').val(row.apiendpoint || '');
+                    $('#editapitype').val(row.apitype || '').trigger('change');
+                    $('#editapireqtype').val(row.Requesttype || '').trigger('change');
+                    $('#Editkeyuserid').val(row.Keyuserid || '');
+                    $('#Editvalueuserid').val(row.valuserid || '');
+                    $('#editkeypasscode').val(row.Keypasscode || '');
+                    $('#editvalpasscode').val(row.valpasscode || '');
+                    $('#editrchnumber').val(row.Keyrechargeno || '');
+                    $('#editkeyoptcode').val(row.Keyoptcode || '');
+                    $('#editekyamount').val(row.KeyAmount || '');
+                    $('#editrequestID').val(row.KeyReqid || '');
+                    $('#editisstv').val(row.isstv || '');
+                    $('#editstatecode').val(row.keystatecode || '');
+                    $('#editkeynoromaing').val(row.keynoromaing || '');
+                    openRechargeApiModal('#rechargeApiEditModal');
+                })
+                .catch(function () {
+                    if (window.swal) {
+                        swal('Error', 'Unable to load API details.', 'error');
+                    }
+                });
+        }
+
+        function deleteRechargeApi(id) {
+            var doDelete = function () {
+                fetch('@Url.Action("Delete_Recharge_Api", "Home")?id=' + encodeURIComponent(id))
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        if (data && data.status) {
+                            location.reload();
+                        } else if (window.swal) {
+                            swal('Error', (data && data.message) ? data.message : 'Unable to delete API.', 'error');
+                        }
+                    })
+                    .catch(function () {
+                        if (window.swal) {
+                            swal('Error', 'Unable to delete API.', 'error');
+                        }
+                    });
+            };
+
+            if (window.swal) {
+                swal({
+                    title: 'Are you sure?',
+                    text: 'This recharge API will be deleted permanently.',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    confirmButtonText: 'Yes, delete',
+                    cancelButtonText: 'Cancel'
+                }, function (confirmed) {
+                    if (confirmed) {
+                        doDelete();
+                    }
+                });
+            } else if (window.confirm('Are you sure?')) {
+                doDelete();
+            }
+        }
+
+        function bootRechargeApiPage() {
+            var $ = window.jQuery;
+            if (!$ || !$.fn || !$.fn.modal) {
+                window.setTimeout(bootRechargeApiPage, 50);
+                return;
+            }
+
+            $('#rechargeApiSearch').off('keyup.rechargeApi').on('keyup.rechargeApi', applyRechargeApiSearch);
+
+            $(document).off('click.rechargeApiStatus', '.vm-recharge-api-status-toggle').on('click.rechargeApiStatus', '.vm-recharge-api-status-toggle', function () {
+                var id = $(this).data('id');
+                var $btn = $(this);
+                $btn.prop('disabled', true);
+
+                postJson('@Url.Action("UpdateApiUrlSts", "Home")', { idno: id })
+                    .then(function () {
+                        location.reload();
+                    })
+                    .catch(function () {
+                        $btn.prop('disabled', false);
+                        if (window.swal) {
+                            swal('Error', 'Unable to update status.', 'error');
+                        }
+                    });
+            });
+
+            $(document).off('click.rechargeApiFlag', '.vm-recharge-api-flag-toggle').on('click.rechargeApiFlag', '.vm-recharge-api-flag-toggle', function () {
+                var id = $(this).data('id');
+                var type = $(this).data('type');
+                var $btn = $(this);
+                $btn.prop('disabled', true);
+
+                postJson('@Url.Action("success_failed_change", "Home")', { idno: id, type: type })
+                    .then(function () {
+                        location.reload();
+                    })
+                    .catch(function () {
+                        $btn.prop('disabled', false);
+                        if (window.swal) {
+                            swal('Error', 'Unable to update setting.', 'error');
+                        }
+                    });
+            });
+
+            $(document).off('click.rechargeApiEdit', '.vm-recharge-api-edit-btn').on('click.rechargeApiEdit', '.vm-recharge-api-edit-btn', function () {
+                openRechargeApiEditModal($(this).data('id'));
+            });
+
+            $(document).off('click.rechargeApiDelete', '.vm-recharge-api-delete-btn').on('click.rechargeApiDelete', '.vm-recharge-api-delete-btn', function () {
+                deleteRechargeApi($(this).data('id'));
+            });
+
+            $(document).off('click.rechargeApiAdd', '.vm-recharge-api-add-btn').on('click.rechargeApiAdd', '.vm-recharge-api-add-btn', function (e) {
+                e.preventDefault();
+                openRechargeApiModal('#rechargeApiAddModal');
+            });
+
+            $('#rechargeApiAddModal, #rechargeApiEditModal').off('click.rechargeApiClose', '[data-dismiss="modal"]').on('click.rechargeApiClose', '[data-dismiss="modal"]', function (e) {
+                e.preventDefault();
+                closeRechargeApiModal($(this).closest('.modal'));
+            });
+
+            $('#rechargeApiAddModal').off('hidden.bs.modal.rechargeApi').on('hidden.bs.modal.rechargeApi', function () {
+                var form = document.getElementById('rechargeApiAddForm');
+                if (form) {
+                    form.reset();
+                }
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bootRechargeApiPage);
+        } else {
+            bootRechargeApiPage();
+        }
+    })();
 </script>
-

@@ -1,0 +1,511 @@
+/* ================================================================
+   M-ATM Device Info — page-specific styling.
+   The page reuses admin-ecommerce-modern.css directly (same
+   .Ecommerce_Page-scoped vm-ecom-* classes: form cards, field rows,
+   inputs, buttons, table) so the design stays "same to same" with
+   ADMIN/Home/Ecommerce. This file only covers the handful of pieces
+   unique to this page — the toolbar's Charge List / Rental Report
+   links, the success/error banners, and the device table's
+   Remain-Days badge + inline Edit/Save actions.
+   ================================================================ */
+
+/* The device table has 10 columns and is wider than the card once the
+   Remain-Days/status badges and Edit button are added — a flex item
+   with no explicit min-width defaults to the width of its content
+   (min-width:auto), so that wide table was forcing .vm-ft-history-col
+   (and everything flexed inside it) past the card's own width and
+   pushing the whole page wider than the viewport, exposing a solid
+   black strip of the page background to the right of the fold.
+   min-width:0 on the whole flex chain lets the table-responsive
+   wrapper's own overflow:auto take over and scroll internally instead. */
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ft-history-col,
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ft-form-col,
+body.saas-admin-ui .MicroAtmDevice_Page .fund-trasfer-right.vm-ft-history-panel,
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ft-history-body,
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-table-wrap {
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ft-page-shell,
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ft-layout-wrap,
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ft-layout.vm-ft-layout--full {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-table-wrap > table.vm-ecom-table {
+    min-width: 780px !important;
+}
+
+/* The left card has no tabs (single "Create Device info" form), so
+   its lone content wrapper needs the same flex/scroll treatment the
+   shared card gives to tabbed content, otherwise it just overflows
+   the fixed-height card silently (card has overflow:hidden). */
+body.saas-admin-ui .MicroAtmDevice_Page .fund-trasfer-left.vm-ft-form-card > #tab-9.tab-content.current {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 4px 4px 0 !important;
+}
+
+/* Start Date field — the shared .saas-acc-dp-field/.saas-acc-dp-input
+   classes default to a compact ~160px width (built for sitting next
+   to other filters in a report toolbar row). Here the date field is
+   the only control on its own row, so it should span the same full
+   width as the Retailer ID / Device Name / Plan Name selects above
+   it, with the same modern rounded look. */
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-date-wrap {
+    width: 100% !important;
+    display: block !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-date-field {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-date-field .saas-acc-dp-input,
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-date-field .form-control.saas-acc-dp-input {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    padding: 0 14px 0 38px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    font-size: 0.88rem !important;
+    color: #1e293b !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-date-field .saas-acc-dp-input:focus {
+    outline: none !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-date-field .saas-acc-dp-icon {
+    color: #94a3b8 !important;
+    left: 14px !important;
+}
+
+/* Retailer ID / Device Name / Plan Name / Charge Type all get
+   select2-ified by the page's own script ( ravi("select").select2() )
+   *on top of* the modern vm-ecom-select-wrap chevron, so every
+   dropdown ended up showing select2's own grey triangle arrow
+   stacked right next to the custom SVG chevron drawn by the wrapper's
+   ::before — a "double icon". Drop the wrapper's chevron on this page
+   and restyle select2's own box/arrow to match the same modern look
+   (single clean chevron) instead. */
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-select-wrap::before {
+    display: none !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-select-wrap .select2-container {
+    width: 100% !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-select-wrap .select2-selection--single {
+    height: 42px !important;
+    min-height: 42px !important;
+    display: flex !important;
+    align-items: center !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-select-wrap .select2-selection__rendered {
+    padding: 0 34px 0 14px !important;
+    line-height: 40px !important;
+    font-size: 0.88rem !important;
+    color: #1e293b !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-select-wrap .select2-selection__arrow {
+    height: 100% !important;
+    top: 0 !important;
+    right: 4px !important;
+    width: 30px !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-select-wrap .select2-selection__arrow b {
+    display: none !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-select-wrap .select2-selection__arrow::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 7px;
+    margin: -3px 0 0 -5px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%2364748b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / contain;
+    pointer-events: none;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-select-wrap .select2-container--open .select2-selection--single,
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-select-wrap .select2-container--focus .select2-selection--single {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+/* Toolbar — Charge List / Rental Report links + search, combined in
+   one flex row (same trick used by the Web Login page's toolbar). */
+body.saas-admin-ui .MicroAtmDevice_Page .vm-ft-page-toolbar .vm-ft-search-wrap.vm-matm-toolbar-actions {
+    flex: 1 1 auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-toolbar-actions input#txtsearch {
+    flex: 1 1 200px !important;
+    max-width: 260px !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-toolbar-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    height: 34px !important;
+    padding: 0 14px !important;
+    border-radius: 8px !important;
+    border: 1px solid #dbe2ea !important;
+    background: #fff !important;
+    color: #334155 !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+    transition: all 0.15s ease !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-toolbar-btn i {
+    color: #2563eb !important;
+    font-size: 0.78rem !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-toolbar-btn:hover {
+    background: linear-gradient(135deg, #eff6ff 0%, #fff 100%) !important;
+    border-color: #2563eb !important;
+    color: #1d4ed8 !important;
+    text-decoration: none !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15) !important;
+}
+
+/* Success / error banners above the Insert Device button — hidden
+   whenever they have no text instead of always rendering as a solid
+   colour bar. */
+.MicroAtmDevice_Page .vm-matm-msg {
+    width: 100% !important;
+    margin: 0 0 10px !important;
+    padding: 9px 12px !important;
+    border-radius: 8px !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-msg:empty {
+    display: none !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-msg--ok {
+    background: #ecfdf5 !important;
+    color: #047857 !important;
+    border: 1px solid #a7f3d0 !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-msg--err {
+    background: #fef2f2 !important;
+    color: #b91c1c !important;
+    border: 1px solid #fecaca !important;
+}
+
+/* Device table — column widths/alignment so the 10 columns read as a
+   deliberately designed table instead of everything being left-
+   aligned and auto-width. Dates and the Mobile number don't wrap,
+   the badge/edit columns are centered, and the Device ID column
+   keeps a readable minimum width. */
+.MicroAtmDevice_Page .vm-ecom-table-wrap table th:nth-child(1),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table td:nth-child(1) {
+    min-width: 130px !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+}
+
+.MicroAtmDevice_Page .vm-ecom-table-wrap table th:nth-child(4),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table td:nth-child(4),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table th:nth-child(5),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table td:nth-child(5),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table th:nth-child(6),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table td:nth-child(6),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table th:nth-child(7),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table td:nth-child(7) {
+    white-space: nowrap !important;
+}
+
+.MicroAtmDevice_Page .vm-ecom-table-wrap table th:nth-child(8),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table td:nth-child(8),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table th:nth-child(9),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table td:nth-child(9),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table th:nth-child(10),
+.MicroAtmDevice_Page .vm-ecom-table-wrap table td:nth-child(10) {
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+/* Device table — Remain Days badge */
+.MicroAtmDevice_Page .vm-matm-remain-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 60px !important;
+    min-height: 24px !important;
+    padding: 0 10px !important;
+    border-radius: 999px !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-remain-badge--ok {
+    background: #ecfdf5 !important;
+    color: #047857 !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-remain-badge--warn {
+    background: #fffbeb !important;
+    color: #b45309 !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-remain-badge--info {
+    background: #eff6ff !important;
+    color: #1d4ed8 !important;
+}
+
+/* Inline Edit / Save actions in the device table */
+.MicroAtmDevice_Page .vm-matm-edit-btn,
+.MicroAtmDevice_Page .vm-matm-save-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    height: 30px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    font-size: 0.74rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-edit-btn {
+    background: #f1f5f9 !important;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-edit-btn:hover {
+    background: #e2e8f0 !important;
+    transform: translateY(-1px) !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-save-btn {
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.28) !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-save-btn:hover {
+    filter: brightness(1.06) !important;
+    transform: translateY(-1px) !important;
+}
+
+.MicroAtmDevice_Page .editbutton-spinclass {
+    margin-left: 4px !important;
+}
+
+/* Inline-edit row's select2 dropdowns (Firm Name / Charge Type) —
+   the legacy .select2addnew wrapper forced a fixed 150px width; give
+   it room to sit comfortably inside the modern table cell instead. */
+.MicroAtmDevice_Page .vm-matm-edit-select {
+    width: 100% !important;
+    min-width: 150px !important;
+}
+
+.MicroAtmDevice_Page .vm-matm-edit-select .select2-container {
+    width: 100% !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-edit-select .select2-selection--single {
+    height: 36px !important;
+    min-height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-edit-select .select2-selection__rendered {
+    padding: 0 28px 0 10px !important;
+    line-height: 34px !important;
+    font-size: 0.8rem !important;
+    color: #1e293b !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-edit-select .select2-selection__arrow {
+    height: 100% !important;
+    top: 0 !important;
+    right: 4px !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-edit-select .select2-selection__arrow b {
+    display: none !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-edit-select .select2-selection__arrow::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 7px;
+    margin: -3px 0 0 -5px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%2364748b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / contain;
+    pointer-events: none;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-edit-native-select {
+    width: 100% !important;
+    min-width: 110px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 28px 0 10px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 8px !important;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%2364748b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 10px center / 10px 7px !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    color: #1e293b !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-edit-native-select:focus {
+    outline: none !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .MicroAtmDevice_Page #mdList tbody tr:hover {
+    background: #f8fafc !important;
+}
+
+/* ================================================================
+   Mobile / tablet responsiveness
+   ================================================================ */
+
+/* Tablet (≤991px) — the shared fund-transfer shell already stacks
+   the two cards full-width and resets their height to auto below
+   1199px; here we just tighten up the toolbar row and give the wide
+   table a "swipe" hint since 10 columns need horizontal scrolling on
+   a touch screen. */
+@media (max-width: 991px) {
+    body.saas-admin-ui .MicroAtmDevice_Page .vm-ft-page-toolbar .vm-ft-search-wrap.vm-matm-toolbar-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-toolbar-actions input#txtsearch,
+    body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-toolbar-btn {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-toolbar-btn {
+        justify-content: flex-start !important;
+        height: 48px !important;
+        padding: 0 16px !important;
+        border-radius: 12px !important;
+        gap: 12px !important;
+        font-size: 0.86rem !important;
+        border: 1px solid #e4e9f0 !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
+    }
+
+    .MicroAtmDevice_Page .vm-matm-toolbar-btn i {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 30px !important;
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 9px !important;
+        font-size: 0.82rem !important;
+        color: #2563eb !important;
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+    }
+
+    .MicroAtmDevice_Page a.vm-matm-toolbar-btn:nth-of-type(2) i {
+        color: #7c3aed !important;
+        background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%) !important;
+    }
+
+    .MicroAtmDevice_Page .vm-matm-toolbar-btn:active {
+        transform: scale(0.98) !important;
+        background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%) !important;
+        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08) !important;
+    }
+
+    .MicroAtmDevice_Page .vm-ft-history-body > .vm-ecom-table-wrap::after {
+        content: "Swipe table left / right to see more \2192";
+        display: block;
+        padding: 6px 4px 2px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: #64748b;
+        text-align: center;
+        background: #fff;
+    }
+}
+
+/* Phone (≤767px) — stack the toolbar actions, buttons and search box
+   go full-width, and the left card's fields already inherit the
+   Ecommerce_Page mobile rules (padding, full-width buttons, etc). */
+@media (max-width: 767px) {
+    body.saas-admin-ui .MicroAtmDevice_Page .vm-ft-form-card-header,
+    body.saas-admin-ui .MicroAtmDevice_Page .vm-ft-history-toolbar {
+        padding: 12px 14px !important;
+    }
+
+    body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-date-field .saas-acc-dp-input,
+    body.saas-admin-ui .MicroAtmDevice_Page .vm-matm-date-field .form-control.saas-acc-dp-input {
+        font-size: 16px !important;
+    }
+
+    body.saas-admin-ui .MicroAtmDevice_Page .vm-ecom-select-wrap .select2-selection__rendered {
+        font-size: 0.86rem !important;
+    }
+
+    .MicroAtmDevice_Page .vm-matm-edit-btn span,
+    .MicroAtmDevice_Page .vm-matm-save-btn {
+        font-size: 0.72rem !important;
+    }
+}

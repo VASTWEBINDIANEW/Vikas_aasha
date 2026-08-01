@@ -357,6 +357,9 @@ function onTestSuccess1(data) {
 
     });
     $("#mytableDealer > tbody").html(tblHtml);
+    if (window.oiOpenHistory) {
+        window.oiOpenHistory('.for-Distributor');
+    }
 
 }
 
@@ -522,7 +525,9 @@ function onTestSuccess2(data) {
 
 
     $("#apiusertable > tbody").html(tblHtml);
-
+    if (window.oiOpenHistory) {
+        window.oiOpenHistory('.for-Api-User');
+    }
 
 }
 
@@ -1060,7 +1065,9 @@ function onTestSuccess3(data) {
 
 
     $("#whitelabeltable > tbody").html(tblHtml);
-
+    if (window.oiOpenHistory) {
+        window.oiOpenHistory('.for-White-Label');
+    }
 
 }
 

@@ -1,763 +1,443 @@
 @model IEnumerable<Vastwebmulti.Models.Recharge_API_URLS>
+@using System.Linq
 @{
     ViewBag.Title = "Api_Name";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var apiRows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.Recharge_API_URLS>();
+    var selectedApinm = (Request["apinm"] ?? "").Trim();
+    var apiFilterNames = apiRows
+        .Select(a => a.API_Name)
+        .Where(n => !string.IsNullOrWhiteSpace(n))
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .OrderBy(n => n)
+        .ToList();
 }
-<style>
 
-   /* new css */
-    .col-md-12.rtyfrty {
-        padding: 0;
-    }
-    .col-md-7.rtyfrtyclass-third {
-        padding: 0;
-    }
-    .rtyfrty .card {
-        width: 100%;
-        float: left;
-        margin-bottom: 4px;
-    }
-    .modal-body .row.clearfix {
-        padding: 2px 0px;
-    }
-    #ul li {
-        width: 15%;
-    }
-    #ul {
-        display: flex;
-    }
-    .rtyfrtyclass-third {
-        padding: 0;
-        margin-bottom: 4px;
-    }
-    .rtyfrty form {
-        display: flex;
-        align-items: center;
-        justify-content: end;
-    }
-    .vacrivet {
-        padding: 0 5px;
-    }
-    .modal-footer {
-        margin-top: 10px;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=28" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-operator-modern.css?v=20" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
-   /* new css */
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-api-operator-page saas-api-name-page">
+    <div class="container-fluid vm-opr-page-shell">
 
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+            <div class="saas-acc-toolbar-top vm-api-operator-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-api-operator-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li><a href="@Url.Action("Dashboard", "Home")#setting">Basic Setting</a></li>
+                    <li>Set {Post} API</li>
+                </ol>
+                <div class="vm-dmt-fin-nav-row vm-api-operator-nav-wrap">
+                    @Html.Partial("_menuapinm")
+                </div>
+            </div>
 
-    span.select2.select2-container.select2-container--default {
-
-        float: right;
-    }
-    .col-md-7.col-xs-6.vacrivet {
-        padding-right:4px;
-    }
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    .form-inline .bootstrap-select.btn-group, .form-horizontal .bootstrap-select.btn-group, .form-group .bootstrap-select.btn-group {
-        height: 29px;
-    }
-
-    .form-control-label {
-        text-align: left;
-    }
-         .select2-selection.select2-selection--single {
-    border-radius: 0px !important;
-    height: 32px !important;border-color: #ccc !important;
-}
-         .bread-same-all-page li{margin:6px 0px;}
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media screen and (max-width: 992px) {
-
-        .rtyfrty .card {
-            display: block;
-            width: 100%;
-            float: left;
-        }
-        .col-md-7.rtyfrtyclass-third {
-            width: 100%;
-            float: left;
-        }
-        .col-md-5.for-r-width.for-r-button {
-            width: 100% !important;
-        }
-
-        .vacrivet {
-            width: 33.333% !important;
-            float: left;
-            padding: 0 4px !important;
-        }
-
-        span.select2.select2-container.select2-container--default {
-            width: 100% !important;
-            float: right;
-        }
-
-        .rtyfrty {
-            width: 100%;
-            float: left;
-        }
-
-            .rtyfrty ul li {
-                width: 33%;
-                float: left;
-                margin-bottom: 10px;
-            }
-
-                .rtyfrty ul li a {
-                    margin-bottom: 0;
-                }
-
-        .vacrivet {
-            width: 50%;
-            float: left;
-            padding: 0 4px !important;
-        }
-
-            .vacrivet button {
-                width: 100%;
-            }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-        .rtyfrty ul li {
-            width: 50%;
-            float: left;
-            margin-bottom: 10px;
-            margin-right: 0px !important;
-        }
-    }
-
-         @@media only screen and (max-width:480px) {
-            #ul {
-                display: block;
-            }
-            .rtyfrty form {
-                display: block;
-            }
-            div#custnav ul li a {
-                font-size: 12px;
-            }
-            .rtyfrty ul li {
-                margin-bottom: 5px;
-            }
-            .rtyfrtyclass-third #custnav ul li {
-                width: 50% !important;
-            }
-            .vacrivet {
-                width: 100% !important;
-                float: left;
-                padding: 2px 0px !important;
-            }
-
-            
-
-            .for-r-width, .vast-bazar-api {
-                width: 100% !important;
-                float: left !important;
-                margin-bottom: 10px !important;
-            }            
-            span.select2.select2-container.select2-container--default {
-                width: 100% !important;
-                float: right;
-            }
-             .modal-dialog{width:96% !important;}
-         }
-    
-</style>
-<section class="content">
-    <div class="container-fluid">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>API Setting</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">API Setting</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix four-noneclass-admin-only">
-            <div class="col-md-12">
-                <div class="page-header-third pageheader-second-third">
-                    <div class="bread-same-all-page breadsameall-second">
-                        <ul class="padding-top-thirdclass" style="margin:0px;">
-                            <li class="smli">
-                                <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                                </a>
-                            </li>
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                <a href="@Url.Action("Dashboard", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                                    Basic&nbsp;Setting
-                                </a>&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                            </li>
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                Set {Post} API
-                            </li>
-                        </ul>
-
+            <div class="vm-rpt-filters-panel vm-api-operator-filter-panel">
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-api-operator-filter-row vm-rpt-filters-panel__bar">
+                    <div class="vm-api-operator-filter-group vm-api-name-filter-group">
+                        <div class="vm-opr-field vm-api-operator-field vm-api-name-field--api">
+                            <select id="filterApinm" name="apinm" title="Api Name" class="form-control vm-opr-select vm-dmt-select vm-api-operator-select">
+                                <option value="">Api Name</option>
+                                @foreach (var name in apiFilterNames)
+                                {
+                                    if (string.Equals(name, selectedApinm, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <option value="@name" selected="selected">@name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@name">@name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <button type="button" id="apiNameFilterBtn" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-api-operator-search-btn" title="Search">
+                            <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                        </button>
+                        <button type="button" class="saas-acc-btn saas-acc-btn--search vm-api-nm-add-btn" data-toggle="modal" data-target="#apiNameAddModal" title="Add New API">
+                            <i class="fas fa-plus" aria-hidden="true"></i><span>Add New</span>
+                        </button>
                     </div>
                 </div>
-
             </div>
         </div>
-        
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card page-header-third">
-                    <div class="col-md-12 rtyfrty">
-                        <div class="card" style="">
-
-                            <div class="col-md-12 rtyfrtyclass-third">
-                                <div style="">
-                                    @Html.Partial("_menuapinm")
-                                </div>
-
-                            </div>
-                            <div class="col-md-12 for-r-width for-r-button" style="width: 100%; float: right;">
-                                <div class="row">
-                                    @using (Html.BeginForm("Api_Name", "Home", FormMethod.Post))
-                                    {
-
-                                        <div class="col-md-2 vacrivet">
-                                            <div class="input-group" style="">
-                                                <div class="">
-                                                    @Html.DropDownList("apinm", ViewBag.apinm as SelectList, "Api Name", new { id = "apinm", @class = "form-control for-select2", data_live_search = "true", @style = "border:1px solid #8e7f7f4d;height:38px;", @required = "required" })
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md-1 vacrivet buttonsearch-second" style="padding:0px;">
-                                            <center>
-                                                <button type="submit" class=" waves-effect" style="width: 100%; height: 32px; float: left; border: 1px solid #c7c2c2; background: transparent;">
-                                                    <i class="fa fa-search" style="top: 1px; font-size: 14px; color: #444;"></i>
-                                                    <span style="color: #444;">Search</span>
-                                                </button>
-                                            </center>
-                                        </div>
-                                        <div class="col-md-1  col-xs-3 vacrivet" style="padding-right: 0;">
-                                            <center>
-                                                <button type="button" class="btn waves-effect fullbodydycolorbg" style="width:100%; float:right; height:32px;float:right;border:1px solid #c7c2c2;background:#dedddd;" data-toggle="modal" data-target="#defaultModal">
-                                                    <i class="fa fa-plus" style="top:1px;font-size:16px;color:#fff;"></i>
-                                                    <span style="color:#fff;">Add New</span>
-                                                </button>
-                                            </center>
-
-                                        </div>
-
-
-                                    }
-                                </div>
-                            </div>
-                        </div>
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-upload" aria-hidden="true"></i>
+                        <span>POST API configuration</span>
                     </div>
-
-                    <div class="" style="width:100%;float:left;">
-                        <div class="table-responsive tablefourdesign-admin" style="position:inherit;">
-                            <table class="table table-bordered table-striped example-second" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>API&nbsp;Name</th>
-                                        <th>API&nbsp;ID</th>
-                                        @*  <th>Password</th>*@
-                                        <th>API&nbsp;Token1</th>
-                                        <th>API&nbsp;Token2</th>
-                                        <th>API&nbsp;Token3</th>
-                                        <th>Token&nbsp;Priority</th>
-                                        <th>API&nbsp;Url</th>
-                                        @*<th><center>Status</center></th>*@
-                                        <th><center>Edit</center></th>
-                                        <th><center>Delete</center></th>
+                    <label class="vm-api-operator-table-search" for="apiNameSearch">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="text" id="apiNameSearch" placeholder="Search records..." autocomplete="off" />
+                    </label>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="apiNameTable" class="table vm-opr-data-table vm-api-name-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>API Name</th>
+                                    <th>API ID</th>
+                                    <th>API Token1</th>
+                                    <th>API Token2</th>
+                                    <th>API Token3</th>
+                                    <th>Token Priority</th>
+                                    <th>API Url</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in apiRows)
+                                {
+                                    var copyInputId = "apiNameUrlCopy" + item.Idno;
+                                    <tr data-api-name="@(item.API_Name ?? "")">
+                                        <td class="vm-api-name-cell">@item.API_Name</td>
+                                        <td class="vm-api-name-cell--mono">@item.API_ID</td>
+                                        <td class="vm-api-name-cell--mono vm-api-name-cell--ellipsis" title="@(item.Token ?? "")">@item.Token</td>
+                                        <td class="vm-api-name-cell--mono vm-api-name-cell--ellipsis" title="@(item.token1 ?? "")">@item.token1</td>
+                                        <td class="vm-api-name-cell--mono vm-api-name-cell--ellipsis" title="@(item.token2 ?? "")">@item.token2</td>
+                                        <td class="vm-api-name-cell--priority">@item.prioritytoken</td>
+                                        <td class="vm-api-nm-url-cell">
+                                            <div class="vm-api-nm-url-wrap">
+                                                <span class="vm-api-nm-url-text" title="@(item.url ?? "")">@(item.url ?? "")</span>
+                                                <input type="hidden" id="@copyInputId" value="@(item.url ?? "")" />
+                                                <button type="button"
+                                                        class="vm-api-nm-copy-btn"
+                                                        data-copy-target="@copyInputId"
+                                                        data-copy-text="@Html.AttributeEncode(item.url ?? "")"
+                                                        title="Copy URL">
+                                                    <i class="fas fa-copy" aria-hidden="true"></i>
+                                                    <span>Copy</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="vm-api-nm-action-cell">
+                                            <div class="vm-api-nm-action-group">
+                                                <button type="button"
+                                                        class="vm-api-operator-edit-btn vm-api-name-edit-btn"
+                                                        data-id="@item.Idno"
+                                                        data-apiname="@(item.API_Name ?? "")"
+                                                        data-apiid="@(item.API_ID ?? "")"
+                                                        data-apipwd="@Html.AttributeEncode(item.Api_pwd ?? "")"
+                                                        data-token1="@Html.AttributeEncode(item.Token ?? "")"
+                                                        data-token2="@Html.AttributeEncode(item.token1 ?? "")"
+                                                        data-token3="@Html.AttributeEncode(item.token2 ?? "")"
+                                                        data-priority="@(item.prioritytoken ?? "")"
+                                                        data-url="@Html.AttributeEncode(item.url ?? "")"
+                                                        data-toggle="modal"
+                                                        data-target="#apiNameEditModal">
+                                                    <i class="fas fa-edit" aria-hidden="true"></i> Edit
+                                                </button>
+                                                <button type="button" class="vm-api-nm-delete-btn" data-id="@item.Idno" title="Delete API" aria-label="Delete API">
+                                                    <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="vm-api-nm-delete-confirm-btn" data-id="@item.Idno" title="Confirm delete" aria-label="Confirm delete" style="display:none;">
+                                                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @if (Model != null)
-                                    {
-                                        foreach (var item in Model)
-                                        {
-                                            <tr>
-                                                <td>@item.API_Name</td>
-                                                <td>@item.API_ID</td>
-                                                @* <td>@item.Api_pwd</td>*@
-                                                <td>@item.Token</td>
-                                                <td>@item.token1</td>
-                                                <td>@item.token2</td>
-                                                <td>@item.prioritytoken</td>
-                                                <td>@item.url</td>
-                                                @*<td>
-                                        @if (item.MoneyApiStatus == "Y")
-                                        {
-                                            <center>
-                                                <a href="@Url.Action("Update_money_api_status", new { id = item.API_NAME, sts = item.MoneyApiStatus })" style="text-decoration:none;">
-                                                    <img src="~/images/reportimage/switch_on.png" style="margin-top:2px;height:23px;" />
-                                                </a>
-                                            </center>
-
-                                        }
-                                        else
-                                        {
-                                            <center>
-                                                <a href="@Url.Action("Update_money_api_status", new { id = item.API_NAME, sts = item.MoneyApiStatus })" style="text-decoration:none;">
-                                                    <img src="~/images/reportimage/switchoff.png" style="margin-top:2px;height:23px;" />
-                                                </a>
-                                            </center>
-
-                                        }
-                                    </td>*@
-                                                <td>
-                                                    <center>
-                                                        <button id="but" onclick="animation('@item.Idno', '@item.API_Name', '@item.API_ID', '@item.Api_pwd', '@item.Token', '@item.token1', '@item.token2', '@item.prioritytoken', '@item.url')" style="background-color:transparent;color:#03a9f4; border:none;" data-toggle="modal" data-target="#defaultModal1">
-                                                            <p style="padding:2px 11px 2px 11px;border:1px solid #dddddd;color:black;margin:0px;">Edit</p>
-                                                        </button>
-                                                    </center>
-
-                                                </td>
-                                                <td>
-                                                    <center>
-
-                                                        <button type="button" class="first-button" style="background-color:transparent; border:none;">
-                                                            <p style="padding:1px 11px 1px 11px;border:1px solid #dddddd;color:black;height: 26px;margin:0px; line-height: 22px;">Delete</p>
-                                                        </button>
-
-                                                        <button class="second-button" type="button" style=" border:none;display:none;width:64px;" onclick="DelteAPi('@item.Idno')">
-                                                            <p class="fullbodydycolorbg" style="padding:1px 11px 1px 11px;border:1px solid #dddddd;color:#fff;height: 26px;margin:0px; line-height: 22px;">Sure ?</p>
-                                                        </button>
-                                                    </center>
-
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!--Add Model-->
-<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="margin: 0px;float: right;width:50%;">
+
+<!-- Add API Modal -->
+<div class="modal fade saas-admin-modal vm-sm-modal vm-api-operator-modal vm-api-nm-modal vm-api-name-modal" id="apiNameAddModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered saas-admin-modal-dialog vm-sm-modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Add API Url</h4>
-            </div>
-            @using (Html.BeginForm("insert_Api_Name", "Home", FormMethod.Post))
+            @using (Html.BeginForm("insert_Api_Name", "Home", FormMethod.Post, new { id = "apiNameAddForm" }))
             {
-                <div class="modal-body" style="margin-top:0px;">
-                    <div class="body">
-
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">API Name</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        <input type="text" id="txtapiname" name="txtapiname" placeholder="Enter API Name" class="form-control" maxlength="8" required="" />
-                                    </div>
-                                </div>
-                            </div>
+                <div class="modal-header saas-admin-modal-header accent-sky">
+                    <div class="saas-admin-modal-head-main">
+                        <div class="saas-admin-modal-icon"><i class="fas fa-plus" aria-hidden="true"></i></div>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Add API Url</h4>
+                            <p class="saas-admin-modal-subtitle">Configure POST API credentials and endpoints</p>
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">API ID</label>
-                            </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
 
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("txtapiId", "", new { @class = "form-control", @required = "", @placeholder = "Enter API ID" })
-                                    </div>
-                                </div>
-                            </div>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body">
+                    <div class="vm-sm-modal-panel vm-api-operator-form-grid">
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="txtapiname">API Name</label>
+                            <input type="text" id="txtapiname" name="txtapiname" placeholder="Enter API Name" class="form-control" maxlength="8" required="" />
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Password</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("txtApi_pwd", "", new { @class = "form-control", @placeholder = "Enter Password", @required = "" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="txtapiId">API ID</label>
+                            @Html.TextBox("txtapiId", "", new { id = "txtapiId", @class = "form-control", @required = "", @placeholder = "Enter API ID" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">API Token1</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("txtApiToken", "", new { @class = "form-control", @placeholder = "Enter API Token1", @required = "" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="txtApi_pwd">Password</label>
+                            @Html.TextBox("txtApi_pwd", "", new { id = "txtApi_pwd", @class = "form-control", @placeholder = "Enter Password", @required = "" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">API Token2</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("txtApiToken1", "", new { @class = "form-control", @placeholder = "Enter API Token2", @required = "" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="txtApiToken">API Token1</label>
+                            @Html.TextBox("txtApiToken", "", new { id = "txtApiToken", @class = "form-control", @placeholder = "Enter API Token1", @required = "" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">API Token3</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("txtApiToken2", "", new { @class = "form-control", @placeholder = "Enter API Token3", @required = "" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="txtApiToken1">API Token2</label>
+                            @Html.TextBox("txtApiToken1", "", new { id = "txtApiToken1", @class = "form-control", @placeholder = "Enter API Token2", @required = "" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">API Token3</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.DropDownList("tokenpriority", new List<SelectListItem>
-                           {
-                        new SelectListItem{ Text="token1",Value="token1"},
-                        new SelectListItem{Text="token2",Value="token2"},
-                        new SelectListItem{Text="token3",Value="token3"}
-                       }, new { @class = "form-control", @style = "margin-top:0px; padding:0px;text-align:center;"})
-
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="txtApiToken2">API Token3</label>
+                            @Html.TextBox("txtApiToken2", "", new { id = "txtApiToken2", @class = "form-control", @placeholder = "Enter API Token3", @required = "" })
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">API Url</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("txtApiUrl", "", new { @class = "form-control", @placeholder = "Enter API Token", @required = "" })
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="tokenpriority">Token Priority</label>
+                            @Html.DropDownList("tokenpriority", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "token1", Value = "token1" },
+                                new SelectListItem { Text = "token2", Value = "token2" },
+                                new SelectListItem { Text = "token3", Value = "token3" }
+                            }, new { id = "tokenpriority", @class = "form-control" })
                         </div>
-                        <div class="modal-footer">
-
-                            <button type="button" class="btn bg-grey waves-effect" style=" margin-right: 12px; height:32px;" data-dismiss="modal">
-                                <span style="color:black;">Close</span>
-                            </button>
-                            <button type="submit" class="btn fullbodydycolorbg waves-effect" style=" height:32px;">
-                                <span style="color:#fff;">Save Change</span>
-                            </button>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="txtApiUrl">API Url</label>
+                            @Html.TextBox("txtApiUrl", "", new { id = "txtApiUrl", @class = "form-control", @placeholder = "Enter API Url", @required = "" })
                         </div>
                     </div>
                 </div>
-            }
 
-        </div>
-    </div>
-</div>
-<!--Edit Model-->
-<div class="modal fade" id="defaultModal1" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="margin: 0px;float: right;width: 50%;">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Edit API Details</h4>
-            </div>
-            @using (Html.BeginForm("Edit_Api_Nam", "Home", FormMethod.Post))
-            {
-                <div class="modal-body" style="margin-top:0px;">
-                    <div class="body">
-
-                        @Html.Hidden("Editid")
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">API Name</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("Editapiname", "", new { @class = "form-control", @readonly = "readonly" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">API ID</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("EditapiId", "", new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Password</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("EditApi_pwd", "", new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Token1</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("EditApiToken", "", new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Token2</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("EditApiToken1", "", new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Token3</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("EditApiToken2", "", new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Token Priority</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.DropDownList("edittokenpriority", new List<SelectListItem>
-                          {
-                       new SelectListItem{Text="token1",Value="token1"},
-                       new SelectListItem{Text="token2",Value="token2"},
-                       new SelectListItem{Text="token3",Value="token3"}
-                      }, new { @class = "form-control", @style = "margin-top:0px; padding:0px;text-align:center;"})
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Api Url</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #dddddd;">
-                                        @Html.TextBox("EditApiUrl", "", new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-
-                            <button type="button" class="btn bg-grey waves-effect" style=" margin-right: 12px; height:32px;" data-dismiss="modal">
-                                <span style="color:black;">Close</span>
-                            </button>
-                            <button type="submit" class="btn fullbodydycolorbg waves-effect" style=" height:32px;">
-                                <span style="color:#fff;">Save Change</span>
-                            </button>
-                        </div>
-                    </div>
+                <div class="modal-footer saas-admin-modal-footer vm-sm-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                        <i class="fas fa-times" aria-hidden="true"></i> Cancel
+                    </button>
+                    <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save Changes
+                    </button>
                 </div>
             }
-
         </div>
     </div>
 </div>
 
+<!-- Edit API Modal -->
+<div class="modal fade saas-admin-modal vm-sm-modal vm-api-operator-modal vm-api-nm-modal vm-api-name-modal" id="apiNameEditModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered saas-admin-modal-dialog vm-sm-modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("Edit_Api_Nam", "Home", FormMethod.Post, new { id = "apiNameEditForm" }))
+            {
+                <div class="modal-header saas-admin-modal-header accent-emerald">
+                    <div class="saas-admin-modal-head-main">
+                        <div class="saas-admin-modal-icon"><i class="fas fa-edit" aria-hidden="true"></i></div>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Edit API Details</h4>
+                            <p class="saas-admin-modal-subtitle">Update POST API credentials and endpoints</p>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
 
-<!-- Jquery Core Js -->
-<script src="~/Swalalert/datatablejquery.js"></script>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body">
+                    @Html.Hidden("Editid", "", new { id = "Editid" })
+                    <div class="vm-sm-modal-panel vm-api-operator-form-grid">
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="Editapiname">API Name</label>
+                            @Html.TextBox("Editapiname", "", new { id = "Editapiname", @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="EditapiId">API ID</label>
+                            @Html.TextBox("EditapiId", "", new { id = "EditapiId", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="EditApi_pwd">Password</label>
+                            @Html.TextBox("EditApi_pwd", "", new { id = "EditApi_pwd", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="EditApiToken">Token1</label>
+                            @Html.TextBox("EditApiToken", "", new { id = "EditApiToken", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="EditApiToken1">Token2</label>
+                            @Html.TextBox("EditApiToken1", "", new { id = "EditApiToken1", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="EditApiToken2">Token3</label>
+                            @Html.TextBox("EditApiToken2", "", new { id = "EditApiToken2", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field">
+                            <label for="edittokenpriority">Token Priority</label>
+                            @Html.DropDownList("edittokenpriority", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "token1", Value = "token1" },
+                                new SelectListItem { Text = "token2", Value = "token2" },
+                                new SelectListItem { Text = "token3", Value = "token3" }
+                            }, new { id = "edittokenpriority", @class = "form-control" })
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="EditApiUrl">API Url</label>
+                            @Html.TextBox("EditApiUrl", "", new { id = "EditApiUrl", @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer saas-admin-modal-footer vm-sm-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                        <i class="fas fa-times" aria-hidden="true"></i> Cancel
+                    </button>
+                    <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save Changes
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
 <script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
 <script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
 <script src="~/AdminDesign/js/demo.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script src="~/select2/dist/js/select2.min.js"></script>
 
-
-
-
 <script>
-    $('.for-select2').select2();
-</script>
-
-<script>
-    function isNumber(evt) {
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            return false;
+    function initApiNameFilter() {
+        var $api = $('#filterApinm');
+        if ($api.hasClass('select2-hidden-accessible')) {
+            $api.select2('destroy');
         }
-        return true;
+        $api.select2({
+            width: '100%',
+            placeholder: 'Api Name',
+            allowClear: true,
+            dropdownParent: $(document.body)
+        });
     }
-</script>
-<!--Insert Popuop-->
-<script>
+
+    function applyApiNameFilters() {
+        var apiVal = ($('#filterApinm').val() || '').trim().toLowerCase();
+        var q = ($('#apiNameSearch').val() || '').trim().toLowerCase();
+
+        $('#apiNameTable tbody tr').each(function () {
+            var $row = $(this);
+            var apiName = ($row.attr('data-api-name') || '').toLowerCase();
+            var text = $row.text().toLowerCase();
+            var matchApi = !apiVal || apiName === apiVal;
+            var matchSearch = !q || text.indexOf(q) > -1;
+            $row.toggle(matchApi && matchSearch);
+        });
+    }
+
     $(document).ready(function () {
-        var editdata = '@ViewData["success"]'
-        var error = '@ViewData["errormsg"]';
-        if (editdata != null && editdata != "") {
-            swal("Good job!", editdata, "success");
+        initApiNameFilter();
+
+        var successMsg = '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(Convert.ToString(ViewData["success"])))';
+        var errorMsg = '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(Convert.ToString(ViewData["errormsg"])))';
+        var tempMsg = '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(Convert.ToString(TempData["msg"])))';
+
+        if (successMsg) {
+            swal('Good job!', successMsg, 'success');
+        } else if (tempMsg) {
+            swal('Good job!', tempMsg, 'success');
+        }
+        if (errorMsg) {
+            swal('Oops..!', errorMsg, 'error');
         }
 
-        if (error != null && error != "") {
-            swal("Oops..!", error, "error");
+        if (@(!string.IsNullOrEmpty(selectedApinm) ? "true" : "false")) {
+            applyApiNameFilters();
         }
 
+        $('#apiNameFilterBtn').on('click', applyApiNameFilters);
+        $('#filterApinm').on('change select2:select select2:clear', applyApiNameFilters);
+        $('#apiNameSearch').on('keyup', applyApiNameFilters);
     });
-</script>
 
-
-<!--Edit Javascript-->
-<script type="text/javascript">
-    function animation(id, apinnm, apiid, pwd, token1,token2,token3,priortitytoken, url) {
-        $('#Editid').val(id);
-        $('#Editapiname').val(apinnm);
-        $('#EditapiId').val(apiid);
-        $('#EditApi_pwd').val(pwd);
-        $('#EditApiToken').val(token1);
-        $('#EditApiToken1').val(token2);
-        $('#EditApiToken2').val(token3);
-        $('#edittokenpriority').val(priortitytoken);
-        $('#EditApiUrl').val(url);
+    function openApiNameEdit($btn) {
+        $('#Editid').val($btn.attr('data-id') || '');
+        $('#Editapiname').val($btn.attr('data-apiname') || '');
+        $('#EditapiId').val($btn.attr('data-apiid') || '');
+        $('#EditApi_pwd').val($btn.attr('data-apipwd') || '');
+        $('#EditApiToken').val($btn.attr('data-token1') || '');
+        $('#EditApiToken1').val($btn.attr('data-token2') || '');
+        $('#EditApiToken2').val($btn.attr('data-token3') || '');
+        $('#edittokenpriority').val($btn.attr('data-priority') || '');
+        $('#EditApiUrl').val($btn.attr('data-url') || '');
     }
 
-</script>
+    $(document).on('click', '.vm-api-name-edit-btn', function () {
+        openApiNameEdit($(this));
+    });
 
-<script>
-    function DelteAPi(e) {
-        var url = '@Url.Action("Delete_Api_Name_Details", "Home")'
+    $(document).on('click', '.vm-api-nm-copy-btn', function () {
+        var text = $(this).attr('data-copy-text') || '';
+        if (!text) {
+            var targetId = $(this).data('copy-target');
+            text = $('#' + targetId).val() || '';
+        }
+        if (!text) {
+            return;
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function () {
+                swal('Copied!', 'API URL copied to clipboard.', 'success');
+            }).catch(function () {
+                copyTextFallback(text);
+            });
+        } else {
+            copyTextFallback(text);
+        }
+    });
+
+    function copyTextFallback(text) {
+        var $temp = $('<textarea readonly></textarea>').val(text).css({ position: 'fixed', left: '-9999px', top: '0' }).appendTo('body');
+        $temp[0].select();
+        try {
+            document.execCommand('copy');
+            swal('Copied!', 'API URL copied to clipboard.', 'success');
+        } catch (e) {
+            swal('Error', 'Unable to copy URL.', 'error');
+        }
+        $temp.remove();
+    }
+
+    $(document).on('click', '.saas-api-name-page .vm-api-nm-delete-btn', function () {
+        $('.saas-api-name-page .vm-api-nm-action-group').each(function () {
+            $(this).find('.vm-api-nm-delete-btn').show();
+            $(this).find('.vm-api-nm-delete-confirm-btn').hide().prop('disabled', false);
+        });
+        var $group = $(this).closest('.vm-api-nm-action-group');
+        $group.find('.vm-api-nm-delete-btn').hide();
+        $group.find('.vm-api-nm-delete-confirm-btn').show();
+    });
+
+    $(document).on('click', '.saas-api-name-page .vm-api-nm-delete-confirm-btn', function () {
+        var id = $(this).data('id');
+        var $btn = $(this);
+        $btn.prop('disabled', true);
+
         $.ajax({
-            url: url,
-            data: { Idno: e },
+            type: 'POST',
+            url: '@Url.Action("Delete_Api_Name_Details", "Home")',
+            data: { Idno: id },
             cache: false,
-            type: "POST",
-            success: function (data) {
-                    var pathname = window.location.pathname; // Returns path only
-    var url = window.location.href;
-    window.location.href = url;
+            success: function () {
+                window.location.reload();
+            },
+            error: function () {
+                $btn.prop('disabled', false);
+                swal('Error', 'Unable to delete API. Please try again.', 'error');
             }
         });
-    }
-</script>
-
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        var gg = window.location.href
-        var n = gg.indexOf("API");
-        if (n != -1) {
-            $("#but3").click();
-        }
     });
-</script>
-<script>
-    $('.first-button').click(function () {
-        $(this).hide();
-        $(this).next('.second-button').show();
-    })
-</script>
-
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
-        });
-    });
-
 </script>

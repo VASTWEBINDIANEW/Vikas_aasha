@@ -1,67 +1,56 @@
-<style>
-    #ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-    }
-
-        #ul li {
-            float: left;
-        }
-
-            #ul li a {
-                display: block;
-               
-                padding: 5px 10px;
-                text-decoration: none;
-               
-                position: initial;
-            }
-
-               
-    
-   
-</style>
-
-
-
-<div id="custnav" style="border-top: 4px solid #c7c7c7;">
-    <ul id="ul">
-        <li><a href="~/ADMIN/Home/PortReport">Port Setting</a></li>
-        <li><a href="~/ADMIN/Home/LapuReport">Lapu Setting</a></li>
-        @*<li><a href="~/ADMIN/Home/Assign_port">Assign Port</a></li>*@
-        <li><a href="~/ADMIN/Home/Status_master">Status&nbsp;Mnager</a></li>
-    </ul>
-    <ul class="network-type">
-        <li style="border-bottom:1px solid #06ac75;">
-            <img src="~/AdminDesign/images/strong-network.svg" /><span style="color:#06ac75;">Strong Network</span>
+<div id="vmHardwareNav" class="vm-slab-category-nav vm-hardware-nav">
+    <h2 class="vm-slab-category-nav__title">Hardware</h2>
+    <ul class="nav nav-tabs vm-slab-category-nav__list vm-hardware-nav__list">
+        <li>
+            <a href="@Url.Action("PortReport", "Home")">
+                <i class="fas fa-plug vm-hardware-nav__icon" aria-hidden="true"></i>
+                <span>Port Setting</span>
+            </a>
         </li>
-        <li style="border-bottom:1px solid #6e9805; ">
-            <img src="~/AdminDesign/images/avg-network.svg" /><span style="color:#6e9805;">Average Network</span>
+        <li>
+            <a href="@Url.Action("LapuReport", "Home")">
+                <i class="fas fa-sim-card vm-hardware-nav__icon" aria-hidden="true"></i>
+                <span>Lapu Setting</span>
+            </a>
         </li>
-        <li style="border-bottom:1px solid #e67000; ">
-            <img src="~/AdminDesign/images/weak-network.svg" /><span style="color:#e67000;">Weak Network</span>
-        </li>
-        <li style="border-bottom:1px solid #fa0000;">
-            <img src="~/AdminDesign/images/poor-network.svg" /><span style=" color:#fa0000;">Poor Network</span>
-        </li>
-        <li style="border-bottom:1px solid #000;">
-            <img src="~/AdminDesign/images/no-network.svg" /><span>No Network</span>
+        @*<li><a href="@Url.Action("Assign_port", "Home")">Assign Port</a></li>*@
+        <li>
+            <a href="@Url.Action("Status_master", "Home")">
+                <i class="fas fa-list-alt vm-hardware-nav__icon" aria-hidden="true"></i>
+                <span>Status Manager</span>
+            </a>
         </li>
     </ul>
+    <div class="vm-hardware-network-legend-wrap">
+        <p class="vm-hardware-network-legend__title">Network Status</p>
+        <ul class="vm-hardware-network-legend">
+            <li>
+                <img src="~/AdminDesign/images/strong-network.svg" alt="" /><span>Strong Network</span>
+            </li>
+            <li>
+                <img src="~/AdminDesign/images/avg-network.svg" alt="" /><span>Average Network</span>
+            </li>
+            <li>
+                <img src="~/AdminDesign/images/weak-network.svg" alt="" /><span>Weak Network</span>
+            </li>
+            <li>
+                <img src="~/AdminDesign/images/poor-network.svg" alt="" /><span>Poor Network</span>
+            </li>
+            <li>
+                <img src="~/AdminDesign/images/no-network.svg" alt="" /><span>No Network</span>
+            </li>
+        </ul>
+    </div>
 </div>
-
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script>
     $(document).ready(function () {
         var current = location.pathname;
-        $('#custnav li a').each(function () {
+        $('#vmHardwareNav .vm-slab-category-nav__list li a').each(function () {
             var $this = $(this);
             if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('activee');
-                $this.addClass('navbar');
+                $this.parent().addClass('active');
+                $this.addClass('active');
             }
-        })
+        });
     });
 </script>

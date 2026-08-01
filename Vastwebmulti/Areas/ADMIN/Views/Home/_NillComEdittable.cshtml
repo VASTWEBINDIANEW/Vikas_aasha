@@ -28,7 +28,7 @@
             {
 
                 <td>
-                    <input type="text" id="min" name="min" value="@Model.NillCOmGetbyid.min" />
+                    <input type="text" class="form-control" id="min" name="min" value="@Model.NillCOmGetbyid.min" />
                 </td>
             }
             else
@@ -39,7 +39,7 @@
             {
 
                 <td>
-                    <input type="text" id="max" name="max" value="@Model.NillCOmGetbyid.max" />
+                    <input type="text" class="form-control" id="max" name="max" value="@Model.NillCOmGetbyid.max" />
                 </td>
             }
             else
@@ -49,7 +49,7 @@
 
 
         <td>
-            <div class="onoffswitch">
+            <div class="onoffswitch onoffswitch-secondclass">
                 @if (item.sts == "N")
                 {
            
@@ -57,7 +57,7 @@
 
                     @*<a href="@Url.Action("nillcomblock",new { id = item.idno})" style="text-decoration:none;">*@
                     
-                    <span class="custom-off" onclick="UpdateStatus(@item.idno)">off</span>
+                    <span class="custom-off custom-off-secondbutton" onclick="UpdateStatus(@item.idno)">off</span>
                     @*</a>*@
             
 
@@ -67,7 +67,7 @@
          
                 @*<a href="@Url.Action("nillcomblock",new { id = item.idno})" style="text-decoration:none;">*@
                
-                <span class="costom-on" onclick="UpdateStatus(@item.idno)">on</span>
+                <span class="costom-on custom-on-secondbutton" onclick="UpdateStatus(@item.idno)">on</span>
                 @*</a>*@
          
 
@@ -80,7 +80,7 @@
             {
 
                 <td>
-                    <button type="button" class="switch-edit-button custom-table-loading" onclick="SaveData(@item.idno)" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                    <button type="button" class="switch-edit-button deletebuttoback-second custom-table-loading" onclick="SaveData(@item.idno)" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
                         Save
                     </button>
                 </td>
@@ -88,7 +88,7 @@
             else
             {
                 <td>
-                    <button type="button" class="switch-edit-button" onclick="EditMode(@item.idno)" >
+                    <button type="button" class="switch-edit-button deletebuttoback-second" onclick="EditMode(@item.idno)" >
                         Edit
                     </button>
                 </td>
@@ -102,7 +102,7 @@
         </td>*@
             <td>
 
-                <button class="confirm" id="DeleteBtn" onclick="Deltenillcom('@item.idno')" >
+                <button class="confirm btnssl special-iii" id="DeleteBtn" onclick="Deltenillcom('@item.idno')" >
                     <img src="~/MainFrontDesign/images/delete.svg" />
                 </button>
             </td>

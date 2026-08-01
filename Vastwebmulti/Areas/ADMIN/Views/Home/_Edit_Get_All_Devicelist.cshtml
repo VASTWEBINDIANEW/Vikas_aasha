@@ -1,7 +1,7 @@
 @model Vastwebmulti.Areas.ADMIN.ViewModel.GetAllDeviceinfo
 
 
-<table class="table table-bordered" style="background: #eae9e9; border: 0;" id="mdList">
+<table class="table table-bordered vm-ecom-table" id="mdList">
     <thead>
         <tr>
             <th>Device&nbsp;ID</th>
@@ -53,9 +53,9 @@
                     @if (item.idno == Model.DevicelistByid.idno)
                     {
                         
-                            <div class="select2addnew">
+                            <div class="vm-matm-edit-select">
                                 @Html.DropDownList("Frm_Name", (IEnumerable<SelectListItem>)ViewBag.remid,
-                               new { @class = "for-select2", style = "padding-left:0px;", required = "required" })
+                               new { @class = "for-select2 form-control", required = "required" })
                             </div>
                    @Html.TextBox("txtdevicenm",item.userid,new { style = "display:none;" })
 
@@ -73,23 +73,23 @@
                 <td>
                     @if (paymenttype == "")
                     {
-                        <span>  @totalremainday</span>
+                        <span class="vm-matm-remain-badge @(totalremainday <= 7 ? "vm-matm-remain-badge--warn" : "vm-matm-remain-badge--ok")">@totalremainday&nbsp;days</span>
                     }
                     else
                     {
-                        <span>  @paymenttype</span>
+                        <span class="vm-matm-remain-badge vm-matm-remain-badge--info">@paymenttype</span>
 
                     }
                 </td>
                 <td>
                     @if (item.idno == Model.DevicelistByid.idno)
                     {
-                        <div class="select2addnew">
+                        <div class="vm-matm-edit-select">
                             @Html.DropDownList("chargetypeEdit", new List<SelectListItem>
          {
           new SelectListItem{ Text="Daily",Value="Daily"},
               new SelectListItem{Text="Monthly",Value="Monthly"}
-          }, new { @class = "form-control", required = "required" })
+          }, new { @class = "form-control vm-matm-edit-native-select", required = "required" })
                         </div>
                         @Html.TextBox("txtchargetype", item.chargetype, new { style = "display:none;" })
                     }
@@ -101,15 +101,16 @@
                 @if (item.idno == Model.DevicelistByid.idno)
                 {
                     <td>
-                        <button type="button" class="switch-edit-button custom-table-loading" onclick="Savebyamount(@item.idno)" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                            Save
+                        <button type="button" class="switch-edit-button custom-table-loading vm-matm-save-btn" onclick="Savebyamount(@item.idno)" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                            <i class="fas fa-check" aria-hidden="true"></i> Save
                         </button>
                     </td>
                 }
                 else
                 {
                     <td>
-                        <button class="btn btn default micro-edit-button" id="EditBtn_@item.idno" onclick="Editbyamount('@item.idno')" style="background-color:transparent;height: auto;padding: 3px 10px; border:none;border: 1px solid #aaa4a4;" title="Edit Information">
+                        <button class="btn btn default micro-edit-button vm-matm-edit-btn" id="EditBtn_@item.idno" onclick="Editbyamount('@item.idno')" title="Edit Information">
+                            <i class="fas fa-pen" aria-hidden="true"></i>
                             <span id="editmicro_@item.idno">Edit</span>
                             <span class="editbutton-spinclass" id="microloader_@item.idno"></span>
                         </button>
@@ -120,19 +121,3 @@
 
     </tbody>
 </table>
-
-
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
-<!--Add State dropdown list-->
-
-
-<script>
-    $('.for-select2').select2();
-</script>
-<script>
-    $('#chargetypeEdit').val("Monthly");
-    $('#Frm_Name').val($('#txtdevicenm').val()).change();
-    $('#chargetypeEdit').val($('#txtchargetype').val()).change();
-    
-</script>

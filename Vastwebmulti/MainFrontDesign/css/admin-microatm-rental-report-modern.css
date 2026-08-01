@@ -1,0 +1,175 @@
+/* Record-count chip next to the export buttons */
+.saas-microatm-rental-report-page .vm-matm-rr-record-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 30px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* The shared .vm-dmt-filter-row .form-control rule in
+   admin-money-transfer-report-modern.css paints a dropdown chevron on
+   EVERY .form-control inside the filter row — including our plain text
+   search box, which is why it looked like a select. Strip that chevron
+   and give the search field a magnifying-glass icon on the left. */
+body.saas-admin-ui .saas-microatm-rental-report-page .vm-dmt-filter-search-group .vm-dmt-field--search {
+    position: relative;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page .vm-dmt-filter-search-group input.vm-dmt-search-input.form-control {
+    background-image: none !important;
+    background-color: var(--dmt-input-bg, #f8fafc) !important;
+    padding: 0 12px 0 38px !important;
+    cursor: text !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page .vm-dmt-filter-search-group input.vm-dmt-search-input.form-control:focus {
+    background-color: #fff !important;
+    background-image: none !important;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page .vm-dmt-filter-search-group .vm-dmt-field--search::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.1a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat center / contain;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ---------------------------------------------------------------
+   Grouped header — row 1 groups Retailer / Distributor / Master,
+   row 2 spells out Pre / Charge-Commission / GST / TDS / Post.
+   --------------------------------------------------------------- */
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table {
+    min-width: 1650px;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table thead th.vm-matm-rr-th--group {
+    text-align: center !important;
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%) !important;
+    color: #1e3a8a !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #bfdbfe !important;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table thead th.vm-matm-rr-th--group.vm-matm-rr-th--dealer {
+    background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%) !important;
+    color: #14532d !important;
+    border-bottom-color: #bbf7d0 !important;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table thead th.vm-matm-rr-th--group.vm-matm-rr-th--master {
+    background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%) !important;
+    color: #7f1d1d !important;
+    border-bottom-color: #fecaca !important;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table thead th.vm-matm-rr-th--rowspan {
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table thead tr.vm-matm-rr-head-row--sub th {
+    padding: 8px 8px !important;
+    font-size: 0.6rem !important;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+}
+
+/* Fixed / identity columns (S.N, firm, device, plan, trans, dates) */
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table th.vm-matm-rr-col--sn,
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table td.vm-matm-rr-col--sn {
+    width: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table td.vm-matm-rr-col--sn {
+    color: #94a3b8 !important;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table th.vm-matm-rr-col--firm,
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table td.vm-matm-rr-col--firm {
+    min-width: 160px;
+    text-align: left !important;
+    font-weight: 700;
+    color: #1e293b !important;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table td.vm-matm-rr-col--device,
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table td.vm-matm-rr-col--plan {
+    white-space: nowrap;
+    color: #334155 !important;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table td.vm-matm-rr-col--trans {
+    text-align: center !important;
+    font-weight: 700;
+    color: #0f172a !important;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table td.vm-matm-rr-col--date {
+    white-space: nowrap;
+    color: #64748b !important;
+    font-size: 0.72rem !important;
+}
+
+/* Commission-tier amount columns — all right aligned, tabular figures */
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table td.vm-matm-rr-amt {
+    text-align: right !important;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    color: #334155 !important;
+}
+
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table td.vm-matm-rr-amt--pre,
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table td.vm-matm-rr-amt--post {
+    font-weight: 700;
+    color: #0f172a !important;
+}
+
+/* Subtle tier separators so the eye can tell Retailer/Distributor/
+   Master column blocks apart while scrolling horizontally */
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table th.vm-matm-rr-tier-start,
+body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table td.vm-matm-rr-tier-start {
+    border-left: 2px solid #e2e8f0 !important;
+}
+
+/* ---------------------------------------------------------------
+   Legacy detail modal (#defaultModal222) — currently unreachable
+   (its opening trigger is commented out in the table), kept as a
+   dormant feature but given the same modern look as every other
+   report's detail modal for visual consistency.
+   --------------------------------------------------------------- */
+body.saas-admin-ui .saas-microatm-rental-report-page #defaultModal222 .vm-dmt-modal-field input:read-only {
+    background: #f8fafc !important;
+    cursor: default !important;
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table thead th {
+        font-size: 0.56rem !important;
+        padding: 7px 6px !important;
+    }
+
+    body.saas-admin-ui .saas-microatm-rental-report-page #matmRentalTable.vm-opr-data-table tbody td {
+        font-size: 0.72rem !important;
+        padding: 8px 6px !important;
+    }
+}

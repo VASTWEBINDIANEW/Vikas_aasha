@@ -1,0 +1,3378 @@
+/* Outside Logo page — final unified modern design v2 (loads last, wins conflicts) */
+
+body.saas-admin-ui .saas-outside-logo-page {
+    --ol-bg: #eef2f7;
+    --ol-card: #ffffff;
+    --ol-border: #e2e8f0;
+    --ol-text: #0f172a;
+    --ol-muted: #64748b;
+    --ol-primary: #2563eb;
+    --ol-radius: 16px;
+    --ol-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+
+/* ---- Page shell ---- */
+body.saas-admin-ui .saas-outside-logo-page.saas-admin-account-page {
+    background: var(--ol-bg) !important;
+    background-image: none !important;
+    padding: 16px 18px 40px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page.content {
+    background: transparent !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-container {
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-body {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section {
+    scroll-margin-top: 100px;
+}
+
+/* ---- Hero ---- */
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-hero {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(30, 64, 175, 0.22);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-hero-stat {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+/* ---- Quick nav (single row) ---- */
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav {
+    position: sticky;
+    top: 56px;
+    z-index: 40;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 4px;
+    width: 100%;
+    padding: 6px;
+    border-radius: 14px;
+    border: 1px solid var(--ol-border);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--ol-shadow);
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav::-webkit-scrollbar {
+    display: none;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 36px;
+    padding: 0 8px 0 6px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--ol-muted);
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link > span:not(.vm-logo-quick-nav__icon) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link.is-active {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__icon {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #f1f5f9;
+    font-size: 0.78rem;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link.is-active .vm-logo-quick-nav__icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+/* ---- Section header ---- */
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding: 14px 16px;
+    border: 1px solid var(--ol-border);
+    border-radius: var(--ol-radius);
+    background: var(--ol-card);
+    box-shadow: var(--ol-shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__head::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #1d4ed8, #3b82f6);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__badge {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    color: #fff;
+    font-size: 0.76rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__title {
+    margin: 0 0 3px;
+    font-size: 0.98rem;
+    font-weight: 800;
+    color: var(--ol-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__title i {
+    color: var(--ol-primary);
+    font-size: 0.88rem;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__desc {
+    margin: 0;
+    font-size: 0.76rem;
+    color: var(--ol-muted);
+    line-height: 1.45;
+}
+
+/* ---- Cards ---- */
+body.saas-admin-ui .saas-outside-logo-page .vm-pg-slab-card.vm-logo-card {
+    border: 1px solid var(--ol-border) !important;
+    border-radius: var(--ol-radius) !important;
+    background: var(--ol-card) !important;
+    box-shadow: var(--ol-shadow) !important;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-pg-slab-card.vm-logo-card::after {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-pg-slab-card.vm-logo-card:hover {
+    transform: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-pg-slab-card__head {
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    background: #fafbfc !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-pg-slab-card__title {
+    font-size: 0.88rem !important;
+    font-weight: 800 !important;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-pg-slab-body.vm-logo-card-body {
+    padding: 16px !important;
+}
+
+/* ---- Upload control (universal) ---- */
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-upload-zone__controls {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 10px !important;
+    align-items: center !important;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--ol-border);
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-file-input,
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-upload-zone__controls input[type="file"] {
+    width: 100% !important;
+    min-height: 38px !important;
+    margin: 0 !important;
+    padding: 6px 10px !important;
+    border: 1px solid var(--ol-border) !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    font-size: 0.74rem !important;
+}
+
+/* ---- Brand rows (stacked card layout) ---- */
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-master > .vm-pg-slab-body {
+    padding: 8px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-rows {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+    padding: 14px !important;
+    margin: 0 !important;
+    border: 1px solid var(--ol-border) !important;
+    border-radius: 12px !important;
+    background: #fafbfc !important;
+    border-bottom: 1px solid var(--ol-border) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row:last-child {
+    border-bottom: 1px solid var(--ol-border) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #dbeafe, #eff6ff);
+    color: #1d4ed8;
+    font-size: 0.88rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__text strong {
+    display: block;
+    font-size: 0.84rem;
+    font-weight: 800;
+    color: var(--ol-text);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__text span {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--ol-muted);
+    margin-top: 2px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__upload {
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__preview {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+    padding: 10px 12px !important;
+    border: 1px solid #eef2f6 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__preview--header {
+    grid-column: 1 !important;
+    display: grid !important;
+    grid-template-columns: 72px 1fr auto !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 12px !important;
+    margin-top: 0 !important;
+    border: 1px solid #eef2f6 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-preview__thumb {
+    width: 72px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border: 1px solid var(--ol-border);
+    border-radius: 8px;
+    background: #fff;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-preview__thumb--favicon {
+    width: 44px;
+    height: 44px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-preview__thumb img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-preview__thumb img[src=""] {
+    display: none;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-swatch-grid {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    border: 2px solid var(--ol-border);
+    border-radius: 8px;
+    background: #fff;
+    min-width: 58px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-swatch:has(input:checked) {
+    border-color: var(--ol-primary);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-swatch .container {
+    padding: 0;
+    margin: 0;
+    width: 22px;
+    height: 22px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-swatch .checkmark {
+    left: 50% !important;
+    top: 0 !important;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-swatch p {
+    margin: 0;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--ol-muted);
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row:not(.vm-logo-brand-row--header) {
+        grid-template-columns: minmax(200px, 240px) minmax(0, 1fr) !important;
+        align-items: center !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row:not(.vm-logo-brand-row--header) .vm-logo-brand-row__preview {
+        grid-column: 3;
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        justify-content: flex-end !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row--header {
+        grid-template-columns: minmax(200px, 240px) minmax(0, 1fr) !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row--header .vm-logo-brand-row__preview--header {
+        grid-column: 1 / -1 !important;
+    }
+}
+
+/* ---- Background options (horizontal cards) ---- */
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid > li {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+    padding: 14px 16px !important;
+    margin: 0 0 10px !important;
+    border: 1px solid var(--ol-border) !important;
+    border-radius: 12px !important;
+    background: #fafbfc !important;
+    float: none !important;
+    width: 100% !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid > li:last-child {
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid > li:has(input:checked) {
+    border-color: #3b82f6 !important;
+    background: #eff6ff !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view-first {
+    flex: 0 0 170px !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+    width: auto !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view-first label {
+    font-size: 0.84rem !important;
+    font-weight: 800 !important;
+    margin: 0 !important;
+    cursor: pointer;
+    color: var(--ol-text) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view-first input[type="radio"] {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--ol-primary);
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view,
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid img.background-view,
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-preview {
+    flex: 0 0 200px !important;
+    max-width: 260px !important;
+    width: 200px !important;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-preview .background-view,
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-preview img.background-view {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid > li > div:has(.background-view) {
+    flex: 0 0 200px !important;
+    max-width: 260px !important;
+    width: 200px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view,
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid img.background-view {
+    width: 200px !important;
+    max-width: 260px !important;
+    min-height: 90px !important;
+    max-height: 120px !important;
+    height: auto !important;
+    object-fit: cover !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--ol-border) !important;
+    margin: 0 !important;
+    float: none !important;
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view.fullbodydycolorbg {
+    min-height: 90px !important;
+    max-height: 120px !important;
+    width: 200px !important;
+    max-width: 260px !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--ol-border) !important;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view.fullbodydycolorbg::after {
+    content: "Default color";
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #334155;
+    font-size: 0.62rem;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view:empty,
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid #img2:empty {
+    min-height: 90px !important;
+    max-height: 120px !important;
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9) !important;
+    border: 2px dashed #cbd5e1 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view-third {
+    flex: 1 1 260px !important;
+    min-width: 0 !important;
+    width: auto !important;
+    float: none !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-info {
+    margin: 0;
+    padding: 10px 12px;
+    font-size: 0.74rem;
+    line-height: 1.5;
+    color: var(--ol-muted);
+    background: #f0f7ff;
+    border-left: 3px solid var(--ol-primary);
+    border-radius: 0 8px 8px 0;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-file-limit {
+    font-size: 0.68rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+/* ---- Slider (compact 2-col) ---- */
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-row {
+    display: grid !important;
+    grid-template-columns: 220px minmax(0, 1fr) !important;
+    gap: 14px !important;
+    align-items: start !important;
+    padding: 14px 16px !important;
+    border: 1px solid var(--ol-border) !important;
+    border-radius: 12px !important;
+    background: #fafbfc !important;
+    float: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    grid-column: 1;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-meta {
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .slider-image-number {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .slider-image-number span {
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--ol-primary);
+    color: #fff;
+    font-size: 0.76rem;
+    font-weight: 800;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-visual .background-view-slider {
+    flex: 1 1 auto;
+    min-height: 80px !important;
+    max-height: 110px !important;
+    height: auto !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border: 1px solid var(--ol-border);
+    border-radius: 10px;
+    background: #fff;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-visual .background-view-slider img {
+    max-height: 88px !important;
+    max-width: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-img-placeholder {
+    background: #f8fafc !important;
+    min-height: 80px !important;
+    max-height: 110px !important;
+    position: relative;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-img-placeholder img[src=""] {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-img-placeholder:has(img[src=""])::after {
+    content: "\f03e";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 400;
+    font-size: 1.4rem;
+    color: #cbd5e1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    grid-column: 2;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+/* ---- Role themes ---- */
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-themes-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-theme-pill-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)) !important;
+    gap: 6px !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .theam-button {
+    display: block !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .theam-button button,
+body.saas-admin-ui .saas-outside-logo-page .vm-theme-pill-grid button {
+    width: 100% !important;
+    min-height: 34px !important;
+    margin: 0 !important;
+    padding: 0 10px !important;
+    float: none !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px !important;
+    border: 1.5px solid var(--ol-border) !important;
+    background: #fff !important;
+    color: var(--ol-muted) !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .theam-button button.thame-active,
+body.saas-admin-ui .saas-outside-logo-page .vm-theme-pill-grid button.thame-active {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .theam-button .vm-theme-pill-grid button:not(.thame-active) i {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .theam-button .vm-theme-pill-grid button.thame-active i {
+    display: inline-block !important;
+    margin-right: 4px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .theam-button .vm-pg-slab-card__title i {
+    display: inline-flex !important;
+}
+
+/* ---- Front themes ---- */
+body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 12px !important;
+    padding: 4px 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-card,
+body.saas-admin-ui .saas-outside-logo-page .container11.vm-front-theme-card {
+    border-radius: 12px !important;
+    overflow: hidden;
+    border: 1px solid var(--ol-border) !important;
+    background: #fff !important;
+    box-shadow: var(--ol-shadow);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-preview {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: #f1f5f9;
+    position: relative;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-preview .image {
+    width: 100% !important;
+    height: 100%;
+    object-fit: cover;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-footer,
+body.saas-admin-ui .saas-outside-logo-page .designch.vm-front-theme-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: #fafbfc;
+    border-top: 1px solid #f1f5f9;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-name {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-badge--free {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 0.65rem;
+    font-weight: 800;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-badge--pro {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #92400e;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .text5 {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px !important;
+    border-radius: 999px !important;
+    border: none !important;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
+    color: #fff !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.32);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .middle {
+    top: 50%;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-card:hover .middle,
+body.saas-admin-ui .saas-outside-logo-page .container11:hover .middle {
+    opacity: 1;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .container11:hover .image {
+    opacity: 0.85;
+}
+
+/* ---- Buttons (all) ---- */
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-btn,
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-action-btn,
+body.saas-admin-ui .saas-outside-logo-page a.vm-logo-action-btn,
+body.saas-admin-ui .saas-outside-logo-page .for-disable.input-back-second {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    min-height: 36px !important;
+    padding: 0 14px !important;
+    border-radius: 9px !important;
+    font-size: 0.74rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    float: none !important;
+    margin: 0 !important;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: all 0.15s;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-btn--primary,
+body.saas-admin-ui .saas-outside-logo-page .for-disable.input-back-second,
+body.saas-admin-ui .saas-outside-logo-page #btnaaa,
+body.saas-admin-ui .saas-outside-logo-page #HeaderLogoBtn,
+body.saas-admin-ui .saas-outside-logo-page #faviconBtn,
+body.saas-admin-ui .saas-outside-logo-page #fileButtonSingle,
+body.saas-admin-ui .saas-outside-logo-page #fileButton,
+body.saas-admin-ui .saas-outside-logo-page #btnimage1,
+body.saas-admin-ui .saas-outside-logo-page #btnimage2 {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-action-btn--danger,
+body.saas-admin-ui .saas-outside-logo-page #delBackLogin_ContentSingle,
+body.saas-admin-ui .saas-outside-logo-page #delBackLogin_ContentRepeat,
+body.saas-admin-ui .saas-outside-logo-page #btnslid1img,
+body.saas-admin-ui .saas-outside-logo-page #btnslider2 {
+    background: #fff !important;
+    border: 1px solid #fca5a5 !important;
+    color: #dc2626 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-action-btn--ghost,
+body.saas-admin-ui .saas-outside-logo-page a.vm-logo-action-btn--ghost {
+    background: #fff !important;
+    border: 1px solid var(--ol-border) !important;
+    color: #334155 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-hint {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px !important;
+    border: 1px solid var(--ol-border) !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    color: var(--ol-muted) !important;
+    font-size: 0.68rem !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-hint i {
+    color: var(--ol-primary);
+    font-size: 0.72rem;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .note-border-second::before {
+    display: none !important;
+    content: none !important;
+}
+
+/* Slider toggle */
+body.saas-admin-ui .saas-outside-logo-page .custom-off,
+body.saas-admin-ui .saas-outside-logo-page .custom-on,
+body.saas-admin-ui .saas-outside-logo-page .costom-on {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    min-width: 90px;
+    padding: 0 16px !important;
+    border-radius: 999px !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .custom-off {
+    background: #fee2e2 !important;
+    color: #991b1b !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .custom-on,
+body.saas-admin-ui .saas-outside-logo-page .costom-on {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Kill legacy floats */
+body.saas-admin-ui .saas-outside-logo-page .background-view-first,
+body.saas-admin-ui .saas-outside-logo-page .background-view-third,
+body.saas-admin-ui .saas-outside-logo-page .background-view-third-one,
+body.saas-admin-ui .saas-outside-logo-page .background-view-third-two,
+body.saas-admin-ui .saas-outside-logo-page .background-view-slider {
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page input[type="file"]::file-selector-button {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-themes-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__preview,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__preview--header {
+        grid-column: 1 !important;
+        justify-content: flex-start;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__preview--header {
+        grid-template-columns: 72px 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__actions {
+        margin-left: 0;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-upload-zone__controls {
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        gap: 8px !important;
+        padding: 8px 10px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-upload-zone__controls .vm-logo-btn {
+        width: auto !important;
+        min-width: 84px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid > li {
+        flex-direction: column !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid img.background-view,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view.fullbodydycolorbg {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-controls {
+        grid-column: 1 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-hero-stats {
+        display: none;
+    }
+}
+
+/* ---- v2 nuclear overrides (win over legacy inline + modern.css) ---- */
+body.saas-admin-ui .saas-outside-logo-page .outside-logo-page .background-view-slider img,
+body.saas-admin-ui .saas-outside-logo-page .background-view-slider img {
+    width: auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 88px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid > li > div[style] {
+    flex: 0 0 200px !important;
+    max-width: 260px !important;
+    width: 200px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid > li > div[style] img.background-view {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid #mydiv {
+    flex: 0 0 200px !important;
+    max-width: 260px !important;
+    width: 200px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid #mydiv .background-view {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 90px !important;
+    max-height: 120px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-themes-grid .vm-pg-slab-card {
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-themes-grid .vm-pg-slab-card__head {
+    padding: 10px 14px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-head {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-body > .vm-logo-section + .vm-logo-section {
+    margin-top: 4px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__preview--header .vm-logo-brand-row__actions {
+    justify-self: end;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-brand-row__preview--header .vm-logo-swatch-grid {
+    justify-self: start;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view-first {
+        flex: 1 1 100% !important;
+    }
+}
+
+/* ============================================================
+   Brand Assets — modern card grid (#vmLogoBrand)
+   ============================================================ */
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--ol-border);
+    border-radius: var(--ol-radius);
+    background: var(--ol-card);
+    box-shadow: var(--ol-shadow);
+    overflow: hidden;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card--wide {
+    grid-column: 1 / -1;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    background: linear-gradient(180deg, #fafbfc 0%, #fff 100%);
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    font-size: 0.95rem;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__icon--login {
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__icon--favicon {
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__icon--header {
+    background: linear-gradient(135deg, #0891b2, #22d3ee);
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__title {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--ol-text);
+    line-height: 1.3;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__hint {
+    margin: 3px 0 0;
+    font-size: 0.7rem;
+    color: var(--ol-muted);
+    line-height: 1.4;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px 16px 16px;
+    flex: 1;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__upload .vm-logo-upload-zone__controls {
+    border-style: dashed;
+    border-color: #cbd5e1;
+    background: #f8fafc;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__upload .vm-logo-upload-zone__controls:hover {
+    border-color: #93c5fd;
+    background: #eff6ff;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__current {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame--favicon {
+    min-height: 100px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame--header {
+    min-height: 100px;
+    max-width: 220px;
+    border: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame img {
+    max-width: 100%;
+    max-height: 88px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame--favicon img {
+    max-height: 48px;
+    max-width: 48px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame--header img {
+    max-height: 64px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame.is-empty {
+    border-style: dashed;
+    border-color: #cbd5e1;
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame.is-empty img {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__empty {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #94a3b8;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame.is-empty .vm-brand-card__empty {
+    display: flex;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__empty i {
+    font-size: 1.4rem;
+    opacity: 0.7;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__actions .vm-logo-action-btn.is-hidden {
+    display: none !important;
+}
+
+/* Header card — preview left, swatches right */
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__body--header {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__header-main {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__current--header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1 1 180px;
+    min-width: 0;
+    max-width: 100%;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame--header {
+    min-height: 100px;
+    width: 100%;
+    max-width: 240px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__swatches--right {
+    flex: 0 0 auto;
+    margin-left: auto;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--ol-border);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    min-width: 200px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__swatches {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__swatch-label {
+    margin: 0;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ol-muted);
+    text-align: center;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__swatches--right .vm-logo-swatch-grid {
+    justify-content: center;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-swatch-grid {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 10px;
+    border: 2px solid var(--ol-border);
+    border-radius: 10px;
+    background: #fff;
+    min-width: 58px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-swatch:hover {
+    border-color: #93c5fd;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-swatch:has(input:checked) {
+    border-color: var(--ol-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-swatch .container {
+    padding: 0;
+    margin: 0;
+    width: 24px;
+    height: 24px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-swatch .checkmark {
+    left: 50% !important;
+    top: 0 !important;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 22px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-swatch p {
+    margin: 0;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--ol-muted);
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-swatch--white .checkmark {
+    background: #fff !important;
+    border: 1px solid #cbd5e1;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-swatch--transparent .checkmark {
+    background: repeating-conic-gradient(#e2e8f0 0% 25%, #fff 0% 50%) 50% / 8px 8px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-swatch--black .checkmark {
+    background: #0f172a !important;
+}
+
+/* Desktop — swatches pinned right */
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__header-main {
+        flex-wrap: nowrap;
+        align-items: stretch;
+        gap: 20px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__swatches--right {
+        margin-left: auto;
+        align-self: flex-start;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__current--header {
+        flex: 0 1 auto;
+    }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__header-main {
+        flex-wrap: nowrap;
+        align-items: flex-start;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__swatches--right {
+        margin-left: auto;
+        flex-shrink: 0;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame--header {
+        max-width: 200px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    /* Header: preview left, swatches right — saves vertical space */
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__header-main {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto;
+        align-items: start;
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__current--header {
+        order: unset;
+        grid-column: 1;
+        grid-row: 1;
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__swatches--right {
+        order: unset;
+        grid-column: 2;
+        grid-row: 1;
+        margin-left: 0;
+        width: auto;
+        min-width: 0;
+        max-width: 118px;
+        padding: 8px;
+        align-self: start;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__swatches--right .vm-logo-swatch-grid {
+        flex-direction: column;
+        gap: 4px;
+        justify-content: flex-start;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__swatch-label {
+        text-align: center;
+        font-size: 0.58rem;
+        line-height: 1.2;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-swatch {
+        min-width: 0;
+        width: 100%;
+        padding: 4px 5px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame--header {
+        max-width: 100%;
+        min-height: 72px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__current--header .vm-brand-card__actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-upload-zone__controls {
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        padding: 8px 10px !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-upload-zone__controls .vm-logo-btn {
+        width: auto !important;
+        min-width: 80px;
+        min-height: 34px !important;
+        padding: 0 12px !important;
+    }
+}
+
+/* ============================================================
+   v5 — Mobile & Tablet compact (reduce gaps, fix broken layout)
+   ============================================================ */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page.saas-admin-account-page {
+        padding: 10px 12px 24px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-body {
+        gap: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-toolbar {
+        gap: 10px !important;
+        margin-bottom: 4px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .saas-acc-breadcrumb {
+        margin-bottom: 6px !important;
+        font-size: 0.72rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-hero {
+        border-radius: 12px !important;
+        box-shadow: 0 6px 20px rgba(30, 64, 175, 0.18) !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .saas-acc-hero-title {
+        font-size: 1.15rem !important;
+        line-height: 1.25 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .saas-acc-hero-desc {
+        font-size: 0.74rem !important;
+        margin-bottom: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-hero-deco {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav {
+        top: 50px;
+        border-radius: 10px !important;
+    }
+
+    /* quick nav layout: see v12/v14 — do not force flex row here */
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__head {
+        padding: 10px 12px !important;
+        margin-bottom: 8px !important;
+        border-radius: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__badge {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.68rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__title {
+        font-size: 0.88rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__desc {
+        font-size: 0.7rem !important;
+        line-height: 1.35 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-pg-slab-body.vm-logo-card-body {
+        padding: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-pg-slab-card__head {
+        padding: 10px 12px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-btn,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-action-btn {
+        min-height: 34px !important;
+        padding: 0 12px !important;
+        font-size: 0.72rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-row {
+        padding: 10px 12px !important;
+        gap: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-slider-visual .background-view-slider {
+        min-height: 64px !important;
+        max-height: 80px !important;
+        padding: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid > li {
+        padding: 10px 12px !important;
+        gap: 10px !important;
+        margin-bottom: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-grid {
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-themes-grid {
+        gap: 10px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card--wide {
+        grid-column: 1 / -1;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-outside-logo-page.saas-admin-account-page {
+        padding: 8px 10px 20px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-body {
+        gap: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section {
+        scroll-margin-top: 72px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .saas-acc-hero-main {
+        padding: 12px 14px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .saas-acc-hero-title {
+        font-size: 1.05rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__head {
+        padding: 10px 12px !important;
+        gap: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__icon {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 0.82rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__title {
+        font-size: 0.82rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__hint {
+        font-size: 0.66rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__body {
+        padding: 10px 12px 12px !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame {
+        min-height: 72px !important;
+        padding: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame--favicon {
+        min-height: 64px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame img {
+        max-height: 64px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame--favicon img {
+        max-height: 40px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__actions {
+        gap: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__actions .vm-logo-action-btn {
+        flex: 1 1 auto;
+        justify-content: center;
+        min-width: 0;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__empty {
+        font-size: 0.66rem !important;
+        gap: 4px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__empty i {
+        font-size: 1.1rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-file-input,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-upload-zone__controls input[type="file"] {
+        min-height: 34px !important;
+        font-size: 0.68rem !important;
+        padding: 4px 8px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-hint {
+        font-size: 0.62rem !important;
+        padding: 3px 8px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-front-theme-preview {
+        aspect-ratio: 16/10 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-theme-pill-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 5px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .theam-button button,
+    body.saas-admin-ui .saas-outside-logo-page .vm-theme-pill-grid button {
+        min-height: 30px !important;
+        font-size: 0.66rem !important;
+        padding: 0 6px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .background-view-first,
+    body.saas-admin-ui .saas-outside-logo-page .background-view,
+    body.saas-admin-ui .saas-outside-logo-page .background-view-third,
+    body.saas-admin-ui .saas-outside-logo-page .background-view-slider {
+        float: none !important;
+        width: 100% !important;
+        text-align: left !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid img.background-view,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-grid .background-view.fullbodydycolorbg,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-bg-preview {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+        min-height: 72px !important;
+        max-height: 96px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .center_iset {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: 180px !important;
+        padding: 8px 0 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .optshow_c {
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .zooma-main,
+    body.saas-admin-ui .saas-outside-logo-page .zooma-main1,
+    body.saas-admin-ui .saas-outside-logo-page .zooma-main2,
+    body.saas-admin-ui .saas-outside-logo-page .zooma-main3,
+    body.saas-admin-ui .saas-outside-logo-page .zooma-main4,
+    body.saas-admin-ui .saas-outside-logo-page .zooma-main5,
+    body.saas-admin-ui .saas-outside-logo-page .zooma-main6,
+    body.saas-admin-ui .saas-outside-logo-page .zooma-main7,
+    body.saas-admin-ui .saas-outside-logo-page .zooma-main8,
+    body.saas-admin-ui .saas-outside-logo-page .zooma-mainR_theme,
+    body.saas-admin-ui .saas-outside-logo-page .zooma-mainL {
+        max-width: 100% !important;
+        max-height: 220px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup [class*="zooma-main"],
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] {
+        max-height: none !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .popup .popup-content,
+    body.saas-admin-ui .saas-outside-logo-page .popup-content {
+        max-width: calc(100vw - 24px) !important;
+        margin: 12px auto !important;
+        padding: 10px !important;
+    }
+}
+
+/* ============================================================
+   v6 — Front theme card head: fix huge mobile gap
+   (slab CSS sets column + space-between on .vm-pg-slab-card__head)
+   ============================================================ */
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head {
+    justify-content: flex-start !important;
+    align-content: flex-start !important;
+    min-height: 0 !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+        justify-content: flex-start !important;
+        gap: 8px !important;
+        padding: 10px 12px !important;
+        min-height: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head__info {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head__desc {
+        margin: 4px 0 0 !important;
+        font-size: 0.72rem !important;
+        line-height: 1.35 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head__badges {
+        width: 100% !important;
+        margin: 0 !important;
+        justify-content: flex-start !important;
+        gap: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-pill {
+        min-height: 30px !important;
+        padding: 0 10px !important;
+        font-size: 0.68rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-logo-front-card--pro {
+        margin-top: 14px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-logo-front-body {
+        padding: 8px 10px 12px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-grid {
+        padding: 8px !important;
+        gap: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-front-divider {
+        margin: 14px 0 12px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-pg-slab-card__title {
+        font-size: 0.84rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-pg-slab-card__title i {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.72rem !important;
+    }
+}
+
+/* Theme preview popup — close icon + header */
+body.saas-admin-ui .saas-outside-logo-page .vm-theme-popup-close {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 34px !important;
+    height: 34px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #0f172a !important;
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    cursor: pointer;
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+    transition: background 0.15s, color 0.15s;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-theme-popup-close:hover {
+    background: #fff !important;
+    color: #dc2626 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-theme-popup-close i {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    display: inline-block !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .product__description {
+    position: relative;
+    padding-right: 44px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .zoom111 span del,
+body.saas-admin-ui .saas-outside-logo-page .zoom111 span b {
+    font-weight: 700;
+}
+
+/* v8 — Quick nav: equal columns on desktop only */
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-toolbar .vm-logo-quick-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: space-between !important;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-toolbar .vm-logo-quick-nav__link {
+        flex: 1 1 0 !important;
+        max-width: none !important;
+        float: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link {
+        font-size: 0.74rem !important;
+        padding: 0 10px 0 6px !important;
+        min-height: 38px !important;
+    }
+}
+
+/* ============================================================
+   v9 — Front Login Themes (full modern section)
+   ============================================================ */
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-front-divider {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-section__head {
+    flex-wrap: wrap;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-section__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-section__stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-section__stat i {
+    color: #2563eb;
+    font-size: 0.72rem;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-section__stat--pro {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border-color: #fde68a;
+    color: #92400e;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-section__stat--pro i {
+    color: #d97706;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-themes-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-logo-front-card {
+    border-radius: 16px !important;
+    overflow: hidden;
+    border: 1px solid var(--ol-border) !important;
+    box-shadow: var(--ol-shadow) !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-logo-front-card--pro {
+    border-color: #fcd34d !important;
+    background: linear-gradient(180deg, #fffbeb 0%, #fff 80px) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-logo-front-card--pro .vm-pg-slab-card__title i {
+    background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+    color: #b45309 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head {
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    background: linear-gradient(180deg, #fafbfc 0%, #fff 100%) !important;
+    min-height: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-logo-front-body {
+    padding: 12px 14px 16px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-item {
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .container11.vm-front-theme-card,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 14px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #fff !important;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
+    overflow: hidden !important;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1) !important;
+    border-color: #93c5fd !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-logo-front-card--pro .vm-front-theme-card:hover {
+    border-color: #f59e0b !important;
+    box-shadow: 0 12px 28px rgba(245, 158, 11, 0.15) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-preview {
+    position: relative !important;
+    aspect-ratio: 16 / 11 !important;
+    overflow: hidden !important;
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-preview .image,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .container11 img.image {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    object-fit: cover !important;
+    object-position: top center !important;
+    border-radius: 0 !important;
+    transition: transform 0.25s ease, opacity 0.2s !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-preview .middle {
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(15, 23, 42, 0.5) !important;
+    opacity: 0 !important;
+    transition: opacity 0.2s ease !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-card:hover .middle,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .container11:hover .middle {
+    opacity: 1 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-card:hover .image,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .container11:hover .image {
+    opacity: 1 !important;
+    transform: scale(1.03);
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .text5 {
+    min-height: 36px !important;
+    padding: 0 18px !important;
+    font-size: 0.76rem !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .designch,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    padding: 10px 12px !important;
+    border-top: 1px solid #f1f5f9 !important;
+    background: #fafbfc !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .designch p,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-name {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    color: #0f172a !important;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    border-radius: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .designch span {
+    margin: 0 !important;
+    padding: 3px 10px !important;
+    border-radius: 999px !important;
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+    background: #dcfce7 !important;
+    color: #15803d !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-badge--pro,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-logo-front-card--pro .designch span {
+    background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+    color: #92400e !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-pill {
+    min-height: 30px;
+    padding: 0 12px;
+    font-size: 0.7rem;
+}
+
+/* Theme preview popup — modern */
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup {
+    z-index: 9999 !important;
+    background: rgba(15, 23, 42, 0.65) !important;
+    backdrop-filter: blur(4px);
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup-content {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    width: min(96%, 1100px) !important;
+    max-width: 1100px !important;
+    margin: 24px auto !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25) !important;
+    font-weight: normal !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    margin: 0 0 0 !important;
+    padding: 12px 16px !important;
+    padding-right: 48px !important;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb) !important;
+    border-bottom: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description h1.zoom111 {
+    margin: 0 !important;
+    font-size: 0.9rem !important;
+    font-weight: 800 !important;
+    color: #fff !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .zoom111 {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes h2.zoom111 {
+    margin: 0 !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes h2.zoom111 p {
+    margin: 0 !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .zoom111 span {
+    float: none !important;
+    clip-path: none !important;
+    padding: 3px 10px !important;
+    border-radius: 6px !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+    font-size: 0.72rem !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description a.zoom111 {
+    margin-left: auto !important;
+    padding: 6px 14px !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    color: #1d4ed8 !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+    border: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product.wrapper {
+    display: flex !important;
+    gap: 10px !important;
+    padding: 12px !important;
+    background: #f8fafc !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__thumbnails,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-thumbnail"] {
+    width: 72px !important;
+    flex-shrink: 0 !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__focus,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    min-height: 320px !important;
+    max-height: 70vh !important;
+    float: none !important;
+    margin: 0 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    overflow: auto !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__focus img,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup-close {
+    top: 10px !important;
+    right: 10px !important;
+}
+
+@media (max-width: 1199px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head__header-main,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-brand-card__header-main {
+        /* keep inherited */
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-section__stats {
+        gap: 6px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-section__stat {
+        font-size: 0.62rem;
+        padding: 3px 8px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product.wrapper {
+        flex-direction: column !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__thumbnails,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-thumbnail"] {
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__focus,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] {
+        min-height: 240px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup-content {
+        width: calc(100% - 16px) !important;
+        margin: 12px auto !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ============================================================
+   v10 — Front Login Themes polish + popup + touch
+   ============================================================ */
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes.vm-logo-section--front {
+    scroll-margin-top: 80px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head__info {
+    flex: 1 1 220px;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head__desc {
+    margin: 4px 0 0 !important;
+    color: #64748b !important;
+    font-size: 0.74rem !important;
+    line-height: 1.45 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head__desc strong {
+    color: #334155 !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head__badges {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    flex: 0 0 auto !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-grid--pro {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .text5 {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .text5:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-logo-front-card--pro .text5 {
+    background: linear-gradient(135deg, #b45309, #d97706) !important;
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup.show {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    z-index: 10050 !important;
+    padding: 16px 0 24px !important;
+    overflow-y: auto !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup-content[style] {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    display: block !important;
+    height: auto !important;
+    background: #fff !important;
+    font-weight: normal !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description a.zoom111:hover {
+    background: #eff6ff !important;
+    color: #1e40af !important;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-preview .middle {
+        opacity: 1 !important;
+        background: linear-gradient(180deg, transparent 40%, rgba(15, 23, 42, 0.55) 100%) !important;
+        align-items: flex-end !important;
+        padding-bottom: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-card:hover .image,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .container11:hover .image {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-grid--pro {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-grid--pro {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ============================================================
+   v11 — Pro ribbon + popup preview layout fix
+   ============================================================ */
+
+/* Remove broken full-width orange PRO bar (::before had no position) */
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-logo-front-card--pro .vm-front-theme-card::before {
+    content: none !important;
+    display: none !important;
+}
+
+/* Premium ribbon on pro theme cards */
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-pro-ribbon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px 5px 8px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #b45309 0%, #f59e0b 55%, #fbbf24 100%);
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow:
+        0 4px 14px rgba(180, 83, 9, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    pointer-events: none;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-pro-ribbon i {
+    font-size: 0.68rem;
+    color: #fffbeb;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-badge--pro {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 4px 10px !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #fff7ed, #ffedd5) !important;
+    border: 1px solid #fdba74 !important;
+    color: #9a3412 !important;
+    font-size: 0.62rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.03em !important;
+    text-transform: uppercase !important;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-badge--pro i {
+    color: #d97706 !important;
+    font-size: 0.65rem !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-logo-front-card--pro .vm-front-theme-card {
+    border-color: #fde68a !important;
+    background: linear-gradient(180deg, #fffbeb 0%, #fff 72px) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-theme-head--pro .vm-front-theme-head__desc {
+    color: #92400e !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-pill--pro {
+    background: linear-gradient(135deg, #fff7ed, #fed7aa) !important;
+    border: 1px solid #fdba74 !important;
+    color: #9a3412 !important;
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.12) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-front-pill--pro i {
+    color: #d97706 !important;
+}
+
+/* Theme preview popup — full layout */
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup-shell {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    transform: none !important;
+    display: block !important;
+    width: min(96%, 1140px) !important;
+    max-width: 1140px !important;
+    margin: 16px auto 24px !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    background: #fff !important;
+    box-shadow: 0 28px 70px rgba(15, 23, 42, 0.28) !important;
+    font-weight: normal !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup.show {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    padding: 12px !important;
+    overflow-y: auto !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
+    align-items: center !important;
+    gap: 12px 14px !important;
+    margin: 0 !important;
+    padding: 14px 52px 14px 16px !important;
+    border-radius: 0 !important;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 52%, #2563eb 100%) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description h1.zoom111 {
+    grid-column: 1;
+    font-size: 0.95rem !important;
+    letter-spacing: 0.06em !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes h2.zoom111 {
+    grid-column: 2;
+    margin: 0 !important;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes h2.zoom111 p {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description a.zoom111 {
+    grid-column: 3;
+    margin-left: 0 !important;
+    min-height: 34px !important;
+    padding: 0 16px !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    color: #1d4ed8 !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup-close {
+    top: 12px !important;
+    right: 12px !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: #fff !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(4px);
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup-close:hover {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #dc2626 !important;
+    border-color: #fff !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product.wrapper {
+    display: flex !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 14px !important;
+    float: none !important;
+    background: #f1f5f9 !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__thumbnails,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-thumbnail"] {
+    width: 92px !important;
+    min-width: 92px !important;
+    max-width: 92px !important;
+    flex: 0 0 92px !important;
+    float: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    max-height: min(72vh, 640px) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 8px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-thumbnail"] img {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    border: 2px solid transparent !important;
+    opacity: 0.55 !important;
+    outline: none !important;
+    cursor: pointer !important;
+    transition: opacity 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-thumbnail"] img.is-active {
+    opacity: 1 !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup-stage,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] {
+    position: relative !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: min(72vh, 640px) !important;
+    min-height: 420px !important;
+    max-width: none !important;
+    max-height: min(72vh, 640px) !important;
+    float: none !important;
+    margin: 0 !important;
+    overflow: auto !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] img.is-loaded {
+    position: absolute !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] img.is-active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description {
+        grid-template-columns: 1fr auto !important;
+        padding-right: 48px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes h2.zoom111 {
+        grid-column: 1 / -1;
+        justify-self: start;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description a.zoom111 {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product.wrapper {
+        flex-direction: column !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__thumbnails,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-thumbnail"] {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        flex: 0 0 auto !important;
+        max-height: none !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-thumbnail"] img {
+        width: 72px !important;
+        flex: 0 0 72px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup-stage,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] {
+        min-height: 280px !important;
+        height: 52vh !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-pro-ribbon {
+        top: 8px;
+        right: 8px;
+        padding: 4px 8px;
+        font-size: 0.58rem;
+    }
+}
+
+/* ============================================================
+   v12 — Mobile & tablet quick nav + brand layout fix
+   ============================================================ */
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__label--short {
+    display: none;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav-scroll {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav-scroll::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 28px;
+    pointer-events: none;
+    border-radius: 0 14px 14px 0;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.98) 20%, transparent);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav-scroll.is-scrollable::after {
+    opacity: 1;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page.saas-admin-account-page {
+        padding: 8px 10px 20px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-container.container-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .saas-acc-breadcrumb {
+        flex-wrap: wrap !important;
+        row-gap: 4px !important;
+        font-size: 0.68rem !important;
+        line-height: 1.35 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-toolbar {
+        gap: 8px !important;
+        margin-bottom: 2px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-toolbar .vm-logo-quick-nav,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        width: 100% !important;
+        padding: 8px !important;
+        overflow: visible !important;
+        align-items: stretch !important;
+        justify-content: stretch !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav-scroll::after {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-toolbar .vm-logo-quick-nav__link,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link {
+        flex: none !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        min-height: 38px !important;
+        padding: 0 10px 0 8px !important;
+        justify-content: flex-start !important;
+        overflow: hidden !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link:nth-child(5) {
+        grid-column: 1 / -1;
+        max-width: calc(50% - 4px);
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__label--short {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__label--full {
+        display: inline !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__icon {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 0.7rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__actions {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__actions .vm-logo-action-btn {
+        width: 100% !important;
+        min-height: 38px !important;
+        justify-content: center !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__preview-frame {
+        min-height: 120px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link {
+        font-size: 0.7rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card--wide {
+        grid-column: 1 / -1 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__label--full {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__label--short {
+        display: inline !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link {
+        font-size: 0.68rem !important;
+        padding: 0 10px 0 6px !important;
+        gap: 5px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-upload-zone__controls,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__upload .vm-logo-upload-zone__controls {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+        padding: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-upload-zone__controls .vm-logo-btn,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-brand-card__upload .vm-logo-upload-zone__controls .vm-logo-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 38px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-file-input,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoBrand .vm-logo-upload-zone__controls input[type="file"] {
+        font-size: 0.7rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__head {
+        padding: 10px !important;
+        gap: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-pg-slab-card.vm-logo-card {
+        border-radius: 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav {
+        gap: 6px !important;
+        padding: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link {
+        min-height: 36px !important;
+        padding: 0 8px 0 6px !important;
+        font-size: 0.66rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link:nth-child(5) {
+        max-width: 100%;
+    }
+}
+
+/* v13 — override legacy flex rules on tablet/mobile quick nav */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-toolbar .vm-logo-quick-nav,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        flex-wrap: unset !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-toolbar .vm-logo-quick-nav__link,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link {
+        flex: none !important;
+        min-width: 0 !important;
+    }
+}
+
+/* v14 — label visibility fix (no duplicate "Brand Assets Brand") */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link > .vm-logo-quick-nav__label--short {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link > .vm-logo-quick-nav__label--full {
+        display: inline !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        min-width: 0 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link > .vm-logo-quick-nav__label--full {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link > .vm-logo-quick-nav__label--short {
+        display: inline !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        min-width: 0 !important;
+    }
+}
+
+/* ============================================================
+   v15 — Theme preview popup mobile & tablet fix
+   ============================================================ */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup.show {
+        align-items: flex-start !important;
+        padding: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup-shell {
+        width: calc(100% - 4px) !important;
+        max-width: 100% !important;
+        margin: 6px auto 12px !important;
+        border-radius: 14px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description {
+        display: grid !important;
+        grid-template-columns: 1fr auto !important;
+        grid-template-rows: auto auto !important;
+        align-items: center !important;
+        gap: 8px 10px !important;
+        padding: 12px 44px 12px 12px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description h1.zoom111 {
+        grid-column: 1 / -1 !important;
+        grid-row: 1 !important;
+        font-size: 0.84rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes h2.zoom111 {
+        grid-column: 1 !important;
+        grid-row: 2 !important;
+        font-size: 0.72rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__description a.zoom111 {
+        grid-column: 2 !important;
+        grid-row: 2 !important;
+        min-height: 30px !important;
+        padding: 0 12px !important;
+        font-size: 0.68rem !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup-close {
+        top: 10px !important;
+        right: 10px !important;
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product.wrapper {
+        flex-direction: column !important;
+        padding: 10px !important;
+        gap: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .product__thumbnails,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-thumbnail"] {
+        order: 1 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        flex: 0 0 auto !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        max-height: none !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        padding: 8px !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-thumbnail"] img {
+        width: 68px !important;
+        min-width: 68px !important;
+        max-width: 68px !important;
+        flex: 0 0 68px !important;
+        height: auto !important;
+        padding: 0 !important;
+        opacity: 0.6 !important;
+        border-radius: 8px !important;
+        border: 2px solid #e2e8f0 !important;
+        cursor: pointer !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-thumbnail"] img.is-active {
+        opacity: 1 !important;
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup-stage,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] {
+        order: 2 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: 55vh !important;
+        max-height: none !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding: 4px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] img,
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] img.is-loaded {
+        position: static !important;
+        display: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        opacity: 0 !important;
+        left: auto !important;
+        top: auto !important;
+        margin: 0 0 8px !important;
+        pointer-events: none !important;
+        cursor: default !important;
+        border-radius: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] img.is-active {
+        display: block !important;
+        opacity: 1 !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] img.is-zoomed-in {
+        transform: none !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup-shell {
+        width: min(96%, 720px) !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-main"] {
+        min-height: 50vh !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes [class*="zooma-thumbnail"] img {
+        width: 80px !important;
+        min-width: 80px !important;
+        max-width: 80px !important;
+        flex-basis: 80px !important;
+    }
+}
+
+/* ============================================================
+   v16 — Mobile popup class + force full-width preview
+   ============================================================ */
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup--mobile .product.wrapper,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup--mobile .product {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    float: none !important;
+    clear: both !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup--mobile [class*="zooma-thumbnail"],
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup--mobile .product__thumbnails {
+    order: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    float: none !important;
+    flex: 0 0 auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 8px !important;
+    margin: 0 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup--mobile [class*="zooma-main"],
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup--mobile .vm-theme-popup-stage {
+    order: 2 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 52vh !important;
+    max-height: none !important;
+    float: none !important;
+    margin: 0 !important;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+    padding: 6px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup--mobile [class*="zooma-main"] img,
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup--mobile [class*="zooma-main"] img.is-loaded {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    left: auto !important;
+    top: auto !important;
+    float: none !important;
+    pointer-events: none !important;
+    cursor: default !important;
+    border-radius: 8px !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup--mobile [class*="zooma-thumbnail"] img {
+    width: 72px !important;
+    min-width: 72px !important;
+    max-width: 72px !important;
+    flex: 0 0 72px !important;
+    height: auto !important;
+    padding: 0 !important;
+    opacity: 0.55 !important;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .vm-theme-popup--mobile [class*="zooma-thumbnail"] img.is-active {
+    opacity: 1 !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup .product.wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        float: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup [class*="zooma-thumbnail"],
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup .product__thumbnails {
+        float: none !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page #vmLogoFrontThemes .popup [class*="zooma-main"] {
+        float: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}

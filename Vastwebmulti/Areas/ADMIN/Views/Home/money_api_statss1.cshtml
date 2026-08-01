@@ -1,259 +1,201 @@
 @model IEnumerable<Vastwebmulti.Models.money_api_status1>
-@using Vastwebmulti.Models;
+@using System.Linq
 @{
-    ViewBag.Title = "MoneyApiUrls";
+    ViewBag.Title = "money_api_statss1";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.money_api_status1>();
 }
-<style>
 
-    /* New css  */
-    .rtyfrtyclass-third {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding:0;
-    }
-    .money_api_s {
-        display: flex;
-        justify-content: space-between;
-        margin: 0;
-    }
-        .money_api_s a {
-            background-color: var(--main-bg-lcolor);
-            border: 1px solid #7b7b7b38 !important;
-        }
-    .padding-top-thirdclass {
-        padding: 5px 4px;
-        float: left;
-    }
-    .updatests button {
-        background: green !important;
-        padding: 6px 16px;
-        border: 1px solid !important;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=28" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-operator-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
-    /* New css  */
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-api-operator-page saas-money-api-stats-page">
+    <div class="container-fluid vm-opr-page-shell">
 
-
-    .off {
-        width: 30%;
-        background: red;
-        color: white;
-    }
-
-    .on {
-        width: 30%;
-        background: green;
-        color: white;
-    }
-
-
-    @@media only screen and (max-width: 480px) {
-        .rtyfrtyclass-third {
-            display: block;
-        }
-
-        .money_api_s a {
-            width: 100%;
-        }
-
-        .row.money_api_s .col.col-md-3 {
-            width: 50%;
-            padding: 0;
-        }
-
-        .money_api_s {
-            margin-top: 6px;
-            width: 100%;
-            float: left;
-            text-align: center;
-        }
-    } 
-
-</style>
-<section class="content">
-    <div class="container-fluid">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>API Setting</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">API Setting</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix">
-            <div class="col-md-12 four-noneclass-admin-only">
-                <div class="page-header-third pageheader-second-third">
-                    <div class="bread-same-all-page breadsameall-second">
-                        <ul class="padding-top-thirdclass" style="margin:0px;">
-                            <li class="smli">
-                                <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                                </a>
-                            </li>
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                <a href="@Url.Action("Dashboard", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                                    Basic&nbsp;Setting
-                                </a>&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                            </li>
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                Vast Bazaar API
-                            </li>
-                        </ul>
-                    </div>
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+            <div class="saas-acc-toolbar-top vm-api-operator-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-api-operator-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li><a href="@Url.Action("Dashboard", "Home")#setting">Basic Setting</a></li>
+                    <li>Money API Setting</li>
+                </ol>
+                <div class="vm-dmt-fin-nav-row vm-api-operator-nav-wrap">
+                    @Html.Partial("_menuapinm")
                 </div>
-
             </div>
-        </div>
-        
-        <div class="page-header-third">
-            <div class="row clearfix">
-                <div class="col-md-12">
-                    <div class="card" style="">
-                        <div class="col-md-12 rtyfrty rtyfrtyclass-third">
-                            <div style="">
-                                @Html.Partial("_menuapinm")
-                            </div>
-                            <div style="" class="row money_api_s">
-                                <div class="col col-md-3">
-                                    <a href="@Url.Action("money_api_statss","Home")" class="btn btn-default"> BANK1 </a>
-                                </div>
-                                <div class="col col-md-3">
-                                    <a href="@Url.Action("money_api_statss1","Home")" class="btn " style="color:#fff;"> BANK2 </a>
-                                </div>
-                            </div>
 
+            <div class="vm-rpt-filters-panel vm-api-operator-filter-panel">
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-api-operator-filter-row vm-rpt-filters-panel__bar">
+                    <div class="vm-api-operator-filter-group vm-money-api-stats-filter-group">
+                        <div class="vm-money-api-bank-tabs" role="tablist" aria-label="Bank API">
+                            <a href="@Url.Action("money_api_statss", "Home")" class="vm-money-api-bank-tab" role="tab" aria-selected="false">BANK1</a>
+                            <a href="@Url.Action("money_api_statss1", "Home")" class="vm-money-api-bank-tab is-active" role="tab" aria-selected="true">BANK2</a>
                         </div>
-
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="" style="width: 100%; float: left; margin-top: 8px;">
-                <div class=" table-responsive tablefourdesign-admin" style="position:inherit;">
-                    <table class="table table-bordered table-striped example-second" style="width:100%;">
-                        <thead style="background-color:whitesmoke;">
-                            <tr>
-                                <th>API&nbsp;Name</th>
-                                <th>API&nbsp;Category</th>
-                                <th>Edit</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model != null)
-                            {
-                                var deta = 0;
-                                foreach (var item in Model)
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-money-bill-wave" aria-hidden="true"></i>
+                        <span>Money API status - BANK2</span>
+                    </div>
+                    <label class="vm-api-operator-table-search" for="moneyApiStatsSearch">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="text" id="moneyApiStatsSearch" placeholder="Search records..." autocomplete="off" />
+                    </label>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="moneyApiStatsTable" class="table vm-opr-data-table vm-money-api-stats-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>API Name</th>
+                                    <th>Slab</th>
+                                    <th>API Category</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in rows)
                                 {
-                                    <tr>
-                                        <td>
-                                            <select id="apis+@item.idno" onchange="updateapi(@item.idno)" class="btn btn-secondary dropdown-toggle">
+                                    var apiSelectId = "apis+" + item.idno;
+                                    var slabSelectId = "apis1+" + item.idno;
+                                    <tr data-api="@(item.api_name ?? "")" data-category="@(item.catagory ?? "")">
+                                        <td class="vm-money-api-stats-cell vm-money-api-stats-cell--select">
+                                            <select id="@apiSelectId" class="form-control vm-money-api-stats-select vm-money-api-stats-api-select" data-idno="@item.idno" title="API Name">
                                                 @if (item.catagory != "DMT")
                                                 {
-                                                    <option>VASTWEB</option>
+                                                    <option @(item.api_name == "VASTWEB" ? "selected=\"selected\"" : "")>VASTWEB</option>
                                                 }
-                                                <option @(item.api_name == "RADIANT" ? "selected" : "")>RADIANT</option>
-
-
+                                                <option @(item.api_name == "RADIANT" ? "selected=\"selected\"" : "")>RADIANT</option>
                                             </select>
                                         </td>
-                                        <td>
+                                        <td class="vm-money-api-stats-cell vm-money-api-stats-cell--slab">
                                             @if (item.catagory == "PAYOUT")
                                             {
-                                                <select id="apis1+@item.idno" onchange="updateapiSlab(@item.idno)" class="btn btn-secondary dropdown-toggle">
+                                                <select id="@slabSelectId" class="form-control vm-money-api-stats-select vm-money-api-stats-slab-select" data-idno="@item.idno" title="Slab">
                                                     <option>Slab1</option>
-                                                    <option @(item.Slabnm == "Slab2" ? "selected" : "")>Slab2</option>
+                                                    <option @(item.Slabnm == "Slab2" ? "selected=\"selected\"" : "")>Slab2</option>
                                                 </select>
-                                            }
-                                        </td>
-                                        <td>@item.catagory</td>
-                                        <td class="updatests">
-                                            @if (item.status == true)
-                                            {
-
-
-                                                <button class="btn btn-primary" onclick="updates(false,@item.idno , @deta )">ON</button>
                                             }
                                             else
                                             {
-                                                <button class="btn btn-primary" onclick="updates(true,@item.idno, @deta )">OFF</button>
+                                                <span class="vm-money-api-stats-empty">N/A</span>
                                             }
-
+                                        </td>
+                                        <td class="vm-money-api-stats-cell vm-money-api-stats-cell--category">@item.catagory</td>
+                                        <td class="vm-money-api-stats-cell vm-money-api-stats-cell--status">
+                                            @if (item.status == true)
+                                            {
+                                                <button type="button" class="vm-money-api-stats-toggle vm-money-api-stats-toggle--on" data-idno="@item.idno" data-sts="false" title="Turn off">
+                                                    <span class="onoffswitch"><span class="costom-on">on</span></span>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="vm-money-api-stats-toggle vm-money-api-stats-toggle--off" data-idno="@item.idno" data-sts="true" title="Turn on">
+                                                    <span class="onoffswitch"><span class="custom-off">off</span></span>
+                                                </button>
+                                            }
                                         </td>
                                     </tr>
-                                    deta++;
                                 }
-                            }
-
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        function updates(s , id) {
-
-            $.ajax({
-    url: '@Url.Action("updatestsmoneyapi1", "Home")',
-                cache: false,
-                data: { idno: id, sts: s },
-    type: "GET",
-                success: function (data) {
-                    location.reload();
-    }
-});
-        }
-
-        function updateapi(idno) {
-            var idss = 'apis+' + idno;
-            var value = document.getElementById(idss).value;
-            $.ajax({
-    url: '@Url.Action("updatestsmoneyapiyes1", "Home")',
-                cache: false,
-                data: { idno: idno, cat: value },
-    type: "GET",
-                success: function (data) {
-                    location.reload();
-    }
-});
-        }
-
-          function updateapiSlab(idno) {
-            var idss = 'apis1+' + idno;
-            var value = document.getElementById(idss).value;
-            $.ajax({
-    url: '@Url.Action("updatestsmoneyapiyesSlab1", "Home")',
-                cache: false,
-                data: { idno: idno, cat: value },
-    type: "GET",
-                success: function (data) {
-                    location.reload();
-    }
-});
-        }
-    </script>
-
-
 </section>
 
+<script>
+    (function () {
+        function applyMoneyApiStatsSearch() {
+            var q = ($('#moneyApiStatsSearch').val() || '').trim().toLowerCase();
+            $('#moneyApiStatsTable tbody tr').each(function () {
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(!q || text.indexOf(q) > -1);
+            });
+        }
 
-<!-- Jquery Core Js -->
-<script src="~/Swalalert/datatablejquery.js"></script>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+        function bootMoneyApiStatsPage() {
+            var $ = window.jQuery;
+            if (!$ || !$.fn) {
+                window.setTimeout(bootMoneyApiStatsPage, 50);
+                return;
+            }
 
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
+            $('#moneyApiStatsSearch').off('keyup.moneyApiStats').on('keyup.moneyApiStats', applyMoneyApiStatsSearch);
 
+            $(document).off('change.moneyApiStatsApi', '.vm-money-api-stats-api-select').on('change.moneyApiStatsApi', '.vm-money-api-stats-api-select', function () {
+                var idno = $(this).data('idno');
+                var value = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("updatestsmoneyapiyes1", "Home")',
+                    cache: false,
+                    data: { idno: idno, cat: value },
+                    type: 'GET',
+                    success: function () {
+                        location.reload();
+                    }
+                });
+            });
+
+            $(document).off('change.moneyApiStatsSlab', '.vm-money-api-stats-slab-select').on('change.moneyApiStatsSlab', '.vm-money-api-stats-slab-select', function () {
+                var idno = $(this).data('idno');
+                var value = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("updatestsmoneyapiyesSlab1", "Home")',
+                    cache: false,
+                    data: { idno: idno, cat: value },
+                    type: 'GET',
+                    success: function () {
+                        location.reload();
+                    }
+                });
+            });
+
+            $(document).off('click.moneyApiStatsToggle', '.vm-money-api-stats-toggle').on('click.moneyApiStatsToggle', '.vm-money-api-stats-toggle', function () {
+                var idno = $(this).data('idno');
+                var sts = $(this).data('sts');
+                var $btn = $(this);
+                $btn.prop('disabled', true);
+
+                $.ajax({
+                    url: '@Url.Action("updatestsmoneyapi1", "Home")',
+                    cache: false,
+                    data: { idno: idno, sts: sts },
+                    type: 'GET',
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function () {
+                        $btn.prop('disabled', false);
+                        if (window.swal) {
+                            swal('Error', 'Unable to update status. Please try again.', 'error');
+                        }
+                    }
+                });
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bootMoneyApiStatsPage);
+        } else {
+            bootMoneyApiStatsPage();
+        }
+    })();
+</script>

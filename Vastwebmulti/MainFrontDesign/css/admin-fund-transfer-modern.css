@@ -437,11 +437,10 @@ body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-rol
 }
 
 body.saas-admin-ui .saas-fund-transfer-page .tabcurrent-seconddesign {
-    padding: 14px 12px 16px !important;
+    padding: 6px 12px 6px !important;
     border: none !important;
     float: none !important;
     width: 100% !important;
-    background: #fff;
     flex: 1 1 auto;
     min-height: 0;
     display: flex;
@@ -1746,6 +1745,769 @@ body.saas-admin-ui .saas-upload-apk-page .vm-ft-copy-link-btn .tooltiptext {
 body.saas-admin-ui .saas-upload-apk-page .vm-ft-copy-link-btn:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-toolbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex: 0 1 auto;
+    margin-left: auto;
+    margin-right: 8px;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-toolbar-actions .vm-ft-apk-toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 8px 14px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    background: #fff !important;
+    color: #334155 !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-toolbar-actions .vm-ft-apk-toolbar-btn:hover {
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-page-search input#txtSocialSearch {
+    width: 100% !important;
+    height: 36px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 0 12px 0 38px !important;
+    font-size: 0.84rem !important;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.1a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat 12px center !important;
+    float: none !important;
+    margin: 0 !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-page-search input#txtSocialSearch:focus {
+    border-color: var(--ft-accent) !important;
+    box-shadow: 0 0 0 3px var(--ft-accent-glow) !important;
+    outline: none !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-ft-apk-page-search input#txtCspSearch:focus {
+    border-color: var(--ft-accent) !important;
+    box-shadow: 0 0 0 3px var(--ft-accent-glow) !important;
+    outline: none !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-del-btn {
+    background: #fff !important;
+    color: #dc2626 !important;
+    border: 1px solid #fecaca !important;
+    box-shadow: none !important;
+    min-width: auto !important;
+    padding: 8px 12px !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-del-btn:hover {
+    background: #fef2f2 !important;
+    color: #b91c1c !important;
+    border-color: #fca5a5 !important;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-form select.form-control {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 0 12px !important;
+    font-size: 0.84rem !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-form input[type="url"],
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-form input[type="text"] {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 0 12px !important;
+    font-size: 0.84rem !important;
+    background: #fff !important;
+    margin-top: 4px !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-form .saas-admin-modal-editor-wrap {
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    overflow: hidden;
+    background: #fff;
+}
+
+/* —— Social Media page (fixed card height on desktop) —— */
+body.saas-admin-ui .saas-social-media-page .vm-ft-apk-col .fund-trasfer-left.vm-ft-form-card {
+    height: 700px !important;
+    min-height: 700px !important;
+    max-height: 700px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .saas-social-media-page .vm-ft-apk-col .tabcurrent-seconddesign {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .saas-social-media-page .vm-ft-apk-col .vm-ft-apk-status-panel {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .saas-social-media-page .vm-ft-apk-col .vm-ft-apk-table-wrap {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* —— Change Security Password page —— */
+body.saas-admin-ui .saas-security-password-page .vm-ft-layout--stacked {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-line {
+    width: 100%;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin-bottom: 6px !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-breadcrumb {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 38%;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-breadcrumb .vm-ft-breadcrumb {
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-right {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    min-width: 0;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-search {
+    flex: 0 0 200px;
+    min-width: 160px;
+    max-width: 220px;
+    margin-left: 0 !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-switch-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 34px;
+    padding: 5px 12px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: 999px !important;
+    background: #f8fafc !important;
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    color: #64748b !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-switch-pill span {
+    padding: 0 !important;
+    background: transparent !important;
+    width: auto !important;
+    text-align: center;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    color: inherit !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 34px;
+    padding: 6px 12px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    background: #fff !important;
+    color: #334155 !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-btn:hover {
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-rules {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-rules li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px dashed #e2e8f0;
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.45;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-rules li:last-child {
+    border-bottom: none;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-rules li i {
+    color: #2563eb;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-field {
+    margin-bottom: 12px;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-field label.required::after {
+    color: #dc2626;
+    content: " *";
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-field .form-control {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 0 12px !important;
+    font-size: 0.84rem !important;
+    background: #fff !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-field .text-danger,
+body.saas-admin-ui .saas-security-password-page .field-validation-error {
+    color: #dc2626 !important;
+    font-size: 0.72rem !important;
+    margin-top: 4px;
+    display: block;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-alert {
+    display: block;
+    width: 100%;
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    border-radius: var(--ft-radius-sm);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-alert:empty {
+    display: none;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-alert--ok {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-alert--err {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px dashed #e2e8f0;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-btn-secondary {
+    min-width: 110px;
+    height: 38px;
+    padding: 0 16px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    background: #fff !important;
+    color: #475569 !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-otp-wrap {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #e2e8f0;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-sm-modal-panel.vm-csp-otp-wrap {
+    margin-top: 0;
+    padding-top: 14px;
+    border-top: none;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-otp-field {
+    margin-bottom: 0;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-otp-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-otp-send {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 0 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #059669 !important;
+    text-decoration: none !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-otp-box {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: auto !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-otp-box input,
+body.saas-admin-ui .saas-security-password-page .vm-csp-otp-box input.vm-csp-otp-input,
+body.saas-admin-ui .saas-security-password-page .fund-transfer-form .vm-csp-otp-box input[type="number"],
+body.saas-admin-ui .saas-security-password-page .input-border-third .vm-csp-otp-box input[type="number"],
+body.saas-admin-ui .saas-security-password-page .tabcurrent-seconddesign .vm-csp-otp-box input[type="number"],
+body.saas-admin-ui .vm-csp-modal .vm-csp-otp-box input[type="number"] {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    flex: 0 0 48px !important;
+    display: block !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    line-height: 48px !important;
+    border: 2px solid #dbe2ea !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+    color: #0f172a !important;
+    box-shadow: none !important;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-otp-box input:focus,
+body.saas-admin-ui .vm-csp-modal .vm-csp-otp-box input:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16) !important;
+    outline: none !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-otp-box input::-webkit-outer-spin-button,
+body.saas-admin-ui .saas-security-password-page .vm-csp-otp-box input::-webkit-inner-spin-button,
+body.saas-admin-ui .vm-csp-modal .vm-csp-otp-box input::-webkit-outer-spin-button,
+body.saas-admin-ui .vm-csp-modal .vm-csp-otp-box input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+body.saas-admin-ui .vm-csp-modal .vm-sm-modal-panel + .vm-sm-modal-panel {
+    margin-top: 12px;
+}
+
+body.saas-admin-ui .vm-csp-modal .vm-csp-modal-grid {
+    grid-template-columns: 1fr 1fr;
+}
+
+body.saas-admin-ui .vm-csp-modal .vm-sm-modal-field label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+body.saas-admin-ui .vm-csp-modal .vm-sm-modal-field .form-control {
+    height: 38px !important;
+    min-height: 38px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-drawer .vm-csp-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 12px;
+    border: 1px dashed #e2e8f0;
+    border-radius: var(--ft-radius-sm);
+    background: #f8fafc;
+    margin: 12px 0;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-drawer .vm-csp-detail-grid label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+    margin: 0 0 4px;
+    display: block;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-drawer .vm-csp-detail-grid .form-control {
+    background: #fff !important;
+    height: 36px !important;
+    min-height: 36px !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-ft-apk-page-search input#txtCspSearch {
+    width: 100% !important;
+    height: 36px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 0 12px 0 38px !important;
+    font-size: 0.84rem !important;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.1a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat 12px center !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-page-alert {
+    margin-bottom: 10px;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-rows {
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-row.vm-ft-layout--split-equal {
+    align-items: stretch !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-row .vm-ft-apk-col {
+    flex: 0 0 calc(50% - 6px) !important;
+    max-width: calc(50% - 6px) !important;
+    width: calc(50% - 6px) !important;
+    padding: 0 !important;
+    float: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    min-height: 0 !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-row .vm-ft-apk-col .fund-trasfer-left.vm-ft-form-card {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 460px !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-row .vm-ft-apk-col .tabcurrent-seconddesign.vm-csp-card-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-row .vm-ft-form-card {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 100% !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-card-body {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 12px !important;
+    min-height: 0 !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-card-body .vm-ft-apk-form,
+body.saas-admin-ui .saas-security-password-page .vm-csp-card-body .vm-ft-apk-section {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-rules-panel {
+    margin-bottom: 0 !important;
+    flex: 1 1 auto !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-actions {
+    margin-top: auto !important;
+    padding-top: 12px !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-btn-primary,
+body.saas-admin-ui .saas-security-password-page .vm-csp-actions .password-change {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    min-width: 148px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: var(--ft-radius-sm) !important;
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28) !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-btn-primary:hover,
+body.saas-admin-ui .saas-security-password-page .vm-csp-actions .password-change:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.34) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-btn-confirm,
+body.saas-admin-ui .saas-security-password-page .vm-csp-actions .password-sure {
+    display: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    min-width: 148px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: var(--ft-radius-sm) !important;
+    background: linear-gradient(135deg, #047857, #10b981) !important;
+    color: #fff !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.28) !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-actions .password-sure.is-visible {
+    display: inline-flex !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-actions .password-sure.is-visible:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 16px rgba(5, 150, 105, 0.34) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-switch-pill.is-on,
+body.saas-admin-ui .saas-security-password-page .vm-csp-switch-pill:has(.costom-on) {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+    border-color: #059669 !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-switch-pill.is-on span,
+body.saas-admin-ui .saas-security-password-page .vm-csp-switch-pill:has(.costom-on) span,
+body.saas-admin-ui .saas-security-password-page .vm-csp-switch-pill.is-on .costom-on {
+    background: transparent !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-switch-pill:not(.is-on):has(.custom-off) {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-btn i {
+    color: #2563eb;
+}
+
+@media (max-width: 1199px) {
+    body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-line {
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-breadcrumb {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-right {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-actions {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        overflow-x: visible;
+    }
+
+    body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-search {
+        flex: 1 1 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    body.saas-admin-ui .vm-csp-modal .vm-csp-modal-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .saas-security-password-page .vm-csp-switch-pill,
+    body.saas-admin-ui .saas-security-password-page .vm-csp-toolbar-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    body.saas-admin-ui .saas-security-password-page .vm-csp-otp-box {
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-security-password-page .vm-csp-otp-box input,
+    body.saas-admin-ui .saas-security-password-page .vm-csp-otp-box input.vm-csp-otp-input,
+    body.saas-admin-ui .vm-csp-modal .vm-csp-otp-box input[type="number"] {
+        width: 42px !important;
+        min-width: 42px !important;
+        max-width: 42px !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        flex: 0 0 42px !important;
+        line-height: 42px !important;
+        font-size: 1rem !important;
+    }
+
+    body.saas-admin-ui .vm-csp-modal .vm-csp-modal-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .saas-security-password-page .vm-csp-actions {
+        flex-direction: column-reverse;
+    }
+
+    body.saas-admin-ui .saas-security-password-page .vm-csp-actions .fullbodydycolorbg,
+    body.saas-admin-ui .saas-security-password-page .vm-csp-actions .vm-csp-btn-secondary,
+    body.saas-admin-ui .saas-security-password-page .vm-csp-actions .password-sure {
+        width: 100% !important;
+    }
 }
 
 /* —— Cash Deposit Charge page —— */

@@ -16,410 +16,37 @@
 <link href="~/MainFrontDesign/select2/dist/css/select2.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-index-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-index-modals.css?v=9" rel="stylesheet" />
 
 <style>
-
-   /* new css */
-    .bread-same-all-page li {
-        margin: 6px 0;
-    }
-    .OpertorIndex-page .oprindex-right .tab-content2 {
-        width: 100%;
-        float: left;
-    }
-    .OpertorIndex-page .oprindex-left .op-c {
-        background: #fff;
-    }
-    .OpertorIndex-page .oprindex-right {
-
-        background: #fff;
-    }
-        .OpertorIndex-page .oprindex-right .tab-content2 ul.top-tab-ul {
-            background: #fff;
-        }
-    .OpertorIndex-page .table-responsive {
-        background: #fff;
-    }
-    .OpertorIndex-page .oprindex-right .tab-content2 ul.top-tab-ul li:last-child button {
-        right: 6px;
-        top: -49px;
-    }
-
-   /* new css */
-
-
-    @@media screen and (max-width:640px) {
-        .uptotransction .classwhichknown {
-            position: absolute;
-            right: 121px;
-            top: 70px;
-        }
-    }
-                                                                              
-
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #dddddd !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-    }
-
-    .slab-buttonadminch p.uptotransction {
-        float: left;
-        background: #f9f9cb;
-        color: #555;
-        padding: 0 1px;
-        margin-left: 8px;
-        margin-top: 3px;
-    }
-
-    p.uptotransction.activeupto::after {
-        content: "";
-        float: left;
-        width: 10px;
-        height: 10px;
-        background: url('../../ashok-images/correct.svg')no-repeat;
-        background-color: green;
-        background-size: 83%;
-        background-position: center;
-        position: relative;
-        left: 1px;
-        top: 3.4px;
-    }
-
-    .retailer-profile-secondclass button p {
-        font-size: 9px;
-        left: 22px;
-        bottom: -9px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-    .retailer-profile-secondclass p.uptotransction {
-        float: left;
-        background: #f9f9cb;
-        color: #555;
-        padding: 0 1px;
-        margin-left: 8px;
-        margin-top: 3px;
-        margin-bottom: 0;
-        width: 33%;
-    }
-
-    .retailer-profile-secondclass span {
-        text-transform: uppercase;
-    }
-
-    .retailer-profile-secondclass strong {
-        text-align: center;
-        display: flex;
-        width: 100%;
-        justify-content: center;
-    }
-
-        .retailer-profile-secondclass strong span {
-            font-size: 12px;
-        }
-
-    .editmodalprofile .select2.select2-container.select2-container--default {
-        width: 100% !important;
-    }
-
-    .editmodalprofile .form-group select {
-        background-size: 3.5%;
-    }
-
-    .ribbon {
-        position: absolute;
-        right: -2px;
-        top: -2px;
-        z-index: 1;
-        overflow: hidden;
-        width: 75px;
-        height: 75px;
-    }
-
-        .ribbon span {
-            font-size: 11px;
-            color: #fff;
-            text-align: center;
-            font-weight: bold;
-            line-height: 20px;
-            transform: rotate(45deg);
-            -webkit-transform: rotate(45deg);
-            width: 100px;
-            box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
-            position: absolute;
-            top: 19px;
-            right: -21px;
-            background: linear-gradient(#c5c5c5 0%, #868686 100%);
-        }
-
-    .list-group-item {
-        border: none;
-    }
-
-    .field-validation-error {
-        color: red;
-    }
-
-    .required:after {
-        color: red;
-        content: " *";
-    }
-
-    .toast-top-right1 {
-        top: 78px;
-        left: 81%;
-    }
-
-    .profile-kyc {
-        background: yellow;
-        border: 1px solid var(--border-color);
-        padding: 0px 15px;
-        margin-bottom: 10px;
-    }
-
-        .profile-kyc p {
-            font-size: 36px;
-            margin: 0px;
-            letter-spacing: 3px;
-            text-transform: capitalize;
-            font-weight: 600;
-        }
-
-    #EditAadhaardocModal .btn:not(.btn-link):not(.btn-circle) i {
-        color: #000;
-    }
-
-    .retailerprofileonof-button .retailer-profile-secondclass button strong p {
-        white-space: normal;
-        display: grid;
-        text-align: center;
-        align-items: center;
-    }
-
-        .retailerprofileonof-button .retailer-profile-secondclass button strong p span {
-            font-size: 10px;
-        }
-
-        .retailerprofileonof-button .retailer-profile-secondclass button strong p::after {
-            display: none;
-        }
-
-        .retailerprofileonof-button .retailer-profile-secondclass button strong p.activeupto {
-            background: green;
-        }
-
-            .retailerprofileonof-button .retailer-profile-secondclass button strong p.activeupto span {
-                color: #fff;
-                margin: 0px;
-            }
-
-    .retailerprofileonof-button .retailer-profile-secondclass button strong p {
-        min-height: 32px;
-        border: 1px solid #e1e0e0;
-    }
-
-        .retailerprofileonof-button .retailer-profile-secondclass button strong p.activeupto span::before {
-            content: "";
-            display: inline-block;
-            width: 13px;
-            height: 7px;
-            border: 2px solid #fff;
-            border-top-color: green;
-            border-right-color: green;
-            border-top-color: transparent;
-            border-right-color: transparent;
-            transform: rotate(-45deg);
-            margin-right: 3px;
-            position: relative;
-            top: -2px;
-        }
-
-    .profilecard .bodyprofileshow .editmodalprofile select {
-        background-size: 12px;
-    }
-
-    .retailer-profile-secondclass button {
-        background: #eae9e9 !important;
-    }
-
-
-    @@media screen and (max-width:1366px) {
-        .card.profilecard .profilebodyback a.activeuserprofile {
-            top: 3px;
-        }
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .retailer-profile-secondclass p.uptotransction {
-            width: 50%;
-        }
-
-        .retailer-profile-secondclass strong {
-            display: block;
-        }
-
-        .retailer-profile-secondclass p.uptotransction {
-            width: 48%;
-            margin-bottom: 10px;
-            margin-left: 2%;
-        }
-
-        .col-md-4, .col-md-8 {
-            width: 100%;
-            float: left;
-        }
-    }
-
-    @@media screen and (max-width:480px) {
-        .profilemodal-responsive .col-md-3, .profilemodal-responsive .col-md-9 {
-            width: 100%;
-            float: left;
-        }
-
-        #EditnameandpancardModal.profilemodal-responsive .col-md-3 {
-            padding-left: 15px;
-        }
-        .OpertorIndex-page .oprindex-right .tab-content2 ul.top-tab-ul li:first-child, .OpertorIndex-page .oprindex-right .tab-content2 ul.top-tab-ul li:nth-child(2), .OpertorIndex-page .oprindex-right .tab-content2 ul.top-tab-ul li:nth-child(3) {
-            width: 100%;
-        }
-        .OpertorIndex-page .oprindex-left ul.tabs li {
-            font-size: 12px;
-        }
-
-    }
-
-    @@media screen and (max-width:420px) {
-        .retailer-profile-secondclass p.uptotransction {
-            width: 100%;
-            margin-bottom: 10px;
-            margin-left: 0;
-        }
-
-        .profilecard .bodyprofileshow .editmodalprofile select {
-            background-size: 12px;
-            background-position-x: 98%;
-        }
-    }
-
-    #EditAadhaardocModal .btn:not(.btn-link):not(.btn-circle) i {
-        color: #000;
-    }
-
-
-    /*   .imageDiv:hover {
-        width: 300px;
-        height: 250px;
-        position: relative;
-        display: block;
-        border: 3px solid #fed136;
-        background-color: #b20000;
-        border-radius: 20px;
-        position: relative;
-        z-index: 999;
-    }*/
-
-    button.image-profilemodal img {
-        max-width: 100%;
-        width: 100%;
-        margin: 0px;
-        height: 100%;
-    }
-
-    button.image-profilemodal {
-        padding: 0;
-        height: 28px;
-        width: 50px;
-        float: right;
-        position: relative;
-        border: 0;
-        left: -7px;
-    }
+    .field-validation-error { color: red; }
+    .required:after { color: red; content: " *"; }
+    .toast-top-right1 { top: 78px; left: 81%; }
+    .close-retailer { padding: 2px 6px; }
+    i#loading { display: none; }
 </style>
-<style>
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
+<section class="content OpertorIndex-page OperatorIndex_Page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium">
+    <div class="container-fluid vm-ft-page-shell">
 
-    .form-inline .bootstrap-select.btn-group, .form-horizontal .bootstrap-select.btn-group, .form-group .bootstrap-select.btn-group {
-        height: 29px;
-    }
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <ol class="vm-ft-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Basic Setting</li>
+                    <li>Block Service's</li>
+                </ol>
+            </div>
+            <div class="vm-ft-search-wrap">
+                <input class="form-control" type="text" value="" id="txtsearch" placeholder="Search operator, service, user..." name="txtsearch" autocomplete="off" />
+            </div>
+        </div>
 
-    [type="checkbox"].filled-in:not(:checked) + label:after {
-        background-color: #f5f5f5;
-        border: 2px solid #dddddd;
-    }
-
-    .toast-top-right1 {
-        top: 78px;
-        left: 81%;
-    }
-
-    .select2-container--default .select2-selection--single {
-        border-radius: 0px !important;
-        height: 32px !important;
-        text-align: left;
-    }
-
-    .newfourdesign-admin .OpertorIndex-page .oprindex-right .tab-content2 ul.top-tab-ul li button.btn.fullbodydycolorbg.abslute-button-third.back-button-third.header-button-thirddesign {
-        background: var(--fullbodybg-four) !important;
-    }
-
-    .newfourdesign-admin .OpertorIndex-page .btn.fullbodydycolorbg.abslute-button-third.back-button-third {
-        background: var(--fullbodybg-four) !important;
-    }
-
-
-    .close-retailer {
-        padding: 2px 6px;
-    }
-
-    .operator-top-close {
-        height: 32px !important;
-    }
-
-    @@media only screen and (max-width:520px) {
-        .OpertorIndex-page .for-un ul li.one, .OpertorIndex-page .for-un ul li.two, .OpertorIndex-page .for-un ul li.three, .OpertorIndex-page .for-un ul li.four, .OpertorIndex-page .for-un ul li.six, .OpertorIndex-page .for-un ul li.five {
-            width: 50% !important;
-            margin-bottom: 3px;
-        }
-    }
-</style>
-<section class="content OpertorIndex-page">
-    <div class="container-fluid">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
+        <!--Legacy header (hidden via CSS)-->
         <div class="page-title-box-fourde-admin" style="margin-bottom:15px;">
             <h3>Block Service's</h3>
             <ul>
@@ -447,90 +74,25 @@
                         Block&nbsp;Service's
                     </li>
                 </ul>
-                <!--<div class="col-md-4 retailerprofileonof-button" style="right: -480px;">
-                    <div class="retailer-profile-secondclass" style="width: 100%; float: left; background: #b2804e; margin-bottom: 20px;">
-                        <fieldset style="border: 1px solid #fff;padding: 5px 10px;">
-                            <legend style="font-size: 14px;border: 0px;color: #fff;width: auto;padding: 0px 10px;margin-left: 10px;margin-bottom:0px;">Category Wise Block Service in App</legend>
-                            <button type="button" class="btn bg-blue-grey waves-effect valuechangebuttonadmin valuechang-second changeback-four-design-pro-but" style="float: right !important;
-                      width: 100% !important; background: #eae9e9;background: #fff !important; height: auto;  border: 0; padding: 0 !important;">
-
-                                <strong>
-                                    foreach (var item in resultappstatus)
-                                    {
-                                        var ststat = "";
-                                        if (item.status == true)
-                                        {
-                                            ststat = "activeupto";
-                                        }
-                                        <p class="uptotransction classwhichknown ststat"><span data-value="item.servicename">item.servicename Service</span></p>-->
-                @*<p class="uptotransction classwhichknown "><span data-value="Financial">Financial Service</span> </p>
-                    <p class="uptotransction classwhichknown "><span data-value="TRAVEL">Travel Service</span></p>*@
-                <!--}
-                                </strong>
-                            </button>
-                        </fieldset>
-
-
-                    </div>
-                </div>-->
+               
             </div>
-        </div>
-
-
-
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="col-md-8">
-                        @*<div style="margin-left:-13px;">
-                                @Html.Partial("_menuoperatorcode")
-                            </div>*@
-
-                    </div>
-                    @using (Html.BeginForm("OperatorIndex", "Home", FormMethod.Post))
-                    {
-                        <div class="col-md-4 test">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group" style="margin-bottom:0px; margin-top:3px;">
-                                        <div class="input-group" style="margin-top:0px; margin-bottom:0px;">
-                                            @*<div class="input-group-addon" style="background-color:whitesmoke; color:white;border:1px solid #dddddd;border-radius:0px;padding:0 7px 0 0;">
-                                                    &nbsp;&nbsp;&nbsp;<i class="material-icons" style="color:#607d8b;">date_range</i>
-                                                </div>*@
-                                            <input type="text" id="txt_frm_date" name="txt_frm_date" class="datetimepicker form-control " style="text-align:center;border:1px solid #dddddd; height:37px; width:100px;display:none">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-
-                                </div>
-                                <div class="col-md-6">
-                                    @*<button type="button" id="block" name="block" value="Blocked" class="btn btn-default waves-effect" style="margin-top:3px;  height:37px;border:1px solid #dddddd; margin-left:-39px;">
-                                            <i class="fa fa-lock" style="top:1px;color:black;"></i>
-                                            <span style="top:-2px;color:black;">Blocked</span>
-                                        </button>*@
-                                    @*<button type="button" id="unblock" value="Unblocked" name="Unblocked" class="btn btn-default waves-effect" style="margin-top:3px;height:37px;border:1px solid #dddddd;">
-                                            <i class="fa fa-unlock-alt" style="top:1px;color:black;"></i>
-                                            <span style="top:-2px;color:black;">Unblocked</span>
-                                        </button>*@
-                                </div>
-
-
-                            </div>
-
-                        </div>
-                    }
-                </div>
-            </div>
-
         </div>
 
         <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
-        <div class="row clearfix">
-            <div class="col-md-4 col-sm-4 col-xs-12 classpositin-second">
-                <div class="oprindex-left page-header-third" style="margin-bottom:35px;">
+        <div class="col-md-12 vm-ft-layout-wrap">
+        <div class="row clearfix vm-ft-layout vm-ft-layout--full">
+            <div class="col-md-4 col-sm-12 col-xs-12 vm-ft-form-col classpositin-second">
+                <div class="fund-trasfer-left vm-ft-form-card oprindex-left page-header-third" style="margin-bottom:35px;">
+                    <div class="vm-ft-form-card-header">
+                        <div class="vm-ft-form-card-header__icon" aria-hidden="true"><i class="fas fa-user-shield"></i></div>
+                        <div>
+                            <span class="vm-ft-form-card-header__title">User Operator Blocking</span>
+                            <span class="vm-ft-form-card-header__sub">Block services for individual users</span>
+                        </div>
+                    </div>
                     <h2 class="fullbodydycolorbg"><i class="fa fa-user-circle-o" aria-hidden="true" style="margin-right:7px;"></i>User's individual operator <em><b><span style="color:#D3D3D3;">block</span>ing</b></em></h2>
                     <div class="op-c">
-                        <ul class="tabs tab-seconddesign tab-third-design">
+                        <ul class="tabs tab-seconddesign tab-third-design vm-ft-role-tabs" id="oi-left-tabs">
                             <li onclick="Retailer()" class="tab-link current" data-tab="tab-2">Retailer</li>
                             <li onclick="Distributor('@Url.Action("BindDistributor", "Home")')" class="tab-link " data-tab="tab-1">Distributor</li>
                             <li onclick="WhiteLabel('@Url.Action("BindWhitelabel", "Home")')" class="tab-link" data-tab="tab-3">White Label</li>
@@ -544,7 +106,7 @@
 
                                 <div class="items">
                                     <label>Select Distributor</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="user">
                                         <select id="Distributorlist" name="Distributorlist" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select Distributor</option>
 
@@ -554,7 +116,7 @@
                                 </div>
                                 <div class="items">
                                     <label>Select Category</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="category">
                                         <select data-request-url="@Url.Action("FillOperatorType", "Home")" data-secondrequest-url="@Url.Action("BindService","Home")" id="DCategory" name="DCategory" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select Category</option>
 
@@ -564,7 +126,7 @@
                                 </div>
                                 <div class="items" id="Dservpro" style="display:none;">
                                     <label>Particular Service</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="service">
                                         <select data-request-url="@Url.Action("FillOperatorType","Home")" id="DService" name="DService" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select Service</option>
 
@@ -575,7 +137,7 @@
                                 </div>
                                 <div class="items" id="DOperatorselect" style="display:none;">
                                     <label>Select Operator</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="operator">
                                         <select id="DOperator" name="DOperator" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select Operator</option>
 
@@ -603,19 +165,19 @@
 
                                 <div class="items custom-select">
                                     <label>Select Retailer</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="user">
                                         @Html.DropDownList("rem", ViewBag.retailer as SelectList, "Select Retailer", new { id = "rem", @class = " form-control border-0", @style = "border:1px solid #8e7f7f4d;", @required = "required" })
                                     </div>
                                 </div>
                                 <div class="items test2 custom-select">
                                     <label>Select Category</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="category">
                                         @Html.DropDownList("RequiredCategory", ViewBag.RequiredCategory as SelectList, "Select Category", new { id = "RequireCategory", @class = " form-control border-0", data_live_search = "true", @style = "border:1px solid #8e7f7f4d;", @required = "required" })
                                     </div>
                                 </div>
                                 <div id="servpro" class="items" style="display:none">
                                     <label>Particular Service</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="service">
                                         <select id="service123" name="service123" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select Service</option>
 
@@ -624,7 +186,7 @@
                                 </div>
                                 <div id="operatorsselect" class="items" style="display:none;">
                                     <label>Select Operator</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="operator">
                                         <select id="operatornameid" name="operatornameid" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                         </select>
                                     </div>
@@ -651,9 +213,7 @@
 
                             }))
                             {
-                                <div class="right-button" style="width:100%;">
-
-                                    @*<button   class="for-Reta"><i class='fa fa-spinner fa-spin'></i></button>*@
+                                <div class="right-button button-seconddesign oi-history-btn-wrap">
                                     <button type="submit" class="for-Reta rotetat-second">Blocked History<i id="loading" class='fa fa-spinner fa-spin'></i></button>
                                 </div>
 
@@ -665,7 +225,7 @@
                             {
                                 <div class="items">
                                     <label>Select White Label</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="user">
                                         <select id="Whitelabellist" name="Whitelabellist" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select WhiteLabel</option>
 
@@ -675,7 +235,7 @@
                                 </div>
                                 <div class="items">
                                     <label>Particular Category</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="category">
                                         <select data-request-url="@Url.Action("FillOperatorType", "Home")" data-secondrequest-url="@Url.Action("BindService", "Home")" id="WhiteLabelCategory" name="WhiteLabelCategory" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select Category</option>
 
@@ -686,7 +246,7 @@
                                 </div>
                                 <div class="items" id="Whitelabelservpro" style="display:none;">
                                     <label>Select Service</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="service">
                                         <select data-request-url="@Url.Action("FillOperatorType", "Home")" id="WhitelabelService" name="WhitelabelService" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select Service</option>
                                         </select>
@@ -697,7 +257,7 @@
 
                                 <div class="items" id="Whitelabeloperatorsselect" style="display:none">
                                     <label>Select Operator</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="operator">
                                         <select id="WhitelabelOperator" name="WhitelabelOperator" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select Operator</option>
 
@@ -731,7 +291,7 @@
 
                                 <div class="items">
                                     <label>Select Api User</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="user">
                                         <select id="APIUSERlist" name="APIUSERlist" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select APIUSER</option>
 
@@ -744,7 +304,7 @@
                                 </div>
                                 <div class="items">
                                     <label>Particular Category</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="category">
                                         <select data-request-url="@Url.Action("FillOperatorType", "Home")" data-secondrequest-url="@Url.Action("BindService","Home")" id="APIUSERCategory" name="APIUSERCategory" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select Category</option>
 
@@ -758,7 +318,7 @@
                                 </div>
                                 <div class="items" id="APIUSERservpro" style="display:none;">
                                     <label>Particular Service</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="service">
                                         <select data-request-url="@Url.Action("FillOperatorType", "Home")" data-secondrequest-url="@Url.Action("BindService","Home")" id="APIUSERService" name="APIUSERService" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select Service</option>
                                         </select>
@@ -767,7 +327,7 @@
 
                                 <div class="items" id="APIUSERoperatorsselect" style="display:none;">
                                     <label>Select Operator</label>
-                                    <div class="custom-district">
+                                    <div class="custom-district oi-field-icon-wrap" data-oi-icon="operator">
                                         <select id="APIUSEROperator" name="APIUSEROperator" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                             <option value="">Select Operator</option>
 
@@ -802,22 +362,32 @@
                 </div>
             </div>
 
-            <div class="col-md-8 col-sm-8 col-xs-12 tablefourdesign-admin">
-                <div class="oprindex-right page-header-third">
-                    <ul class="tabs2 tab-seconddesign tab-third-design">
-                        <li class="tab-link current2" data-tab="tab-5" onclick="PrePaidTabeOpen('PrePaid')">
+            <div class="col-md-8 col-sm-12 col-xs-12 vm-ft-history-col fund-transfer-main-admin tablefourdesign-admin" style="padding-left:0;">
+                <div class="fund-trasfer-right vm-ft-history-panel oprindex-right page-header-third">
+                    <div class="vm-ft-history-body">
+                    <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium oi-history-head">
+                        <div class="vm-ft-history-toolbar__head">
+                            <i class="fas fa-ban" aria-hidden="true"></i>
+                            <div>
+                                <span class="vm-ft-history-toolbar__title" id="oiRightPanelTitle">Operator Services</span>
+                                <span class="vm-ft-history-toolbar__sub">Manage prepaid, utility, financial &amp; travel operators</span>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="tabs2 tab-seconddesign tab-third-design vm-ft-role-tabs" id="oi-right-tabs">
+                        <li class="tab-link current2" data-tab="tab-5" data-title="Prepaid / DTH" onclick="PrePaidTabeOpen('PrePaid')">
                             Prepaid/DTH
                         </li>
-                        <li class="tab-link" data-tab="tab-6" onclick="UtilityTabeOpen('Utility')">
+                        <li class="tab-link" data-tab="tab-6" data-title="Utilities Services" onclick="UtilityTabeOpen('Utility')">
                             Utilites Service's
                         </li>
-                        <li class="tab-link" data-tab="tab-7">
+                        <li class="tab-link" data-tab="tab-7" data-title="Financial">
                             Financial
                         </li>
-                        <li class="tab-link" data-tab="tab-8">
+                        <li class="tab-link" data-tab="tab-8" data-title="Travels">
                             Travels
                         </li>
-                        <li class="tab-link" data-tab="tab-9">
+                        <li class="tab-link" data-tab="tab-9" data-title="Others Services">
                             Others Service's
                         </li>
                     </ul>
@@ -825,25 +395,28 @@
                     <div id="tab-5" class="tab-content2 current2">
 
                         <form>
-                            <ul class="top-tab-ul">
+                            <ul class="top-tab-ul oi-filter-toolbar" style=" justify-content: space-between;">
                                 <li>
-                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                                    <div class="oi-field-icon-wrap" data-oi-icon="date">
                                     <input type="text" id="blockdatetime" name="blockdatetime" class="timepicker-actions-exmpl" placeholder="Select Date & Time" data-language='en' />
+                                    </div>
                                     <label id="blockdatetimet"></label>
                                 </li>
-                                <li class="custom-district">
-
+                                <li>
+                                    <div class="oi-field-icon-wrap" data-oi-icon="category">
                                     <select id="OperatorCategory" name="OperatorCategory" data-live-search="true" class="form-control border-0" style="-webkit-appearance:none;">
                                         <option value="">Select Category</option>
                                         <option value="PrePaid">PrePaid</option>
                                         <option value="DTH">DTH</option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="custom-district">
-
+                                <li>
+                                    <div class="oi-field-icon-wrap" data-oi-icon="operator">
                                     <select id="Operatoenamelist" name="Operatoenamelist" class="form-control border-0" style="-webkit-appearance:none;">
                                         <option>Select Operator</option>
                                     </select>
+                                    </div>
                                 </li>
                                 <li>
                                     <button type="button" id="blockOperatorPreDTH" name="blockOperatorPreDTH" value="Blocked" class="btn btn-default waves-effect block block-after-second">
@@ -858,16 +431,8 @@
                                     </button>
                                 </li>
                                 <li>
-
-
-
-                                    @*<button type="button" class="btn fullbodydycolorbg abslute-button-third back-button-third header-button-thirddesign" style="padding:4px 7px;">
-                                            <i class="fa fa-plus" aria-hidden="true" style="font-size:15px;top:1px;left:-8px;"></i>Status
-                                        </button>*@
-                                </li>
-                                <li>
                                     <button type="button" class="btn fullbodydycolorbg abslute-button-third back-button-third header-button-thirddesign" data-toggle="modal" data-target="#addoprmodal11" style="padding:4px 7px;">
-                                        <i class="fa fa-plus" aria-hidden="true" style="font-size:15px;top:1px;left:-4px;"></i>New Operator
+                                        <i class="fa fa-plus" aria-hidden="true" style="font-size: 15px; top: 1px; margin-right: 10px; position: relative; "></i>New Operator
                                     </button>
                                 </li>
 
@@ -883,13 +448,15 @@
                     </div><!--#tab-5-->
                     <div id="tab-6" class="tab-content2">
                         <form>
-                            <ul class="top-tab-ul">
+                            <ul class="top-tab-ul oi-filter-toolbar">
                                 <li>
-                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                    <input type="text" class="timepicker-actions-exmpl" id="UTBlockdatetime" name="UTBlockdatetime" placeholder="Select Date & Time" " data-language='en'             />
+                                    <div class="oi-field-icon-wrap" data-oi-icon="date">
+                                    <input type="text" class="timepicker-actions-exmpl" id="UTBlockdatetime" name="UTBlockdatetime" placeholder="Select Date & Time" data-language="en" />
+                                    </div>
                                     <label id="UTBlockdatetimet"></label>
                                 </li>
-                                <li class="custom-district">
+                                <li>
+                                    <div class="oi-field-icon-wrap" data-oi-icon="service">
                                     <select id="UtilityService" name="UtilityService" class="form-control" style="-webkit-appearance:none;">
                                         <option value="">Select Service</option>
                                         <option value="PostPaid">PostPaid</option>
@@ -901,12 +468,15 @@
                                         <option value="LPG Gas">LPG Gas</option>
                                         <option value="Fastag">Fastag</option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="custom-district">
+                                <li>
+                                    <div class="oi-field-icon-wrap" data-oi-icon="operator">
                                     <select id="UtilityOperatorname" name="UtilityOperatorname" class="form-control" style="-webkit-appearance:none;">
                                         <option value="">Select Service</option>
 
                                     </select>
+                                    </div>
                                 </li>
                                 <li>
                                     <button type="button" id="UTServiceBlock" name="UTServiceBlock" value="Blocked" class="btn btn-default waves-effect block block-after-second">
@@ -939,14 +509,15 @@
 
                     <div id="tab-7" class="tab-content2">
                         <form>
-                            <ul class="top-tab-ul">
+                            <ul class="top-tab-ul oi-filter-toolbar">
                                 <li>
-                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                    <input type="text" id="FincBlockdatetime" name="FincBlockdatetime" class="timepicker-actions-exmpl" placeholder="Select Date & Time" " data-language='en'             />
+                                    <div class="oi-field-icon-wrap" data-oi-icon="date">
+                                    <input type="text" id="FincBlockdatetime" name="FincBlockdatetime" class="timepicker-actions-exmpl" placeholder="Select Date & Time" data-language="en" />
+                                    </div>
                                     <label id="FincBlockdatetimet"></label>
                                 </li>
-                                <li class="custom-district">
-
+                                <li>
+                                    <div class="oi-field-icon-wrap" data-oi-icon="service">
                                     <select id="FinanceServices" name="FinanceServices" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                         <option value="">Select Service</option>
                                         <option value="PAN">PAN</option>
@@ -956,14 +527,15 @@
                                         <option value="Insurance">Insurance</option>
                                         <option value="Loan">Loan</option>
                                     </select>
-
-
+                                    </div>
                                 </li>
-                                <li class="custom-district">
+                                <li>
+                                    <div class="oi-field-icon-wrap" data-oi-icon="operator">
                                     <select id="FinanceOperatorname" name="FinanceOperatorname" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                         <option value="">Select Operator</option>
 
                                     </select>
+                                    </div>
                                 </li>
                                 <li>
                                     <button type="button" id="FinanceServiceBlock" name="FinanceServiceBlock" value="Blocked" class="btn btn-default waves-effect block block-after-second">
@@ -994,13 +566,15 @@
                     </div><!--#tab-7-->
                     <div id="tab-8" class="tab-content2">
                         <form>
-                            <ul class="top-tab-ul">
+                            <ul class="top-tab-ul oi-filter-toolbar">
                                 <li>
-                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                    <input type="text" id="TravelBlockdatetime" class="timepicker-actions-exmpl" placeholder="Select Date & Time" " data-language='en'             />
+                                    <div class="oi-field-icon-wrap" data-oi-icon="date">
+                                    <input type="text" id="TravelBlockdatetime" class="timepicker-actions-exmpl" placeholder="Select Date & Time" data-language="en" />
+                                    </div>
                                     <label id="TravelBlockdatetimet"></label>
                                 </li>
-                                <li class="custom-district">
+                                <li>
+                                    <div class="oi-field-icon-wrap" data-oi-icon="service">
                                     <select id="TravelsServices" name="TravelsServices" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                         <option value="">Select Service</option>
                                         <option value="Bus">Bus</option>
@@ -1008,12 +582,15 @@
                                         <option value="Hotel">Hotel</option>
 
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="custom-district">
+                                <li>
+                                    <div class="oi-field-icon-wrap" data-oi-icon="operator">
                                     <select id="TravelsOperatorname" name="TravelsOperatorname" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                         <option value="">Select Operator</option>
 
                                     </select>
+                                    </div>
                                 </li>
                                 <li>
                                     <button type="button" id="Travelsblock" name="Travelsblock" value="Blocked" class="btn btn-default waves-effect block block-after-second">
@@ -1044,25 +621,30 @@
                     </div><!--#tab-8-->
                     <div id="tab-9" class="tab-content2">
                         <form>
-                            <ul class="top-tab-ul">
+                            <ul class="top-tab-ul oi-filter-toolbar">
                                 <li>
-                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                    <input type="text" id="OthersBlocktime" class="timepicker-actions-exmpl" placeholder="Select Date & Time" " data-language='en'             />
+                                    <div class="oi-field-icon-wrap" data-oi-icon="date">
+                                    <input type="text" id="OthersBlocktime" class="timepicker-actions-exmpl" placeholder="Select Date & Time" data-language="en" />
+                                    </div>
                                     <label id="OthersBlocktimet"></label>
                                 </li>
-                                <li class="custom-district">
+                                <li>
+                                    <div class="oi-field-icon-wrap" data-oi-icon="service">
                                     <select id="OthersServices" name="OthersServices" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                         <option value="">Select Service</option>
                                         <option value="DTH-Booking">DTH-Booking</option>
 
 
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="custom-district">
+                                <li>
+                                    <div class="oi-field-icon-wrap" data-oi-icon="operator">
                                     <select id="OthersOperatorname" name="OthersOperatorname" data-live-search="true" class=" form-control border-0 " style="-webkit-appearance:none;">
                                         <option value="">Select Operator</option>
 
                                     </select>
+                                    </div>
                                 </li>
                                 <li>
                                     <button type="button" id="Othersblock" name="Othersblock" value="Blocked" class="btn btn-default waves-effect block block-after-second">
@@ -1094,26 +676,34 @@
 
                     <div class="for-Distributor width100" style="display:none;">
                         <div class="for-un">
-                            <ul>
-                                <li class="one custom-district">
+                            <ul class="oi-history-filter-row">
+                                <li class="one">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="user">
                                     <select id="DDistributorlist" name="DDistributorlist" class="form-control border-0" style="-webkit-appearance:none;">
                                         <option>Select Dealer</option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="two custom-district">
+                                <li class="two">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="category">
                                     <select id="DDCategorylist" name="DDCategorylist" class="form-control border-0" style="-webkit-appearance:none;">
                                         <option>Select Category</option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="three custom-district">
+                                <li class="three">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="operator">
                                     <select id="DDOperatorlist" name="DDOperatorlist" class="form-control border-0" style="-webkit-appearance:none;">
                                         <option>Select Operator</option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="four custom-district">
+                                <li class="four">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="service">
                                     <select id="DDServicelist" name="DDServicelist" class="form-control border-0" style="-webkit-appearance:none;">
                                         <option>Select Service</option>
                                     </select>
+                                    </div>
                                 </li>
                                 <li class="five">
                                     <button type="button" id="btnDsearch" name="btnDsearch" class="btnssl22" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
@@ -1125,7 +715,7 @@
                                     <button type="button" class="operator-top-button" onclick="btnunblockall('Dealer')">Click To Unblock All Users</button>
                                 </li>
                                 <li class="seven">
-                                    <button type="button" class="close-button operator-top-close" name="close">Close</button>
+                                    <button type="button" class="close-button operator-top-close oi-history-close-btn" name="close"><i class="fas fa-times" aria-hidden="true"></i> Close</button>
                                 </li>
                             </ul>
                         </div>
@@ -1159,31 +749,33 @@
                     <div class="for-Retailer width100" style="display:none;">
 
                         <div class="for-un">
-                            <ul>
-                                <li class="one custom-district">
+                            <ul class="oi-history-filter-row">
+                                <li class="one">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="user">
                                     @Html.DropDownList("retailerlist", Enumerable.Empty<SelectListItem>(), "Select Retailer", new { @class = "form-control border-0", data_live_search = "true", })
-
+                                    </div>
                                 </li>
-                                <li class="two custom-district">
-
+                                <li class="two">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="category">
                                     <select id="Categorylist" name="Categorylist" class="form-control border-0">
                                         <option>Select Category</option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="three custom-district">
+                                <li class="three">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="service">
                                     <select id="servicelist" name="servicelist" class="form-control border-0">
                                         <option>Select Service</option>
                                     </select>
-
+                                    </div>
                                 </li>
-
-
-                                <li class="four custom-district">
+                                <li class="four">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="operator">
                                     <select id="Operatorlist" name="Operatorlist" class="form-control border-0">
                                         <option>Select Operator</option>
                                     </select>
+                                    </div>
                                 </li>
-
                                 <li class="five">
                                     <button type="button" id="btnsearch" name="btnsearch" class="btnssl22" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
                                         <i class="fa fa-search"></i>
@@ -1195,7 +787,7 @@
                                     <button type="button" class="operator-top-button" onclick="btnunblockall('retailer')">Click To Unblock All Users</button>
                                 </li>
                                 <li class="seven">
-                                    <button type="button" class="close-button operator-top-close" name="close">Close</button>
+                                    <button type="button" class="close-button operator-top-close oi-history-close-btn" name="close"><i class="fas fa-times" aria-hidden="true"></i> Close</button>
                                 </li>
                             </ul>
                         </div>
@@ -1243,26 +835,34 @@
 
                     <div class="for-White-Label width100" style="display:none;">
                         <div class="for-un">
-                            <ul>
-                                <li class="one custom-district">
+                            <ul class="oi-history-filter-row">
+                                <li class="one">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="user">
                                     <select id="Whitelabeluserlist" name="Whitelabeluserlist" class="form-control border-0">
                                         <option>Select WhiteLabel</option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="two custom-district">
+                                <li class="two">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="category">
                                     <select id="WhitelabeluserCategorylist" name="WhitelabeluserCategorylist" class="form-control border-0">
                                         <option>Select Category </option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="three custom-district">
+                                <li class="three">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="service">
                                     <select id="WhitelabeluserServicelist" name="WhitelabeluserServicelist" class="form-control border-0">
                                         <option>Select Service</option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="four custom-district">
+                                <li class="four">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="operator">
                                     <select id="whitelabeluserOperatorlist" name="whitelabeluserOperatorlist" class="form-control border-0" style="display:none">
                                         <option>Select Operator</option>
                                     </select>
+                                    </div>
                                 </li>
                                 <li class="five">
                                     <button type="button" name="btnsearchWhitelabel" id="btnsearchWhitelabel" class="btnssl22" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
@@ -1274,7 +874,7 @@
                                     <button type="button" class="operator-top-button" onclick="btnunblockall('Whitelabel')">Click To Unblock All Users</button>
                                 </li>
                                 <li class="seven">
-                                    <button type="button" class="close-button operator-top-close" name="close">Close</button>
+                                    <button type="button" class="close-button operator-top-close oi-history-close-btn" name="close"><i class="fas fa-times" aria-hidden="true"></i> Close</button>
                                 </li>
                             </ul>
                         </div>
@@ -1299,26 +899,34 @@
                     </div>
                     <div class="for-Api-User width100" style="display:none;">
                         <div class="for-un">
-                            <ul>
-                                <li class="one custom-district">
+                            <ul class="oi-history-filter-row">
+                                <li class="one">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="user">
                                     <select id="AAPIUSERlist" name="AAPIUSERlist" class="form-control border-0">
                                         <option>Select Dealer</option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="two custom-district">
+                                <li class="two">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="category">
                                     <select id="AAPIUSERCategorylist" name="AAPIUSERCategorylist" class="form-control border-0">
                                         <option>Select Category</option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="three custom-district">
+                                <li class="three">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="service">
                                     <select id="AAPIUSERServicelist" name="AAPIUSERServicelist" class="form-control border-0">
                                         <option>Select Service</option>
                                     </select>
+                                    </div>
                                 </li>
-                                <li class="four custom-district">
+                                <li class="four">
+                                    <div class="oi-field-icon-wrap oi-history-field" data-oi-icon="operator">
                                     <select id="APIUSEROperatorlist" name="APIUSEROperatorlist" class="form-control border-0" style="display:none">
                                         <option>Select Operator</option>
                                     </select>
+                                    </div>
                                 </li>
                                 <li class="five">
                                     <button type="button" name="search" id="btnsearchapiuser" class="btnssl22" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
@@ -1330,7 +938,7 @@
                                     <button type="button" class="operator-top-button" onclick="btnunblockall('ApiUSER')">Click To Unblock All Users</button>
                                 </li>
                                 <li class="seven">
-                                    <button type="button" class="close-button operator-top-close" name="close">Close</button>
+                                    <button type="button" class="close-button operator-top-close oi-history-close-btn" name="close"><i class="fas fa-times" aria-hidden="true"></i> Close</button>
                                 </li>
                             </ul>
                         </div>
@@ -1353,9 +961,11 @@
                             </div>
                         </div>
                     </div>
+                    </div><!-- /.vm-ft-history-body -->
                 </div>
             </div>
         </div>
+        </div><!-- /.vm-ft-layout-wrap -->
         <!--========================-->
         @*<div class="row clearfix">
                 <div class="col-md-12">
@@ -1576,15 +1186,16 @@
 </section>
 
 <!--Edit Operator Status Code-->
-<div class="modal fade" id="defaultModal1" tabindex="-1" role="dialog">
+<div class="modal fade oi-modern-modal" id="defaultModal1" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Edit OTP Code Status</h4>
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Edit OTP Code Status</h4>
+                <button type="button" class="btn waves-effect" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             @using (Html.BeginForm("Edit_opt", "Home", FormMethod.Post))
             {
-                <div class="modal-body" style="margin-top:0px;">
+                <div class="modal-body">
                     <div class="body">
                         <form id="form_validation" method="POST">
                             <div class="row clearfix">
@@ -1686,12 +1297,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-right: 12px; height:34px;">
-                                    <span style="top:-2px;color:black;">Save Change</span>
-                                </button>
-                                <button type="button" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-left: -3px; height:34px;" data-dismiss="modal">
-                                    <span style="top:-2px;color:black;">Close</span>
-                                </button>
+                                <button type="button" class="btn bg-grey waves-effect" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn bg-grey waves-effect btnssl2233 special-iii">Save Change</button>
                             </div>
                         </form>
                     </div>
@@ -1704,15 +1311,16 @@
 </div>
 <!--Add New Operator Code-->
 <!--Add  modal-->
-<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+<div class="modal fade oi-modern-modal" id="defaultModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Add New Operator</h4>
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Add New Operator</h4>
+                <button type="button" class="btn waves-effect" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             @using (Html.BeginForm("inset_New_Operator", "Home", FormMethod.Post))
             {
-                <div class="modal-body" style="margin-top:0px;">
+                <div class="modal-body">
                     <div class="body">
                         <form>
                             <div class="row clearfix">
@@ -1722,7 +1330,7 @@
                                 <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            @Html.DropDownList("ddloperatortype", ViewBag.operatortype as SelectList, "Select Operators Type", new { @id = "ddloperatortype", @class = "selectpicker form-control", data_live_search = "true", @required = "required" })
+                                            @Html.DropDownList("ddloperatortype", ViewBag.operatortype as SelectList, "Select Operators Type", new { @id = "ddloperatortype", @class = "form-control oi-modal-select", @required = "required" })
                                         </div>
                                     </div>
                                 </div>
@@ -1753,12 +1361,8 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button type="submit" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-right: 12px; height:34px;">
-                                    <span style="top:-2px;color:black;">Save Change</span>
-                                </button>
-                                <button type="button" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-left: -3px; height:34px;" data-dismiss="modal">
-                                    <span style="top:-2px;color:black;">Close</span>
-                                </button>
+                                <button type="button" class="btn bg-grey waves-effect" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn bg-grey waves-effect btnssl2233 special-iii">Save Change</button>
                             </div>
                         </form>
                     </div>
@@ -1778,16 +1382,16 @@
     <input type="hidden" id="HDoptypeselection" name="HDoptypeselection" value="0" />
 </div>
 <!--  Custom Modal For Limit Setting Start -->
-<div class="modal fade Operator-Resend-Limit-Setting" id="defaultModal2" tabindex="-1" role="dialog">
+<div class="modal fade oi-modern-modal Operator-Resend-Limit-Setting" id="defaultModal2" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Edit Limit Setting</h4>
-                <button type="button" class="btn waves-effect" data-dismiss="modal" style="float:right;"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button type="button" class="btn waves-effect" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             @*@using (Html.BeginForm("Edit_opt", "Home", FormMethod.Post))
                 {*@
-            <div class="modal-body" style="margin-top:0px;">
+            <div class="modal-body">
                 <div class="body">
 
                     <form id="form_validation" method="POST">
@@ -1838,7 +1442,7 @@
                                                 <div class="form-line">
                                                     @*@Html.TextBox("txtresendcount", "", new { @class = "form-control", onkeypress = "javascript:return isNumber(event)" })*@
 
-                                                    <select id="rprepaidCounter" name="rprepaidCounter" class="form-control  border-0">
+                                                    <select id="rprepaidCounter" name="rprepaidCounter" class="form-control border-0 oi-modal-native-select">
                                                         <option value="">Select Counter</option>
                                                         <option value="1">1</option>
                                                         <option value="2">2</option>
@@ -1969,6 +1573,7 @@
 
 
                         <div class="modal-footer">
+                            <button type="button" class="btn bg-grey waves-effect" data-dismiss="modal">Close</button>
                             <button type="button" id="btnEditopRes" class="btn waves-effect btnssl2233 special-iii fullbodydycolorbg" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
                                 Save Change
                             </button>
@@ -1984,19 +1589,12 @@
 </div>
 <!--  Custom Modal For Limit Setting END -->
 <!-- Change Operator Code Modal START -->
-<div class="modal fade for-Change-Operator" id="defaultModal12" tabindex="-1" role="dialog">
+<div class="modal fade oi-modern-modal for-Change-Operator" id="defaultModal12" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title" style="color:#fff;float:left;">
-                    <label id="lblopname" for="email_address_2">Operator Name</label>
-                    @*<div class="form-group">
-                            <div class="form-line">
-                                @Html.TextBox("txtoptnm", "", new { @class = "form-control", @readonly = "readonly" })
-                            </div>
-                        </div>*@
-                </div>
-                <button type="button" class="btn waves-effect" data-dismiss="modal" style="float:right;"><i class="fa fa-times" aria-hidden="true" style="margin-right:3px;"></i></button>
+                <h4 class="modal-title" id="lblopname">Operator Name</h4>
+                <button type="button" class="btn waves-effect" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             @*@using (Html.BeginForm("change_opt", "Home", FormMethod.Post))
                 {*@
@@ -2040,6 +1638,7 @@
                             </div><!--.row-->
                         </fieldset>
                         <div class="modal-footer">
+                            <button type="button" class="btn bg-grey waves-effect" data-dismiss="modal">Close</button>
                             <button type="button" id="btnupdateopcode" name="btnupdateopcode" class="btn waves-effect special-iii btnssl2233 fullbodydycolorbg" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Save Change</button>
                         </div>
 
@@ -2053,23 +1652,24 @@
 </div>
 <!-- Change Operator Code Modal END -->
 <!--  Block Amount Modal START -->
-<div class="modal fade modal-for-block-amount" id="defaultModal33" tabindex="-1" role="dialog">
+<div class="modal fade oi-modern-modal modal-for-block-amount" id="defaultModal33" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content ">
             <div class="modal-header">
-                <h4 class="modal-title" id="defaultModalLabel33" style="float:left;color:#000;">Operator Name</h4>
-                <button type="button" class="btn waves-effect " data-dismiss="modal" style="float:right;"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <h4 class="modal-title" id="defaultModalLabel33">Operator Name</h4>
+                <button type="button" class="btn waves-effect" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
-                <fieldset>
+                <fieldset class="oi-ba-form-fieldset">
                     <legend>Add Block Amount</legend>
-                    <ul>
-
-                        <li class="one">
+                    <ul class="oi-ba-form-row">
+                        <li class="oi-ba-field oi-ba-field--amount">
                             <input type="hidden" id="HDOptnameforAmount" name="HDOptnameforAmount" value="0" />
+                            <label class="oi-ba-label" for="txtblockamount">Amount</label>
                             @Html.TextBox("txtblockamount", "", new { id = "txtblockamount", @placeholder = "Enter Amount", @class = "form-control searchInput", onkeypress = "return isNumber(event)" })
                         </li>
-                        <li class="one">
+                        <li class="oi-ba-field oi-ba-field--user">
+                            <label class="oi-ba-label" for="txtblockuser">User</label>
                             @Html.DropDownList("SelectedItemId", new List<SelectListItem>
                             {
                                 new SelectListItem { Value = "API", Text = "Api user" },
@@ -2079,19 +1679,19 @@
                                 new SelectListItem { Value = "Whitelabeldealer", Text = "Whitelabel dealer" },
                                 new SelectListItem { Value = "Whitelabelmaster", Text = "Whitelabel master" },
                                 new SelectListItem { Value = "Whitelabelretailer", Text = "Whitelabel retailer" },
-                                // Add more options as needed
-                            }, "Select User", new { id = "txtblockuser", @class = "form-control searchInput", })
+                            }, "Select User", new { id = "txtblockuser", @class = "form-control searchInput oi-modal-native-select", })
                         </li>
-                        <li class="one">
+                        <li class="oi-ba-field oi-ba-field--submit">
+                            <label class="oi-ba-label oi-ba-label--hidden" aria-hidden="true">Submit</label>
                             <button type="button" id="btnAddAmountBlock" name="" class="btn btnssl2233 special-iii enableOnInput" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" disabled="disabled">
                                 Submit
                             </button>
                         </li>
                     </ul>
                 </fieldset>
-                <div class="this-table">
+                <div class="this-table oi-ba-table-wrap">
                     <div class="table-responsive">
-                        <table class="table table-bordered" style="width:100%;" id="blockamounttable">
+                        <table class="table table-bordered oi-ba-table" id="blockamounttable">
                             <thead>
                                 <tr>
                                     <th>Blocked Amount</th>
@@ -2106,6 +1706,9 @@
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-grey waves-effect" data-dismiss="modal">Close</button>
+            </div>
 
 
         </div>
@@ -2113,12 +1716,12 @@
 </div>
 <!--  Block Amount Modal END -->
 <!-- Add Operator Modal Start -->
-<div class="modal fade addOperatpr-modal" id="addoprmodal11" tabindex="-1" role="dialog">
+<div class="modal fade oi-modern-modal addOperatpr-modal" id="addoprmodal11" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content ">
             <div class="modal-header">
-                <h4 style="color:#000;">Operator Name</h4>
-                <button type="button" class="btn waves-effect" data-dismiss="modal" style="float:right;"><i class="fa fa-times" aria-hidden="true" style="margin-right:3px;"></i></button>
+                <h4 class="modal-title">Add New Operator</h4>
+                <button type="button" class="btn waves-effect" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
                 <form>
@@ -2145,7 +1748,7 @@
                                        new SelectListItem{ Text="Water", Value = "Water" },
                                        new SelectListItem{ Text="LPG Gas", Value = "LPG Gas" },
                                             new SelectListItem{ Text="Fastag", Value = "Fastag" }
-                                    }, "Select Operators Type", new { @id = "onlyoptype", @class = "selectpicker form-control", data_live_search = "true", @required = "required" })
+                                    }, "Select Operators Type", new { @id = "onlyoptype", @class = "form-control oi-modal-select", @required = "required" })
 
                             </div>
                         </div>
@@ -2175,11 +1778,11 @@
 
                         </div>
                     </div><!--.row-->
-                    <div>
-
-                        <input type="button" id="btnAddoperator" class="btn fullbodydycolorbg" name="btnAddoperator" value="Add Operator" style="color:#fff;width:auto;float:right;border:0px;" />
-                    </div>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-grey waves-effect" data-dismiss="modal">Close</button>
+                <input type="button" id="btnAddoperator" class="btn fullbodydycolorbg" name="btnAddoperator" value="Add Operator" />
             </div>
 
 
@@ -2280,7 +1883,7 @@
                      ToastrMessage();
                      toastr.success("New Operator has been Added Successfully !");
 
-                     $('#onlyoptype').val('');
+                    $('#onlyoptype').val('').trigger('change');
                      $('#new_opt_code').val('');
                      $('#operator_Name').val('');
                      $('#txtSecurityPassword').val('');
@@ -2293,7 +1896,7 @@
                      ToastrMessage();
                      toastr.error("Wrong Security Password Please Check !");
 
-                     $('#onlyoptype').val('');
+                    $('#onlyoptype').val('').trigger('change');
                      $('#new_opt_code').val('');
                      $('#operator_Name').val('');
                      $('#txtSecurityPassword').val('');
@@ -2788,7 +2391,7 @@
             });
 
 
-            $('Operatoenamelist .selectpicker').selectpicker('refresh');
+            // options appended; Select2/Native selects don't require refresh here
         }
          });
 
@@ -3320,6 +2923,8 @@
 
              });
                     $("#mytble > tbody").html(tblHtml);
+                    if (window.oiRefreshSearch) window.oiRefreshSearch();
+                    if (window.oiOpenHistory) window.oiOpenHistory('.for-Retailer');
 
     }
 
@@ -3872,6 +3477,41 @@
 
     }
 
+    function oiBuildBlockAmountRow(b) {
+        var user = b.User == null ? 'All' : b.User;
+        var optEnc = encodeURI(b.OperatorName);
+        var statusHtml = '';
+
+        if (b.status == "Y") {
+            statusHtml = "<td><div class='onoffswitch'><span class='costom-on' onclick=\"BlockAmountStatusUpdate('" + b.idno + "','" + optEnc + "','Y')\">on</span></div></td>";
+        } else if (b.status == "N") {
+            statusHtml = "<td><div class='onoffswitch'><span class='custom-off' onclick=\"BlockAmountStatusUpdate('" + b.idno + "','" + optEnc + "','N')\">off</span></div></td>";
+        } else {
+            statusHtml = "<td>-</td>";
+        }
+
+        return "<tr>" +
+            "<td class='oi-ba-amount'>" + b.Amount + "</td>" +
+            "<td class='oi-ba-user'>" + user + "</td>" +
+            statusHtml +
+            "<td class='oi-ba-del'><button type='button' class='oi-ba-delete-btn' title='Delete' aria-label='Delete' onclick=\"BlockAmountStatusDelete('" + b.idno + "','" + optEnc + "')\"><i class='fa fa-trash' aria-hidden='true'></i></button></td>" +
+            "</tr>";
+    }
+
+    function oiRenderBlockAmountTable(result) {
+        var tblHtml = "";
+
+        if (result && result.length > 0) {
+            $.each(result, function (a, b) {
+                tblHtml += oiBuildBlockAmountRow(b);
+            });
+        } else {
+            tblHtml = "<tr><td colspan='4' class='oi-ba-empty'>No blocked amounts found.</td></tr>";
+        }
+
+        $("#blockamounttable > tbody").html(tblHtml);
+    }
+
     function BlockAmountStatusUpdate(id, optnm, status) {
         optnm = decodeURI(optnm);
           $.ajax({
@@ -3879,36 +3519,7 @@
             url: '@Url.Action("BlockAmountStatusUpdate", "Home")',
             data: {id: id,optnm:optnm,status:status },
            success: function (result) {
-                var tblHtml = "";
-               if (result.length > 0) {
-
-                   $.each(result, function (a, b) {
-
-                       //tblHtml+= "<tr><td>"+b.idno+"</td>";
-                       // tblHtml += "<tr><td>" + b.OperatorName + "</td>";
-                       tblHtml += "<tr><td>" + b.Amount + "</td>";
-
-                       if (b.status == "Y") {
-                           tblHtml += "<td>  <div class='onoffswitch'> <span class='costom-on' onclick=BlockAmountStatusUpdate('" + b.idno + "','" + encodeURI(b.OperatorName) + "','Y')>on</span></div></td>";
-                       }
-                       else if (b.status == "N") {
-
-                           tblHtml += "<td><div class='onoffswitch'><span class='custom-off'  onclick=BlockAmountStatusUpdate('" + b.idno + "','" + encodeURI(b.OperatorName) + "','N')>off</span></div></td>";
-
-
-
-                       }
-                       tblHtml += "<td><button class='bt btn-default' onclick=BlockAmountStatusDelete('" + b.idno + "','" + encodeURI(b.OperatorName) + "')><img src='../../MainFrontDesign/images/delete.svg'  /></button></td></tr>"
-
-                   });
-                   $("#blockamounttable > tbody").html(tblHtml);
-               } else {
-                    tblHtml += "<tr><td>hguihjjh</td></tr>";
-               }
-
-
-
-
+                oiRenderBlockAmountTable(result);
                 }
             });
 
@@ -4303,31 +3914,7 @@ $('#OthersBlocktime').on('blur', function(event) {
             url: '@Url.Action("BlockAmountStatusDelete", "Home")',
             data: {id: id,optnm:optnm },
            success: function (result) {
-
-
-                var tblHtml = "";
-                $.each(result, function (a, b) {
-
-                    if (b.User == null) {
-                        b.User = 'All';
-                    }
-                    //tblHtml+= "<tr><td>"+b.idno+"</td>";
-                    // tblHtml += "<tr><td>" + b.OperatorName + "</td>";
-                    tblHtml += "<tr><td>" + b.Amount + "</td>";
-                    tblHtml += "<td>" + b.User + "</td>";
-                      if (b.status=="Y") {
-                            tblHtml += "<td> <div class='onoffswitch'> <span class='costom-on' onclick=BlockAmountStatusUpdate('"+b.idno +"','"+encodeURI(b.OperatorName) +"','Y')>on</span></div></td>";
-                      }
-                      else if (b.status=="N") {
-                     
-                            tblHtml += "<td><div class='onoffswitch'><span class='custom-off'  onclick=BlockAmountStatusUpdate('"+b.idno +"','"+encodeURI(b.OperatorName) +"','N')>off</span></div></td>";
-                      }
-                      tblHtml+="<td><button class='bt btn-default'  onclick=BlockAmountStatusDelete('"+b.idno +"','"+encodeURI(b.OperatorName) +"') > <img src='../../MainFrontDesign/images/delete.svg' /></button></td></tr>"                   
-                     });
-
-
-                $("#blockamounttable > tbody").html(tblHtml);
-
+                oiRenderBlockAmountTable(result);
                 }
             });
     }
@@ -4341,35 +3928,7 @@ $('#OthersBlocktime').on('blur', function(event) {
                $('#defaultModalLabel33').text(optnm);
 
                $('#HDOptnameforAmount').val(optnm);
-                var tblHtml = "";
-               if (result.length > 0) {
-
-                   $.each(result, function (a, b) {
-                       if (b.User == null) {
-                           b.User = 'All';
-                       }
-                       //tblHtml+= "<tr><td>"+b.idno+"</td>";
-                       // tblHtml += "<tr><td>" + b.OperatorName + "</td>";
-                       tblHtml += "<tr><td>" + b.Amount + "</td>";
-                       tblHtml += "<td>" + b.User + "</td>";
-
-                       if (b.status == "Y") {
-                           tblHtml += "<td><div class='onoffswitch'> <span class='costom-on' onclick=BlockAmountStatusUpdate('" + b.idno + "','" + encodeURI(b.OperatorName) + "','Y')>on</span></div></td>";
-                       }
-                       else if (b.status == "N") {
-
-                           tblHtml += "<td><div class='onoffswitch'><span class='custom-off'  onclick=BlockAmountStatusUpdate('" + b.idno + "','" + encodeURI(b.OperatorName) + "','N')>off</span></div></td>";
-                       }
-                       tblHtml += "<td><button class='bt btn-default' onclick=BlockAmountStatusDelete('" + b.idno + "','" + encodeURI(b.OperatorName) + "') > <img src='../../MainFrontDesign/images/delete.svg' /></button></td></tr>"
-
-                   });
-
-
-                   $("#blockamounttable > tbody").html(tblHtml);
-               } else {
-                   tblHtml += "<tr><td colspan='3'><img src='../../img/NoDatall.svg' style='width: 400px;display: block;margin: auto;'></td></tr>";
-                    $("#blockamounttable > tbody").html(tblHtml);
-               }
+                oiRenderBlockAmountTable(result);
                 }
             });
 
@@ -4385,29 +3944,7 @@ $('#OthersBlocktime').on('blur', function(event) {
              data: { amount: $('#txtblockamount').val(), User: $('#txtblockuser').val(),  name: name },
            success: function (result) {
              $('#txtblockamount').val('')
-
-                var tblHtml = "";
-                $.each(result, function (a, b) {
-                    if (b.User == null) {
-                        b.User = 'All';
-                    }
-                    //tblHtml+= "<tr><td>"+b.idno+"</td>";
-                   // tblHtml += "<tr><td>" + b.OperatorName + "</td>";
-                    tblHtml += "<tr><td>" + b.Amount + "</td>";
-                    tblHtml += "<td>" + b.User + "</td>";
-                     if (b.status=="Y") {
-                          tblHtml += "<td> <div class='onoffswitch'> <span class='costom-on' onclick=BlockAmountStatusUpdate('"+b.idno +"','"+encodeURI(b.OperatorName) +"','Y')>on</span></div></td>";
-                     }
-                      else if (b.status=="N") {                     
-                          tblHtml += "<td><div class='onoffswitch'><span class='custom-off'  onclick=BlockAmountStatusUpdate('"+b.idno +"','"+encodeURI(b.OperatorName) +"','N')>off</span></div></td>";                                      
-                      }
-                     tblHtml+="<td><button class='bt btn-default' onclick=BlockAmountStatusDelete('"+b.idno +"','"+encodeURI(b.OperatorName) +"') ><img src='../../MainFrontDesign/images/delete.svg' /></button></td></tr>"
-
-                });
-
-
-                $("#blockamounttable > tbody").html(tblHtml);
-
+                oiRenderBlockAmountTable(result);
                 }
             });
 
@@ -4564,165 +4101,6 @@ $('#OthersBlocktime').on('blur', function(event) {
 </script>
 
 <script>
-    $(document).ready(function () {
-        $('.OpertorIndex-page button.for-Distr').click(function () {
-            $(".OpertorIndex-page .for-Distributor").show();
-        });
-        $(".OpertorIndex-page button.close-button").click(function () {
-            $(".OpertorIndex-page .for-Distributor").hide();
-        });
-
-
-        $('.OpertorIndex-page button.for-Reta').click(function () {
-
-            $(".OpertorIndex-page .for-Retailer").show();
-        });
-        $(".OpertorIndex-page button.close-button").click(function () {
-            $(".OpertorIndex-page .for-Retailer").hide();
-        });
-
-        $('.OpertorIndex-page button.for-Whi-Lab').click(function () {
-            $(".OpertorIndex-page .for-White-Label").show();
-        });
-        $(".OpertorIndex-page button.close-button").click(function () {
-            $(".OpertorIndex-page .for-White-Label").hide();
-        });
-
-        $('.OpertorIndex-page button.for-ap-us').click(function () {
-            $(".OpertorIndex-page .for-Api-User").show();
-        });
-        $(".OpertorIndex-page button.close-button").click(function () {
-            $(".OpertorIndex-page .for-Api-User").hide();
-        });
-
-
-    });
-    $('.OpertorIndex-page button.for-Distr').click(function () {
-        $(".OpertorIndex-page .for-Distributor").show();
-    });
-    $(".OpertorIndex-page button.close-button").click(function () {
-        $(".OpertorIndex-page .for-Distributor").hide();
-    });
-
-
-    $('.OpertorIndex-page button.for-Reta').click(function () {
-
-        $(".OpertorIndex-page .for-Retailer").show();
-    });
-    $(".OpertorIndex-page button.close-button").click(function () {
-        $(".OpertorIndex-page .for-Retailer").hide();
-    });
-
-    $('.OpertorIndex-page button.for-Whi-Lab').click(function () {
-        $(".OpertorIndex-page .for-White-Label").show();
-    });
-    $(".OpertorIndex-page button.close-button").click(function () {
-        $(".OpertorIndex-page .for-White-Label").hide();
-    });
-
-    $('.OpertorIndex-page button.for-ap-us').click(function () {
-        $(".OpertorIndex-page .for-Api-User").show();
-    });
-    $(".OpertorIndex-page button.close-button").click(function () {
-        $(".OpertorIndex-page .for-Api-User").hide();
-    });
-
-</script>
-
-<script>
-    $(document).ready(function () {
-        $('.OpertorIndex-page button.for-Distr').click(function () {
-            $(".OpertorIndex-page .for-Distributor").show();
-        });
-        $(".OpertorIndex-page button.close-button").click(function () {
-            $(".OpertorIndex-page .for-Distributor").hide();
-        });
-
-
-        $('.OpertorIndex-page button.for-Reta').click(function () {
-            $(".OpertorIndex-page .for-Retailer").show();
-        });
-        $(".OpertorIndex-page button.close-button").click(function () {
-            $(".OpertorIndex-page .for-Retailer").hide();
-        });
-
-        $('.OpertorIndex-page button.for-Whi-Lab').click(function () {
-            $(".OpertorIndex-page .for-White-Label").show();
-        });
-        $(".OpertorIndex-page button.close-button").click(function () {
-            $(".OpertorIndex-page .for-White-Label").hide();
-        });
-
-        $('.OpertorIndex-page button.for-ap-us').click(function () {
-            $(".OpertorIndex-page .for-Api-User").show();
-        });
-        $(".OpertorIndex-page button.close-button").click(function () {
-            $(".OpertorIndex-page .for-Api-User").hide();
-        });
-
-        $('.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-2"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-3"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-4"]').click(function () {
-            $(".OpertorIndex-page .for-Distributor").hide();
-        });
-
-        $('.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-1"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-3"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-4"]').click(function () {
-            $(".OpertorIndex-page .for-Retailer").hide();
-        });
-
-        $('.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-1"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-2"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-4"]').click(function () {
-            $(".OpertorIndex-page .for-White-Label").hide();
-        });
-
-        $('.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-1"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-2"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-3"]').click(function () {
-            $(".OpertorIndex-page .for-Api-User").hide();
-        });
-    });
-
-    $('.OpertorIndex-page button.for-Distr').click(function () {
-        $(".OpertorIndex-page .for-Distributor").show();
-    });
-    $(".OpertorIndex-page button.close-button").click(function () {
-        $(".OpertorIndex-page .for-Distributor").hide();
-    });
-
-
-    $('.OpertorIndex-page button.for-Reta').click(function () {
-        $(".OpertorIndex-page .for-Retailer").show();
-    });
-    $(".OpertorIndex-page button.close-button").click(function () {
-        $(".OpertorIndex-page .for-Retailer").hide();
-    });
-
-    $('.OpertorIndex-page button.for-Whi-Lab').click(function () {
-        $(".OpertorIndex-page .for-White-Label").show();
-    });
-    $(".OpertorIndex-page button.close-button").click(function () {
-        $(".OpertorIndex-page .for-White-Label").hide();
-    });
-
-    $('.OpertorIndex-page button.for-ap-us').click(function () {
-        $(".OpertorIndex-page .for-Api-User").show();
-    });
-    $(".OpertorIndex-page button.close-button").click(function () {
-        $(".OpertorIndex-page .for-Api-User").hide();
-    });
-
-    $('.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-2"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-3"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-4"]').click(function () {
-        $(".OpertorIndex-page .for-Distributor").hide();
-    });
-
-    $('.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-1"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-3"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-4"]').click(function () {
-        $(".OpertorIndex-page .for-Retailer").hide();
-    });
-
-    $('.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-1"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-2"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-4"]').click(function () {
-        $(".OpertorIndex-page .for-White-Label").hide();
-    });
-
-    $('.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-1"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-2"],.OpertorIndex-page .oprindex-left ul.tabs li[data-tab="tab-3"]').click(function () {
-        $(".OpertorIndex-page .for-Api-User").hide();
-    });
-</script>
-<script>
     // Create start date
     var start = new Date(),
         prevDay,
@@ -4771,64 +4149,124 @@ $('#OthersBlocktime').on('blur', function(event) {
     })
 
     function BlockDealer(result) {
-        // $('select').select2().val('');
         $('#Distributorlist').val('');
         $('#DCategory').val('');
         $('#DOperatorselect').hide();
         $('#Dservpro').hide();
-
-        $('.for-Distr').click();
+        if (window.oiOpenHistory) {
+            window.oiOpenHistory('.for-Distributor');
+        }
     }
 
-
-
-
     function BlockWhitelabel(result) {
-        // $('select').select2().val('');
         $('#Whitelabellist').val('');
         $('#WhiteLabelCategory').val('');
         $('#Whitelabeloperatorsselect').hide();
         $('#Whitelabelservpro').hide();
-        $('.for-Whi-Lab').click();
+        if (window.oiOpenHistory) {
+            window.oiOpenHistory('.for-White-Label');
+        }
     }
-
 
     function BlockAPIUser(result) {
         $('#APIUSERlist').val('');
         $('#APIUSERCategory').val('');
         $('#APIUSERoperatorsselect').hide();
         $('#APIUSERservpro').hide();
-        $('.for-ap-us').click();
+        if (window.oiOpenHistory) {
+            window.oiOpenHistory('.for-Api-User');
+        }
     }
 
 </script>
 
 <script>
-    $('select').select2();
     var j = $.noConflict();
-    //j(document).ready(function () {
 
-    //    // Initialize select2
-    //    j("#rem").select2();
-    //    j('#RequireCategory').select2();
-    //    j('select').select2();
+    function oiDestroySelect2($el) {
+        if (!$.fn.select2 || !$el || !$el.length) {
+            return;
+        }
+        try {
+            if ($el.hasClass('select2-hidden-accessible')) {
+                $el.select2('destroy');
+            }
+        } catch (e) { }
+    }
 
+    window.oiInitOperatorIndexSelects = function (root) {
+        var $root = root ? $(root) : $('.OperatorIndex_Page');
+        var $modal = $root.hasClass('modal') ? $root : $root.closest('.modal');
+        var inModal = $modal.length > 0;
+        var dropdownParent = inModal ? $modal : $(document.body);
 
-    //});
+        if ($.fn.selectpicker) {
+            $root.find('select.selectpicker').each(function () {
+                var $s = $(this);
+                oiDestroySelect2($s);
+
+                if ($s.data('selectpicker')) {
+                    // Ensure button reflects latest options/state
+                    try { $s.selectpicker('refresh'); } catch (e) { }
+                    return;
+                }
+
+                // Always render dropdown in body (reliable), we handle z-index in CSS.
+                $s.selectpicker({
+                    liveSearch: true,
+                    container: $s.data('container') || 'body',
+                    dropupAuto: false,
+                    width: '100%'
+                });
+            });
+        }
+
+        if ($.fn.select2) {
+            $root.find('select').not('.selectpicker').not('.oi-modal-native-select').each(function () {
+                var $el = $(this);
+                if (inModal) {
+                    // Ensure dropdownParent is the modal for proper stacking
+                    oiDestroySelect2($el);
+                } else if ($el.hasClass('select2-hidden-accessible')) {
+                    return;
+                }
+
+                $el.select2({
+                    width: '100%',
+                    dropdownParent: dropdownParent,
+                    minimumResultsForSearch: $el.find('option').length > 8 ? 0 : Infinity
+                });
+            });
+        }
+    };
+
+    $(function () {
+        oiInitOperatorIndexSelects('.OperatorIndex_Page');
+    });
+
+    $(document).on('shown.bs.modal', '.oi-modern-modal', function () {
+        oiInitOperatorIndexSelects(this);
+    });
+
     function BlockRetailer(result) {
         // $('select').select2().val('');
         if (result == 1) {
             j('#operatorsselect').hide();
             j('#servpro').hide();
 
-            //j("select").select2().select2("val", null);
-            j("#rem").select2().select2("val", 0);
-            // $('select').select2().val('');
-            j('#RequireCategory').select2().select2("val", 0);//.val();
-
-            //.val();
-            //swal("Good job!", "Retailer has been Blocked!", "success");
-            j('.for-Reta').click();
+            // Reset selects safely (Select2 v4 doesn't support select2("val", ...))
+            try {
+                j("#rem").val('').trigger('change');
+                j('#RequireCategory').val('').trigger('change');
+            } catch (e) {
+                try {
+                    j("#rem").val('');
+                    j('#RequireCategory').val('');
+                } catch (e2) { }
+            }
+            if (window.oiOpenHistory) {
+                window.oiOpenHistory('.for-Retailer');
+            }
         }
     }
 </script>
@@ -4845,14 +4283,167 @@ $('#OthersBlocktime').on('blur', function(event) {
 
     </script>*@
 
-<style>
-    i#loading {
-        display: none;
-    }
-</style>
 <script>
-    $('.first-botton').click(function () {
-        $(this).hide();
-        $(this).prev('.second-button').show();
-    })
+    (function ($) {
+        var $page = $('.OperatorIndex_Page');
+        var historyPanels = '.for-Distributor, .for-Retailer, .for-White-Label, .for-Api-User';
+
+        function oiGetVisiblePanel() {
+            var $hist = $page.find('.oi-history-active').first();
+            if ($hist.length) return $hist;
+            var $tab = $page.find('.tab-content2.current2').first();
+            if ($tab.length) return $tab;
+            return $page.find('.tab-content2').first();
+        }
+
+        function oiFilterTables(term) {
+            var q = (term || '').toLowerCase().trim();
+            var $panel = oiGetVisiblePanel();
+            $panel.find('table tbody tr').each(function () {
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(q === '' || text.indexOf(q) > -1);
+            });
+        }
+
+        function oiUpdateRightTitle() {
+            var title = 'Operator Services';
+            var $activeHist = $page.find('.oi-history-active').first();
+            if ($activeHist.length) {
+                if ($activeHist.hasClass('for-Retailer')) title = 'Retailer Blocked History';
+                else if ($activeHist.hasClass('for-Distributor')) title = 'Distributor Blocked History';
+                else if ($activeHist.hasClass('for-White-Label')) title = 'White Label Blocked History';
+                else if ($activeHist.hasClass('for-Api-User')) title = 'API User Blocked History';
+            } else {
+                var $active = $('#oi-right-tabs li.current2').first();
+                title = $active.data('title') || $.trim($active.text()) || title;
+            }
+            $('#oiRightPanelTitle').text(title);
+        }
+
+        function oiRefreshSearch() {
+            oiUpdateRightTitle();
+            oiFilterTables($('#txtsearch').val());
+        }
+
+        window.oiCloseHistory = function () {
+            $page.removeClass('oi-history-open');
+            $page.find(historyPanels).removeClass('oi-history-active').attr('style', 'display:none;');
+            // Restore operator tabs/content in case any legacy code hid them inline
+            $page.find('.oprindex-right #oi-right-tabs').removeAttr('style');
+            $page.find('.oprindex-right .tab-content2').removeAttr('style');
+            oiRefreshSearch();
+        };
+
+        window.oiOpenHistory = function (panelSelector) {
+            $page.find(historyPanels).removeClass('oi-history-active').attr('style', 'display:none;');
+            $page.addClass('oi-history-open');
+            $page.find(panelSelector).addClass('oi-history-active').removeAttr('style');
+            oiRefreshSearch();
+            if (window.matchMedia('(max-width: 991px)').matches) {
+                var $target = $page.find('.vm-ft-history-col');
+                if ($target.length) {
+                    $('html, body').animate({ scrollTop: $target.offset().top - 72 }, 280);
+                }
+            }
+        };
+
+        window.PrePaidTabeOpen = function () {
+            oiCloseHistory();
+        };
+
+        window.UtilityTabeOpen = function () {
+            oiCloseHistory();
+        };
+
+        window.oiRefreshSearch = oiRefreshSearch;
+
+        function oiScheduleHistoryOpen(panelSelector) {
+            setTimeout(function () {
+                if (window.oiOpenHistory) window.oiOpenHistory(panelSelector);
+            }, 0);
+        }
+
+        function oiSwitchLeftTab($li) {
+            var tabId = $li.attr('data-tab');
+            if (!tabId) return;
+            oiCloseHistory();
+            $('#oi-left-tabs li').removeClass('current');
+            $page.find('.oprindex-left > .op-c > .tab-content').removeClass('current').removeAttr('style');
+            $li.addClass('current');
+            $page.find('.oprindex-left #' + tabId).addClass('current').removeAttr('style');
+        }
+
+        function oiSwitchRightTab($li) {
+            var tabId = $li.attr('data-tab');
+            if (!tabId) return;
+            oiCloseHistory();
+            $('#oi-right-tabs li').removeClass('current2');
+            $page.find('.oprindex-right .tab-content2').removeClass('current2').removeAttr('style');
+            $li.addClass('current2');
+            $page.find('.oprindex-right #' + tabId).addClass('current2').removeAttr('style');
+            setTimeout(oiRefreshSearch, 40);
+        }
+
+        $(function () {
+            $('#txtsearch').on('input', function () {
+                oiFilterTables($(this).val());
+            });
+
+            $(document).on('click', '#oi-left-tabs li', function (e) {
+                e.preventDefault();
+                oiSwitchLeftTab($(this));
+            });
+
+            $(document).on('click', '#oi-right-tabs li', function (e) {
+                e.preventDefault();
+                oiSwitchRightTab($(this));
+            });
+
+            $(document).on('click', '.OperatorIndex_Page .first-botton', function () {
+                var $delete = $(this);
+                var $confirm = $delete.siblings('.second-button');
+                $delete.hide();
+                $confirm.removeClass('oi-delete-hidden').addClass('oi-delete-confirm').show();
+            });
+
+            $(document).on('click', '.OperatorIndex_Page button.for-Distr', function (e) {
+                oiScheduleHistoryOpen('.for-Distributor');
+            });
+            $(document).on('click', '.OperatorIndex_Page button.for-Reta', function (e) {
+                oiScheduleHistoryOpen('.for-Retailer');
+            });
+            $(document).on('click', '.OperatorIndex_Page button.for-Whi-Lab', function (e) {
+                oiScheduleHistoryOpen('.for-White-Label');
+            });
+            $(document).on('click', '.OperatorIndex_Page button.for-ap-us', function (e) {
+                oiScheduleHistoryOpen('.for-Api-User');
+            });
+
+            // If a history form submits (AJAX or normal), ensure the correct panel is opened
+            $(document).on('submit', '.OperatorIndex_Page form', function () {
+                var $btn = $(document.activeElement);
+                if (!$btn || !$btn.length) return;
+                if ($btn.hasClass('for-Distr')) oiScheduleHistoryOpen('.for-Distributor');
+                else if ($btn.hasClass('for-Reta')) oiScheduleHistoryOpen('.for-Retailer');
+                else if ($btn.hasClass('for-Whi-Lab')) oiScheduleHistoryOpen('.for-White-Label');
+                else if ($btn.hasClass('for-ap-us')) oiScheduleHistoryOpen('.for-Api-User');
+            });
+            $(document).on('click', '.OperatorIndex_Page .oi-history-close-btn, .OperatorIndex_Page .for-un .close-button', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.oiCloseHistory) {
+                    window.oiCloseHistory();
+                }
+                return false;
+            });
+
+            oiRefreshSearch();
+
+            $('.OperatorIndex_Page .table .second-button').addClass('oi-delete-hidden');
+
+            if (typeof window.oiInitOperatorIndexSelects === 'function') {
+                window.oiInitOperatorIndexSelects('.OperatorIndex_Page');
+            }
+        });
+    })(jQuery);
 </script>

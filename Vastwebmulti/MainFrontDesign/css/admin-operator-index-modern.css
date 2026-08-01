@@ -1,0 +1,2007 @@
+/* ADMIN Operator Index (Block Services) — matches Bank Info / Fund Transfer design */
+
+body.saas-admin-ui .OperatorIndex_Page .page-title-box-fourde-admin,
+body.saas-admin-ui .OperatorIndex_Page .page-header-third.pageheader-margin-third,
+body.saas-admin-ui .OperatorIndex_Page > .container-fluid > .page-title-box-fourde-admin,
+body.saas-admin-ui .OperatorIndex_Page > .container-fluid > .page-header-third {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page > .container-fluid > .row.clearfix:first-of-type {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page > .container-fluid > .vm-ft-layout-wrap ~ .row.clearfix {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .vm-ft-page-shell {
+    gap: 0 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .vm-ft-page-toolbar {
+    margin-bottom: 10px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .vm-ft-layout-wrap {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Fixed-height cards (left + right) — no more full-viewport stretch/empty space */
+body.saas-admin-ui .OperatorIndex_Page.saas-fund-transfer-page {
+    min-height: 0 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left.vm-ft-form-card,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right.fund-trasfer-right.vm-ft-history-panel {
+    height: 600px !important;
+    min-height: 600px !important;
+    max-height: 600px !important;
+}
+
+/* Left form card */
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left.vm-ft-form-card {
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left .op-c {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 12px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left ul.tabs.vm-ft-role-tabs {
+    flex: 0 0 auto !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left h2.fullbodydycolorbg {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left ul.tabs.vm-ft-role-tabs,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right ul.tabs2.vm-ft-role-tabs {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    margin: 12px 12px 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    width: calc(100% - 24px) !important;
+    list-style: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left ul.tabs.vm-ft-role-tabs > li,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right ul.tabs2.vm-ft-role-tabs > li {
+    float: none !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    list-style: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left ul.tabs.vm-ft-role-tabs > li,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right ul.tabs2.vm-ft-role-tabs > li {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 38px !important;
+    padding: 8px 6px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    color: #64748b !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left ul.tabs.vm-ft-role-tabs > li.current,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right ul.tabs2.vm-ft-role-tabs > li.current2 {
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.32) !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .tab-content,
+body.saas-admin-ui .OperatorIndex_Page .tab-content2 {
+    display: none !important;
+    width: 100% !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .tab-content.current,
+body.saas-admin-ui .OperatorIndex_Page .tab-content2.current2 {
+    display: block !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left .Same-design-form.tab-content.current {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-content: flex-start !important;
+    gap: 8px !important;
+    padding: 4px 12px 14px !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left > .op-c > .tab-content:not(.current),
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2:not(.current2) {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .oprindex-right .tab-content2 {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .tab-content2.current2 {
+    padding: 0 12px 14px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form .items {
+    margin-bottom: 10px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form .items label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form .form-control,
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form select,
+body.saas-admin-ui .OperatorIndex_Page .custom-district select {
+    width: 100% !important;
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    border: 1px solid #dbe2ea !important;
+    background: #fff !important;
+    font-size: 0.78rem !important;
+}
+
+/* Field icon wraps — left form + history filters */
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap {
+    position: relative !important;
+    display: flex !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* Same icon-wrap base when body doesn't have saas-admin-ui */
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap {
+    position: relative !important;
+    display: flex !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap::before {
+    content: '\f007' !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 38px !important;
+    min-width: 38px !important;
+    background: #f1f5f9 !important;
+    border-right: 1px solid #e2e8f0 !important;
+    color: #64748b !important;
+    font-family: 'Font Awesome 5 Free' !important;
+    font-weight: 900 !important;
+    font-size: 0.82rem !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+}
+
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap::before {
+    content: '\f007' !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 38px !important;
+    min-width: 38px !important;
+    background: #f1f5f9 !important;
+    border-right: 1px solid #e2e8f0 !important;
+    color: #64748b !important;
+    font-family: 'Font Awesome 5 Free' !important;
+    font-weight: 900 !important;
+    font-size: 0.82rem !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap[data-oi-icon="user"]::before { content: '\f007' !important; }
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap[data-oi-icon="category"]::before { content: '\f009' !important; }
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap[data-oi-icon="service"]::before { content: '\f085' !important; }
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap[data-oi-icon="operator"]::before { content: '\f0e8' !important; }
+
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap[data-oi-icon="user"]::before { content: '\f007' !important; }
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap[data-oi-icon="category"]::before { content: '\f009' !important; }
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap[data-oi-icon="service"]::before { content: '\f085' !important; }
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap[data-oi-icon="operator"]::before { content: '\f0e8' !important; }
+
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap::after,
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap.custom-district::after {
+    display: none !important;
+    content: none !important;
+}
+
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap::after,
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap.custom-district::after {
+    display: none !important;
+    content: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap > select,
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap > .select2-container,
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap > .bootstrap-select {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: 1% !important;
+    max-width: 100% !important;
+}
+
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap > select,
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap > .select2-container,
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap > .bootstrap-select {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: 1% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap > select,
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap .form-control {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    min-height: 36px !important;
+    height: 36px !important;
+    padding-left: 10px !important;
+}
+
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap > select,
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap .form-control {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    min-height: 36px !important;
+    height: 36px !important;
+    padding-left: 10px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap > .select2-container .select2-selection--single,
+body.saas-admin-ui .OperatorIndex_Page .oi-history-field > .select2-container .select2-selection--single {
+    border: none !important;
+    border-radius: 0 !important;
+    min-height: 36px !important;
+    height: 36px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap > .bootstrap-select > .dropdown-toggle {
+    border: none !important;
+    border-radius: 0 !important;
+    min-height: 36px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-history-field {
+    width: 100% !important;
+    min-height: 38px !important;
+}
+
+.OpertorIndex-page.OperatorIndex_Page .oi-history-field {
+    width: 100% !important;
+    min-height: 38px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap[data-oi-icon="date"]::before { content: '\f073' !important; }
+
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap[data-oi-icon="date"]::before { content: '\f073' !important; }
+
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap > input.timepicker-actions-exmpl {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    min-height: 36px !important;
+    height: 36px !important;
+    padding-left: 10px !important;
+    width: 100% !important;
+}
+
+.OpertorIndex-page.OperatorIndex_Page .oi-field-icon-wrap > input.timepicker-actions-exmpl {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    min-height: 36px !important;
+    height: 36px !important;
+    padding-left: 10px !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li > .oi-field-icon-wrap {
+    width: 100% !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li > .oi-field-icon-wrap {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un .oi-history-close-btn {
+    gap: 5px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un .oi-history-close-btn i {
+    font-size: 0.72rem !important;
+    line-height: 1 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .button-seconddesign,
+body.saas-admin-ui .OperatorIndex_Page .left-button,
+body.saas-admin-ui .OperatorIndex_Page .right-button {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    width: auto !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: none !important;
+}
+
+/* Left form — fields + action buttons in one flex flow */
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form.tab-content {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 4px 12px 14px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form.tab-content > form {
+    display: contents !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form.tab-content .items {
+    flex: 1 1 100% !important;
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form.tab-content .left-button,
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form.tab-content .right-button {
+    flex: 1 1 calc(50% - 4px) !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form.tab-content .oi-history-btn-wrap,
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form.tab-content .right-button:has(.for-Reta) {
+    flex: 1 1 100% !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page #tab-1 .left-button,
+body.saas-admin-ui .OperatorIndex_Page #tab-1 .right-button:has(.for-Distr),
+body.saas-admin-ui .OperatorIndex_Page #tab-3 .left-button,
+body.saas-admin-ui .OperatorIndex_Page #tab-3 .right-button:has(.for-Whi-Lab),
+body.saas-admin-ui .OperatorIndex_Page #tab-4 .left-button,
+body.saas-admin-ui .OperatorIndex_Page #tab-4 .right-button:has(.for-ap-us) {
+    flex: 1 1 calc(50% - 4px) !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page #tab-2 .left-button,
+body.saas-admin-ui .OperatorIndex_Page #tab-2 #OncreditBLock {
+    flex: 1 1 calc(50% - 4px) !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .btn-first,
+body.saas-admin-ui .OperatorIndex_Page .for-Reta.rotetat-second,
+body.saas-admin-ui .OperatorIndex_Page .for-Distr.btn-first,
+body.saas-admin-ui .OperatorIndex_Page .for-Whi-Lab.btn-first,
+body.saas-admin-ui .OperatorIndex_Page .for-ap-us.btn-first {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-height: 40px !important;
+    padding: 0 14px !important;
+    border-radius: 10px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #fff !important;
+    color: #334155 !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .btn-first:hover,
+body.saas-admin-ui .OperatorIndex_Page .for-Reta.rotetat-second:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1) !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .left-button .btn-first[type="submit"] {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28) !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page #OncreditBLock .btn-first {
+    background: #fffbeb !important;
+    border: 1px solid #fcd34d !important;
+    color: #b45309 !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .right-button:has(.for-Reta) .for-Reta,
+body.saas-admin-ui .OperatorIndex_Page .right-button:has(.for-Distr) .for-Distr,
+body.saas-admin-ui .OperatorIndex_Page .right-button:has(.for-Whi-Lab) .for-Whi-Lab,
+body.saas-admin-ui .OperatorIndex_Page .right-button:has(.for-ap-us) .for-ap-us {
+    background: #f8fafc !important;
+    border: 1px dashed #94a3b8 !important;
+    color: #475569 !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-Reta.rotetat-second::before,
+body.saas-admin-ui .OperatorIndex_Page .for-Distr.btn-first::before,
+body.saas-admin-ui .OperatorIndex_Page .for-Whi-Lab.btn-first::before,
+body.saas-admin-ui .OperatorIndex_Page .for-ap-us.btn-first::before {
+    font-family: FontAwesome;
+    content: "\f1da";
+    font-size: 0.85rem;
+    opacity: 0.85;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .btn-first span,
+body.saas-admin-ui .OperatorIndex_Page .btn-first span[style] {
+    color: inherit !important;
+}
+
+/* Right panel card shell */
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right.fund-trasfer-right.vm-ft-history-panel {
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06) !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .vm-ft-history-body {
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .oi-history-head,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right #oi-right-tabs {
+    flex: 0 0 auto !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .oi-history-head {
+    padding: 14px 16px 10px !important;
+    margin: 0 !important;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right #oi-right-tabs {
+    margin: 10px 0 0 !important;
+    width: 100% !important;
+    padding: 4px !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+}
+
+/* Same right-tabs shell when body doesn't have saas-admin-ui */
+.OpertorIndex-page.OperatorIndex_Page .oprindex-right #oi-right-tabs {
+    margin: 10px 0 0 !important;
+    width: 100% !important;
+    padding: 4px !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2.current2 {
+    padding: 10px 12px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Same tab padding when body doesn't have saas-admin-ui */
+.OpertorIndex-page.OperatorIndex_Page .oprindex-right .tab-content2.current2 {
+    padding: 10px 12px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.oi-filter-toolbar,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul,
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .oprindex-right .tab-content2 ul.oi-filter-toolbar,
+.OpertorIndex-page.OperatorIndex_Page .oprindex-right .tab-content2 ul.oi-filter-toolbar {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 0 12px !important;
+    padding: 12px 10px !important;
+    list-style: none !important;
+    text-align: left !important;
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Operator tabs filter row — full cover + auto adjust (desktop) */
+@media (min-width: 992px) {
+    /* Let toolbar cover full width (remove inner side padding gap) */
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2.current2,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-right .tab-content2.current2 {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar {
+        display: grid !important;
+        grid-template-columns: minmax(190px, 1.7fr) minmax(170px, 1.4fr) minmax(190px, 1.7fr) auto auto auto;
+        gap: 8px !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Same layout when body doesn't have saas-admin-ui (class lives on section) */
+    .OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar {
+        display: grid !important;
+        grid-template-columns: minmax(190px, 1.7fr) minmax(170px, 1.4fr) minmax(190px, 1.7fr) auto auto auto;
+        gap: 8px !important;
+        overflow-x: hidden !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li {
+        min-width: 0 !important;
+    }
+
+    .OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li {
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:nth-child(4) {
+        margin-left: 0 !important;
+    }
+
+    .OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li:nth-child(4) {
+        margin-left: 0 !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:last-child,
+    .OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li:last-child {
+        justify-self: end !important;
+    }
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul > li,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.oi-filter-toolbar > li,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul > li,
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li,
+.OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li {
+    float: none !important;
+    display: flex !important;
+    flex: 0 0 auto !important;
+    align-items: stretch !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    position: static !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:nth-child(1),
+.OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li:nth-child(1) {
+    flex: 1 1 0 !important;
+    min-width: 150px !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:nth-child(2),
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:nth-child(3),
+.OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li:nth-child(2),
+.OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li:nth-child(3) {
+    flex: 1 1 0 !important;
+    min-width: 108px !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:nth-child(4),
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:nth-child(5),
+.OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li:nth-child(4),
+.OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li:nth-child(5) {
+    flex: 0 0 auto !important;
+    min-width: 86px !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:nth-child(6),
+.OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li:nth-child(6) {
+    flex: 0 0 auto !important;
+    min-width: 140px !important;
+    max-width: none !important;
+}
+
+/* Make toolbar feel "full cover": push action group to right edge */
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:nth-child(4) {
+    margin-left: auto !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul > li:first-child,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul > li:nth-child(2),
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul > li:nth-child(3),
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul > li:nth-child(4),
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul > li:nth-child(5),
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul > li:last-child,
+.OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li {
+    width: auto !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul label,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul label {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul li button,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul li button {
+    float: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul li:nth-child(4) button,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul li:nth-child(5) button,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul li:nth-child(4) button,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul li:nth-child(5) button {
+    border-bottom: none !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul li:nth-child(3) button {
+    background: transparent !important;
+    color: inherit !important;
+    border: inherit !important;
+}
+
+body.saas-admin-ui .newfourdesign-admin .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul li:first-child input.timepicker-actions-exmpl {
+    background: #fff !important;
+}
+
+body.saas-admin-ui .newfourdesign-admin .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul li button.block,
+body.saas-admin-ui .newfourdesign-admin .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul li button.unblock,
+body.saas-admin-ui .newfourdesign-admin .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul li button.abslute-button-third {
+    background: inherit !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul > li:empty {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul .oi-field-icon-wrap input.timepicker-actions-exmpl,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul .oi-field-icon-wrap select.form-control,
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar .oi-field-icon-wrap input.timepicker-actions-exmpl,
+body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar .oi-field-icon-wrap select.form-control {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul input.timepicker-actions-exmpl,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul select.form-control {
+    width: 100% !important;
+    min-height: 38px !important;
+    border-radius: 9px !important;
+    border: 1px solid #dbe2ea !important;
+    background: #fff !important;
+    font-size: 0.74rem !important;
+    padding: 0 10px !important;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul input.timepicker-actions-exmpl:focus,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul select.form-control:focus {
+    border-color: #2563eb !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul .block,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul .unblock {
+    width: 100% !important;
+    min-height: 38px !important;
+    padding: 0 14px !important;
+    border-radius: 9px !important;
+    font-size: 0.74rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul .block {
+    background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%) !important;
+    border: 1px solid #fca5a5 !important;
+    color: #b91c1c !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul .unblock {
+    background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%) !important;
+    border: 1px solid #86efac !important;
+    color: #15803d !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul .block:hover {
+    background: #fecaca !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul .unblock:hover {
+    background: #bbf7d0 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul .abslute-button-third,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul .back-button-third,
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul .header-button-thirddesign {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    padding: 0 12px !important;
+    border-radius: 9px !important;
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    border: none !important;
+    color: #fff !important;
+    font-size: 0.74rem !important;
+    font-weight: 700 !important;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25) !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .top-tab-ul li:last-child button,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .top-tab-ul li:last-child button,
+.OpertorIndex-page.OperatorIndex_Page .top-tab-ul li:last-child button {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .tab-content2 form:has(.oi-filter-toolbar),
+.OpertorIndex-page.OperatorIndex_Page .tab-content2 form:has(.oi-filter-toolbar) {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex: 0 0 auto !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .this-table,
+body.saas-admin-ui .OperatorIndex_Page .table-data {
+    padding: 0 12px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table-responsive {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: 100%;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered thead th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered {
+    width: max-content !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+    border-collapse: collapse !important;
+    border: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered thead tr,
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered thead th {
+    background: #1e293b !important;
+    color: #fff !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    padding: 9px 10px !important;
+    white-space: nowrap !important;
+    border: none !important;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered tbody tr:nth-child(even) td {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered tbody tr:nth-child(odd) td {
+    background: #fff !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered tbody tr:hover td {
+    background: #eff6ff !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered tbody td {
+    font-size: 0.76rem !important;
+    padding: 8px 10px !important;
+    color: #334155 !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    vertical-align: middle !important;
+}
+
+/* Blocked history panels */
+body.saas-admin-ui .OperatorIndex_Page .for-Distributor,
+body.saas-admin-ui .OperatorIndex_Page .for-Retailer,
+body.saas-admin-ui .OperatorIndex_Page .for-White-Label,
+body.saas-admin-ui .OperatorIndex_Page .for-Api-User {
+    display: none !important;
+    padding: 0 12px 14px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open #oi-right-tabs,
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .tab-content2 {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .for-Distributor.oi-history-active,
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .for-Retailer.oi-history-active,
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .for-White-Label.oi-history-active,
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .for-Api-User.oi-history-active {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-Distributor .for-un,
+body.saas-admin-ui .OperatorIndex_Page .for-Retailer .for-un,
+body.saas-admin-ui .OperatorIndex_Page .for-White-Label .for-un,
+body.saas-admin-ui .OperatorIndex_Page .for-Api-User .for-un {
+    flex: 0 0 auto !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .oi-history-head .vm-ft-history-toolbar__sub {
+    display: none !important;
+}
+
+/* Keep conditional form fields hidden when JS toggles them */
+body.saas-admin-ui .OperatorIndex_Page #servpro[style*="display: none"],
+body.saas-admin-ui .OperatorIndex_Page #servpro[style*="display:none"],
+body.saas-admin-ui .OperatorIndex_Page #operatorsselect[style*="display: none"],
+body.saas-admin-ui .OperatorIndex_Page #operatorsselect[style*="display:none"],
+body.saas-admin-ui .OperatorIndex_Page #Dservpro[style*="display: none"],
+body.saas-admin-ui .OperatorIndex_Page #Dservpro[style*="display:none"],
+body.saas-admin-ui .OperatorIndex_Page #DOperatorselect[style*="display: none"],
+body.saas-admin-ui .OperatorIndex_Page #DOperatorselect[style*="display:none"],
+body.saas-admin-ui .OperatorIndex_Page #Whitelabelservpro[style*="display: none"],
+body.saas-admin-ui .OperatorIndex_Page #Whitelabelservpro[style*="display:none"],
+body.saas-admin-ui .OperatorIndex_Page #Whitelabeloperatorsselect[style*="display: none"],
+body.saas-admin-ui .OperatorIndex_Page #Whitelabeloperatorsselect[style*="display:none"],
+body.saas-admin-ui .OperatorIndex_Page #APIUSERservpro[style*="display: none"],
+body.saas-admin-ui .OperatorIndex_Page #APIUSERservpro[style*="display:none"],
+body.saas-admin-ui .OperatorIndex_Page #APIUSERoperatorsselect[style*="display: none"],
+body.saas-admin-ui .OperatorIndex_Page #APIUSERoperatorsselect[style*="display:none"] {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul,
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row,
+.OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 0 12px !important;
+    padding: 12px 14px !important;
+    list-style: none !important;
+    text-align: left !important;
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul > li,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li {
+    float: none !important;
+    display: flex !important;
+    flex: 0 0 auto !important;
+    align-items: stretch !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    position: static !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.one,
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.two,
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.three,
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.one,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.two,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.three,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four {
+    flex: 1 1 0 !important;
+    min-width: 118px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four:has(select[style*="display:none"]),
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four:has(select[style*="display: none"]),
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four:has(select[style*="display:none"]),
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four:has(select[style*="display: none"]) {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.five,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.five {
+    flex: 0 0 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six {
+    flex: 1 1 auto !important;
+    min-width: 168px !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.seven,
+body.saas-admin-ui .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.seven {
+    flex: 0 0 88px !important;
+    min-width: 88px !important;
+    max-width: 88px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row .oi-field-icon-wrap > .select2-container,
+body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row .oi-field-icon-wrap > .bootstrap-select {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un .btnssl22 {
+    width: 100% !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    border: none !important;
+    color: #fff !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un .operator-top-button {
+    width: 100% !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    background: #f0fdf4 !important;
+    border: 1px solid #86efac !important;
+    color: #15803d !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .for-un .close-button.operator-top-close,
+body.saas-admin-ui .OperatorIndex_Page .for-un .oi-history-close-btn {
+    width: 100% !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 10px !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #64748b !important;
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .vm-ft-search-wrap {
+    flex: 0 1 320px;
+    min-width: 200px;
+    max-width: 360px;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .vm-ft-search-wrap input#txtsearch {
+    width: 100% !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    border-radius: 9px !important;
+    border: 1px solid #dbe2ea !important;
+    background: #f8fafc !important;
+    font-size: 0.82rem !important;
+    padding: 0 12px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .vm-ft-search-wrap input#txtsearch:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+    outline: none !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .select2-container--default .select2-selection--single {
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    border: 1px solid #dbe2ea !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oi-field-icon-wrap .select2-container--default .select2-selection--single {
+    min-height: 36px !important;
+    height: 36px !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+/* —— Table action cells —— */
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered tbody td {
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered tbody td.amount-td,
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered tbody td.lcode-button,
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered tbody td.limit-tdb,
+body.saas-admin-ui .OperatorIndex_Page .table.table-bordered tbody td:last-child {
+    text-align: center !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .oi-td-actions {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+}
+
+/* Delete + confirm — Sure hidden until Delete click */
+body.saas-admin-ui .OperatorIndex_Page .table .second-button.oi-delete-confirm {
+    display: inline-flex !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .first-botton,
+body.saas-admin-ui .OperatorIndex_Page .table .deletebuttoback-second.first-botton,
+body.saas-admin-ui .OperatorIndex_Page .table .second-button:not(.oi-delete-hidden) {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    min-height: 30px !important;
+    height: auto !important;
+    padding: 0 12px !important;
+    margin: 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid #dbe2ea !important;
+    background: #fff !important;
+    color: #475569 !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05) !important;
+    width: auto !important;
+    float: none !important;
+    text-transform: none !important;
+    transition: background 0.15s ease, border-color 0.15s ease !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .first-botton:hover,
+body.saas-admin-ui .OperatorIndex_Page .table .second-button:hover {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .second-button {
+    background: #fff1f2 !important;
+    border-color: #fda4af !important;
+    color: #be123c !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .second-button:hover {
+    background: #fee2e2 !important;
+    border-color: #f87171 !important;
+}
+
+/* Amount / Code / Edit */
+body.saas-admin-ui .OperatorIndex_Page .table .switch-edit-button,
+body.saas-admin-ui .OperatorIndex_Page .table .switch-edit-button.deletebuttoback-second,
+body.saas-admin-ui .OperatorIndex_Page .table td .btn.switch-edit-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    min-height: 30px !important;
+    height: auto !important;
+    min-width: 68px !important;
+    width: auto !important;
+    padding: 0 10px !important;
+    margin: 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid #dbe2ea !important;
+    background: #fff !important;
+    color: #475569 !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05) !important;
+    float: none !important;
+    text-transform: none !important;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .switch-edit-button::before {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .switch-edit-button:hover {
+    background: #eff6ff !important;
+    border-color: #93c5fd !important;
+    color: #1d4ed8 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table td.amount-tdb .switch-edit-button,
+body.saas-admin-ui .OperatorIndex_Page .table td.amount-td .switch-edit-button {
+    background: #fffbeb !important;
+    border-color: #fde68a !important;
+    color: #b45309 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table td.lcode-button .switch-edit-button {
+    background: #f5f3ff !important;
+    border-color: #ddd6fe !important;
+    color: #6d28d9 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table td.limit-tdb .switch-edit-button {
+    background: #f0fdf4 !important;
+    border-color: #bbf7d0 !important;
+    color: #15803d !important;
+}
+
+/* History table — Live / Unblock */
+body.saas-admin-ui .OperatorIndex_Page .table .edit-live-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    min-height: 30px !important;
+    height: auto !important;
+    min-width: 72px !important;
+    width: auto !important;
+    padding: 0 12px 0 22px !important;
+    margin: 0 !important;
+    border-radius: 999px !important;
+    border: 1px solid #86efac !important;
+    background: #ecfdf5 !important;
+    color: #15803d !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    float: none !important;
+    text-transform: capitalize !important;
+    position: relative !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .edit-live-button::after {
+    content: '' !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: #22c55e !important;
+    display: block !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 10px !important;
+    transform: translateY(-50%) !important;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25) !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .switch-edit-button.new-button {
+    min-width: 82px !important;
+    background: #fef2f2 !important;
+    border-color: #fecaca !important;
+    color: #b91c1c !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .switch-edit-button.new-button:hover {
+    background: #fee2e2 !important;
+    border-color: #f87171 !important;
+    color: #991b1b !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .close-retailer {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 24px !important;
+    padding: 0 8px !important;
+    margin-left: 6px !important;
+    border-radius: 6px !important;
+    background: #fef3c7 !important;
+    border: 1px solid #fcd34d !important;
+    color: #92400e !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    float: none !important;
+    height: auto !important;
+}
+
+/* Status on/off toggle */
+body.saas-admin-ui .OperatorIndex_Page .table .onoffswitch,
+body.saas-admin-ui .OperatorIndex_Page .table .onoffswitch-secondclass {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    min-width: 58px !important;
+    min-height: 30px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    overflow: visible !important;
+    float: none !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .costom-on,
+body.saas-admin-ui .OperatorIndex_Page .table .custom-on-secondbutton,
+body.saas-admin-ui .OperatorIndex_Page .table .custom-off,
+body.saas-admin-ui .OperatorIndex_Page .table .custom-off-secondbutton {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    min-width: 58px !important;
+    min-height: 30px !important;
+    width: auto !important;
+    padding: 0 12px !important;
+    margin: 0 !important;
+    border-radius: 999px !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    text-transform: capitalize !important;
+    float: none !important;
+    position: relative !important;
+    cursor: pointer !important;
+    transition: background 0.15s ease, border-color 0.15s ease !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .costom-on,
+body.saas-admin-ui .OperatorIndex_Page .table .custom-on-secondbutton {
+    background: #ecfdf5 !important;
+    border: 1px solid #86efac !important;
+    color: #15803d !important;
+    text-align: center !important;
+    padding-left: 22px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .custom-off,
+body.saas-admin-ui .OperatorIndex_Page .table .custom-off-secondbutton {
+    background: #fef2f2 !important;
+    border: 1px solid #fecaca !important;
+    color: #b91c1c !important;
+    text-align: center !important;
+    padding-right: 22px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .costom-on::after,
+body.saas-admin-ui .OperatorIndex_Page .table .custom-on-secondbutton::after {
+    content: '' !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: #22c55e !important;
+    display: block !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 10px !important;
+    right: auto !important;
+    transform: translateY(-50%) !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .custom-off::before,
+body.saas-admin-ui .OperatorIndex_Page .table .custom-off-secondbutton::before {
+    content: '' !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: #ef4444 !important;
+    display: block !important;
+    position: absolute !important;
+    top: 50% !important;
+    right: 10px !important;
+    left: auto !important;
+    transform: translateY(-50%) !important;
+    float: none !important;
+}
+
+/* Modal table buttons inside OperatorIndex modals */
+body.saas-admin-ui .OperatorIndex_Page .modal .bt.btn-default,
+body.saas-admin-ui .OperatorIndex_Page .modal .btnssl2233 {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 36px !important;
+    padding: 0 14px !important;
+    border-radius: 8px !important;
+    border: 1px solid #dbe2ea !important;
+    background: #fff !important;
+    color: #475569 !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .modal .btnssl2233.special-iii,
+body.saas-admin-ui .OperatorIndex_Page .modal #btnEditopRes,
+body.saas-admin-ui .OperatorIndex_Page .modal #btnAddAmountBlock {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table tbody td:has(.first-botton) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .second-button.oi-delete-hidden,
+body.saas-admin-ui .OperatorIndex_Page .table .second-button[style*="display: none"],
+body.saas-admin-ui .OperatorIndex_Page .table .second-button[style*="display:none"] {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .second-button.oi-delete-confirm {
+    display: inline-flex !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .first-botton.oi-delete-hidden {
+    display: none !important;
+}
+
+/* ============================================================
+   Operator table "Del OPT" buttons — keep simple/normal look
+   (User request: hide fancy styling, keep normal)
+   ============================================================ */
+body.saas-admin-ui .OperatorIndex_Page .table tbody td:has(.first-botton),
+.OpertorIndex-page.OperatorIndex_Page .table tbody td:has(.first-botton) {
+    display: table-cell !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .first-botton,
+.OpertorIndex-page.OperatorIndex_Page .table .first-botton {
+    display: inline-block !important;
+    min-height: 24px !important;
+    height: 24px !important;
+    line-height: 22px !important;
+    padding: 0 10px !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    background: #f0f0f0 !important;
+    border: 1px solid #bfbebe !important;
+    color: #666 !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .second-button,
+.OpertorIndex-page.OperatorIndex_Page .table .second-button {
+    display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .table .second-button.oi-delete-confirm,
+.OpertorIndex-page.OperatorIndex_Page .table .second-button.oi-delete-confirm {
+    display: inline-block !important;
+    min-height: 24px !important;
+    height: 24px !important;
+    line-height: 22px !important;
+    padding: 0 10px !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    background: #fff1f2 !important;
+    border: 1px solid #fda4af !important;
+    color: #be123c !important;
+    font-weight: 700 !important;
+    font-size: 12px !important;
+}
+
+/* ============================================================
+   Toolbar right-edge "cover" (remove visible right gap)
+   ============================================================ */
+@media (min-width: 992px) {
+    body.saas-admin-ui .OperatorIndex_Page .tab-content2.current2 form .oi-filter-toolbar,
+    .OpertorIndex-page.OperatorIndex_Page .tab-content2.current2 form .oi-filter-toolbar {
+        margin-left: -12px !important;
+        margin-right: -12px !important;
+        width: calc(100% + 24px) !important;
+    }
+}
+
+@media (max-width: 1199px) {
+    body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:nth-child(1),
+    .OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li:nth-child(1) {
+        min-width: 140px !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:nth-child(2),
+    body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li:nth-child(3),
+    .OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li:nth-child(2),
+    .OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li:nth-child(3) {
+        min-width: 100px !important;
+    }
+
+    /* Tablet/mobile: history filter rows should not horizontal-scroll */
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-flow: row !important;
+        gap: 8px !important;
+        overflow-x: hidden !important;
+        overflow-y: visible !important;
+        flex-wrap: unset !important;
+        margin: 0 0 12px !important;
+        padding: 10px !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul > li,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul > li,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li {
+        float: none !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        flex: unset !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Dashcustom.css makes these absolute; keep them inside grid */
+    body.saas-admin-ui .OperatorIndex_Page .for-un .operator-top-button,
+    body.saas-admin-ui .OperatorIndex_Page .for-un .operator-top-close,
+    body.saas-admin-ui .OperatorIndex_Page .for-un .close-button.operator-top-close,
+    body.saas-admin-ui .OperatorIndex_Page .for-un .oi-history-close-btn,
+    .OpertorIndex-page.OperatorIndex_Page .for-un .operator-top-button,
+    .OpertorIndex-page.OperatorIndex_Page .for-un .operator-top-close,
+    .OpertorIndex-page.OperatorIndex_Page .for-un .close-button.operator-top-close,
+    .OpertorIndex-page.OperatorIndex_Page .for-un .oi-history-close-btn {
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    /* Ensure "Service" select is visible (Dashcustom hides li.three) */
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.three,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.three {
+        display: flex !important;
+    }
+
+    /* Place actions like the operator toolbar: Search + Close row, Unblock full width below */
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.seven,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.seven {
+        order: 6 !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six {
+        order: 7 !important;
+        grid-column: 1 / -1 !important;
+    }
+}
+
+@media (max-width: 991px) {
+    /* Hard override for Operator toolbar UL (prevents horizontal scroll) */
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul.oi-filter-toolbar,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul.oi-filter-toolbar {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-flow: row !important;
+        gap: 8px !important;
+        padding: 10px !important;
+        overflow-x: hidden !important;
+        overflow-y: visible !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul.oi-filter-toolbar > li,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-right .tab-content2 ul.top-tab-ul.oi-filter-toolbar > li {
+        float: none !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .vm-ft-layout.vm-ft-layout--full,
+    .OpertorIndex-page.OperatorIndex_Page .vm-ft-layout.vm-ft-layout--full {
+        flex-direction: column !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-left.vm-ft-form-card,
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-right.fund-trasfer-right.vm-ft-history-panel,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-left.vm-ft-form-card,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-right.fund-trasfer-right.vm-ft-history-panel {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .vm-ft-page-toolbar,
+    .OpertorIndex-page.OperatorIndex_Page .vm-ft-page-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .vm-ft-search-wrap,
+    .OpertorIndex-page.OperatorIndex_Page .vm-ft-search-wrap {
+        flex: 1 1 100%;
+        max-width: none;
+        width: 100%;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-left ul.tabs.vm-ft-role-tabs,
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-right ul.tabs2.vm-ft-role-tabs,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-left ul.tabs.vm-ft-role-tabs,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-right ul.tabs2.vm-ft-role-tabs {
+        flex-wrap: wrap !important;
+    }
+
+    /* Mobile/tablet: show all fields (no horizontal scroll) — 2 columns */
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-right .tab-content2 ul.oi-filter-toolbar,
+    body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-right .tab-content2 ul.oi-filter-toolbar,
+    .OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-flow: row !important;
+        padding: 10px !important;
+        gap: 8px !important;
+        overflow-x: visible !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar > li,
+    .OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar > li {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    /* Order becomes: (1)Date (2)Category / (3)Operator (4)Block / (5)Unblock (6)New Operator */
+
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-left ul.tabs.vm-ft-role-tabs > li,
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-right ul.tabs2.vm-ft-role-tabs > li,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-left ul.tabs.vm-ft-role-tabs > li,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-right ul.tabs2.vm-ft-role-tabs > li {
+        flex: 1 1 calc(50% - 4px) !important;
+        font-size: 0.65rem !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .vm-ft-layout-wrap,
+    .OpertorIndex-page.OperatorIndex_Page .vm-ft-layout-wrap {
+        margin-top: 0 !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .vm-ft-form-col,
+    body.saas-admin-ui .OperatorIndex_Page .vm-ft-history-col,
+    .OpertorIndex-page.OperatorIndex_Page .vm-ft-form-col,
+    .OpertorIndex-page.OperatorIndex_Page .vm-ft-history-col {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-left .Same-design-form.tab-content.current .left-button,
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-left .Same-design-form.tab-content.current .right-button,
+    body.saas-admin-ui .OperatorIndex_Page #tab-1 .left-button,
+    body.saas-admin-ui .OperatorIndex_Page #tab-1 .right-button:has(.for-Distr),
+    body.saas-admin-ui .OperatorIndex_Page #tab-2 .left-button,
+    body.saas-admin-ui .OperatorIndex_Page #tab-2 #OncreditBLock,
+    body.saas-admin-ui .OperatorIndex_Page #tab-3 .left-button,
+    body.saas-admin-ui .OperatorIndex_Page #tab-3 .right-button:has(.for-Whi-Lab),
+    body.saas-admin-ui .OperatorIndex_Page #tab-4 .left-button,
+    body.saas-admin-ui .OperatorIndex_Page #tab-4 .right-button:has(.for-ap-us) {
+        flex: 1 1 100% !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row {
+        padding: 10px !important;
+        gap: 6px !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.one,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.two,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.three,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four {
+        min-width: 108px !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.five {
+        flex: 0 0 40px !important;
+        min-width: 40px !important;
+        max-width: 40px !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six {
+        min-width: 150px !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.seven {
+        flex: 0 0 80px !important;
+        min-width: 80px !important;
+        max-width: 80px !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul > li {
+        flex: 0 0 auto !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .button-seconddesign .btn-first,
+    body.saas-admin-ui .OperatorIndex_Page .for-Reta.rotetat-second {
+        width: 100% !important;
+    }
+
+    .OpertorIndex-page.OperatorIndex_Page .button-seconddesign .btn-first,
+    .OpertorIndex-page.OperatorIndex_Page .for-Reta.rotetat-second {
+        width: 100% !important;
+    }
+
+    /* Blocked history filter row: no horizontal scroll, 2 columns */
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-flow: row !important;
+        gap: 8px !important;
+        overflow-x: hidden !important;
+        flex-wrap: unset !important;
+        padding: 10px !important;
+    }
+
+    /* Stronger override: some legacy CSS targets `.for-un > ul` and keeps it scrolling */
+    body.saas-admin-ui .OperatorIndex_Page .for-un,
+    .OpertorIndex-page.OperatorIndex_Page .for-un {
+        overflow-x: hidden !important;
+    }
+
+    /* Fix: Dashcustom.css positions these absolutely (breaks grid on mobile) */
+    .OpertorIndex-page.OperatorIndex_Page .for-un .operator-top-button,
+    .OpertorIndex-page.OperatorIndex_Page .for-un .operator-top-close,
+    .OpertorIndex-page.OperatorIndex_Page .for-un .close-button.operator-top-close,
+    .OpertorIndex-page.OperatorIndex_Page .for-un .oi-history-close-btn {
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-flow: row !important;
+        gap: 8px !important;
+        overflow-x: hidden !important;
+        overflow-y: visible !important;
+        flex-wrap: unset !important;
+        margin: 0 0 12px !important;
+        padding: 10px !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li {
+        min-width: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        flex: unset !important;
+    }
+
+    /* Override legacy min-width/flex per-slot rules in mobile/tablet */
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.one,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.two,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.three,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.five,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.seven,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.one,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.two,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.three,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.five,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.seven {
+        min-width: 0 !important;
+        max-width: none !important;
+        width: 100% !important;
+        flex: unset !important;
+    }
+
+    /* Dashcustom hides li.three; force it back for history rows */
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.three {
+        display: flex !important;
+    }
+
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.one,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.two,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.three,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.five,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.seven {
+        float: none !important;
+        padding: 0 !important;
+    }
+
+    /* Place actions nicely: search + close in one row, unblock spans full */
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six {
+        grid-column: 1 / -1 !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row .btnssl22,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row .operator-top-button,
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row .oi-history-close-btn,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row .btnssl22,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row .operator-top-button,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row .oi-history-close-btn {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 575px) {
+    /* Keep 2-column layout even on small mobiles (user preference) */
+    body.saas-admin-ui .OperatorIndex_Page .oi-filter-toolbar,
+    .OpertorIndex-page.OperatorIndex_Page .oi-filter-toolbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-left.vm-ft-form-card,
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-right.fund-trasfer-right.vm-ft-history-panel,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-left.vm-ft-form-card,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-right.fund-trasfer-right.vm-ft-history-panel {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-left ul.tabs.vm-ft-role-tabs > li,
+    body.saas-admin-ui .OperatorIndex_Page .oprindex-right ul.tabs2.vm-ft-role-tabs > li,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-left ul.tabs.vm-ft-role-tabs > li,
+    .OpertorIndex-page.OperatorIndex_Page .oprindex-right ul.tabs2.vm-ft-role-tabs > li {
+        flex: 1 1 calc(50% - 4px) !important;
+        font-size: 0.6rem !important;
+        min-height: 34px !important;
+        padding: 6px 4px !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .vm-ft-history-toolbar__title,
+    .OpertorIndex-page.OperatorIndex_Page .vm-ft-history-toolbar__title {
+        font-size: 0.86rem !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .vm-ft-history-toolbar__sub,
+    .OpertorIndex-page.OperatorIndex_Page .vm-ft-history-toolbar__sub {
+        font-size: 0.66rem !important;
+    }
+}
+
+/* ============================================================
+   Blocked History open state — force hide operator tabs/content
+   (Fix: higher specificity overrides .tab-content2.current2)
+   ============================================================ */
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .oprindex-right #oi-right-tabs,
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .oprindex-right .tab-content2,
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .oprindex-right .tab-content2.current2,
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .oprindex-right .tab-content2.current2[style] {
+    display: none !important;
+}
+
+.OpertorIndex-page.OperatorIndex_Page.oi-history-open .oprindex-right #oi-right-tabs,
+.OpertorIndex-page.OperatorIndex_Page.oi-history-open .oprindex-right .tab-content2,
+.OpertorIndex-page.OperatorIndex_Page.oi-history-open .oprindex-right .tab-content2.current2,
+.OpertorIndex-page.OperatorIndex_Page.oi-history-open .oprindex-right .tab-content2.current2[style] {
+    display: none !important;
+}
+
+/* Ensure history panel starts immediately under header */
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .oprindex-right .for-Distributor.oi-history-active,
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .oprindex-right .for-Retailer.oi-history-active,
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .oprindex-right .for-White-Label.oi-history-active,
+body.saas-admin-ui .OperatorIndex_Page.oi-history-open .oprindex-right .for-Api-User.oi-history-active {
+    padding-top: 10px !important;
+}
+
+/* ============================================================
+   FINAL: Mobile/Tablet history filter row — 2 columns, no scroll
+   (Fixes Dashcustom floats + single-row scroll on some devices)
+   ============================================================ */
+@media (max-width: 1199px) {
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        overflow-x: hidden !important;
+        overflow-y: visible !important;
+        padding: 10px !important;
+    }
+
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li {
+        float: none !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        flex: 1 1 calc(50% - 8px) !important;
+    }
+
+    /* Keep service visible (Dashcustom hides li.three) */
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.three,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.three {
+        display: flex !important;
+    }
+
+    /* Hide operator li when its select is hidden */
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four:has(select[style*="display:none"]),
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four:has(select[style*="display: none"]),
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four:has(select[style*="display:none"]),
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.four:has(select[style*="display: none"]) {
+        display: none !important;
+    }
+
+    /* Search + Close: keep in grid flow (not absolute) */
+    body.saas-admin-ui .OperatorIndex_Page .for-un .operator-top-button,
+    body.saas-admin-ui .OperatorIndex_Page .for-un .operator-top-close,
+    body.saas-admin-ui .OperatorIndex_Page .for-un .close-button.operator-top-close,
+    body.saas-admin-ui .OperatorIndex_Page .for-un .oi-history-close-btn,
+    .OpertorIndex-page.OperatorIndex_Page .for-un .operator-top-button,
+    .OpertorIndex-page.OperatorIndex_Page .for-un .operator-top-close,
+    .OpertorIndex-page.OperatorIndex_Page .for-un .close-button.operator-top-close,
+    .OpertorIndex-page.OperatorIndex_Page .for-un .oi-history-close-btn {
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        bottom: auto !important;
+        float: none !important;
+    }
+
+    /* Unblock All should be full width */
+    body.saas-admin-ui .OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six,
+    .OpertorIndex-page.OperatorIndex_Page .for-un > ul.oi-history-filter-row > li.six {
+        flex: 1 1 100% !important;
+    }
+}

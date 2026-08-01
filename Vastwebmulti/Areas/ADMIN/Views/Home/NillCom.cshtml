@@ -6,125 +6,33 @@
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 
 }
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="https://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
-<style>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-nillcom-modern.css?v=16" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-nillcom-modals.css?v=3" rel="stylesheet" />
 
-    /* new css */
-    .bread-same-all-page li {
-        margin: 6px 0;
-    }
-    .width100.float-left.card {
-        background: #fff !important;
-    }
+<section class="content NillCom_Page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium">
+    <div class="container-fluid vm-ft-page-shell">
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <ol class="vm-ft-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Basic Setting</li>
+                    <li>Switching</li>
+                </ol>
+            </div>
+            <div class="vm-ft-search-wrap" style="flex:0 0 auto;max-width:none;">
+                <button type="button" class="btn fullbodydycolorbg" data-toggle="modal" data-target="#defaultModal" style="height:36px;border-radius:10px;border:0;float:right;">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Add Nill Com
+                </button>
+            </div>
+        </div>
+    </div>
 
-    .bkpfull .col-md-4 {
-        float: left;
-    }
-    .bkpfull .col-md-8 {
-        float: left;
-    }
-    
-    /* new css */
-
-    .custom-district1::before {
-        border-color: #888 transparent transparent transparent;
-        border-style: solid;
-        border-width: 5px 4px 0 4px;
-        height: 0;
-        right: 7px;
-        position: absolute;
-        top: 13px;
-        content: '';
-    }
-
-    .custom-district1 {
-        position: relative;
-    }
-
-    .select2-selection.select2-selection--single {
-        border-radius: 0px !important;
-        height: 32px !important;
-        border-color: #ccc !important;
-    }
-    .nillsearch-data .select2-selection.select2-selection--single, .nillsearch-data button {
-        border-color: #7d7a7a !important;
-    }
-    .nillsearch-data button {
-        width: 100% !important;
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-        .bkpfull .col-md-4 {
-            width:100%;
-        }
-        .bkpfull .col-md-8 {
-            width: 100%;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .nillsearch-data .col-md-2.col-xs-12.buttonsearch-second {
-            padding: 0;
-            width: 15%;
-        }
-    }
-
-    @@media screen and (max-width:766px){
-        .nillcom-form .col-md-6.col-xs-12 {
-            padding: 0;
-        }
-    }
-
-    @@media screen and (max-width:480px){
-        .nillcom-first ul {
-            display: inherit !important;
-        }
-            .nillcom-first ul li {
-                width: 33%;
-                float: left;
-            }
-                .nillcom-first ul li:nth-child(3) {
-                    border-right: 0px;
-                }
-                    .nillcom-first ul li:nth-child(3) ~ li {
-                        width: 50%;
-                        float: left;
-                        border-top: 2px solid #fff;
-                    }
-    }
-
-</style>
-
-<section class="content">
-    <div class="container-fluid" style="min-height:inherit !important;height:auto !important;">
+    <div class="container-fluid nill-legacy-header-wrap">
 
         <!--Four-Design-Admin-page-Header-Section-Start-->
         <div class="page-title-box-fourde-admin">
@@ -162,20 +70,20 @@
 
     <div class="bkpfull">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="op-c fullbgw nillcom-first page-header-third" style="height: 82vh;overflow: auto;">
-                        <ul class="nav nav-tabs tab-seconddesign tab-third-design" id="tabs" style="display:flex;">
-                            <li class="tab-link active" data-tab="tab-1"><a data-toggle="tab" href="#home">Nill&nbsp;Port</a></li>
-                            <li class="tab-link" data-tab="tab-2"><a data-toggle="tab" href="#menu1">By&nbsp;Circle</a></li>
-                            <li class="tab-link" data-tab="tab-3"><a data-toggle="tab" href="#menu2">By&nbsp;amount</a></li>
-                            <li class="tab-link" data-tab="tab-4"><a data-toggle="tab" href="#menu3">By&nbsp;operator</a></li>
-                            <li class="tab-link" data-tab="tab-5"><a data-toggle="tab" href="#menu4">Extra&nbsp;Comm</a></li>
+            <div class="row vm-ft-layout vm-ft-layout--full">
+                <div class="col-md-4 col-sm-12 col-xs-12 vm-ft-form-col">
+                    <div class="op-c fullbgw nillcom-first page-header-third nill-left-card vm-ft-form-card">
+                        <ul class="nav nav-tabs tab-seconddesign tab-third-design nill-tabs" id="tabs">
+                            <li class="tab-link active current" data-tab="tab-1"><a data-toggle="tab" href="#home"><i class="fas fa-broadcast-tower" aria-hidden="true"></i>Nill&nbsp;Port</a></li>
+                            <li class="tab-link" data-tab="tab-2"><a data-toggle="tab" href="#menu1"><i class="fas fa-map-marker-alt" aria-hidden="true"></i>By&nbsp;Circle</a></li>
+                            <li class="tab-link" data-tab="tab-3"><a data-toggle="tab" href="#menu2"><i class="fas fa-rupee-sign" aria-hidden="true"></i>By&nbsp;amount</a></li>
+                            <li class="tab-link" data-tab="tab-4"><a data-toggle="tab" href="#menu3"><i class="fas fa-user-cog" aria-hidden="true"></i>By&nbsp;operator</a></li>
+                            <li class="tab-link" data-tab="tab-5"><a data-toggle="tab" href="#menu4"><i class="fas fa-percentage" aria-hidden="true"></i>Extra&nbsp;Comm</a></li>
 
                         </ul>
 
                         <!-- Nav tabs -->
-                        <div class="width100 float-left tab-content tabcurrent-seconddesign input-border-third only-select-third nillcom-form">
+                        <div class="nill-left-body width100 float-left tab-content tabcurrent-seconddesign input-border-third only-select-third nillcom-form">
 
                             <div id="home" class="width100 float-left tab-pane fade in active">
                                 <div class="ROWW">
@@ -185,11 +93,11 @@
                                         {
 
 
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
 
                                                 <label>Select Services </label><label id="lblOperatorids" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select id="Operatorids" name="Operatorids" class="form-control border-0" onchange="NillcomValidationForm();" style="-webkit-appearance:none;">
+                                                    <select id="Operatorids" name="Operatorids" class="form-control" onchange="NillcomValidationForm();" style="-webkit-appearance:none;">
                                                         <option value="">
                                                             ALL OPERATORS TYPE
                                                         </option>
@@ -210,10 +118,10 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select Operator</label><label id="lblopnamelistbyid" class="form-invalid"></label>
                                                 <div class="">
-                                                    <select id="opnamelistbyid" name="opnamelistbyid" class="form-control for-select2 border-0" onchange="NillcomValidationForm();" style="-webkit-appearance:none;">
+                                                    <select id="opnamelistbyid" name="opnamelistbyid" class="form-control for-select2" onchange="NillcomValidationForm();" style="-webkit-appearance:none;">
                                                         <option value="">
                                                             Select Operator
                                                         </option>
@@ -221,12 +129,12 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Minimum Amount</label><label id="lblminiamount" style="color:red;"></label>
                                                 <input class="form-control" type="number" id="textminiamount" name="textminiamount" placeholder="Enter Minimum amount" onchange="NillcomValidationForm();" />
                                                 <div id="word"></div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Maximum T/f Amount</label><label id="lblmaxamount" style="color:red;"></label>
                                                 <input class="form-control" type="number" id="textmaxamount" name="textmaxamount" placeholder="Enter Maximum amount" onchange="NillcomValidationForm();" />
                                                 <div id="word1"></div>
@@ -252,8 +160,8 @@
 
                                         @using (Ajax.BeginForm("SwichStateWise", new AjaxOptions() { HttpMethod = "Post", UpdateTargetId = "SwitchStateWaise", OnBegin = "return DdlValidationForm()" }))
                                         {
-                                            <div class="col-md-12 col-xs-12">
-                                                <label>Select user Type</label><label id="lblddlstateusertype" class="form-invalid"></label>
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
+                                                <label>Select User Type</label><label id="lblddlstateusertype" class="form-invalid"></label>
                                                 <div class="custom-district1">
                                                     <select name="ddlstateusertype" id="ddlstateusertype" class="form-control" onchange="DdlValidationForm();" style="-webkit-appearance:none;">
                                                         <option value="">Select User Type</option>
@@ -262,8 +170,8 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
-                                                <label>Select  user</label><label id="lblddlstateuserList" class="form-invalid"></label>
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
+                                                <label>Select User</label><label id="lblddlstateuserList" class="form-invalid"></label>
                                                 <div class="">
                                                     <select id="ddlstateuserList" name="ddlstateuserList" class="form-control for-select2" onchange="DdlValidationForm();" style="-webkit-appearance:none;">
                                                         <option value="">Select User</option>
@@ -271,11 +179,11 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
 
                                                 <label>Select State (Circle)</label><label id="lblstatecircle" class="form-invalid"></label>
                                                 <div class="">
-                                                    <select id="statecircle" name="statecircle" class="form-control for-select2 border-0" onchange="DdlValidationForm();" style="-webkit-appearance:none;">
+                                                    <select id="statecircle" name="statecircle" class="form-control for-select2" onchange="DdlValidationForm();" style="-webkit-appearance:none;">
                                                         <option value="ALL">ALL</option>
                                                         <option value="Andhra Pradesh">Andhra Pradesh</option>
                                                         <option value="Assam">Assam</option>
@@ -308,10 +216,10 @@
                                                 </div>
 
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select Operator</label><label id="lbloperatorbtstate" class="form-invalid"></label>
                                                 <div class="">
-                                                    <select id="operatorbtstate" name="operatorbtstate" class="form-control for-select2 border-0" onchange="DdlValidationForm();" style="-webkit-appearance:none;">
+                                                    <select id="operatorbtstate" name="operatorbtstate" class="form-control for-select2" onchange="DdlValidationForm();" style="-webkit-appearance:none;">
                                                         <option value="">Select operator</option>
                                                         @foreach (var item in ViewBag.onlyPrepaid)
                                                         {
@@ -323,10 +231,10 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select API/Port</label><label id="lblApinm" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select id="Apinm" name="Apinm" class="form-control border-0" onchange="DdlValidationForm();" style="-webkit-appearance:none;">
+                                                    <select id="Apinm" name="Apinm" class="form-control" onchange="DdlValidationForm();" style="-webkit-appearance:none; width: 100%;">
                                                         <option value="">Select API/Port</option>
                                                         @foreach (var item in ViewBag.Apinm)
                                                         {
@@ -337,13 +245,13 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
-                                                <div class="col-md-6 col-xs-6 padd-left">
+                                            <div class="col-md-12 col-xs-12" style="padding-left:0; padding-right:0;">
+                                                <div class="col-md-6 col-xs-12 padd-left">
                                                     <label>Min amount</label><label id="lbltextbycircle" class="form-invalid"></label>
                                                     <input class="form-control" type="number" name="textminbycircle" id="textbycircle" placeholder="Enter Min. amount" onchange="DdlValidationForm();" />
                                                     <div id="word4"></div>
                                                 </div>
-                                                <div class="col-md-6 col-xs-6 padd-right">
+                                                <div class="col-md-6 col-xs-12 padd-right">
                                                     <label>Max amount</label><label id="lbltextmaxbycircle" class="form-invalid"></label>
                                                     <input class="form-control" type="number" id="textmaxbycircle" name="textmaxbycircle" placeholder="Enter Max. amount" onchange="DdlValidationForm();" />
                                                     <div id="word5"></div>
@@ -372,7 +280,7 @@
                                             OnBegin = "return fnOnBegin()"
                                         }))
                                         {
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select User Type</label><label id="lblddlusertype" class="form-invalid"></label>
                                                 <div class="custom-district1">
                                                     <select name="ddlusertype" id="ddlusertype" onchange="fnOnBegin();" class="form-control" style="-webkit-appearance:none;">
@@ -382,8 +290,8 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
-                                                <label>Select  user</label><label id="lblddluserList" class="form-invalid"></label>
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
+                                                <label>Select User</label><label id="lblddluserList" class="form-invalid"></label>
                                                 <div class="">
                                                     <select id="ddluserList" name="ddluserList" class="form-control for-select2" onchange="fnOnBegin();" style="-webkit-appearance:none;">
                                                         <option value="">Select User</option>
@@ -391,7 +299,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
 
                                                 <label>Select Services</label><label id="lblByAMountopttype" class="form-invalid"></label>
                                                 <div class="custom-district1">
@@ -414,8 +322,8 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-12 col-xs-12">
-                                                <label>select operator</label><label id="lblByAmountOperator" class="form-invalid"></label>
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
+                                                <label>Select Operator</label><label id="lblByAmountOperator" class="form-invalid"></label>
                                                 <div class="">
                                                     <select name="ByAmountOperator" id="ByAmountOperator" onchange="fnonsss();" class="for-select2 form-control" style="-webkit-appearance:none;">
                                                         <option value="">Select Operator</option>
@@ -423,8 +331,8 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
-                                                <div class="col-md-5 padd-left">
+                                            <div class="col-md-12 col-xs-12" style="padding-left:0; padding-right:0;">
+                                                <div class="col-md-5 col-xs-12" style="padding-left:0; padding-right:5px; margin-bottom: 12px;">
                                                     <label>Gateway</label><label id="lblddlType" class="form-invalid"></label>
                                                     <div class="custom-district1">
                                                         <select id="ddlType" name="ddlType" class="form-control" onchange="fnOnBegin();" style="-webkit-appearance:none;">
@@ -435,7 +343,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div id="machineport" class="col-md-7 padd-right" style="width:100%;float:left;">
+                                                <div id="machineport" class="col-md-7 col-xs-12" style="padding-left:5px; padding-right:0; margin-bottom: 12px;">
                                                     <label>Port/API</label><label id="lbldlmMP" class="form-invalid"></label>
                                                     <div class="">
                                                         <select name="dlmMP" id="dlmMP" class="form-control for-select2" style="-webkit-appearance:none;">
@@ -451,29 +359,29 @@
                                                 </div>
 
 
-                                                    <div id="apiport" class="col-md-7 padd-right" style="display:none;">
-                                                        <label>Port/API </label><label id="lblddlPT" class="form-invalid"></label>
-                                                        <div class="">
-                                                            <select id="ddlPT" name="ddlPT" class="form-control for-select2" onchange="fnOnBegin();" style="-webkit-appearance:none;">
-                                                                <option value="">Select API/Port</option>
-                                                                @foreach (var item in ViewBag.portapi)
-                                                                {
-                                                                    <text>
-                                                                        <option value="@item.Value">@item.Text</option>
-                                                                    </text>
-                                                                }
-                                                            </select>
-                                                        </div>
+                                                <div id="apiport" class="col-md-7 col-xs-12" style="padding-left:5px; padding-right:0; display:none; margin-bottom: 12px;">
+                                                    <label>Port/API </label><label id="lblddlPT" class="form-invalid"></label>
+                                                    <div class="">
+                                                        <select id="ddlPT" name="ddlPT" class="form-control for-select2" onchange="fnOnBegin();" style="-webkit-appearance:none;">
+                                                            <option value="">Select API/Port</option>
+                                                            @foreach (var item in ViewBag.portapi)
+                                                            {
+                                                                <text>
+                                                                    <option value="@item.Value">@item.Text</option>
+                                                                </text>
+                                                            }
+                                                        </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12 col-xs-12">
-                                                    <div class="col-md-6 col-xs-6 padd-left">
+                                            </div>
+                                                <div class="col-md-12 col-xs-12" style="padding-left:0; padding-right:0;">
+                                                    <div class="col-md-6 col-xs-12 padd-left">
                                                         <label>Min amount</label><label id="lbltxtByamount" class="form-invalid"></label>
                                                         <input class="form-control" type="number" id="txtByamount" name="txtByamount" placeholder="Enter Min. amount" onchange="fnOnBegin();" />
                                                         <div id="word6"></div>
                                                     </div>
 
-                                                    <div class="col-md-6 col-xs-6 padd-right">
+                                                    <div class="col-md-6 col-xs-12 padd-right">
                                                         <label>Max amount</label><label id="lbltxtmaxByamount" class="form-invalid"></label>
                                                         <input class="form-control" type="number" id="txtmaxByamount" name="txtmaxByamount" placeholder="Enter Max. amount" onchange="fnOnBegin();" />
                                                         <div id="word7"></div>
@@ -509,30 +417,30 @@
 
                                         }))
                                         {
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select User Type</label><label id="lblddSwitchOpusertype" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select id="ddSwitchOpusertype" name="ddSwitchOpusertype" onchange="DdsValidationForm()" class="form-control border-0" style="-webkit-appearance:none;">
+                                                    <select id="ddSwitchOpusertype" name="ddSwitchOpusertype" onchange="DdsValidationForm()" class="form-control" style="-webkit-appearance:none;">
                                                         <option value="">Select User Type</option>
                                                         <option value="API">API User</option>
                                                         <option value="Retailer">Retailer</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select User</label><label id="lblddSwitchOpuserlist" class="form-invalid"></label>
                                                 <div class="">
-                                                    <select id="ddSwitchOpuserlist" name="ddSwitchOpuserlist" class="form-control for-select2 border-0" onchange="DdsValidationForm()" style="-webkit-appearance:none;">
+                                                    <select id="ddSwitchOpuserlist" name="ddSwitchOpuserlist" class="form-control for-select2" onchange="DdsValidationForm()" style="-webkit-appearance:none;">
                                                         <option value="">Select User</option>
 
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
 
                                                 <label>Select Services</label><label id="lblddswitchoptype" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select id="ddswitchoptype" name="ddswitchoptype" class="form-control border-0" onchange="DdsValidationForm()" style="-webkit-appearance:none;">
+                                                    <select id="ddswitchoptype" name="ddswitchoptype" class="form-control" onchange="DdsValidationForm()" style="-webkit-appearance:none;">
                                                         <option value="">ALL OPERATORS TYPE</option>
 
                                                         <option value="PrePaid">PrePaid</option>
@@ -548,8 +456,8 @@
                                                 </div>
 
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
-                                                <label>select operator</label><label id="lblBySwitchOperator" class="form-invalid"></label>
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
+                                                <label>Select Operator</label><label id="lblBySwitchOperator" class="form-invalid"></label>
                                                 <div class="">
                                                     <select name="BySwitchOperator" id="BySwitchOperator" onchange="DdsValidationForm()" class="for-select2 form-control">
                                                         <option value="">Select Operator</option>
@@ -557,20 +465,20 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
-                                                <label>Select Gateway</label><label id="lblddlOpusertype" class="form-invalid"></label>
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
+                                                <label>Gateway</label><label id="lblddlOpusertype" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select id="ddlOpusertype" name="ddlOpusertype" class="form-control border-0" onchange="DdsValidationForm()" style="-webkit-appearance:none;">
+                                                    <select id="ddlOpusertype" name="ddlOpusertype" class="form-control" onchange="DdsValidationForm()" style="-webkit-appearance:none;">
                                                         <option value="">Select User type</option>
                                                         <option>API</option>
                                                         <option>Machine</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select API/Port</label><label id="lblddlSwitchoptport" class="form-invalid"></label>
                                                 <div class="">
-                                                    <select id="ddlSwitchoptport" name="ddlSwitchoptport" onchange="DdsValidationForm()" class="for-select2 form-control border-0" style="-webkit-appearance:none;">
+                                                    <select id="ddlSwitchoptport" name="ddlSwitchoptport" onchange="DdsValidationForm()" class="for-select2 form-control" style="-webkit-appearance:none;">
                                                         <option value="">Select Port</option>
                                                     </select>
                                                 </div>
@@ -606,11 +514,11 @@
                                         {
 
 
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
 
                                                 <label>Select Services </label><label id="lblextracommOperatorids" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select id="extracommOperatorids" name="extracommOperatorids" class="form-control border-0" onchange="extracommValidationForm();" style="-webkit-appearance:none;">
+                                                    <select id="extracommOperatorids" name="extracommOperatorids" class="form-control" onchange="extracommValidationForm();" style="-webkit-appearance:none;">
                                                         <option value="">
                                                             ALL OPERATORS TYPE
                                                         </option>
@@ -627,10 +535,10 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-12 col-xs-12">
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select Operator</label><label id="lblextracommopnamelistbyid" class="form-invalid"></label>
                                                 <div class="">
-                                                    <select id="extracommopnamelistbyid" name="extracommopnamelistbyid" class="form-control for-select2 border-0" onchange="extracommValidationForm();" style="-webkit-appearance:none;">
+                                                    <select id="extracommopnamelistbyid" name="extracommopnamelistbyid" class="form-control for-select2" onchange="extracommValidationForm();" style="-webkit-appearance:none;">
                                                         <option value="">
                                                             Select Operator
                                                         </option>
@@ -638,21 +546,21 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
-                                                <div class="col-md-6 col-xs-12" style="padding-left:0px;">
+                                            <div class="col-md-12 col-xs-12" style="padding-left:0; padding-right:0;">
+                                                <div class="col-md-6 col-xs-12 padd-left">
                                                     <label>Minimum Amount</label><label id="lblextracommminiamount" style="color:red;"></label>
                                                     <input class="form-control" type="number" id="textextracommminiamount" name="textextracommminiamount" placeholder="Enter Minimum amount" onchange="extracommValidationForm();" />
                                                     <div id="word"></div>
                                                 </div>
-                                                <div class="col-md-6 col-xs-12" style="padding-right:0px;">
+                                                <div class="col-md-6 col-xs-12 padd-right">
                                                     <label>Maximum T/f Amount</label><label id="lblextracommmaxamount" style="color:red;"></label>
                                                     <input class="form-control" type="text" id="extracommtextmaxamount" name="extracommtextmaxamount" placeholder="Enter Maximum amount" onchange="extracommValidationForm();" />
                                                     <div id="word1"></div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 col-xs-12">
-                                                <label>Commision  in Persentage</label><label id="lblextracommmaxamount" style="color:red;"></label>
-                                                <input class="form-control" type="text" id="extracommtextCommision" name="extracommtextCommision" placeholder="Commision in Persentage" onchange="extracommValidationForm();" />
+                                            <div class="col-md-12 col-xs-12 form-group-spacing">
+                                                <label>Commission in Percentage</label><label id="lblextracommmaxamount" style="color:red;"></label>
+                                                <input class="form-control" type="text" id="extracommtextCommision" name="extracommtextCommision" placeholder="Commission in Percentage" onchange="extracommValidationForm();" />
                                                 <div id="word1"></div>
                                             </div>
                                             <div class="col-md-12 col-xs-12 button-seconddesign">
@@ -678,18 +586,28 @@
 
 
                 <!--right sider content for tabs start-->
-                <div class="col-md-8">
-                    <div class="page-header-third">
+                <div class="col-md-8 col-sm-12 col-xs-12 vm-ft-history-col">
+                    <div class="page-header-third nill-right-card vm-ft-history-panel fund-trasfer-right">
+                        <div class="nill-right-head vm-ft-history-toolbar vm-ft-history-toolbar--premium">
+                            <div class="vm-ft-history-toolbar__head">
+                                <i class="fas fa-toggle-on" aria-hidden="true"></i>
+                                <div>
+                                    <span class="vm-ft-history-toolbar__title">Switching</span>
+                                    <span class="vm-ft-history-toolbar__sub">Nill port, circle/amount/operator switching &amp; extra commission</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nill-right-body">
 
                         <div class="width100 float-left tab-contentt current nill-port" id="tab-1">
-                            <div class="width100 float-left card" style="background:#eae9e9;">
+                            <div class="width100 float-left card">
 
-                                <div class="width100 float-left nillsearch nillsearch-data" style="background:#a4a0a0;margin-bottom:10px;">
+                                <div class="width100 float-left nillsearch nillsearch-data">
 
 
                                     <div class="roww">
                                         <div class="col-md-5 col-xs-12">
-                                            <select id="operatorstypevalue" class="form-control for-select2" required onchange="operatorstype()">
+                                            <select id="operatorstypevalue" class="form-control for-select2" required onchange="operatorstype()" style="width: 100%; text-align: left;">
                                                 <option value="">ALL OPERATORS TYPE</option>
 
                                                 <option value="PrePaid">Prepaid Wise</option>
@@ -710,7 +628,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-5 col-xs-12">
-                                            <select id="listAllOp" class="form-control for-select2">
+                                            <select id="listAllOp" class="form-control for-select2" style="width: 100%; text-align: left;">
                                                 <option>Select Operator</option>
                                             </select>
                                         </div>
@@ -724,7 +642,7 @@
 
 
 
-                                <div class="body same-height " style="padding:0;">
+                                <div class="body same-height nill-table-wrap" style="padding:0;">
                                     <div id="comments" class="table-responsive" style="position:inherit;">
                                         @Html.Partial("_NILLPORTALLAMOUNTShow", Model)
                                     </div>
@@ -732,15 +650,15 @@
                             </div>
                         </div>
                         <div class="tab-contentt nill-port" id="tab-2">
-                            <div class="width100 float-left card" style="background:#eae9e9;">
+                            <div class="width100 float-left card">
 
-                                <div class="width100 float-left nillsearch nillsearch-data" style="background:#a4a0a0;margin-bottom:10px;">
+                                <div class="width100 float-left nillsearch nillsearch-data">
 
 
                                     <div class="roww">
                                         <div class="col-md-5 col-xs-12">
-                                            <select name="ddlStatetypefilter" id="ddlStatetypefilter" required="" class="form-control for-select2">
-                                                <option value="">Select Filter Type</option>
+                                            <select name="ddlStatetypefilter" id="ddlStatetypefilter" required="" class="form-control for-select2" style="width: 100%; text-align: left;">
+                                                <option value="" disabled="disabled" selected="selected">Select Filter Type</option>
                                                 <option value="API">API User Wise</option>
                                                 <option value="Retailer">Retailers Wise</option>
                                                 <option value="Statewise">State wise</option>
@@ -750,10 +668,8 @@
 
                                         </div>
                                         <div class="col-md-5 col-xs-12">
-                                            <select required="" id="ddlStateSwitchTypeSearch" name="ddlSwitchTypeSearch" class="form-control for-select2">
-                                                @*<option value="">Switch To</option>
-                                <option value="API">API</option>
-                                <option value="Machine">Machine</option>*@
+                                            <select required="" id="ddlStateSwitchTypeSearch" name="ddlSwitchTypeSearch" class="form-control for-select2" style="width: 100%;" data-placeholder="Please Select Switch">
+                                                <option value="">Please Select Switch</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2 col-xs-12 buttonsearch-second">
@@ -763,7 +679,7 @@
                                     </div>
 
                                 </div>
-                                <div class="body same-height" style="padding:0;">
+                                <div class="body same-height nill-table-wrap" style="padding:0;">
                                     <div id="SwitchStateWaise" class="table-responsive" style="position:inherit;">
                                         @Html.Partial("_SwitchStatewise", Model)
                                     </div>
@@ -772,15 +688,15 @@
                             </div>
                         </div>
                         <div class="tab-contentt nill-port" id="tab-3">
-                            <div class="width100 float-left card" style="background:#eae9e9;">
+                            <div class="width100 float-left card">
 
-                                <div class="width100 float-left nillsearch nillsearch-data" style="background:#a4a0a0;margin-bottom:10px;">
+                                <div class="width100 float-left nillsearch nillsearch-data">
 
 
                                     <div class="roww">
                                         <div class="col-md-5 col-xs-12">
-                                            <select name="ddlusertypefilter" id="ddlusertypefilter" required="" class="form-control for-select2">
-                                                <option value="">Select Filter Type</option>
+                                            <select name="ddlusertypefilter" id="ddlusertypefilter" required="" class="form-control for-select2" style="width: 100%; text-align: left;">
+                                                <option value="" disabled="disabled" selected="selected">Select Filter Type</option>
                                                 <option value="API">API User Wise</option>
                                                 <option value="Retailer">Retailer Wise</option>
                                                 <option value="GetWaywise">Geteway Wise</option>
@@ -795,10 +711,8 @@
 
                                         </div>
                                         <div class="col-md-5 col-xs-12">
-                                            <select required="" id="ddlSwitchTypeSearch" name="ddlSwitchTypeSearch" class="form-control for-select2">
-                                                @*<option value="">Switch To</option>
-                                <option value="API">API</option>
-                                <option value="Machine">Machine</option>*@
+                                            <select required="" id="ddlSwitchTypeSearch" name="ddlSwitchTypeSearch" class="form-control for-select2" style="width: 100%;" data-placeholder="Please Select Switch">
+                                                <option value="">Please Select Switch</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2 col-xs-12 buttonsearch-second">
@@ -811,7 +725,7 @@
 
 
 
-                                <div class="body same-height" style="padding:0;">
+                                <div class="body same-height nill-table-wrap" style="padding:0;">
                                     <div id="ListByAmount" class="table-responsive" style="position:inherit;">
                                         @Html.Partial("_specialamount", Model)
                                     </div>
@@ -819,15 +733,15 @@
                             </div>
                         </div>
                         <div class="tab-contentt nill-port" id="tab-4">
-                            <div class="width100 float-left card" style="background:#eae9e9;">
+                            <div class="width100 float-left card">
 
-                                <div class="width100 float-left nillsearch nillsearch-data" style="background:#a4a0a0;margin-bottom:10px;">
+                                <div class="width100 float-left nillsearch nillsearch-data">
 
 
                                     <div class="roww">
                                         <div class="col-md-5 col-xs-12">
-                                            <select name="ddlopusertypeSearch" id="ddlopusertypeSearch" required="" class="form-control for-select2">
-                                                <option value="">Select Filter Type</option>
+                                            <select name="ddlopusertypeSearch" id="ddlopusertypeSearch" required="" class="form-control for-select2" style="width: 100%; text-align: left;">
+                                                <option value="" disabled="disabled" selected="selected">Select Filter Type</option>
                                                 <option value="API">API User Wise</option>
                                                 <option value="Retailer">Retailer Wise</option>
                                                 <option value="GetWaywise">Geteway Wise</option>
@@ -842,7 +756,8 @@
 
                                         </div>
                                         <div class="col-md-5 col-xs-12">
-                                            <select required="" id="ddlopSwitchTypeSearch" name="ddlopSwitchTypeSearch" class="form-control for-select2">
+                                            <select required="" id="ddlopSwitchTypeSearch" name="ddlopSwitchTypeSearch" class="form-control for-select2" style="width: 100%;" data-placeholder="Please Select Switch">
+                                                <option value="">Please Select Switch</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2 col-xs-12 buttonsearch-second">
@@ -855,7 +770,7 @@
 
 
 
-                                <div class="body same-height " style="padding:0;">
+                                <div class="body same-height nill-table-wrap" style="padding:0;">
                                     <div id="ListByOperator" class="table-responsive" style="position:inherit;">
                                         @Html.Partial("_Recharge_switch", Model)
                                     </div>
@@ -863,14 +778,14 @@
                             </div>
                         </div>
                         <div class="tab-contentt nill-port" id="tab-5">
-                            <div class="width100 float-left card" style="background:#eae9e9;">
+                            <div class="width100 float-left card">
 
-                                <div class="width100 float-left nillsearch nillsearch-data" style="background:#a4a0a0;margin-bottom:10px;">
+                                <div class="width100 float-left nillsearch nillsearch-data">
 
 
                                     <div class="roww">
                                         <div class="col-md-5 col-xs-12">
-                                            <select id="operatorstypevalue" class="form-control for-select2" required onchange="operatorstype()">
+                                            <select id="operatorstypevalue" class="form-control for-select2" required onchange="operatorstype()" style="width: 100%; text-align: left;">
                                                 <option value="">ALL OPERATORS TYPE</option>
 
                                                 <option value="PrePaid">Prepaid Wise</option>
@@ -891,7 +806,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-5 col-xs-12">
-                                            <select id="listAllOp" class="form-control for-select2">
+                                            <select id="listAllOp" class="form-control for-select2" style="width: 100%; text-align: left;">
                                                 <option>Select Operator</option>
                                             </select>
                                         </div>
@@ -905,7 +820,7 @@
 
 
 
-                                <div class="body same-height " style="padding:0;">
+                                <div class="body same-height nill-table-wrap" style="padding:0;">
                                     <div id="Extracommisions" class="table-responsive" style="position:inherit;">
                                         @Html.Partial("_ExtraCommision_report")
                                     </div>
@@ -914,6 +829,7 @@
                         </div>
 
                     </div>
+                        </div><!-- /.nill-right-body -->
                 </div>
                 <!--right sider content for tabs end-->
             </div>
@@ -933,75 +849,51 @@
 
 </section>
 <!--Add Nill Com  modal-->
-<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+<div class="modal fade oi-modern-modal" id="defaultModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Add Nill Com Setting</h4>
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Add Nill Com Setting</h4>
+                <button type="button" class="btn waves-effect" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             @using (Html.BeginForm("NillCom", "Home", FormMethod.Post))
             {
                 <div class="modal-body" style="margin-top:0px;">
-                    <div class="body">
-                        <form>
+                    <div class="row vm-modal-row">
+                        <div class="col-md-12 col-xs-12 vm-modal-group">
+                            <label>Operator Name</label>
+                            <select id="Operator" name="Operator" class="form-control" required>
+                                <option value="">ALL OPERATORS TYPE</option>
 
-                            <div class="row clearfix">
-                                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                    <label for="email_address_2">Operator Name</label>
-                                </div>
-                                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <select id="Operator" name="Operator" class="form-control" required>
-                                                <option value="">ALL OPERATORS TYPE</option>
-
-                                                <option value="PrePaid">PrePaid</option>
-                                                <option value="PostPaid">PostPaid</option>
-                                                <option value="Electricity">Electricity</option>
-                                                <option value="Landline">Landline</option>
-                                                <option value="Broadband">Broadband</option>
-                                                <option value="Water">Water</option>
-                                                <option value="Gas">Gas</option>
-                                            </select>
-                                            @*@Html.DropDownList("Operator", ViewBag.Operator as SelectList, "ALL OPERATORS", new { id = "Operator", @class = "form-control", @required = "required" })*@
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row clearfix">
-                                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                    <label for="email_address_2">Minimum Amount</label>
-                                </div>
-                                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            @Html.TextBox("txtminvalue", "", new { @placeholder = "Enter Minimum Value", @required = "required", @class = "form-control", onkeypress = "return isNumber(event)" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row clearfix">
-                                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                    <label for="email_address_2">Maximum&nbsp;Amount</label>
-                                </div>
-                                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            @Html.TextBox("txtmaxvalue", "", new { @placeholder = "Enter Maximum Value", @required = "required", @class = "form-control", onkeypress = "return isNumber(event)" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-right: 12px; height:34px;">
-                                    <span style="top:-2px;color:black;">Save Change</span>
-                                </button>
-                                <button type="button" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-left: -3px; height:34px;" data-dismiss="modal">
-                                    <span style="top:-2px;color:black;">Close</span>
-                                </button>
-                            </div>
-                        </form>
+                                <option value="PrePaid">PrePaid</option>
+                                <option value="PostPaid">PostPaid</option>
+                                <option value="Electricity">Electricity</option>
+                                <option value="Landline">Landline</option>
+                                <option value="Broadband">Broadband</option>
+                                <option value="Water">Water</option>
+                                <option value="Gas">Gas</option>
+                            </select>
+                            @*@Html.DropDownList("Operator", ViewBag.Operator as SelectList, "ALL OPERATORS", new { id = "Operator", @class = "form-control", @required = "required" })*@
+                        </div>
                     </div>
+                    <div class="row vm-modal-row">
+                        <div class="col-md-6 col-xs-12 vm-modal-group">
+                            <label>Minimum Amount</label>
+                            @Html.TextBox("txtminvalue", "", new { @placeholder = "Enter Minimum Value", @required = "required", @class = "form-control", onkeypress = "return isNumber(event)" })
+                        </div>
+                        <div class="col-md-6 col-xs-12 vm-modal-group">
+                            <label>Maximum&nbsp;Amount</label>
+                            @Html.TextBox("txtmaxvalue", "", new { @placeholder = "Enter Maximum Value", @required = "required", @class = "form-control", onkeypress = "return isNumber(event)" })
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn fullbodydycolorbg waves-effect">
+                        <i class="fa fa-check" aria-hidden="true"></i>&nbsp;Save Change
+                    </button>
+                    <button type="button" class="btn btn-second waves-effect" data-dismiss="modal">
+                        Close
+                    </button>
                 </div>
             }
 
@@ -1009,65 +901,44 @@
     </div>
 </div>
 <!--Edit Nill Com  modal-->
-<div class="modal fade" id="defaultModal1" tabindex="-1" role="dialog">
+<div class="modal fade oi-modern-modal" id="defaultModal1" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:white;">Edit Nill Com Setting</h4>
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Edit Nill Com Setting</h4>
+                <button type="button" class="btn waves-effect" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
-            @using (Html.BeginForm("Edit_NillCom", "Home", FormMethod.Post))
+            @using (Html.BeginForm("Edit_NillCom", "Home", FormMethod.Post, new { id = "form_validation" }))
             {
                 <div class="modal-body" style="margin-top:0px;">
-                    <div class="body">
-                        <form id="form_validation" method="POST">
-                            <div class="row clearfix">
-                                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                    <label for="email_address_2">Operator Name</label>
-                                </div>
-                                <input id="txtrchid" name="txtrchid" class="form-control" style="display:none;" />
-                                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            @Html.TextBox("txtoptname", "", new { @placeholder = "Enter opt name", @required = "required", @class = "form-control", @readonly = "readonly" })
-                                            @Html.TextBox("txtid", "", new { style = "display:none;" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row clearfix">
-                                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                    <label for="email_address_2">Minimum Amount</label>
-                                </div>
-                                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            @Html.TextBox("txtmin", "", new { @placeholder = "Enter Min Value", @class = "form-control", @required = "required", onkeypress = "return isNumber(event)" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @*<div class="row clearfix">
-                                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                        <label for="email_address_2">Maximum&nbsp;Amount</label>
-                                    </div>
-                                    <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                @Html.TextBox("txtmax", "", new { @placeholder = "Enter Max Value", @class = "form-control", @required = "required", onkeypress = "return isNumber(event)" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>*@
-                            <div class="modal-footer">
-                                <button type="submit" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-right: 12px; height:34px;">
-                                    <span style="top:-2px;color:black;">Save Change</span>
-                                </button>
-                                <button type="button" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-left: -3px; height:34px;" data-dismiss="modal">
-                                    <span style="top:-2px;color:black;">Close</span>
-                                </button>
-                            </div>
-                        </form>
+                    <input id="txtrchid" name="txtrchid" class="form-control" style="display:none;" />
+                    <div class="row vm-modal-row">
+                        <div class="col-md-12 col-xs-12 vm-modal-group">
+                            <label>Operator Name</label>
+                            @Html.TextBox("txtoptname", "", new { @placeholder = "Enter opt name", @required = "required", @class = "form-control", @readonly = "readonly" })
+                            @Html.TextBox("txtid", "", new { style = "display:none;" })
+                        </div>
                     </div>
+                    <div class="row vm-modal-row">
+                        <div class="col-md-12 col-xs-12 vm-modal-group">
+                            <label>Minimum Amount</label>
+                            @Html.TextBox("txtmin", "", new { @placeholder = "Enter Min Value", @class = "form-control", @required = "required", onkeypress = "return isNumber(event)" })
+                        </div>
+                    </div>
+                    @*<div class="row vm-modal-row">
+                            <div class="col-md-12 col-xs-12 vm-modal-group">
+                                <label>Maximum&nbsp;Amount</label>
+                                @Html.TextBox("txtmax", "", new { @placeholder = "Enter Max Value", @class = "form-control", @required = "required", onkeypress = "return isNumber(event)" })
+                            </div>
+                        </div>*@
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn fullbodydycolorbg waves-effect">
+                        <i class="fa fa-check" aria-hidden="true"></i>&nbsp;Save Change
+                    </button>
+                    <button type="button" class="btn btn-second waves-effect" data-dismiss="modal">
+                        Close
+                    </button>
                 </div>
             }
 
@@ -1205,7 +1076,7 @@
                 success: function (data) {
 
                     $('#listAllOp').empty()
-                   $('#listAllOp').append('<option selected="selected" value="">Please select Operator</option>');
+                   $('#listAllOp').append('<option selected="selected" value="">Select Operator</option>');
                     $.each(data, function (data, item) {
             $('#listAllOp').append($('<option></option>').text(item.Text).val(item.Value));
 
@@ -1276,7 +1147,7 @@
 
     $('#btnByAMountSearch').click(function () {
         var usertype = $('#ddlusertypefilter').val();
-        var SwitchTypes =$('#ddlSwitchTypeSearch').val();
+        var SwitchTypes = $('#ddlSwitchTypeSearch').val() || '';
         $('#btnByAMountSearch').text('Loading...');
          $('#textminiamount').prop('disabled', true);
           $.ajax({
@@ -1307,7 +1178,7 @@
                 success: function (data) {
 
                     $('#ddluserList').empty()
-                   $('#ddluserList').append('<option selected="selected" value="">Please select User</option>');
+                   $('#ddluserList').append('<option selected="selected" value="" disabled="disabled">Please select User</option>');
                     $.each(data, function (data, item) {
             $('#ddluserList').append($('<option></option>').text(item.Text).val(item.Value));
 
@@ -1347,7 +1218,7 @@
                 success: function (data) {
 
                     $('#ByAmountOperator').empty()
-                   $('#ByAmountOperator').append('<option selected="selected" value="">Please select Operator</option>');
+                   $('#ByAmountOperator').append('<option selected="selected" value="" disabled="disabled">Please select Operator</option>');
                    $('#ByAmountOperator').append('<option selected="selected" value="ALL">ALL</option>');
                     $.each(data, function (data, item) {
             $('#ByAmountOperator').append($('<option></option>').text(item.Text).val(item.Value));
@@ -1425,7 +1296,7 @@
 
         var filtertype = $('#ddlusertypefilter').val();
         $('#ddlSwitchTypeSearch').empty();
-          $('#ddlSwitchTypeSearch').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
+          $('#ddlSwitchTypeSearch').append('<option selected="selected" value="">Loading.....</option>')
 
         if (filtertype == "GetWaywise") {
             var data = [
@@ -1555,8 +1426,8 @@
      $('#ddlStatetypefilter').change(function () {
 
         var filtertype = $('#ddlStatetypefilter').val();
-        $('#ddlSwitchTypeSearch').empty();
-          $('#ddlSwitchTypeSearch').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
+        $('#ddlStateSwitchTypeSearch').empty();
+          $('#ddlStateSwitchTypeSearch').append('<option selected="selected" value="">Loading.....</option>')
 
         if (filtertype == "Statewise") {
 
@@ -1628,7 +1499,7 @@
 
       $('#btnByOPSearch').click(function () {
         var usertype = $('#ddlopusertypeSearch').val();
-        var SwitchTypes =$('#ddlopSwitchTypeSearch').val();
+        var SwitchTypes = $('#ddlopSwitchTypeSearch').val() || '';
         $('#btnByOPSearch').text('Loading...');
          $('#textminiamount').prop('disabled', true);
           $.ajax({
@@ -1653,7 +1524,7 @@
 
         var filtertype = $('#ddlopusertypeSearch').val();
         $('#ddlopSwitchTypeSearch').empty();
-          $('#ddlopSwitchTypeSearch').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
+          $('#ddlopSwitchTypeSearch').append('<option selected="selected" value="">Loading.....</option>')
 
         if (filtertype == "GetWaywise") {
             var data = [
@@ -1764,7 +1635,7 @@
             success: function (data) {
 
                 $('#ddlSwitchoptport').empty()
-                $('#ddlSwitchoptport').append('<option selected="selected" value="">Please select Port</option>');
+                $('#ddlSwitchoptport').append('<option selected="selected" value="" disabled="disabled">Please select Port</option>');
                 $.each(data, function (data, item) {
                     $('#ddlSwitchoptport').append($('<option></option>').text(item.Text).val(item.Value));
 
@@ -1792,7 +1663,7 @@
                 success: function (data) {
 
                     $('#dUrlSwitchOpuserlist').empty()
-                   $('#ddSwitchOpuserlist').append('<option selected="selected" value="">Please select User</option>');
+                   $('#ddSwitchOpuserlist').append('<option selected="selected" value="" disabled="disabled">Please select User</option>');
                     $.each(data, function (data, item) {
             $('#ddSwitchOpuserlist').append($('<option></option>').text(item.Text).val(item.Value));
 
@@ -1821,7 +1692,7 @@
                 success: function (data) {
 
                     $('#BySwitchOperator').empty()
-                   $('#BySwitchOperator').append('<option selected="selected" value="">Please select Operator</option>');
+                   $('#BySwitchOperator').append('<option selected="selected" value="" disabled="disabled">Please select Operator</option>');
                     $.each(data, function (data, item) {
             $('#BySwitchOperator').append($('<option></option>').text(item.Text).val(item.Value));
 
@@ -1842,14 +1713,14 @@
 <script>
 
                                 $('#btnByStateSearch').click(function () {
-                                var usertype = $('#ddlStatetypefilter').val();
-                                var SwitchTypes =$('#ddlStateSwitchTypeSearch').val();
-                                $('#btnByStateSearch').text('Loading...');
+        var usertype = $('#ddlStatetypefilter').val();
+        var SwitchTypes = $('#ddlStateSwitchTypeSearch').val() || '';
+        $('#btnByStateSearch').text('Loading...');
 
-                                  $.ajax({
-                                        type: 'POST',
-                                        url: '@Url.Action("SearchStatewiseswitch","Home")',
-                                        data: {usertype:usertype,SwitchTypes:SwitchTypes },
+          $.ajax({
+                type: 'POST',
+                url: '@Url.Action("SearchStatewiseswitch","Home")',
+                data: {usertype:usertype,SwitchTypes:SwitchTypes },
                                       success: function (data) {
 
                                           $('#btnByStateSearch').text('Search');
@@ -1874,9 +1745,9 @@
                                            data: { utype: $('#ddlstateusertype').val() },
                                         success: function (data) {
 
-                                            $('#ddlstateuserList').empty()
-                                           $('#ddlstateuserList').append('<option selected="selected" value="">Please select User</option>');
-                                            $.each(data, function (data, item) {
+                    $('#ddlstateuserList').empty()
+                   $('#ddlstateuserList').append('<option selected="selected" value="" disabled="disabled">Please select User</option>');
+                    $.each(data, function (data, item) {
                                     $('#ddlstateuserList').append($('<option></option>').text(item.Text).val(item.Value));
 
                                   })
@@ -2121,7 +1992,7 @@ function () {
                 success: function (data) {
                     
                     $('#extracommopnamelistbyid').empty()
-                    $('#extracommopnamelistbyid').append('<option selected="selected" value="">Please select Operator</option>');
+                    $('#extracommopnamelistbyid').append('<option selected="selected" value="" disabled="disabled">Please select Operator</option>');
                     $.each(data, function (data, item) {
                         $('#extracommopnamelistbyid').append($('<option></option>').text(item.Text).val(item.Value));
 
@@ -2239,6 +2110,7 @@ function () {
                 }
             }
         }
+        return true;
     }
 </script>
 
@@ -2345,14 +2217,20 @@ function () {
 <script>
 
 
-    $('ul#tabs li').click(function () {
+    $('ul#tabs li').click(function (e) {
+        e.preventDefault();
         var tab_id = $(this).attr('data-tab');
+        var target_pane = $(this).find('a').attr('href');
 
-        $('ul#tabs li').removeClass('current');
+        $('ul#tabs li').removeClass('current active');
         $('.tab-contentt').removeClass('current');
+        $('.nillcom-form .tab-pane').removeClass('in active');
 
-        $(this).addClass('current');
+        $(this).addClass('current active');
         $("#" + tab_id).addClass('current');
+        if (target_pane) {
+            $(target_pane).addClass('in active');
+        }
     })
 
 
@@ -2395,6 +2273,7 @@ function () {
                 }
             }
         }
+        return true;
     }
 </script>
 
@@ -2452,6 +2331,7 @@ function () {
                 }
             }
         }
+        return true;
     }
 </script>
 
@@ -2506,6 +2386,7 @@ function () {
                 }
             }
         }
+        return true;
     }
 </script>
 
@@ -2526,7 +2407,7 @@ function () {
                success: function (data) {
                    
                 $('#ddlPT').empty()
-                   $('#ddlPT').append('<option selected="selected" value="">select API</option>');
+                   $('#ddlPT').append('<option selected="selected" value="" disabled="disabled">select API</option>');
                    var datasss = data.datas;
                    console.log(datasss);
 
@@ -2605,12 +2486,16 @@ function () {
                 }
             }
         }
-
+        return true;
     }
 </script>
 
 @*=============for loader==========*@
 <script>
+    function Failmessage() {
+        alert("Something went wrong. Please try again.");
+    }
+
     $('.custom-loading').on('click', function () {
         var $this = $(this);
         $this.button('loading');

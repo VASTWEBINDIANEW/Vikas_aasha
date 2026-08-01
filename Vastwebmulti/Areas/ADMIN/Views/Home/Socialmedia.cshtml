@@ -2,586 +2,561 @@
     ViewBag.Title = "Socialmedia";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
-<script src="~/Ckeditor/ckeditor.js"></script>
-<script src="~/Ckeditor/adapters/jquery.js"></script>
-<script type="text/javascript">
-    CKEDITOR.replace('txtedit');
-</script>
 
-<style>
-   /* new css */
-    .folower-setting {
-        background: #fff;
-    }
-    .bread-same-all-page li {
-        margin: 6px 0px;
-    }
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-   
-   /* new css */
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=25" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=29" rel="stylesheet" />
 
+<section class="content saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium saas-upload-apk-page saas-social-media-page">
 
-    .socialmedia-page .folower-setting .custom-district::after, .custom-district::after {
-        display: none;
-    }
+    <div class="container-fluid vm-ft-page-shell">
 
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-
-    @@media screen and (max-width:992px){
-        .folower-setting {margin-bottom: 15px;}
-    }
-
-    @@media only screen and (max-width:650px){
-
-        .bread-same-all-page {
-            display: block;
-        }
-        .four-noneclass-admin-only {
-            width: 100%;
-            float: left;
-        }
-        .sitemap-button button {
-            margin: 3px 0;
-        }
-
-
-    }
-
-
-</style>
-
-<section class="content">
-    <div class="container-fluid socialmedia-page">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Social Media</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Social Media</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="page-header-third pageheader-second-third four-noneclass-admin-only">
-            <div class="bread-same-all-page breadsameall-second">
-                <ul class="four-noneclass-admin-only" style="margin:0px;">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        <a href="@Url.Action("Dashboard", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                            Basic&nbsp;Setting
-                        </a>&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Social Media
-                    </li>
-                </ul>
-                <div class="sitemap-button setmap-third-responsive">
-                    <button class="fullbodydycolorbg white-back-bor-third" data-toggle="modal" data-target="#defaultModal">Sitemap </button>
-                    <button class="fullbodydycolorbg white-back-bor-third" data-toggle="modal" data-target="#defaultModal1">Help </button>
-                    <button class="fullbodydycolorbg white-back-bor-third" data-toggle="modal" data-target="#defaultModal2">Term&nbsp;&&nbsp;Condition </button>
-                    <button class="fullbodydycolorbg white-back-bor-third" data-toggle="modal" data-target="#defaultModal3">Privacy</button>
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium vm-ft-apk-toolbar">
+            <div class="vm-ft-page-hero">
+                <div>
+                    <ol class="vm-ft-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li><a href="@Url.Action("Dashboard", "Home")#setting">Basic Setting</a></li>
+                        <li>Social Media</li>
+                    </ol>
                 </div>
+            </div>
+            <div class="vm-ft-apk-toolbar-actions">
+                <button type="button" class="vm-ft-apk-toolbar-btn" data-toggle="modal" data-target="#defaultModal"><i class="fas fa-sitemap" aria-hidden="true"></i> Sitemap</button>
+                <button type="button" class="vm-ft-apk-toolbar-btn" data-toggle="modal" data-target="#defaultModal1"><i class="fas fa-circle-question" aria-hidden="true"></i> Help</button>
+                <button type="button" class="vm-ft-apk-toolbar-btn" data-toggle="modal" data-target="#defaultModal2"><i class="fas fa-file-contract" aria-hidden="true"></i> T&amp;C</button>
+                <button type="button" class="vm-ft-apk-toolbar-btn" data-toggle="modal" data-target="#defaultModal3"><i class="fas fa-shield-halved" aria-hidden="true"></i> Privacy</button>
+            </div>
+            <div class="vm-ft-search-wrap vm-ft-apk-page-search">
+                <input class="form-control" type="text" value="" id="txtSocialSearch" placeholder="Search..." autocomplete="off" />
             </div>
         </div>
 
+        <div class="col-md-12 vm-ft-layout-wrap">
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full vm-ft-layout--split-equal">
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="page-header-third folower-setting current-tab-seconddesign tabcurrent-seconddesign button-seconddesign input-border-third">
-                    <h2>Followers Setting</h2>
-
-                    <fieldset>
-                        <legend>Select Social Media</legend>
-                        <div class="custom-district aapearnce-noneclass apperancenone-third">
-                            @Html.DropDownList("ddlSocial", new List<SelectListItem>
-                                {
-                                   new SelectListItem{ Text="Select Media",Value="",},
-                                   new SelectListItem{ Text="Facebook",Value="Facebook",},
-                                   new SelectListItem{Text="Instagram",Value="Instagram"},
-                                   new SelectListItem{Text="Youtube",Value="Youtube"},
-                                   new SelectListItem{Text="Twitter",Value="Twitter"},
-                                   new SelectListItem{Text="Pinterest",Value="Pinterest"},
-                                   new SelectListItem{Text="LinkedIn",Value="LinkedIn"},
-                                   new SelectListItem{Text="Blogger",Value="Blogger"},
-                                   new SelectListItem{Text="Tumblr",Value="Tumblr"}
-                                 }, new { @required = "required" })
+                <div class="col-md-6 col-sm-12 vm-ft-apk-col">
+                    <div class="fund-trasfer-left vm-ft-form-card">
+                        <div class="vm-ft-form-card-header">
+                            <div class="vm-ft-form-card-header__icon" aria-hidden="true">
+                                <i class="fas fa-share-nodes"></i>
+                            </div>
+                            <div>
+                                <span class="vm-ft-form-card-header__title">Followers Setting</span>
+                                <span class="vm-ft-form-card-header__sub">Add and manage social media profile links</span>
+                            </div>
                         </div>
-                        <input type="url" id="urlLink" placeholder="Enter Social Media Link" />
-                        <button class="fullbodydycolorbg btn-first" onclick="SaveSocialAc()"><span style="color:#fff;position:relative;">Save Link</span></button>
-                    </fieldset>
-                    <div class="social-history table-responsive">
-                        <table id="social-list" class="table table-bordered table-striped table-hover" style="width:100%;">
-                            <thead>
-                                <tr>
-                                    <th>Media&nbsp;Type</th>
-                                    <th>Social Media Link</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (ViewBag.linkcontact.Count > 0)
-                                {
-                                    foreach (var item in ViewBag.linkcontact)
-                                    {
-                                        <tr>
-                                            <td>@item.FooterType</td>
-                                            <td>@item.FooterLink</td>
-                                            <td>
-                                                <button onclick="delSocialAc('@item.Id')"><img src="../../MainFrontDesign/images/delete.svg" style="width:16px;margin-top:-1px;"></button>
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
 
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="page-header-third Badges-setting folower-setting current-tab-seconddesign tabcurrent-seconddesign button-seconddesign input-border-third">
-                    <h2>Badges Setting</h2>
-                    <fieldset>
-                        <legend>Select Badges</legend>
-                        <div class="custom-district apperancenone-third">
-                            @Html.DropDownList("ddlBadges", new List<SelectListItem>
-                                    {
-                                       new SelectListItem{ Text="Select Media",Value="",},
-                                       new SelectListItem{ Text="Appfutura",Value="Appfutura",},
-                                       new SelectListItem{Text="Applancher",Value="Applancher"},
-                                       new SelectListItem{Text="Badush",Value="Badush"},
-                                       new SelectListItem{Text="Extract",Value="Extract"},
-                                       new SelectListItem{Text="Freelancer",Value="Freelancer"},
-                                       new SelectListItem{Text="Good-firms",Value="Good-firms"},
-                                       new SelectListItem{Text="Mobile-app",Value="Mobile-app"},
-                                       new SelectListItem{Text="Trustpilot",Value="Trustpilot"},
-                                     }, new { @required = "required" })
+                        <div class="width100 float-left tabcurrent-seconddesign input-border-third">
+                            <div class="fund-transfer-form vm-ft-apk-form">
+                                <div class="col-md-12 col-sm-12 col-xs-12 vm-ft-apk-section" data-apk-search="followers social media facebook instagram twitter">
+                                    <span class="vm-ft-apk-section__title">Add Social Link</span>
+                                    <label for="ddlSocial">Select Social Media</label>
+                                    <div>
+                                        @Html.DropDownList("ddlSocial", new List<SelectListItem>
+                                        {
+                                           new SelectListItem{ Text="Select Media", Value="" },
+                                           new SelectListItem{ Text="Facebook", Value="Facebook" },
+                                           new SelectListItem{ Text="Instagram", Value="Instagram" },
+                                           new SelectListItem{ Text="Youtube", Value="Youtube" },
+                                           new SelectListItem{ Text="Twitter", Value="Twitter" },
+                                           new SelectListItem{ Text="Pinterest", Value="Pinterest" },
+                                           new SelectListItem{ Text="LinkedIn", Value="LinkedIn" },
+                                           new SelectListItem{ Text="Blogger", Value="Blogger" },
+                                           new SelectListItem{ Text="Tumblr", Value="Tumblr" }
+                                         }, new { @class = "form-control", required = "required" })
+                                    </div>
+                                    <label for="urlLink">Social Media Link</label>
+                                    <div>
+                                        <input type="url" id="urlLink" class="form-control" placeholder="Enter Social Media Link" autocomplete="off" />
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign vm-ft-apk-actions">
+                                        <div>
+                                            <button type="button" class="fullbodydycolorbg btn-first" onclick="SaveSocialAc()">
+                                                <span style="color:#fff;position:relative;"><i class="fas fa-save" aria-hidden="true"></i> Save Link</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="vm-ft-apk-status-panel" data-apk-search="social media list history">
+                                <div class="vm-ft-apk-status-panel__head">
+                                    <span class="vm-ft-apk-status-panel__title">Social Media Links</span>
+                                </div>
+                                <div class="vm-ft-table-wrap vm-ft-apk-table-wrap">
+                                    <table id="social-list" class="table third-design-table vm-ft-apk-status-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Media Type</th>
+                                                <th>Social Media Link</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (ViewBag.linkcontact != null && ViewBag.linkcontact.Count > 0)
+                                            {
+                                                foreach (var item in ViewBag.linkcontact)
+                                                {
+                                                    <tr class="tr">
+                                                        <td>@item.FooterType</td>
+                                                        <td><span class="vm-ft-apk-value">@item.FooterLink</span></td>
+                                                        <td>
+                                                            <button type="button" class="button-third-design vm-ft-apk-action-btn vm-ft-apk-del-btn" onclick="delSocialAc('@item.Id')" title="Delete">
+                                                                <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        <input type="url" id="BadgeLink" placeholder="Enter Badges Link" />
-                        <button class="fullbodydycolorbg btn-first" onclick="SaveBadge()"><span style="color:#fff;position:relative;">Save Link</span></button>
-                    </fieldset>
-                    <div class="social-history">
-                        <table id="Badge-list" class="table table-bordered table-striped table-hover" style="width:100%;">
-                            <thead>
-                                <tr>
-                                    <th>Badges&nbsp;Type</th>
-                                    <th>Badges Link</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (ViewBag.Badges.Count > 0)
-                                {
-                                    foreach (var item in ViewBag.Badges)
-                                    {
-                                        <tr>
-                                            <td>@item.BadgeType</td>
-                                            <td>@item.Url_Link</td>
-                                            <td>
-                                                <button onclick="delBadge('@item.Id')"><img src="../../MainFrontDesign/images/delete.svg" style="width:16px;"></button>
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
                     </div>
                 </div>
+
+                <div class="col-md-6 col-sm-12 vm-ft-apk-col">
+                    <div class="fund-trasfer-left vm-ft-form-card">
+                        <div class="vm-ft-form-card-header">
+                            <div class="vm-ft-form-card-header__icon vm-ft-form-card-header__icon--wl" aria-hidden="true">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <div>
+                                <span class="vm-ft-form-card-header__title">Badges Setting</span>
+                                <span class="vm-ft-form-card-header__sub">Add and manage review platform badge links</span>
+                            </div>
+                        </div>
+
+                        <div class="width100 float-left tabcurrent-seconddesign input-border-third">
+                            <div class="fund-transfer-form vm-ft-apk-form">
+                                <div class="col-md-12 col-sm-12 col-xs-12 vm-ft-apk-section" data-apk-search="badges appfutura trustpilot freelancer">
+                                    <span class="vm-ft-apk-section__title">Add Badge Link</span>
+                                    <label for="ddlBadges">Select Badges</label>
+                                    <div>
+                                        @Html.DropDownList("ddlBadges", new List<SelectListItem>
+                                        {
+                                           new SelectListItem{ Text="Select Media", Value="" },
+                                           new SelectListItem{ Text="Appfutura", Value="Appfutura" },
+                                           new SelectListItem{ Text="Applancher", Value="Applancher" },
+                                           new SelectListItem{ Text="Badush", Value="Badush" },
+                                           new SelectListItem{ Text="Extract", Value="Extract" },
+                                           new SelectListItem{ Text="Freelancer", Value="Freelancer" },
+                                           new SelectListItem{ Text="Good-firms", Value="Good-firms" },
+                                           new SelectListItem{ Text="Mobile-app", Value="Mobile-app" },
+                                           new SelectListItem{ Text="Trustpilot", Value="Trustpilot" }
+                                         }, new { @class = "form-control", required = "required" })
+                                    </div>
+                                    <label for="BadgeLink">Badges Link</label>
+                                    <div>
+                                        <input type="url" id="BadgeLink" class="form-control" placeholder="Enter Badges Link" autocomplete="off" />
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign vm-ft-apk-actions">
+                                        <div>
+                                            <button type="button" class="fullbodydycolorbg btn-first" onclick="SaveBadge()">
+                                                <span style="color:#fff;position:relative;"><i class="fas fa-save" aria-hidden="true"></i> Save Link</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="vm-ft-apk-status-panel" data-apk-search="badges list history">
+                                <div class="vm-ft-apk-status-panel__head">
+                                    <span class="vm-ft-apk-status-panel__title">Badge Links</span>
+                                </div>
+                                <div class="vm-ft-table-wrap vm-ft-apk-table-wrap">
+                                    <table id="Badge-list" class="table third-design-table vm-ft-apk-status-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Badges Type</th>
+                                                <th>Badges Link</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (ViewBag.Badges != null && ViewBag.Badges.Count > 0)
+                                            {
+                                                foreach (var item in ViewBag.Badges)
+                                                {
+                                                    <tr class="tr">
+                                                        <td>@item.BadgeType</td>
+                                                        <td><span class="vm-ft-apk-value">@item.Url_Link</span></td>
+                                                        <td>
+                                                            <button type="button" class="button-third-design vm-ft-apk-action-btn vm-ft-apk-del-btn" onclick="delBadge('@item.Id')" title="Delete">
+                                                                <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-
-
 </section>
 
-
-<!--- site map content editor-------------->
-
-<div class="modal fade sitemap-editor" id="defaultModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div class="modal fade saas-admin-modal vm-sm-modal" id="defaultModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg vm-sm-modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Add Sitemap Content</h4>
-                <button type="button" class="btn bg-grey waves-effect" style="float:right; height:auto;padding: 0px;background-color: #f5f5f5 !important;padding: 0px;border:0px;" data-dismiss="modal">
-                    <i class="fa fa-times fulltextbodycolor fullbodydycolorbg" aria-hidden="true" style="top: 0px;"></i>
-                </button>
+            <div class="modal-header saas-admin-modal-header accent-slate">
+                <div class="saas-admin-modal-head-main">
+                    <span class="saas-admin-modal-icon"><i class="fas fa-sitemap" aria-hidden="true"></i></span>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title">Add Sitemap Content</h4>
+                        <span class="saas-admin-modal-subtitle">Manage sitemap page links for your website footer</span>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
             </div>
-            <div class="modal-body" style="margin-top:0px;">
-                <div class="body">
-                    <form>
-
-                        <div class="row clearfix">
-
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group folower-setting" style="height: auto;margin-bottom: 0px;">
-                                    <fieldset>
-                                        <legend>Select Badges</legend>
-                                        <div class="custom-district">
-                                            <select>
-                                                <option>Help </option>
-                                                <option>Privacy</option>
-                                                <option>T&nbsp;&&nbsp;C</option>
-                                                <option>Login</option>
-
-                                            </select>
-                                        </div>
-                                        <input type="text" placeholder="Enter Badges Link" />
-                                        <button class="fullbodydycolorbg">Save Link</button>
-                                    </fieldset>
-                                    <div class="social-history table-responsive">
-                                        <table class="table table-bordered table-striped table-hover" style="width:100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th>Badges&nbsp;Type</th>
-                                                    <th>Badges Link</th>
-                                                    <th>Delete</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body">
+                <div class="vm-sm-modal-panel">
+                    <span class="vm-sm-modal-panel__title">Sitemap Entry</span>
+                    <div class="vm-sm-modal-grid">
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="smPageType">Page Type</label>
+                            <select id="smPageType" class="form-control">
+                                <option>Help</option>
+                                <option>Privacy</option>
+                                <option>T &amp; C</option>
+                                <option>Login</option>
+                            </select>
                         </div>
-
-                    </form>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="smPageLink">Page Link</label>
+                            <input type="text" id="smPageLink" class="form-control" placeholder="Enter page link" autocomplete="off" />
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="saas-admin-modal-footer vm-sm-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Cancel</button>
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--success"><i class="fas fa-save" aria-hidden="true"></i> Save Link</button>
+            </div>
         </div>
     </div>
 </div>
 
-<!--- Help content editor-------------->
-
-<div class="modal fade sitemap-editor" id="defaultModal1" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div class="modal fade saas-admin-modal vm-sm-modal vm-sm-modal--editor" id="defaultModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg vm-sm-modal-dialog vm-sm-modal-dialog--editor" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Add Help Content</h4>
-                <button type="button" class="btn bg-grey waves-effect" style="float:right; height:auto;padding: 0px;background-color: #f5f5f5 !important;padding: 0px;border:0px;" data-dismiss="modal">
-                    <i class="fa fa-times fulltextbodycolor fullbodydycolorbg" aria-hidden="true" style="top: 0px;"></i>
-                </button>
-            </div>
-            <div class="modal-body" style="margin-top:0px;">
-                <div class="body">
-                    @using (Ajax.BeginForm("HelpJsonData", "Home", new AjaxOptions
-                    {
-                        InsertionMode = InsertionMode.Replace,
-                        OnSuccess = "OnSuccess",
-                        OnFailure = "OnFailure"
-                    }))
-                    {
-                        Vastwebmulti.JsonData.Hlp_TC_Privacy person = new Vastwebmulti.JsonData.Hlp_TC_Privacy();
-                        <div class="row clearfix">
-
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #c7c2c2;">
-                                        @*<textarea id="txtedit" name="txtedit" class="ckeditor" required=""></textarea>*@
-                                        <input type="hidden" asp-for="@person.Id" name="Id" value="1" />
-                                        <br />
-                                        <br />
-                                        <textarea id="txtedit" asp-for="@person.Name" name="Name" class="ckeditor" required></textarea>
-                                        <br />
-                                    </div>
-                                </div>
-                            </div>
+            @using (Ajax.BeginForm("HelpJsonData", "Home", new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                OnSuccess = "OnSuccess",
+                OnFailure = "OnFailure"
+            }))
+            {
+                Vastwebmulti.JsonData.Hlp_TC_Privacy person = new Vastwebmulti.JsonData.Hlp_TC_Privacy();
+                <div class="modal-header saas-admin-modal-header accent-emerald">
+                    <div class="saas-admin-modal-head-main">
+                        <span class="saas-admin-modal-icon"><i class="fas fa-circle-question" aria-hidden="true"></i></span>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Add Help Content</h4>
+                            <span class="saas-admin-modal-subtitle">Edit help page content shown to your users</span>
                         </div>
-                        <div class="modal-footer" id="silder1">
-                            <button id="Help" type="submit" class="btn bg-grey waves-effect" style=" margin-right: 12px; height:34px;">
-                                <span style="color:black;">Save Change</span>
-                            </button>
-                        </div>
-                    }
                     </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--- Term & Condition content editor-------------->
-
-<div class="modal fade sitemap-editor" id="defaultModal2" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Add Term&nbsp;&&nbsp;Condition Content</h4>
-                <button type="button" class="btn bg-grey waves-effect" style="float:right; height:auto;padding: 0px;background-color: #f5f5f5 !important;padding: 0px;border:0px;" data-dismiss="modal">
-                    <i class="fa fa-times fulltextbodycolor fullbodydycolorbg" aria-hidden="true" style="top: 0px;"></i>
-                </button>
-            </div>
-            <div class="modal-body" style="margin-top:0px;">
-                <div class="body">
-                    @using (Ajax.BeginForm("TCJsonData", "Home", new AjaxOptions
-                    {
-                        InsertionMode = InsertionMode.Replace,
-                        OnSuccess = "OnSuccess",
-                        OnFailure = "OnFailure"
-                    }))
-                    {
-                        Vastwebmulti.JsonData.Hlp_TC_Privacy person = new Vastwebmulti.JsonData.Hlp_TC_Privacy();
-                        <div class="row clearfix">
-
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #c7c2c2;">
-                                        @*<textarea id="txtedit" name="txtedit" class="ckeditor" required=""></textarea>*@
-                                        <input type="hidden" asp-for="@person.Id" name="Id" value="1" />
-                                        <br />
-                                        <br />
-                                        <textarea id="txtedit" asp-for="@person.Name" name="Name" class="ckeditor" required></textarea>
-                                        <br />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer" id="silder1">
-                            <button id="TC" type="submit" class="btn bg-grey waves-effect" style=" margin-right: 12px; height:34px;">
-                                <span style="color:black;">Save Change</span>
-                            </button>
-                        </div>
-                    }
-                    </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--- Privacy Policy content editor-------------->
-
-<div class="modal fade sitemap-editor" id="defaultModal3" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Add Privacy Policy Content</h4>
-                <button type="button" class="btn bg-grey waves-effect" style="float:right; height:auto;padding: 0px;background-color: #f5f5f5 !important;padding: 0px;border:0px;" data-dismiss="modal">
-                    <i class="fa fa-times fulltextbodycolor fullbodydycolorbg" aria-hidden="true" style="top: 0px;"></i>
-                </button>
-            </div>
-            <div class="modal-body" style="margin-top:0px;">
-                <div class="body">
-                    @using (Ajax.BeginForm("PrivacyJsonData", "Home", new AjaxOptions
-                    {
-                        InsertionMode = InsertionMode.Replace,
-                        OnSuccess = "OnSuccess",
-                        OnFailure = "OnFailure"
-                    }))
-                    {
-                        Vastwebmulti.JsonData.Hlp_TC_Privacy person = new Vastwebmulti.JsonData.Hlp_TC_Privacy();
-
-                        <div class="row clearfix">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <div class="" style="border:1px solid #c7c2c2;">
-
-                                        <input type="hidden" asp-for="@person.Id" name="Id" value="1" />
-                                        <br />
-                                        <br />
-                                        <textarea id="txtedit" asp-for="@person.Name" name="Name" class="ckeditor" required></textarea>
-                                        <br />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer" id="silder1">
-                            <button type="submit" id="savePrivacy" class="btn bg-grey waves-effect" style=" margin-right: 12px; height:34px;">
-                                <span style="color:black;">Save Change</span>
-                            </button>
-                        </div>
-                    }
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
-            </div>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body vm-sm-modal-body--editor">
+                    <input type="hidden" name="Id" value="1" />
+                    <div class="vm-sm-modal-editor-wrap">
+                        <textarea id="txteditHelp" name="Name" class="ckeditor" required></textarea>
+                    </div>
+                </div>
+                <div class="saas-admin-modal-footer vm-sm-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Cancel</button>
+                    <button id="Help" type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save Change
+                    </button>
+                </div>
+            }
         </div>
     </div>
 </div>
+
+<div class="modal fade saas-admin-modal vm-sm-modal vm-sm-modal--editor" id="defaultModal2" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg vm-sm-modal-dialog vm-sm-modal-dialog--editor" role="document">
+        <div class="modal-content">
+            @using (Ajax.BeginForm("TCJsonData", "Home", new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                OnSuccess = "OnSuccess",
+                OnFailure = "OnFailure"
+            }))
+            {
+                Vastwebmulti.JsonData.Hlp_TC_Privacy person = new Vastwebmulti.JsonData.Hlp_TC_Privacy();
+                <div class="modal-header saas-admin-modal-header">
+                    <div class="saas-admin-modal-head-main">
+                        <span class="saas-admin-modal-icon"><i class="fas fa-file-contract" aria-hidden="true"></i></span>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Add Term &amp; Condition Content</h4>
+                            <span class="saas-admin-modal-subtitle">Update terms and conditions for your portal</span>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body vm-sm-modal-body--editor">
+                    <input type="hidden" name="Id" value="1" />
+                    <div class="vm-sm-modal-editor-wrap">
+                        <textarea id="txteditTC" name="Name" class="ckeditor" required></textarea>
+                    </div>
+                </div>
+                <div class="saas-admin-modal-footer vm-sm-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Cancel</button>
+                    <button id="TC" type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save Change
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade saas-admin-modal vm-sm-modal vm-sm-modal--editor" id="defaultModal3" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg vm-sm-modal-dialog vm-sm-modal-dialog--editor" role="document">
+        <div class="modal-content">
+            @using (Ajax.BeginForm("PrivacyJsonData", "Home", new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                OnSuccess = "OnSuccess",
+                OnFailure = "OnFailure"
+            }))
+            {
+                Vastwebmulti.JsonData.Hlp_TC_Privacy person = new Vastwebmulti.JsonData.Hlp_TC_Privacy();
+                <div class="modal-header saas-admin-modal-header accent-violet">
+                    <div class="saas-admin-modal-head-main">
+                        <span class="saas-admin-modal-icon"><i class="fas fa-shield-halved" aria-hidden="true"></i></span>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Add Privacy Policy Content</h4>
+                            <span class="saas-admin-modal-subtitle">Edit privacy policy content for your website</span>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body vm-sm-modal-body--editor">
+                    <input type="hidden" name="Id" value="1" />
+                    <div class="vm-sm-modal-editor-wrap">
+                        <textarea id="txteditPrivacy" name="Name" class="ckeditor" required></textarea>
+                    </div>
+                </div>
+                <div class="saas-admin-modal-footer vm-sm-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Cancel</button>
+                    <button id="savePrivacy" type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save Change
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
+<script src="~/Ckeditor/ckeditor.js"></script>
+<script src="~/Ckeditor/adapters/jquery.js"></script>
 
 <script>
+    function buildSocialRow(b) {
+        return '<tr class="tr">' +
+            '<td>' + b.FooterType + '</td>' +
+            '<td><span class="vm-ft-apk-value">' + b.FooterLink + '</span></td>' +
+            '<td><button type="button" class="button-third-design vm-ft-apk-action-btn vm-ft-apk-del-btn" onclick="delSocialAc(' + b.Id + ')" title="Delete"><i class="fas fa-trash-alt"></i></button></td>' +
+            '</tr>';
+    }
+
+    function buildBadgeRow(b) {
+        return '<tr class="tr">' +
+            '<td>' + b.BadgeType + '</td>' +
+            '<td><span class="vm-ft-apk-value">' + b.Url_Link + '</span></td>' +
+            '<td><button type="button" class="button-third-design vm-ft-apk-action-btn vm-ft-apk-del-btn" onclick="delBadge(' + b.Id + ')" title="Delete"><i class="fas fa-trash-alt"></i></button></td>' +
+            '</tr>';
+    }
+
+    function isValidUrl(txt) {
+        var re = /(http(s)?:\\)?([\w-]+\.)+[\w-]+[.com|.in|.org]+(\[\?%&=]*)?/;
+        return re.test(txt);
+    }
+
     function SaveSocialAc() {
         var social = $('#ddlSocial').val();
-        if (social != "") {
-            var txt = $('#urlLink').val();
-        var re = /(http(s)?:\\)?([\w-]+\.)+[\w-]+[.com|.in|.org]+(\[\?%&=]*)?/
-        if (re.test(txt)) {
-            $.ajax({
-                type: "GET",
-               url: '@Url.Action("Social_Media", "Home")',
-                    data: { socialType: $('#ddlSocial').val(), link: $('#urlLink').val() },
-                success: function (response) {
-
-                var i = 0;
-                var mdtblHtml = "";
-                $.each(response, function (a, b) {
-                    mdtblHtml += "<tr><td>" + b.FooterType + "</td>";
-                    mdtblHtml += "<td>" + b.FooterLink + "</td>";
-                    mdtblHtml += "<td>" + '<button onclick="delSocialAc('+b.Id+')"><img src="../../MainFrontDesign/images/delete.svg" style="width:16px;"></button>' + "</td>";
-                    i++;
-                });
-                $('#social-list > tbody').html(mdtblHtml);
-                }
-
-            });
-            }
-            else {
-            alert('Not a Valid Url !');
-        }
-        }
-
-        else {
+        if (social === "") {
             alert('Select Social Account Type');
+            return;
         }
-    }
-</script>
-<script>
-    function delSocialAc(e) {
-        if (e != "") {
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("delfooterlink", "Home")',
-                data: { Id: e },
-                dataType: 'json',
-                cache: false,
-                success: function (response) {
-                var i = 0;
+
+        var txt = $('#urlLink').val();
+        if (!isValidUrl(txt)) {
+            alert('Not a Valid Url !');
+            return;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Social_Media", "Home")',
+            data: { socialType: social, link: txt },
+            success: function (response) {
                 var mdtblHtml = "";
                 $.each(response, function (a, b) {
-                    mdtblHtml += "<tr><td>" + b.FooterType + "</td>";
-                    mdtblHtml += "<td>" + b.FooterLink + "</td>";
-                    mdtblHtml += "<td>" + '<button onclick="delSocialAc('+b.Id+')"><img src="../../MainFrontDesign/images/delete.svg" style="width:16px;"></button>' + "</td>";
-                    i++;
+                    mdtblHtml += buildSocialRow(b);
                 });
                 $('#social-list > tbody').html(mdtblHtml);
-                }
-
-            });
-        }
-        else {
-            alert('');
-        }
-    }
-</script>
-
-
-<script>
-    function SaveBadge() {
-        var Badge = $('#ddlBadges').val();
-        if (Badge != "") {
-            var txt = $('#BadgeLink').val();
-        var re = /(http(s)?:\\)?([\w-]+\.)+[\w-]+[.com|.in|.org]+(\[\?%&=]*)?/
-        if (re.test(txt)) {
-            $.ajax({
-                type: "GET",
-               url: '@Url.Action("BadgeMedia", "Home")',
-                    data: { BadgeType: $('#ddlBadges').val(), Badgelink: $('#BadgeLink').val() },
-                success: function (response) {
-
-                var i = 0;
-                var BadgeHtml = "";
-                $.each(response, function (a, b) {
-                    BadgeHtml += "<tr><td>" + b.BadgeType + "</td>";
-                    BadgeHtml += "<td>" + b.Url_Link + "</td>";
-                    BadgeHtml += "<td>" + '<button onclick="delBadge('+b.Id+')"><img src="../../MainFrontDesign/images/delete.svg" style="width:16px;"></button>' + "</td>";
-                    i++;
-                });
-                $('#Badge-list > tbody').html(BadgeHtml);
-                }
-
-            });
+                $('#urlLink').val('');
             }
-            else {
-            alert('Not a Valid Url !');
-        }
+        });
+    }
+
+    function delSocialAc(e) {
+        if (e === "") {
+            return;
         }
 
-        else {
-            alert('Select Badge Type');
-        }
-    }
-</script>
-<script>
-    function delBadge(e) {
-        if (e != "") {
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("delBadgesMedia", "Home")',
-                data: { Id: e },
-                dataType: 'json',
-                cache: false,
-                success: function (response) {
-                var i = 0;
-                var BadgeHtml = "";
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("delfooterlink", "Home")',
+            data: { Id: e },
+            dataType: 'json',
+            cache: false,
+            success: function (response) {
+                var mdtblHtml = "";
                 $.each(response, function (a, b) {
-                    BadgeHtml += "<tr><td>" + b.BadgeType + "</td>";
-                    BadgeHtml += "<td>" + b.Url_Link + "</td>";
-                    BadgeHtml += "<td>" + '<button onclick="delBadge('+b.Id+')"><img src="../../MainFrontDesign/images/delete.svg" style="width:16px;"></button>' + "</td>";
-                    i++;
+                    mdtblHtml += buildSocialRow(b);
                 });
-                $('#Badge-list > tbody').html(BadgeHtml);
-                }
-
-            });
-        }
-        else {
-            alert('');
-        }
+                $('#social-list > tbody').html(mdtblHtml);
+            }
+        });
     }
-</script>
 
-<script>
-    $('#savePrivacy').click(function () {
-        $('#defaultModal3').modal('hide');
-    })
+    function SaveBadge() {
+        var badge = $('#ddlBadges').val();
+        if (badge === "") {
+            alert('Select Badge Type');
+            return;
+        }
 
-    $('#Help').click(function () {
-        $('#defaultModal1').modal('hide');
-    })
+        var txt = $('#BadgeLink').val();
+        if (!isValidUrl(txt)) {
+            alert('Not a Valid Url !');
+            return;
+        }
 
-    $('#TC').click(function () {
-        $('#defaultModal2').modal('hide');
-    })
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("BadgeMedia", "Home")',
+            data: { BadgeType: badge, Badgelink: txt },
+            success: function (response) {
+                var badgeHtml = "";
+                $.each(response, function (a, b) {
+                    badgeHtml += buildBadgeRow(b);
+                });
+                $('#Badge-list > tbody').html(badgeHtml);
+                $('#BadgeLink').val('');
+            }
+        });
+    }
+
+    function delBadge(e) {
+        if (e === "") {
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("delBadgesMedia", "Home")',
+            data: { Id: e },
+            dataType: 'json',
+            cache: false,
+            success: function (response) {
+                var badgeHtml = "";
+                $.each(response, function (a, b) {
+                    badgeHtml += buildBadgeRow(b);
+                });
+                $('#Badge-list > tbody').html(badgeHtml);
+            }
+        });
+    }
+
+    function getCkEditorHeight() {
+        if (window.innerWidth <= 767) {
+            return 160;
+        }
+        if (window.innerWidth <= 1199) {
+            return 200;
+        }
+        return 320;
+    }
+
+    function initCkEditor(id) {
+        if (typeof CKEDITOR === 'undefined' || CKEDITOR.instances[id]) {
+            return;
+        }
+        CKEDITOR.replace(id, {
+            height: getCkEditorHeight(),
+            removePlugins: 'elementspath',
+            resize_enabled: false
+        });
+    }
+
+    function OnSuccess() {
+        $('.vm-sm-modal--editor').modal('hide');
+    }
+
+    function OnFailure() {
+        alert('Failed to save content. Please try again.');
+    }
+
+    $(document).ready(function () {
+        $('#defaultModal1').on('shown.bs.modal', function () {
+            initCkEditor('txteditHelp');
+        });
+        $('#defaultModal2').on('shown.bs.modal', function () {
+            initCkEditor('txteditTC');
+        });
+        $('#defaultModal3').on('shown.bs.modal', function () {
+            initCkEditor('txteditPrivacy');
+        });
+
+        $('#savePrivacy, #Help, #TC').on('click', function () {
+            var editorId = this.id === 'Help' ? 'txteditHelp' : (this.id === 'TC' ? 'txteditTC' : 'txteditPrivacy');
+            if (CKEDITOR.instances[editorId]) {
+                CKEDITOR.instances[editorId].updateElement();
+            }
+        });
+
+        $('#txtSocialSearch').on('input', function () {
+            var q = $.trim($(this).val()).toLowerCase();
+            var $blocks = $('.saas-upload-apk-page [data-apk-search]');
+
+            if (!q) {
+                $blocks.removeClass('vm-ft-apk-search-hidden');
+                $('.vm-ft-apk-col').removeClass('vm-ft-apk-col--empty');
+                $('#social-list tbody tr, #Badge-list tbody tr').show();
+                return;
+            }
+
+            $blocks.each(function () {
+                var text = (($(this).attr('data-apk-search') || '') + ' ' + $(this).text()).toLowerCase();
+                $(this).toggleClass('vm-ft-apk-search-hidden', text.indexOf(q) === -1);
+            });
+
+            $('.vm-ft-apk-col').each(function () {
+                var visible = $(this).find('[data-apk-search]').not('.vm-ft-apk-search-hidden').length > 0;
+                $(this).toggleClass('vm-ft-apk-col--empty', !visible);
+            });
+
+            $('#social-list tbody tr, #Badge-list tbody tr').each(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(q) > -1);
+            });
+        });
+    });
 </script>

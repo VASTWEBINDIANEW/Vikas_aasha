@@ -26,7 +26,7 @@
             {
 
                 <td>
-                    <input type="text" id="amount" name="amount" value="@Model.GetRechargeSpecialGetById.amount" />
+                    <input class="form-control" type="text" id="amount" name="amount" value="@Model.GetRechargeSpecialGetById.amount" />
                 </td>
             }
             else
@@ -37,7 +37,7 @@
             {
 
                 <td>
-                    <input type="text" id="maxamount" name="maxamount" value="@Model.GetRechargeSpecialGetById.maxamount" />
+                    <input class="form-control" type="text" id="maxamount" name="maxamount" value="@Model.GetRechargeSpecialGetById.maxamount" />
                 </td>
             }
             else
@@ -48,13 +48,13 @@
 
             @*<td>@Html.DisplayFor(modelItem => item.rct_to) </td>*@
             <td>
-                <div class="onoffswitch">
+                <div class="onoffswitch onoffswitch-secondclass">
                     @if (item.sts == "N")
                     {
 
 
 
-                        <span class="custom-off" onclick="changebyamount('@item.idno')">off</span>
+                        <span class="custom-off custom-off-secondbutton" onclick="changebyamount('@item.idno')">off</span>
 
 
                     }
@@ -62,7 +62,7 @@
                     {
 
 
-                        <span class="costom-on" onclick="changebyamount('@item.idno')">on</span>
+                        <span class="costom-on custom-on-secondbutton" onclick="changebyamount('@item.idno')">on</span>
 
 
 
@@ -72,7 +72,7 @@
             @if (item.idno == Model.GetRechargeSpecialGetById.idno)
             {
                 <td>
-                    <button type="button" class="switch-edit-button custom-table-loading" onclick="SaveAmountData(@item.idno)" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                    <button type="button" class="switch-edit-button deletebuttoback-second custom-table-loading" onclick="SaveAmountData(@item.idno)" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
                         Save
                     </button>
                 </td>
@@ -80,14 +80,14 @@
             else
             {
                 <td>
-                    <button type="button" class="switch-edit-button" onclick="EditByamount(@item.idno)">
+                    <button type="button" class="switch-edit-button deletebuttoback-second" onclick="EditByamount(@item.idno)">
                         Edit
                     </button>
                 </td>
             }
 
             <td>
-                <button id="DeleteBtn" class="confirm" onclick="Deletebyamount('@item.idno')">
+                <button id="DeleteBtn" class="confirm btnssl special-iii" onclick="Deletebyamount('@item.idno')">
                     <img src="~/MainFrontDesign/images/delete.svg" />
                 </button>
             </td>

@@ -1,0 +1,1741 @@
+/* ADMIN — Hardware pages (Port / Lapu / Status) — extends prepaid slab layout */
+
+body.saas-admin-ui .saas-hardware-page {
+    --hardware-accent: #2563eb;
+    --hardware-accent-soft: #93c5fd;
+    --hardware-muted: #64748b;
+}
+
+/* Toolbar — breadcrumb + actions in one row */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-toolbar-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 14px;
+    margin-bottom: 10px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-toolbar-line .saas-acc-breadcrumb {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-toolbar-actions,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-search-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-search-form .form-control,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-search-form select.form-control,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-port-select {
+    min-height: 36px;
+    min-width: 160px;
+    border-radius: 10px;
+    border: 1px solid #dbe2ea;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+/* Lapu — Port filter pill (Select Port + Search inline) */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter {
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter-form {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto;
+    max-width: 100%;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__group {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-height: 40px;
+    padding: 4px 6px 4px 12px;
+    border: 1px solid #dbe2ea;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__label {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex: 0 0 auto;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #64748b;
+    white-space: nowrap;
+    cursor: default;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__label i {
+    color: #2563eb;
+    font-size: 0.78rem;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__select {
+    display: inline-block !important;
+    width: auto !important;
+    min-width: 132px !important;
+    max-width: 200px;
+    min-height: 32px !important;
+    height: 32px !important;
+    margin: 0 !important;
+    padding: 0 28px 0 10px !important;
+    flex: 1 1 auto;
+    border: none !important;
+    border-radius: 8px !important;
+    background: #f8fafc !important;
+    box-shadow: inset 0 0 0 1px #e2e8f0 !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    color: #334155 !important;
+    line-height: 32px !important;
+    appearance: auto;
+    -webkit-appearance: menulist;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__select:focus {
+    outline: none !important;
+    background: #fff !important;
+    box-shadow: inset 0 0 0 1px #93c5fd, 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__submit {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    flex: 0 0 auto !important;
+    min-width: 96px !important;
+    width: auto !important;
+    min-height: 32px !important;
+    height: 32px !important;
+    margin: 0 !important;
+    padding: 0 16px !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%) !important;
+    color: #fff !important;
+    font-size: 0.76rem !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.22) !important;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__submit:hover {
+    background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%) !important;
+    box-shadow: 0 5px 14px rgba(37, 99, 235, 0.28) !important;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__submit i {
+    font-size: 0.72rem;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-toolbar-btn {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
+/* Lapu page — single-line toolbar (breadcrumb left, actions right) */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-toolbar-line--lapu {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 12px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-toolbar-line--lapu .saas-acc-breadcrumb {
+    flex: 0 1 auto;
+    min-width: 0;
+    width: auto;
+    margin: 0;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions--lapu {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex: 0 0 auto;
+    min-width: 0;
+    width: auto;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions--lapu > * {
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    min-width: 0;
+    max-width: none;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__group {
+    gap: 6px !important;
+    min-height: 38px;
+    padding: 3px 4px 3px 10px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__label span {
+    display: none;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__select {
+    min-width: 118px !important;
+    max-width: 150px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-filter__submit {
+    min-width: 82px !important;
+    padding: 0 12px !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-table-search {
+    flex: 0 0 auto;
+    width: 180px;
+    min-width: 160px;
+    max-width: 200px;
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-table-search input[type="text"] {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Status page — single-line toolbar */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-toolbar-line--status {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 12px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-toolbar-line--status .saas-acc-breadcrumb {
+    flex: 0 1 auto;
+    min-width: 0;
+    width: auto;
+    margin: 0;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions--status {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex: 0 0 auto;
+    min-width: 0;
+    width: auto;
+    margin-left: auto;
+    min-height: 38px;
+    height: 38px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions--status > * {
+    flex-shrink: 0;
+    align-self: center;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-filter,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-filter-form {
+    display: flex !important;
+    align-items: center !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-filter {
+    flex: 0 0 auto;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-filter-form {
+    flex-direction: row !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-filter__group {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    padding: 0 4px 0 8px !important;
+    border: 1px solid #dbe2ea;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-filter__select {
+    display: inline-block !important;
+    width: auto !important;
+    min-width: 108px !important;
+    max-width: 130px;
+    height: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
+    margin: 0 !important;
+    padding: 0 24px 0 8px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    background: #f8fafc !important;
+    box-shadow: inset 0 0 0 1px #e2e8f0 !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #334155 !important;
+    line-height: 32px !important;
+    vertical-align: middle !important;
+    appearance: auto;
+    -webkit-appearance: menulist;
+    cursor: pointer;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-filter__select:focus {
+    outline: none !important;
+    background: #fff !important;
+    box-shadow: inset 0 0 0 1px #93c5fd, 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-filter__submit {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    flex: 0 0 auto !important;
+    min-width: 78px !important;
+    width: auto !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
+    margin: 0 !important;
+    padding: 0 12px !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%) !important;
+    color: #fff !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.22) !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-filter__submit:hover {
+    background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%) !important;
+    box-shadow: 0 5px 14px rgba(37, 99, 235, 0.28) !important;
+    transform: none !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions--status .vm-hardware-status-add-toggle.vm-hardware-btn-new--primary {
+    min-width: 110px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    padding: 0 14px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions--status .vm-hardware-status-table-search {
+    flex: 0 0 auto;
+    display: flex !important;
+    align-items: center !important;
+    width: 170px;
+    min-width: 150px;
+    max-width: 190px;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions--status .vm-hardware-status-table-search input[type="text"] {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    padding: 0 14px 0 38px !important;
+    margin: 0 !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 999px !important;
+    box-sizing: border-box !important;
+    line-height: 38px !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions--status .vm-hardware-status-table-search i {
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-table {
+    display: table !important;
+    width: max-content !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+    border-collapse: collapse !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-table thead {
+    display: table-header-group !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-table tbody {
+    display: table-row-group !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-table tbody tr {
+    display: table-row !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-table tbody td {
+    display: table-cell !important;
+}
+
+body.saas-admin-ui .saas-hardware-page button.vm-hardware-btn-new.vm-hardware-btn-new--primary,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-add-toggle.vm-hardware-btn-new--primary,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-add-toggle.vm-hardware-btn-new--primary,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-status-add-toggle.vm-hardware-btn-new--primary {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    min-width: 118px;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 18px !important;
+    border-radius: 999px !important;
+    border: 1px solid #2563eb !important;
+    background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%) !important;
+    background-image: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.24) !important;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.02em;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s !important;
+}
+
+body.saas-admin-ui .saas-hardware-page button.vm-hardware-btn-new.vm-hardware-btn-new--primary:hover,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-add-toggle.vm-hardware-btn-new--primary:hover {
+    background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%) !important;
+    background-image: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%) !important;
+    border-color: #1d4ed8 !important;
+    color: #fff !important;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3) !important;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-new__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.22);
+    flex: 0 0 20px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-new__icon i {
+    font-size: 0.65rem;
+    line-height: 1;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-new__label {
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-new--primary .add-new-port {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Top toolbar search — single pill (override global input double-box) */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-search {
+    position: relative;
+    display: block;
+    flex: 0 1 260px;
+    min-width: 200px;
+    max-width: 320px;
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-search input[type="text"] {
+    width: 100% !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 14px 0 38px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-search input[type="text"]:focus {
+    outline: none !important;
+    border-color: #93c5fd !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-search i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.82rem;
+    pointer-events: none;
+    z-index: 1;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-search:focus-within i {
+    color: #2563eb;
+}
+
+/* Port inline form — single row controls */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-form__input[type="text"] {
+    min-width: 170px;
+    max-width: 220px;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 12px !important;
+    border-radius: 10px !important;
+    border: 1px solid #93c5fd !important;
+    background: #fff !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-form__input[type="text"]:focus {
+    outline: none !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+/* Port table — always show server rows + scroll */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-table {
+    display: table !important;
+    width: max-content !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+    border-collapse: collapse !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-table {
+    display: table !important;
+    width: max-content !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+    border-collapse: collapse !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-table thead,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-table thead {
+    display: table-header-group !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-table tbody,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-table tbody {
+    display: table-row-group !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-table tbody tr,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-table tbody tr {
+    display: table-row !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-table tbody td,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-table tbody td {
+    display: table-cell !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-table-empty td {
+    padding: 32px 16px !important;
+    text-align: center;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #94a3b8;
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-sure-btn {
+    display: none;
+    min-width: 52px;
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 1px solid #dc2626;
+    background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-sure-btn:hover {
+    background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-new--primary.port-save.is-visible,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-new--primary .port-save.is-visible {
+    background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+    border-color: #16a34a;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-add {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-hardware-page .report-top {
+    float: none;
+}
+
+/* Top toolbar — New Port + Search (breadcrumb row) */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions .vm-hardware-port-panel {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 1 auto;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions .vm-hardware-port-search {
+    flex: 0 1 260px;
+    min-width: 200px;
+    max-width: 320px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions .vm-hardware-port-form {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions .vm-hardware-port-panel.is-editing .vm-hardware-port-add-toggle {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-top-actions .vm-hardware-port-panel.is-editing .vm-hardware-port-form {
+    display: inline-flex;
+}
+
+/* Card head — title only */
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-card__head {
+    padding-bottom: 12px !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-save-btn,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
+    border-radius: 999px !important;
+    font-size: 0.76rem !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    border: 1px solid transparent !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-save-btn {
+    background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%) !important;
+    border-color: #16a34a !important;
+    color: #fff !important;
+    box-shadow: 0 3px 10px rgba(22, 163, 74, 0.22) !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-save-btn:hover {
+    background: linear-gradient(180deg, #16a34a 0%, #15803d 100%) !important;
+    border-color: #15803d !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-cancel-btn {
+    background: #fff !important;
+    border-color: #dbe2ea !important;
+    color: #64748b !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-cancel-btn:hover {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #334155 !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-card-actions {
+    width: auto !important;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-table-toolbar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 0 1 240px;
+    min-width: 180px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-table-toolbar .dataTables_filter {
+    float: none !important;
+    margin: 0 !important;
+    text-align: right;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-table-toolbar .dataTables_filter label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 0;
+    color: transparent;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-table-toolbar .dataTables_filter label::before {
+    content: "\f002";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 0.72rem;
+    color: #94a3b8;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-table-toolbar .dataTables_filter input {
+    min-width: 200px;
+    min-height: 36px;
+    margin: 0 !important;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #dbe2ea;
+    background: #fff;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #334155;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-table-toolbar .dataTables_filter input:focus {
+    outline: none;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-table-footer {
+    padding: 10px 16px 14px;
+    border-top: 1px solid #eef2f6;
+    margin-top: 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-table-footer .dataTables_info {
+    padding: 0;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-datatable-shell .dataTables_wrapper .dataTables_filter,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-datatable-shell .dataTables_wrapper .dataTables_info {
+    display: none;
+}
+
+/* Table icon / toggle column headers */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-th-icon {
+    min-width: 72px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-th-icon .vm-hardware-th-icon__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto 4px;
+    border-radius: 8px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-th-icon .vm-hardware-th-icon__badge img {
+    width: 18px;
+    height: 18px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-th-icon .vm-hardware-th-icon__label {
+    display: block;
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.2;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-th-toggle {
+    min-width: 64px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-input {
+    display: none;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-input input {
+    min-height: 36px;
+    min-width: 180px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid #dbe2ea;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-hardware-page .port-save {
+    display: none;
+}
+
+body.saas-admin-ui .saas-hardware-page .port-save.is-visible {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-port-input.is-visible {
+    display: block;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-new:not(.vm-hardware-btn-new--primary),
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-search,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 6px 14px;
+    border-radius: 10px;
+    border: 1px solid #dbe2ea;
+    background: #fff;
+    color: #334155;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-new:not(.vm-hardware-btn-new--primary):hover,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-search:hover,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-add:hover {
+    border-color: var(--hardware-accent-soft);
+    background: #eff6ff;
+    color: var(--hardware-accent);
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-new img,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-search img,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-btn-add img {
+    width: 14px;
+    height: 14px;
+}
+
+/* Sidebar nav — reuse slab nav + network legend */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sidebar nav — vertical pills like prepaid slab */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav .vm-hardware-nav__list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px;
+    padding: 10px !important;
+    max-height: none;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav .vm-hardware-nav__list li {
+    margin: 0 !important;
+    width: 100%;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav .vm-hardware-nav__list a {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #fff !important;
+    color: #64748b !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav .vm-hardware-nav__list a::before {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav .vm-hardware-nav__icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    flex: 0 0 28px;
+    transition: background 0.15s, color 0.15s;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav .vm-hardware-nav__list a:hover {
+    color: #2563eb !important;
+    background: #eff6ff !important;
+    border-color: #bfdbfe !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav .vm-hardware-nav__list a:hover .vm-hardware-nav__icon {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav .vm-hardware-nav__list li.active a,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav .vm-hardware-nav__list a.active {
+    color: #1d4ed8 !important;
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%) !important;
+    border-color: #93c5fd !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav .vm-hardware-nav__list li.active a .vm-hardware-nav__icon,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-nav .vm-hardware-nav__list a.active .vm-hardware-nav__icon {
+    background: #2563eb;
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-network-legend-wrap {
+    padding: 10px 12px 12px;
+    border-top: 1px solid #eef2f6;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-network-legend__title {
+    margin: 0 0 8px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-network-legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-network-legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 8px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-bottom: none !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-network-legend li img {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-network-legend li:nth-child(1) {
+    background: rgba(6, 172, 117, 0.08);
+    color: #06ac75;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-network-legend li:nth-child(2) {
+    background: rgba(110, 152, 5, 0.08);
+    color: #6e9805;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-network-legend li:nth-child(3) {
+    background: rgba(230, 112, 0, 0.08);
+    color: #e67000;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-network-legend li:nth-child(4) {
+    background: rgba(250, 0, 0, 0.06);
+    color: #fa0000;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-network-legend li:nth-child(5) {
+    background: rgba(15, 23, 42, 0.05);
+    color: #334155;
+}
+
+/* Table card */
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-card {
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-card__head {
+    padding-bottom: 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-card__head .vm-pg-slab-card__actions {
+    flex: 1 1 auto;
+    justify-content: flex-end;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-body {
+    padding: 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-table-wrap {
+    margin: 0 12px 14px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table-scroll.vm-hardware-table-wrap {
+    display: block;
+    width: calc(100% - 32px);
+    max-width: calc(100% - 32px);
+    max-height: min(560px, calc(100vh - 290px));
+    margin: 0 16px 0;
+    overflow: auto !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table-scroll.vm-hardware-table-wrap::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table-scroll.vm-hardware-table-wrap::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table-scroll.vm-hardware-table-wrap::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table-scroll.vm-hardware-table-wrap .vm-pg-slab-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table-scroll.vm-hardware-table-wrap::after {
+    content: "Scroll horizontally & vertically for all data \2192";
+    display: block;
+    padding: 6px 10px 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #64748b;
+    text-align: center;
+    background: #f8fafc;
+    border-top: 1px solid #eef2f6;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table-scroll.vm-hardware-table-wrap::after {
+        display: none;
+    }
+}
+
+/* DataTables — fallback when not moved to toolbar */
+body.saas-admin-ui .saas-hardware-page .dataTables_wrapper .dataTables_filter {
+    float: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin: 0 16px 10px;
+    padding: 0;
+    text-align: right;
+}
+
+body.saas-admin-ui .saas-hardware-page .dataTables_wrapper .dataTables_filter label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-hardware-page .dataTables_wrapper .dataTables_filter input {
+    min-width: 180px;
+    min-height: 34px;
+    margin: 0 !important;
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid #dbe2ea;
+    background: #fff;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #334155;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+body.saas-admin-ui .saas-hardware-page .dataTables_wrapper .dataTables_filter input:focus {
+    outline: none;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+body.saas-admin-ui .saas-hardware-page .dataTables_wrapper .dataTables_info {
+    padding: 8px 16px 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-hardware-page .dataTables_wrapper .dataTables_empty {
+    padding: 28px 16px !important;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-align: center;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table thead th {
+    white-space: nowrap;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 0.68rem;
+    padding: 10px 8px !important;
+    background: #cfd9e6 !important;
+    color: #0f172a !important;
+    border-color: #b8c5d6 !important;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table {
+    margin-bottom: 0;
+    font-size: 0.74rem;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table tbody tr:nth-child(even) td {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table tbody tr:hover td {
+    background: #eff6ff !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table tbody td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 8px 6px !important;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table tbody td input[type="text"] {
+    width: 100%;
+    min-width: 80px;
+    max-width: 140px;
+    min-height: 30px;
+    padding: 4px 8px;
+    border: 1px solid #dbe2ea;
+    border-radius: 8px;
+    background: #f8fafc;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-table tbody td input[type="text"]:not([readonly]) {
+    background: #fff;
+    border-color: #93c5fd;
+}
+
+/* Toggle switches */
+body.saas-admin-ui .saas-hardware-page .onoffswitch {
+    display: inline-flex;
+    justify-content: center;
+}
+
+body.saas-admin-ui .saas-hardware-page .costom-on,
+body.saas-admin-ui .saas-hardware-page .custom-off {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 24px;
+    padding: 0 10px;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 1px solid transparent;
+    transition: transform 0.12s, box-shadow 0.12s;
+}
+
+body.saas-admin-ui .saas-hardware-page .costom-on {
+    background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+    color: #fff;
+    border-color: #16a34a;
+}
+
+body.saas-admin-ui .saas-hardware-page .custom-off {
+    background: #f1f5f9;
+    color: #64748b;
+    border-color: #cbd5e1;
+}
+
+body.saas-admin-ui .saas-hardware-page .costom-on:hover,
+body.saas-admin-ui .saas-hardware-page .custom-off:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+/* Row action buttons */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-edit-btn,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-view-btn,
+body.saas-admin-ui .saas-hardware-page .hardware-right-edit,
+body.saas-admin-ui .saas-hardware-page .hardware-right-save {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 28px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid #dbe2ea !important;
+    background: #fff !important;
+    color: #2563eb !important;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-hardware-page .hardware-right-save {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .hardware-right-save.is-visible {
+    display: inline-flex !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-edit-btn p,
+body.saas-admin-ui .saas-hardware-page .vm-hardware-view-btn p,
+body.saas-admin-ui .saas-hardware-page .hardware-right-edit p,
+body.saas-admin-ui .saas-hardware-page .hardware-right-save p {
+    margin: 0;
+    padding: 0;
+    border: none !important;
+    background: transparent !important;
+    color: inherit !important;
+    height: auto !important;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-del-btn,
+body.saas-admin-ui .saas-hardware-page .click-to-sure {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px !important;
+    min-height: 28px;
+    padding: 4px !important;
+    border-radius: 8px;
+    border: 1px solid #dbe2ea !important;
+    background: #fff !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-del-btn img,
+body.saas-admin-ui .saas-hardware-page .click-to-sure img {
+    width: 14px;
+    height: 14px;
+}
+
+body.saas-admin-ui .saas-hardware-page #DeleteBtn,
+body.saas-admin-ui .saas-hardware-page button.special-iii#DeleteBtn {
+    display: none;
+    min-width: 44px !important;
+    width: auto !important;
+    min-height: 28px;
+    padding: 0 8px !important;
+    border-radius: 8px !important;
+    border: 1px solid #dc2626 !important;
+    background: #dc2626 !important;
+    color: #fff !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+}
+
+body.saas-admin-ui .saas-hardware-page #DeleteBtn span {
+    color: #fff !important;
+    font-size: 0.68rem !important;
+}
+
+/* Lapu balance refresh */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-balance-refresh {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    margin-left: 4px;
+    border-radius: 999px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    float: right;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-balance-refresh img {
+    width: 12px;
+    height: 12px;
+}
+
+/* New Lapu row action — keep in toolbar area per port group */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-new-wrap {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 12px 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-lapu-new-wrap .vm-hardware-btn-add {
+    margin: 0;
+}
+
+/* Loader overlay */
+body.saas-admin-ui .saas-hardware-page #div_Loader {
+    background: rgba(15, 23, 42, 0.45);
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 999999;
+}
+
+body.saas-admin-ui .saas-hardware-page .loader_innner {
+    position: fixed;
+    z-index: 999999;
+    height: 100%;
+    margin: auto;
+    inset: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.saas-admin-ui .saas-hardware-page .loader_innner img {
+    margin: 0 !important;
+    max-width: 80px;
+}
+
+/* Hardware modals — form layout */
+body.saas-admin-ui .vm-hardware-modal .saas-admin-modal-dialog {
+    max-width: 560px;
+    width: calc(100% - 24px);
+}
+
+body.saas-admin-ui .vm-hardware-modal .vm-hardware-modal-form .row.clearfix {
+    display: grid;
+    grid-template-columns: minmax(100px, 34%) minmax(0, 1fr);
+    gap: 8px 12px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+body.saas-admin-ui .vm-hardware-modal .vm-hardware-modal-form .form-control-label label {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui .vm-hardware-modal .vm-hardware-modal-form .form-control {
+    min-height: 40px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .vm-hardware-modal .vm-hardware-modal-form .form-control:focus {
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+body.saas-admin-ui .vm-hardware-modal .modal-footer.saas-admin-modal-footer:not(.vm-status-modal-footer) {
+    padding-top: 0;
+    border-top: none;
+}
+
+/* Status Master modals — scroll body + sticky footer */
+body.saas-admin-ui .vm-status-modal.vm-hardware-modal .modal-dialog,
+body.saas-admin-ui .vm-status-modal.vm-hardware-modal .saas-admin-modal-dialog {
+    max-width: min(540px, 96vw) !important;
+    width: min(540px, 96vw) !important;
+    max-height: calc(100dvh - 1.5rem) !important;
+    margin: 0.75rem auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+body.saas-admin-ui .vm-status-modal .modal-content {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-height: calc(100dvh - 1.5rem) !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .vm-status-modal .modal-content > form,
+body.saas-admin-ui .vm-status-modal .vm-status-modal-form {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .vm-status-modal .modal-header {
+    flex-shrink: 0 !important;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-modal-body,
+body.saas-admin-ui .vm-status-modal .saas-admin-modal-body.saas-admin-modal-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: min(56vh, calc(100dvh - 220px)) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 #f1f5f9;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-modal-body::-webkit-scrollbar,
+body.saas-admin-ui .vm-status-modal .saas-admin-modal-body.saas-admin-modal-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-modal-body::-webkit-scrollbar-track,
+body.saas-admin-ui .vm-status-modal .saas-admin-modal-body.saas-admin-modal-scroll::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-modal-body::-webkit-scrollbar-thumb,
+body.saas-admin-ui .vm-status-modal .saas-admin-modal-body.saas-admin-modal-scroll::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-modal-body::-webkit-scrollbar-thumb:hover,
+body.saas-admin-ui .vm-status-modal .saas-admin-modal-body.saas-admin-modal-scroll::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-form-panel {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-form-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-form-list .vm-sm-modal-field {
+    margin: 0;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-modal-footer {
+    display: flex !important;
+    flex-shrink: 0 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative;
+    z-index: 2;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid #e2e8f0 !important;
+    padding: 12px 16px !important;
+    background: #f8fafc !important;
+    box-shadow: 0 -4px 12px rgba(15, 23, 42, 0.06);
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-modal-footer .saas-admin-modal-btn--success {
+    min-width: 130px;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-sm-modal-panel {
+    margin: 0;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-sm-modal-panel__title i {
+    margin-right: 6px;
+    color: #2563eb;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-field-input,
+body.saas-admin-ui .vm-status-modal input.vm-status-field-input,
+body.saas-admin-ui .vm-status-modal select.vm-status-field-input,
+body.saas-admin-ui .vm-status-modal textarea.vm-status-field-input {
+    width: 100% !important;
+    min-height: 40px !important;
+    padding: 0 12px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    line-height: 1.4 !important;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-field-textarea {
+    min-height: 72px !important;
+    padding: 10px 12px !important;
+    resize: vertical;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-field-input:focus,
+body.saas-admin-ui .vm-status-modal textarea.vm-status-field-input:focus {
+    outline: none !important;
+    border-color: #93c5fd !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-status-field-input[readonly] {
+    background: #f8fafc !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .vm-status-modal .select2-container {
+    width: 100% !important;
+}
+
+body.saas-admin-ui .vm-status-modal .select2-container--default .select2-selection--single {
+    min-height: 40px !important;
+    height: 40px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .vm-status-modal .select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 12px !important;
+    padding-right: 28px !important;
+    line-height: 38px !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+}
+
+body.saas-admin-ui .vm-status-modal .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 38px !important;
+    right: 8px !important;
+}
+
+body.saas-admin-ui .vm-status-modal .vm-sm-modal-footer {
+    border-top: 1px solid #e2e8f0 !important;
+    padding: 12px 16px !important;
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-card__head .vm-hardware-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-pg-slab-card__head .vm-hardware-filter-row .form-group {
+    margin: 0;
+    flex: 0 1 150px;
+    min-width: 120px;
+}
+
+/* Status master — filter chips row inside card head */
+body.saas-admin-ui .saas-hardware-page .vm-hardware-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 0 16px 12px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-filter-row .form-group {
+    margin: 0;
+    flex: 1 1 140px;
+    min-width: 120px;
+}
+
+body.saas-admin-ui .saas-hardware-page .vm-hardware-filter-row select.form-control {
+    min-height: 36px;
+    border-radius: 10px;
+    border: 1px solid #dbe2ea;
+    font-size: 0.76rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-hardware-page .select2-container--default .select2-selection--single {
+    min-height: 36px;
+    border-radius: 10px !important;
+    border: 1px solid #dbe2ea !important;
+    display: flex;
+    align-items: center;
+}
+
+body.saas-admin-ui .saas-hardware-page .select2-container--default .select2-selection--single .select2-selection__rendered {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #334155;
+    line-height: 34px;
+    padding-left: 12px;
+}
+
+body.saas-admin-ui .saas-hardware-page .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 34px;
+}
+
+/* Hide legacy page chrome when modern shell is active */
+body.saas-admin-ui .saas-hardware-page .page-title-box-fourde-admin,
+body.saas-admin-ui .saas-hardware-page .page-header-third.pageheader-second-third {
+    display: none !important;
+}

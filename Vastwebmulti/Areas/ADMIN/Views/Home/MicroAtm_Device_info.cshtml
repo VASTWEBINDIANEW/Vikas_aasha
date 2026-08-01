@@ -6,267 +6,150 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ecommerce-modern.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-microatm-device-modern.css?v=8" rel="stylesheet" />
 <style>
-
-    /* new css */
-    .retailerList_Page .left-tabs form {
-        background: #fff;
-    }
-    .custom-table-responsive, #EmailHistory {
-        background: #fff !important;
-    }
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-
-    /* new css */
-
-
-    .btn-group, .btn-group-vertical {
-        box-shadow: none;
-    }
-    .toast-top-right1 {top: 65px;left: 81%;}
-    .dropdown {position: relative;display: inline-block;}
-    .dropdown-content {
-        display: none;position: absolute;background-color: #f9f9f9;min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);padding: 12px 16px;z-index: 1;
-    }
-    .dropdown:hover .dropdown-content {display: block;}
-    .for-search {position: absolute;right: 130px;}
-    .for-search input {width: 250px;border: 1px solid #dbdbdb;padding: 3px 10px;}
-    section.content {background-color: white;margin: 75px 0px 0 164px;}
-    a.addnewbuttonemploy-admin {
-        background: var(--main-bg-lcolor);width: auto;height: 28px;display: inline-block;float: right;
-        text-align: center;padding: 4px 13px;border: 1px solid #555;color: #fff;margin-left: 10px;
-    }
-    .custom-date-icon i{left:4px;}
-    .retailerList_Page .left-tabs form {border:0px;}
-    .retailerList_Page .select2-container--default .select2-selection--single .select2-selection__arrow {
-        display: block;
-    }
-    .select2addnew .select2.select2-container.select2-container--default{
-        float:left;
-        width: 150px !important;
-    }
-
+    /* Loading spinner used on the inline "Edit" button of the device table. */
     @@keyframes microatmspin111 {
-        0% {
-            transform:rotate(0deg);
-        }
-        100% {
-            transform:rotate(360deg);
-        }
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     .editbutton-spinclass {
-        width: 15px;height: 15px;border: 2px solid #aaa4a4;border-top-color: rgb(170, 164, 164);
-        border-radius: 50%;border-top-color: transparent;animation: microatmspin111 2s linear infinite;display:none;
-        float:left;
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .newemployee-admin .left-tabs ul li {width: 100%;float: left;}
-        .for-search.search-after-third {
-            position: static;width: 100%;float: left;margin-bottom: 10px;
-        }
-        .for-search.search-after-third input {width: auto;}
-    }
-
-    @@media only screen and (max-width:395px) {
-        .for-search.search-after-third input {width: 100%;margin-bottom: 10px;}
-        .for-search.search-after-third a {margin: 0;width: 100%;}
+        width: 15px;
+        height: 15px;
+        border: 2px solid #aaa4a4;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: microatmspin111 2s linear infinite;
+        display: none;
+        float: left;
     }
 </style>
-<section class="content retailerList_Page fourdesign-section-admin">
-    <div class="container-fluid newemployee-admin">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Whitelabel User</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">User's & Account&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Whitelabel User</a></li>
-            </ul>
+<section class="content MicroAtmDevice_Page Ecommerce_Page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium">
+    <div class="container-fluid vm-ft-page-shell">
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <ol class="vm-ft-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li><a href="@Url.Action("Dashboard", "Home")#setting">Basic Setting</a></li>
+                    <li>M-ATM Device's</li>
+                </ol>
+            </div>
+            <div class="vm-ft-search-wrap vm-matm-toolbar-actions">
+                <a href="@Url.Action("Microatm_charge_list", "Home")" class="vm-matm-toolbar-btn"><i class="fas fa-list-ul" aria-hidden="true"></i>&nbsp;Charge List</a>
+                <a href="@Url.Action("Admin_Microatm_rental_report", "Home")" class="vm-matm-toolbar-btn"><i class="fas fa-file-invoice" aria-hidden="true"></i>&nbsp;Rental Report</a>
+                <input class="form-control" type="text" id="txtsearch" placeholder="Search devices..." autocomplete="off" />
+            </div>
+            <iframe id="txtArea1" style="display:none"></iframe>
         </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
 
-        <div class="page-header-third pagheadernewclass-admin-third" style="width:100%;float:left;">
-            <div class="bread-same-all-page four-noneclass-admin-only">
-                <ul style="float:left;margin:0;">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        <a href="@Url.Action("Dashboard", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                            Basic&nbsp;Setting
-                        </a>&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        M-ATM Device's
-                    </li>
-
-                </ul>
-
-                <div class="web-white-filter pdf-third-design" style="float: right;">
-                    <div class="retalerrlist-add-button" style="width:auto;float:right; ">
-
-                        <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: right;position:static;width:auto;padding-left:3px;">
-                            <a href="@Url.Action("Microatm_charge_list", "Home")" style=" margin-left: 0px; font-size: 11px; float: left; padding: 0px 4px; height: 32px; border: 1px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Charge List</a>
-
-                        </div>
-                        <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: right;position:static;width:auto;padding-left:3px;">
-                            <a href="@Url.Action("Admin_Microatm_rental_report", "Home")" style=" margin-left: 0px; font-size: 11px; float: left; padding: 0px 4px; height: 32px; border: 1px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Rental Report</a>
-
-                        </div>
-                        <div class="for-search tablesearch-second" style="position:static;float:right;width:auto;padding-right: 5px;">
-                            <div class="search-after-third">
-                                <input id="myInput" type="text" name="myInput" placeholder="Search..." onkeyup="myFunction()" style="height: 32px; border: 1px solid #ccc; padding: 5px 8px;" />
+        <div class="col-md-12 vm-ft-layout-wrap">
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full">
+                <div class="col-md-4 col-sm-12 col-xs-12 vm-ft-form-col">
+                    <div class="fund-trasfer-left vm-ecom-left-card vm-ft-form-card">
+                        <div class="vm-ft-form-card-header">
+                            <div class="vm-ft-form-card-header__icon" aria-hidden="true"><i class="fas fa-sim-card"></i></div>
+                            <div>
+                                <span class="vm-ft-form-card-header__title">Device Info</span>
+                                <span class="vm-ft-form-card-header__sub">Create a new M-ATM device</span>
                             </div>
                         </div>
-                    </div>
-
-                    <iframe id="txtArea1" style="display:none"></iframe>
-                </div>
-
-            </div>
-
-
-
-        </div>
-
-        <!--////-->
-        <div class="row clearfix" style="margin-bottom:40px;">
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="page-header-third left-tabs width100 float-left">
-                    <ul class="tabs width100 float-left">
-                        <li class="tab-link current" style="width:100%;float:left;" data-tab="tab-9"><img src="~/images/reportimage/add-user-button.svg" alt="add user" class="create-add-image">Create Device info</li>
-                    </ul>
-                    <div id="tab-9" class="tab-content current custom-table-responsive" style="height:75vh !important;">
-                        @using (Ajax.BeginForm("Insert_microAtm_deviceinfo", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "devicelist_tbl", LoadingElementId = "div-loader" }))
-                        {
-                        <div class="left-four-tabs width100 float-left">
-                            <div class="row clearfix">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <label for="email_address_2">Retailer ID</label>
-                                    <div class="form-group">
-                                        <div class="">
-                                            @Html.DropDownList("Remid", (IEnumerable<SelectListItem>)ViewBag.remid, "Select Retailerid", new { @class = "form-control", required = "required" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row clearfix">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <label for="email_address_2">Device Name </label>
-                                    <div class="form-group">
-                                        <div class="">
-
-                                            @Html.DropDownList("deviceid", (IEnumerable<SelectListItem>)ViewBag.deviceid, "Select deviceid", new { @class = "form-control", required = "required" })
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-                            <div class="row clearfix">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <label for="email_address_2">Plan Name </label>
-                                    <div class="form-group">
-                                        <div class="">
-                                            @Html.DropDownList("plannm", (IEnumerable<SelectListItem>)ViewBag.planchk, "Select PlanName", new { @class = "form-control", required = "required" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row clearfix">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <label for="email_address_2">Plan Charge Type </label>
-                                    <div class="form-group">
-                                        <div class="">
-                                            @Html.DropDownList("chargetype", new List<SelectListItem>
-                                             {
-                                              new SelectListItem{ Text="Daily",Value="Daily"},
-                                                  new SelectListItem{Text="Monthly",Value="Monthly"}
-                                              }, new { @class = "form-control", required = "required" })
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-                            <div class="row clearfix">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <label for="email_address_2">Start Date </label>
-                                    <div class="form-group">
-
-                                        <div class="input-daterange input-group">
-                                            <div class="custom-date-icon ner" style="border-color:#aaa !important;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
+                        <div id="tab-9" class="tab-content current" style="overflow-y:auto;">
+                            @using (Ajax.BeginForm("Insert_microAtm_deviceinfo", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "devicelist_tbl", LoadingElementId = "div-loader" }))
+                            {
+                                <div class="ecommerce-left-first vm-ecom-form-panel">
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 vm-ecom-field-row">
+                                            <label class="vm-ecom-field-label" for="Remid">Retailer ID</label>
+                                            <div class="vm-ecom-select-wrap">
+                                                @Html.DropDownList("Remid", (IEnumerable<SelectListItem>)ViewBag.remid, "Select Retailerid", new { @class = "vm-ecom-select form-control", required = "required" })
                                             </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #aaa !important; height: 32px !important;text-align:left;padding-left:38px;", autocomplete = "off" })
-
                                         </div>
+                                    </div><!--.row-->
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 vm-ecom-field-row">
+                                            <label class="vm-ecom-field-label" for="deviceid">Device Name</label>
+                                            <div class="vm-ecom-select-wrap">
+                                                @Html.DropDownList("deviceid", (IEnumerable<SelectListItem>)ViewBag.deviceid, "Select deviceid", new { @class = "vm-ecom-select form-control", required = "required" })
+                                            </div>
+                                        </div>
+                                    </div><!--.row-->
 
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 vm-ecom-field-row">
+                                            <label class="vm-ecom-field-label" for="plannm">Plan Name</label>
+                                            <div class="vm-ecom-select-wrap">
+                                                @Html.DropDownList("plannm", (IEnumerable<SelectListItem>)ViewBag.planchk, "Select PlanName", new { @class = "vm-ecom-select form-control", required = "required" })
+                                            </div>
+                                        </div>
+                                    </div><!--.row-->
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 vm-ecom-field-row">
+                                            <label class="vm-ecom-field-label" for="chargetype">Plan Charge Type</label>
+                                            <div class="vm-ecom-select-wrap">
+                                                @Html.DropDownList("chargetype", new List<SelectListItem>
+                                                 {
+                                                  new SelectListItem{ Text="Daily",Value="Daily"},
+                                                      new SelectListItem{Text="Monthly",Value="Monthly"}
+                                                  }, new { @class = "vm-ecom-select form-control", required = "required" })
+                                            </div>
+                                        </div>
+                                    </div><!--.row-->
+
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 vm-ecom-field-row">
+                                            <label class="vm-ecom-field-label" for="txt_frm_date">Start Date</label>
+                                            <div class="input-daterange vm-matm-date-wrap">
+                                                <div class="saas-acc-dp-field vm-matm-date-field">
+                                                    <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                    @Html.TextBox("txt_frm_date", "", new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!--.row-->
+
+                                    <div id="lblSuccess">
+                                        <label id="lblmsg1" class="danger vm-matm-msg vm-matm-msg--ok"></label>
                                     </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class=" width100 float-left">
-                                <div id="lblSuccess">
-                                    <label id="lblmsg1" class="danger" style="color:#fff;font-size: 16px;background: green;width: 96%;margin-bottom:5px;"></label>
-                                </div>
-                                <div id="lblerror">
-                                    <label id="lblmsg" class="danger" style="color:#fff;font-size: 16px;background: red;width: 96%;margin-bottom:5px;"></label>
-                                </div>
-                                <button type="submit" class="btn pull-right fullbodydycolorbg insert-errorshow" style="margin-left:15px;color:#fff;border-color:transparent;margin-right: 15px;margin-top:5px;">Insert Device</button>
-                                <button type="reset" class="btn pull-right" style="margin-top:5px;">Reset</button>
-                            </div>
-                            <label id="error-mictigit"></label>
+                                    <div id="lblerror">
+                                        <label id="lblmsg" class="danger vm-matm-msg vm-matm-msg--err"></label>
+                                    </div>
+
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 vm-ecom-action-row">
+                                            <button type="submit" class="fullbodydycolorbg insert-errorshow vm-ecom-btn-primary" style="color:#fff;"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Insert Device</button>
+                                            <button type="reset" class="vm-ecom-btn-secondary"><i class="fas fa-undo" aria-hidden="true"></i>&nbsp;Reset</button>
+                                        </div>
+                                    </div>
+                                    <label id="error-mictigit"></label>
+                                </div><!--.vm-ecom-form-panel-->
+                            }
                         </div>
-                        }
                     </div>
                 </div>
 
-            </div>
-            <div class="col-md-8 col-sm-8 col-xs-12">
-                <div class="page-header-third right-tabs width100 float-left">
-                    <div class="table-responsive custom-table-responsive tablefourdesign-admin" style="height:80vh !important;" id="devicelist_tbl">
-                        @Html.Action("Get_allDeviceList")
+                <div class="col-md-8 col-sm-12 col-xs-12 vm-ft-history-col">
+                    <div class="vm-ecom-right-card fund-trasfer-right vm-ft-history-panel">
+                        <div class="vm-ft-history-body">
+                            <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium">
+                                <div class="vm-ft-history-toolbar__head">
+                                    <i class="fas fa-microchip" aria-hidden="true"></i>
+                                    <div>
+                                        <span class="vm-ft-history-toolbar__title">Device List</span>
+                                        <span class="vm-ft-history-toolbar__sub">Manage every registered M-ATM device</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive vm-ecom-table-wrap" id="devicelist_tbl">
+                                @Html.Action("Get_allDeviceList")
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -323,7 +206,6 @@
             $("#txt_frm_date").datepicker("setDate", new Date());
             $("#txt_to_date").datepicker("setDate", new Date());
         }
-        answers();
 
     });
     $(document).ajaxComplete(function () {
@@ -331,69 +213,81 @@
     });
 </script>
 
-@*<script>
-        function Deletebyamount (e) {
-        $.ajax({
-            type: 'POST',
-            url:'@Url.Action("del_spl1", "Home")',
-            data: { idno: e },
-
-            success: function (result) {
-                //
-
-                $('#devicelist_tbl').html(result)
-
-            }
-            });
-            }
-        </script>
-    @ViewBag.msg;*@
-
-
 <script>
+    function initMatmDeviceEditRow() {
+        var $wrap = $('#devicelist_tbl');
+        if (!$wrap.length) {
+            return;
+        }
+
+        var $ctype = $wrap.find('#chargetypeEdit');
+        var ct = $wrap.find('#txtchargetype').val();
+        if ($ctype.length && ct) {
+            $ctype.val(ct);
+        }
+
+        var $frm = $wrap.find('#Frm_Name.for-select2');
+        var uid = $wrap.find('#txtdevicenm').val();
+        if ($frm.length && ravi.fn.select2) {
+            if ($frm.data('select2')) {
+                $frm.select2('destroy');
+            }
+            $frm.select2({
+                width: '100%',
+                minimumResultsForSearch: 6,
+                dropdownParent: $wrap.closest('.vm-ft-history-body')
+            });
+            if (uid) {
+                $frm.val(uid).trigger('change');
+            }
+        }
+    }
+
     function Editbyamount(e) {
-        debugger
         $("#microloader_" + e).show();
         $("#editmicro_" + e).hide();
-    $.ajax({
-        type: 'POST',
-        url:'@Url.Action("Check_DevicelistByid", "Home")',
-        data: { idno: e },
-
-        success: function (result) {
-            //
-            $("#microloader_" + e).hide();
-            $("#editmicro_" + e).show();
-
-            $('#mdList').html(result)
-
-        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Check_DevicelistByid", "Home")',
+            data: { idno: e },
+            success: function (result) {
+                $('#devicelist_tbl').html(result);
+                initMatmDeviceEditRow();
+            },
+            complete: function () {
+                $("#microloader_" + e).hide();
+                $("#editmicro_" + e).show();
+            }
         });
-        }
-
+    }
 </script>
 
 <script>
     function Savebyamount(e) {
+        var $wrap = $('#devicelist_tbl');
+        var userid = $wrap.find('#Frm_Name').val();
+        var ctype = $wrap.find('#chargetypeEdit').val();
+        var $btn = $wrap.find('.vm-matm-save-btn');
 
-    $.ajax({
-        type: 'POST',
-        url:'@Url.Action("Edit_Get_All_Devicelist", "Home")',
-        data: { idno: e, userid: $('#Frm_Name').val(), ctype:$('#chargetypeEdit').val() },
+        $btn.prop('disabled', true);
 
-        success: function (result) {
-            //
-
-            $('#mdList').html(result)
-
-        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Edit_Get_All_Devicelist", "Home")',
+            data: { idno: e, userid: userid, ctype: ctype },
+            success: function (result) {
+                $wrap.html(result);
+            },
+            complete: function () {
+                $btn.prop('disabled', false);
+            }
         });
-        }
+    }
 </script>
 
 <script>
     $(document).ready(function () {
-        $("#myInput").on("keyup", function () {
+        $("#txtsearch").on("keyup", function () {
 
             var value = $(this).val().toLowerCase();
             $("#body .tr").filter(function () {
@@ -402,5 +296,3 @@
         });
     });
 </script>
-
-

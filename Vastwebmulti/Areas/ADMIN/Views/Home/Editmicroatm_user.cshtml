@@ -3,81 +3,80 @@
     Layout = null;
 }
 
-
-<thead>
-    <tr>
-        <th>Device&nbsp;ID</th>
-        <th>Plan&nbsp;Name</th>
-        <th>
-            @if (Model.msg != "DONE")
-            {
-                <label style="color:red;">@Model.msg</label>
-            }Firm&nbsp;Name
-        </th>
-        <th>Mobile</th>
-        <th>Inserted&nbsp;Date</th>
-        <th>Start&nbsp;Date</th>
-        <th>Expire&nbsp;Date</th>
-        <th>Remain&nbsp;Days</th>
-        <th>Charge&nbsp;Type</th>
-        <th>Edit</th>
-
-    </tr>
-</thead>
-
-<tbody id="body">
-
-    @foreach (var item in Model.devicelist)
+<div>
+    @if (Model.msg != null && Model.msg != "DONE" && Model.msg != "")
     {
-        string paymenttype = "";
-        int totalremainday = 0;
-        System.TimeSpan diffResult;
-        if (item.expdate == null)
-        {
-            paymenttype = "Full Payment Mode";
+        <label class="vm-matm-msg vm-matm-msg--err">@Model.msg</label>
+    }
+</div>
 
-        }
-        else
+<table class="table table-bordered vm-ecom-table" id="mdList">
+    <thead>
+        <tr>
+            <th>Device&nbsp;ID</th>
+            <th>Plan&nbsp;Name</th>
+            <th>Firm&nbsp;Name</th>
+            <th>Mobile</th>
+            <th>Inserted&nbsp;Date</th>
+            <th>Start&nbsp;Date</th>
+            <th>Expire&nbsp;Date</th>
+            <th>Remain&nbsp;Days</th>
+            <th>Charge&nbsp;Type</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+
+    <tbody id="body">
+        @foreach (var item in Model.devicelist)
         {
-            diffResult = item.expdate.Value - DateTime.Now.Date;
-            if (diffResult.Days < 1)
+            string paymenttype = "";
+            int totalremainday = 0;
+            System.TimeSpan diffResult;
+            if (item.expdate == null)
             {
-                paymenttype = "Full Payment";
-
+                paymenttype = "Full Payment Mode";
             }
             else
             {
-                paymenttype = "";
-                totalremainday = diffResult.Days;
-            }
-        }
-
-        <tr class="tr">
-            <td>@item.deviceid</td>
-            <td>@item.planname</td>
-            <td>@item.Frm_Name </td>
-            <td>@item.Mobile</td>
-            <td>@item.inseteddate</td>
-            <td>@item.startdate</td>
-            <td>@item.expdate</td>
-            <td>
-                @if (paymenttype == "")
+                diffResult = item.expdate.Value - DateTime.Now.Date;
+                if (diffResult.Days < 1)
                 {
-                    <span>@totalremainday</span>
+                    paymenttype = "Full Payment";
                 }
                 else
                 {
-                    <span>@paymenttype</span>
-
+                    paymenttype = "";
+                    totalremainday = diffResult.Days;
                 }
-            </td>
-            <td>@item.chargetype</td>
-            <td>
-                <button type="button" class="switch-edit-button" onclick="Editbyamount(@item.idno)">
-                    Edit
-                </button>
-            </td>
-        </tr>
-    }
+            }
 
-</tbody>
+            <tr class="tr">
+                <td>@item.deviceid</td>
+                <td>@item.planname</td>
+                <td>@item.Frm_Name</td>
+                <td>@item.Mobile</td>
+                <td>@item.inseteddate</td>
+                <td>@item.startdate</td>
+                <td>@item.expdate</td>
+                <td>
+                    @if (paymenttype == "")
+                    {
+                        <span class="vm-matm-remain-badge @(totalremainday <= 7 ? "vm-matm-remain-badge--warn" : "vm-matm-remain-badge--ok")">@totalremainday&nbsp;days</span>
+                    }
+                    else
+                    {
+                        <span class="vm-matm-remain-badge vm-matm-remain-badge--info">@paymenttype</span>
+                    }
+                </td>
+                <td>@item.chargetype</td>
+                <td>
+                    <button class="btn btn default micro-edit-button vm-matm-edit-btn" id="EditBtn_@item.idno" onclick="Editbyamount('@item.idno')" title="Edit Information">
+                        <i class="fas fa-pen" aria-hidden="true"></i>
+                        <span id="editmicro_@item.idno">Edit</span>
+                        <span class="editbutton-spinclass" id="microloader_@item.idno"></span>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,915 @@
+/* ============================================================
+   Ecommerce (ADMIN/Home/Ecommerce) — modern design
+   Mirrors the design language already applied to
+   ADMIN/Home/Notification / ADMIN/Home/Fund_transfer, reusing the
+   shared vm-ft-* page shell + card system. All page-specific rules
+   below are scoped to .Ecommerce_Page to avoid touching other pages.
+   ============================================================ */
+
+/* Hide the old duplicate breadcrumb headers — replaced by the
+   vm-ft-page-toolbar breadcrumb at the top of the page shell. */
+.Ecommerce_Page .vm-ecom-legacy-header-wrap {
+    display: none !important;
+}
+
+/* ============================================================
+   Card heights — the shared fund-transfer shell stretches both
+   cards to height:100% of the viewport (min-height: 100vh - header),
+   which left a large, unbalanced blank gap under Ecommerce's short
+   Categories form. Give both cards a matching, fixed height on
+   desktop instead; let them size to their content on mobile/tablet
+   where the columns stack full-width anyway.
+   ============================================================ */
+@media (min-width: 992px) {
+    .Ecommerce_Page .fund-trasfer-left.vm-ft-form-card,
+    .Ecommerce_Page .fund-trasfer-right.vm-ft-history-panel {
+        height: 700px !important;
+        min-height: 700px !important;
+        max-height: 700px !important;
+        flex: 0 0 700px !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .Ecommerce_Page .fund-trasfer-left.vm-ft-form-card,
+    .Ecommerce_Page .fund-trasfer-right.vm-ft-history-panel {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        flex: 1 1 auto !important;
+    }
+}
+
+/* The table itself only takes the height its rows need — the footer
+   bar below (margin-top: auto) soaks up any remaining space in the
+   fixed-height card instead of leaving a blank gap under a short
+   result set. If the table ever grows past the card, it scrolls. */
+.Ecommerce_Page .vm-ft-history-body > .vm-ecom-table-wrap {
+    flex: 0 1 auto !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+}
+
+/* ============================================================
+   Left card — Categories
+   ============================================================ */
+.Ecommerce_Page .ecommerce-left.fund-trasfer-left {
+    background: #fff !important;
+}
+
+.Ecommerce_Page .tab-content > .ecommerce-left-first.tab-pane {
+    padding: 16px !important;
+}
+
+/* Section title ("Add new category name") */
+/* Soft card wrapper around each tab's "Add category / sub-category"
+   form so it reads as its own panel instead of floating loosely in
+   the tab body. */
+.Ecommerce_Page .vm-ecom-form-panel {
+    background: #f8fafc !important;
+    border: 1px solid #eef2f6 !important;
+    border-radius: 12px !important;
+    padding: 18px !important;
+}
+
+.Ecommerce_Page .vm-ecom-section-title {
+    width: 100% !important;
+    background: transparent !important;
+    margin: 0 0 14px !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    text-align: left !important;
+    font-size: 0.98rem !important;
+    font-weight: 800 !important;
+    color: #1e293b !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.Ecommerce_Page .vm-ecom-section-title i {
+    color: #2563eb !important;
+    font-size: 0.95rem !important;
+}
+
+/* Field rows */
+.Ecommerce_Page .vm-ecom-field-row {
+    margin-bottom: 14px !important;
+}
+
+.Ecommerce_Page .vm-ecom-field-label {
+    width: 100% !important;
+    float: none !important;
+    display: block !important;
+    margin: 0 0 6px !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em !important;
+}
+
+.Ecommerce_Page .vm-ecom-input,
+.Ecommerce_Page select.vm-ecom-select {
+    width: 100% !important;
+    float: none !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    padding: 0 14px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    font-size: 0.88rem !important;
+    color: #1e293b !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.Ecommerce_Page .vm-ecom-input:focus,
+.Ecommerce_Page select.vm-ecom-select:focus {
+    outline: none !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+/* Leading-icon input group */
+.Ecommerce_Page .vm-ecom-input-group {
+    position: relative !important;
+}
+
+.Ecommerce_Page .vm-ecom-input-icon {
+    position: absolute !important;
+    top: 50% !important;
+    left: 14px !important;
+    transform: translateY(-50%) !important;
+    color: #94a3b8 !important;
+    font-size: 0.85rem !important;
+    pointer-events: none !important;
+}
+
+.Ecommerce_Page .vm-ecom-input.vm-ecom-input--icon {
+    padding-left: 38px !important;
+}
+
+.Ecommerce_Page .vm-ecom-input-group:focus-within .vm-ecom-input-icon {
+    color: #2563eb !important;
+}
+
+/* Native <select> chevron — hide the site-wide diagonal-border arrow
+   drawn by .custom-district::after and draw a clean SVG chevron instead,
+   matching the Notification page's dropdown treatment. */
+.Ecommerce_Page .vm-ecom-select-wrap {
+    position: relative !important;
+    width: 100% !important;
+}
+
+.Ecommerce_Page .vm-ecom-select-wrap.custom-district::after {
+    display: none !important;
+}
+
+.Ecommerce_Page .vm-ecom-select-wrap::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    width: 10px;
+    height: 7px;
+    margin-top: -3px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%2364748b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / contain;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.Ecommerce_Page select.vm-ecom-select {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    padding-right: 34px !important;
+}
+
+/* Action row (Add / Block History buttons) */
+.Ecommerce_Page .vm-ecom-action-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin-top: 4px !important;
+}
+
+.Ecommerce_Page .ecommerce-left-first button.vm-ecom-btn-primary,
+.Ecommerce_Page .ecommerce-left-first button.vm-ecom-btn-secondary {
+    float: none !important;
+    margin-top: 0 !important;
+    flex: 1 1 0 !important;
+    width: auto !important;
+    height: 42px !important;
+    padding: 0 16px !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    font-size: 0.86rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    border: none !important;
+    transition: filter 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.Ecommerce_Page .vm-ecom-btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28) !important;
+}
+
+.Ecommerce_Page .vm-ecom-btn-secondary {
+    background: #f1f5f9 !important;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.Ecommerce_Page .vm-ecom-btn-primary:hover,
+.Ecommerce_Page .vm-ecom-btn-secondary:hover {
+    filter: brightness(1.05) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ============================================================
+   Right card — Product Detail toolbar + filters
+   ============================================================ */
+.Ecommerce_Page .vm-ecom-filter-row {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+}
+
+.Ecommerce_Page .vm-ecom-filter-row .vm-ecom-select-wrap {
+    width: auto !important;
+    min-width: 160px !important;
+    flex: 0 1 180px !important;
+}
+
+.Ecommerce_Page .vm-ecom-filter-row select.vm-ecom-select {
+    height: 40px !important;
+    min-height: 40px !important;
+}
+
+/* ============================================================
+   Product table
+   ============================================================ */
+.Ecommerce_Page .vm-ecom-table-wrap {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+.Ecommerce_Page .vm-ecom-table-wrap > table.vm-ecom-table {
+    display: table !important;
+    width: 100% !important;
+    table-layout: auto !important;
+    margin-bottom: 0 !important;
+    border: none !important;
+}
+
+/* .table-bordered (Bootstrap) draws a border around every single
+   header cell, which is what gives the header row that boxy, dated
+   vertical-grid-line look — strip those side borders out and rebuild
+   a single clean underline instead. */
+.Ecommerce_Page .vm-ecom-table-wrap table thead th {
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%) !important;
+    color: #1e3a8a !important;
+    font-weight: 800 !important;
+    font-size: 0.72rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 2px solid #dbe3ee !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+    white-space: nowrap !important;
+}
+
+.Ecommerce_Page .vm-ecom-table-wrap table thead th:first-child {
+    border-top-left-radius: 10px !important;
+}
+
+.Ecommerce_Page .vm-ecom-table-wrap table thead th:last-child {
+    border-top-right-radius: 10px !important;
+}
+
+.Ecommerce_Page .vm-ecom-table-wrap table td,
+.Ecommerce_Page .vm-ecom-table-wrap table th {
+    padding: 11px 14px !important;
+    vertical-align: middle !important;
+}
+
+.Ecommerce_Page .vm-ecom-table-wrap table tbody td {
+    border-bottom: 1px solid #eef2f6 !important;
+    border-top: 0 !important;
+}
+
+.Ecommerce_Page .vm-ecom-table-wrap table tbody tr:last-child td {
+    border-bottom: 0 !important;
+}
+
+.Ecommerce_Page .vm-ecom-table-wrap table tbody tr {
+    cursor: pointer;
+    transition: background 0.12s ease;
+}
+
+.Ecommerce_Page .vm-ecom-table-wrap table tbody tr:hover {
+    background: #f8fafc !important;
+}
+
+/* Seller status badges (ok / rejected / pending) */
+.Ecommerce_Page .vm-ecom-status-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 50% !important;
+    margin-right: 8px !important;
+    font-size: 0.72rem !important;
+    color: #fff !important;
+}
+
+.Ecommerce_Page .vm-ecom-status-icon--ok {
+    background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+}
+
+.Ecommerce_Page .vm-ecom-status-icon--rejected {
+    background: linear-gradient(135deg, #f87171, #dc2626) !important;
+}
+
+.Ecommerce_Page .vm-ecom-status-icon--pending {
+    background: linear-gradient(135deg, #fbbf24, #d97706) !important;
+}
+
+.Ecommerce_Page .seller-firm {
+    font-weight: 700 !important;
+    color: #1e293b !important;
+}
+
+/* Category / sub-category pill badges */
+.Ecommerce_Page .vm-ecom-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    min-height: 24px !important;
+    padding: 0 10px !important;
+    border-radius: 999px !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+}
+
+.Ecommerce_Page .vm-ecom-badge--cat {
+    background: #eff6ff !important;
+    color: #2563eb !important;
+    border: 1px solid #dbeafe !important;
+}
+
+.Ecommerce_Page .vm-ecom-badge--subcat {
+    background: #f5f3ff !important;
+    color: #7c3aed !important;
+    border: 1px solid #ede9fe !important;
+}
+
+/* Price columns */
+.Ecommerce_Page .vm-ecom-price {
+    font-weight: 700 !important;
+    color: #1e293b !important;
+}
+
+.Ecommerce_Page .vm-ecom-my-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    min-height: 24px !important;
+    padding: 0 10px !important;
+    border-radius: 8px !important;
+    font-size: 0.74rem !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+    color: #92400e !important;
+}
+
+.Ecommerce_Page .vm-ecom-date {
+    color: #64748b !important;
+    font-size: 0.8rem !important;
+}
+
+.Ecommerce_Page .vm-ecom-date i {
+    color: #94a3b8 !important;
+    font-size: 0.72rem !important;
+}
+
+/* Circular "open detail" arrow button, right-aligned in the last cell */
+.Ecommerce_Page .vm-ecom-row-btn {
+    float: right;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 50% !important;
+    background: #f1f5f9 !important;
+    color: #64748b !important;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.Ecommerce_Page .vm-ecom-table-wrap table tbody tr:hover .vm-ecom-row-btn {
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+    color: #fff !important;
+    transform: translateX(2px);
+}
+
+.Ecommerce_Page .vm-ecom-row-arrow {
+    font-size: 0.66rem !important;
+}
+
+/* Table footer — result count + decorative pager, pinned to the bottom
+   of the card via margin-top:auto so it fills the space left by a
+   short result set instead of a blank gap. */
+.Ecommerce_Page .vm-ecom-table-footer {
+    margin-top: auto !important;
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px;
+    padding: 12px 16px !important;
+    border-top: 1px solid #eef2f6 !important;
+    background: #f8fafc !important;
+    border-radius: 0 0 10px 10px;
+}
+
+.Ecommerce_Page .vm-ecom-table-footer__info {
+    font-size: 0.78rem !important;
+    color: #64748b !important;
+}
+
+.Ecommerce_Page .vm-ecom-table-footer__info i {
+    color: #94a3b8 !important;
+}
+
+.Ecommerce_Page .vm-ecom-table-footer__pager {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px;
+}
+
+.Ecommerce_Page .vm-ecom-pager-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #fff !important;
+    color: #94a3b8 !important;
+    cursor: not-allowed;
+}
+
+.Ecommerce_Page .vm-ecom-pager-page {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    padding: 0 4px !important;
+    border-radius: 8px !important;
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+    color: #fff !important;
+    font-size: 0.76rem !important;
+    font-weight: 800 !important;
+}
+
+/* On / off pills reused site-wide (.costom-on / .custom-off) */
+.Ecommerce_Page .costom-on,
+.Ecommerce_Page .custom-off {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    float: none !important;
+    width: auto !important;
+    min-width: 56px !important;
+    min-height: 26px !important;
+    padding: 0 12px !important;
+    border-radius: 999px !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 6px rgba(22, 163, 74, 0.28) !important;
+}
+
+.Ecommerce_Page .custom-off {
+    background: linear-gradient(135deg, #f87171, #dc2626) !important;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.24) !important;
+}
+
+.Ecommerce_Page .costom-on::after {
+    display: none !important;
+}
+
+.Ecommerce_Page .vm-ecom-onoff.onoffswitch {
+    width: auto !important;
+    border: none !important;
+    overflow: visible !important;
+}
+
+/* ============================================================
+   Seller / product detail modal (#defaultModal1)
+   ============================================================ */
+.Ecommerce_Page .vm-ecom-modal .modal-dialog {
+    max-width: 640px;
+}
+
+/* body.saas-admin-ui prefix needed on the next 3 rules: the shared
+   admin-modal-modern.css rules for .saas-admin-modal-body /
+   .saas-admin-modal .form-control / .saas-admin-modal-footer already
+   carry that prefix, which out-specifies a plain .Ecommerce_Page
+   selector on a tie (extra "body" type selector wins), so these must
+   match that specificity to reliably override them. */
+body.saas-admin-ui .Ecommerce_Page .vm-ecom-modal-body {
+    max-height: 78vh !important;
+    overflow-y: auto !important;
+    padding: 0 !important;
+    background: #fff !important;
+}
+
+/* Avatar + live status header strip */
+.Ecommerce_Page .vm-ecom-modal .vm-ecom-modal-avatar-row {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 52%, #4f46e5 100%) !important;
+    padding: 22px 20px !important;
+    text-align: left !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+}
+
+.Ecommerce_Page .vm-ecom-modal .thisLeft {
+    float: none !important;
+    display: inline-block !important;
+}
+
+.Ecommerce_Page .vm-ecom-modal .thisLeft img {
+    border: 3px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25) !important;
+}
+
+.Ecommerce_Page .vm-ecom-modal-avatar-meta {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+}
+
+.Ecommerce_Page .vm-ecom-modal-avatar-meta__label {
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+}
+
+.Ecommerce_Page .vm-ecom-modal-form {
+    padding: 18px 20px 4px !important;
+    display: block !important;
+}
+
+/* Explicit flex grid for the modal's read-only fields — deliberately
+   ignores the page's Bootstrap col-md-*/col-sm-* classes (they don't
+   reliably produce two columns in this admin shell) so every field
+   pair always renders side by side, two per row. */
+.Ecommerce_Page .vm-ecom-modal-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+    margin: 0 0 0 !important;
+    width: 100% !important;
+}
+
+.Ecommerce_Page .vm-ecom-modal-col {
+    flex: 1 1 calc(50% - 6px) !important;
+    max-width: calc(50% - 6px) !important;
+    min-width: 0 !important;
+    width: auto !important;
+    float: none !important;
+    padding: 0 !important;
+}
+
+/* Each read-only field becomes a compact "info tile" */
+.Ecommerce_Page .vm-ecom-modal-tile {
+    background: #f8fafc !important;
+    border: 1px solid #eef2f6 !important;
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+    margin-bottom: 12px !important;
+}
+
+.Ecommerce_Page .vm-ecom-modal .form-group label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em !important;
+    color: #64748b !important;
+    margin-bottom: 4px !important;
+}
+
+.Ecommerce_Page .vm-ecom-modal .form-group label i {
+    color: #94a3b8 !important;
+    font-size: 0.72rem !important;
+}
+
+body.saas-admin-ui .Ecommerce_Page .vm-ecom-modal .form-control {
+    height: auto !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: #1e293b !important;
+    font-weight: 700 !important;
+    font-size: 0.92rem !important;
+    box-shadow: none !important;
+}
+
+.Ecommerce_Page .vm-ecom-modal-section-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 4px 0 12px !important;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    color: #1e3a8a !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em !important;
+    padding-top: 6px !important;
+    border-top: 1px dashed #e2e8f0 !important;
+    padding-top: 14px !important;
+}
+
+.Ecommerce_Page .vm-ecom-modal-section-title i {
+    color: #2563eb !important;
+}
+
+body.saas-admin-ui .Ecommerce_Page .vm-ecom-modal .modal-footer {
+    padding: 14px 20px 18px !important;
+    margin: 0 !important;
+    border-top: none !important;
+}
+
+/* ============================================================
+   Slide-in "Block History" panels (category / sub category)
+   ============================================================ */
+.Ecommerce_Page .vm-ecom-slide-panel {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 80vh !important;
+    z-index: 20;
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.14) !important;
+    padding: 0 !important;
+    overflow-y: auto !important;
+}
+
+.Ecommerce_Page .vm-ecom-slide-panel__header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px;
+    padding: 14px 16px !important;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 52%, #4f46e5 100%) !important;
+}
+
+.Ecommerce_Page .vm-ecom-slide-panel__title {
+    color: #fff !important;
+    font-weight: 800 !important;
+    font-size: 0.9rem !important;
+}
+
+.Ecommerce_Page .vm-ecom-panel-close {
+    float: none !important;
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 6px 14px !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    transition: background 0.15s ease;
+}
+
+.Ecommerce_Page .vm-ecom-panel-close:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+.Ecommerce_Page .vm-ecom-slide-panel .table-data {
+    padding: 14px 16px 18px !important;
+}
+
+.Ecommerce_Page .vm-ecom-inline-input {
+    height: 36px !important;
+    border-radius: 8px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #f8fafc !important;
+    padding: 0 10px !important;
+    width: 100% !important;
+}
+
+/* Small icon action buttons — edit / save / delete.
+   !important throughout: these need to beat the legacy
+   .for-category .for-edit / .for-save / .for-delete rules in
+   Dashcustom.css, which share the same selector specificity.
+   Note: "display" is NOT set here (only on the always-visible
+   .vm-ecom-icon-btn--edit / --delete variants below) — the
+   .vm-ecom-icon-btn--save button must stay controlled by the
+   legacy ".for-save { display:none }" rule (no !important there)
+   so the edit-click handler's inline $(this).css('display','block')
+   can still reveal it; forcing display here would break that. */
+.Ecommerce_Page .vm-ecom-icon-btn {
+    align-items: center !important;
+    justify-content: center !important;
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    text-transform: none !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    margin-right: 4px !important;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.Ecommerce_Page .vm-ecom-icon-btn--edit,
+.Ecommerce_Page .vm-ecom-icon-btn--delete {
+    display: inline-flex !important;
+}
+
+.Ecommerce_Page .vm-ecom-icon-btn--edit:hover {
+    background: #eff6ff !important;
+    border-color: #93c5fd !important;
+    color: #2563eb !important;
+}
+
+/* display intentionally left to the legacy .for-category/.for-sub-category
+   ".for-save { display:none }" rule (no !important there) so the inline
+   $(this).css('display','block') from the edit-button click handler can
+   still reveal this button — adding !important here would silently break
+   the edit/save toggle. */
+.Ecommerce_Page .vm-ecom-icon-btn--save {
+    background: #ecfdf5 !important;
+    border-color: #6ee7b7 !important;
+    color: #16a34a !important;
+}
+
+.Ecommerce_Page .vm-ecom-icon-btn--delete {
+    width: 30px !important;
+    height: 30px !important;
+    color: #dc2626 !important;
+}
+
+.Ecommerce_Page .vm-ecom-icon-btn--delete:hover {
+    background: #fee2e2 !important;
+    border-color: #f87171 !important;
+}
+
+/* display likewise left to the legacy ".for-sure { display:none }" rule —
+   the delete-button click handler reveals this via inline .css() too. */
+.Ecommerce_Page .vm-ecom-icon-btn--delete .for-sure {
+    color: #dc2626 !important;
+    font-weight: 800 !important;
+    font-size: 0.68rem !important;
+}
+
+/* ============================================================
+   Mobile / tablet responsiveness
+   ============================================================ */
+@media (max-width: 991px) {
+    .Ecommerce_Page .vm-ecom-filter-row .vm-ecom-select-wrap {
+        min-width: 140px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .Ecommerce_Page .vm-ecom-form-panel {
+        padding: 14px !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-action-row {
+        flex-wrap: wrap !important;
+    }
+
+    .Ecommerce_Page .ecommerce-left-first button.vm-ecom-btn-primary,
+    .Ecommerce_Page .ecommerce-left-first button.vm-ecom-btn-secondary {
+        flex: 1 1 100% !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-filter-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-filter-row .vm-ecom-select-wrap,
+    .Ecommerce_Page .vm-ecom-filter-row .vm-dmt-filter-search-group {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-table-wrap {
+        background:
+            linear-gradient(to right, #fff 30%, rgba(255,255,255,0)),
+            linear-gradient(to right, rgba(255,255,255,0), #fff 70%) 100% 0,
+            linear-gradient(to right, rgba(15,23,42,0.12), rgba(15,23,42,0)),
+            linear-gradient(to left, rgba(15,23,42,0.12), rgba(15,23,42,0)) 100% 0 !important;
+        background-repeat: no-repeat !important;
+        background-size: 24px 100%, 24px 100%, 8px 100%, 8px 100% !important;
+        background-attachment: local, local, scroll, scroll !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-table-wrap table td,
+    .Ecommerce_Page .vm-ecom-table-wrap table th {
+        padding: 8px 10px !important;
+        font-size: 0.76rem !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-slide-panel {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        overflow-y: auto;
+    }
+
+    .Ecommerce_Page .vm-ecom-table-footer {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-modal .modal-dialog {
+        max-width: calc(100% - 20px);
+        margin: 10px auto;
+    }
+
+    .Ecommerce_Page .vm-ecom-modal .vm-ecom-modal-avatar-row {
+        padding: 18px 16px !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-modal .thisLeft img {
+        width: 72px !important;
+        height: 72px !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-modal-form {
+        padding: 14px 14px 2px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .Ecommerce_Page .vm-ecom-slide-panel__title {
+        font-size: 0.8rem !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-table-footer {
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-modal .vm-ecom-modal-avatar-row {
+        flex-direction: column !important;
+        text-align: center !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-modal-avatar-meta {
+        align-items: center !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-modal-row {
+        flex-wrap: wrap !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-modal-col {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+    }
+
+    .Ecommerce_Page .vm-ecom-modal-col:empty {
+        display: none !important;
+    }
+}

@@ -1,0 +1,266 @@
+/* M-ATM Charge List — page-specific styling on top of the shared
+   Prepaid Card / operator report shell (admin-operator-report-modern +
+   admin-money-transfer-report-modern). */
+
+/* Toolbar — breadcrumb left, search box right */
+body.saas-admin-ui .saas-microatm-charge-list-page .vm-matm-cl-toolbar-row {
+    justify-content: space-between !important;
+    gap: 12px !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page .vm-matm-cl-toolbar-row .vm-dmt-breadcrumb {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page .vm-matm-cl-toolbar-search {
+    flex: 0 1 280px !important;
+    max-width: 320px !important;
+    min-width: 200px !important;
+    margin-left: auto !important;
+    position: relative !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page .vm-matm-cl-toolbar-search input.vm-dmt-search-input {
+    width: 100% !important;
+    background-image: none !important;
+    background-color: var(--dmt-input-bg, #f8fafc) !important;
+    padding: 0 12px 0 38px !important;
+    cursor: text !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page .vm-matm-cl-toolbar-search input.vm-dmt-search-input:focus {
+    background-color: #fff !important;
+    background-image: none !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page .vm-matm-cl-toolbar-search::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.1a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat center / contain;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.saas-microatm-charge-list-page .vm-matm-cl-record-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 30px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Wide grouped table */
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table {
+    min-width: 1480px;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead th.vm-matm-cl-th--group {
+    text-align: center !important;
+    font-size: 0.66rem !important;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid #dbeafe !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead th.vm-matm-cl-th--group.vm-matm-cl-th--t2 {
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%) !important;
+    color: #1e3a8a !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead th.vm-matm-cl-th--group.vm-matm-cl-th--t5 {
+    background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%) !important;
+    color: #14532d !important;
+    border-bottom-color: #bbf7d0 !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead th.vm-matm-cl-th--group.vm-matm-cl-th--t8 {
+    background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%) !important;
+    color: #92400e !important;
+    border-bottom-color: #fde68a !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead th.vm-matm-cl-th--group.vm-matm-cl-th--a8 {
+    background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%) !important;
+    color: #7f1d1d !important;
+    border-bottom-color: #fecaca !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead th.vm-matm-cl-th--group.vm-matm-cl-th--month {
+    background: linear-gradient(180deg, #f5f3ff 0%, #ede9fe 100%) !important;
+    color: #5b21b6 !important;
+    border-bottom-color: #ddd6fe !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead th.vm-matm-cl-th--rowspan {
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead tr.vm-matm-cl-head-row--sub th {
+    padding: 7px 6px !important;
+    font-size: 0.58rem !important;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead tr.vm-matm-cl-head-row--sub th .vm-matm-cl-role--ret {
+    color: #dc2626 !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead tr.vm-matm-cl-head-row--sub th .vm-matm-cl-role--dlm,
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead tr.vm-matm-cl-head-row--sub th .vm-matm-cl-role--md {
+    color: #16a34a !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table tbody td.vm-matm-cl-col--plan {
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table tbody td.vm-matm-cl-col--days,
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table tbody td.vm-matm-cl-col--num {
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table tbody td.vm-matm-cl-tier-start {
+    border-left: 2px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table tbody td.vm-matm-cl-col--action {
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+/* Inline edit inputs */
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport input.vm-matm-cl-inline-input {
+    width: 62px !important;
+    min-width: 52px !important;
+    max-width: 72px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 0 6px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    color: #1e293b !important;
+    text-align: center !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+body.saas-admin-ui .saas-microatm-charge-list-page #matmreport input.vm-matm-cl-inline-input:focus {
+    outline: none !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+/* Edit / Save buttons */
+.saas-microatm-charge-list-page .vm-matm-cl-edit-btn,
+.saas-microatm-charge-list-page .vm-matm-cl-save-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    min-width: 64px !important;
+    height: 30px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    font-size: 0.74rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+}
+
+.saas-microatm-charge-list-page .vm-matm-cl-edit-btn {
+    background: #f1f5f9 !important;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.saas-microatm-charge-list-page .vm-matm-cl-edit-btn:hover {
+    background: #e2e8f0 !important;
+    transform: translateY(-1px) !important;
+}
+
+.saas-microatm-charge-list-page .vm-matm-cl-save-btn {
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.28) !important;
+}
+
+.saas-microatm-charge-list-page .vm-matm-cl-save-btn:hover {
+    filter: brightness(1.06) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Edit-button loading spinner (keeps legacy class name for JS) */
+@keyframes microatmspin111 {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.saas-microatm-charge-list-page .microatmcharge-button {
+    position: relative;
+}
+
+.saas-microatm-charge-list-page .microatmcharge-button::after {
+    content: "";
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15px;
+    height: 15px;
+    margin: -7px 0 0 -7px;
+    border: 2px solid #94a3b8;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: microatmspin111 1s linear infinite;
+}
+
+.saas-microatm-charge-list-page .microatmcharge-button-spin::after {
+    display: block;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-microatm-charge-list-page .vm-matm-cl-toolbar-row {
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-microatm-charge-list-page .vm-matm-cl-toolbar-search {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        margin-left: 0 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table thead th {
+        font-size: 0.54rem !important;
+        padding: 6px 4px !important;
+    }
+
+    body.saas-admin-ui .saas-microatm-charge-list-page #matmreport.vm-opr-data-table tbody td {
+        font-size: 0.72rem !important;
+        padding: 7px 5px !important;
+    }
+}

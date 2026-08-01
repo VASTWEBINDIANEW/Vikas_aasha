@@ -1,235 +1,190 @@
 @model Vastwebmulti.Areas.ADMIN.ViewModel.MicroatmchargeViewmodel
-
+@using System.Linq
 @{
     ViewBag.Title = "Microatm_charge_list";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var plans = Model != null && Model.Showdeviceplanlist != null ? Model.Showdeviceplanlist : Enumerable.Empty<Vastwebmulti.Models.Micro_atm_device_plan>();
+    var rowCount = plans.Count();
 }
 
-<style>
-    .table-bordered tbody tr td, .table-bordered thead tr th {
-        padding: 5px 2px;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-microatm-charge-list-modern.css?v=2" rel="stylesheet" />
 
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-microatm-charge-list-page">
 
+    <div class="container-fluid vm-opr-page-shell">
 
-    .form-iconmy {
-        position: absolute;
-        z-index: 99;
-        top: 0px;
-        bottom: 0px;
-        padding: 6px 5px;
-        border-right: 1px solid #bbb;
-        height: 32px;
-    }
-    .microatm-charge-table table th, .microatm-charge-table table td {
-        padding: 5px 6px !important;
-    }
-        .microatm-charge-table table td select {
-            padding-left: 0;
-        }
-        .microatm-charge-table table td input {
-            border: 1px solid #aaa4a4;
-            padding: 4px 4px;
-        }
-    @@keyframes microatmspin111 {
-        0% {
-            transform: rotate(0deg);
-        }
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-matm-cl-toolbar-row">
 
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-    .microatmcharge-button {
-        position:relative;
-    }
-    .microatmcharge-button::after {
-        content: "";
-        display: none;
-        width: 15px;
-        height: 15px;
-        border: 2px solid #aaa4a4;
-        border-radius: 50%;
-        border-top-color: transparent;
-        animation: microatmspin111 1s linear infinite;
-    }
-    .microatmcharge-button-spin::after{display:block;}
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li><a href="@Url.Action("Dashboard", "Home")#setting">Basic Setting</a></li>
+                    <li><a href="@Url.Action("MicroAtm_Device_info", "Home")#setting">M-ATM Device's</a></li>
+                    <li>Microatm Charge List</li>
+                </ol>
 
-    @@media screen and (max-width:1366px) {
-        .actul-none-third {
-            display: none;
-        }
+                <div class="vm-matm-cl-toolbar-search">
+                    <input id="myInput" type="text" class="form-control vm-dmt-search-input" placeholder="Search plans..." onkeyup="myFunction()" autocomplete="off" />
+                </div>
 
-        .actul-search-third {
-            width: 23%;
-        }
-
-        .actulpdf-third {
-            width: 35%;
-            padding-right: 5px;
-        }
-
-        .actulpdf-third {
-            padding-left: 0;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        .up-up-up #custnav li {
-            width: 33%;
-            margin-bottom: 10px;
-        }
-
-        .responcive-fifty {
-            width: 50%;
-            float: left;
-            margin-bottom: 10px;
-            padding: 0 2px !important;
-        }
-
-            .responcive-fifty button {
-                width: 100%;
-                text-align: left;
-            }
-
-            .responcive-fifty div {
-                padding-bottom: 0px !important;
-            }
-
-        .actul-search-third {
-            width: auto;
-        }
-
-        .actulpdf-third {
-            width: auto;
-            float: right;
-        }
-    }
-
-    @@media only screen and (max-width:520px) {
-        .admin-day-book .col-md-5 {
-            width: 38%;
-            padding-left: 15px !important;
-            float: left;
-        }
-
-            .admin-day-book .col-md-5 input {
-                padding-left: 15px;
-            }
-
-        .admin-day-book .col-md-2 {
-            width: 25%;
-            float: left;
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > thead > tr > td:first-child,
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-left: 1px solid var(--border-color);
-        }
-    }
-</style>
-<section class="content fourdesign-section-admin">
-    <div class="container-fluid">
-        <div class="page-header-third pageheader-margin-third four-noneclass-admin-only">
-            <div class="bread-same-all-page breadsameall-second">
-                <ul class="padding-top-third">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                            Basic&nbsp;Setting &nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="smli">
-                        <a href="@Url.Action("MicroAtm_Device_info", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                            M-ATM&nbsp;Device's &nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Microatm Charge List
-                    </li>
-                </ul>
             </div>
         </div>
-        <div class="table-responsive microatm-charge-table" style="width:100%;float:left;margin-top:10px;">
-            <table class="table table-bordered example-second" id="matmreport" style="width:100%;background:#f5f5f5;">
-                <thead style="background-color:whitesmoke;">
-                    <tr>
-                        <th rowspan="3">Plan&nbsp;Name</th>
-                        <th rowspan="3">Days</th>
-                        <th rowspan="3">Device&nbsp;Price</th>
-                        <th rowspan="3">Min&nbsp;Qty</th>
-                        <th colspan="3">Upto&nbsp;2&nbsp;Transition (Daily) </th>
-                        <th colspan="3">Upto&nbsp;5&nbsp;Transition (Daily)</th>
-                        <th colspan="3">Upto&nbsp;8&nbsp;Transition (Daily)</th>
-                        <th colspan="3">Above&nbsp;8&nbsp;Transition (Daily)</th>
-                        <th colspan="3">Monthly&nbsp;Charge (Fixed) </th>
-                        <th rowspan="3">Edit</th>
-                    </tr>
-                    <tr>
-                        <th>Retailer<i style="color:red;">*</i> </th>
-                        <th>Dealer<i style="color:green;">*</i></th>
-                        <th>Master<i style="color:green;">*</i></th>
-                        <th>Retailer<i style="color:red;">*</i> </th>
-                        <th>Dealer<i style="color:green;">*</i></th>
-                        <th>Master<i style="color:green;">*</i></th>
-                        <th>Retailer<i style="color:red;">*</i> </th>
-                        <th>Dealer<i style="color:green;">*</i></th>
-                        <th>Master<i style="color:green;">*</i></th>
-                        <th>Retailer<i style="color:red;">*</i> </th>
-                        <th>Dealer<i style="color:green;">*</i></th>
-                        <th>Master<i style="color:green;">*</i></th>
-                        <th>Retailer<i style="color:red;">*</i> </th>
-                        <th>Dealer<i style="color:green;">*</i></th>
-                        <th>Master<i style="color:green;">*</i></th>
-                    </tr>
-                </thead>
-                @Html.Partial("_microatmEdit", Model)
 
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-list-alt" aria-hidden="true"></i>
+                        <span>M-ATM charge list</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-matm-cl-record-badge" title="Total plans">
+                            Plans: <strong id="matmClRecordCount">@rowCount</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" id="btnExportCL" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFCL" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-            </table>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="matmreport" class="table vm-opr-data-table" cellspacing="0">
+                            @Html.Partial("_MicroatmChargeTableHead")
+                            @Html.Partial("_microatmEdit", Model)
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    </section>
 
+    </div>
+</section>
 
 <script>
+    function myFunction() {
+        var value = document.getElementById('myInput').value.toLowerCase();
+        $('#matmreport tbody tr').filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    }
+
+    function refreshMatmClRecordCount() {
+        var count = document.querySelectorAll('#matmreport tbody tr:not(.vm-opr-table-empty-row)').length;
+        $('#matmClRecordCount').text(count);
+    }
+
+    function exportMatmClTable(type) {
+        var table = document.getElementById('matmreport');
+        if (!table) {
+            return;
+        }
+
+        var stamp = new Date().toISOString().slice(0, 10);
+        var title = 'M-ATM Charge List';
+        var clone = table.cloneNode(true);
+        var emptyRow = clone.querySelector('.vm-opr-table-empty-row');
+        if (emptyRow) {
+            alert('No data available to export.');
+            return;
+        }
+
+        if (type === 'excel') {
+            var excelHtml = '<html><head><meta charset="utf-8"></head><body>' + clone.outerHTML + '</body></html>';
+            var blob = new Blob(['\ufeff', excelHtml], { type: 'application/vnd.ms-excel' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'MicroAtmChargeList_' + stamp + '.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return;
+        }
+
+        var printWin = window.open('', '_blank');
+        if (!printWin) {
+            alert('Please allow pop-ups to export PDF.');
+            return;
+        }
+        printWin.document.write(
+            '<html><head><title>' + title + '</title>'
+            + '<style>body{font-family:Arial,sans-serif;padding:16px}h3{margin:0 0 12px}table{border-collapse:collapse;width:100%;font-size:8px}th,td{border:1px solid #ccc;padding:3px;text-align:left}th{background:#f3f4f6}</style>'
+            + '</head><body><h3>' + title + '</h3>' + clone.outerHTML + '</body></html>'
+        );
+        printWin.document.close();
+        printWin.focus();
+        printWin.print();
+    }
 
     function EditPlanorday(id) {
-        debugger
-        $("#editplanoder_" + id).addClass("microatmcharge-button-spin");
-        $("#editplanoder_" + id).attr('style', 'font-size:0px !important;');
-         $.ajax({
-                type: 'POST',
-                url: '@Url.Action("GetChargelistById", "Home")',
-                data: {idno:id },
-             success: function (data) {
-                 $('#matmreport').html(data);
-                 $("#editplanoder_" + id).style("font-size:12px !important;")
-                 $("#editplanoder_" + id).attr('style', 'font-size:0px !important;');
-                },
-         });
+        var $btn = $('#editplanoder_' + id);
+        $btn.addClass('microatmcharge-button-spin');
+        $btn.css('font-size', '0');
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetChargelistById", "Home")',
+            data: { idno: id },
+            success: function (data) {
+                $('#matmreport').replaceWith(data);
+                refreshMatmClRecordCount();
+            },
+            complete: function () {
+                $btn.removeClass('microatmcharge-button-spin');
+                $btn.css('font-size', '');
+            }
+        });
     }
 
     function SaveAmountData(id) {
-         $.ajax({
-                type: 'POST',
-             url: '@Url.Action("Editrentalchargelist", "Home")',
-             data: {
-                 idno: id, deviceprice: $('#deviceprice').val(), minquantity: $('#minquantity').val(), upto2: $('#upto2').val()
-                 , upto5: $('#upto5').val(), upto8: $('#upto8').val(), above8: $('#above8').val(), dlm_upto2: $('#dlm_upto2').val()
-                 , dlm_upto5: $('#dlm_upto5').val(), dlm_upto8: $('#dlm_upto8').val(), dlm_above8: $('#dlm_above8').val(), md_upto2: $('#md_upto2').val()
-                 , md_upto5: $('#md_upto5').val(), md_upto8: $('#md_upto8').val(), md_above8: $('#md_above8').val(), md_monthly: $('#md_monthly').val(),
-                 md_monthly_dealer: $('#md_monthly_dealer').val(), md_monthly_master: $('#md_monthly_master').val()},
-             success: function (data) {
-                 $('#matmreport').html(data);
-             },
-         });
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Editrentalchargelist", "Home")',
+            data: {
+                idno: id,
+                deviceprice: $('#deviceprice').val(),
+                minquantity: $('#minquantity').val(),
+                upto2: $('#upto2').val(),
+                upto5: $('#upto5').val(),
+                upto8: $('#upto8').val(),
+                above8: $('#above8').val(),
+                dlm_upto2: $('#dlm_upto2').val(),
+                dlm_upto5: $('#dlm_upto5').val(),
+                dlm_upto8: $('#dlm_upto8').val(),
+                dlm_above8: $('#dlm_above8').val(),
+                md_upto2: $('#md_upto2').val(),
+                md_upto5: $('#md_upto5').val(),
+                md_upto8: $('#md_upto8').val(),
+                md_above8: $('#md_above8').val(),
+                md_monthly: $('#md_monthly').val(),
+                md_monthly_dealer: $('#md_monthly_dealer').val(),
+                md_monthly_master: $('#md_monthly_master').val()
+            },
+            success: function (data) {
+                $('#matmreport').html(data);
+                refreshMatmClRecordCount();
+            }
+        });
     }
+
+    $(document).ready(function () {
+        refreshMatmClRecordCount();
+
+        $('#btnExportCL').on('click', function () {
+            exportMatmClTable('excel');
+        });
+
+        $('#btnPDFCL').on('click', function () {
+            exportMatmClTable('pdf');
+        });
+    });
 </script>

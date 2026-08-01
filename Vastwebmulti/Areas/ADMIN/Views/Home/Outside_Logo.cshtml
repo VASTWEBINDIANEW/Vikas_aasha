@@ -4,6 +4,13 @@
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css?v=12" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-payment-gateway-slab-modern.css?v=10" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-outside-logo-modern.css?v=20" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <link rel="stylesheet" href="/path/to/dist/css/image-zoom.css" />
 <script src="/path/to/cdn/jquery.min.js"></script>
 <script src="/path/to/dist/js/image-zoom.min.js"></script>
@@ -332,13 +339,13 @@
     }
 
 
-    .theam-button i {
+    .theam-button .vm-theme-pill-grid button:not(.thame-active) i {
         display: none;
     }
 
-    .thame-active i {
-        display: block;
-        margin-right: 10px;
+    .theam-button .vm-theme-pill-grid button.thame-active i {
+        display: inline-block;
+        margin-right: 6px;
     }
 
     .theam-button {
@@ -1404,11 +1411,83 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
-<section class="content outside-logo-page" style="position: relative;">
-    <div class="container-fluid">
+<style>
+    /* Kill legacy inline conflicts on this page only */
+    body.saas-admin-ui .saas-outside-logo-page .background-view-third-one input[type="file"] {
+        margin-left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
+    body.saas-admin-ui .saas-outside-logo-page .theam-button.vm-theme-role-card {
+        display: block !important;
+        float: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .theam-button.vm-theme-role-card button,
+    body.saas-admin-ui .saas-outside-logo-page .theam-button button {
+        float: none !important;
+        display: inline-flex !important;
+        margin: 0 !important;
+        padding: 0 12px !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .note-border-second:not(.vm-logo-hint)::before {
+        display: none !important;
+        content: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .background-view-third button,
+    body.saas-admin-ui .saas-outside-logo-page .background-view-third-two button,
+    body.saas-admin-ui .saas-outside-logo-page .background-view-third-one button {
+        float: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .background-view-slider img {
+        width: auto !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: 88px !important;
+        object-fit: contain !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .background-view-first,
+    body.saas-admin-ui .saas-outside-logo-page .background-view,
+    body.saas-admin-ui .saas-outside-logo-page .background-view-third,
+    body.saas-admin-ui .saas-outside-logo-page .background-view-slider {
+        float: none !important;
+        width: auto !important;
+        text-align: left !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .theam-button button {
+        float: none !important;
+    }
+</style>
+<link href="~/MainFrontDesign/css/admin-outside-logo-final.css?v=16" rel="stylesheet" />
+
+<section class="content outside-logo-page saas-admin-account-page saas-admin-settings-page saas-pg-slab-page saas-outside-logo-page" style="position: relative;">
+    <div class="container-fluid vm-logo-container">
+
+        <div class="saas-acc-toolbar vm-logo-page-toolbar">
+            <ol class="saas-acc-breadcrumb">
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                <li><a href="javascript:void(0);">Basic Setting</a></li>
+                <li>Logo &amp; Theme</li>
+            </ol>
+            
+            <div class="vm-logo-quick-nav-scroll">
+            <nav class="vm-logo-quick-nav" aria-label="Page sections">
+                <a href="#vmLogoBrand" class="vm-logo-quick-nav__link is-active"><span class="vm-logo-quick-nav__icon"><i class="fas fa-images" aria-hidden="true"></i></span><span class="vm-logo-quick-nav__label vm-logo-quick-nav__label--full">Brand Assets</span><span class="vm-logo-quick-nav__label vm-logo-quick-nav__label--short">Brand</span></a>
+                <a href="#vmLogoBackground" class="vm-logo-quick-nav__link"><span class="vm-logo-quick-nav__icon"><i class="fas fa-image" aria-hidden="true"></i></span><span class="vm-logo-quick-nav__label vm-logo-quick-nav__label--full">Login Background</span><span class="vm-logo-quick-nav__label vm-logo-quick-nav__label--short">Background</span></a>
+                <a href="#vmLogoSlider" class="vm-logo-quick-nav__link"><span class="vm-logo-quick-nav__icon"><i class="fas fa-sliders" aria-hidden="true"></i></span><span class="vm-logo-quick-nav__label vm-logo-quick-nav__label--full">Login Slider</span><span class="vm-logo-quick-nav__label vm-logo-quick-nav__label--short">Slider</span></a>
+                <a href="#vmLogoThemes" class="vm-logo-quick-nav__link"><span class="vm-logo-quick-nav__icon"><i class="fas fa-palette" aria-hidden="true"></i></span><span class="vm-logo-quick-nav__label vm-logo-quick-nav__label--full">Role Themes</span><span class="vm-logo-quick-nav__label vm-logo-quick-nav__label--short">Roles</span></a>
+                <a href="#vmLogoFrontThemes" class="vm-logo-quick-nav__link"><span class="vm-logo-quick-nav__icon"><i class="fas fa-table-cells-large" aria-hidden="true"></i></span><span class="vm-logo-quick-nav__label vm-logo-quick-nav__label--full">Front Themes</span><span class="vm-logo-quick-nav__label vm-logo-quick-nav__label--short">Front</span></a>
+            </nav>
+            </div>
+        </div>
+
+        <div class="page-title-box-fourde-admin" style="display:none;">
             <h3>Logo & Theme</h3>
             <ul>
                 <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
@@ -1441,273 +1520,206 @@
 
 
 
-        <div class="row clearfix">
+        <div class="vm-logo-shell">
+        <div class="vm-logo-page-body">
 
-            <div class="col-md-12" style="float: left;width: 100%;">
-                <div class="row clearfix">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="card page-header-third">
-                            <div class="logo-change" style="margin-top:0px;">
-                                <h2>
-                                    Login Page Logo Image
-                                </h2>
+        <div id="vmLogoBrand" class="vm-logo-section">
+            <div class="vm-logo-section__head">
+                <span class="vm-logo-section__badge">01</span>
+                <div class="vm-logo-section__text">
+                <h2 class="vm-logo-section__title"><i class="fas fa-images" aria-hidden="true"></i> Brand Assets</h2>
+                <p class="vm-logo-section__desc">Upload login logo, header logo, favicon and preview current images</p>
+                </div>
+            </div>
 
-                                @*@using (Html.BeginForm("Login_Content_outside", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))*@
-                                @*@using (Ajax.BeginForm("Login_Content_outside", "Home", new AjaxOptions { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
-                                    {*@
-
-                                <div class="image-upload">
-
-                                    <input type="file" name="files" id="LoginPageLogo" class="form-control">
-                                    <input type="submit" value="Save Change" class="for-disable input-back-second" id="btnaaa" style="font-size:14px; padding: 6px 15px;height: 32px !important;background: #f0f0f0;border: 1px solid #555;" />
-                                    @*<button type="submit" class="btn bg-grey waves-effect" onclick="return check()">
-                                            <span>Save Change</span>
-                                        </button>*@
-
-                                </div>
-
-                                @*}*@
-                            </div>
-
-                            <div class="body">
-                                <div class="row">
-                                    <div class="table-responsive" style="position:inherit;margin-top:-20px;">
-                                        <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-
-                                            <tbody id="loginlogo">
-                                                @if (ViewBag.login != null)
-                                                {
-                                                    foreach (var item in ViewBag.login)
-                                                    {
-                                                        <tr>
-                                                            @*<td>@item.LoginType</td>*@
-                                                            <td> <img src="@Url.Content("~/" + item.Image)" width="100" height="70" id="LoginPageLogoImg" /></td>
-                                                            <td>
-                                                                <p class="note-border-second classborder-third"><strong class="color-red-second">Note :-</strong> For Best Veiw, Logo Size Must Be required 300 pixel * 300 pixel</p>
-                                                                <div style="float:right;clear:both;">
-                                                                    <button type="button" class="btn btn-default waves-effect" style="background-color:transparent; border:none;border:1px solid #c7c2c2;" onclick="delLoginContent1('@item.Id')">
-                                                                        Delete
-                                                                    </button>
-                                                                    <a id="LoginPageLogoTab" href="@Url.Content("~/" + item.Image)" target="_blank"><button type="button" class="btn btn-default waves-effect" style="border:1px solid #c7c2c2;">Open Link In New Tab</button></a>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    }
-                                                }
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                            </div>
+        <div class="vm-brand-grid">
+            <!-- Login Page Logo -->
+            <article class="vm-brand-card">
+                <header class="vm-brand-card__head">
+                    <span class="vm-brand-card__icon vm-brand-card__icon--login"><i class="fas fa-right-to-bracket" aria-hidden="true"></i></span>
+                    <div class="vm-brand-card__titles">
+                        <h3 class="vm-brand-card__title">Login Page Logo</h3>
+                        <p class="vm-brand-card__hint">Recommended 300 &times; 300 px &middot; PNG or JPG</p>
+                    </div>
+                </header>
+                <div class="vm-brand-card__body">
+                    <div class="vm-brand-card__upload">
+                        <div class="vm-logo-upload-zone__controls">
+                            <input type="file" name="files" id="LoginPageLogo" class="form-control vm-logo-file-input" accept="image/*">
+                            <button type="button" class="vm-logo-btn vm-logo-btn--primary for-disable" id="btnaaa">
+                                <i class="fas fa-cloud-arrow-up" aria-hidden="true"></i>
+                                <span>Upload</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="loginlogo" class="vm-brand-card__current">
+                        @{
+                            var loginImg = "";
+                            var loginId = "";
+                            if (ViewBag.login != null)
+                            {
+                                foreach (var item in ViewBag.login)
+                                {
+                                    loginImg = item.Image;
+                                    loginId = item.Id.ToString();
+                                }
+                            }
+                        }
+                        <div class="vm-brand-card__preview-frame@(string.IsNullOrEmpty(loginImg) ? " is-empty" : "")">
+                            <img src="@(string.IsNullOrEmpty(loginImg) ? "" : Url.Content("~/" + loginImg))" alt="Login logo" id="LoginPageLogoImg" />
+                            <span class="vm-brand-card__empty"><i class="fas fa-image" aria-hidden="true"></i> No logo uploaded</span>
+                        </div>
+                        <div class="vm-brand-card__actions">
+                            <button type="button" class="vm-logo-action-btn vm-logo-action-btn--danger@(string.IsNullOrEmpty(loginId) ? " is-hidden" : "")" onclick="delLoginContent1('@loginId')">
+                                <i class="fas fa-trash" aria-hidden="true"></i> Delete
+                            </button>
+                            <a id="LoginPageLogoTab" href="@(string.IsNullOrEmpty(loginImg) ? "#" : Url.Content("~/" + loginImg))" target="_blank" class="vm-logo-action-btn vm-logo-action-btn--ghost@(string.IsNullOrEmpty(loginImg) ? " is-hidden" : "")">
+                                <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Open
+                            </a>
                         </div>
                     </div>
                 </div>
+            </article>
 
-                <div class="row clearfix">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:-2px;">
-                        <div class="card page-header-third">
-                            <div class="logo-change">
-                                <h2>
-                                    Header Logo Image
-                                </h2>
-                                <h2 class="header-logo-background" style="margin-left:10%;">Header Logo Background</h2>
-                                @*@using (Html.BeginForm("Outside_logo", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
-                                    {*@
-
-                                <div class="image-upload">
-
-                                    <input type="file" name="file" id="HeaderLogo" class="form-control">
-
-                                    <button type="submit" id="HeaderLogoBtn" class="btn bg-grey waves-effect for-disable input-back-second" onclick="return check()">
-                                        <span>Save Change</span>
-                                    </button>
-
-                                </div>
-
-                                @*}*@
-
-
-
-
-
-
-                            </div>
-                            <div class="body">
-                                <div class="row">
-                                    <div class="table-responsive" style="position:inherit;margin-top:-20px;">
-                                        <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-                                            @if (ViewBag.logoHeaderimage != null)
-                                            {
-                                                <tbody>
-                                                    @foreach (var item in ViewBag.logoHeaderimage)
-                                                    {
-                                                        <tr>
-                                                            <td> <img id="LogoHeaderImg" src="@Url.Content("~/" + item.LogoImage)" width="100" height="70" /></td>
-                                                            <td style="text-align:center;">
-
-                                                                <span style="width: 100px;height: 70px;display: inline-block;border: 1px solid var(--border-color);background:#fff;">
-                                                                    <label class="container">
-
-                                                                        <input type="radio" checked="checked" name="radio" value="#fff">
-                                                                        <span class="checkmark"></span>
-                                                                    </label>
-                                                                    <p style="margin:0px;margin-top:30px;">White</p>
-                                                                </span>
-                                                                <span style="width: 100px;height: 70px;display: inline-block;border: 1px solid var(--border-color);">
-                                                                    <label class="container">
-
-                                                                        <input type="radio" name="radio" value="transparent">
-                                                                        <span class="checkmark"></span>
-                                                                    </label>
-                                                                    <p style="margin:0px;margin-top:30px;"> Transparent</p>
-                                                                </span>
-                                                                <span style="width: 100px;height: 70px;display: inline-block;border: 1px solid var(--border-color);background:#000;">
-                                                                    <label class="container">
-
-                                                                        <input type="radio" name="radio" value="#000">
-                                                                        <span class="checkmark"></span>
-                                                                    </label>
-                                                                    <p style="margin:0px;margin-top:30px;color:#fff;">Black</p>
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <p class="note-border-second classborder-third"><strong class="color-red-second">Note :-</strong> For Best Veiw, Logo Size Must Be required 170 pixel * 80 pixel</p>
-                                                                <div style="float:right;clear:both;">
-
-                                                                    <button type="button" class="btn btn-default waves-effect" style="background-color:transparent; border:none;border:1px solid #c7c2c2;" onclick="delLogo1('@item.Id')">
-                                                                        Delete
-                                                                    </button>
-
-
-
-                                                                    <a id="LogoHeaderTab" href="@Url.Content("~/" + item.LogoImage)" target="_blank"><button type="button" class="btn btn-default waves-effect" style="border:1px solid #c7c2c2;">Open Link In New Tab</button></a>
-
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    }
-                                                </tbody>
-                                            }
-                                        </table>
-                                    </div>
-                                </div>
-
-                            </div>
+            <!-- Favicon -->
+            <article class="vm-brand-card vm-brand-card--favicon">
+                <header class="vm-brand-card__head">
+                    <span class="vm-brand-card__icon vm-brand-card__icon--favicon"><i class="fas fa-star" aria-hidden="true"></i></span>
+                    <div class="vm-brand-card__titles">
+                        <h3 class="vm-brand-card__title">Favicon</h3>
+                        <p class="vm-brand-card__hint">Recommended 32 &times; 32 px &middot; ICO or PNG</p>
+                    </div>
+                </header>
+                <div class="vm-brand-card__body">
+                    <div class="vm-brand-card__upload">
+                        <div class="vm-logo-upload-zone__controls">
+                            <input type="file" name="file" class="form-control vm-logo-file-input" id="faviconfile" accept="image/*">
+                            <button type="button" class="vm-logo-btn vm-logo-btn--primary for-disable" onclick="return check()" id="faviconBtn">
+                                <i class="fas fa-cloud-arrow-up" aria-hidden="true"></i>
+                                <span>Upload</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="vm-brand-card__current">
+                        @{
+                            var favImg = "";
+                            var favId = "";
+                            if (ViewBag.faviconimage != null)
+                            {
+                                foreach (var item1 in ViewBag.faviconimage)
+                                {
+                                    favImg = item1.faviconimage;
+                                    favId = item1.Id.ToString();
+                                }
+                            }
+                        }
+                        <div class="vm-brand-card__preview-frame vm-brand-card__preview-frame--favicon@(string.IsNullOrEmpty(favImg) ? " is-empty" : "")">
+                            <img id="faviconImg" src="@(string.IsNullOrEmpty(favImg) ? "" : Url.Content("~/" + favImg))" alt="Favicon" />
+                            <span class="vm-brand-card__empty"><i class="fas fa-star" aria-hidden="true"></i> No favicon yet</span>
+                        </div>
+                        <div class="vm-brand-card__actions">
+                            <button type="button" class="vm-logo-action-btn vm-logo-action-btn--danger@(string.IsNullOrEmpty(favId) ? " is-hidden" : "")" onclick="delfavico('@favId')">
+                                <i class="fas fa-trash" aria-hidden="true"></i> Delete
+                            </button>
+                            <a id="faviconTab" href="@(string.IsNullOrEmpty(favImg) ? "#" : Url.Content("~/" + favImg))" target="_blank" class="vm-logo-action-btn vm-logo-action-btn--ghost@(string.IsNullOrEmpty(favImg) ? " is-hidden" : "")">
+                                <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Open
+                            </a>
                         </div>
                     </div>
                 </div>
+            </article>
 
-                <div class="row clearfix">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:-2px;">
-                        <div class="card page-header-third">
-                            <div class="logo-change">
-                                <h2>
-                                    Favicon Image
-                                </h2>
-
-                                @*@using (Html.BeginForm("Outside_favicon", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
-                                    {*@
-
-                                <div class="image-upload">
-
-                                    <input type="file" name="file" class="form-control" id="faviconfile">
-
-                                    <button type="submit" class="btn bg-grey waves-effect for-disable input-back-second" onclick="return check()" id="faviconBtn">
-                                        <span>Save Change</span>
-                                    </button>
-
-                                </div>
-
-                                @*}*@
-
-
-
-                            </div>
-                            <div class="body">
-                                <div class="row">
-                                    <div class="table-responsive" style="position:inherit;margin-top:-20px;">
-                                        <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-
-                                            <tbody>
-                                                @foreach (var item1 in ViewBag.faviconimage)
-                                                {
-                                                    <tr>
-                                                        <td> <img id="faviconImg" src="@Url.Content("~/" + item1.faviconimage)" width="100" height="70" /></td>
-                                                        <td>
-                                                            <p class="note-border-second classborder-third"><strong class="color-red-second">Note :-</strong> For Best Veiw, Logo Size Must Be required 32 pixel * 32 Pixel</p>
-                                                            <div style="float:right;clear:both;">
-                                                                <button type="button" class="btn btn-default waves-effect" style="background-color:transparent; border:none;border:1px solid #c7c2c2;" onclick="delfavico('@item1.Id')">
-                                                                    Delete
-                                                                </button>
-
-
-
-
-                                                                <a id="faviconTab" href="@Url.Content("~/" + item1.faviconimage)" target="_blank"><button type="button" class="btn btn-default waves-effect" style="border:1px solid #c7c2c2;">Open Link In New Tab</button></a>
-
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                            </div>
+            <!-- Header Logo (full width) -->
+            <article class="vm-brand-card vm-brand-card--header vm-brand-card--wide">
+                <header class="vm-brand-card__head">
+                    <span class="vm-brand-card__icon vm-brand-card__icon--header"><i class="fas fa-image" aria-hidden="true"></i></span>
+                    <div class="vm-brand-card__titles">
+                        <h3 class="vm-brand-card__title">Header Logo</h3>
+                        <p class="vm-brand-card__hint">Recommended 170 &times; 80 px &middot; Pick preview background on the right</p>
+                    </div>
+                </header>
+                <div class="vm-brand-card__body vm-brand-card__body--header">
+                    <div class="vm-brand-card__upload vm-brand-card__upload--header">
+                        <div class="vm-logo-upload-zone__controls">
+                            <input type="file" name="file" id="HeaderLogo" class="form-control vm-logo-file-input" accept="image/*">
+                            <button type="button" id="HeaderLogoBtn" class="vm-logo-btn vm-logo-btn--primary for-disable" onclick="return check()">
+                                <i class="fas fa-cloud-arrow-up" aria-hidden="true"></i>
+                                <span>Upload</span>
+                            </button>
                         </div>
                     </div>
-                </div>
-
-                <div class="row clearfix " style="display:none;">
-
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
-                        <div class="card login-back-img page-header-third">
-                            <h2>Theme Color</h2>
-                            <ul class="" for="retailer">
-
-                                <li class="tab-link2 current2" data-tab="tab-5">
-                                    <div class="background-view-first">
-
-                                        <p>Choose your Theme colors:</p>
-
-                                        <div>
-                                            <input type="color" class="clr_color" id="clr1" name="head"
-                                                   value="#e66465">
-                                            <label for="head">Head</label>
-                                        </div>
-
-                                        <div>
-                                            <input type="color" class="clr_color" id="clr2" name="body"
-                                                   value="#f6b73c">
-                                            <label for="body">Body</label>
-                                        </div>
-                                    </div>
-                                    <div class="background-view" id="themebox"></div>
-                                    <div class="background-view-third" style="
-text-align: center;">
-                                        <p style="font-size: 18px; text-align: center;">Upload  Theme color </p>
-                                        <button type="submit" class="btn bg-grey waves-effect for-disable input-back-second" onclick="return check()" id="themclrupload">
-                                            <span>Save Change</span>
-                                        </button>
-
-                                    </div>
-                                </li>
-
-                            </ul>
+                    @{
+                        var headerImg = "";
+                        var headerId = "";
+                        if (ViewBag.logoHeaderimage != null)
+                        {
+                            foreach (var item in ViewBag.logoHeaderimage)
+                            {
+                                headerImg = item.LogoImage;
+                                headerId = item.Id.ToString();
+                            }
+                        }
+                    }
+                    <div class="vm-brand-card__header-main">
+                        <div class="vm-brand-card__current vm-brand-card__current--header">
+                            <div class="vm-brand-card__preview-frame vm-brand-card__preview-frame--header@(string.IsNullOrEmpty(headerImg) ? " is-empty" : "")" data-bg="white">
+                                <img id="LogoHeaderImg" src="@(string.IsNullOrEmpty(headerImg) ? "" : Url.Content("~/" + headerImg))" alt="Header logo" />
+                                <span class="vm-brand-card__empty"><i class="fas fa-image" aria-hidden="true"></i> No header logo yet</span>
+                            </div>
+                            <div class="vm-brand-card__actions">
+                                <button type="button" class="vm-logo-action-btn vm-logo-action-btn--danger@(string.IsNullOrEmpty(headerId) ? " is-hidden" : "")" onclick="delLogo1('@headerId')">
+                                    <i class="fas fa-trash" aria-hidden="true"></i> Delete
+                                </button>
+                                <a id="LogoHeaderTab" href="@(string.IsNullOrEmpty(headerImg) ? "#" : Url.Content("~/" + headerImg))" target="_blank" class="vm-logo-action-btn vm-logo-action-btn--ghost@(string.IsNullOrEmpty(headerImg) ? " is-hidden" : "")">
+                                    <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Open
+                                </a>
+                            </div>
                         </div>
+                        <aside class="vm-brand-card__swatches vm-brand-card__swatches--right" aria-label="Preview background">
+                            <p class="vm-brand-card__swatch-label">Preview background</p>
+                            <div class="vm-logo-swatch-grid">
+                                <span class="vm-logo-swatch vm-logo-swatch--white">
+                                    <label class="container">
+                                        <input type="radio" checked="checked" name="radio" value="#fff">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <p>White</p>
+                                </span>
+                                <span class="vm-logo-swatch vm-logo-swatch--transparent">
+                                    <label class="container">
+                                        <input type="radio" name="radio" value="transparent">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <p>Transparent</p>
+                                </span>
+                                <span class="vm-logo-swatch vm-logo-swatch--black">
+                                    <label class="container">
+                                        <input type="radio" name="radio" value="#000">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <p>Black</p>
+                                </span>
+                            </div>
+                        </aside>
                     </div>
                 </div>
+            </article>
+        </div><!-- /.vm-logo-brand-grid -->
 
+        </div><!-- /#vmLogoBrand -->
 
-                <div class="row clearfix ">
+        <div id="vmLogoBackground" class="vm-logo-section">
+            <div class="vm-logo-section__head">
+                <span class="vm-logo-section__badge">02</span>
+                <div class="vm-logo-section__text">
+                <h2 class="vm-logo-section__title"><i class="fas fa-image" aria-hidden="true"></i> Login Page Background</h2>
+                <p class="vm-logo-section__desc">Choose default color, single image or repeat pattern for login screen</p>
+                </div>
+            </div>
 
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
-                        <div class="card login-back-img page-header-third">
-                            <h2>Login Page Background Setting</h2>
-                            <ul class="" for="retailer">
+            <div class="vm-pg-slab-card vm-logo-card vm-logo-bg-card">
+                <div class="vm-pg-slab-body vm-logo-card-body">
+                    <ul class="vm-logo-bg-grid" for="retailer">
 
                                 <li class="tab-link2 current2" data-tab="tab-5">
                                     <div class="background-view-first">
@@ -1716,10 +1728,9 @@ text-align: center;">
                                         <label for="byapi1">Background</label>
                                         <p>Color</p>
                                     </div>
-                                    <div class="background-view fullbodydycolorbg"></div>
+                                    <div class="background-view fullbodydycolorbg vm-logo-bg-preview"></div>
                                     <div class="background-view-third">
-                                        <p style="font-size: 18px;text-align: justify;">This is default color you can't change. You are not intersted to use this color then can use next two options.</p>
-
+                                        <p class="vm-logo-bg-info">This is the default background color and cannot be changed. If you prefer a custom look, choose one of the image options below.</p>
                                     </div>
                                 </li>
                                 <li class="tab-link2" data-tab="tab-6" id="imgg2">
@@ -1728,12 +1739,12 @@ text-align: center;">
                                         <input type="radio" onclick="Img_ON_Off()" value="value3" name="group1" id="bysim2">
 
                                         <label for="bysim2">Single Image</label>
-                                        <span style="display:block;">(file Size Upto 824kb)</span>
+                                        <span class="vm-logo-file-limit">Max file size: 824 KB</span>
                                     </div>
                                     @if (ViewBag.showimg3 != null)
                                     {
                                         @*<img class="background-view" id="img1" name="img1" src="@Url.Content("~/"+ ViewBag.showimg3)" style="background-repeat:no-repeat"/>*@
-                                        <div style="background-repeat:no-repeat">
+                                        <div class="vm-logo-bg-preview" style="background-repeat:no-repeat">
 
                                             <img class="background-view" id="img1" name="img1" src="@Url.Content("~/" + ViewBag.showimg3)" />
 
@@ -1741,7 +1752,7 @@ text-align: center;">
                                     }
                                     else
                                     {
-                                        <div style="background-repeat:no-repeat">
+                                        <div class="vm-logo-bg-preview" style="background-repeat:no-repeat">
 
                                             <img class="background-view" id="img1" name="img1" src="@Url.Content("~/" + ViewBag.showimg3)" />
 
@@ -1749,22 +1760,24 @@ text-align: center;">
                                         @*<div class="background-view" style="background:url(../../AdminDesign/images/bg.jpg)no-repeat top left / cover;"></div>*@
                                     }
                                     <div class="background-view-third">
-                                        <div class="background-view-third-one">
-                                            <input type="file" id="fileInputSingle" multiple />
-                                            <button type="button" class="for-disable input-back-second" id="fileButtonSingle" value="Single">Save</button>
-                                            <span class="note-border-second classborder-third"><strong class="color-red-second">Note :- </strong>Image Max Size 1600 * 900 Pixel</span>
+                                        <div class="vm-logo-bg-upload">
+                                            <div class="vm-logo-upload-zone__controls">
+                                                <input type="file" id="fileInputSingle" multiple />
+                                                <button type="button" class="for-disable input-back-second vm-logo-btn vm-logo-btn--primary" id="fileButtonSingle" value="Single"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Save</button>
+                                            </div>
+                                            <span class="note-border-second classborder-third vm-logo-hint"><i class="fas fa-circle-info" aria-hidden="true"></i> Max size: 1600 &times; 900 px</span>
                                             <label id="Single1"></label>
                                         </div>
-                                        <div class="background-view-third-two">
-                                            <button type="button" id="delBackLogin_ContentSingle">Delete</button>
+                                        <div class="background-view-third-two vm-logo-bg-actions vm-logo-action-bar">
+                                            <button type="button" id="delBackLogin_ContentSingle" class="vm-logo-action-btn vm-logo-action-btn--danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
                                             @if (ViewBag.showimg3 != null)
                                             {
-                                                <a id="fileInputSingleTab" href="@Url.Content("~/" + ViewBag.showimg3)" target="_blank"><button type="button">Open Link In New Tab</button></a>
+                                                <a id="fileInputSingleTab" href="@Url.Content("~/" + ViewBag.showimg3)" target="_blank" class="vm-logo-action-btn vm-logo-action-btn--ghost"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Link</a>
 
                                             }
                                             else
                                             {
-                                                <a id="fileInputSingleTab" href="#" target="_blank"><button type="button">Open Link In New Tab</button></a>
+                                                <a id="fileInputSingleTab" href="#" target="_blank" class="vm-logo-action-btn vm-logo-action-btn--ghost"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Link</a>
 
                                             }
                                         </div>
@@ -1778,13 +1791,12 @@ text-align: center;">
                                         <input type="radio" onclick="Img_ON_Off2()" value="value2" name="group1" id="bysim1">
 
                                         <label for="bysim1">Repeat Image</label>
-
-                                        <span style="display:block;">(file Size Upto 224kb)</span>
+                                        <span class="vm-logo-file-limit">Max file size: 224 KB</span>
                                     </div>
                                     @if (ViewBag.showimg2 != null)
                                     {
                                         @*<img class="background-view" id="img2" name="img2" src="@Url.Content("~/"+ ViewBag.showimg2)" style="background-repeat:repeat" />*@
-                                        <div id="mydiv">
+                                        <div id="mydiv" class="vm-logo-bg-preview">
                                             <div class="background-view" id="img2" name="img2" style="background:url('@Url.Content("~/" + ViewBag.showimg2)')repeat;">
 
                                             </div>
@@ -1793,27 +1805,29 @@ text-align: center;">
                                     else
                                     {
                                         // style="background:url(../../AdminDesign/images/img79.png)repeat;"
-                                        <div class="background-view" id="img2" name="img2">
+                                        <div class="background-view vm-logo-bg-preview" id="img2" name="img2">
 
                                         </div>
                                         @*<div class="background-view" style="background:url(../../AdminDesign/images/img79.png)repeat;"></div>*@
                                     }
                                     <div class="background-view-third">
-                                        <div class="background-view-third-one">
-                                            <input type="file" id="fileInput" multiple />
-                                            <button type="button" class="for-disable input-back-second" id="fileButton" value="Repeat">Save</button>
-                                            <span class="note-border-second classborder-third"><strong class="color-red-second">Note :- </strong>Image Max Size 300 * 300 Pixel</span>
+                                        <div class="vm-logo-bg-upload">
+                                            <div class="vm-logo-upload-zone__controls">
+                                                <input type="file" id="fileInput" multiple />
+                                                <button type="button" class="for-disable input-back-second vm-logo-btn vm-logo-btn--primary" id="fileButton" value="Repeat"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Save</button>
+                                            </div>
+                                            <span class="note-border-second classborder-third vm-logo-hint"><i class="fas fa-circle-info" aria-hidden="true"></i> Max size: 300 &times; 300 px</span>
                                             <label id="Repeat1"></label>
                                         </div>
-                                        <div class="background-view-third-two">
-                                            <button type="button" id="delBackLogin_ContentRepeat">Delete</button>
+                                        <div class="background-view-third-two vm-logo-bg-actions vm-logo-action-bar">
+                                            <button type="button" id="delBackLogin_ContentRepeat" class="vm-logo-action-btn vm-logo-action-btn--danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
                                             @if (ViewBag.showimg2 != null)
                                             {
-                                                <a id="RepeatTab" href="@Url.Content("~/" + ViewBag.showimg2)" target="_blank"><button type="button">Open Link In New Tab</button></a>
+                                                <a id="RepeatTab" href="@Url.Content("~/" + ViewBag.showimg2)" target="_blank" class="vm-logo-action-btn vm-logo-action-btn--ghost"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Link</a>
                                             }
                                             else
                                             {
-                                                <a id="RepeatTab" href="#" target="_blank"><button type="button">Open Link In New Tab</button></a>
+                                                <a id="RepeatTab" href="#" target="_blank" class="vm-logo-action-btn vm-logo-action-btn--ghost"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Link</a>
                                             }
                                         </div>
 
@@ -1821,16 +1835,25 @@ text-align: center;">
                                     @*    @Html.Partial("_LoginPageBackgroundImage3")*@
 
                                 </li>
-                            </ul>
-                        </div>
-                    </div>
+                    </ul>
                 </div>
+            </div>
 
+        </div><!-- /#vmLogoBackground -->
+
+        <div id="vmLogoSlider" class="vm-logo-section">
+            <div class="vm-logo-section__head">
+                <span class="vm-logo-section__badge">03</span>
+                <div class="vm-logo-section__text">
+                <h2 class="vm-logo-section__title"><i class="fas fa-sliders" aria-hidden="true"></i> Login Page Slider</h2>
+                <p class="vm-logo-section__desc">Enable slider and upload up to two login page banner images</p>
+                </div>
+            </div>
 
                 @*  app theam color  *@
                 <!--<div class="row clearfix">
 
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button vm-theme-role-card">
 
 
                         <div class="card login-back-img page-header-third">
@@ -1979,7 +2002,7 @@ text-align: center;">
 
                                 <div class="row clearfix">
 
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button vm-theme-role-card">
 
 
                                         <div class="card login-back-img page-header-third">
@@ -2395,13 +2418,15 @@ text-align: center;">
                              });
                     }
                 </script>-->
-                <div class="row clearfix" id="loginSliders">
-                    @*@Html.Partial("_LoginPagesliderImage")*@
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
-                        <div class="card login-back-img page-header-third">
-                            <div class="login-slider-status">
-                                <h2>Login Page slider Image</h2>
-                                <div class="onoffswitch" style="cursor:pointer;">
+                <div class="vm-pg-slab-card vm-logo-card vm-logo-slider-card">
+                    <div class="vm-pg-slab-card__head vm-logo-slider-head">
+                        <h3 class="vm-pg-slab-card__title">
+                            <i class="fas fa-images" aria-hidden="true"></i>
+                            Slider Images
+                        </h3>
+                        <div class="vm-logo-slider-toggle">
+                            <label>Slider</label>
+                            <div class="onoffswitch" style="cursor:pointer;">
 
                                     @{ var res = ViewBag.LoginsilderStatus;
                                         if (res == null)
@@ -2431,61 +2456,52 @@ text-align: center;">
 
 
 
-                                </div>
-                                <label>Slider</label>
-
                             </div>
-                            <ul>
+                        </div>
+                    </div>
+                    <div class="vm-pg-slab-body vm-logo-card-body" id="loginSliders">
+                        <ul class="vm-logo-slider-list">
 
-                                <li>
-                                    <div class="background-view-first" style="width: 33%;">
-
-                                        <div class="slider-image-number">
-                                            <span>1</span>
-                                            <label>Image</label>
+                                <li class="vm-logo-slider-row">
+                                    <div class="vm-logo-slider-visual">
+                                        <div class="vm-logo-slider-meta">
+                                            <div class="slider-image-number">
+                                                <span>1</span>
+                                                <label>Image</label>
+                                            </div>
+                                            <span class="vm-logo-file-limit">Max 224 KB</span>
                                         </div>
-                                        <span style="display:block;">(file Size Upto 224kb)</span>
+                                        @if (ViewBag.Loginsilder1 != null)
+                                        {
+                                            <div class="background-view-slider">
+                                                <img name="slider1" src="@Url.Content("~/" + ViewBag.Loginsilder1.ImagePath)" id="slider1" alt="Slider 1" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="background-view-slider vm-logo-img-placeholder">
+                                                <img name="slider1" src="" id="slider1" alt="Slider 1" />
+                                            </div>
+                                        }
                                     </div>
-                                    @if (ViewBag.Loginsilder1 != null)
-                                    {
-                                        <div class="background-view-slider">
-                                            @{
-                                                <img name="slider1" src="@Url.Content("~/" + ViewBag.Loginsilder1.ImagePath)" id="slider1" />
-                                                @*if (ViewBag.Loginsilder[0].SilderType == "LoginSlide1")
-                                                    {
-                                                        <img name="slider1" src="@Url.Content("~/" + ViewBag.Loginsilder[0].ImagePath)" id="slider1" />
-                                                    }
-
-                                                    if (ViewBag.Loginsilder[1].SilderType == "LoginSlide1")
-                                                    {
-                                                        <img name="slider1" src="@Url.Content("~/" + ViewBag.Loginsilder[1].ImagePath)" id="slider1" />
-                                                    }*@
-                                            }
-
-
-
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <img name="slider1" src="" id="slider1" />
-                                    }
-                                    <div class="background-view-third" style="float:right;">
-                                        <div class="background-view-third-one">
-                                            <input type="file" id="image1" />
-                                            <button type="button" class="for-disable input-back-second" id="btnimage1">Save</button>
-                                            <span class="note-border-second classborder-third"><strong class="color-red-second">Note :- </strong>Image Max Size 460 * 460 Pixel</span>
+                                    <div class="vm-logo-slider-controls">
+                                        <div class="vm-logo-bg-upload">
+                                            <div class="vm-logo-upload-zone__controls">
+                                                <input type="file" id="image1" />
+                                                <button type="button" class="for-disable input-back-second vm-logo-btn vm-logo-btn--primary" id="btnimage1"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Save</button>
+                                            </div>
+                                            <span class="note-border-second classborder-third vm-logo-hint"><i class="fas fa-circle-info" aria-hidden="true"></i> Max size: 460 &times; 460 px</span>
                                             <label id="img1msg"></label>
                                         </div>
-                                        <div class="background-view-third-two">
-                                            <button id="btnslid1img" type="button">Delete</button>
+                                        <div class="background-view-third-two vm-logo-bg-actions vm-logo-action-bar">
+                                            <button id="btnslid1img" type="button" class="vm-logo-action-btn vm-logo-action-btn--danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
                                             @if (ViewBag.Loginsilder1 != null)
                                             {
-                                                <a id="image1Tab" href="@Url.Content("~/" +  ViewBag.Loginsilder1.ImagePath)" target="_blank"><button type="button">Open Link In New Tab</button></a>
+                                                <a id="image1Tab" href="@Url.Content("~/" +  ViewBag.Loginsilder1.ImagePath)" target="_blank" class="vm-logo-action-btn vm-logo-action-btn--ghost"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Link</a>
                                             }
                                             else
                                             {
-                                                <a id="image1Tab" href="#" target="_blank"><button type="button">Open Link In New Tab</button></a>
+                                                <a id="image1Tab" href="#" target="_blank" class="vm-logo-action-btn vm-logo-action-btn--ghost"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Link</a>
                                             }
 
                                         </div>
@@ -2493,329 +2509,328 @@ text-align: center;">
                                     </div>
 
                                 </li>
-                                <li>
-                                    <div class="background-view-first" style="width: 33%;">
-                                        <div class="slider-image-number">
-                                            <span>2</span>
-                                            <label>Image</label>
+                                <li class="vm-logo-slider-row">
+                                    <div class="vm-logo-slider-visual">
+                                        <div class="vm-logo-slider-meta">
+                                            <div class="slider-image-number">
+                                                <span>2</span>
+                                                <label>Image</label>
+                                            </div>
+                                            <span class="vm-logo-file-limit">Max 224 KB</span>
                                         </div>
-                                        <span style="display:block;">(file Size Upto 224kb)</span>
+                                        @if (ViewBag.Loginsilder2 != null)
+                                        {
+                                            <div class="background-view-slider">
+                                                <img name="slider2" src="@Url.Content("~/" +  ViewBag.Loginsilder2.ImagePath)" id="slider2" alt="Slider 2" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="background-view-slider vm-logo-img-placeholder">
+                                                <img name="slider2" src="" id="slider2" alt="Slider 2" />
+                                            </div>
+                                        }
                                     </div>
-                                    @if (ViewBag.Loginsilder2 != null)
-                                    {
-                                        <div class="background-view-slider">
-
-
-                                            @{
-                                                @*if (ViewBag.Loginsilder[0].SilderType == "LoginSlide2")
-                                                    {
-                                                        <img name="slider2" src="@Url.Content("~/" + ViewBag.Loginsilder[0].ImagePath)" id="slider2" />
-                                                    }
-
-                                                    if (ViewBag.Loginsilder[1].SilderType == "LoginSlide2")
-                                                    {
-                                                        <img name="slider2" src="@Url.Content("~/" + ViewBag.Loginsilder[1].ImagePath)" id="slider2" />
-                                                    }*@
-                                                <img name="slider2" src="@Url.Content("~/" +  ViewBag.Loginsilder2.ImagePath)" id="slider2" />
-                                            }
-
-
-
-
-
-                                        </div>
-                                    }
-
-                                    else
-                                    {
-                                        <img name="slider2" src="" id="slider2" />
-                                    }
-                                    <div class="background-view-third" style="float:right;">
-                                        <div class="background-view-third-one">
-                                            <input type="file" id="image2" />
-                                            <button type="button" class="for-disable input-back-second" id="btnimage2">Save</button>
-                                            <span class="note-border-second classborder-third"><strong class="color-red-second">Note :- </strong>Image Max Size 460 * 460 Pixel</span>
+                                    <div class="vm-logo-slider-controls">
+                                        <div class="vm-logo-bg-upload">
+                                            <div class="vm-logo-upload-zone__controls">
+                                                <input type="file" id="image2" />
+                                                <button type="button" class="for-disable input-back-second vm-logo-btn vm-logo-btn--primary" id="btnimage2"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Save</button>
+                                            </div>
+                                            <span class="note-border-second classborder-third vm-logo-hint"><i class="fas fa-circle-info" aria-hidden="true"></i> Max size: 460 &times; 460 px</span>
                                             <label id="img2msg"></label>
                                         </div>
-                                        <div class="background-view-third-two">
-                                            <button type="button" id="btnslider2">Delete</button>
+                                        <div class="background-view-third-two vm-logo-bg-actions vm-logo-action-bar">
+                                            <button type="button" id="btnslider2" class="vm-logo-action-btn vm-logo-action-btn--danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
                                             @if (ViewBag.Loginsilders2 != null)
                                             {
-                                                <a id="image1Tab" href="@Url.Content("~/" + ViewBag.Loginsilders2.ImagePath)" target="_blank"><button type="button">Open Link In New Tab</button></a>
+                                                <a id="image2Tab" href="@Url.Content("~/" + ViewBag.Loginsilders2.ImagePath)" target="_blank" class="vm-logo-action-btn vm-logo-action-btn--ghost"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Link</a>
                                             }
                                             else
                                             {
-                                                <a id="image1Tab" href="#" target="_blank"><button type="button">Open Link In New Tab</button></a>
+                                                <a id="image2Tab" href="#" target="_blank" class="vm-logo-action-btn vm-logo-action-btn--ghost"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Link</a>
                                             }
 
                                         </div>
 
                                     </div>
                                 </li>
-                            </ul>
-                        </div>
+                        </ul>
                     </div>
                 </div>
 
+        </div><!-- /#vmLogoSlider -->
 
-
-                @*//admin_theme*@
-                <div class="row clearfix">
-
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-
-
-                        <div class="card login-back-img page-header-third">
-
-                            <div class="thame-headding">
-                                <h2>Select Admin Theme</h2>
-                            </div>
-
-                            @if (ViewBag.themes != null && ViewBag.themes.Count > 0)
-                            {
-                                foreach (var item in ViewBag.themes)
-                                {
-                                    if (item.Id == 1)
-                                    {
-                                        <button class="thame-active" onclick="changetheme('@item.Theme')"> <i class="fa fa-check-square"></i> Theme-@item.Theme</button>
-                                    }
-                                    else
-                                    {
-                                        <button onclick="changetheme('@item.Theme')"> <i class="fa fa-check-square"></i> Theme-@item.Theme</button>
-
-                                    }
-
-                                }
-                            }
-
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                @*//retailer_theme*@
-                <div class="row clearfix">
-
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-
-
-                        <div class="card login-back-img page-header-third">
-
-                            <div class="thame-headding">
-                                <h2>Select Retailer Theme</h2>
-                            </div>
-
-                            @if (ViewBag.themesR != null && ViewBag.themesR.Count > 0)
-                            {
-                                foreach (var item in ViewBag.themesR)
-                                {
-                                    if (item.Id == 1)
-                                    {
-                                        <button class="thame-active" onclick="changethemeR('@item.Theme')"> <i class="fa fa-check-square"></i> Theme-@item.Theme</button>
-                                    }
-                                    else
-                                    {
-                                        <button onclick="changethemeR('@item.Theme')"> <i class="fa fa-check-square"></i> Theme-@item.Theme</button>
-
-                                    }
-
-                                }
-                            }
-
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                @*//Dealer_theme*@
-                <div class="row clearfix">
-
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-
-
-                        <div class="card login-back-img page-header-third">
-
-                            <div class="thame-headding">
-                                <h2>Select Distributor Theme</h2>
-                            </div>
-
-                            @if (ViewBag.themesD != null && ViewBag.themesD.Count > 0)
-                            {
-                                foreach (var item in ViewBag.themesD)
-                                {
-                                    if (item.Id == 1)
-                                    {
-                                        <button class="thame-active" onclick="changethemeD('@item.Theme')"> <i class="fa fa-check-square"></i> Theme-@item.Theme</button>
-                                    }
-                                    else
-                                    {
-                                        <button onclick="changethemeD('@item.Theme')"> <i class="fa fa-check-square"></i> Theme-@item.Theme</button>
-
-                                    }
-
-                                }
-                            }
-
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                @*//Master_theme*@
-                <div class="row clearfix">
-
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-
-
-                        <div class="card login-back-img page-header-third">
-
-                            <div class="thame-headding">
-                                <h2>Select Master Distributor Theme</h2>
-                            </div>
-
-                            @if (ViewBag.themesM != null && ViewBag.themesM.Count > 0)
-                            {
-                                foreach (var item in ViewBag.themesM)
-                                {
-                                    if (item.Id == 1)
-                                    {
-                                        <button class="thame-active" onclick="changethemeM('@item.Theme')"> <i class="fa fa-check-square"></i> Theme-@item.Theme</button>
-                                    }
-                                    else
-                                    {
-                                        <button onclick="changethemeM('@item.Theme')"> <i class="fa fa-check-square"></i> Theme-@item.Theme</button>
-
-                                    }
-
-                                }
-                            }
-
-
-                        </div>
-
-                    </div>
-
+        <div id="vmLogoThemes" class="vm-logo-section">
+            <div class="vm-logo-section__head">
+                <span class="vm-logo-section__badge">04</span>
+                <div class="vm-logo-section__text">
+                <h2 class="vm-logo-section__title"><i class="fas fa-palette" aria-hidden="true"></i> Role-wise Portal Themes</h2>
+                <p class="vm-logo-section__desc">Select active theme for Admin, Retailer, Distributor and Master Distributor panels</p>
                 </div>
             </div>
-        </div>
 
-    </div>
+            <div class="vm-logo-themes-grid">
 
+                <div class="vm-pg-slab-card vm-logo-card vm-theme-role-card theam-button">
+                    <div class="vm-pg-slab-card__head">
+                        <h3 class="vm-pg-slab-card__title">
+                            <i class="fas fa-user-shield" aria-hidden="true"></i>
+                            Admin Theme
+                        </h3>
+                    </div>
+                    <div class="vm-pg-slab-body vm-logo-card-body">
+                            @if (ViewBag.themes != null && ViewBag.themes.Count > 0)
+                            {
+                                <div class="vm-theme-pill-grid">
+                                @foreach (var item in ViewBag.themes)
+                                {
+                                    if (item.Id == 1)
+                                    {
+                                        <button type="button" class="thame-active" onclick="changetheme('@item.Theme')"><i class="fas fa-square-check" aria-hidden="true"></i> Theme-@item.Theme</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" onclick="changetheme('@item.Theme')"><i class="fas fa-square-check" aria-hidden="true"></i> Theme-@item.Theme</button>
+                                    }
+                                }
+                                </div>
+                            }
+                    </div>
+                </div>
 
-    <div class="container-fluid">
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-fornt" style="margin:35px 0px;">
-                <div class="card login-back-img page-header-third all_themeimg" style="padding-bottom: 18px; ">
-                    <div><h2 style="font-size: 22px;">Select for Front Theme - Free</h2></div>
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                        <div class="container11">
+                <div class="vm-pg-slab-card vm-logo-card vm-theme-role-card theam-button">
+                    <div class="vm-pg-slab-card__head">
+                        <h3 class="vm-pg-slab-card__title">
+                            <i class="fas fa-store" aria-hidden="true"></i>
+                            Retailer Theme
+                        </h3>
+                    </div>
+                    <div class="vm-pg-slab-body vm-logo-card-body">
+                            @if (ViewBag.themesR != null && ViewBag.themesR.Count > 0)
+                            {
+                                <div class="vm-theme-pill-grid">
+                                @foreach (var item in ViewBag.themesR)
+                                {
+                                    if (item.Id == 1)
+                                    {
+                                        <button type="button" class="thame-active" onclick="changethemeR('@item.Theme')"><i class="fas fa-square-check" aria-hidden="true"></i> Theme-@item.Theme</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" onclick="changethemeR('@item.Theme')"><i class="fas fa-square-check" aria-hidden="true"></i> Theme-@item.Theme</button>
+                                    }
+                                }
+                                </div>
+                            }
+                    </div>
+                </div>
+
+                <div class="vm-pg-slab-card vm-logo-card vm-theme-role-card theam-button">
+                    <div class="vm-pg-slab-card__head">
+                        <h3 class="vm-pg-slab-card__title">
+                            <i class="fas fa-sitemap" aria-hidden="true"></i>
+                            Distributor Theme
+                        </h3>
+                    </div>
+                    <div class="vm-pg-slab-body vm-logo-card-body">
+                            @if (ViewBag.themesD != null && ViewBag.themesD.Count > 0)
+                            {
+                                <div class="vm-theme-pill-grid">
+                                @foreach (var item in ViewBag.themesD)
+                                {
+                                    if (item.Id == 1)
+                                    {
+                                        <button type="button" class="thame-active" onclick="changethemeD('@item.Theme')"><i class="fas fa-square-check" aria-hidden="true"></i> Theme-@item.Theme</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" onclick="changethemeD('@item.Theme')"><i class="fas fa-square-check" aria-hidden="true"></i> Theme-@item.Theme</button>
+                                    }
+                                }
+                                </div>
+                            }
+                    </div>
+                </div>
+
+                <div class="vm-pg-slab-card vm-logo-card vm-theme-role-card theam-button">
+                    <div class="vm-pg-slab-card__head">
+                        <h3 class="vm-pg-slab-card__title">
+                            <i class="fas fa-users" aria-hidden="true"></i>
+                            Master Distributor Theme
+                        </h3>
+                    </div>
+                    <div class="vm-pg-slab-body vm-logo-card-body">
+                            @if (ViewBag.themesM != null && ViewBag.themesM.Count > 0)
+                            {
+                                <div class="vm-theme-pill-grid">
+                                @foreach (var item in ViewBag.themesM)
+                                {
+                                    if (item.Id == 1)
+                                    {
+                                        <button type="button" class="thame-active" onclick="changethemeM('@item.Theme')"><i class="fas fa-square-check" aria-hidden="true"></i> Theme-@item.Theme</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" onclick="changethemeM('@item.Theme')"><i class="fas fa-square-check" aria-hidden="true"></i> Theme-@item.Theme</button>
+                                    }
+                                }
+                                </div>
+                            }
+                    </div>
+                </div>
+
+            </div><!-- /.vm-logo-themes-grid -->
+
+        </div><!-- /#vmLogoThemes -->
+
+        <div class="vm-logo-front-divider" aria-hidden="true"></div>
+
+        <div id="vmLogoFrontThemes" class="vm-logo-section vm-logo-section--front">
+            <div class="vm-logo-section__head vm-front-section__head">
+                <span class="vm-logo-section__badge">05</span>
+                <div class="vm-logo-section__text">
+                <h2 class="vm-logo-section__title"><i class="fas fa-table-cells-large" aria-hidden="true"></i> Front Login Themes</h2>
+                <p class="vm-logo-section__desc">Browse modern login page designs &mdash; preview free themes instantly or explore premium pro layouts</p>
+                <div class="vm-front-section__stats" aria-hidden="true">
+                    <span class="vm-front-section__stat"><i class="fas fa-gift" aria-hidden="true"></i> 8 Free Themes</span>
+                    <span class="vm-front-section__stat vm-front-section__stat--pro"><i class="fas fa-crown" aria-hidden="true"></i> 3 Pro Themes</span>
+                    <span class="vm-front-section__stat"><i class="fas fa-eye" aria-hidden="true"></i> Live Preview</span>
+                </div>
+                </div>
+            </div>
+
+        <div class="vm-front-themes-stack">
+        <div class="vm-pg-slab-card vm-logo-card vm-logo-front-card">
+            <div class="vm-pg-slab-card__head vm-front-theme-head">
+                <div class="vm-front-theme-head__info">
+                    <h3 class="vm-pg-slab-card__title">
+                        <i class="fas fa-gift" aria-hidden="true"></i>
+                        Free Front Login Themes
+                    </h3>
+                    <p class="vm-front-theme-head__desc">8 ready-to-use login layouts &mdash; click <strong>Preview</strong> to see the full design</p>
+                </div>
+                <div class="vm-front-theme-head__badges">
+                    <span class="vm-front-pill vm-front-pill--count"><i class="fas fa-images" aria-hidden="true"></i> 8 Themes</span>
+                    <span class="vm-front-pill vm-front-pill--free"><i class="fas fa-circle-check" aria-hidden="true"></i> 100% Free</span>
+                </div>
+            </div>
+            <div class="vm-pg-slab-body vm-logo-card-body vm-logo-front-body">
+                <div class="all_themeimg vm-front-theme-grid vm-front-theme-grid--free">
+                    <div class="vm-front-theme-item">
+                        <div class="container11 vm-front-theme-card">
+                            <div class="vm-front-theme-preview">
                             <img src="~/images/desgin_one-1.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
-                                <div><button class="text5" id="myButton">View <i class="fa fa-eye"></i></button></div>
+                                <div><button class="text5" id="myButton" type="button"><i class="fas fa-eye" aria-hidden="true"></i> Preview</button></div>
                             </div>
-                            <div class="designch">
-                                <p style="margin:0px;">Theme-1</p>
-                                <span><del>?5000</del> Free</span>
+                            </div>
+                            <div class="designch vm-front-theme-footer">
+                                <p class="vm-front-theme-name">Theme-1</p>
+                                <span class="vm-front-theme-badge vm-front-theme-badge--free">Free</span>
                             </div>
                         </div>
 
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                        <div class="container11">
+                    <div class="vm-front-theme-item">
+                        <div class="container11 vm-front-theme-card">
+                            <div class="vm-front-theme-preview">
                             <img src="~/images/desgin2-2.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
-                                <div><button class="text5" id="myButton1">View <i class="fa fa-eye"></i></button></div>
+                                <div><button class="text5" type="button" id="myButton1"><i class="fas fa-eye" aria-hidden="true"></i> Preview</button></div>
                             </div>
-                            <div class="designch">
-                                <p style="margin:0px;">Theme-2</p>
-                                <span><del>?5000</del> Free</span>
+                            </div>
+                            <div class="designch vm-front-theme-footer">
+                                <p class="vm-front-theme-name">Theme-2</p>
+                                <span class="vm-front-theme-badge vm-front-theme-badge--free">Free</span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-
-                        <div class="container11">
+                    <div class="vm-front-theme-item">
+                        <div class="container11 vm-front-theme-card">
+                            <div class="vm-front-theme-preview">
                             <img src="~/images/desgin3.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
-                                <div><button class="text5" id="myButton2">View <i class="fa fa-eye"></i></button></div>
+                                <div><button class="text5" type="button" id="myButton2"><i class="fas fa-eye" aria-hidden="true"></i> Preview</button></div>
                             </div>
-                            <div class="designch">
-                                <p style="margin:0px;">Theme-3</p>
-                                <span><del>?5000</del> Free</span>
+                            </div>
+                            <div class="designch vm-front-theme-footer">
+                                <p class="vm-front-theme-name">Theme-3</p>
+                                <span class="vm-front-theme-badge vm-front-theme-badge--free">Free</span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-
-                        <div class="container11">
+                    <div class="vm-front-theme-item">
+                        <div class="container11 vm-front-theme-card">
+                            <div class="vm-front-theme-preview">
                             <img src="~/images/desgin4.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
-                                <div><button class="text5" id="myButton3">View <i class="fa fa-eye"></i></button></div>
+                                <div><button class="text5" type="button" id="myButton3"><i class="fas fa-eye" aria-hidden="true"></i> Preview</button></div>
                             </div>
-                            <div class="designch">
-                                <p style="margin:0px;">Theme-4</p>
-                                <span><del>?5000</del> Free</span>
+                            </div>
+                            <div class="designch vm-front-theme-footer">
+                                <p class="vm-front-theme-name">Theme-4</p>
+                                <span class="vm-front-theme-badge vm-front-theme-badge--free">Free</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                        <div class="container11">
+                    <div class="vm-front-theme-item">
+                        <div class="container11 vm-front-theme-card">
+                            <div class="vm-front-theme-preview">
                             <img src="~/images/desgin5.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
-                                <div><button class="text5" id="myButton4">View <i class="fa fa-eye"></i></button></div>
+                                <div><button class="text5" type="button" id="myButton4"><i class="fas fa-eye" aria-hidden="true"></i> Preview</button></div>
                             </div>
-                            <div class="designch">
-                                <p style="margin:0px;">Theme-5</p>
-                                <span><del>?5000</del> Free</span>
+                            </div>
+                            <div class="designch vm-front-theme-footer">
+                                <p class="vm-front-theme-name">Theme-5</p>
+                                <span class="vm-front-theme-badge vm-front-theme-badge--free">Free</span>
                             </div>
                         </div>
 
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-
-                        <div class="container11">
+                    <div class="vm-front-theme-item">
+                        <div class="container11 vm-front-theme-card">
+                            <div class="vm-front-theme-preview">
                             <img src="~/images/desgin6.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
-                                <div><button class="text5" id="myButton5">View <i class="fa fa-eye"></i></button></div>
+                                <div><button class="text5" type="button" id="myButton5"><i class="fas fa-eye" aria-hidden="true"></i> Preview</button></div>
                             </div>
-                            <div class="designch">
-                                <p style="margin:0px;">Theme-6</p>
-                                <span><del>?5000</del> Free</span>
+                            </div>
+                            <div class="designch vm-front-theme-footer">
+                                <p class="vm-front-theme-name">Theme-6</p>
+                                <span class="vm-front-theme-badge vm-front-theme-badge--free">Free</span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-
-                        <div class="container11">
+                    <div class="vm-front-theme-item">
+                        <div class="container11 vm-front-theme-card">
+                            <div class="vm-front-theme-preview">
                             <img src="~/images/desgin7.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
-                                <div><button class="text5" id="myButton6">View <i class="fa fa-eye"></i></button></div>
+                                <div><button class="text5" type="button" id="myButton6"><i class="fas fa-eye" aria-hidden="true"></i> Preview</button></div>
                             </div>
-                            <div class="designch">
-                                <p style="margin:0px;">Theme-7</p>
-                                <span><del>?5000</del> Free</span>
+                            </div>
+                            <div class="designch vm-front-theme-footer">
+                                <p class="vm-front-theme-name">Theme-7</p>
+                                <span class="vm-front-theme-badge vm-front-theme-badge--free">Free</span>
                             </div>
                         </div>
                     </div>
 
 
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-
-                        <div class="container11">
+                    <div class="vm-front-theme-item">
+                        <div class="container11 vm-front-theme-card">
+                            <div class="vm-front-theme-preview">
                             <img src="~/images/Recharge_Theme1.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
-                                <div><button class="text5" id="myButtonR">View <i class="fa fa-eye"></i></button></div>
+                                <div><button class="text5" type="button" id="myButtonR"><i class="fas fa-eye" aria-hidden="true"></i> Preview</button></div>
                             </div>
-                            <div class="designch">
-                                <p style="margin:0px;">Recharge-Theme</p>
-                                <span><del>?5000</del> Free</span>
+                            </div>
+                            <div class="designch vm-front-theme-footer">
+                                <p class="vm-front-theme-name">Recharge-Theme</p>
+                                <span class="vm-front-theme-badge vm-front-theme-badge--free">Free</span>
                             </div>
                         </div>
                     </div>
@@ -2823,19 +2838,19 @@ text-align: center;">
                 </div>
 
                 <div id="myPopup" class="popup">
-                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                    <div class="popup-content vm-theme-popup-shell">
                         <div class="product__description">
 
                             <h1 class="zoom111" style="text-transform:uppercase;">theme-1</h1>
-                            <h2 class="zoom111"><p>Just buy the theme</p> <span><del>?5000</del> Free</span></h2>
+                            <h2 class="zoom111"><p>Just buy the theme</p> <span><del>&#8377;5000</del> Free</span></h2>
                             <a href="#" class="zoom111">Buy Now</a>
-                            <button id="closePopup">?</button>
+                            <button id="closePopup" type="button" class="vm-theme-popup-close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                         </div>
                         <div class="product wrapper">
 
                             <div class="product__thumbnails zooma-thumbnail"></div>
 
-                            <div class="product__focus zooma-main" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px;">
+                            <div class="product__focus zooma-main vm-theme-popup-stage">
                                 <img src="~/images/desgin_one-L2.png" />
                                 <img src="~/images/desgin_one-2.png" />
                             </div>
@@ -2844,19 +2859,19 @@ text-align: center;">
                 </div>
 
                 <div id="myPopup1" class="popup">
-                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                    <div class="popup-content vm-theme-popup-shell">
                         <div class="product__description">
 
                             <h1 class="zoom111" style="text-transform:uppercase;">theme-2</h1>
-                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>?5000</del> Free</span></h2>
+                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>&#8377;5000</del> Free</span></h2>
                             <a href="#" class="zoom111">Buy Now</a>
-                            <button id="closePopup1">?</button>
+                            <button id="closePopup1" type="button" class="vm-theme-popup-close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                         </div>
                         <div class="product wrapper">
 
                             <div class="product__thumbnails zooma-thumbnail1"></div>
 
-                            <div class="product__focus zooma-main1" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px;">
+                            <div class="product__focus zooma-main1 vm-theme-popup-stage">
                                 <img src="~/images/Design2.png" />
                                 <img src="~/images/Design6-login.png" />
                             </div>
@@ -2865,19 +2880,19 @@ text-align: center;">
                 </div>
 
                 <div id="myPopup2" class="popup">
-                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                    <div class="popup-content vm-theme-popup-shell">
                         <div class="product__description">
 
                             <h1 class="zoom111" style="text-transform:uppercase;">theme-3</h1>
-                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>?5000</del> Free</span></h2>
+                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>&#8377;5000</del> Free</span></h2>
                             <a href="#" class="zoom111">Buy Now</a>
-                            <button id="closePopup2">?</button>
+                            <button id="closePopup2" type="button" class="vm-theme-popup-close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                         </div>
                         <div class="product wrapper">
 
                             <div class="product__thumbnails zooma-thumbnail2"></div>
 
-                            <div class="product__focus zooma-main2" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px;">
+                            <div class="product__focus zooma-main2 vm-theme-popup-stage">
                                 <img src="~/images/Design3-3.png" />
                                 <img src="~/images/Design3 login.png" />
                             </div>
@@ -2886,19 +2901,19 @@ text-align: center;">
                 </div>
 
                 <div id="myPopup3" class="popup">
-                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                    <div class="popup-content vm-theme-popup-shell">
                         <div class="product__description">
 
                             <h1 class="zoom111" style="text-transform:uppercase;">theme-4</h1>
-                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>?5000</del> Free</span></h2>
+                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>&#8377;5000</del> Free</span></h2>
                             <a href="#" class="zoom111">Buy Now</a>
-                            <button id="closePopup3">?</button>
+                            <button id="closePopup3" type="button" class="vm-theme-popup-close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                         </div>
                         <div class="product wrapper">
 
                             <div class="product__thumbnails zooma-thumbnail3"></div>
 
-                            <div class="product__focus zooma-main3" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px;">
+                            <div class="product__focus zooma-main3 vm-theme-popup-stage">
                                 <img src="~/images/Design4-4.png" />
                                 <img src="~/images/Design4 login.png" />
                             </div>
@@ -2907,19 +2922,19 @@ text-align: center;">
                 </div>
 
                 <div id="myPopup4" class="popup">
-                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                    <div class="popup-content vm-theme-popup-shell">
                         <div class="product__description">
 
                             <h1 class="zoom111" style="text-transform:uppercase;">theme-5</h1>
-                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>?5000</del> Free</span></h2>
+                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>&#8377;5000</del> Free</span></h2>
                             <a href="#" class="zoom111">Buy Now</a>
-                            <button id="closePopup4">?</button>
+                            <button id="closePopup4" type="button" class="vm-theme-popup-close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                         </div>
                         <div class="product wrapper">
 
                             <div class="product__thumbnails zooma-thumbnail4"></div>
 
-                            <div class="product__focus zooma-main4" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px;">
+                            <div class="product__focus zooma-main4 vm-theme-popup-stage">
                                 <img src="~/images/Design5-5.png" />
                                 <img src="~/images/Design5 login.png" />
                             </div>
@@ -2928,19 +2943,19 @@ text-align: center;">
                 </div>
 
                 <div id="myPopup5" class="popup">
-                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                    <div class="popup-content vm-theme-popup-shell">
                         <div class="product__description">
 
                             <h1 class="zoom111" style="text-transform:uppercase;">theme-6</h1>
-                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>?5000</del> Free</span></h2>
+                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>&#8377;5000</del> Free</span></h2>
                             <a href="#" class="zoom111">Buy Now</a>
-                            <button id="closePopup5">?</button>
+                            <button id="closePopup5" type="button" class="vm-theme-popup-close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                         </div>
                         <div class="product wrapper">
 
                             <div class="product__thumbnails zooma-thumbnail5"></div>
 
-                            <div class="product__focus zooma-main5" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px;">
+                            <div class="product__focus zooma-main5 vm-theme-popup-stage">
                                 <img src="~/images/Design6-6.png" />
                                 <img src="~/images/Design6-login.png" />
                             </div>
@@ -2949,19 +2964,19 @@ text-align: center;">
                 </div>
 
                 <div id="myPopup6" class="popup">
-                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                    <div class="popup-content vm-theme-popup-shell">
                         <div class="product__description">
 
                             <h1 class="zoom111" style="text-transform:uppercase;">theme-7</h1>
-                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>?5000/-</del> pro</span></h2>
+                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>&#8377;5000/-</del> pro</span></h2>
                             <a href="#" class="zoom111">Buy Now</a>
-                            <button id="closePopup6">?</button>
+                            <button id="closePopup6" type="button" class="vm-theme-popup-close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                         </div>
                         <div class="product wrapper">
 
                             <div class="product__thumbnails zooma-thumbnail6"></div>
 
-                            <div class="product__focus zooma-main6" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px;">
+                            <div class="product__focus zooma-main6 vm-theme-popup-stage">
                                 <img src="~/images/Design7-7.png" />
                                 <img src="~/images/Design7-login.png" />
 
@@ -2971,19 +2986,19 @@ text-align: center;">
                 </div>
 
                 <div id="myPopupR" class="popup">
-                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                    <div class="popup-content vm-theme-popup-shell">
                         <div class="product__description">
 
                             <h1 class="zoom111" style="text-transform:uppercase;">Recharge Theme</h1>
-                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>?5000/-</del> pro</span></h2>
+                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>&#8377;5000/-</del> pro</span></h2>
                             <a href="#" class="zoom111">Buy Now</a>
-                            <button id="closePopupR">?</button>
+                            <button id="closePopupR" type="button" class="vm-theme-popup-close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                         </div>
                         <div class="product wrapper" style=" display: flex;">
 
                             <div class="product__thumbnails zooma-thumbnailR_theme"></div>
 
-                            <div class="product__focus zooma-mainR_theme" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px; width: 96%; margin-left: 12px;">
+                            <div class="product__focus zooma-mainR_theme vm-theme-popup-stage">
                                 <img src="~/images/Recharge_Theme.png" />
                                 <img src="~/images/Design7-login.png" />
 
@@ -2992,55 +3007,68 @@ text-align: center;">
                     </div>
                 </div>
 
+            </div><!-- /.vm-pg-slab-body free -->
+        </div><!-- /.vm-pg-slab-card free -->
 
+        <div class="vm-pg-slab-card vm-logo-card vm-logo-front-card vm-logo-front-card--pro">
+            <div class="vm-pg-slab-card__head vm-front-theme-head vm-front-theme-head--pro">
+                <div class="vm-front-theme-head__info">
+                    <h3 class="vm-pg-slab-card__title">
+                        <i class="fas fa-crown" aria-hidden="true"></i>
+                        Pro Front Login Themes
+                    </h3>
+                    <p class="vm-front-theme-head__desc">Premium login designs with advanced layouts &mdash; available on pro plan</p>
+                </div>
+                <div class="vm-front-theme-head__badges">
+                    <span class="vm-front-pill vm-front-pill--count"><i class="fas fa-images" aria-hidden="true"></i> 3 Themes</span>
+                    <span class="vm-front-pill vm-front-pill--pro"><i class="fas fa-star" aria-hidden="true"></i> Premium</span>
+                </div>
             </div>
-        </div>
-    </div>
-
-
-    <div class="container-fluid">
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-fornt" style="margin:35px 0px;margin-top:0px;">
-                <div class="card login-back-img page-header-third all_themeimg" style="padding-bottom: 18px; ">
-                    <div><h2 style="font-size: 22px;">Select for Front Theme - Pro</h2></div>
-
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-
-                        <div class="container11">
+            <div class="vm-pg-slab-body vm-logo-card-body vm-logo-front-body">
+                <div class="all_themeimg vm-front-theme-grid vm-front-theme-grid--pro">
+                    <div class="vm-front-theme-item">
+                        <div class="container11 vm-front-theme-card">
+                            <div class="vm-front-theme-preview">
+                            <span class="vm-pro-ribbon" aria-hidden="true"><i class="fas fa-crown"></i><span>Premium</span></span>
                             <img src="~/images/desgin8.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
-                                <div><button class="text5" id="myButton7">View <i class="fa fa-eye"></i></button></div>
+                                <div><button class="text5" type="button" id="myButton7"><i class="fas fa-eye" aria-hidden="true"></i> Preview</button></div>
                             </div>
-                            <div class="designch">
-                                <p style="margin:0px;">Theme-8</p>
-                                <span>?5000/- Pro</span>
+                            </div>
+                            <div class="designch vm-front-theme-footer">
+                                <p class="vm-front-theme-name">Theme-8</p>
+                                <span class="vm-front-theme-badge vm-front-theme-badge--pro"><i class="fas fa-crown" aria-hidden="true"></i> Premium</span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-
-                        <div class="container11">
+                    <div class="vm-front-theme-item">
+                        <div class="container11 vm-front-theme-card">
+                            <div class="vm-front-theme-preview">
+                            <span class="vm-pro-ribbon" aria-hidden="true"><i class="fas fa-crown"></i><span>Premium</span></span>
                             <img src="~/images/desgin9.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
-                                <div><button class="text5" id="myButton8">View <i class="fa fa-eye"></i></button></div>
+                                <div><button class="text5" type="button" id="myButton8"><i class="fas fa-eye" aria-hidden="true"></i> Preview</button></div>
                             </div>
-                            <div class="designch">
-                                <p style="margin:0px;">Theme-9</p>
-                                <span>?5000/- Pro</span>
+                            </div>
+                            <div class="designch vm-front-theme-footer">
+                                <p class="vm-front-theme-name">Theme-9</p>
+                                <span class="vm-front-theme-badge vm-front-theme-badge--pro"><i class="fas fa-crown" aria-hidden="true"></i> Premium</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-
-                        <div class="container11">
+                    <div class="vm-front-theme-item">
+                        <div class="container11 vm-front-theme-card">
+                            <div class="vm-front-theme-preview">
+                            <span class="vm-pro-ribbon" aria-hidden="true"><i class="fas fa-crown"></i><span>Premium</span></span>
                             <img src="~/images/desginL.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
-                                <div><button class="text5" id="myButtonL">View <i class="fa fa-eye"></i></button></div>
+                                <div><button class="text5" type="button" id="myButtonL"><i class="fas fa-eye" aria-hidden="true"></i> Preview</button></div>
                             </div>
-                            <div class="designch">
-                                <p style="margin:0px;">Loan-Theme</p>
-                                <span>?5000/- Pro</span>
+                            </div>
+                            <div class="designch vm-front-theme-footer">
+                                <p class="vm-front-theme-name">Loan-Theme</p>
+                                <span class="vm-front-theme-badge vm-front-theme-badge--pro"><i class="fas fa-crown" aria-hidden="true"></i> Premium</span>
                             </div>
                         </div>
                     </div>
@@ -3050,19 +3078,19 @@ text-align: center;">
 
 
                 <div id="myPopup7" class="popup">
-                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                    <div class="popup-content vm-theme-popup-shell">
                         <div class="product__description">
 
                             <h1 class="zoom111" style="text-transform:uppercase;">theme-8</h1>
-                            <h2 class="zoom111"><p>Just buy the theme</p><span><b>?5000/-</b> pro</span></h2>
+                            <h2 class="zoom111"><p>Just buy the theme</p><span><b>&#8377;5000/-</b> pro</span></h2>
                             <a href="#" class="zoom111">Buy Now</a>
-                            <button id="closePopup7">?</button>
+                            <button id="closePopup7" type="button" class="vm-theme-popup-close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                         </div>
                         <div class="product wrapper">
 
                             <div class="product__thumbnails zooma-thumbnail7"></div>
 
-                            <disv class="product__focus zooma-main7" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px;">
+                            <div class="product__focus zooma-main7 vm-theme-popup-stage">
                                 <img src="~/images/desgin8-0.png" />
                                 <img src="~/images/desgin8-1.png" />
                                 <img src="~/images/desgin8-2.png" />
@@ -3070,7 +3098,7 @@ text-align: center;">
                                 <img src="~/images/desgin8-4.png" />
                                 <img src="~/images/desgin8-5.png" />
                                 <img src="~/images/desgin8-login.png" />
-                            </disv>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3079,19 +3107,19 @@ text-align: center;">
                 
 
                 <div id="myPopup8" class="popup">
-                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                    <div class="popup-content vm-theme-popup-shell">
                         <div class="product__description">
 
                             <h1 class="zoom111" style="text-transform:uppercase;">theme-9</h1>
-                            <h2 class="zoom111"><p>Just buy the theme</p><span><b>?5000/-</b> pro</span></h2>
+                            <h2 class="zoom111"><p>Just buy the theme</p><span><b>&#8377;5000/-</b> pro</span></h2>
                             <a href="#" class="zoom111">Buy Now</a>
-                            <button id="closePopup8">?</button>
+                            <button id="closePopup8" type="button" class="vm-theme-popup-close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                         </div>
                         <div class="product wrapper">
 
                             <div class="product__thumbnails zooma-thumbnail8"></div>
 
-                            <div class="product__focus zooma-main8" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px;">
+                            <div class="product__focus zooma-main8 vm-theme-popup-stage">
                                 <img src="~/images/desgin9-0.png" />
                                 <img src="~/images/desgin9-1.png" />
                                 <img src="~/images/desgin9-2.png" />
@@ -3107,19 +3135,19 @@ text-align: center;">
                 </div>
 
                 <div id="myPopupL" class="popup">
-                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                    <div class="popup-content vm-theme-popup-shell">
                         <div class="product__description">
 
                             <h1 class="zoom111" style="text-transform:uppercase;">Loan Theme</h1>
-                            <h2 class="zoom111"><p>Just buy the theme</p><span><b>?5000/-</b> pro</span></h2>
+                            <h2 class="zoom111"><p>Just buy the theme</p><span><b>&#8377;5000/-</b> pro</span></h2>
                             <a href="#" class="zoom111">Buy Now</a>
-                            <button id="closePopupL">?</button>
+                            <button id="closePopupL" type="button" class="vm-theme-popup-close" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                         </div>
                         <div class="product wrapper">
 
                             <div class="product__thumbnails zooma-thumbnailL"></div>
 
-                            <div class="product__focus zooma-mainL" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px;">
+                            <div class="product__focus zooma-mainL vm-theme-popup-stage">
                                 <img src="~/images/desginL-0.png" />
                                 <img src="~/images/desginL-1.png" />
                                 <img src="~/images/desginL-login.png" />
@@ -3128,9 +3156,14 @@ text-align: center;">
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </div>
+            </div><!-- /.vm-pg-slab-body pro -->
+        </div><!-- /.vm-pg-slab-card pro -->
+        </div><!-- /.vm-front-themes-stack -->
+        </div><!-- /#vmLogoFrontThemes -->
+
+        </div><!-- /.vm-logo-page-body -->
+
+    </div><!-- /.vm-logo-shell -->
 
 </section>
 
@@ -3231,42 +3264,33 @@ text-align: center;">
         </div>
     </div>*@
 
-<div class="modal fade" id="defaultModal1" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div class="modal fade saas-admin-modal vm-prepaid-modal" id="defaultModal1" tabindex="-1" role="dialog" aria-labelledby="defaultModal1Label" aria-hidden="true">
+    <div class="modal-dialog saas-admin-modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Add New Favicon</h4>
-            </div>
             @using (Html.BeginForm("Outside_favicon", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
             {
-                <div class="modal-body" style="margin-top:-0px;">
-                    <div class="body">
-                        <form>
-                            <div class="row clearfix">
-                                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                    <label for="email_address_2">Select Image</label>
-                                </div>
-                                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                    <div class="form-group">
-                                        <div class="" style="border:1px solid #dddddd;">
-                                            <input type="file" name="file" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer" id="silder1">
-                                <button type="submit" class="btn bg-grey waves-effect for-disable" style="margin-top: 4px; margin-right: 12px; height:34px;">
-                                    <span style="top:-2px;color:black;">Save Change</span>
-                                </button>
-                                <button type="button" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-left: -3px; height:34px;" data-dismiss="modal">
-                                    <span style="top:-2px;color:black;">Close</span>
-                                </button>
-                            </div>
-                        </form>
+                <div class="modal-header saas-admin-modal-header accent-sky">
+                    <div class="saas-admin-modal-head-main">
+                        <div class="saas-admin-modal-icon"><i class="fas fa-star" aria-hidden="true"></i></div>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title" id="defaultModal1Label">Add New Favicon</h4>
+                            <p class="saas-admin-modal-subtitle">Upload favicon image (32×32 px recommended)</p>
+                        </div>
                     </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body saas-admin-modal-body">
+                    <label for="faviconModalFile" style="display:block;margin-bottom:8px;font-size:0.8rem;font-weight:700;color:#334155;">Select Image</label>
+                    <input id="faviconModalFile" type="file" name="file" class="form-control" />
+                </div>
+                <div class="modal-footer saas-admin-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
+                    <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success for-disable">
+                        <i class="fas fa-save" aria-hidden="true"></i>
+                        Save Change
+                    </button>
                 </div>
             }
-
         </div>
     </div>
 </div>
@@ -4261,7 +4285,7 @@ text-align: center;">
 <script>
     $(document).ready(function () {
         $('.theam-button button').click(function () {
-            $('.theam-button button').removeClass("thame-active");
+            $(this).closest('.theam-button').find('button').removeClass("thame-active");
             $(this).addClass("thame-active");
         });
     });
@@ -4338,14 +4362,9 @@ text-align: center;">
 
         $.ajax({
         type: "POST", url: '@Url.Action("delLogo1", "Home")', data: { Id: e }, dataType: 'json', cache: false, success: function (result) {
-            if (result == "Success") {
-                $('#LogoHeaderImg').attr('src', "")
-                $('LogoHeaderTab').attr('href',"")
-            }
-            else {
-                $('#LogoHeaderImg').attr('src', "")
-                $('#LogoHeaderTab').attr('href',"")
-            }
+            $('#LogoHeaderImg').attr('src', "")
+            $('#LogoHeaderTab').attr('href', "")
+            vmBrandSetPreviewState('#LogoHeaderImg', null, false);
         }
     });
 
@@ -4360,14 +4379,9 @@ text-align: center;">
 
         $.ajax({
         type: "POST", url: '@Url.Action("delLoginContent1", "Home")', data: { Id: e }, dataType: 'json', cache: false, success: function (result) {
-            if (result == "Success") {
-                $('#LoginPageLogoImg').attr('src', "")
-                $('#LoginPageLogoTab').attr('href', "")
-            }
-            else {
-                $('#LoginPageLogoImg').attr('src', "")
-                $('#LoginPageLogoTab').attr('href', "")
-            }
+            $('#LoginPageLogoImg').attr('src', "")
+            $('#LoginPageLogoTab').attr('href', "")
+            vmBrandSetPreviewState('#LoginPageLogoImg', null, false);
         }
     });
 
@@ -4381,14 +4395,9 @@ text-align: center;">
 
         $.ajax({
         type: "POST", url: '@Url.Action("delfavicon", "Home")', data: { Id: e }, dataType: 'json', cache: false, success: function (result) {
-            if (result == "Success") {
-               $('#faviconImg').attr('src', "")
-                $('#faviconTab').attr('href',"")
-            }
-            else {
-                $('#faviconImg').attr('src', "")
-                $('#faviconTab').attr('href',"")
-            }
+            $('#faviconImg').attr('src', "")
+            $('#faviconTab').attr('href',"")
+            vmBrandSetPreviewState('#faviconImg', null, false);
         }
     });
 }
@@ -4798,6 +4807,40 @@ else {
 </script>
 
 <script>
+    function vmBrandSetPreviewState(imgSelector, frameSelector, showActions) {
+        var $img = $(imgSelector);
+        var $frame = $img.closest('.vm-brand-card__preview-frame');
+        if (!$frame.length && frameSelector) {
+            $frame = $(frameSelector);
+        }
+        if (showActions) {
+            $frame.removeClass('is-empty');
+            $img.closest('.vm-brand-card__current').find('.vm-brand-card__actions .vm-logo-action-btn').removeClass('is-hidden');
+        } else {
+            $img.attr('src', '');
+            $frame.addClass('is-empty');
+            $img.closest('.vm-brand-card__current').find('.vm-brand-card__actions .vm-logo-action-btn').addClass('is-hidden');
+        }
+    }
+
+    function vmBrandApplyHeaderBg(color) {
+        var $frame = $('.vm-brand-card__preview-frame--header');
+        if (color === 'transparent') {
+            $frame.attr('data-bg', 'transparent').css('background', 'repeating-conic-gradient(#e2e8f0 0% 25%, #fff 0% 50%) 50% / 12px 12px');
+        } else if (color === '#000') {
+            $frame.attr('data-bg', 'black').css('background', '#0f172a');
+        } else {
+            $frame.attr('data-bg', 'white').css('background', '#ffffff');
+        }
+    }
+
+    $(document).ready(function () {
+        var initColor = $("input[name='radio']:checked").val() || '#fff';
+        vmBrandApplyHeaderBg(initColor);
+    });
+</script>
+
+<script>
     $("#btnaaa").click(function () {
 
         var files = $("#LoginPageLogo").get(0).files;
@@ -4819,6 +4862,10 @@ else {
 
                 $('#LoginPageLogoImg').attr('src', "../.." + response[0].Image)
                 $('#LoginPageLogoTab').attr('href', "../.." + response[0].Image)
+                if (response[0].Id) {
+                    $('#loginlogo .vm-logo-action-btn--danger').attr('onclick', "delLoginContent1('" + response[0].Id + "')");
+                }
+                vmBrandSetPreviewState('#LoginPageLogoImg', null, true);
                 $("#LoginPageLogo").val('');
                 ToastrMessage();
                 toastr.success('Logo Upload for Login Page');
@@ -4850,6 +4897,10 @@ $("#HeaderLogoBtn").click(function () {
 
                 $('#LogoHeaderImg').attr('src', "../.." + response[0].LogoImage)
                 $('#LogoHeaderTab').attr('href',"../.."+ response[0].LogoImage)
+                if (response[0].Id) {
+                    $('.vm-brand-card--header .vm-logo-action-btn--danger').attr('onclick', "delLogo1('" + response[0].Id + "')");
+                }
+                vmBrandSetPreviewState('#LogoHeaderImg', null, true);
                 $("#HeaderLogo").val('');
 
                 ToastrMessage();
@@ -4880,6 +4931,10 @@ $("#faviconBtn").click(function () {
             success: function (response) {
                 $('#faviconImg').attr('src', "../.." + response[0].faviconimage)
                 $('#faviconTab').attr('href', "../.." + response[0].faviconimage)
+                if (response[0].Id) {
+                    $('.vm-brand-card--favicon .vm-logo-action-btn--danger').attr('onclick', "delfavico('" + response[0].Id + "')");
+                }
+                vmBrandSetPreviewState('#faviconImg', null, true);
                 $("#faviconfile").val('');
 
                 ToastrMessage();
@@ -4949,9 +5004,10 @@ $("#faviconBtn").click(function () {
       });
 </script>
 <script type='text/javascript'>
-    $("input[type='radio']").click(function(){
+    $("input[name='radio']").click(function(){
         var radioValue = $("input[name='radio']:checked").val();
             if(radioValue){
+                vmBrandApplyHeaderBg(radioValue);
                 $.ajax({
                     url: '@Url.Action("AddColor","Home")',
              type: 'POST',
@@ -4979,11 +5035,178 @@ $("#faviconBtn").click(function () {
     });
 
     $(document).ready(() => {
-        document.getElementById('themebox').style.backgroundImage = `linear-gradient(to right, ${$('#clr1').val()}, ${$('#clr2').val()})`
+        var themebox = document.getElementById('themebox');
+        if (themebox) {
+            themebox.style.backgroundImage = `linear-gradient(to right, ${$('#clr1').val()}, ${$('#clr2').val()})`;
+        }
+
+        // Quick section nav — smooth scroll + active state
+        var $navLinks = $('.vm-logo-quick-nav__link');
+        var $quickNav = $('.vm-logo-quick-nav');
+
+        function vmLogoScrollNavToLink($link) {
+            if (!$link || !$link.length || !$quickNav.length) return;
+            var nav = $quickNav[0];
+            var link = $link[0];
+            var targetLeft = link.offsetLeft - (nav.clientWidth / 2) + (link.offsetWidth / 2);
+            nav.scrollTo({
+                left: Math.max(0, targetLeft),
+                behavior: 'smooth'
+            });
+        }
+
+        function vmLogoUpdateNavScrollFade() {
+            var $wrap = $('.vm-logo-quick-nav-scroll');
+            if (!$wrap.length || !$quickNav.length) return;
+            var nav = $quickNav[0];
+            $wrap.toggleClass('is-scrollable', nav.scrollWidth > nav.clientWidth + 2);
+        }
+
+        if ($navLinks.length) {
+            $navLinks.on('click', function (e) {
+                var target = $(this).attr('href');
+                if (target && target.indexOf('#') === 0) {
+                    var $el = $(target);
+                    if ($el.length) {
+                        e.preventDefault();
+                        $('html, body').animate({ scrollTop: $el.offset().top - 110 }, 280);
+                        $navLinks.removeClass('is-active');
+                        $(this).addClass('is-active');
+                        vmLogoScrollNavToLink($(this));
+                    }
+                }
+            });
+
+            $(window).on('scroll.vmLogoNav', function () {
+                var scrollPos = $(window).scrollTop() + 130;
+                var current = null;
+                $navLinks.each(function () {
+                    var $section = $($(this).attr('href'));
+                    if ($section.length && $section.offset().top <= scrollPos) {
+                        current = this;
+                    }
+                });
+                if (current) {
+                    $navLinks.removeClass('is-active');
+                    $(current).addClass('is-active');
+                }
+            });
+
+            vmLogoScrollNavToLink($navLinks.filter('.is-active').first());
+            vmLogoUpdateNavScrollFade();
+            $(window).on('resize.vmLogoNav', vmLogoUpdateNavScrollFade);
+        }
+
+        // Theme preview popup — mobile/tablet layout fix
+        function vmThemeIsCompact() {
+            return window.innerWidth <= 991;
+        }
+
+        function vmThemeGetMainSelector($thumbBox) {
+            var classes = ($thumbBox.attr('class') || '').split(/\s+/);
+            for (var i = 0; i < classes.length; i++) {
+                if (classes[i].indexOf('zooma-thumbnail') === 0) {
+                    return '.' + classes[i].replace('zooma-thumbnail', 'zooma-main');
+                }
+            }
+            return '[class*="zooma-main"]';
+        }
+
+        function vmThemePopupFix($popup) {
+            if (!$popup || !$popup.length) {
+                $popup = $('#vmLogoFrontThemes .popup.show');
+            }
+            if (!$popup.length) return;
+
+            var isCompact = vmThemeIsCompact();
+            $popup.toggleClass('vm-theme-popup--mobile', isCompact);
+            if (!isCompact) return;
+
+            $popup.find('.product.wrapper').each(function () {
+                var $wrap = $(this);
+                var $thumb = $wrap.find('[class*="zooma-thumbnail"]').first();
+                var $main = $wrap.find('[class*="zooma-main"]').first();
+                if (!$main.length) return;
+
+                if ($thumb.length && !$thumb.children().length) {
+                    $main.children('img').clone().appendTo($thumb);
+                }
+
+                if (!$main.find('img.is-active').length) {
+                    $main.find('img').removeClass('is-active');
+                    $main.find('img').first().addClass('is-active');
+                }
+                if ($thumb.length && !$thumb.find('img.is-active').length) {
+                    $thumb.find('img').removeClass('is-active');
+                    $thumb.find('img').first().addClass('is-active');
+                }
+
+                var mainEl = $main[0];
+                mainEl.style.setProperty('width', '100%', 'important');
+                mainEl.style.setProperty('height', 'auto', 'important');
+                mainEl.style.setProperty('min-height', '52vh', 'important');
+                mainEl.style.setProperty('max-width', '100%', 'important');
+                mainEl.style.setProperty('max-height', 'none', 'important');
+                mainEl.style.setProperty('overflow', 'auto', 'important');
+                mainEl.style.setProperty('float', 'none', 'important');
+                mainEl.style.setProperty('position', 'relative', 'important');
+
+                $main.find('img').each(function () {
+                    var active = $(this).hasClass('is-active');
+                    $(this).removeClass('is-zoomed-in').off('mousemove');
+                    this.style.setProperty('position', 'static', 'important');
+                    this.style.setProperty('width', '100%', 'important');
+                    this.style.setProperty('max-width', '100%', 'important');
+                    this.style.setProperty('height', 'auto', 'important');
+                    this.style.setProperty('left', 'auto', 'important');
+                    this.style.setProperty('top', 'auto', 'important');
+                    this.style.setProperty('display', active ? 'block' : 'none', 'important');
+                    this.style.setProperty('opacity', '1', 'important');
+                    this.style.setProperty('pointer-events', 'none', 'important');
+                });
+            });
+        }
+
+        function vmThemeSchedulePopupFix($popup) {
+            [0, 80, 200, 450, 800].forEach(function (delay) {
+                setTimeout(function () { vmThemePopupFix($popup); }, delay);
+            });
+        }
+
+        $(document).on('click', '[id^="myButton"]', function () {
+            var $popup = $('#' + $(this).attr('id').replace(/^myButton/, 'myPopup'));
+            vmThemeSchedulePopupFix($popup);
+        });
+
+        $(document).on('click', '#vmLogoFrontThemes [class*="zooma-thumbnail"] img', function () {
+            var $img = $(this);
+            var $popup = $img.closest('.popup');
+            var $thumbBox = $img.parent();
+            var idx = $img.index();
+            var mainSel = vmThemeGetMainSelector($thumbBox);
+            var $main = $popup.find(mainSel).first();
+
+            $thumbBox.find('img').removeClass('is-active');
+            $img.addClass('is-active');
+            $main.find('img').removeClass('is-active is-zoomed-in').off('mousemove');
+            $main.find('img').eq(idx).addClass('is-active');
+            vmThemePopupFix($popup);
+        });
+
+        $(window).on('resize.vmThemePopup', function () {
+            vmThemePopupFix($('#vmLogoFrontThemes .popup.show'));
+        });
+
+        if (vmThemeIsCompact()) {
+            setTimeout(function () { vmThemePopupFix($()); }, 600);
+        }
     })
 
     $('.clr_color').change(() => {
-        document.getElementById('themebox').style.backgroundImage = `linear-gradient(to right, ${$('#clr1').val()}, ${$('#clr2').val()})`
+        var themebox = document.getElementById('themebox');
+        if (themebox) {
+            themebox.style.backgroundImage = `linear-gradient(to right, ${$('#clr1').val()}, ${$('#clr2').val()})`;
+        }
     });
     // document.documentElement.style.setProperty('--main-bg-lcolor', '#099678');
 </script>

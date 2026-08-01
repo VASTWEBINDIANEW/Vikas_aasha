@@ -43360,7 +43360,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
             var userid = User.Identity.GetUserId();
             var apiinfo = db.RechargeapiInfoes.Where(aa => aa.Apiid == userid).ToList();
-            ViewBag.apiinfo = new SelectList(apiinfo, "id", "apiname", "Select Api Name");
+            ViewBag.apiinfo = new SelectList(apiinfo, "id", "apiname", apiinfomove);
             List<KeyValuePair<string, string>> kvpList = new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("JSON", "JSON"),
@@ -43603,7 +43603,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 apiinfomove = "ALL";
             }
             var apiinfo = db.RechargeapiInfoes.Where(aa => aa.Apiid == userid).ToList();
-            ViewBag.apiinfo = new SelectList(apiinfo, "id", "apiname", "Select Api Name");
+            ViewBag.apiinfo = new SelectList(apiinfo, "id", "apiname", apiinfomove);
             List<KeyValuePair<string, string>> kvpList = new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("Get", "Get"),
@@ -43732,15 +43732,77 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         public ActionResult ApiCallBack()
         {
             var userid = User.Identity.GetUserId();
-            string hostName = Dns.GetHostName(); // Retrive the Name of HOST  
-            // Get the IP  
+            string hostName = Dns.GetHostName();
             string myIP = Dns.GetHostByName(hostName).AddressList[0].ToString();
             ViewBag.address = myIP;
             var resp = db.RechargeapiInfoes.Where(aa => aa.Apiid == userid).ToList();
-            String strPathAndQuery = HttpContext.Request.Url.PathAndQuery;
-            String strUrl = HttpContext.Request.Url.AbsoluteUri.Replace(strPathAndQuery, "");
-            ViewBag.api = strUrl;
+            ViewBag.api = GetRechargeCallbackBaseUrl();
             return View(resp);
+        }
+
+        private string GetRechargeCallbackBaseUrl()
+        {
+            var liveUrl = BuildRechargeLiveCallbackBaseUrl();
+            if (!string.IsNullOrWhiteSpace(liveUrl))
+            {
+                return liveUrl;
+            }
+
+            if (Request?.Url != null)
+            {
+                var pathAndQuery = Request.Url.PathAndQuery ?? string.Empty;
+                var requestBase = Request.Url.AbsoluteUri.Replace(pathAndQuery, string.Empty).TrimEnd('/');
+                if (!IsLocalCallbackBaseUrl(requestBase))
+                {
+                    return requestBase;
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private string BuildRechargeLiveCallbackBaseUrl()
+        {
+            var websiteUrl = db.Admin_details.FirstOrDefault()?.WebsiteUrl;
+            if (string.IsNullOrWhiteSpace(websiteUrl))
+            {
+                return string.Empty;
+            }
+
+            var domain = websiteUrl.Trim().ToLowerInvariant();
+            domain = domain.Replace("https://www.", string.Empty)
+                .Replace("http://www.", string.Empty)
+                .Replace("https://", string.Empty)
+                .Replace("http://", string.Empty)
+                .TrimEnd('/');
+
+            if (domain.StartsWith("www."))
+            {
+                domain = domain.Substring(4);
+            }
+
+            if (string.IsNullOrWhiteSpace(domain) || IsLocalCallbackBaseUrl(domain))
+            {
+                return string.Empty;
+            }
+
+            if (!domain.StartsWith("recharge."))
+            {
+                domain = "recharge." + domain;
+            }
+
+            return "https://" + domain;
+        }
+
+        private static bool IsLocalCallbackBaseUrl(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return true;
+            }
+
+            var value = url.ToLowerInvariant();
+            return value.Contains("localhost") || value.Contains("127.0.0.1");
         }
 
         #region SMS
@@ -114877,7 +114939,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             }
 
             d.devicelist = db.show_microatm_deviceinfo();
-            return PartialView("Editmicroatm_user", d);
+            return PartialView("_Get_ALL_DeviceList", d);
         }
 
         public ActionResult Get_allDeviceList()
