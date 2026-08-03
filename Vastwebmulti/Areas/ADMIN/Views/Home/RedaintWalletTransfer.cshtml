@@ -126,7 +126,7 @@
                             Records: <strong id="radiantWalletRecordCount">@rowCount</strong>
                         </span>
                         <span class="vm-radiant-inline-total" title="Total amount for current filter">
-                            Total: <strong id="radiantWalletInlineTotal">? @totalAmount.ToString("N2")</strong>
+                            Total: <strong id="radiantWalletInlineTotal">&#8377; @totalAmount.ToString("N2")</strong>
                         </span>
                         <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
                             <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-gift-totals-btn vm-radiant-wallet-totals-btn" onclick="findRadiantWalletTotals()" title="Show totals" aria-expanded="false" aria-controls="radiantWalletTotalsPanel">
@@ -152,9 +152,9 @@
                                     <th>Status</th>
                                     <th>CEID</th>
                                     <th>Request&nbsp;Date</th>
-                                    <th>Amount</th>
-                                    <th>Remain&nbsp;Pre</th>
-                                    <th>Remain&nbsp;Post</th>
+                                    <th>Amount&nbsp;&#8377;</th>
+                                    <th>Remain&nbsp;Pre&nbsp;&#8377;</th>
+                                    <th>Remain&nbsp;Post&nbsp;&#8377;</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -260,7 +260,7 @@
         }
 
         $('#radiantWalletRecordCount').text(count);
-        $('#radiantWalletInlineTotal').text('? ' + formatRadiantWalletAmount(total));
+        $('#radiantWalletInlineTotal').text('\u20B9 ' + formatRadiantWalletAmount(total));
         $('#radiantWalletTotalApproved').text(formatRadiantWalletAmount(approved));
         $('#radiantWalletTotalReject').text(formatRadiantWalletAmount(reject));
         $('#radiantWalletTotalPending').text(formatRadiantWalletAmount(pending));

@@ -30,7 +30,7 @@
                         <i class="fas fa-sliders-h" aria-hidden="true"></i> Max limit
                     </a>
                     <button type="button" class="saas-acc-btn saas-acc-btn--search" id="btnMicroUnholdTotal" title="Sum amounts">
-                        <i class="fas fa-calculator" aria-hidden="true"></i> Total ?@totalAmount.ToString("N2")
+                        <i class="fas fa-calculator" aria-hidden="true"></i> Total &#8377;@totalAmount.ToString("N2")
                     </button>
                     <div class="saas-acc-export-group saas-pan-export-group">
                         <button type="button" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn" id="btnExport">
@@ -57,7 +57,7 @@
                             <th>Bank RRN</th>
                             <th>Transaction type</th>
                             <th>Payment method</th>
-                            <th class="text-right">Amount</th>
+                            <th class="text-right">Amount&nbsp;&#8377;</th>
                             <th>Card payment</th>
                             <th>Trans time</th>
                             <th>Action</th>
@@ -120,7 +120,7 @@
                     <div class="saas-set-filter-bar" style="margin:0;box-shadow:none;border:none;padding:0;display:grid;gap:12px;">
                         <div><label class="saas-mo-label">Firm / mobile</label><input type="text" class="form-control" id="txtfrmname" readonly /></div>
                         <div><label class="saas-mo-label">Bank RRN</label><input type="text" class="form-control" id="txtbnkrrnno" readonly /></div>
-                        <div><label class="saas-mo-label">Amount</label><input type="text" class="form-control" id="txtamountss" readonly /></div>
+                        <div><label class="saas-mo-label">Amount &#8377;</label><input type="text" class="form-control" id="txtamountss" readonly /></div>
                         <div><label class="saas-mo-label">Card payment type</label><input type="text" class="form-control" id="txtcardPaymentType" readonly /></div>
                         <div><label class="saas-mo-label">Transaction type</label><input type="text" class="form-control" id="txttransectionType" readonly /></div>
                         <div><label class="saas-mo-label">Payment method</label><input type="text" class="form-control" id="txtPaymentMethode" readonly /></div>
@@ -151,7 +151,13 @@
         var $b = $(this);
         $('#txtfrmname').val($b.data('frm') || '');
         $('#txtbnkrrnno').val($b.data('rrn') || '');
-        $('#txtamountss').val($b.data('amount') || '');
+        var amt = $b.data('amount');
+        if (amt !== undefined && amt !== null && amt !== '') {
+            var num = parseFloat(amt);
+            $('#txtamountss').val(isNaN(num) ? amt : '\u20B9 ' + num.toFixed(2));
+        } else {
+            $('#txtamountss').val('');
+        }
         $('#txtcardPaymentType').val($b.data('card') || '');
         $('#txttransectionType').val($b.data('tran') || '');
         $('#txtPaymentMethode').val($b.data('pay') || '');
@@ -167,9 +173,9 @@
             total += v;
         });
         if (typeof swal === 'function') {
-            swal('Total amount', '? ' + total.toFixed(2), 'info');
+            swal('Total amount', '\u20B9 ' + total.toFixed(2), 'info');
         } else {
-            alert('Total amount: ? ' + total.toFixed(2));
+            alert('Total amount: \u20B9 ' + total.toFixed(2));
         }
     });
 

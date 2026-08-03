@@ -915,6 +915,18 @@ body.saas-admin-ui .saas-acc-table tbody td.col-balance {
     font-weight: 800 !important;
 }
 
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table tbody td.col-balance::before,
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table tbody td.col-credit::before,
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table tbody td.col-mdcredit::before,
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table tbody td.col-pos::before,
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table tbody td.col-virtual::before,
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table tbody td.col-loss::before,
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table tbody td.col-money::before,
+body.saas-admin-ui .saas-alldetails-page .saas-acc-table tbody td.col-bal::before {
+    content: "\20B9 ";
+    font-weight: 800;
+}
+
 body.saas-admin-ui .saas-acc-table tbody td.col-credit {
     color: var(--acc-success) !important;
     font-weight: 800 !important;
@@ -1147,4 +1159,158 @@ body.saas-admin-ui .saas-acc-table:not([class*="--"]) {
         font-size: 0.74rem !important;
         min-height: 36px !important;
     }
+}
+
+/* ========== Account balance / ledger pages — reliable horizontal scroll ========== */
+body.saas-admin-ui .saas-admin-account-page .container-fluid,
+body.saas-admin-ui .saas-alldetails-page .container-fluid,
+body.saas-admin-ui .tmw-Alldetails .container-fluid {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table-card,
+body.saas-admin-ui .saas-alldetails-page .saas-acc-table-card,
+body.saas-admin-ui .tmw-Alldetails .saas-acc-table-card {
+    max-width: 100%;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table-card .saas-acc-table-wrap,
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table-card .saas-acc-table-scroll,
+body.saas-admin-ui .saas-alldetails-page .saas-acc-table-card #showreport,
+body.saas-admin-ui .tmw-Alldetails .saas-acc-table-card #showreport {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: #64748b #e2e8f0;
+    padding-bottom: 10px;
+}
+
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table-card .saas-acc-table-wrap::-webkit-scrollbar,
+body.saas-admin-ui .saas-alldetails-page .saas-acc-table-card #showreport::-webkit-scrollbar,
+body.saas-admin-ui .tmw-Alldetails .saas-acc-table-card #showreport::-webkit-scrollbar {
+    height: 10px;
+}
+
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table-card .saas-acc-table-wrap::-webkit-scrollbar-track,
+body.saas-admin-ui .saas-alldetails-page .saas-acc-table-card #showreport::-webkit-scrollbar-track,
+body.saas-admin-ui .tmw-Alldetails .saas-acc-table-card #showreport::-webkit-scrollbar-track {
+    background: #e2e8f0;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table-card .saas-acc-table-wrap::-webkit-scrollbar-thumb,
+body.saas-admin-ui .saas-alldetails-page .saas-acc-table-card #showreport::-webkit-scrollbar-thumb,
+body.saas-admin-ui .tmw-Alldetails .saas-acc-table-card #showreport::-webkit-scrollbar-thumb {
+    background: #64748b;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table-wrap .dataTables_wrapper,
+body.saas-admin-ui .saas-alldetails-page #showreport .dataTables_wrapper,
+body.saas-admin-ui .tmw-Alldetails #showreport .dataTables_wrapper {
+    overflow: visible !important;
+    width: max-content;
+    min-width: 100%;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table-wrap .saas-acc-table:not(.saas-acc-table--fill),
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table-wrap table.dataTable:not(.saas-acc-table--fill) {
+    width: max-content !important;
+    min-width: 100% !important;
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .saas-admin-account-page .saas-acc-table-wrap .saas-acc-table--fill,
+body.saas-admin-ui .saas-admin-account-page #adminTotalTable {
+    width: 100% !important;
+    min-width: 980px !important;
+    max-width: none !important;
+    table-layout: auto !important;
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .saas-admin-account-page.saas-acc-page--admintotal .saas-acc-table-wrap .dataTables_wrapper,
+body.saas-admin-ui .saas-admin-account-page #adminTotalTable_wrapper {
+    overflow: visible !important;
+    width: 100% !important;
+    min-width: 980px !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .saas-admin-account-page #adminTotalTable thead th {
+    white-space: normal !important;
+    word-break: break-word;
+    line-height: 1.35;
+    vertical-align: bottom;
+    padding: 12px 10px !important;
+    font-size: 0.62rem !important;
+}
+
+body.saas-admin-ui .saas-admin-account-page #adminTotalTable tbody td {
+    white-space: nowrap;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-admin-account-page #adminTotalTable {
+        table-layout: fixed !important;
+    }
+
+    body.saas-admin-ui .saas-admin-account-page #adminTotalTable thead th,
+    body.saas-admin-ui .saas-admin-account-page #adminTotalTable tbody td {
+        width: auto;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-admin-account-page.saas-acc-page--admintotal .saas-acc-table-wrap,
+    body.saas-admin-ui .saas-admin-account-page.saas-acc-page--admintotal .saas-acc-table-wrap--fill {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.saas-admin-ui .saas-admin-account-page #adminTotalTable,
+    body.saas-admin-ui .saas-admin-account-page #adminTotalTable_wrapper,
+    body.saas-admin-ui .saas-admin-account-page.saas-acc-page--admintotal .saas-acc-table-wrap .dataTables_wrapper {
+        width: 980px !important;
+        min-width: 980px !important;
+        max-width: none !important;
+        table-layout: auto !important;
+    }
+
+    body.saas-admin-ui .saas-admin-account-page #adminTotalTable thead th {
+        white-space: nowrap !important;
+        font-size: 0.68rem !important;
+        padding: 10px 12px !important;
+    }
+}
+
+body.saas-admin-ui .saas-admin-account-page #dtBasicExample {
+    min-width: 920px !important;
+}
+
+body.saas-admin-ui .saas-admin-account-page.saas-acc-page--retailer #dtBasicExample {
+    min-width: 1180px !important;
+}
+
+body.saas-admin-ui .saas-alldetails-page #example.saas-acc-table--ledger,
+body.saas-admin-ui .tmw-Alldetails #example.saas-acc-table--ledger {
+    min-width: 1200px !important;
+}
+
+body.saas-admin-ui .saas-alldetails-page .saas-acc-table tbody td.col-details,
+body.saas-admin-ui .tmw-Alldetails .saas-acc-table tbody td.col-details {
+    white-space: normal;
+    min-width: 180px;
+    max-width: 320px;
 }

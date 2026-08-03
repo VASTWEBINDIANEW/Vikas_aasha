@@ -9,7 +9,7 @@
 }
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-support-pages-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-support-pages-modern.css?v=3" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-report-page saas-support-page saas-complaint-page">
     <div class="container-fluid">
@@ -47,7 +47,7 @@
                             }
                             <div class="saas-complaint-user-meta">
                                 <strong>@item.Email</strong>
-                                <span>@item.Name � @item.Role</span>
+                                <span>@item.Name <i class="fas fa-user-tag saas-complaint-user-role-ico" aria-hidden="true"></i> @item.Role</span>
                             </div>
                             <span class="saas-complaint-badge @(item.count == 0 ? "is-zero" : "")">@item.count</span>
                         </li>
@@ -69,7 +69,7 @@
                         if (item.rdate != null)
                         {
                             <div class="saas-chat-bubble saas-chat-bubble--in clearfix">
-                                <div class="saas-chat-bubble-head"><strong>@item.Email</strong> � @item.rdate</div>
+                                <div class="saas-chat-bubble-head"><strong>@item.Email</strong> <i class="far fa-clock saas-chat-time-ico" aria-hidden="true"></i> @item.rdate</div>
                                 <div class="saas-chat-bubble-body">@item.complant</div>
                             </div>
                             if (item.resdate == null)
@@ -85,7 +85,7 @@
                         if (item.resdate != null)
                         {
                             <div class="saas-chat-bubble saas-chat-bubble--out clearfix">
-                                <div class="saas-chat-bubble-head"><strong>Admin</strong> � @item.resdate</div>
+                                <div class="saas-chat-bubble-head"><strong>Admin</strong> <i class="far fa-clock saas-chat-time-ico" aria-hidden="true"></i> @item.resdate</div>
                                 <div class="saas-chat-bubble-body">@item.response</div>
                             </div>
                         }

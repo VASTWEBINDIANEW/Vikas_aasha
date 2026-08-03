@@ -178,7 +178,7 @@
                             Records: <strong id="walletUnloadRecordCount">@rowCount</strong>
                         </span>
                         <span class="vm-radiant-inline-total" title="Total amount for current filter">
-                            Total: <strong id="walletUnloadInlineTotal">? @totalAmount.ToString("N2")</strong>
+                            Total: <strong id="walletUnloadInlineTotal">&#8377; @totalAmount.ToString("N2")</strong>
                         </span>
                         <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
                             <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-gift-totals-btn vm-wallet-unload-totals-btn" onclick="findWalletUnloadTotals()" title="Show totals" aria-expanded="false" aria-controls="walletUnloadTotalsPanel">
@@ -204,10 +204,10 @@
                                     <th>Firm&nbsp;Name</th>
                                     <th>Transfer&nbsp;Type</th>
                                     <th>Bank&nbsp;Name</th>
-                                    <th>Remain&nbsp;Pre</th>
-                                    <th>Amount</th>
-                                    <th>Charge</th>
-                                    <th>Remain&nbsp;Post</th>
+                                    <th>Remain&nbsp;Pre&nbsp;&#8377;</th>
+                                    <th>Amount&nbsp;&#8377;</th>
+                                    <th>Charge&nbsp;&#8377;</th>
+                                    <th>Remain&nbsp;Post&nbsp;&#8377;</th>
                                     <th>Request&nbsp;Time</th>
                                     <th>Response&nbsp;Time</th>
                                     <th>Bank&nbsp;RRN</th>
@@ -398,7 +398,7 @@
         if (isNaN(num)) {
             return value || '�';
         }
-        return '? ' + num.toFixed(2);
+        return '\u20B9 ' + num.toFixed(2);
     }
 
     function openWalletUnloadActionModal(btn) {
@@ -582,7 +582,7 @@
         }
 
         $('#walletUnloadRecordCount').text(count);
-        $('#walletUnloadInlineTotal').text('? ' + formatWalletUnloadAmount(total));
+        $('#walletUnloadInlineTotal').text('\u20B9 ' + formatWalletUnloadAmount(total));
         $('#walletUnloadTotalSuccess').text(formatWalletUnloadAmount(success));
         $('#walletUnloadTotalRejected').text(formatWalletUnloadAmount(rejected));
         $('#walletUnloadTotalPending').text(formatWalletUnloadAmount(pending));

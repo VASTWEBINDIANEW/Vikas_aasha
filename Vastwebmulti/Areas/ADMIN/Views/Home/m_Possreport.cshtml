@@ -50,11 +50,11 @@
                     <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-mpos-totals-grid">
                         <div class="vm-opr-total-card vm-opr-total-card--success">
                             <span class="vm-opr-total-card__label">Success</span>
-                            <strong class="vm-opr-total-card__value" id="successtotal">�</strong>
+                            <strong class="vm-opr-total-card__value" id="successtotal">&#8377;</strong>
                         </div>
                         <div class="vm-opr-total-card vm-opr-total-card--failed">
                             <span class="vm-opr-total-card__label">Failed</span>
-                            <strong class="vm-opr-total-card__value" id="Failedtotal">�</strong>
+                            <strong class="vm-opr-total-card__value" id="Failedtotal">&#8377;</strong>
                         </div>
                     </div>
                 </div>
@@ -138,9 +138,9 @@
                                     <th>Card&nbsp;Type</th>
                                     <th>Card&nbsp;Brand</th>
                                     <th>Poss&nbsp;Id</th>
-                                    <th>Net&nbsp;Amount&nbsp;?</th>
+                                    <th>Net&nbsp;Amount&nbsp;&#8377;</th>
                                     <th>Comm</th>
-                                    <th>Debit&nbsp;Amount&nbsp;?</th>
+                                    <th>Debit&nbsp;Amount&nbsp;&#8377;</th>
                                     <th>BankRRN&nbsp;No</th>
                                     <th>Date</th>
                                     <th>Bank&nbsp;TerminalID</th>
@@ -347,8 +347,8 @@
         $.post("@Url.Action("mpos_Total", "Home")",
             { "ddlusers": ddlusers, "allmaster2": allmaster, "alldealer": alldealer, "allretailer": allretailer, "ddl_status": ddl_status, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date },
             function (data) {
-                $('#successtotal').text("? " + data.success);
-                $('#Failedtotal').text("? " + data.failed);
+                $('#successtotal').text("\u20B9 " + data.success);
+                $('#Failedtotal').text("\u20B9 " + data.failed);
             });
     }
 

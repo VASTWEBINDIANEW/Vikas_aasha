@@ -138,7 +138,7 @@
                     </div>
                     <div class="vm-dmt-table-panel__right">
                         <span class="vm-radiant-inline-total" title="Total amount for current filter">
-                            Total: <strong>? @totalAmount.ToString("N2")</strong>
+                            Total: <strong>&#8377; @totalAmount.ToString("N2")</strong>
                         </span>
                         <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
                             <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn" onclick="findtotalRadiantPrepay()" title="Show totals" aria-expanded="false" aria-controls="radiantPrepayTotalsPanel">
@@ -161,9 +161,9 @@
                                 <tr>
                                     <th>Firm&nbsp;Name</th>
                                     <th>RCEID</th>
-                                    <th>Amount</th>
-                                    <th>Remain&nbsp;Pre</th>
-                                    <th>Remain&nbsp;Post</th>
+                                    <th>Amount&nbsp;&#8377;</th>
+                                    <th>Remain&nbsp;Pre&nbsp;&#8377;</th>
+                                    <th>Remain&nbsp;Post&nbsp;&#8377;</th>
                                     <th>Request&nbsp;ID</th>
                                     <th>Insert&nbsp;Date</th>
                                     <th>Update&nbsp;Date</th>
@@ -228,7 +228,7 @@
         $('#radiantSuccessAmount').text(formatRadiantAmount(data.success));
         $('#radiantFailedAmount').text(formatRadiantAmount(data.failed));
         $('#radiantPendingAmount').text(formatRadiantAmount(data.pending));
-        $('.vm-radiant-inline-total strong').text('? ' + formatRadiantAmount(data.total));
+        $('.vm-radiant-inline-total strong').text('\u20B9 ' + formatRadiantAmount(data.total));
     }
 
     function findtotalRadiantPrepay() {

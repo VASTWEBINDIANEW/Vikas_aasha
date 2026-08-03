@@ -11,7 +11,7 @@
     Func<decimal, string> fmt = v => v.ToString("N2");
 }
 
-<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css?v=35" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
 
 <section class="content fourdesign-section-admin saas-admin-account-page">
@@ -45,20 +45,20 @@
                 <h3>M/D balance report</h3>
                 <span class="saas-acc-row-count"><i class="fas fa-list" aria-hidden="true"></i> @rowCount records</span>
             </div>
-            <div class="saas-acc-table-wrap table-responsive">
+            <div class="saas-acc-table-wrap saas-acc-table-scroll table-responsive">
                 <table id="dtBasicExample" class="table saas-acc-table example-second third-design-table">
                     <thead>
                         <tr>
                             <th class="col-text">M/D Firm</th>
                             <th class="col-text">M/D Name</th>
                             <th>Registered No.</th>
-                            <th>Account Balance</th>
-                            <th>Admin Credit</th>
+                            <th>Account Balance&nbsp;&#8377;</th>
+                            <th>Admin Credit&nbsp;&#8377;</th>
                         </tr>
                         <tr class="saas-acc-subtotal-row third-tr-color">
                             <th class="col-text" colspan="3">Sub Total</th>
-                            <th class="col-balance">₹@fmt(sumBalance)</th>
-                            <th class="col-credit">₹@fmt(sumCredit)</th>
+                            <th class="col-balance">&#8377;@fmt(sumBalance)</th>
+                            <th class="col-credit">&#8377;@fmt(sumCredit)</th>
                         </tr>
                     </thead>
                     <tbody id="body">

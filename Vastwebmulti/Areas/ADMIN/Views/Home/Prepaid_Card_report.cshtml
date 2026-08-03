@@ -100,15 +100,15 @@
                     <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
                         <div class="vm-opr-total-card vm-opr-total-card--success">
                             <span class="vm-opr-total-card__label">Success</span>
-                            <strong class="vm-opr-total-card__value" id="prepaidTotalSuccess">@totalSuccess.ToString("N2")</strong>
+                            <strong class="vm-opr-total-card__value" id="prepaidTotalSuccess">&#8377; @totalSuccess.ToString("N2")</strong>
                         </div>
                         <div class="vm-opr-total-card vm-opr-total-card--failed">
                             <span class="vm-opr-total-card__label">Failed</span>
-                            <strong class="vm-opr-total-card__value" id="prepaidTotalFailed">@totalFailed.ToString("N2")</strong>
+                            <strong class="vm-opr-total-card__value" id="prepaidTotalFailed">&#8377; @totalFailed.ToString("N2")</strong>
                         </div>
                         <div class="vm-opr-total-card vm-opr-total-card--pending">
                             <span class="vm-opr-total-card__label">Pending</span>
-                            <strong class="vm-opr-total-card__value" id="prepaidTotalPending">@totalPending.ToString("N2")</strong>
+                            <strong class="vm-opr-total-card__value" id="prepaidTotalPending">&#8377; @totalPending.ToString("N2")</strong>
                         </div>
                     </div>
                 </div>
@@ -128,7 +128,7 @@
                             Records: <strong id="prepaidRecordCount">@rowCount</strong>
                         </span>
                         <span class="vm-radiant-inline-total" title="Total amount for current filter">
-                            Total: <strong id="prepaidInlineTotal">? @totalAmount.ToString("N2")</strong>
+                            Total: <strong id="prepaidInlineTotal">&#8377; @totalAmount.ToString("N2")</strong>
                         </span>
                         <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
                             <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-gift-totals-btn vm-prepaid-totals-btn" onclick="findtotalA()" title="Show totals" aria-expanded="false" aria-controls="prepaidCardTotalsPanel">
@@ -156,7 +156,7 @@
                                     <th>Status</th>
                                     <th>User</th>
                                     <th>Quantity</th>
-                                    <th>Amount</th>
+                                    <th>Amount&nbsp;&#8377;</th>
                                     <th>Request&nbsp;Time</th>
                                     <th>Response&nbsp;Time</th>
                                     <th>Comm</th>
@@ -234,10 +234,10 @@
         }
 
         $('#prepaidRecordCount').text(count);
-        $('#prepaidInlineTotal').text('? ' + formatPrepaidAmount(total));
-        $('#prepaidTotalSuccess').text(formatPrepaidAmount(success));
-        $('#prepaidTotalFailed').text(formatPrepaidAmount(failed));
-        $('#prepaidTotalPending').text(formatPrepaidAmount(pending));
+        $('#prepaidInlineTotal').text('\u20B9 ' + formatPrepaidAmount(total));
+        $('#prepaidTotalSuccess').text('\u20B9 ' + formatPrepaidAmount(success));
+        $('#prepaidTotalFailed').text('\u20B9 ' + formatPrepaidAmount(failed));
+        $('#prepaidTotalPending').text('\u20B9 ' + formatPrepaidAmount(pending));
     }
 
     function exportPrepaidCardTable(type) {

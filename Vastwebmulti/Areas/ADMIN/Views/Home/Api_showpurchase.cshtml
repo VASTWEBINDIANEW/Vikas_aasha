@@ -16,7 +16,7 @@
 <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-purchase-report-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-purchase-report-modern.css?v=2" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-purchase-report-page">
     <div class="container-fluid">
@@ -59,7 +59,7 @@
         <div class="saas-acc-table-card">
             <div class="saas-acc-table-card-head">
                 <h3>API user purchase orders</h3>
-                <span class="saas-acc-row-count"><i class="fas fa-list" aria-hidden="true"></i> @rows.Count entries � @frmDate to @toDate</span>
+                <span class="saas-acc-row-count"><i class="fas fa-list" aria-hidden="true"></i> @rows.Count entries <span class="saas-pan-report-meta"><i class="fas fa-calendar-alt" aria-hidden="true"></i> @frmDate to @toDate</span></span>
             </div>
             <div class="saas-acc-table-wrap table-responsive">
                 <table class="table saas-acc-table saas-acc-table--purchase table-bordered">
@@ -70,8 +70,8 @@
                             <th>API user</th>
                             <th>Request date</th>
                             <th>Payment mode</th>
-                            <th class="text-right">Amount</th>
-                            <th class="text-right">Charge</th>
+                            <th class="text-right">Amount&nbsp;&#8377;</th>
+                            <th class="text-right">Charge&nbsp;&#8377;</th>
                             <th>Action</th>
                             <th>From acc no</th>
                             <th>UTR / Slip</th>
@@ -98,8 +98,8 @@
                                     <td data-label="API user">@Html.DisplayFor(m => item.apiemail)</td>
                                     <td data-label="Request date">@string.Format("{0:dd-MM-yyyy} {0:t}", item.reqdate)</td>
                                     <td data-label="Payment mode">@Html.DisplayFor(m => item.paymode)</td>
-                                    <td data-label="Amount" class="text-right">@Html.DisplayFor(m => item.amount)</td>
-                                    <td data-label="Charge" class="text-right">@item.cashDepositCharge</td>
+                                    <td data-label="Amount" class="text-right saas-pur-amount">@Html.DisplayFor(m => item.amount)</td>
+                                    <td data-label="Charge" class="text-right saas-pur-amount">@item.cashDepositCharge</td>
                                     <td data-label="Action">
                                         @if (sts.Equals("Pending", StringComparison.OrdinalIgnoreCase))
                                         {
@@ -118,7 +118,7 @@
                             <tr class="saas-pur-row-total">
                                 <td><strong>Total</strong></td>
                                 <td colspan="4"></td>
-                                <td class="text-right"><strong>@rows.Sum(a => a.amount)</strong></td>
+                                <td class="text-right saas-pur-amount"><strong>@rows.Sum(a => a.amount)</strong></td>
                                 <td colspan="6"></td>
                             </tr>
                         }

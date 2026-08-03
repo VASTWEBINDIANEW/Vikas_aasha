@@ -67,6 +67,189 @@ body.saas-admin-ui #retailerBankImageModal img {
     object-fit: contain;
 }
 
+/* Cancel cheque — modern table preview + image modal */
+body.saas-admin-ui .saas-bank-cheque-preview {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-decoration: none !important;
+    color: inherit;
+    max-width: 92px;
+}
+
+body.saas-admin-ui .saas-bank-cheque-preview:hover,
+body.saas-admin-ui .saas-bank-cheque-preview:focus {
+    outline: none;
+    text-decoration: none !important;
+}
+
+body.saas-admin-ui .saas-bank-cheque-preview__media {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid #dbe4f0;
+    background: linear-gradient(145deg, #f8fafc 0%, #eef2ff 100%);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+body.saas-admin-ui .saas-bank-cheque-preview:hover .saas-bank-cheque-preview__media {
+    transform: translateY(-1px);
+    border-color: #93c5fd;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16);
+}
+
+body.saas-admin-ui .saas-bank-cheque-preview__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+body.saas-admin-ui .saas-bank-cheque-preview__img.is-broken {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-bank-cheque-preview__fallback {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-size: 1.35rem;
+    background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+}
+
+body.saas-admin-ui .saas-bank-cheque-preview__media.is-broken .saas-bank-cheque-preview__fallback {
+    display: flex;
+}
+
+body.saas-admin-ui .saas-bank-cheque-preview__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.42);
+    color: #fff;
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity .18s ease;
+}
+
+body.saas-admin-ui .saas-bank-cheque-preview:hover .saas-bank-cheque-preview__overlay {
+    opacity: 1;
+}
+
+body.saas-admin-ui .saas-bank-cheque-preview__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: .68rem;
+    font-weight: 700;
+    color: #1d4ed8;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-bank-cheque-empty {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: .68rem;
+    font-weight: 600;
+    color: #64748b;
+    background: #f1f5f9;
+    border: 1px dashed #cbd5e1;
+}
+
+body.saas-admin-ui .vm-delete-bank-cheque-modal .modal-dialog {
+    float: none !important;
+    width: calc(100% - 28px) !important;
+    max-width: 760px !important;
+    margin: 1.25rem auto !important;
+}
+
+body.saas-admin-ui .vm-delete-bank-cheque-modal .modal-body {
+    float: none !important;
+    width: 100% !important;
+    padding: 18px 20px !important;
+}
+
+body.saas-admin-ui .saas-bank-cheque-modal-view__frame {
+    position: relative;
+    min-height: 280px;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.saas-admin-ui .saas-bank-cheque-modal-view__frame img {
+    width: 100%;
+    max-height: 68vh;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+body.saas-admin-ui .saas-bank-cheque-modal-view__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 220px;
+    color: #64748b;
+    text-align: center;
+}
+
+body.saas-admin-ui .saas-bank-cheque-modal-view__empty i {
+    font-size: 2.4rem;
+    color: #94a3b8;
+}
+
+body.saas-admin-ui .saas-bank-cheque-modal-view__empty p {
+    margin: 0;
+    font-size: .88rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .vm-delete-bank-cheque-modal .saas-admin-modal-footer {
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+body.saas-admin-ui .vm-delete-bank-cheque-modal .saas-admin-modal-btn--primary {
+    background: linear-gradient(135deg, #0369a1, #2563eb) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+    text-decoration: none !important;
+}
+
+body.saas-admin-ui .vm-delete-bank-cheque-modal .saas-admin-modal-btn--primary:hover {
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
 /* Dispute toolbar — status + quick filter inputs */
 body.saas-admin-ui .saas-dispute-status-input-wrap,
 body.saas-admin-ui .saas-dispute-search-inner {
@@ -300,6 +483,29 @@ body.saas-admin-ui .saas-dispute-amount {
     white-space: nowrap;
 }
 
+body.saas-admin-ui .saas-dispute-amount::before {
+    content: "\20B9 ";
+    font-weight: 800;
+}
+
+body.saas-admin-ui .saas-bank-user-phone {
+    margin: 0 4px;
+    color: #64748b;
+    font-size: 0.78rem;
+}
+
+body.saas-admin-ui .saas-set-user-type {
+    margin-left: 6px;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-set-user-type i {
+    margin-right: 4px;
+    color: #6366f1;
+}
+
 body.saas-admin-ui .saas-dispute-txn-id {
     display: inline-block;
     font-size: 0.76rem;
@@ -471,6 +677,18 @@ body.saas-admin-ui .saas-complaint-user-meta strong {
 body.saas-admin-ui .saas-complaint-user-meta span {
     font-size: 0.72rem;
     color: #64748b;
+}
+
+body.saas-admin-ui .saas-complaint-user-role-ico {
+    margin: 0 4px;
+    color: #6366f1;
+    font-size: 0.72rem;
+}
+
+body.saas-admin-ui .saas-chat-time-ico {
+    margin: 0 4px;
+    color: #94a3b8;
+    font-size: 0.68rem;
 }
 
 body.saas-admin-ui .saas-complaint-badge {

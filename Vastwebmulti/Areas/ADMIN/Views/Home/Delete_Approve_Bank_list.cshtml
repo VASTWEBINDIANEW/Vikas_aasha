@@ -1,232 +1,426 @@
 @model IEnumerable<Vastwebmulti.Models.deletedApprveBankInfo>
-
+@using System.Linq
+@using System.Web
 @{
-    ViewBag.Title = "Delete_Approve_Bank_list";
+    ViewBag.Title = "Delete Approve Bank List";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.deletedApprveBankInfo>();
+    var rowCount = rows.Count;
 }
 
-<style>
-    .image-modal-content button {
-        color: #000;
-        z-index: 9;
-        width: 100%;
-        float: left;
-        text-align: right;
-        border-bottom: 1px solid #aaa4a4;
-        padding: 10px 15px;
-        opacity: 1;
-    }
-    .image-modal-content .modal-body {
-        padding: 15px !important;
-    }
-        .image-modal-content button span {
-            font-size: 1.2em !important;
-            color: #000 !important;
-            font-weight: 400;
-            line-height: 1;
-            text-shadow: 0 1px 0 #fff;
-        }
-    .image-modal-content button.close-footer {
-        border-bottom: 0px;
-        border-top: 0;
-        background: #6c757d;
-        width: auto;
-        float: right;
-        padding: 0;
-        font-size: 14px;
-        border-radius: .25rem;
-        padding: 10px 15px;
-    }
-            .image-modal-content button.close-footer span {
-                text-shadow: none;color:#fff !important;
-            }
-    .button-footer-close {
-        width: 100%;
-        float: left;
-        padding: 9px 15px;
-        border-top: 1px solid #e1e1e1;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=42" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-support-pages-modern.css?v=3" rel="stylesheet" />
 
-    @@media screen and (max-width:766px){
-        #galleryimageprofile-modal .modal-dialog {
-            width: 100% !important;
-            float: left !important;
-            margin: 0;
-            padding: 0 15px;
-        }
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-support-page saas-bank-page saas-delete-bank-report-page">
 
-    @@media screen and (max-width:420px){
-        .image-modal-content img {
-            height: 250px !important;
-        }
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-</style>
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
 
-<section class="content">
-    <div class="container-fluid">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li><a href="javascript:void(0);">User A/C Q</a></li>
+                    <li>Delete Approve Bank List</li>
+                </ol>
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Delete Approve Bank List</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right" style="margin:0px;"></i></a></li>
-                <li><a href="javascript:void(0);">User A/C Q&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Delete Approve Bank List</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="page-header-third pageheader-margin-third">
-            <div class="bread-same-all-page breadsameall-second">
-                <ul class="padding-top-third four-noneclass-admin-only" style="width:auto;float:left;">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Retailer Deleted Bank
-                    </li>
-
-                </ul>
-                <div class="col-md-4" style="width:auto;float:right;margin-bottom:10px;padding-right:0px;">
-                    <div style="float:right; " class="web-white-filter lop">
-
-                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                        <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-
+                <div class="vm-dur-filter-right">
+                    <a href="@Url.Action("RetailerBnk", "Home")" class="saas-acc-btn saas-acc-btn--secondary" style="text-decoration:none;">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Retailer Bank
+                    </a>
+                    <div class="vm-dur-search-field">
+                        <i class="fas fa-search vm-dur-search-icon" aria-hidden="true"></i>
+                        <input id="deleteBankSearch" type="text" placeholder="Search records..."
+                               class="vm-dur-search-input"
+                               onkeyup="deleteBankSearchRows()" autocomplete="off" />
                     </div>
-
+                    <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                        <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                    </button>
+                    <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                        <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                    </button>
                 </div>
-            </div>
-        </div>
-        <div class="table-responsive tablefourdesign-admin" style="width:100%;float:left;overflow:auto;">
-            <table class="table table-bordered table-striped third-design-table" style="background:#f9f9f9;">
-                <tr>
 
-                    <th>
-                        <span>Delete Date</span>
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AcconutHolderName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.BankAccountNo)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.IFSC_CODE)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Bank_Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Bank_Address)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Firm_Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CancelCheckFile)
-                    </th>
-
-
-                </tr>
-
-                @foreach (var item in Model)
-                {
-                    <tr>
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.deleteddate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AcconutHolderName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BankAccountNo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.IFSC_CODE)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Bank_Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Bank_Address)
-                        </td>
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Firm_Name)
-                        </td>
-                        <td>
-                            @if (item.CancelCheckFile == null)
-                            {
-
-                                <span>Image Not Found</span>
-
-                            }
-                            else
-                            {
-                                <button class="image-profilemodal" data-toggle="modal" data-target="#galleryimageprofile-modal">
-                                    <img src="@Url.Content("~/"+ item.CancelCheckFile )" class="img img-responsive" onclick="imgfullsizecopy('@item.Idno')" id="upload-@item.Idno" alt="User" width="100" height="100"
-                                         style="display: flex; align-items: center; justify-content: center" />
-                                </button>
-                            }
-
-                        </td>
-
-
-                    </tr>
-                }
-
-            </table>
-        </div>
-
-        <div class="modal fade" id="galleryimageprofile-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style=" margin-top: 78px;">
-            <div class="modal-dialog" role="document" style="">
-                <div class="modal-content image-modal-content" style="width:100%;float:left;border-radius: 5px;border: 1px solid #aaa4a4;">
-                    @*<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #000;z-index:9;">
-                        <span aria-hidden="true" style=" font-size: 36px; color: #000; opacity: 1;">&times;</span>
-                    </button>*@
-                    <div class="modal-body" style="width:100%;float:left;">
-
-
-
-                        <img src="" class="" id="uploadprofileim111g" alt="User" width="100" height="100" style="cursor:pointer; float:right;width: 100%;height: 340px;" />
-
-
-
-                    </div>
-                    <div class="button-footer-close">
-                        <button type="button" class="close close-footer" data-dismiss="modal" aria-label="Close" style="color: #000;z-index:9;">
-                            <span aria-hidden="true" style=" font-size: 36px; color: #000; opacity: 1;">Close</span>
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
 
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card" id="deleteBankExportWrap">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-university" aria-hidden="true"></i>
+                        <span>Delete Approve Bank List</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="deleteApproveBankTable" class="table vm-opr-data-table saas-acc-table saas-acc-table--bank" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Delete&nbsp;Date</th>
+                                    <th>Account&nbsp;Holder</th>
+                                    <th>Account&nbsp;No.</th>
+                                    <th>IFSC</th>
+                                    <th>Bank&nbsp;Name</th>
+                                    <th>Bank&nbsp;Address</th>
+                                    <th>Email</th>
+                                    <th>Firm&nbsp;Name</th>
+                                    <th>Cancel&nbsp;Cheque</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (rows.Count == 0)
+                                {
+                                    <tr>
+                                        <td colspan="9" class="saas-pan-empty-cell">
+                                            <i class="fas fa-university" style="font-size:2rem;display:block;margin-bottom:8px;opacity:.35;" aria-hidden="true"></i>
+                                            No deleted bank records found.
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    foreach (var item in rows)
+                                    {
+                                        var deletedDate = item.deleteddate.HasValue
+                                            ? item.deleteddate.Value.ToString("dd-MM-yyyy hh:mm tt")
+                                            : "—";
+                                        var holder = string.IsNullOrWhiteSpace(item.AcconutHolderName) ? "—" : item.AcconutHolderName;
+                                        var accountNo = string.IsNullOrWhiteSpace(item.BankAccountNo) ? "—" : item.BankAccountNo;
+                                        var ifsc = string.IsNullOrWhiteSpace(item.IFSC_CODE) ? "—" : item.IFSC_CODE;
+                                        var bankName = string.IsNullOrWhiteSpace(item.Bank_Name) ? "—" : item.Bank_Name;
+                                        var bankAddress = string.IsNullOrWhiteSpace(item.Bank_Address) ? "—" : item.Bank_Address;
+                                        var email = string.IsNullOrWhiteSpace(item.Email) ? "—" : item.Email;
+                                        var firmName = string.IsNullOrWhiteSpace(item.Firm_Name) ? "—" : item.Firm_Name;
+
+                                        <tr>
+                                            <td data-label="Delete Date">
+                                                <span class="vm-opr-date-meta"><i class="fas fa-calendar-alt" aria-hidden="true"></i> @deletedDate</span>
+                                            </td>
+                                            <td data-label="Account Holder">@holder</td>
+                                            <td data-label="Account No.">@accountNo</td>
+                                            <td data-label="IFSC">@ifsc</td>
+                                            <td data-label="Bank Name">@bankName</td>
+                                            <td data-label="Bank Address">@bankAddress</td>
+                                            <td data-label="Email">@email</td>
+                                            <td data-label="Firm Name">@firmName</td>
+                                            <td data-label="Cancel Cheque">
+                                                @if (string.IsNullOrWhiteSpace(item.CancelCheckFile))
+                                                {
+                                                    <span class="saas-bank-cheque-empty">
+                                                        <i class="fas fa-image" aria-hidden="true"></i> No image
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    var chequeSrc = Url.Content("~/" + item.CancelCheckFile);
+                                                    var holderJs = HttpUtility.JavaScriptStringEncode(holder);
+                                                    var firmJs = HttpUtility.JavaScriptStringEncode(firmName);
+                                                    <button type="button"
+                                                            class="saas-bank-cheque-preview"
+                                                            onclick="deleteBankShowImage('@item.Idno', '@holderJs', '@firmJs')"
+                                                            title="View cancel cheque">
+                                                        <span class="saas-bank-cheque-preview__media">
+                                                            <img src="@chequeSrc"
+                                                                 data-src="@chequeSrc"
+                                                                 class="saas-bank-cheque-preview__img"
+                                                                 id="upload-@item.Idno"
+                                                                 alt=""
+                                                                 onerror="deleteBankChequeImgError(this)" />
+                                                            <span class="saas-bank-cheque-preview__fallback" aria-hidden="true">
+                                                                <i class="fas fa-receipt"></i>
+                                                            </span>
+                                                            <span class="saas-bank-cheque-preview__overlay" aria-hidden="true">
+                                                                <i class="fas fa-search-plus"></i>
+                                                            </span>
+                                                        </span>
+                                                        <span class="saas-bank-cheque-preview__label">
+                                                            <i class="fas fa-eye" aria-hidden="true"></i> View
+                                                        </span>
+                                                    </button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
     </div>
 </section>
-<script>
 
-    function imgfullsizecopy(id) {
-        
-        var srcids = '#upload-' + id
+<div class="modal fade saas-admin-modal vm-opr-detail-modal vm-delete-bank-cheque-modal" id="deleteBankImageModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg vm-opr-detail-dialog" role="document">
+        <div class="modal-content vm-opr-detail-content">
+            <div class="modal-header saas-admin-modal-header accent-sky">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-file-invoice" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title">Cancel cheque preview</h4>
+                        <p class="saas-admin-modal-subtitle" id="deleteBankImageSubtitle">Deleted bank record</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body vm-opr-detail-body">
+                <div class="saas-bank-cheque-modal-view">
+                    <div class="saas-bank-cheque-modal-view__frame">
+                        <img src="" alt="Cancel cheque preview" id="deleteBankImageFull" />
+                        <div class="saas-bank-cheque-modal-view__empty" id="deleteBankImageError" style="display:none;">
+                            <i class="fas fa-image" aria-hidden="true"></i>
+                            <p>Cheque image could not be loaded.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer vm-opr-detail-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                    <i class="fas fa-times" aria-hidden="true"></i> Close
+                </button>
+                <a href="#" target="_blank" rel="noopener" class="saas-admin-modal-btn saas-admin-modal-btn--primary" id="deleteBankImageOpen">
+                    <i class="fas fa-external-link-alt" aria-hidden="true"></i> Open full size
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
-        var imgsss = $(srcids).attr('src')
-        $('#uploadprofileim111g').attr('src',imgsss);
+<style>
+    .vm-dur-filter-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-left: auto;
+        flex-shrink: 0;
     }
 
+    .vm-dur-search-field {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-width: 220px;
+    }
 
+    .vm-dur-search-icon {
+        position: absolute;
+        left: 10px;
+        color: #94a3b8;
+        font-size: .75rem;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .vm-dur-search-input {
+        width: 100%;
+        height: 34px;
+        padding: 0 12px 0 30px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: .8rem;
+        color: #1e293b;
+        background: #f8fafc;
+        outline: none;
+        transition: border-color .15s, box-shadow .15s, background .15s;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, .06);
+    }
+
+    .vm-dur-search-input:focus {
+        border-color: #0891b2;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(8, 145, 178, .12);
+    }
+
+    .vm-dur-search-input::placeholder {
+        color: #94a3b8;
+    }
+
+    .saas-delete-bank-report-page .vm-opr-table-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .saas-delete-bank-report-page .vm-opr-data-table {
+        min-width: 980px;
+    }
+
+    .saas-delete-bank-report-page .vm-opr-date-meta {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+        font-size: .78rem;
+        color: #475569;
+    }
+
+    .saas-delete-bank-report-page .vm-opr-date-meta i {
+        color: #0891b2;
+        font-size: .72rem;
+    }
+
+    @@media (max-width: 767px) {
+        body.saas-admin-ui .saas-delete-bank-report-page .vm-opr-page-shell {
+            padding-left: 8px !important;
+            padding-right: 8px !important;
+        }
+
+        body.saas-admin-ui .saas-delete-bank-report-page .vm-opr-toolbar-unified {
+            padding: 6px 8px 8px !important;
+            margin-bottom: 12px !important;
+        }
+
+        .vm-dur-filter-right {
+            width: 100%;
+            margin-left: 0;
+            flex-wrap: wrap;
+        }
+
+        .vm-dur-search-field {
+            flex: 1 1 100%;
+            min-width: 0;
+        }
+
+        .vm-dur-filter-right .saas-acc-btn {
+            flex: 1;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        body.saas-admin-ui .saas-delete-bank-report-page .vm-dmt-table-panel__head {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 8px !important;
+        }
+
+        body.saas-admin-ui .saas-delete-bank-report-page .vm-dmt-table-panel__right {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+            width: 100% !important;
+            margin-left: 0 !important;
+            justify-content: flex-start !important;
+        }
+
+        body.saas-admin-ui .saas-delete-bank-report-page .vm-radiant-record-badge {
+            width: auto !important;
+            flex: 0 1 auto !important;
+            text-align: left !important;
+        }
+
+        body.saas-admin-ui .saas-delete-bank-report-page .vm-gift-report-main-card {
+            margin-top: 10px !important;
+            clear: both !important;
+        }
+    }
+</style>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+<script>
+    function deleteBankSearchRows() {
+        var value = $("#deleteBankSearch").val().toLowerCase();
+        $("#deleteApproveBankTable tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    }
+
+    function deleteBankChequeImgError(img) {
+        if (!img) {
+            return;
+        }
+        img.classList.add("is-broken");
+        var media = img.closest(".saas-bank-cheque-preview__media");
+        if (media) {
+            media.classList.add("is-broken");
+        }
+    }
+
+    function deleteBankShowImage(idno, holderName, firmName) {
+        var $thumb = $("#upload-" + idno);
+        var src = $thumb.data("src") || $thumb.attr("src") || "";
+        var subtitleParts = [];
+        if (holderName && holderName !== "—") {
+            subtitleParts.push(holderName);
+        }
+        if (firmName && firmName !== "—") {
+            subtitleParts.push(firmName);
+        }
+
+        $("#deleteBankImageSubtitle").text(subtitleParts.length ? subtitleParts.join(" · ") : "Deleted bank record");
+        $("#deleteBankImageFull").off("error.deleteBank").on("error.deleteBank", function () {
+            $(this).hide();
+            $("#deleteBankImageError").show();
+        }).attr("src", src).show();
+
+        $("#deleteBankImageError").hide();
+
+        if (src) {
+            $("#deleteBankImageOpen").attr("href", src).show();
+        } else {
+            $("#deleteBankImageOpen").attr("href", "#").hide();
+            $("#deleteBankImageFull").hide();
+            $("#deleteBankImageError").show();
+        }
+
+        $("#deleteBankImageModal").modal("show");
+    }
+
+    function exportDeleteBankExcel() {
+        var table = document.getElementById("deleteApproveBankTable");
+        if (!table) {
+            return;
+        }
+        var html = "<html><head><meta charset=\"utf-8\" /></head><body>" + table.outerHTML + "</body></html>";
+        var blob = new Blob(["\ufeff", html], { type: "application/vnd.ms-excel;charset=utf-8;" });
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "Delete_Approve_Bank_List.xls";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function exportDeleteBankPdf() {
+        var el = document.getElementById("deleteBankExportWrap");
+        if (!el || typeof html2canvas === "undefined" || typeof pdfMake === "undefined") {
+            return;
+        }
+        html2canvas(el, {
+            onrendered: function (canvas) {
+                var data = canvas.toDataURL();
+                var docDefinition = {
+                    pageOrientation: "landscape",
+                    content: [{ image: data, width: 760 }]
+                };
+                pdfMake.createPdf(docDefinition).download("Delete_Approve_Bank_List.pdf");
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $("#btnExport").on("click", exportDeleteBankExcel);
+        $("#btnPDF").on("click", exportDeleteBankPdf);
+    });
 </script>

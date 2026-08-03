@@ -52,15 +52,15 @@
                     <div class="vm-opr-totals-grid vm-dmt-totals-grid">
                         <div class="vm-opr-total-card vm-opr-total-card--success">
                             <span class="vm-opr-total-card__label">Success</span>
-                            <strong class="vm-opr-total-card__value" id="successtotal">�</strong>
+                            <strong class="vm-opr-total-card__value" id="successtotal">&#8377;</strong>
                         </div>
                         <div class="vm-opr-total-card vm-opr-total-card--failed">
                             <span class="vm-opr-total-card__label">Failed</span>
-                            <strong class="vm-opr-total-card__value" id="Failedtotal">�</strong>
+                            <strong class="vm-opr-total-card__value" id="Failedtotal">&#8377;</strong>
                         </div>
                         <div class="vm-opr-total-card vm-opr-total-card--pending">
                             <span class="vm-opr-total-card__label">Pending</span>
-                            <strong class="vm-opr-total-card__value" id="Pendingtotal">�</strong>
+                            <strong class="vm-opr-total-card__value" id="Pendingtotal">&#8377;</strong>
                         </div>
                     </div>
                 </div>
@@ -157,7 +157,7 @@
                                     <th>Aadhaar</th>
                                     <th>Mobile</th>
                                     <th>User&nbsp;Name</th>
-                                    <th>Withdraw&nbsp;?</th>
+                                    <th>Withdraw&nbsp;&#8377;</th>
                                     <th>Comm</th>
                                     <th>Partner&nbsp;Pre</th>
                                     <th>Net&nbsp;T/F</th>
@@ -377,9 +377,9 @@
         $.post("@Url.Action("AepsReport_Total", "Home")",
             { "ddlusers": ddlusers, "allmaster1": allmaster, "alldealer": alldealer, "allretailer": allretailer, "allwhitelabel1": allwhitelabel, "ddl_status": ddl_status, "api_name": api_name, "ddl_settletype": ddl_settletype, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date },
             function (data) {
-                $('#successtotal').text("? " + data.success);
-                $('#Failedtotal').text("? " + data.failed);
-                $('#Pendingtotal').text("? " + data.pending);
+                $('#successtotal').text("\u20B9 " + data.success);
+                $('#Failedtotal').text("\u20B9 " + data.failed);
+                $('#Pendingtotal').text("\u20B9 " + data.pending);
             });
     }
 

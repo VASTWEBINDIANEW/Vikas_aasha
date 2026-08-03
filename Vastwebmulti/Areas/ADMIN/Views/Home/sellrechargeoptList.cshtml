@@ -15,6 +15,7 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-support-pages-modern.css?v=2" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-settings-page">
     <div class="container-fluid">
@@ -84,6 +85,7 @@
                             <th>Operator</th>
                             <th>Comm %</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,7 +95,7 @@
                             {
                                 var isRetailer = retailerIds.Contains(i.userid);
                                 <tr>
-                                    <td data-label="User">@i.dlm_Name � @(isRetailer ? "Retailer" : "Distributor")</td>
+                                    <td data-label="User">@i.dlm_Name <span class="saas-set-user-type"><i class="fas fa-user-tag" aria-hidden="true"></i> @(isRetailer ? "Retailer" : "Distributor")</span></td>
                                     <td data-label="Email">@i.Email</td>
                                     <td data-label="Firm">@i.farmname</td>
                                     <td data-label="Operator">@i.operator_1</td>

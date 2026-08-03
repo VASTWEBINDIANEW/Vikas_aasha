@@ -14,10 +14,10 @@
     Func<decimal, string> fmt = v => v.ToString("N2");
 }
 
-<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css?v=35" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
 
-<section class="content fourdesign-section-admin saas-admin-account-page">
+<section class="content fourdesign-section-admin saas-admin-account-page saas-acc-page--retailer">
     <div class="container-fluid">
 
         
@@ -48,7 +48,7 @@
                 <h3>Retailer balance report</h3>
                 <span class="saas-acc-row-count"><i class="fas fa-list" aria-hidden="true"></i> @rowCount records</span>
             </div>
-            <div class="saas-acc-table-wrap table-responsive">
+            <div class="saas-acc-table-wrap saas-acc-table-scroll table-responsive">
                 <table id="dtBasicExample" class="table saas-acc-table example-second third-design-table">
                     <thead>
                         <tr>
@@ -57,17 +57,17 @@
                             <th class="col-text">Dealer Firm</th>
                             <th class="col-text">Retailer Name</th>
                             <th>Registered No.</th>
-                            <th>Account Balance</th>
-                            <th>POS Balance</th>
-                            <th>Admin Credit</th>
-                            <th>Distributor Credit</th>
+                            <th>Account Balance&nbsp;&#8377;</th>
+                            <th>POS Balance&nbsp;&#8377;</th>
+                            <th>Admin Credit&nbsp;&#8377;</th>
+                            <th>Distributor Credit&nbsp;&#8377;</th>
                         </tr>
                         <tr class="saas-acc-subtotal-row third-tr-color">
                             <th colspan="5" class="col-text">Sub Total</th>
-                            <th class="col-balance">₹@fmt(sumBalance)</th>
-                            <th class="col-pos">₹@fmt(sumPos)</th>
-                            <th class="col-credit">₹@fmt(sumAdminCredit)</th>
-                            <th class="col-mdcredit">₹@fmt(sumDistCredit)</th>
+                            <th class="col-balance">&#8377;@fmt(sumBalance)</th>
+                            <th class="col-pos">&#8377;@fmt(sumPos)</th>
+                            <th class="col-credit">&#8377;@fmt(sumAdminCredit)</th>
+                            <th class="col-mdcredit">&#8377;@fmt(sumDistCredit)</th>
                         </tr>
                     </thead>
                     <tbody id="body">

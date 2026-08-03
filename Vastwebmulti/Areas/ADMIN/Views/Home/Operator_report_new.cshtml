@@ -190,15 +190,15 @@
             <div class="vm-opr-totals-grid">
                 <div class="vm-opr-total-card vm-opr-total-card--pending">
                     <span class="vm-opr-total-card__label">Pending</span>
-                    <strong class="vm-opr-total-card__value" id="Pendingtotal">�</strong>
+                    <strong class="vm-opr-total-card__value" id="Pendingtotal">&#8377; 0.00</strong>
                 </div>
                 <div class="vm-opr-total-card vm-opr-total-card--failed">
                     <span class="vm-opr-total-card__label">Failed</span>
-                    <strong class="vm-opr-total-card__value" id="Failedtotal">�</strong>
+                    <strong class="vm-opr-total-card__value" id="Failedtotal">&#8377; 0.00</strong>
                 </div>
                 <div class="vm-opr-total-card vm-opr-total-card--success">
                     <span class="vm-opr-total-card__label">Success</span>
-                    <strong class="vm-opr-total-card__value" id="successtotal">�</strong>
+                    <strong class="vm-opr-total-card__value" id="successtotal">&#8377; 0.00</strong>
                 </div>
             </div>
         </div>
@@ -223,13 +223,13 @@
                                     <th>#&nbsp;User&nbsp;Information</th>
                                     <th>Operator&nbsp;Name</th>
                                     <th>Consumer&nbsp;/&nbsp;Circle</th>
-                                    <th>Net&nbsp;?</th>
-                                    <th>Opening&nbsp;?</th>
-                                    <th>Dr/Cr&nbsp;?</th>
-                                    <th>Closing&nbsp;?</th>
+                                    <th>Net&nbsp;&#8377;</th>
+                                    <th>Opening&nbsp;&#8377;</th>
+                                    <th>Dr/Cr&nbsp;&#8377;</th>
+                                    <th>Closing&nbsp;&#8377;</th>
                                     <th>Port/API</th>
-                                    <th>Charge/Comm</th>
-                                    <th>Api-R&nbsp;?</th>
+                                    <th>Charge/Comm&nbsp;&#8377;</th>
+                                    <th>Api-R&nbsp;&#8377;</th>
                                     <th>Operator&nbsp;ID</th>
                                     <th>Request&nbsp;Time</th>
                                     <th>Response&nbsp;Time</th>
@@ -320,27 +320,27 @@
                         </div>
                         <div class="vm-opr-detail-panel__body vm-opr-detail-grid vm-opr-detail-grid--2">
                             <div class="vm-opr-detail-field vm-opr-detail-field--money">
-                                <label>Distributor remain ?</label>
+                                <label>Distributor remain &#8377;</label>
                                 @Html.TextBox("dlmpost", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money", @readonly = "readonly" })
                             </div>
                             <div class="vm-opr-detail-field vm-opr-detail-field--money">
-                                <label>Master remain ?</label>
+                                <label>Master remain &#8377;</label>
                                 @Html.TextBox("masterpost", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money", @readonly = "readonly" })
                             </div>
                             <div class="vm-opr-detail-field vm-opr-detail-field--money">
-                                <label>User commission ?</label>
+                                <label>User commission &#8377;</label>
                                 @Html.TextBox("UserComm", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money", @readonly = "readonly" })
                             </div>
                             <div class="vm-opr-detail-field vm-opr-detail-field--money">
-                                <label>Distributor ?</label>
+                                <label>Distributor &#8377;</label>
                                 @Html.TextBox("dlmComm", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money", @readonly = "readonly" })
                             </div>
                             <div class="vm-opr-detail-field vm-opr-detail-field--money">
-                                <label>Master ?</label>
+                                <label>Master &#8377;</label>
                                 @Html.TextBox("mdComm", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money", @readonly = "readonly" })
                             </div>
                             <div class="vm-opr-detail-field vm-opr-detail-field--money vm-opr-detail-field--highlight">
-                                <label>My income ?</label>
+                                <label>My income &#8377;</label>
                                 @Html.TextBox("AdminIncome", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money vm-opr-detail-input--highlight", @readonly = "readonly" })
                             </div>
                         </div>
@@ -1814,11 +1814,11 @@ url,
                      "lapuno11": lapuno11
                  },
                  function (data) {
-                     $('#successtotal').text("? " + data.success);
-                     $('#Failedtotal').text("? " + data.failed);
-                     $('#Pendingtotal').text("? " + data.pending);
-                     //$('#totaldlm').text("DLM ?. " + data.dlmincom);
-                     //$('#totalrem').text("REM ?. " + data.remincome);
+                     $('#successtotal').text("\u20B9 " + (data.success != null ? data.success : "0.00"));
+                     $('#Failedtotal').text("\u20B9 " + (data.failed != null ? data.failed : "0.00"));
+                     $('#Pendingtotal').text("\u20B9 " + (data.pending != null ? data.pending : "0.00"));
+                     //$('#totaldlm').text("DLM \u20B9. " + data.dlmincom);
+                     //$('#totalrem').text("REM \u20B9. " + data.remincome);
 
                  });
         //$('#white-success').css('display','block');

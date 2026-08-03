@@ -1786,6 +1786,62 @@ body.saas-admin-ui .vm-ml-distributor-actions-bar .vm-ml-toggle-btn--compact spa
     font-size: 0.62rem !important;
 }
 
+/* Distributor detail modal — compact OTP/UPI pills (override legacy width:100% toggles) */
+body.saas-admin-ui .vm-ml-detail-modal--distributor .vm-ml-distributor-actions-bar {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--distributor .vm-ml-distributor-actions-bar__title {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--distributor .vm-ml-distributor-actions-bar__chips {
+    flex: 1 1 auto !important;
+    justify-content: flex-end !important;
+    flex-wrap: wrap !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--distributor .vm-ml-distributor-actions-bar .vm-ml-toggle-btn--compact {
+    width: auto !important;
+    max-width: none !important;
+    float: none !important;
+    text-align: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    position: relative !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--distributor .vm-ml-distributor-actions-bar .vm-ml-toggle-btn--compact.custom-off::before,
+body.saas-admin-ui .vm-ml-detail-modal--distributor .vm-ml-distributor-actions-bar .vm-ml-toggle-btn--compact.costom-on::before,
+body.saas-admin-ui .vm-ml-detail-modal--distributor .vm-ml-distributor-actions-bar .vm-ml-toggle-btn--compact.costom-on::after {
+    display: none !important;
+    content: none !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--distributor .vm-ml-distributor-actions-bar .vm-ml-toggle-btn--compact.costom-on {
+    background: #ecfdf5 !important;
+    border-color: #86efac !important;
+    color: #15803d !important;
+    box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.12) !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--distributor .vm-ml-distributor-actions-bar .vm-ml-toggle-btn--compact.custom-off {
+    background: #fef2f2 !important;
+    border-color: #fecaca !important;
+    color: #b91c1c !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--distributor .vm-ml-distributor-actions-bar .vm-ml-toggle-btn--compact:hover {
+    opacity: 0.88;
+}
+
 body.saas-admin-ui .vm-ml-distributor-actions-bar__sell {
     flex: 0 0 auto !important;
     display: inline-flex !important;

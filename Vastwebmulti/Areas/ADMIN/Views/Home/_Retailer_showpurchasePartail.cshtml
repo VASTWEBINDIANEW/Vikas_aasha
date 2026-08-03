@@ -12,8 +12,8 @@
                 <th>Retailer</th>
                 <th>Request date</th>
                 <th>Payment mode</th>
-                <th class="text-right">Amount</th>
-                <th class="text-right">Charge</th>
+                <th class="text-right">Amount&nbsp;&#8377;</th>
+                <th class="text-right">Charge&nbsp;&#8377;</th>
                 <th>Bank / Acc</th>
                 <th>UTR / Slip</th>
                 <th>Comment</th>
@@ -40,8 +40,8 @@
                         <td data-label="Retailer">@Html.DisplayFor(m => item.RemEmail)</td>
                         <td data-label="Request date">@string.Format("{0:dd-MM-yyyy HH:mm:ss}", item.reqdate)</td>
                         <td data-label="Payment mode">@Html.DisplayFor(m => item.paymode)</td>
-                        <td data-label="Amount" class="text-right">@Html.DisplayFor(m => item.amount)</td>
-                        <td data-label="Charge" class="text-right">@item.cashDepositCharge</td>
+                        <td data-label="Amount" class="text-right saas-pur-amount">@Html.DisplayFor(m => item.amount)</td>
+                        <td data-label="Charge" class="text-right saas-pur-amount">@item.cashDepositCharge</td>
                         <td data-label="Bank">@item.banknm / @item.Toaccountno</td>
                         <td data-label="UTR">@Html.DisplayFor(m => item.utrno)</td>
                         <td data-label="Comment" class="col-details">@item.details</td>
@@ -60,7 +60,7 @@
                 <tr class="saas-pur-row-total">
                     <td><strong>Total</strong></td>
                     <td colspan="4"></td>
-                    <td class="text-right"><strong>@rows.Sum(a => a.amount)</strong></td>
+                    <td class="text-right saas-pur-amount"><strong>@rows.Sum(a => a.amount)</strong></td>
                     <td colspan="6"></td>
                 </tr>
             }
