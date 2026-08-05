@@ -17,5 +17,6 @@ namespace Vastwebmulti.Models
         public int id { get; set; }
         public string type { get; set; }
         public string verify_type { get; set; }
+        public bool VideoKycStatus { get; set; }
     }
 }

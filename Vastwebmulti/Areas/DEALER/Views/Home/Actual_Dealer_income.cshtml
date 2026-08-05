@@ -28,14 +28,20 @@
         padding-top: 6px !important;
     }
 
-    @@media screen and (max-width:1366px) {
-    }
-
+    
     @@media screen and (max-width:768px) {
         .actual-dealer-incomepage .table-responsive {
             position: relative !important;
             z-index: 9;
         }
+    }
+
+    @@media only screen and (max-width:766px){
+        .bars.sidebar-toggle-responshiveclass {
+            top: 13px !important;
+        }
+
+
     }
 
     @@media screen and (max-width:580px) {
@@ -51,7 +57,7 @@
     }
 </style>
 <section class="content actual-dealer-incomepage">
-    <div class="container-fluid full-dealer-secondanimation">
+    <div class="container-fluid full-dealer-secondanimation" style="padding-top:8px;">
 
         <!--Four-Design-Admin-page-Header-Section-Start-->
         <div class="page-title-box-fourde-dealer">
@@ -66,11 +72,21 @@
 
         <div class="row clearfix">
             <div class="col-md-12">
-                <div class="card" style="margin-bottom:10px;">
-                    <div class="col-md-6 actualdealer-title dealer-none-fourclass" style="padding: 0px;width:auto;float:left;">
-                        <p style="color:#555; font-size:15px;font-weight:700;margin-top:6px;">@favimage Actual Income</p>
+                <div class="card page-header-third" style="">
+
+                    <div class="col-md-6 dealer-none-fourclass" style="padding:0;">
+                        <div class="w-100 float-left">
+                            <ul class="float-left bred" style="margin:0;padding:0;">
+                                <li class="smli">
+                                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">Dashboard&nbsp;<span style="font-size:18px;">&#187;</span></a>
+                                </li>
+                                <li class="fullbodydycolorbg tmw-total-color-one" style="margin-top:3px;">&nbsp; @favimage Actual Income</li>
+                            </ul>
+
+                        </div>
                     </div>
 
+                    
                     <div class="col-md-2 recharge-report-dealer" style="width:auto;float:right;padding-left:5px;padding-right:0px;">
                         <div class="form-group" style="margin-bottom:0px;width:100%;float:left;">
                             <div style="padding-top:0px;float:right">
@@ -140,9 +156,9 @@
                 <div class="card all-reporttable-css">
 
 
-                    <div>
+                    <div class=" page-header-third">
                         <div class="table-responsive table-responsive-scrolnone tableseconddes-dealer" style="position:inherit;">
-                            <table class="table table-bordered table-striped table-hover dataTable" style="width:100%;border-bottom:0;">
+                            <table class="table table-bordered table-striped table-hover dataTable" style="width:100%;border-bottom:0;margin:0 !important;">
                                 <thead class="thborder-cssdealer" style="background-color:whitesmoke;">
                                     <tr>
                                         <th>Sr.&nbsp;No</th>

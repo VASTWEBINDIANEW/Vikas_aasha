@@ -28,6 +28,9 @@
     }
 
     @@media screen and (max-width:768px) {
+        .bars.sidebar-toggle-responshiveclass {
+            top: 13px !important;
+        }
         .content-tokenpurchase .table-responsive {
             border: 0;
         }
@@ -44,8 +47,10 @@
         }
 
             .col-md-4 ul li {
-                width: 47%;
+                width: 50%;
                 float: left;
+                margin: 0;
+                margin-bottom: 5px;
             }
 
             .col-md-4 ul {
@@ -81,9 +86,9 @@
 
         <div class="row clearfix">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card page-header-third">
                     <div class="row" style="text-align:center;display:block ruby;">
-                        <div class="col-md-4" style="width:auto;float:left;">
+                        <div class="col-md-4" style="width: auto; float: left; padding-right: 15px;">
                             <div>
                                 @Html.Partial("TokenSetting")
                             </div>
@@ -91,12 +96,12 @@
 
 
                         <div class="col-md-6" style="width:auto;padding:0px;float:none;">
-                            <p style="font-size:20px; margin-top:0px; color:red;">Per Token Prize Set By Admin :- @ViewBag.dealervalue</p>
+                            <p style="font-size:18px; margin:0px; color:red;">Per Token Prize Set By Admin :- @ViewBag.dealervalue</p>
                         </div>
                         <div class="col-md-2 recharge-report-dealer" style="width:auto;float:right;padding-left:5px;">
                             <div class="form-group" style="margin-bottom:0px;width:100%;float:left;">
                                 <div style="padding-top:0px;float:right">
-                                    @*<button class="white-success-button" style="height:32px;border:1px solid #b1a6a638;background:#b1a6a638;float: right;padding: 0px 4px;margin-top:-1px;" onclick="findtotal()">Total</button>*@
+                                    
                                     <div class="web-white-filter fil" style="float: left;margin-right: 0px;margin-top:0px;">
                                         <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
                                 background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
@@ -125,10 +130,10 @@
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card all-reporttable-css reporttable-css-token" style="margin-top:-17px;">
-                    <div class="body" style="padding:0px;">
-                        <div class="table-responsive tableseconddes-dealer" style="position:inherit;margin-top:7px;">
-                            <table class="table table-bordered example-second third-design-table" style="width:100%;">
+                <div class="card all-reporttable-css reporttable-css-token" style="">
+                    <div class="body page-header-third" style="padding: 5px;">
+                        <div class="table-responsive tableseconddes-dealer" style="position:inherit;">
+                            <table class="table table-bordered example-second third-design-table" style="width: 100%; margin: 0;">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th>Purchasing&nbsp;By</th>

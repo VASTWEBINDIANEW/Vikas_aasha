@@ -22,11 +22,12 @@
         }
         var admindetail = db2.Admin_details.ToList();
         var mailid = admindetail.SingleOrDefault().email;
-        var mobile = admindetail.SingleOrDefault().mobile;
+        var mobile = "+91 " + admindetail.SingleOrDefault().mobile;
         var Address = admindetail.SingleOrDefault().Address;
         var Firm_Name = admindetail.SingleOrDefault().Companyname;
         var SupportMail = admindetail.SingleOrDefault().email1;
-        var CustCareNo = "+91" + admindetail.SingleOrDefault().mobile1;
+        var mailid2 = admindetail.SingleOrDefault().email2;
+        var CustCareNo = "+91 " + admindetail.SingleOrDefault().mobile1;
         var PinCode = admindetail.SingleOrDefault().pincode;
 
         int state = Convert.ToInt32(admindetail.SingleOrDefault().State);
@@ -330,16 +331,16 @@
                         <div class="d-flex align-items-center">
                             <span><i class="bi bi-telephone"></i></span>
                             <span>
-                                + 91  @CustCareNo
+                                @mobile
                                 <hr style="visibility: visible;" class="animated fadeInLeft">
-                                + 91 @CustCareNo
+                                @CustCareNo
                             </span>
                         </div>
 
                         <div class="d-flex align-items-center">
                             <span><i class="bi bi-envelope-open"></i></span>
                             <span>
-                                <a href="mailto:@SupportMail" style=" color: #fff;">@SupportMail</a>
+                                <a href="mailto:@mailid2" style=" color: #fff;">@mailid2</a>
                                 <hr style="visibility: visible;" class="animated fadeInLeft">
                                 <a href="mailto:@SupportMail" style=" color: #fff;">@SupportMail</a>
                             </span>

@@ -1595,7 +1595,7 @@ namespace Vastwebmulti.Controllers
                                                 System.Threading.Thread.Sleep(1000);
                                                 Task<IRestResponse> task = Task.Run(() =>
                                                 {
-                                                    return cb1.Fund_Transfer(api.Senderno, "", Tranid, amt.ToString(), api.Mode, api.accountno, api.ifsccode, token, api.BankName, "Y", apiuserinfo.adharcard,"","");
+                                                    return cb1.Fund_Transfer(api.Senderno, "", Tranid, amt.ToString(), api.Mode, api.accountno, api.ifsccode, token, api.BankName, "Y", apiuserinfo.adharcard, "", "");
                                                 });
                                                 bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));
                                                 var resp_imps = db.IMPS_transtion_detsils.Where(aa => aa.trans_id == Tranid).SingleOrDefault();
@@ -1794,7 +1794,7 @@ namespace Vastwebmulti.Controllers
                 }
                 else
                 {
-                    return responsechk("Failed", api.Transid, "", api.amount.ToString(), "", "Not Allow","0");
+                    return responsechk("Failed", api.Transid, "", api.amount.ToString(), "", "Not Allow", "0");
                 }
             }
             else

@@ -113,6 +113,8 @@ namespace Vastwebmulti.Models
         public string pincode2 { get; set; }
         public string pincode3 { get; set; }
         public string pincode4 { get; set; }
+        public string Gender { get; set; }
+        public string KYCType { get; set; }
     
         public virtual AEPS_Merchants AEPS_Merchants { get; set; }
         public virtual RetailerOutlet RetailerOutlet { get; set; }

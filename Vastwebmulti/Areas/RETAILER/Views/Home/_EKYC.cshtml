@@ -303,7 +303,6 @@
         <p class="note-content"><strong>.</strong> Firstly Register Yourself On Ekyc</p>
         <p class="note-content"><strong>.</strong>Otp Send To Your Registered Mobile Number</p>
         <p class="note-content"><strong>.</strong>Scan Your Finger , if Match to Aadhar Then Ekyc Done</p>
-
     </div>
 </div>
 <div class="loader"></div>
@@ -321,12 +320,9 @@
                     $(".loader").show();
                 },
                 success: function (data) {
-
-
                     var output = data; //JSON.parse(data);
                     var status = output.Status;
                     var msg = output.Message;
-
                     if (status == "Success") {
                         var primarykey = output.primarykey;
                         var encodetxnid = output.encodetxnid;

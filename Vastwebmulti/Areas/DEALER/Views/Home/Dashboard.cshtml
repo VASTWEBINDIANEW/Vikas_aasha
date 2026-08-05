@@ -10,6 +10,16 @@
 <link href="~/AdditionalCSS/effectivemodalpopup.css" rel="stylesheet" />
 <link href="~/retailer-custum/custum-retailer.css" rel="stylesheet" />
 <style>
+
+    /* new css  */
+    .page-header-third {
+        height: 780px;
+    }
+
+    .nodatafoundclass-dealer {
+        background: #fff;
+    }
+    /* new css  */
     .table tbody tr td, .table tbody tr th {
         padding: 5px;
     }
@@ -45,19 +55,7 @@
         height: 190px;
     }
 
-    /*@@keyframes changecolor {
-        0% {
-            color: #104202;
-        }
-
-        50% {
-            color: #6af955;
-        }
-
-        100% {
-            color: green;
-        }
-    }*/
+    
     .dealer-firstclass.dealer-firstclass-responshive .tab-content {
         min-height: 638px;
     }
@@ -256,6 +254,17 @@
     }
 
     @@media screen and (max-width:768px) {
+
+        /* New Css*/
+        .bars.sidebar-toggle-responshiveclass {
+            top: 13px !important;
+        }
+
+        .page-header-third {
+            height: auto;
+        }
+        /* New Css*/
+
         .history-onetable .table-responsive table {
             margin-top: 0 !important;
         }
@@ -446,17 +455,15 @@
     }
 </style>
 <section class="content content3" style="">
-    <div class="container-fluid">
+    <div class="container-fluid" style=" padding-top: 8px;">
         <!--Holiday Clander and News Start-->
-        <!--Holiday Clander and News End-->
-        <!--Basic Setting and Profile and Today and Yesterday Bussiness-->
         <div class="clearfix"></div>
         <div class="w-100 float-left">
             <div class="row clearfix">
                 <!-- Task Info -->
                 <div class="col-md-4 dealer-firstclass dealer-firstclass-responshive dealer-dashb-second">
                     <div class="card" style="margin-bottom:10px;">
-                        <div class="dealer-user-nav" style="padding-top:1px;">
+                        <div class="dealer-user-nav page-header-third" style="">
                             <ul class="nav-tabs fullbodydycolorbg" role="tablist" @*style="padding-bottom:9px;border-bottom:1px solid #e6e6e6;background:#dddddd;border:3px solid white;*@>
                                 <li role="presentation" class="active">
                                     <a href="#basicsetting" data-toggle="tab" aria-expanded="false">
@@ -469,7 +476,7 @@
                                     </a>
                                 </li>
                             </ul>
-                            <div class="w-100 float-left tab-content">
+                            <div class="w-100 float-left tab-content" style="background: #fff;">
                                 <div role="tabpanel" class="tab-pane fade in active" id="basicsetting">
                                     <div class="w-100 float-left body test">
                                         <div class="icon-button-demo text-center" id="try-one">
@@ -479,14 +486,7 @@
 
                                             </div>
 
-                                            @*<div class="col-xs-3">
-            <a href="~/DEALER/Home/FundTransferDealer">
-                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                    <img src="~/images/reportimage/transfer.svg" />
-                </button>
-            </a>
-            <a href="~/DEALER/Home/FundTransferDealer">Fund&nbsp;Transfer</a>
-        </div>*@
+                                            
 
                                             <div class="col-xs-3">
                                                 <a href="~/DEALER/Home/Index">
@@ -676,7 +676,7 @@
                                                 else
                                                 {
 
-                                                    <img src="~/AdminDesign/images/user.png" width="100" height="100" class="img-circle" alt="User">
+                                                    <img src="~/images/Team_user.png" width="100" height="100" class="img-circle" alt="User">
                                                 }
 
                                             </div>
@@ -704,44 +704,12 @@
 
                     </div>
 
-                    <!--Start setting and basic information-->
-                    <!--Active and Inactive User-->
-                    @*<div class="card active-user-dealer">
-                            <div class="">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="w-100 float-left light-yellow">
-                                            <div id="imgid" class="imgid-dealercss" style="display:block;cursor:pointer;margin-bottom:0px;" onclick="activeinactive()">
-                                                <center style="padding:20px 0;"><span class="text-uppercase">My Active Users</span></center>
-                                            </div>
-                                            <div id="activeuserid" style="display:none;height:auto;">
-                                                <div class="table-responsive table-responsive-dealer">
-                                                    <table class="table table-hover dashboard-task-infos">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>USER</th>
-                                                                <th>ACTIVE</th>
-                                                                <th>INACTIVE</th>
-                                                                <th>TOTAL</th>
-                                                                <th>PROGRESS</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="showactiveuser"></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>*@
-                    <!--End-->
 
                 </div>
                 <!--Show Today and Yesterday Businees-->
                 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 dealer-all-reporthome dealer--report-responshive full-dealer-second full-dealer-secondanimation">
                     <div class="card dealer-addtabnew dealer-tabresponsive">
-                        <div class="" style="padding-top:1px;">
+                        <div class="page-header-third" style="">
                             <!-- Nav tabs -->
 
                             <ul class="nav nav-tabs header-tabbutton tab-seconddesign" role="tablist">
@@ -776,7 +744,7 @@
                             </ul>
 
                             <!-- Tab panes -->
-                            <div class="w-100 float-left tab-content tab-content-dealersclass" style="padding-top:0px;">
+                            <div class="w-100 float-left tab-content tab-content-dealersclass" style="padding-top: 0px; background: #fff;">
 
                                 <div role="tabpanel" class="tab-pane fade in active notification-datashow" id="notifaction-dealer">
                                     <div class="notification-dealercontent">

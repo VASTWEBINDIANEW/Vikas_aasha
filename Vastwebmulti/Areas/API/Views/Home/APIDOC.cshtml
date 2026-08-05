@@ -20,6 +20,11 @@
         width: 100%;
         float: left;
     }
+    #Dispute {
+        width: 100%;
+        float: left;
+    }
+    
     
     .api-doc-right .api-doc-right-in:not(:first-child)::before {
         display: none;
@@ -69,6 +74,7 @@
                         <li><a href="#apirecharge"><img src="~/AdminDesign/images/folder.svg" style="width:16px;margin-top:-4px;" />&nbsp;POST API</a></li>
                         <li><a href="#apirecharge1"><img src="~/AdminDesign/images/folder.svg" style="width:16px;margin-top:-4px;" />&nbsp;GET API</a></li>
                         <li><a href="#Whatsapp"><img src="~/AdminDesign/images/folder.svg" style="width:16px;margin-top:-4px;" />&nbsp;Whatsapp API</a></li>
+                        <li><a href="#Dispute"><img src="~/AdminDesign/images/folder.svg" style="width:16px;margin-top:-4px;" />&nbsp;Dispute API</a></li>
                       @if (ViewBag.payoutsts)
                       {
                         <li><a href="~/Doc/PAYOUT API.pdf" download="Payout API" title="Click here to download PDF"><img src="~/AdminDesign/images/folder.svg" style="width:16px;margin-top:-4px;"/>&nbsp;Payout API</a></li>
@@ -518,7 +524,7 @@
                                                             <td>tokenid </td>
                                                             <td>Your Register Token </td>
                                                         </tr>
-                                                 
+
                                                         <tr>
                                                             <td>3</td>
                                                             <td>message</td>
@@ -531,7 +537,7 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                               
+
                                             </div>
                                         </div>
                                         <div class="col-md-12" style="margin-top:-4px;">
@@ -575,7 +581,62 @@
                             </div>
                         </div>
                     </div>
-                 
+
+
+
+                    <div id="Dispute" class="api-doc-right-in">
+                        <div class="col-md-12">
+
+                            <p style="color:black; font-size:16px;"><b>Dispute API</b></p>
+
+                            <div class="table-responsive" style="margin-bottom:10px;">
+                                <p style="color:blue"><span style="color:black; font-size:16px;"><b>URL:-</b></span>&nbsp;&nbsp;@ViewBag.websiteurl/Retailer/api/data/dispute?id=XXXX&comment=XXXX&mobileno=XXXX&optname=XXXX&amount=XXXX </p>
+                            </div>
+                            <!-- URL -->
+                            
+
+                            <!-- Request Parameters -->
+                            <p><b>Request Parameters:-</b></p>
+                            <table class="table table-bordered" style="background:#f5f5f5;">
+                                <tr>
+                                    <th>SR.No</th>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>id</td>
+                                    <td>Transaction ID</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>comment</td>
+                                    <td>Dispute Comment</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>mobileno</td>
+                                    <td>Mobile Number</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>optname</td>
+                                    <td>Operator Name</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>amount</td>
+                                    <td>Amount</td>
+                                </tr>
+                            </table>
+
+                            <!-- Response -->
+                            <p><b>Response:-</b></p>
+                            <p>{"Message":"Message","Status":"Success/Failed"}</p>
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

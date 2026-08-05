@@ -184,13 +184,14 @@ body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-grid {
     flex: 1 1 auto;
     gap: 16px;
     padding: 0 16px 16px;
+    min-width: 0;
 }
 
 body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    min-height: 100%;
+    min-width: 0;
+    min-height: 0;
     align-self: stretch;
     border: 1px solid #eef2f6;
     border-radius: 12px;
@@ -213,43 +214,68 @@ body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__head {
 
 body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body {
     flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
+    display: block;
+    min-width: 0;
     min-height: 0;
     padding: 0;
     background: #fff;
 }
 
-body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-api-table-wrap {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    min-height: 0;
-    height: 100%;
-    overflow: visible;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    background: #fff;
+/* Keep API tables as real tables so Status buttons stay aligned */
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-api-table-wrap,
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .saas-acc-table-wrap {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
     padding: 0 !important;
 }
 
-body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table,
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body table.saas-acc-table {
+    display: table !important;
     width: 100% !important;
     min-width: 100% !important;
-    height: 100%;
-    min-height: 100%;
+    max-width: 100% !important;
+    height: auto !important;
     margin: 0 !important;
     border: none !important;
-    border-collapse: collapse;
-    border-spacing: 0;
-    table-layout: fixed;
-    background: transparent;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    table-layout: fixed !important;
+    background: #fff !important;
     box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead,
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody {
+    display: table-header-group !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody {
+    display: table-row-group !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tr {
+    display: table-row !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table th,
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table td {
+    display: table-cell !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody::after {
+    display: none !important;
+    content: none !important;
 }
 
 body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead th,
@@ -262,6 +288,9 @@ body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .v
 body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead th {
     border-bottom: 1px solid #e2e8f0 !important;
     background: #f8fafc !important;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody td {
@@ -272,42 +301,40 @@ body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .v
     border-bottom: none !important;
 }
 
-body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead {
-    flex: 0 0 auto;
-    display: table;
-    width: 100%;
-    table-layout: fixed;
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table .vm-upi-set-name-cell {
+    width: auto !important;
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
-body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead tr {
-    display: table-row;
-    width: 100%;
+/* Status / toggle column always visible (does not scroll away) */
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead th.vm-upi-set-status-col,
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody td.vm-upi-set-status-cell {
+    width: 110px !important;
+    min-width: 110px !important;
+    max-width: 110px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+    position: sticky !important;
+    right: 0 !important;
+    z-index: 3 !important;
+    background: #fff !important;
+    box-shadow: -6px 0 10px rgba(15, 23, 42, 0.06);
 }
 
-body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    min-height: 0;
-    background: #fff;
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead th.vm-upi-set-status-col {
+    background: #f8fafc !important;
+    z-index: 4 !important;
 }
 
-body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-    flex: 0 0 auto;
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody tr:nth-child(even) td.vm-upi-set-status-cell {
+    background: #fafbfd !important;
 }
 
-body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody::after {
-    content: "";
-    flex: 1 1 auto;
-    display: block;
-    width: 100%;
-    min-height: 8px;
-    background: transparent;
-    border: none;
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody tr:hover td.vm-upi-set-status-cell {
+    background: #f0f7ff !important;
 }
 
 body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody tr:nth-child(even) td {
@@ -389,9 +416,44 @@ body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle--off .vm-up
 }
 
 body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table tbody td.vm-upi-set-status-cell {
-    width: 130px;
+    width: 110px;
     text-align: center !important;
     vertical-align: middle !important;
+}
+
+/* Top status tables also keep toggle buttons visible */
+body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table-wrap.table-responsive {
+    overflow-x: auto !important;
+    max-width: 100%;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table-wrap > .vm-upi-set-table,
+body.saas-admin-ui .saas-upi-gateway-setting-page .table-responsive > .vm-upi-set-table {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table-wrap .vm-upi-set-table thead th.vm-upi-set-status-col,
+body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table-wrap .vm-upi-set-table tbody td.vm-upi-set-status-cell {
+    width: 120px !important;
+    min-width: 120px !important;
+    position: sticky !important;
+    right: 0 !important;
+    z-index: 3 !important;
+    background: #fff !important;
+    box-shadow: -6px 0 10px rgba(15, 23, 42, 0.06);
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table-wrap .vm-upi-set-table thead th.vm-upi-set-status-col {
+    background: #f8fafc !important;
+    z-index: 4 !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-status-cell .vm-upi-set-toggle {
+    margin: 0 auto;
+    max-width: 100%;
 }
 
 /* Modals (rendered outside section — scope by modal class) */
@@ -655,6 +717,12 @@ body.saas-admin-ui #loadermoney.loadermoney::after {
     box-shadow: 0 12px 40px rgba(15, 23, 42, 0.15);
 }
 
+@media (max-width: 1199px) {
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media (max-width: 991px) {
     body.saas-admin-ui .saas-upi-gateway-setting-page .container-fluid {
         padding-left: 10px;
@@ -680,71 +748,6 @@ body.saas-admin-ui #loadermoney.loadermoney::after {
     body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel {
         height: auto;
         min-height: 0;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body {
-        display: block !important;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-api-table-wrap {
-        display: block !important;
-        height: auto !important;
-        min-height: 0 !important;
-        overflow-x: auto !important;
-        overflow-y: visible !important;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table {
-        display: table !important;
-        width: 100% !important;
-        min-width: 100% !important;
-        max-width: 100% !important;
-        height: auto !important;
-        min-height: 0 !important;
-        table-layout: fixed !important;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table .vm-upi-set-name-cell {
-        white-space: normal !important;
-        word-break: break-word;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table .vm-upi-set-status-cell {
-        white-space: nowrap !important;
-        text-align: center !important;
-        width: 120px;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead th.vm-upi-set-status-col {
-        width: 120px !important;
-        white-space: nowrap !important;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead {
-        display: table-header-group !important;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody {
-        display: table-row-group !important;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tr {
-        display: table-row !important;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table th,
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table td {
-        display: table-cell !important;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody::after {
-        display: none !important;
-        content: none !important;
-    }
-
-    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody tr:last-child td {
-        border-bottom: 1px solid #f1f5f9 !important;
     }
 
     body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-card-head {

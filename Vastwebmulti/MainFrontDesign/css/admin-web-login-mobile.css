@@ -70,31 +70,38 @@
         gap: 10px !important;
     }
 
-    body.saas-admin-ui .WebLogin_Page .wl-toolbar-modal-group {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        gap: 8px !important;
+    body.saas-admin-ui .WebLogin_Page .vm-ft-page-toolbar.wl-login-toolbar {
         width: 100% !important;
+        padding: 8px 10px !important;
     }
 
-    body.saas-admin-ui .WebLogin_Page .wl-toolbar-status-group {
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline {
         display: flex !important;
         flex-wrap: wrap !important;
         gap: 6px !important;
         width: 100% !important;
+        overflow: visible !important;
+        padding: 0 !important;
     }
 
-    body.saas-admin-ui .WebLogin_Page button.wl-toolbar-btn {
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-toolbar-btn {
         flex: 1 1 calc(33.33% - 6px) !important;
-        min-width: 160px !important;
-        height: 40px !important;
+        min-width: 140px !important;
+        height: 38px !important;
     }
 
-    body.saas-admin-ui .WebLogin_Page .wl-toggle-chip {
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-toggle-chip,
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-kyc-select {
         flex: 1 1 calc(50% - 4px) !important;
         min-width: 140px !important;
-        justify-content: flex-start !important;
-        height: 36px !important;
+        justify-content: center !important;
+        min-height: 38px !important;
+        height: 38px !important;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-kyc-select__control {
+        max-width: none !important;
+        width: 100% !important;
     }
 
     /* Left tabs — keep 3-col grid on tablet */
@@ -213,18 +220,30 @@
         padding: 0 14px !important;
     }
 
-    body.saas-admin-ui .WebLogin_Page .wl-toolbar-status-group {
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 6px !important;
+        gap: 8px !important;
+        overflow: visible !important;
     }
 
-    body.saas-admin-ui .WebLogin_Page .wl-toggle-chip {
-        flex: 1 1 auto !important;
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-toolbar-btn,
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-toggle-chip,
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-kyc-select {
         width: 100% !important;
         min-width: 0 !important;
-        height: 38px !important;
-        justify-content: center !important;
+        min-height: 40px !important;
+        height: 40px !important;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-kyc-select {
+        grid-column: 1 / -1;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-kyc-select__control {
+        max-width: none !important;
+        width: 100% !important;
     }
 
     /* Left tabs — stack */
@@ -442,11 +461,16 @@
 
 /* ── Small mobile (max 480px) ── */
 @media (max-width: 480px) {
-    body.saas-admin-ui .WebLogin_Page .wl-toolbar-status-group {
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline {
         grid-template-columns: 1fr !important;
     }
 
-    body.saas-admin-ui .WebLogin_Page .wl-toggle-chip {
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-kyc-select {
+        grid-column: auto;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-toggle-chip,
+    body.saas-admin-ui .WebLogin_Page .wl-kyc-select {
         height: 40px !important;
     }
 

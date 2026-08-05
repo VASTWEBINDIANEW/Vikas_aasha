@@ -4164,28 +4164,6 @@
       <Parameter Name="to" Mode="In" Type="DateTime" />
       <Parameter Name="remid" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="Insert_Dealer" ReturnType="Collection(VastwebmultiModel.Insert_Dealer_Result)">
-      <Parameter Name="ssid" Mode="In" Type="String" />
-      <Parameter Name="Dealerid" Mode="In" Type="String" />
-      <Parameter Name="Dealername" Mode="In" Type="String" />
-      <Parameter Name="FarmName" Mode="In" Type="String" />
-      <Parameter Name="state" Mode="In" Type="String" />
-      <Parameter Name="district" Mode="In" Type="String" />
-      <Parameter Name="mobile" Mode="In" Type="String" />
-      <Parameter Name="address" Mode="In" Type="String" />
-      <Parameter Name="pin" Mode="In" Type="Int32" />
-      <Parameter Name="email" Mode="In" Type="String" />
-      <Parameter Name="photo" Mode="In" Type="String" />
-      <Parameter Name="commission" Mode="In" Type="Decimal" />
-      <Parameter Name="slabnm" Mode="In" Type="String" />
-      <Parameter Name="pancard" Mode="In" Type="String" />
-      <Parameter Name="adharcard" Mode="In" Type="String" />
-      <Parameter Name="gst" Mode="In" Type="String" />
-      <Parameter Name="createdby" Mode="In" Type="String" />
-      <Parameter Name="FinincialRolesType" Mode="In" Type="String" />
-      <Parameter Name="TransPIN" Mode="In" Type="String" />
-      <Parameter Name="output" Mode="InOut" Type="String" />
-    </FunctionImport>
     <FunctionImport Name="Whitelabel_Money_transfer_by_paytm" ReturnType="Collection(VastwebmultiModel.Whitelabel_Money_transfer_by_paytm_Result)">
       <Parameter Name="userid" Mode="In" Type="String" />
       <Parameter Name="amount" Mode="In" Type="Decimal" />
@@ -4290,7 +4268,6 @@
     <FunctionImport Name="AEPS_Count" ReturnType="Collection(VastwebmultiModel.AEPS_Count_Result)">
       <Parameter Name="accountholderaadhar" Mode="In" Type="String" />
     </FunctionImport>
-    <EntitySet Name="Dealer_Details" EntityType="VastwebmultiModel.Dealer_Details" />
     <FunctionImport Name="Whitelabel_Select_super_total" ReturnType="Collection(VastwebmultiModel.Whitelabel_Select_super_total_Result)">
       <Parameter Name="userid" Mode="In" Type="String" />
     </FunctionImport>
@@ -5063,21 +5040,6 @@
       <Parameter Name="bal" Mode="In" Type="Decimal" />
       <Parameter Name="transferid" Mode="In" Type="String" />
       <Parameter Name="transferby" Mode="In" Type="String" />
-    </FunctionImport>
-    <FunctionImport Name="insert_dealer_to_retailer_balance" ReturnType="Collection(VastwebmultiModel.insert_dealer_to_retailer_balance_Result)">
-      <Parameter Name="DealerId" Mode="In" Type="String" />
-      <Parameter Name="RetailerId" Mode="In" Type="String" />
-      <Parameter Name="Balance" Mode="In" Type="Decimal" />
-      <Parameter Name="comm" Mode="In" Type="Decimal" />
-      <Parameter Name="type" Mode="In" Type="String" />
-      <Parameter Name="comment" Mode="In" Type="String" />
-      <Parameter Name="collectionby" Mode="In" Type="String" />
-      <Parameter Name="bankname" Mode="In" Type="String" />
-      <Parameter Name="adminacco" Mode="In" Type="String" />
-      <Parameter Name="head" Mode="In" Type="String" />
-      <Parameter Name="fundby" Mode="In" Type="String" />
-      <Parameter Name="Transectionid" Mode="In" Type="String" />
-      <Parameter Name="output" Mode="InOut" Type="String" />
     </FunctionImport>
     <FunctionImport Name="Insert_SuperStokist_To_Dealer" ReturnType="Collection(VastwebmultiModel.Insert_SuperStokist_To_Dealer_Result)">
       <Parameter Name="ssid" Mode="In" Type="String" />
@@ -6612,28 +6574,6 @@
     <EntitySet Name="wallet_imps_common_comm" EntityType="VastwebmultiModel.wallet_imps_common_comm" />
     <EntitySet Name="wallet_imps_dealer_comm" EntityType="VastwebmultiModel.wallet_imps_dealer_comm" />
     <EntitySet Name="Location_key" EntityType="VastwebmultiModel.Location_key" />
-    <FunctionImport Name="Insert_Retailer" ReturnType="Collection(VastwebmultiModel.Insert_Retailer_Result)">
-      <Parameter Name="DealerId" Mode="In" Type="String" />
-      <Parameter Name="Retailerid" Mode="In" Type="String" />
-      <Parameter Name="Retailername" Mode="In" Type="String" />
-      <Parameter Name="state" Mode="In" Type="Int32" />
-      <Parameter Name="district" Mode="In" Type="Int32" />
-      <Parameter Name="mobile" Mode="In" Type="String" />
-      <Parameter Name="address" Mode="In" Type="String" />
-      <Parameter Name="pincode" Mode="In" Type="Int32" />
-      <Parameter Name="email" Mode="In" Type="String" />
-      <Parameter Name="photo" Mode="In" Type="String" />
-      <Parameter Name="slabname" Mode="In" Type="String" />
-      <Parameter Name="firmnm" Mode="In" Type="String" />
-      <Parameter Name="aadharcard" Mode="In" Type="String" />
-      <Parameter Name="pencard" Mode="In" Type="String" />
-      <Parameter Name="caption" Mode="In" Type="Int32" />
-      <Parameter Name="gst" Mode="In" Type="String" />
-      <Parameter Name="pin" Mode="In" Type="String" />
-      <Parameter Name="referralcode" Mode="In" Type="String" />
-      <Parameter Name="createdBy" Mode="In" Type="String" />
-      <Parameter Name="output" Mode="InOut" Type="String" />
-    </FunctionImport>
     <EntitySet Name="paymentgateway_kyc_status" EntityType="VastwebmultiModel.paymentgateway_kyc_status" />
     <EntitySet Name="AccountOpenings" EntityType="VastwebmultiModel.AccountOpening" />
     <FunctionImport Name="account_opening_report" ReturnType="Collection(VastwebmultiModel.account_opening_report_Result)">
@@ -7682,10 +7622,165 @@
       <Parameter Name="uniqueid" Mode="In" Type="String" />
       <Parameter Name="status" Mode="In" Type="String" />
     </FunctionImport>
+    <EntitySet Name="AepsVideoKycs" EntityType="VastwebmultiModel.AepsVideoKyc" />
     <EntitySet Name="CMS_Ledger" EntityType="VastwebmultiModel.CMS_Ledger" />
     <EntitySet Name="CMSRemainBalances" EntityType="VastwebmultiModel.CMSRemainBalance" />
+    <EntitySet Name="AEPSCHMerchantinfoes" EntityType="VastwebmultiModel.AEPSCHMerchantinfo" />
     <EntitySet Name="HoldBalanceReports" EntityType="VastwebmultiModel.HoldBalanceReport" />
     <EntitySet Name="HoldRemainbalances" EntityType="VastwebmultiModel.HoldRemainbalance" />
+    <FunctionImport Name="UPI_TXN_ICICI" ReturnType="Collection(VastwebmultiModel.UPI_TXN_ICICI_Result)">
+      <Parameter Name="role" Mode="In" Type="String" />
+      <Parameter Name="userid" Mode="In" Type="String" />
+      <Parameter Name="txnid" Mode="In" Type="String" />
+      <Parameter Name="amount" Mode="In" Type="Decimal" />
+      <Parameter Name="status" Mode="In" Type="String" />
+      <Parameter Name="payername" Mode="In" Type="String" />
+      <Parameter Name="payvpn" Mode="In" Type="String" />
+      <Parameter Name="bankrrn" Mode="In" Type="String" />
+      <Parameter Name="response" Mode="In" Type="String" />
+      <Parameter Name="apiname" Mode="In" Type="String" />
+      <Parameter Name="output" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="SignupKYCSettings" EntityType="VastwebmultiModel.SignupKYCSetting" />
+    <FunctionImport Name="Insert_Retailer" ReturnType="Collection(VastwebmultiModel.Insert_Retailer_Result)">
+      <Parameter Name="DealerId" Mode="In" Type="String" />
+      <Parameter Name="Retailerid" Mode="In" Type="String" />
+      <Parameter Name="Retailername" Mode="In" Type="String" />
+      <Parameter Name="state" Mode="In" Type="Int32" />
+      <Parameter Name="KYCType" Mode="In" Type="String" />
+      <Parameter Name="district" Mode="In" Type="Int32" />
+      <Parameter Name="mobile" Mode="In" Type="String" />
+      <Parameter Name="address" Mode="In" Type="String" />
+      <Parameter Name="pincode" Mode="In" Type="Int32" />
+      <Parameter Name="email" Mode="In" Type="String" />
+      <Parameter Name="photo" Mode="In" Type="String" />
+      <Parameter Name="slabname" Mode="In" Type="String" />
+      <Parameter Name="firmnm" Mode="In" Type="String" />
+      <Parameter Name="aadharcard" Mode="In" Type="String" />
+      <Parameter Name="pencard" Mode="In" Type="String" />
+      <Parameter Name="caption" Mode="In" Type="Int32" />
+      <Parameter Name="gst" Mode="In" Type="String" />
+      <Parameter Name="pin" Mode="In" Type="String" />
+      <Parameter Name="referralcode" Mode="In" Type="String" />
+      <Parameter Name="createdBy" Mode="In" Type="String" />
+      <Parameter Name="output" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="Dealer_Details" EntityType="VastwebmultiModel.Dealer_Details" />
+    <FunctionImport Name="Insert_Dealer" ReturnType="Collection(VastwebmultiModel.Insert_Dealer_Result)">
+      <Parameter Name="ssid" Mode="In" Type="String" />
+      <Parameter Name="Dealerid" Mode="In" Type="String" />
+      <Parameter Name="Dealername" Mode="In" Type="String" />
+      <Parameter Name="FarmName" Mode="In" Type="String" />
+      <Parameter Name="state" Mode="In" Type="String" />
+      <Parameter Name="district" Mode="In" Type="String" />
+      <Parameter Name="mobile" Mode="In" Type="String" />
+      <Parameter Name="address" Mode="In" Type="String" />
+      <Parameter Name="pin" Mode="In" Type="Int32" />
+      <Parameter Name="email" Mode="In" Type="String" />
+      <Parameter Name="photo" Mode="In" Type="String" />
+      <Parameter Name="commission" Mode="In" Type="Decimal" />
+      <Parameter Name="slabnm" Mode="In" Type="String" />
+      <Parameter Name="pancard" Mode="In" Type="String" />
+      <Parameter Name="adharcard" Mode="In" Type="String" />
+      <Parameter Name="gst" Mode="In" Type="String" />
+      <Parameter Name="createdby" Mode="In" Type="String" />
+      <Parameter Name="FinincialRolesType" Mode="In" Type="String" />
+      <Parameter Name="TransPIN" Mode="In" Type="String" />
+      <Parameter Name="OnlyCMSUser" Mode="In" Type="Boolean" />
+      <Parameter Name="output" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="insert_dealer_to_retailer_balance" ReturnType="Collection(VastwebmultiModel.insert_dealer_to_retailer_balance_Result)">
+      <Parameter Name="DealerId" Mode="In" Type="String" />
+      <Parameter Name="RetailerId" Mode="In" Type="String" />
+      <Parameter Name="Balance" Mode="In" Type="Decimal" />
+      <Parameter Name="comm" Mode="In" Type="Decimal" />
+      <Parameter Name="type" Mode="In" Type="String" />
+      <Parameter Name="comment" Mode="In" Type="String" />
+      <Parameter Name="collectionby" Mode="In" Type="String" />
+      <Parameter Name="bankname" Mode="In" Type="String" />
+      <Parameter Name="adminacco" Mode="In" Type="String" />
+      <Parameter Name="head" Mode="In" Type="String" />
+      <Parameter Name="fundby" Mode="In" Type="String" />
+      <Parameter Name="Transectionid" Mode="In" Type="String" />
+      <Parameter Name="output" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="Aeps_comm_Dlm_rem_UPI" EntityType="VastwebmultiModel.Aeps_comm_Dlm_rem_UPI" />
+    <EntitySet Name="Aeps_comm_userwise_UPI" EntityType="VastwebmultiModel.Aeps_comm_userwise_UPI" />
+    <EntitySet Name="Aeps_Common_Comm_UPI" EntityType="VastwebmultiModel.Aeps_Common_Comm_UPI" />
+    <FunctionImport Name="Update_AEPS_All_userSlab_Again_UPI">
+      <Parameter Name="role" Mode="In" Type="String" />
+      <Parameter Name="aadharpay" Mode="In" Type="Decimal" />
+      <Parameter Name="ministatement" Mode="In" Type="Decimal" />
+      <Parameter Name="per_500_999" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_500_999" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_500_999" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_500_999" Mode="In" Type="String" />
+      <Parameter Name="per_1000_1499" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_1000_1499" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_1000_1499" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_1000_1499" Mode="In" Type="String" />
+      <Parameter Name="per_1500_1999" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_1500_1999" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_1500_1999" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_1500_1999" Mode="In" Type="String" />
+      <Parameter Name="per_2000_2499" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_2000_2499" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_2000_2499" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_2000_2499" Mode="In" Type="String" />
+      <Parameter Name="per_2500_2999" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_2500_2999" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_2500_2999" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_2500_2999" Mode="In" Type="String" />
+      <Parameter Name="per_3000_3499" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_3000_3499" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_3000_3499" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_3000_3499" Mode="In" Type="String" />
+      <Parameter Name="per_3500_5000" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_3500_5000" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_3500_5000" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_3500_5000" Mode="In" Type="String" />
+      <Parameter Name="per_5001_10000" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_5001_10000" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_5001_10000" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_5001_10000" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Update_AEPS_dlm_rem_userSlab_again_UPI">
+      <Parameter Name="dlmid" Mode="In" Type="String" />
+      <Parameter Name="aadharpay" Mode="In" Type="Decimal" />
+      <Parameter Name="ministatement" Mode="In" Type="Decimal" />
+      <Parameter Name="per_500_999" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_500_999" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_500_999" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_500_999" Mode="In" Type="String" />
+      <Parameter Name="per_1000_1499" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_1000_1499" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_1000_1499" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_1000_1499" Mode="In" Type="String" />
+      <Parameter Name="per_1500_1999" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_1500_1999" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_1500_1999" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_1500_1999" Mode="In" Type="String" />
+      <Parameter Name="per_2000_2499" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_2000_2499" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_2000_2499" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_2000_2499" Mode="In" Type="String" />
+      <Parameter Name="per_2500_2999" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_2500_2999" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_2500_2999" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_2500_2999" Mode="In" Type="String" />
+      <Parameter Name="per_3000_3499" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_3000_3499" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_3000_3499" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_3000_3499" Mode="In" Type="String" />
+      <Parameter Name="per_3500_5000" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_3500_5000" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_3500_5000" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_3500_5000" Mode="In" Type="String" />
+      <Parameter Name="per_5001_10000" Mode="In" Type="Decimal" />
+      <Parameter Name="rs_5001_10000" Mode="In" Type="Decimal" />
+      <Parameter Name="maxrs_5001_10000" Mode="In" Type="Decimal" />
+      <Parameter Name="Type_5001_10000" Mode="In" Type="String" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -20761,9 +20856,6 @@
     <Property Type="String" Name="Head" Nullable="true" MaxLength="50" />
     <Property Type="Decimal" Name="Commission" Nullable="true" Precision="18" Scale="2" />
   </ComplexType>
-  <ComplexType Name="Insert_Dealer_Result">
-    <Property Type="String" Name="msg" Nullable="true" />
-  </ComplexType>
   <ComplexType Name="Whitelabel_Money_transfer_by_paytm_Result">
     <Property Type="String" Name="msg" Nullable="true" />
   </ComplexType>
@@ -21017,72 +21109,6 @@
     <Property Type="String" Name="Status" Nullable="true" MaxLength="100" />
     <Property Type="String" Name="Trans_Type" Nullable="true" MaxLength="100" />
   </ComplexType>
-  <EntityType Name="Dealer_Details">
-    <Key>
-      <PropertyRef Name="DealerId" />
-    </Key>
-    <Property Name="SSId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DealerId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DealerName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-    <Property Name="DOF" Type="DateTime" Precision="0" />
-    <Property Name="FarmName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="State" Type="Int32" Nullable="false" />
-    <Property Name="District" Type="Int32" Nullable="false" />
-    <Property Name="Mobile" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="Pincode" Type="Int32" />
-    <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-    <Property Name="JoinDate" Type="DateTime" Precision="3" />
-    <Property Name="Photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="commission" Type="Decimal" Precision="18" Scale="4" />
-    <Property Name="slab_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="pancard" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="adharcard" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-    <Property Name="gst" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="createdby" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="DefaultStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="PSAStatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessType" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-    <Property Name="Bankaccountno" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
-    <Property Name="Ifsccode" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
-    <Property Name="city" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="accountholder" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="bankname" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="bankAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="pancardPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="aadharcardPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="frimregistrationPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="AadhaarStatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="UpdateprofileDate" Type="DateTime" Precision="3" />
-    <Property Name="Registractioncertificatepath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="serviceagreementpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="AddressProofpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="moneysts" Type="Boolean" />
-    <Property Name="AepsMposstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="Mpossts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="Flighsts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="Bussts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="Hotelsts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="pancardsts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="Indonepalsts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="giftcardsts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="Agreementpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="IsAgreement" Type="Boolean" />
-    <Property Name="FinincialRolesType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="gststatus" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="TransPIN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="BackSideAadharcardphoto" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="APPLOGIN_STS" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-    <Property Name="chargeback_otpsts" Type="Boolean" />
-    <Property Name="DealerSelf_sts" Type="Boolean" />
-    <Property Name="caption" Type="Int32" Nullable="false" />
-    <Property Name="NetOFFR" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="moneysts1" Type="Boolean" />
-    <Property Name="moneyppi" Type="Boolean" />
-    <Property Name="payout" Type="Boolean" />
-  </EntityType>
   <ComplexType Name="Whitelabel_Select_super_total_Result">
     <Property Type="String" Name="SSId" Nullable="false" MaxLength="50" />
     <Property Type="String" Name="RolesType" Nullable="true" MaxLength="50" />
@@ -23851,9 +23877,6 @@
   </ComplexType>
   <ComplexType Name="FundTransfercount_Result">
     <Property Type="Int32" Name="msg" Nullable="true" />
-  </ComplexType>
-  <ComplexType Name="insert_dealer_to_retailer_balance_Result">
-    <Property Type="String" Name="msg" Nullable="true" />
   </ComplexType>
   <ComplexType Name="Insert_SuperStokist_To_Dealer_Result">
     <Property Type="String" Name="msg" Nullable="true" />
@@ -28742,9 +28765,6 @@
     <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="APIKEY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
-  <ComplexType Name="Insert_Retailer_Result">
-    <Property Type="String" Name="msg" Nullable="true" />
-  </ComplexType>
   <EntityType Name="paymentgateway_kyc_status">
     <Key>
       <PropertyRef Name="idno" />
@@ -29679,6 +29699,7 @@
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="verify_type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="VideoKycStatus" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="Recharge_info">
     <Key>
@@ -31395,6 +31416,8 @@
     <Property Name="pincode2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="pincode3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="pincode4" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="KYCType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FK__AEPS_Merc__UserI__46D346CA">
     <End Type="VastwebmultiModel.Retailer_Details" Role="Retailer_Details" Multiplicity="1" />
@@ -34158,6 +34181,16 @@
     <Property Name="status" Type="Boolean" />
     <Property Name="modifieddate" Type="DateTime" Precision="3" />
   </EntityType>
+  <EntityType Name="AepsVideoKyc">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RetailerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DateTime" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
   <EntityType Name="CMS_Ledger">
     <Key>
       <PropertyRef Name="idno" />
@@ -34179,6 +34212,20 @@
     <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="RemainBalance" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="AEPSCHMerchantinfo">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="merchantid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="insertdate" Type="DateTime" Precision="3" />
+    <Property Name="bankPipe" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="kycStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="twofastatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="twofatime" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="HoldBalanceReport">
     <Key>
@@ -34204,5 +34251,216 @@
     <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Remainbal" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <ComplexType Name="UPI_TXN_ICICI_Result">
+    <Property Type="String" Name="msg" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <EntityType Name="SignupKYCSetting">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KYCType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="DisplayName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <ComplexType Name="Insert_Retailer_Result">
+    <Property Type="String" Name="msg" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="Dealer_Details">
+    <Key>
+      <PropertyRef Name="DealerId" />
+    </Key>
+    <Property Name="SSId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DealerId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DealerName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="DOF" Type="DateTime" Precision="0" />
+    <Property Name="FarmName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="State" Type="Int32" Nullable="false" />
+    <Property Name="District" Type="Int32" Nullable="false" />
+    <Property Name="Mobile" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Pincode" Type="Int32" />
+    <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="JoinDate" Type="DateTime" Precision="3" />
+    <Property Name="Photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="commission" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="slab_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="pancard" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="adharcard" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="gst" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="createdby" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="DefaultStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="PSAStatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="BusinessType" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="Bankaccountno" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+    <Property Name="Ifsccode" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+    <Property Name="city" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="accountholder" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="bankname" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="bankAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="pancardPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="aadharcardPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="frimregistrationPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="AadhaarStatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="UpdateprofileDate" Type="DateTime" Precision="3" />
+    <Property Name="Registractioncertificatepath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="serviceagreementpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="AddressProofpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="moneysts" Type="Boolean" />
+    <Property Name="AepsMposstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Mpossts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Flighsts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Bussts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Hotelsts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="pancardsts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Indonepalsts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="giftcardsts" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Agreementpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="IsAgreement" Type="Boolean" />
+    <Property Name="FinincialRolesType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="gststatus" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TransPIN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="BackSideAadharcardphoto" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="APPLOGIN_STS" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="chargeback_otpsts" Type="Boolean" />
+    <Property Name="DealerSelf_sts" Type="Boolean" />
+    <Property Name="caption" Type="Int32" Nullable="false" />
+    <Property Name="NetOFFR" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="moneysts1" Type="Boolean" />
+    <Property Name="moneyppi" Type="Boolean" />
+    <Property Name="payout" Type="Boolean" />
+    <Property Name="OnlyCMSUser" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <ComplexType Name="insert_dealer_to_retailer_balance_Result">
+    <Property Type="String" Name="msg" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="Insert_Dealer_Result">
+    <Property Type="String" Name="msg" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="Aeps_comm_Dlm_rem_UPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="dealerid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="aadharpay" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="ministatement" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="per_500_999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_500_999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_500_999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_500_999" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_1000_1499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1000_1499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1000_1499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1000_1499" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_1500_1999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1500_1999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1500_1999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1500_1999" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_2000_2499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2000_2499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2000_2499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2000_2499" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_2500_2999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2500_2999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2500_2999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2500_2999" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_3000_3499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3000_3499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3000_3499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3000_3499" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_3500_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3500_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3500_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3500_5000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_5001_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_5001_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_5001_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_5001_10000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Aeps_comm_userwise_UPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="aadharpay" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="ministatement" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="per_500_999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_500_999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_500_999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_500_999" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_1000_1499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1000_1499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1000_1499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1000_1499" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_1500_1999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1500_1999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1500_1999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1500_1999" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_2000_2499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2000_2499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2000_2499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2000_2499" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_2500_2999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2500_2999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2500_2999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2500_2999" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_3000_3499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3000_3499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3000_3499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3000_3499" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_3500_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3500_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3500_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3500_5000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_5001_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_5001_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_5001_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_5001_10000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Aeps_Common_Comm_UPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="usertype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="aadharpay" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="ministatement" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="per_500_999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_500_999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_500_999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_500_999" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_1000_1499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1000_1499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1000_1499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1000_1499" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_1500_1999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1500_1999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1500_1999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1500_1999" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_2000_2499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2000_2499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2000_2499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2000_2499" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_2500_2999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2500_2999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2500_2999" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2500_2999" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_3000_3499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3000_3499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3000_3499" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3000_3499" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_3500_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3500_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3500_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3500_5000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="per_5001_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="rs_5001_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_5001_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_5001_10000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

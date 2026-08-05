@@ -759,6 +759,21 @@ body.saas-admin-ui #myModal.show .modal-dialog {
     border-radius: 12px; background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
     box-shadow: 0 1px 4px rgba(15,23,42,.05);
 }
+.WebLogin_Page .vm-ft-page-toolbar.wl-login-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 0 8px 0 !important;
+    padding: 8px 10px !important; /* medium outer padding */
+    box-sizing: border-box !important;
+}
+.WebLogin_Page .vm-ft-page-hero,
+.WebLogin_Page .wl-login-toolbar .vm-ft-page-hero,
+.WebLogin_Page .wl-login-toolbar .vm-ft-breadcrumb {
+    display: none !important;
+}
 .WebLogin_Page .vm-ft-page-hero { flex: 1 1 auto; min-width: 0; }
 .WebLogin_Page .vm-ft-breadcrumb {
     display: flex; align-items: center; flex-wrap: wrap; gap: 4px;
@@ -914,16 +929,49 @@ body.saas-admin-ui #myModal.show .modal-dialog {
     100% { top: 18px; left: 18px; width: 156px; height: 156px; opacity: 0; }
 }
 
-/* ── Toolbar — modern action buttons ── */
-.WebLogin_Page .wl-toolbar-actions {
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+/* ── Toolbar — single-line action + status strip ── */
+.WebLogin_Page .wl-toolbar-actions,
+.WebLogin_Page .wl-toolbar-panel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+}
+.WebLogin_Page .wl-toolbar-panel--inline,
+.WebLogin_Page .wl-toolbar-inline {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    /* overflow breaks native <select> dropdown in Chrome/Edge */
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}
+.WebLogin_Page .wl-toolbar-inline > .wl-toolbar-btn,
+.WebLogin_Page .wl-toolbar-inline > .wl-toggle-chip,
+.WebLogin_Page .wl-toolbar-inline > .wl-kyc-select {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    justify-content: center !important;
+    white-space: nowrap;
 }
 .WebLogin_Page .wl-toolbar-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    height: 38px; padding: 0 16px; border-radius: 10px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    height: 38px; padding: 0 10px; border-radius: 10px;
     border: 2px solid #94a3b8;
     background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
-    color: #334155; font-size: .74rem; font-weight: 700;
+    color: #334155; font-size: .72rem; font-weight: 700;
     cursor: pointer; transition: all .14s; white-space: nowrap;
     text-decoration: none;
     box-shadow: 0 2px 6px rgba(15,23,42,.08);
@@ -962,18 +1010,176 @@ body.saas-admin-ui #myModal.show .modal-dialog {
 }
 
 .WebLogin_Page .wl-toggle-chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    height: 32px; padding: 0 8px; border-radius: 8px;
-    border: 1.5px solid #cbd5e1; background: #f8fafc;
-    font-size: .68rem; cursor: pointer; transition: background .14s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    min-height: 38px; height: 38px; padding: 4px 8px; border-radius: 10px;
+    border: 1.5px solid #cbd5e1; background: #fff;
+    font-size: .68rem; cursor: pointer;
+    transition: background .14s, border-color .14s, box-shadow .14s, transform .12s;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+    text-decoration: none; color: inherit;
 }
-.WebLogin_Page .wl-toggle-chip:hover { background: #f1f5f9; }
+.WebLogin_Page .wl-toggle-chip:hover {
+    background: #fff;
+    border-color: #94a3b8;
+    box-shadow: 0 3px 10px rgba(15,23,42,.08);
+    transform: translateY(-1px);
+    text-decoration: none;
+}
 .WebLogin_Page .wl-toggle-chip__dot {
     width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(148,163,184,.18);
 }
-.WebLogin_Page .wl-toggle-chip__text { line-height: 1.2; text-align: left; }
-.WebLogin_Page .wl-toggle-chip__text small { display: block; font-size: .58rem; color: #64748b; }
-.WebLogin_Page .wl-toggle-chip__text strong { font-size: .66rem; color: #1e293b; }
+.WebLogin_Page .wl-toggle-chip__text { line-height: 1.2; text-align: left; min-width: 0; }
+.WebLogin_Page .wl-toggle-chip__text small { display: block; font-size: .58rem; color: #64748b; font-weight: 600; }
+.WebLogin_Page .wl-toggle-chip__text strong { font-size: .7rem; color: #0f172a; font-weight: 700; }
+
+.WebLogin_Page .wl-chip--off {
+    border-color: #fecaca;
+    background: linear-gradient(180deg, #fff 0%, #fef2f2 100%);
+}
+.WebLogin_Page .wl-chip--off .wl-toggle-chip__dot { box-shadow: 0 0 0 3px rgba(220,38,38,.12); }
+.WebLogin_Page .wl-chip--warn {
+    border-color: #fde68a;
+    background: linear-gradient(180deg, #fff 0%, #fffbeb 100%);
+}
+.WebLogin_Page .wl-chip--warn .wl-toggle-chip__dot { box-shadow: 0 0 0 3px rgba(245,158,11,.14); }
+.WebLogin_Page .wl-chip--on {
+    border-color: #bbf7d0;
+    background: linear-gradient(180deg, #fff 0%, #f0fdf4 100%);
+}
+.WebLogin_Page .wl-chip--on .wl-toggle-chip__dot { box-shadow: 0 0 0 3px rgba(22,163,74,.12); }
+.WebLogin_Page .wl-chip--info {
+    border-color: #bfdbfe;
+    background: linear-gradient(180deg, #fff 0%, #eff6ff 100%);
+}
+.WebLogin_Page .wl-chip--info .wl-toggle-chip__dot { box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+
+/* KYC Type — full-area clickable native select overlay */
+.WebLogin_Page .wl-kyc-select,
+body.saas-admin-ui .WebLogin_Page .wl-kyc-select {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    margin: 0 !important;
+    padding: 4px 8px 4px 6px !important;
+    border-radius: 10px !important;
+    border: 1.5px solid #fcd34d !important;
+    background: linear-gradient(135deg, #fffbeb 0%, #fff 55%, #f8fafc 100%) !important;
+    box-shadow: 0 2px 8px rgba(245,158,11,.12) !important;
+    cursor: pointer !important;
+    float: none !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 168px !important;
+    position: relative !important;
+    overflow: visible !important;
+    font-weight: inherit !important;
+    transition: border-color .14s, box-shadow .14s, transform .12s !important;
+    box-sizing: border-box !important;
+    z-index: 20 !important;
+}
+.WebLogin_Page .wl-kyc-select:hover {
+    border-color: #f59e0b !important;
+    box-shadow: 0 4px 14px rgba(245,158,11,.18) !important;
+    transform: translateY(-1px);
+}
+.WebLogin_Page .wl-kyc-select[data-kyc="DIGITAL"] {
+    border-color: #86efac !important;
+    background: linear-gradient(135deg, #f0fdf4 0%, #fff 55%, #f8fafc 100%) !important;
+    box-shadow: 0 2px 8px rgba(22,163,74,.12) !important;
+}
+.WebLogin_Page .wl-kyc-select[data-kyc="PHYSICAL"] {
+    border-color: #93c5fd !important;
+    background: linear-gradient(135deg, #eff6ff 0%, #fff 55%, #f8fafc 100%) !important;
+    box-shadow: 0 2px 8px rgba(37,99,235,.12) !important;
+}
+.WebLogin_Page .wl-kyc-select[data-kyc="DIGITAL_PHYSICAL"] {
+    border-color: #67e8f9 !important;
+    background: linear-gradient(135deg, #ecfeff 0%, #fff 55%, #f8fafc 100%) !important;
+    box-shadow: 0 2px 8px rgba(8,145,178,.12) !important;
+}
+.WebLogin_Page .wl-kyc-select__icon,
+.WebLogin_Page .wl-kyc-select__meta,
+.WebLogin_Page .wl-kyc-select__caret {
+    pointer-events: none !important;
+    position: relative;
+    z-index: 1;
+}
+.WebLogin_Page .wl-kyc-select__icon {
+    width: 32px; height: 32px; border-radius: 9px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #fef3c7; color: #d97706; flex-shrink: 0;
+    font-size: .82rem;
+}
+.WebLogin_Page .wl-kyc-select[data-kyc="DIGITAL"] .wl-kyc-select__icon {
+    background: #dcfce7; color: #16a34a;
+}
+.WebLogin_Page .wl-kyc-select[data-kyc="PHYSICAL"] .wl-kyc-select__icon {
+    background: #dbeafe; color: #2563eb;
+}
+.WebLogin_Page .wl-kyc-select[data-kyc="DIGITAL_PHYSICAL"] .wl-kyc-select__icon {
+    background: #cffafe; color: #0891b2;
+}
+.WebLogin_Page .wl-kyc-select__meta {
+    display: flex; flex-direction: column; align-items: flex-start;
+    min-width: 0; flex: 1 1 auto; line-height: 1.15;
+}
+.WebLogin_Page .wl-kyc-select__meta small {
+    display: block; font-size: .58rem; color: #64748b; font-weight: 700;
+    letter-spacing: .02em; text-transform: uppercase;
+}
+.WebLogin_Page .wl-kyc-select__meta strong,
+.WebLogin_Page #wl_kyc_selected_text {
+    display: block;
+    font-size: .74rem !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    line-height: 1.2 !important;
+    white-space: nowrap;
+}
+/* Invisible native select covers whole chip so dropdown always opens */
+.WebLogin_Page .wl-kyc-select__control,
+body.saas-admin-ui .WebLogin_Page .wl-kyc-select__control {
+    -webkit-appearance: menulist-button !important;
+    -moz-appearance: menulist-button !important;
+    appearance: auto !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    opacity: 0.011 !important;
+    background: transparent !important;
+    color: transparent !important;
+    font-size: 16px !important; /* prevents iOS zoom */
+    cursor: pointer !important;
+    box-shadow: none !important;
+    pointer-events: auto !important;
+    z-index: 5 !important;
+}
+.WebLogin_Page .wl-kyc-select__control option {
+    color: #1e293b !important;
+    font-weight: 600;
+    background: #fff !important;
+    opacity: 1 !important;
+}
+.WebLogin_Page .wl-kyc-select__caret {
+    width: 22px; height: 22px; border-radius: 7px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(15,23,42,.06); color: #475569; flex-shrink: 0;
+    font-size: .62rem;
+}
 
 /* ── Hide legacy headers & login menu ── */
 .WebLogin_Page .page-title-box-fourde-admin,
@@ -2672,45 +2878,84 @@ body.saas-admin-ui .WebLogin_Page .wl-manage-panel {
    (high specificity overrides fund-transfer / layout defaults)
    ══════════════════════════════════════════════════════════════ */
 
-body.saas-admin-ui .WebLogin_Page.saas-fund-transfer-page .vm-ft-page-toolbar .vm-ft-search-wrap.wl-toolbar-actions {
+body.saas-admin-ui .WebLogin_Page.saas-fund-transfer-page .vm-ft-page-toolbar.wl-login-toolbar {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 0 8px 0 !important;
+    padding: 8px 10px !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .WebLogin_Page.saas-fund-transfer-page .vm-ft-page-toolbar .vm-ft-search-wrap.wl-toolbar-actions,
+body.saas-admin-ui .WebLogin_Page .wl-toolbar-panel {
     flex: 1 1 auto !important;
     max-width: none !important;
     min-width: 0 !important;
-    width: auto !important;
+    width: 100% !important;
     display: flex !important;
-    flex-wrap: wrap !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 10px !important;
-}
-
-body.saas-admin-ui .WebLogin_Page .wl-toolbar-modal-group {
-    display: inline-flex !important;
-    flex-wrap: wrap !important;
-    align-items: center !important;
-    gap: 8px !important;
-}
-
-body.saas-admin-ui .WebLogin_Page .wl-toolbar-status-group {
-    display: inline-flex !important;
-    flex-wrap: wrap !important;
-    align-items: center !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
     gap: 6px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+    width: 100% !important;
+    overflow: visible !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-toolbar-btn,
+body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-toggle-chip,
+body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-kyc-select {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    justify-content: center !important;
+}
+
+body.saas-admin-ui .WebLogin_Page .wl-toggle-chip {
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 4px 8px !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .WebLogin_Page button.wl-toolbar-btn {
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 10px !important;
+}
+
+body.saas-admin-ui .WebLogin_Page .wl-kyc-select {
+    min-height: 38px !important;
+    height: 38px !important;
+    min-width: 0 !important;
+    padding: 4px 8px 4px 6px !important;
 }
 
 body.saas-admin-ui .WebLogin_Page button.wl-toolbar-btn {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 8px !important;
-    height: 40px !important;
-    min-height: 40px !important;
-    padding: 0 16px !important;
+    gap: 6px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 10px !important;
     border-radius: 10px !important;
     border: 2px solid #64748b !important;
     background: #fff !important;
     color: #1e293b !important;
-    font-size: .76rem !important;
+    font-size: .72rem !important;
     font-weight: 700 !important;
     line-height: 1.2 !important;
     cursor: pointer !important;
@@ -2942,18 +3187,46 @@ body.saas-admin-ui .WebLogin_Page .wl-history-filter-panel .saas-acc-btn--pdf:ho
     border-color: #fca5a5 !important;
 }
 
-@media (max-width: 991px) {
-    body.saas-admin-ui .WebLogin_Page .vm-ft-page-toolbar .vm-ft-search-wrap.wl-toolbar-actions {
-        flex-direction: column !important;
-        align-items: stretch !important;
+@media (max-width: 1199px) {
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline {
+        flex-wrap: wrap !important;
     }
-    body.saas-admin-ui .WebLogin_Page .wl-toolbar-modal-group,
-    body.saas-admin-ui .WebLogin_Page .wl-toolbar-status-group {
-        width: 100% !important;
-    }
-    body.saas-admin-ui .WebLogin_Page button.wl-toolbar-btn {
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-toolbar-btn,
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-toggle-chip,
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-kyc-select {
         flex: 1 1 calc(33.33% - 6px) !important;
+        min-width: 140px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .WebLogin_Page.saas-fund-transfer-page .vm-ft-page-toolbar.wl-login-toolbar {
+        padding: 8px !important;
+    }
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+        overflow: visible !important;
+    }
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-toolbar-btn,
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-toggle-chip,
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-kyc-select {
+        width: 100% !important;
         min-width: 0 !important;
+        flex: none !important;
+    }
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-kyc-select {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 480px) {
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline {
+        grid-template-columns: 1fr !important;
+    }
+    body.saas-admin-ui .WebLogin_Page .wl-toolbar-inline > .wl-kyc-select {
+        grid-column: auto;
     }
 }
 

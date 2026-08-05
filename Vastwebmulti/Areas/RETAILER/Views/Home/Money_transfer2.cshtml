@@ -252,14 +252,21 @@
                     else
                     {
                         <input id="checkapi" type="hidden" value="@ViewBag.aepsapinm" />
-
                         if (ViewBag.req == "REQUIREDOTP" || ViewBag.req == "REQUIREDSCAN")
                         {
                             @Html.Partial("_EKYC")
                         }
+                       else if (ViewBag.req == "REQUIREDEKYC")
+                        {
+                            @Html.Partial("_EKYC_NEW")
+                        }
                         else if (ViewBag.req == "2FAREQUIRED")
                         {
                             @Html.Partial("_2FA")
+                        }
+                         else if (ViewBag.req == "APPROVAL-PENDING")
+                        {
+                            @Html.Partial("_EKYC_Update")
                         }
                         else if (ViewBag.daily2fa_AEPS == false)
                         {

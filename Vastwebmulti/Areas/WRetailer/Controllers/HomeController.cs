@@ -288,7 +288,7 @@ namespace Vastwebmulti.Areas.WRetailer.Controllers
             viewModell.optlist = jj;
 
 
-            viewModell.recent_rechargereport = db.recent_recharge_report(userid, "Prepaid", "postpaid").ToList();
+             viewModell.recent_rechargereport  = db.recent_recharge_report(userid, "Prepaid", "postpaid").ToList();
 
             return View(viewModell);
 

@@ -1049,6 +1049,13 @@ namespace Vastwebmulti.Controllers
                 string userids = model.userids;//data.userids;
                 string role = model.role; //data.role;
 
+
+
+                // New Variables
+                string latitude = model.Latitude;
+                string longitude = model.Longitude;
+                string datetime = model.DateTime;
+
                 string base64frontString = kycvideo.ToString();
                 byte[] imageBytesfrontimg = Convert.FromBase64String(base64frontString);
                 // String file = Convert.ToBase64String(file);
@@ -1065,6 +1072,37 @@ namespace Vastwebmulti.Controllers
                     {
                         retailersdetails.videokycpath = imagePath;
                         retailersdetails.videokycstatus = "N";
+
+                       
+                        db.SaveChanges();
+                    }
+                    // Check Blank Values
+                    if (!string.IsNullOrWhiteSpace(latitude) &&!string.IsNullOrWhiteSpace(longitude) && !string.IsNullOrWhiteSpace(datetime))
+                    {
+                       
+                        var RetailerLatLong = db.AepsVideoKycs.Where(x => x.RetailerId == userids).SingleOrDefault();
+
+                        if (RetailerLatLong != null)
+                        {
+                            RetailerLatLong.Latitude = latitude;
+                            RetailerLatLong.Longitude = longitude;
+                            RetailerLatLong.DateTime = datetime;
+
+
+                        }
+                        // INSERT
+                        else
+                        {
+                            AepsVideoKyc obj = new AepsVideoKyc();
+
+                            obj.RetailerId = userids;
+                            obj.Latitude = latitude;
+                            obj.Longitude = longitude;
+                            obj.DateTime = datetime;
+
+                            db.AepsVideoKycs.Add(obj);
+                        }
+
                         db.SaveChanges();
                     }
                 }
@@ -1322,6 +1360,12 @@ namespace Vastwebmulti.Controllers
         public string kycvideo { get; set; }
         public string userids { get; set; }
         public string role { get; set; }
+
+
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public string DateTime { get; set; }
+
     }
     public class AepsVideoUpload
     {

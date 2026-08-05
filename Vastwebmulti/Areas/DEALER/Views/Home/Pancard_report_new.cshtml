@@ -183,11 +183,30 @@
         }
     }
 
+    @@media only screen and (max-width:766px){
+        .bars.sidebar-toggle-responshiveclass {
+            top: 14px !important;
+        }
+
+    }
+
     @@media screen and (max-width:520px) {
+
+        .money-transferreportpage .aepspdfexlto-button .web-white-filter.fil {
+            margin: 0 !important;
+            padding-right: 0px;
+        }
+
+        .col-md-4.aeps-reportbutton {
+            padding-right: 0;
+            padding-bottom: 8px;
+        }
+
         .money-transferreportpage .money-transfere-aeps .aeps-selectclass {
             float: left;
             width: 50%;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            padding-right: 0px !important;
         }
 
         .money-transferreportpage .col-md-5.aeps-dateclass {
@@ -233,12 +252,13 @@
     .new_old a {
         padding: 6px 12px;
         border: 1px solid #ccc;
+        float: right;
     }
 
 
 </style>
 <section class="content money-transferreportpage" style="overflow-x: hidden;">
-    <div class="container-fluid full-dealer-secondanimation">
+    <div class="container-fluid full-dealer-secondanimation" style="padding-top:8px;">
 
         <!--Four-Design-Admin-page-Header-Section-Start-->
         <div class="page-title-box-fourde-dealer">
@@ -253,11 +273,10 @@
 
         <div class="row clearfix">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card page-header-third">
                     <div class="col-md-4 aeps-reportbutton">
                         <div style="margin-left:-14px;">
                             @Html.Partial("Moneytransferreportpartialview")
-
 
                         </div>
                     </div>
@@ -274,13 +293,13 @@
 
 
                                         <div class="col-md-3 only-select-css aeps-selectclass" id="rem" style="padding-right:5px;">
-                                            <div style="width:100%;padding-bottom:10px;">
+                                            <div style="width:100%;">
                                                 @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "Select User", new { id = "allretailer", @class = "selectpicker form-control for-select2", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
                                             </div>
                                         </div>
                                         <div class="col-md-2 only-select-css aeps-selectclass" style="padding-left:0px;padding-right:5px;">
                                             <div class="form-group">
-                                                <div class="" style="width:100%;padding-bottom:10px;">
+                                                <div class="" style="width:100%;">
                                                     @Html.DropDownList("ddl_status", new List<SelectListItem>
                                         {
                                 new SelectListItem{ Text="Status",Value="ALL",},
@@ -362,9 +381,11 @@
         </div>
 
         <div class="row clearfix" style="width: 100%; float: left; margin: 11px 0px; ">
-            <div class="new_old" style="text-align: right;">
-                @Html.ActionLink("NEW", "Pancard_report_new", "Home", new { @style = "background: var(--main-bg-lcolor);color: #fff;" })
-                @Html.ActionLink("OLD", "Pancard_report", "Home")
+            <div class="page-header-third">
+                <div class="new_old" style="text-align: right;">
+                    @Html.ActionLink("NEW", "Pancard_report_new", "Home", new { @style = "background: var(--main-bg-lcolor);color: #fff;" })
+                    @Html.ActionLink("OLD", "Pancard_report", "Home")
+                </div>
             </div>
         </div>
 
@@ -372,7 +393,7 @@
             <div class="col-md-12">
                 <div class="card all-reporttable-css all-reporttable-css-aeps">
 
-                    <div>
+                    <div class="page-header-third">
                         <div class="table-responsive tableseconddes-dealer" style="position:inherit;">
                             <table id="example" class="table table-bordered table-striped table-hover" cellspacing="0" style="width:100%;font-size:12px;">
                                 <thead style="background-color:whitesmoke;">
@@ -392,10 +413,7 @@
                                         <th>MY&nbsp;Post</th>
                                         <th>MY&nbsp;Final</th>
                                         <th>Time</th>
-                                        @*<th>Retailer&nbsp;Remain&nbsp;Post</th>
-                                        <th>Dealer&nbsp;Remain&nbsp;Pre</th>
-                                        <th>Net&nbsp;Income</th>
-                                        <th>Dealer&nbsp;Remain&nbsp;Post</th>*@
+                                        
 
                                     </tr>
 

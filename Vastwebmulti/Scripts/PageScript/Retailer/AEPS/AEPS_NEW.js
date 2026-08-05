@@ -674,21 +674,53 @@ function CaptureAvdm() {
     if (txtWadh.trim() != "") {
         strWadh = " wadh=\"" + txtWadh + '"';
     }
+    txtotp = $('#txtotptransfer').val();
     if (txtotp.trim() != "") {
-        strOtp = " otp=\"" + txtotp + '"';
+        strOtp = ' otp="' + txtotp + '"';
     }
     var XML = '';
 
     if (DeviceKonsi == "Mantra") {
         //Matra
-        XML = '<?xml version="1.0"?> <PidOptions ver="1.0"> <Opts fCount="' + Fcount + '" fType="' + Ftype + '" iCount="' + Icount + '" pCount="' + Pcount + '" pgCount="' + pgCount + '"' + strOtp + ' format="' + Dtype + '"   pidVer="' + Pidver + '" timeout="' + Timeout + '" pTimeout="' + pTimeout + '"' + strWadh + ' posh="UNKNOWN" env="' + Env + '" /> ' + DemoFinalString + '<CustOpts><Param name="mantrakey" value="' + txtCK + '" /></CustOpts> </PidOptions>';
+        //XML = '<?xml version="1.0"?> <PidOptions ver="1.0"> <Opts fCount="' + Fcount + '" fType="' + Ftype + '" iCount="' + Icount + '" pCount="' + Pcount + '" pgCount="' + pgCount + '"' + strOtp + ' format="' + Dtype + '"   pidVer="' + Pidver + '" timeout="' + Timeout + '" pTimeout="' + pTimeout + '"' + strWadh + ' posh="UNKNOWN" env="' + Env + '" /> ' + DemoFinalString + '<CustOpts><Param name="mantrakey" value="' + txtCK + '" /></CustOpts> </PidOptions>';
+        XML = '<?xml version="1.0"?>' +
+            '<PidOptions ver="1.0">' +
+            '<Opts fCount="' + Fcount +
+            '" fType="' + Ftype +
+            '" iCount="' + Icount +
+            '" pCount="' + Pcount +
+            '" pgCount="' + pgCount + '"' +
+            strOtp +
+            ' format="' + Dtype +
+            '" pidVer="' + Pidver +
+            '" timeout="' + Timeout +
+            '" pTimeout="' + pTimeout + '"' +
+            strWadh +
+            ' posh="UNKNOWN" env="' + Env + '" />' +
+            DemoFinalString +
+            '<CustOpts><Param name="mantrakey" value="' + txtCK + '" /></CustOpts>' +
+            '</PidOptions>';
     } else if (DeviceKonsi == "Morpho") {
         //Morpho
-        XML = '<PidOptions ver=\"1.0\">' + '<Opts fCount=\"1\" fType=\"' + Ftype + '\" iCount=\"\" iType=\"\" pCount=\"\" pType=\"\" format=\"0\" pidVer=\"2.0\" timeout=\"10000\" otp=\"\" wadh=\"\" posh=\"\"/>' + '</PidOptions>';
+       // XML = '<PidOptions ver=\"1.0\">' + '<Opts fCount=\"1\" fType=\"' + Ftype + '\" iCount=\"\" iType=\"\" pCount=\"\" pType=\"\" format=\"0\" pidVer=\"2.0\" timeout=\"10000\" otp=\"\" wadh=\"\" posh=\"\"/>' + '</PidOptions>';
+        XML = '<PidOptions ver="1.0">' +
+            '<Opts fCount="1" fType="' + Ftype +
+            '" iCount="" iType="" pCount="" pType="" format="0" pidVer="2.0" timeout="10000"' +
+            strOtp +
+            ' wadh="" posh=""/>' +
+            '</PidOptions>';
+
     }
     else if (DeviceKonsi == "Startek") {
         //Startek
-        XML = '<PidOptions>' + '<Opts fCount=\"1\" fType=\"' + Ftype + '\"  iCount=\"0\" pCount=\"0\" format=\"0\" pidVer=\"2.0\" timeout=\"20000\" otp=\"\" posh=\"UNKNOWN\" env=\"P\" wadh=\"\" /> <Demo></Demo> <CustOpts> <Param name=\"ValidationKey\" value=\"\" /> </CustOpts>' + '</PidOptions>';
+        //XML = '<PidOptions>' + '<Opts fCount=\"1\" fType=\"' + Ftype + '\"  "' + strOtp + '\"  iCount=\"0\" pCount=\"0\" format=\"0\" pidVer=\"2.0\" timeout=\"20000\" otp=\"\" posh=\"UNKNOWN\" env=\"P\" wadh=\"\" /> <Demo></Demo> <CustOpts> <Param name=\"ValidationKey\" value=\"\" /> </CustOpts>' + '</PidOptions>';
+        XML = '<PidOptions>' +
+            '<Opts fCount="1" fType="' + Ftype + '"' +
+            strOtp +
+            ' iCount="0" pCount="0" format="0" pidVer="2.0" timeout="20000" posh="UNKNOWN" env="P" wadh="" />' +
+            '<Demo></Demo>' +
+            '<CustOpts><Param name="ValidationKey" value="" /></CustOpts>' +
+            '</PidOptions>';
     }
     // url = ""; 
     var verb = "CAPTURE";

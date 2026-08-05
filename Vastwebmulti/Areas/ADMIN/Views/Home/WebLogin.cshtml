@@ -18,63 +18,78 @@
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=44" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=29" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-web-login-modern.css?v=22" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-web-login-mobile.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-web-login-modern.css?v=28" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-web-login-mobile.css?v=8" rel="stylesheet" />
 
 <section class="content WebLogin_Page web_login_page New_Employee_Page Masterlist-page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-user-page saas-master-list-page saas-fund-transfer-premium saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-prepaid-card-report-page saas-ecommerce-history-page saas-security-report-page saas-giftcard-report-page">
     <div class="container-fluid vm-ft-page-shell">
 
         <!-- Modern Toolbar -->
-        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
-            <div class="vm-ft-page-hero">
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium wl-login-toolbar">
+            <div class="vm-ft-page-hero" style="display:none;">
                 <ol class="vm-ft-breadcrumb">
                     <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home"></i> Dashboard</a></li>
                     <li>Basic Setting</li>
                     <li>Login Setting</li>
                 </ol>
             </div>
-            <div class="vm-ft-search-wrap wl-toolbar-actions">
-                <div class="wl-toolbar-modal-group">
-                <button type="button" class="wl-toolbar-btn wl-toolbar-btn--ip" onclick="wlOpenIpModal(); return false;">
-                    <span class="wl-toolbar-btn__icon"><i class="fas fa-cog"></i></span>
-                    <span class="wl-toolbar-btn__text">Set Admin Login IP</span>
-                </button>
-                <button type="button" class="wl-toolbar-btn wl-toolbar-btn--perm" onclick="wlOpenPermissionDrawer(); return false;">
-                    <span class="wl-toolbar-btn__icon"><i class="fas fa-unlock-alt"></i></span>
-                    <span class="wl-toolbar-btn__text">My Login Permission</span>
-                </button>
-                <button type="button" class="wl-toolbar-btn wl-toolbar-btn--imei" onclick="wlOpenImeiDrawer('Retailer'); return false;">
-                    <span class="wl-toolbar-btn__icon"><i class="fas fa-sim-card"></i></span>
-                    <span class="wl-toolbar-btn__text">Allow IMEI</span>
-                </button>
-                </div>
-                <div class="wl-toolbar-status-group">
-                @if (Session["yes"] == "ON")
-                {
-                    <a href="@Url.Action("updateotpsetting", "Home")" class="wl-toggle-chip">
-                        <span class="wl-toggle-chip__dot" style="background:#16a34a;"></span>
-                        <span class="wl-toggle-chip__text"><small>Forget OTP</small><strong>ON</strong></span>
-                    </a>
-                }
-                else
-                {
-                    <a href="@Url.Action("updateotpsetting", "Home")" class="wl-toggle-chip">
-                        <span class="wl-toggle-chip__dot" style="background:#dc2626;"></span>
-                        <span class="wl-toggle-chip__text"><small>Forget OTP</small><strong>OFF</strong></span>
-                    </a>
-                }
-                <div class="wl-toggle-chip" onclick="handle_mail_phone_change(document.getElementById('retailer_mailphone_by'))">
-                    <span class="wl-toggle-chip__dot" id="retailer_mailphone_by" created_type="OFF" style="background:#94a3b8;"></span>
-                    <span class="wl-toggle-chip__text"><small>Email Verify</small><strong id="mail_btn">Setting</strong></span>
-                </div>
-                <div class="wl-toggle-chip" onclick="handle_aadhar_pan_change(document.getElementById('retailer_created_by'))">
-                    <span class="wl-toggle-chip__dot" id="retailer_created_by" created_type="off" style="background:#94a3b8;"></span>
-                    <span class="wl-toggle-chip__text"><small>E-Verification</small><strong id="demo_tst">Setting</strong></span>
-                </div>
-                <div class="wl-toggle-chip" onclick="handle_verification_type_change(document.getElementById('retailer_verification_type'))">
-                    <span class="wl-toggle-chip__dot" id="retailer_verification_type" created_type="off" style="background:#94a3b8;"></span>
-                    <span class="wl-toggle-chip__text"><small>E-Verify Type</small><strong id="verify_tst">Setting</strong></span>
-                </div>
+            <div class="vm-ft-search-wrap wl-toolbar-actions wl-toolbar-panel wl-toolbar-panel--inline">
+                <div class="wl-toolbar-inline" id="wl_toolbar_inline">
+                    <button type="button" class="wl-toolbar-btn wl-toolbar-btn--ip" onclick="wlOpenIpModal(); return false;">
+                        <span class="wl-toolbar-btn__icon"><i class="fas fa-cog"></i></span>
+                        <span class="wl-toolbar-btn__text">Set Admin Login IP</span>
+                    </button>
+                    <button type="button" class="wl-toolbar-btn wl-toolbar-btn--perm" onclick="wlOpenPermissionDrawer(); return false;">
+                        <span class="wl-toolbar-btn__icon"><i class="fas fa-unlock-alt"></i></span>
+                        <span class="wl-toolbar-btn__text">My Login Permission</span>
+                    </button>
+                    <button type="button" class="wl-toolbar-btn wl-toolbar-btn--imei" onclick="wlOpenImeiDrawer('Retailer'); return false;">
+                        <span class="wl-toolbar-btn__icon"><i class="fas fa-sim-card"></i></span>
+                        <span class="wl-toolbar-btn__text">Allow IMEI</span>
+                    </button>
+
+                    <div class="wl-toggle-chip wl-chip--off" onclick="handle_videokyc_change(document.getElementById('retailer_videokyc_by'))">
+                        <span class="wl-toggle-chip__dot" id="retailer_videokyc_by" created_type="OFF" style="background:#94a3b8;"></span>
+                        <span class="wl-toggle-chip__text"><small>Video KYC</small><strong id="videokyc_tst">Setting</strong></span>
+                    </div>
+                    @if (Session["yes"] == "ON")
+                    {
+                        <a href="@Url.Action("updateotpsetting", "Home")" class="wl-toggle-chip wl-chip--on">
+                            <span class="wl-toggle-chip__dot" style="background:#16a34a;"></span>
+                            <span class="wl-toggle-chip__text"><small>Forget OTP</small><strong>ON</strong></span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("updateotpsetting", "Home")" class="wl-toggle-chip wl-chip--off">
+                            <span class="wl-toggle-chip__dot" style="background:#dc2626;"></span>
+                            <span class="wl-toggle-chip__text"><small>Forget OTP</small><strong>OFF</strong></span>
+                        </a>
+                    }
+                    <div class="wl-toggle-chip" id="wl_chip_mail" onclick="handle_mail_phone_change(document.getElementById('retailer_mailphone_by'))">
+                        <span class="wl-toggle-chip__dot" id="retailer_mailphone_by" created_type="OFF" style="background:#94a3b8;"></span>
+                        <span class="wl-toggle-chip__text"><small>Email Verify</small><strong id="mail_btn">Setting</strong></span>
+                    </div>
+                    <div class="wl-toggle-chip" id="wl_chip_everify" onclick="handle_aadhar_pan_change(document.getElementById('retailer_created_by'))">
+                        <span class="wl-toggle-chip__dot" id="retailer_created_by" created_type="off" style="background:#94a3b8;"></span>
+                        <span class="wl-toggle-chip__text"><small>E-Verification</small><strong id="demo_tst">Setting</strong></span>
+                    </div>
+                    <div style="display:none;" class="wl-toggle-chip" id="wl_chip_vtype" onclick="handle_verification_type_change(document.getElementById('retailer_verification_type'))">
+                        <span class="wl-toggle-chip__dot" id="retailer_verification_type" created_type="off" style="background:#94a3b8;"></span>
+                        <span class="wl-toggle-chip__text"><small>E-Verify Type</small><strong id="verify_tst">Setting</strong></span>
+                    </div>
+                    <div class="wl-kyc-select" id="wl_kyc_select" data-kyc="ZERO" title="Select KYC Type">
+                        <span class="wl-kyc-select__icon" aria-hidden="true"><i class="fas fa-id-card"></i></span>
+                        <span class="wl-kyc-select__meta">
+                            <small>KYC Type</small>
+                            <strong id="wl_kyc_selected_text">Loading...</strong>
+                        </span>
+                        <span class="wl-kyc-select__caret" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
+                        <select id="ddlSignupKYCType" name="ddlSignupKYCType" class="wl-kyc-select__control"
+                                aria-label="KYC Type"
+                                onchange="handle_signup_kyc_change(this);">
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1202,14 +1217,26 @@
         .WebLogin_Page .rc-right-toolbar-row { padding: 8px 10px 0 !important; }
         .WebLogin_Page .rc-right-panel { padding: 8px 8px 12px !important; }
         .WebLogin_Page .wl-history-table-wrap .vm-opr-table-scroll { max-height: 45vh !important; overflow: auto !important; }
-        .WebLogin_Page button.wl-toolbar-btn { width: 100% !important; justify-content: flex-start !important; height: 42px !important; }
-        .WebLogin_Page .wl-toggle-chip { width: 100% !important; justify-content: center !important; }
+        .WebLogin_Page .wl-toolbar-inline {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+            overflow: visible !important;
+        }
+        .WebLogin_Page button.wl-toolbar-btn,
+        .WebLogin_Page .wl-toggle-chip,
+        .WebLogin_Page .wl-kyc-select {
+            width: 100% !important;
+            justify-content: flex-start !important;
+            min-width: 0 !important;
+        }
+        .WebLogin_Page .wl-kyc-select__control { max-width: none !important; width: 100% !important; }
         .WebLogin_Page .wl-hf-row--selects .wl-hf-field { flex: 1 1 100% !important; }
         .WebLogin_Page .wl-hf-date { flex: 1 1 calc(50% - 4px) !important; }
         .WebLogin_Page .wl-hf-btn { flex: 1 1 calc(50% - 4px) !important; }
     }
     @@media (max-width: 480px) {
-        .WebLogin_Page .wl-toolbar-status-group { grid-template-columns: 1fr !important; }
+        .WebLogin_Page .wl-toolbar-inline { grid-template-columns: 1fr !important; }
         .WebLogin_Page .wl-hf-date,
         .WebLogin_Page .wl-hf-btn { flex: 1 1 100% !important; width: 100% !important; }
     }
@@ -1452,9 +1479,11 @@
         $('#ALLIPSHOWINGADDD, #wlDrawerModal, #myModal').appendTo('body');
         wlInitSelect2();
         $(document).ajaxComplete(function () { wlInitSelect2(); });
-        fetch_aadhar_pan_status();
-        fetch_verification_type_status();
-        fetch_email_mobile_status();
+        if (typeof fetch_videokyc_status === 'function') fetch_videokyc_status();
+        if (typeof fetch_aadhar_pan_status === 'function') fetch_aadhar_pan_status();
+        if (typeof fetch_verification_type_status === 'function') fetch_verification_type_status();
+        if (typeof fetch_email_mobile_status === 'function') fetch_email_mobile_status();
+        if (typeof fetch_signup_kyc_status === 'function') fetch_signup_kyc_status();
     }
 
     if (document.readyState === 'complete') { wlInitPage(); }
@@ -2912,9 +2941,158 @@
 
 <script>
     $(document).ready(() => {
+        fetch_videokyc_status();
         fetch_aadhar_pan_status();
         fetch_verification_type_status();
+        fetch_signup_kyc_status();
     })
+
+    // ====================videokyc====================
+    function wlApplyVideoKycUI(type) {
+        var btn = document.getElementById('retailer_videokyc_by');
+        if (!btn) return;
+        btn.setAttribute("created_type", type);
+        var chip = btn.closest('.wl-toggle-chip');
+        if (type == "ON") {
+            $("#videokyc_tst").text("Active");
+            btn.style.background = "green";
+            if (chip) { chip.classList.remove('wl-chip--off'); chip.classList.add('wl-chip--on'); }
+        } else {
+            $("#videokyc_tst").text("Off");
+            btn.style.background = "red";
+            if (chip) { chip.classList.remove('wl-chip--on'); chip.classList.add('wl-chip--off'); }
+        }
+    }
+
+    function fetch_videokyc_status() {
+        $.ajax({
+            url: '@Url.Action("fetchVideoKycStatus_Data")',
+            success: (data) => {
+                data = typeof (data) == 'string' ? JSON.parse(data) : data;
+                wlApplyVideoKycUI(data.type);
+            }
+        })
+    }
+
+    function handle_videokyc_change(val) {
+        if (!val) return;
+        $.ajax({
+            url: '@Url.Action("ChangeVideoKycStatus", "Home")',
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                data = typeof (data) == 'string' ? JSON.parse(data) : data;
+                wlApplyVideoKycUI(data.type);
+            },
+            error: function (err) { console.error("VideoKycStatus Error", err); }
+        });
+    }
+
+    function wlSetChipState(chipId, state) {
+        var chip = document.getElementById(chipId);
+        if (!chip) return;
+        chip.classList.remove('wl-chip--off', 'wl-chip--warn', 'wl-chip--on', 'wl-chip--info');
+        if (state) chip.classList.add(state);
+    }
+
+    function wlUpdateSignupKycDot(type, displayName) {
+        var wrap = document.getElementById('wl_kyc_select');
+        if (wrap) wrap.setAttribute('data-kyc', type || 'ZERO');
+        var $ddl = $('#ddlSignupKYCType');
+        var text = displayName || ($ddl.length ? ($ddl.find('option:selected').text() || $ddl.val()) : '') || 'Select';
+        $('#wl_kyc_selected_text').text(text);
+    }
+
+    function fetch_signup_kyc_status() {
+        $.ajax({
+            url: '@Url.Action("fetchSignupKYCSetting_Data", "Home")',
+            type: 'GET',
+            cache: false,
+            success: (data) => {
+                data = typeof (data) == 'string' ? JSON.parse(data) : data;
+                var $ddl = $('#ddlSignupKYCType');
+                if (!$ddl.length) return;
+
+                if (!data || !data.length) {
+                    $ddl.empty().append($('<option></option>').val('').text('No KYC Type'));
+                    $('#wl_kyc_selected_text').text('No KYC Type');
+                    return;
+                }
+
+                $ddl.empty();
+                var activeType = '';
+                var activeName = '';
+                $.each(data, function (i, item) {
+                    var isSel = (item.IsActive === true || item.IsActive === 1 || item.IsActive === '1' || item.IsActive === 'true');
+                    if (isSel) {
+                        activeType = item.KYCType;
+                        activeName = item.DisplayName;
+                    }
+                    $ddl.append(
+                        $('<option></option>')
+                            .val(item.KYCType)
+                            .text(item.DisplayName)
+                            .prop('selected', isSel)
+                    );
+                });
+                if (!activeType) {
+                    activeType = $ddl.val();
+                    activeName = $ddl.find('option:selected').text();
+                }
+                wlUpdateSignupKycDot(activeType, activeName);
+            },
+            error: (err) => {
+                console.error("fetchSignupKYCSetting_Data Error", err);
+                $('#wl_kyc_selected_text').text('Load failed');
+            }
+        });
+    }
+
+    function handle_signup_kyc_change(val) {
+        var $ddl = $(val);
+        var selectedType = $ddl.val();
+        if (!selectedType) return;
+        var selectedName = $ddl.find('option:selected').text();
+        wlUpdateSignupKycDot(selectedType, selectedName);
+
+        $.ajax({
+            url: '@Url.Action("ChangeSignupKYCSetting", "Home")',
+            type: 'POST',
+            dataType: 'json',
+            data: { type: selectedType },
+            success: function (data) {
+                data = typeof (data) == 'string' ? JSON.parse(data) : data;
+                if (data && (data.Status === true || data.Status === 'True' || data.Status === 1)) {
+                    wlUpdateSignupKycDot(data.type || selectedType, data.DisplayName || selectedName);
+                } else {
+                    alert((data && data.Message) ? data.Message : 'KYC Type update failed.');
+                    fetch_signup_kyc_status();
+                }
+            },
+            error: function (xhr) {
+                console.error("ChangeSignupKYCSetting Error", xhr);
+                // fallback: send type in querystring if body binding fails
+                $.ajax({
+                    url: '@Url.Action("ChangeSignupKYCSetting", "Home")' + '?type=' + encodeURIComponent(selectedType),
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (data2) {
+                        data2 = typeof (data2) == 'string' ? JSON.parse(data2) : data2;
+                        if (data2 && (data2.Status === true || data2.Status === 'True' || data2.Status === 1)) {
+                            wlUpdateSignupKycDot(data2.type || selectedType, data2.DisplayName || selectedName);
+                        } else {
+                            alert((data2 && data2.Message) ? data2.Message : 'KYC Type update failed.');
+                            fetch_signup_kyc_status();
+                        }
+                    },
+                    error: function () {
+                        alert('KYC Type update failed. Please try again.');
+                        fetch_signup_kyc_status();
+                    }
+                });
+            }
+        });
+    }
 
     function fetch_aadhar_pan_status() {
         $.ajax({
@@ -2927,16 +3105,18 @@
                 if (data.type == "singup") {
                     $("#demo_tst").text("Only Self SingUp");
                     btn.style.background = "rgb(255 193 7)";
+                    wlSetChipState('wl_chip_everify', 'wl-chip--warn');
                 }
                 else if (data.type == "all") {
                     $("#demo_tst").text("All Users Active");
                     btn.style.background = "green";
+                    wlSetChipState('wl_chip_everify', 'wl-chip--on');
                 }
                 else {
                     $("#demo_tst").text("Parmanently Off");
                     btn.style.background = "red";
+                    wlSetChipState('wl_chip_everify', 'wl-chip--off');
                 }
-                //btn.innerText = data.type.toUpperCase();
             }
         })
     }
@@ -2952,14 +3132,17 @@
                 if (data.type == "aadhar") {
                     $("#verify_tst").text("Aadhar Required");
                     btn.style.background = "rgb(255 193 7)";
+                    wlSetChipState('wl_chip_vtype', 'wl-chip--warn');
                 }
                 else if (data.type == "all") {
                     $("#verify_tst").text("Aadhar & Pan Required");
                     btn.style.background = "green";
+                    wlSetChipState('wl_chip_vtype', 'wl-chip--on');
                 }
                 else if (data.type == "pan") {
                     $("#verify_tst").text("Pan Required");
                     btn.style.background = "rgb(255 193 7)";
+                    wlSetChipState('wl_chip_vtype', 'wl-chip--warn');
                 }
             }
         })
@@ -2978,35 +3161,35 @@
             type = 'off'
         }
 
-        fetch('@Url.Action("ChangeAAdharPanVerify")', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ type }),
-        })
-            .then(res => res.json())
-            .then(data => {
+        $.ajax({
+            url: '@Url.Action("ChangeAAdharPanVerify", "Home")',
+            type: 'POST',
+            dataType: 'json',
+            data: { type: type },
+            success: function (data) {
+                data = typeof (data) == 'string' ? JSON.parse(data) : data;
                 var btn = document.getElementById('retailer_created_by');
                 btn.removeAttribute("created_type");
                 btn.setAttribute("created_type", data.type);
 
-
                 if (data.type == "singup") {
                     $("#demo_tst").text("Only Self SingUp");
                     btn.style.background = "rgb(255 193 7)";
+                    wlSetChipState('wl_chip_everify', 'wl-chip--warn');
                 }
                 else if (data.type == "all") {
                     $("#demo_tst").text("All Users Active");
                     btn.style.background = "green";
+                    wlSetChipState('wl_chip_everify', 'wl-chip--on');
                 }
                 else {
                     $("#demo_tst").text("Parmanently Off");
                     btn.style.background = "red";
+                    wlSetChipState('wl_chip_everify', 'wl-chip--off');
                 }
-
-            })
-            .catch(err => console.error("AAdharPanVerify Error", err))
+            },
+            error: function (err) { console.error("AAdharPanVerify Error", err); }
+        });
     }
 
     function handle_verification_type_change(val) {
@@ -3022,15 +3205,13 @@
             type = 'all'
         }
 
-        fetch('@Url.Action("ChangeVerificationTypeVerify")', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ type }),
-        })
-            .then(res => res.json())
-            .then(data => {
+        $.ajax({
+            url: '@Url.Action("ChangeVerificationTypeVerify", "Home")',
+            type: 'POST',
+            dataType: 'json',
+            data: { type: type },
+            success: function (data) {
+                data = typeof (data) == 'string' ? JSON.parse(data) : data;
                 var btn = document.getElementById('retailer_verification_type');
                 btn.removeAttribute("created_type");
                 btn.setAttribute("created_type", data.type);
@@ -3038,20 +3219,21 @@
                 if (data.type == "aadhar") {
                     $("#verify_tst").text("Aadhar Required");
                     btn.style.background = "rgb(255 193 7)";
+                    wlSetChipState('wl_chip_vtype', 'wl-chip--warn');
                 }
                 else if (data.type == "all") {
                     $("#verify_tst").text("Aadhar & Pan Required");
                     btn.style.background = "green";
+                    wlSetChipState('wl_chip_vtype', 'wl-chip--on');
                 }
                 else if (data.type == "pan") {
                     $("#verify_tst").text("Pan Required");
                     btn.style.background = "rgb(255 193 7)";
+                    wlSetChipState('wl_chip_vtype', 'wl-chip--warn');
                 }
-
-            })
-            .catch(err => console.error("AAdharPanVerify Error", err))
-
-
+            },
+            error: function (err) { console.error("VerificationType Error", err); }
+        });
     }
 </script>
 
@@ -3071,16 +3253,18 @@
                 if (data.type == "SIGNUP") {
                     $("#mail_btn").text("Only Self Signup");
                     btn.style.background = "rgb(255 193 7)";
+                    wlSetChipState('wl_chip_mail', 'wl-chip--warn');
                 }
                 else if (data.type == "ALL") {
                     $("#mail_btn").text("All Users Active");
                     btn.style.background = "green";
+                    wlSetChipState('wl_chip_mail', 'wl-chip--on');
                 }
                 else {
                     $("#mail_btn").text("Parmanently Off");
                     btn.style.background = "red";
+                    wlSetChipState('wl_chip_mail', 'wl-chip--off');
                 }
-                //btn.innerText = data.type.toUpperCase();
             }
         })
     }
@@ -3098,34 +3282,34 @@
             type = 'OFF'
         }
 
-        fetch('@Url.Action("ChangeEmail_Mobile_sts")', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ type }),
-        })
-            .then(res => res.json())
-            .then(data => {
+        $.ajax({
+            url: '@Url.Action("ChangeEmail_Mobile_sts", "Home")',
+            type: 'POST',
+            dataType: 'json',
+            data: { type: type },
+            success: function (data) {
+                data = typeof (data) == 'string' ? JSON.parse(data) : data;
                 var btn = document.getElementById('retailer_mailphone_by');
                 btn.removeAttribute("created_type");
                 btn.setAttribute("created_type", data.type);
 
-
                 if (data.type == "SIGNUP") {
                     $("#mail_btn").text("Only Self Signup");
                     btn.style.background = "rgb(255 193 7)";
+                    wlSetChipState('wl_chip_mail', 'wl-chip--warn');
                 }
                 else if (data.type == "ALL") {
                     $("#mail_btn").text("All Users Active");
                     btn.style.background = "green";
+                    wlSetChipState('wl_chip_mail', 'wl-chip--on');
                 }
                 else {
                     $("#mail_btn").text("Parmanently Off");
                     btn.style.background = "red";
+                    wlSetChipState('wl_chip_mail', 'wl-chip--off');
                 }
-
-            })
-            .catch(err => console.error("Email_Mobile_Status Error", err))
+            },
+            error: function (err) { console.error("Email_Mobile_Status Error", err); }
+        });
     }
 </script>

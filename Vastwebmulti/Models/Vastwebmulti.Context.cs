@@ -446,7 +446,6 @@ namespace Vastwebmulti.Models
         public virtual DbSet<EmailSendAll> EmailSendAlls { get; set; }
         public virtual DbSet<Gateway_Auth> Gateway_Auth { get; set; }
         public virtual DbSet<Payment_Gateway_Txn_history> Payment_Gateway_Txn_history { get; set; }
-        public virtual DbSet<Dealer_Details> Dealer_Details { get; set; }
         public virtual DbSet<Wallet_unload_sts> Wallet_unload_sts { get; set; }
         public virtual DbSet<Whitelabel_Aeps_comm> Whitelabel_Aeps_comm { get; set; }
         public virtual DbSet<Whitelabel_Aeps_comm_new> Whitelabel_Aeps_comm_new { get; set; }
@@ -914,10 +913,17 @@ namespace Vastwebmulti.Models
         public virtual DbSet<LoiList> LoiLists { get; set; }
         public virtual DbSet<RadiantCashDeposite> RadiantCashDeposites { get; set; }
         public virtual DbSet<Rechargepin_otp_status> Rechargepin_otp_status { get; set; }
+        public virtual DbSet<AepsVideoKyc> AepsVideoKycs { get; set; }
         public virtual DbSet<CMS_Ledger> CMS_Ledger { get; set; }
         public virtual DbSet<CMSRemainBalance> CMSRemainBalances { get; set; }
+        public virtual DbSet<AEPSCHMerchantinfo> AEPSCHMerchantinfoes { get; set; }
         public virtual DbSet<HoldBalanceReport> HoldBalanceReports { get; set; }
         public virtual DbSet<HoldRemainbalance> HoldRemainbalances { get; set; }
+        public virtual DbSet<SignupKYCSetting> SignupKYCSettings { get; set; }
+        public virtual DbSet<Dealer_Details> Dealer_Details { get; set; }
+        public virtual DbSet<Aeps_comm_Dlm_rem_UPI> Aeps_comm_Dlm_rem_UPI { get; set; }
+        public virtual DbSet<Aeps_comm_userwise_UPI> Aeps_comm_userwise_UPI { get; set; }
+        public virtual DbSet<Aeps_Common_Comm_UPI> Aeps_Common_Comm_UPI { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -13607,87 +13613,6 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<select_whitelabel_dealer_dlm_rem_Result>("select_whitelabel_dealer_dlm_rem", dlmParameter, frmParameter, toParameter, remidParameter);
         }
     
-        public virtual ObjectResult<Insert_Dealer_Result> Insert_Dealer(string ssid, string dealerid, string dealername, string farmName, string state, string district, string mobile, string address, Nullable<int> pin, string email, string photo, Nullable<decimal> commission, string slabnm, string pancard, string adharcard, string gst, string createdby, string finincialRolesType, string transPIN, ObjectParameter output)
-        {
-            var ssidParameter = ssid != null ?
-                new ObjectParameter("ssid", ssid) :
-                new ObjectParameter("ssid", typeof(string));
-    
-            var dealeridParameter = dealerid != null ?
-                new ObjectParameter("Dealerid", dealerid) :
-                new ObjectParameter("Dealerid", typeof(string));
-    
-            var dealernameParameter = dealername != null ?
-                new ObjectParameter("Dealername", dealername) :
-                new ObjectParameter("Dealername", typeof(string));
-    
-            var farmNameParameter = farmName != null ?
-                new ObjectParameter("FarmName", farmName) :
-                new ObjectParameter("FarmName", typeof(string));
-    
-            var stateParameter = state != null ?
-                new ObjectParameter("state", state) :
-                new ObjectParameter("state", typeof(string));
-    
-            var districtParameter = district != null ?
-                new ObjectParameter("district", district) :
-                new ObjectParameter("district", typeof(string));
-    
-            var mobileParameter = mobile != null ?
-                new ObjectParameter("mobile", mobile) :
-                new ObjectParameter("mobile", typeof(string));
-    
-            var addressParameter = address != null ?
-                new ObjectParameter("address", address) :
-                new ObjectParameter("address", typeof(string));
-    
-            var pinParameter = pin.HasValue ?
-                new ObjectParameter("pin", pin) :
-                new ObjectParameter("pin", typeof(int));
-    
-            var emailParameter = email != null ?
-                new ObjectParameter("email", email) :
-                new ObjectParameter("email", typeof(string));
-    
-            var photoParameter = photo != null ?
-                new ObjectParameter("photo", photo) :
-                new ObjectParameter("photo", typeof(string));
-    
-            var commissionParameter = commission.HasValue ?
-                new ObjectParameter("commission", commission) :
-                new ObjectParameter("commission", typeof(decimal));
-    
-            var slabnmParameter = slabnm != null ?
-                new ObjectParameter("slabnm", slabnm) :
-                new ObjectParameter("slabnm", typeof(string));
-    
-            var pancardParameter = pancard != null ?
-                new ObjectParameter("pancard", pancard) :
-                new ObjectParameter("pancard", typeof(string));
-    
-            var adharcardParameter = adharcard != null ?
-                new ObjectParameter("adharcard", adharcard) :
-                new ObjectParameter("adharcard", typeof(string));
-    
-            var gstParameter = gst != null ?
-                new ObjectParameter("gst", gst) :
-                new ObjectParameter("gst", typeof(string));
-    
-            var createdbyParameter = createdby != null ?
-                new ObjectParameter("createdby", createdby) :
-                new ObjectParameter("createdby", typeof(string));
-    
-            var finincialRolesTypeParameter = finincialRolesType != null ?
-                new ObjectParameter("FinincialRolesType", finincialRolesType) :
-                new ObjectParameter("FinincialRolesType", typeof(string));
-    
-            var transPINParameter = transPIN != null ?
-                new ObjectParameter("TransPIN", transPIN) :
-                new ObjectParameter("TransPIN", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Insert_Dealer_Result>("Insert_Dealer", ssidParameter, dealeridParameter, dealernameParameter, farmNameParameter, stateParameter, districtParameter, mobileParameter, addressParameter, pinParameter, emailParameter, photoParameter, commissionParameter, slabnmParameter, pancardParameter, adharcardParameter, gstParameter, createdbyParameter, finincialRolesTypeParameter, transPINParameter, output);
-        }
-    
         public virtual ObjectResult<Whitelabel_Money_transfer_by_paytm_Result> Whitelabel_Money_transfer_by_paytm(string userid, Nullable<decimal> amount, Nullable<decimal> finalamount, string sendernumber, string accountno, string banknm, string ifsccode, string common_req_id, string req_id, string reqtype, string req_from, string kycstatus, string impsrequest, string apiname, string ipaddress, string macaddress, string imeino, Nullable<decimal> apiprebal, Nullable<decimal> apipostbal, string dmtType, string idprooftype, string idproofnumber, ObjectParameter output)
         {
             var useridParameter = userid != null ?
@@ -16405,59 +16330,6 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("transferby", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<FundTransfercount_Result>("FundTransfercount", transferfromParameter, transfertoParameter, typeParameter, balParameter, transferidParameter, transferbyParameter);
-        }
-    
-        public virtual ObjectResult<insert_dealer_to_retailer_balance_Result> insert_dealer_to_retailer_balance(string dealerId, string retailerId, Nullable<decimal> balance, Nullable<decimal> comm, string type, string comment, string collectionby, string bankname, string adminacco, string head, string fundby, string transectionid, ObjectParameter output)
-        {
-            var dealerIdParameter = dealerId != null ?
-                new ObjectParameter("DealerId", dealerId) :
-                new ObjectParameter("DealerId", typeof(string));
-    
-            var retailerIdParameter = retailerId != null ?
-                new ObjectParameter("RetailerId", retailerId) :
-                new ObjectParameter("RetailerId", typeof(string));
-    
-            var balanceParameter = balance.HasValue ?
-                new ObjectParameter("Balance", balance) :
-                new ObjectParameter("Balance", typeof(decimal));
-    
-            var commParameter = comm.HasValue ?
-                new ObjectParameter("comm", comm) :
-                new ObjectParameter("comm", typeof(decimal));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            var commentParameter = comment != null ?
-                new ObjectParameter("comment", comment) :
-                new ObjectParameter("comment", typeof(string));
-    
-            var collectionbyParameter = collectionby != null ?
-                new ObjectParameter("collectionby", collectionby) :
-                new ObjectParameter("collectionby", typeof(string));
-    
-            var banknameParameter = bankname != null ?
-                new ObjectParameter("bankname", bankname) :
-                new ObjectParameter("bankname", typeof(string));
-    
-            var adminaccoParameter = adminacco != null ?
-                new ObjectParameter("adminacco", adminacco) :
-                new ObjectParameter("adminacco", typeof(string));
-    
-            var headParameter = head != null ?
-                new ObjectParameter("head", head) :
-                new ObjectParameter("head", typeof(string));
-    
-            var fundbyParameter = fundby != null ?
-                new ObjectParameter("fundby", fundby) :
-                new ObjectParameter("fundby", typeof(string));
-    
-            var transectionidParameter = transectionid != null ?
-                new ObjectParameter("Transectionid", transectionid) :
-                new ObjectParameter("Transectionid", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<insert_dealer_to_retailer_balance_Result>("insert_dealer_to_retailer_balance", dealerIdParameter, retailerIdParameter, balanceParameter, commParameter, typeParameter, commentParameter, collectionbyParameter, banknameParameter, adminaccoParameter, headParameter, fundbyParameter, transectionidParameter, output);
         }
     
         public virtual ObjectResult<Insert_SuperStokist_To_Dealer_Result> Insert_SuperStokist_To_Dealer(string ssid, string dlmid, Nullable<decimal> balance, Nullable<decimal> comm, string type, string comment, string fundby, string collectionBy, string bankName, string admin_AccountNo, string head, string transectionid, ObjectParameter output)
@@ -21263,87 +21135,6 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Select_Retailer_Details_all_Result>("Select_Retailer_Details_all", useridParameter, searchforParameter, alterdbyParameter);
         }
     
-        public virtual ObjectResult<Insert_Retailer_Result> Insert_Retailer(string dealerId, string retailerid, string retailername, Nullable<int> state, Nullable<int> district, string mobile, string address, Nullable<int> pincode, string email, string photo, string slabname, string firmnm, string aadharcard, string pencard, Nullable<int> caption, string gst, string pin, string referralcode, string createdBy, ObjectParameter output)
-        {
-            var dealerIdParameter = dealerId != null ?
-                new ObjectParameter("DealerId", dealerId) :
-                new ObjectParameter("DealerId", typeof(string));
-    
-            var retaileridParameter = retailerid != null ?
-                new ObjectParameter("Retailerid", retailerid) :
-                new ObjectParameter("Retailerid", typeof(string));
-    
-            var retailernameParameter = retailername != null ?
-                new ObjectParameter("Retailername", retailername) :
-                new ObjectParameter("Retailername", typeof(string));
-    
-            var stateParameter = state.HasValue ?
-                new ObjectParameter("state", state) :
-                new ObjectParameter("state", typeof(int));
-    
-            var districtParameter = district.HasValue ?
-                new ObjectParameter("district", district) :
-                new ObjectParameter("district", typeof(int));
-    
-            var mobileParameter = mobile != null ?
-                new ObjectParameter("mobile", mobile) :
-                new ObjectParameter("mobile", typeof(string));
-    
-            var addressParameter = address != null ?
-                new ObjectParameter("address", address) :
-                new ObjectParameter("address", typeof(string));
-    
-            var pincodeParameter = pincode.HasValue ?
-                new ObjectParameter("pincode", pincode) :
-                new ObjectParameter("pincode", typeof(int));
-    
-            var emailParameter = email != null ?
-                new ObjectParameter("email", email) :
-                new ObjectParameter("email", typeof(string));
-    
-            var photoParameter = photo != null ?
-                new ObjectParameter("photo", photo) :
-                new ObjectParameter("photo", typeof(string));
-    
-            var slabnameParameter = slabname != null ?
-                new ObjectParameter("slabname", slabname) :
-                new ObjectParameter("slabname", typeof(string));
-    
-            var firmnmParameter = firmnm != null ?
-                new ObjectParameter("firmnm", firmnm) :
-                new ObjectParameter("firmnm", typeof(string));
-    
-            var aadharcardParameter = aadharcard != null ?
-                new ObjectParameter("aadharcard", aadharcard) :
-                new ObjectParameter("aadharcard", typeof(string));
-    
-            var pencardParameter = pencard != null ?
-                new ObjectParameter("pencard", pencard) :
-                new ObjectParameter("pencard", typeof(string));
-    
-            var captionParameter = caption.HasValue ?
-                new ObjectParameter("caption", caption) :
-                new ObjectParameter("caption", typeof(int));
-    
-            var gstParameter = gst != null ?
-                new ObjectParameter("gst", gst) :
-                new ObjectParameter("gst", typeof(string));
-    
-            var pinParameter = pin != null ?
-                new ObjectParameter("pin", pin) :
-                new ObjectParameter("pin", typeof(string));
-    
-            var referralcodeParameter = referralcode != null ?
-                new ObjectParameter("referralcode", referralcode) :
-                new ObjectParameter("referralcode", typeof(string));
-    
-            var createdByParameter = createdBy != null ?
-                new ObjectParameter("createdBy", createdBy) :
-                new ObjectParameter("createdBy", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Insert_Retailer_Result>("Insert_Retailer", dealerIdParameter, retaileridParameter, retailernameParameter, stateParameter, districtParameter, mobileParameter, addressParameter, pincodeParameter, emailParameter, photoParameter, slabnameParameter, firmnmParameter, aadharcardParameter, pencardParameter, captionParameter, gstParameter, pinParameter, referralcodeParameter, createdByParameter, output);
-        }
-    
         public virtual ObjectResult<account_opening_report_Result> account_opening_report(string status, string userid, string search, Nullable<System.DateTime> from, Nullable<System.DateTime> to)
         {
             var statusParameter = status != null ?
@@ -24070,6 +23861,564 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("status", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateprepayCashpickup", uniqueidParameter, statusParameter);
+        }
+    
+        public virtual ObjectResult<UPI_TXN_ICICI_Result> UPI_TXN_ICICI(string role, string userid, string txnid, Nullable<decimal> amount, string status, string payername, string payvpn, string bankrrn, string response, string apiname, ObjectParameter output)
+        {
+            var roleParameter = role != null ?
+                new ObjectParameter("role", role) :
+                new ObjectParameter("role", typeof(string));
+    
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var txnidParameter = txnid != null ?
+                new ObjectParameter("txnid", txnid) :
+                new ObjectParameter("txnid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var payernameParameter = payername != null ?
+                new ObjectParameter("payername", payername) :
+                new ObjectParameter("payername", typeof(string));
+    
+            var payvpnParameter = payvpn != null ?
+                new ObjectParameter("payvpn", payvpn) :
+                new ObjectParameter("payvpn", typeof(string));
+    
+            var bankrrnParameter = bankrrn != null ?
+                new ObjectParameter("bankrrn", bankrrn) :
+                new ObjectParameter("bankrrn", typeof(string));
+    
+            var responseParameter = response != null ?
+                new ObjectParameter("response", response) :
+                new ObjectParameter("response", typeof(string));
+    
+            var apinameParameter = apiname != null ?
+                new ObjectParameter("apiname", apiname) :
+                new ObjectParameter("apiname", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UPI_TXN_ICICI_Result>("UPI_TXN_ICICI", roleParameter, useridParameter, txnidParameter, amountParameter, statusParameter, payernameParameter, payvpnParameter, bankrrnParameter, responseParameter, apinameParameter, output);
+        }
+    
+        public virtual ObjectResult<Insert_Retailer_Result> Insert_Retailer(string dealerId, string retailerid, string retailername, Nullable<int> state, string kYCType, Nullable<int> district, string mobile, string address, Nullable<int> pincode, string email, string photo, string slabname, string firmnm, string aadharcard, string pencard, Nullable<int> caption, string gst, string pin, string referralcode, string createdBy, ObjectParameter output)
+        {
+            var dealerIdParameter = dealerId != null ?
+                new ObjectParameter("DealerId", dealerId) :
+                new ObjectParameter("DealerId", typeof(string));
+    
+            var retaileridParameter = retailerid != null ?
+                new ObjectParameter("Retailerid", retailerid) :
+                new ObjectParameter("Retailerid", typeof(string));
+    
+            var retailernameParameter = retailername != null ?
+                new ObjectParameter("Retailername", retailername) :
+                new ObjectParameter("Retailername", typeof(string));
+    
+            var stateParameter = state.HasValue ?
+                new ObjectParameter("state", state) :
+                new ObjectParameter("state", typeof(int));
+    
+            var kYCTypeParameter = kYCType != null ?
+                new ObjectParameter("KYCType", kYCType) :
+                new ObjectParameter("KYCType", typeof(string));
+    
+            var districtParameter = district.HasValue ?
+                new ObjectParameter("district", district) :
+                new ObjectParameter("district", typeof(int));
+    
+            var mobileParameter = mobile != null ?
+                new ObjectParameter("mobile", mobile) :
+                new ObjectParameter("mobile", typeof(string));
+    
+            var addressParameter = address != null ?
+                new ObjectParameter("address", address) :
+                new ObjectParameter("address", typeof(string));
+    
+            var pincodeParameter = pincode.HasValue ?
+                new ObjectParameter("pincode", pincode) :
+                new ObjectParameter("pincode", typeof(int));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("email", email) :
+                new ObjectParameter("email", typeof(string));
+    
+            var photoParameter = photo != null ?
+                new ObjectParameter("photo", photo) :
+                new ObjectParameter("photo", typeof(string));
+    
+            var slabnameParameter = slabname != null ?
+                new ObjectParameter("slabname", slabname) :
+                new ObjectParameter("slabname", typeof(string));
+    
+            var firmnmParameter = firmnm != null ?
+                new ObjectParameter("firmnm", firmnm) :
+                new ObjectParameter("firmnm", typeof(string));
+    
+            var aadharcardParameter = aadharcard != null ?
+                new ObjectParameter("aadharcard", aadharcard) :
+                new ObjectParameter("aadharcard", typeof(string));
+    
+            var pencardParameter = pencard != null ?
+                new ObjectParameter("pencard", pencard) :
+                new ObjectParameter("pencard", typeof(string));
+    
+            var captionParameter = caption.HasValue ?
+                new ObjectParameter("caption", caption) :
+                new ObjectParameter("caption", typeof(int));
+    
+            var gstParameter = gst != null ?
+                new ObjectParameter("gst", gst) :
+                new ObjectParameter("gst", typeof(string));
+    
+            var pinParameter = pin != null ?
+                new ObjectParameter("pin", pin) :
+                new ObjectParameter("pin", typeof(string));
+    
+            var referralcodeParameter = referralcode != null ?
+                new ObjectParameter("referralcode", referralcode) :
+                new ObjectParameter("referralcode", typeof(string));
+    
+            var createdByParameter = createdBy != null ?
+                new ObjectParameter("createdBy", createdBy) :
+                new ObjectParameter("createdBy", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Insert_Retailer_Result>("Insert_Retailer", dealerIdParameter, retaileridParameter, retailernameParameter, stateParameter, kYCTypeParameter, districtParameter, mobileParameter, addressParameter, pincodeParameter, emailParameter, photoParameter, slabnameParameter, firmnmParameter, aadharcardParameter, pencardParameter, captionParameter, gstParameter, pinParameter, referralcodeParameter, createdByParameter, output);
+        }
+    
+        public virtual ObjectResult<Insert_Dealer_Result> Insert_Dealer(string ssid, string dealerid, string dealername, string farmName, string state, string district, string mobile, string address, Nullable<int> pin, string email, string photo, Nullable<decimal> commission, string slabnm, string pancard, string adharcard, string gst, string createdby, string finincialRolesType, string transPIN, Nullable<bool> onlyCMSUser, ObjectParameter output)
+        {
+            var ssidParameter = ssid != null ?
+                new ObjectParameter("ssid", ssid) :
+                new ObjectParameter("ssid", typeof(string));
+    
+            var dealeridParameter = dealerid != null ?
+                new ObjectParameter("Dealerid", dealerid) :
+                new ObjectParameter("Dealerid", typeof(string));
+    
+            var dealernameParameter = dealername != null ?
+                new ObjectParameter("Dealername", dealername) :
+                new ObjectParameter("Dealername", typeof(string));
+    
+            var farmNameParameter = farmName != null ?
+                new ObjectParameter("FarmName", farmName) :
+                new ObjectParameter("FarmName", typeof(string));
+    
+            var stateParameter = state != null ?
+                new ObjectParameter("state", state) :
+                new ObjectParameter("state", typeof(string));
+    
+            var districtParameter = district != null ?
+                new ObjectParameter("district", district) :
+                new ObjectParameter("district", typeof(string));
+    
+            var mobileParameter = mobile != null ?
+                new ObjectParameter("mobile", mobile) :
+                new ObjectParameter("mobile", typeof(string));
+    
+            var addressParameter = address != null ?
+                new ObjectParameter("address", address) :
+                new ObjectParameter("address", typeof(string));
+    
+            var pinParameter = pin.HasValue ?
+                new ObjectParameter("pin", pin) :
+                new ObjectParameter("pin", typeof(int));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("email", email) :
+                new ObjectParameter("email", typeof(string));
+    
+            var photoParameter = photo != null ?
+                new ObjectParameter("photo", photo) :
+                new ObjectParameter("photo", typeof(string));
+    
+            var commissionParameter = commission.HasValue ?
+                new ObjectParameter("commission", commission) :
+                new ObjectParameter("commission", typeof(decimal));
+    
+            var slabnmParameter = slabnm != null ?
+                new ObjectParameter("slabnm", slabnm) :
+                new ObjectParameter("slabnm", typeof(string));
+    
+            var pancardParameter = pancard != null ?
+                new ObjectParameter("pancard", pancard) :
+                new ObjectParameter("pancard", typeof(string));
+    
+            var adharcardParameter = adharcard != null ?
+                new ObjectParameter("adharcard", adharcard) :
+                new ObjectParameter("adharcard", typeof(string));
+    
+            var gstParameter = gst != null ?
+                new ObjectParameter("gst", gst) :
+                new ObjectParameter("gst", typeof(string));
+    
+            var createdbyParameter = createdby != null ?
+                new ObjectParameter("createdby", createdby) :
+                new ObjectParameter("createdby", typeof(string));
+    
+            var finincialRolesTypeParameter = finincialRolesType != null ?
+                new ObjectParameter("FinincialRolesType", finincialRolesType) :
+                new ObjectParameter("FinincialRolesType", typeof(string));
+    
+            var transPINParameter = transPIN != null ?
+                new ObjectParameter("TransPIN", transPIN) :
+                new ObjectParameter("TransPIN", typeof(string));
+    
+            var onlyCMSUserParameter = onlyCMSUser.HasValue ?
+                new ObjectParameter("OnlyCMSUser", onlyCMSUser) :
+                new ObjectParameter("OnlyCMSUser", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Insert_Dealer_Result>("Insert_Dealer", ssidParameter, dealeridParameter, dealernameParameter, farmNameParameter, stateParameter, districtParameter, mobileParameter, addressParameter, pinParameter, emailParameter, photoParameter, commissionParameter, slabnmParameter, pancardParameter, adharcardParameter, gstParameter, createdbyParameter, finincialRolesTypeParameter, transPINParameter, onlyCMSUserParameter, output);
+        }
+    
+        public virtual ObjectResult<insert_dealer_to_retailer_balance_Result> insert_dealer_to_retailer_balance(string dealerId, string retailerId, Nullable<decimal> balance, Nullable<decimal> comm, string type, string comment, string collectionby, string bankname, string adminacco, string head, string fundby, string transectionid, ObjectParameter output)
+        {
+            var dealerIdParameter = dealerId != null ?
+                new ObjectParameter("DealerId", dealerId) :
+                new ObjectParameter("DealerId", typeof(string));
+    
+            var retailerIdParameter = retailerId != null ?
+                new ObjectParameter("RetailerId", retailerId) :
+                new ObjectParameter("RetailerId", typeof(string));
+    
+            var balanceParameter = balance.HasValue ?
+                new ObjectParameter("Balance", balance) :
+                new ObjectParameter("Balance", typeof(decimal));
+    
+            var commParameter = comm.HasValue ?
+                new ObjectParameter("comm", comm) :
+                new ObjectParameter("comm", typeof(decimal));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            var commentParameter = comment != null ?
+                new ObjectParameter("comment", comment) :
+                new ObjectParameter("comment", typeof(string));
+    
+            var collectionbyParameter = collectionby != null ?
+                new ObjectParameter("collectionby", collectionby) :
+                new ObjectParameter("collectionby", typeof(string));
+    
+            var banknameParameter = bankname != null ?
+                new ObjectParameter("bankname", bankname) :
+                new ObjectParameter("bankname", typeof(string));
+    
+            var adminaccoParameter = adminacco != null ?
+                new ObjectParameter("adminacco", adminacco) :
+                new ObjectParameter("adminacco", typeof(string));
+    
+            var headParameter = head != null ?
+                new ObjectParameter("head", head) :
+                new ObjectParameter("head", typeof(string));
+    
+            var fundbyParameter = fundby != null ?
+                new ObjectParameter("fundby", fundby) :
+                new ObjectParameter("fundby", typeof(string));
+    
+            var transectionidParameter = transectionid != null ?
+                new ObjectParameter("Transectionid", transectionid) :
+                new ObjectParameter("Transectionid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<insert_dealer_to_retailer_balance_Result>("insert_dealer_to_retailer_balance", dealerIdParameter, retailerIdParameter, balanceParameter, commParameter, typeParameter, commentParameter, collectionbyParameter, banknameParameter, adminaccoParameter, headParameter, fundbyParameter, transectionidParameter, output);
+        }
+    
+        public virtual int Update_AEPS_All_userSlab_Again_UPI(string role, Nullable<decimal> aadharpay, Nullable<decimal> ministatement, Nullable<decimal> per_500_999, Nullable<decimal> rs_500_999, Nullable<decimal> maxrs_500_999, string type_500_999, Nullable<decimal> per_1000_1499, Nullable<decimal> rs_1000_1499, Nullable<decimal> maxrs_1000_1499, string type_1000_1499, Nullable<decimal> per_1500_1999, Nullable<decimal> rs_1500_1999, Nullable<decimal> maxrs_1500_1999, string type_1500_1999, Nullable<decimal> per_2000_2499, Nullable<decimal> rs_2000_2499, Nullable<decimal> maxrs_2000_2499, string type_2000_2499, Nullable<decimal> per_2500_2999, Nullable<decimal> rs_2500_2999, Nullable<decimal> maxrs_2500_2999, string type_2500_2999, Nullable<decimal> per_3000_3499, Nullable<decimal> rs_3000_3499, Nullable<decimal> maxrs_3000_3499, string type_3000_3499, Nullable<decimal> per_3500_5000, Nullable<decimal> rs_3500_5000, Nullable<decimal> maxrs_3500_5000, string type_3500_5000, Nullable<decimal> per_5001_10000, Nullable<decimal> rs_5001_10000, Nullable<decimal> maxrs_5001_10000, string type_5001_10000)
+        {
+            var roleParameter = role != null ?
+                new ObjectParameter("role", role) :
+                new ObjectParameter("role", typeof(string));
+    
+            var aadharpayParameter = aadharpay.HasValue ?
+                new ObjectParameter("aadharpay", aadharpay) :
+                new ObjectParameter("aadharpay", typeof(decimal));
+    
+            var ministatementParameter = ministatement.HasValue ?
+                new ObjectParameter("ministatement", ministatement) :
+                new ObjectParameter("ministatement", typeof(decimal));
+    
+            var per_500_999Parameter = per_500_999.HasValue ?
+                new ObjectParameter("per_500_999", per_500_999) :
+                new ObjectParameter("per_500_999", typeof(decimal));
+    
+            var rs_500_999Parameter = rs_500_999.HasValue ?
+                new ObjectParameter("rs_500_999", rs_500_999) :
+                new ObjectParameter("rs_500_999", typeof(decimal));
+    
+            var maxrs_500_999Parameter = maxrs_500_999.HasValue ?
+                new ObjectParameter("maxrs_500_999", maxrs_500_999) :
+                new ObjectParameter("maxrs_500_999", typeof(decimal));
+    
+            var type_500_999Parameter = type_500_999 != null ?
+                new ObjectParameter("Type_500_999", type_500_999) :
+                new ObjectParameter("Type_500_999", typeof(string));
+    
+            var per_1000_1499Parameter = per_1000_1499.HasValue ?
+                new ObjectParameter("per_1000_1499", per_1000_1499) :
+                new ObjectParameter("per_1000_1499", typeof(decimal));
+    
+            var rs_1000_1499Parameter = rs_1000_1499.HasValue ?
+                new ObjectParameter("rs_1000_1499", rs_1000_1499) :
+                new ObjectParameter("rs_1000_1499", typeof(decimal));
+    
+            var maxrs_1000_1499Parameter = maxrs_1000_1499.HasValue ?
+                new ObjectParameter("maxrs_1000_1499", maxrs_1000_1499) :
+                new ObjectParameter("maxrs_1000_1499", typeof(decimal));
+    
+            var type_1000_1499Parameter = type_1000_1499 != null ?
+                new ObjectParameter("Type_1000_1499", type_1000_1499) :
+                new ObjectParameter("Type_1000_1499", typeof(string));
+    
+            var per_1500_1999Parameter = per_1500_1999.HasValue ?
+                new ObjectParameter("per_1500_1999", per_1500_1999) :
+                new ObjectParameter("per_1500_1999", typeof(decimal));
+    
+            var rs_1500_1999Parameter = rs_1500_1999.HasValue ?
+                new ObjectParameter("rs_1500_1999", rs_1500_1999) :
+                new ObjectParameter("rs_1500_1999", typeof(decimal));
+    
+            var maxrs_1500_1999Parameter = maxrs_1500_1999.HasValue ?
+                new ObjectParameter("maxrs_1500_1999", maxrs_1500_1999) :
+                new ObjectParameter("maxrs_1500_1999", typeof(decimal));
+    
+            var type_1500_1999Parameter = type_1500_1999 != null ?
+                new ObjectParameter("Type_1500_1999", type_1500_1999) :
+                new ObjectParameter("Type_1500_1999", typeof(string));
+    
+            var per_2000_2499Parameter = per_2000_2499.HasValue ?
+                new ObjectParameter("per_2000_2499", per_2000_2499) :
+                new ObjectParameter("per_2000_2499", typeof(decimal));
+    
+            var rs_2000_2499Parameter = rs_2000_2499.HasValue ?
+                new ObjectParameter("rs_2000_2499", rs_2000_2499) :
+                new ObjectParameter("rs_2000_2499", typeof(decimal));
+    
+            var maxrs_2000_2499Parameter = maxrs_2000_2499.HasValue ?
+                new ObjectParameter("maxrs_2000_2499", maxrs_2000_2499) :
+                new ObjectParameter("maxrs_2000_2499", typeof(decimal));
+    
+            var type_2000_2499Parameter = type_2000_2499 != null ?
+                new ObjectParameter("Type_2000_2499", type_2000_2499) :
+                new ObjectParameter("Type_2000_2499", typeof(string));
+    
+            var per_2500_2999Parameter = per_2500_2999.HasValue ?
+                new ObjectParameter("per_2500_2999", per_2500_2999) :
+                new ObjectParameter("per_2500_2999", typeof(decimal));
+    
+            var rs_2500_2999Parameter = rs_2500_2999.HasValue ?
+                new ObjectParameter("rs_2500_2999", rs_2500_2999) :
+                new ObjectParameter("rs_2500_2999", typeof(decimal));
+    
+            var maxrs_2500_2999Parameter = maxrs_2500_2999.HasValue ?
+                new ObjectParameter("maxrs_2500_2999", maxrs_2500_2999) :
+                new ObjectParameter("maxrs_2500_2999", typeof(decimal));
+    
+            var type_2500_2999Parameter = type_2500_2999 != null ?
+                new ObjectParameter("Type_2500_2999", type_2500_2999) :
+                new ObjectParameter("Type_2500_2999", typeof(string));
+    
+            var per_3000_3499Parameter = per_3000_3499.HasValue ?
+                new ObjectParameter("per_3000_3499", per_3000_3499) :
+                new ObjectParameter("per_3000_3499", typeof(decimal));
+    
+            var rs_3000_3499Parameter = rs_3000_3499.HasValue ?
+                new ObjectParameter("rs_3000_3499", rs_3000_3499) :
+                new ObjectParameter("rs_3000_3499", typeof(decimal));
+    
+            var maxrs_3000_3499Parameter = maxrs_3000_3499.HasValue ?
+                new ObjectParameter("maxrs_3000_3499", maxrs_3000_3499) :
+                new ObjectParameter("maxrs_3000_3499", typeof(decimal));
+    
+            var type_3000_3499Parameter = type_3000_3499 != null ?
+                new ObjectParameter("Type_3000_3499", type_3000_3499) :
+                new ObjectParameter("Type_3000_3499", typeof(string));
+    
+            var per_3500_5000Parameter = per_3500_5000.HasValue ?
+                new ObjectParameter("per_3500_5000", per_3500_5000) :
+                new ObjectParameter("per_3500_5000", typeof(decimal));
+    
+            var rs_3500_5000Parameter = rs_3500_5000.HasValue ?
+                new ObjectParameter("rs_3500_5000", rs_3500_5000) :
+                new ObjectParameter("rs_3500_5000", typeof(decimal));
+    
+            var maxrs_3500_5000Parameter = maxrs_3500_5000.HasValue ?
+                new ObjectParameter("maxrs_3500_5000", maxrs_3500_5000) :
+                new ObjectParameter("maxrs_3500_5000", typeof(decimal));
+    
+            var type_3500_5000Parameter = type_3500_5000 != null ?
+                new ObjectParameter("Type_3500_5000", type_3500_5000) :
+                new ObjectParameter("Type_3500_5000", typeof(string));
+    
+            var per_5001_10000Parameter = per_5001_10000.HasValue ?
+                new ObjectParameter("per_5001_10000", per_5001_10000) :
+                new ObjectParameter("per_5001_10000", typeof(decimal));
+    
+            var rs_5001_10000Parameter = rs_5001_10000.HasValue ?
+                new ObjectParameter("rs_5001_10000", rs_5001_10000) :
+                new ObjectParameter("rs_5001_10000", typeof(decimal));
+    
+            var maxrs_5001_10000Parameter = maxrs_5001_10000.HasValue ?
+                new ObjectParameter("maxrs_5001_10000", maxrs_5001_10000) :
+                new ObjectParameter("maxrs_5001_10000", typeof(decimal));
+    
+            var type_5001_10000Parameter = type_5001_10000 != null ?
+                new ObjectParameter("Type_5001_10000", type_5001_10000) :
+                new ObjectParameter("Type_5001_10000", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Update_AEPS_All_userSlab_Again_UPI", roleParameter, aadharpayParameter, ministatementParameter, per_500_999Parameter, rs_500_999Parameter, maxrs_500_999Parameter, type_500_999Parameter, per_1000_1499Parameter, rs_1000_1499Parameter, maxrs_1000_1499Parameter, type_1000_1499Parameter, per_1500_1999Parameter, rs_1500_1999Parameter, maxrs_1500_1999Parameter, type_1500_1999Parameter, per_2000_2499Parameter, rs_2000_2499Parameter, maxrs_2000_2499Parameter, type_2000_2499Parameter, per_2500_2999Parameter, rs_2500_2999Parameter, maxrs_2500_2999Parameter, type_2500_2999Parameter, per_3000_3499Parameter, rs_3000_3499Parameter, maxrs_3000_3499Parameter, type_3000_3499Parameter, per_3500_5000Parameter, rs_3500_5000Parameter, maxrs_3500_5000Parameter, type_3500_5000Parameter, per_5001_10000Parameter, rs_5001_10000Parameter, maxrs_5001_10000Parameter, type_5001_10000Parameter);
+        }
+    
+        public virtual int Update_AEPS_dlm_rem_userSlab_again_UPI(string dlmid, Nullable<decimal> aadharpay, Nullable<decimal> ministatement, Nullable<decimal> per_500_999, Nullable<decimal> rs_500_999, Nullable<decimal> maxrs_500_999, string type_500_999, Nullable<decimal> per_1000_1499, Nullable<decimal> rs_1000_1499, Nullable<decimal> maxrs_1000_1499, string type_1000_1499, Nullable<decimal> per_1500_1999, Nullable<decimal> rs_1500_1999, Nullable<decimal> maxrs_1500_1999, string type_1500_1999, Nullable<decimal> per_2000_2499, Nullable<decimal> rs_2000_2499, Nullable<decimal> maxrs_2000_2499, string type_2000_2499, Nullable<decimal> per_2500_2999, Nullable<decimal> rs_2500_2999, Nullable<decimal> maxrs_2500_2999, string type_2500_2999, Nullable<decimal> per_3000_3499, Nullable<decimal> rs_3000_3499, Nullable<decimal> maxrs_3000_3499, string type_3000_3499, Nullable<decimal> per_3500_5000, Nullable<decimal> rs_3500_5000, Nullable<decimal> maxrs_3500_5000, string type_3500_5000, Nullable<decimal> per_5001_10000, Nullable<decimal> rs_5001_10000, Nullable<decimal> maxrs_5001_10000, string type_5001_10000)
+        {
+            var dlmidParameter = dlmid != null ?
+                new ObjectParameter("dlmid", dlmid) :
+                new ObjectParameter("dlmid", typeof(string));
+    
+            var aadharpayParameter = aadharpay.HasValue ?
+                new ObjectParameter("aadharpay", aadharpay) :
+                new ObjectParameter("aadharpay", typeof(decimal));
+    
+            var ministatementParameter = ministatement.HasValue ?
+                new ObjectParameter("ministatement", ministatement) :
+                new ObjectParameter("ministatement", typeof(decimal));
+    
+            var per_500_999Parameter = per_500_999.HasValue ?
+                new ObjectParameter("per_500_999", per_500_999) :
+                new ObjectParameter("per_500_999", typeof(decimal));
+    
+            var rs_500_999Parameter = rs_500_999.HasValue ?
+                new ObjectParameter("rs_500_999", rs_500_999) :
+                new ObjectParameter("rs_500_999", typeof(decimal));
+    
+            var maxrs_500_999Parameter = maxrs_500_999.HasValue ?
+                new ObjectParameter("maxrs_500_999", maxrs_500_999) :
+                new ObjectParameter("maxrs_500_999", typeof(decimal));
+    
+            var type_500_999Parameter = type_500_999 != null ?
+                new ObjectParameter("Type_500_999", type_500_999) :
+                new ObjectParameter("Type_500_999", typeof(string));
+    
+            var per_1000_1499Parameter = per_1000_1499.HasValue ?
+                new ObjectParameter("per_1000_1499", per_1000_1499) :
+                new ObjectParameter("per_1000_1499", typeof(decimal));
+    
+            var rs_1000_1499Parameter = rs_1000_1499.HasValue ?
+                new ObjectParameter("rs_1000_1499", rs_1000_1499) :
+                new ObjectParameter("rs_1000_1499", typeof(decimal));
+    
+            var maxrs_1000_1499Parameter = maxrs_1000_1499.HasValue ?
+                new ObjectParameter("maxrs_1000_1499", maxrs_1000_1499) :
+                new ObjectParameter("maxrs_1000_1499", typeof(decimal));
+    
+            var type_1000_1499Parameter = type_1000_1499 != null ?
+                new ObjectParameter("Type_1000_1499", type_1000_1499) :
+                new ObjectParameter("Type_1000_1499", typeof(string));
+    
+            var per_1500_1999Parameter = per_1500_1999.HasValue ?
+                new ObjectParameter("per_1500_1999", per_1500_1999) :
+                new ObjectParameter("per_1500_1999", typeof(decimal));
+    
+            var rs_1500_1999Parameter = rs_1500_1999.HasValue ?
+                new ObjectParameter("rs_1500_1999", rs_1500_1999) :
+                new ObjectParameter("rs_1500_1999", typeof(decimal));
+    
+            var maxrs_1500_1999Parameter = maxrs_1500_1999.HasValue ?
+                new ObjectParameter("maxrs_1500_1999", maxrs_1500_1999) :
+                new ObjectParameter("maxrs_1500_1999", typeof(decimal));
+    
+            var type_1500_1999Parameter = type_1500_1999 != null ?
+                new ObjectParameter("Type_1500_1999", type_1500_1999) :
+                new ObjectParameter("Type_1500_1999", typeof(string));
+    
+            var per_2000_2499Parameter = per_2000_2499.HasValue ?
+                new ObjectParameter("per_2000_2499", per_2000_2499) :
+                new ObjectParameter("per_2000_2499", typeof(decimal));
+    
+            var rs_2000_2499Parameter = rs_2000_2499.HasValue ?
+                new ObjectParameter("rs_2000_2499", rs_2000_2499) :
+                new ObjectParameter("rs_2000_2499", typeof(decimal));
+    
+            var maxrs_2000_2499Parameter = maxrs_2000_2499.HasValue ?
+                new ObjectParameter("maxrs_2000_2499", maxrs_2000_2499) :
+                new ObjectParameter("maxrs_2000_2499", typeof(decimal));
+    
+            var type_2000_2499Parameter = type_2000_2499 != null ?
+                new ObjectParameter("Type_2000_2499", type_2000_2499) :
+                new ObjectParameter("Type_2000_2499", typeof(string));
+    
+            var per_2500_2999Parameter = per_2500_2999.HasValue ?
+                new ObjectParameter("per_2500_2999", per_2500_2999) :
+                new ObjectParameter("per_2500_2999", typeof(decimal));
+    
+            var rs_2500_2999Parameter = rs_2500_2999.HasValue ?
+                new ObjectParameter("rs_2500_2999", rs_2500_2999) :
+                new ObjectParameter("rs_2500_2999", typeof(decimal));
+    
+            var maxrs_2500_2999Parameter = maxrs_2500_2999.HasValue ?
+                new ObjectParameter("maxrs_2500_2999", maxrs_2500_2999) :
+                new ObjectParameter("maxrs_2500_2999", typeof(decimal));
+    
+            var type_2500_2999Parameter = type_2500_2999 != null ?
+                new ObjectParameter("Type_2500_2999", type_2500_2999) :
+                new ObjectParameter("Type_2500_2999", typeof(string));
+    
+            var per_3000_3499Parameter = per_3000_3499.HasValue ?
+                new ObjectParameter("per_3000_3499", per_3000_3499) :
+                new ObjectParameter("per_3000_3499", typeof(decimal));
+    
+            var rs_3000_3499Parameter = rs_3000_3499.HasValue ?
+                new ObjectParameter("rs_3000_3499", rs_3000_3499) :
+                new ObjectParameter("rs_3000_3499", typeof(decimal));
+    
+            var maxrs_3000_3499Parameter = maxrs_3000_3499.HasValue ?
+                new ObjectParameter("maxrs_3000_3499", maxrs_3000_3499) :
+                new ObjectParameter("maxrs_3000_3499", typeof(decimal));
+    
+            var type_3000_3499Parameter = type_3000_3499 != null ?
+                new ObjectParameter("Type_3000_3499", type_3000_3499) :
+                new ObjectParameter("Type_3000_3499", typeof(string));
+    
+            var per_3500_5000Parameter = per_3500_5000.HasValue ?
+                new ObjectParameter("per_3500_5000", per_3500_5000) :
+                new ObjectParameter("per_3500_5000", typeof(decimal));
+    
+            var rs_3500_5000Parameter = rs_3500_5000.HasValue ?
+                new ObjectParameter("rs_3500_5000", rs_3500_5000) :
+                new ObjectParameter("rs_3500_5000", typeof(decimal));
+    
+            var maxrs_3500_5000Parameter = maxrs_3500_5000.HasValue ?
+                new ObjectParameter("maxrs_3500_5000", maxrs_3500_5000) :
+                new ObjectParameter("maxrs_3500_5000", typeof(decimal));
+    
+            var type_3500_5000Parameter = type_3500_5000 != null ?
+                new ObjectParameter("Type_3500_5000", type_3500_5000) :
+                new ObjectParameter("Type_3500_5000", typeof(string));
+    
+            var per_5001_10000Parameter = per_5001_10000.HasValue ?
+                new ObjectParameter("per_5001_10000", per_5001_10000) :
+                new ObjectParameter("per_5001_10000", typeof(decimal));
+    
+            var rs_5001_10000Parameter = rs_5001_10000.HasValue ?
+                new ObjectParameter("rs_5001_10000", rs_5001_10000) :
+                new ObjectParameter("rs_5001_10000", typeof(decimal));
+    
+            var maxrs_5001_10000Parameter = maxrs_5001_10000.HasValue ?
+                new ObjectParameter("maxrs_5001_10000", maxrs_5001_10000) :
+                new ObjectParameter("maxrs_5001_10000", typeof(decimal));
+    
+            var type_5001_10000Parameter = type_5001_10000 != null ?
+                new ObjectParameter("Type_5001_10000", type_5001_10000) :
+                new ObjectParameter("Type_5001_10000", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Update_AEPS_dlm_rem_userSlab_again_UPI", dlmidParameter, aadharpayParameter, ministatementParameter, per_500_999Parameter, rs_500_999Parameter, maxrs_500_999Parameter, type_500_999Parameter, per_1000_1499Parameter, rs_1000_1499Parameter, maxrs_1000_1499Parameter, type_1000_1499Parameter, per_1500_1999Parameter, rs_1500_1999Parameter, maxrs_1500_1999Parameter, type_1500_1999Parameter, per_2000_2499Parameter, rs_2000_2499Parameter, maxrs_2000_2499Parameter, type_2000_2499Parameter, per_2500_2999Parameter, rs_2500_2999Parameter, maxrs_2500_2999Parameter, type_2500_2999Parameter, per_3000_3499Parameter, rs_3000_3499Parameter, maxrs_3000_3499Parameter, type_3000_3499Parameter, per_3500_5000Parameter, rs_3500_5000Parameter, maxrs_3500_5000Parameter, type_3500_5000Parameter, per_5001_10000Parameter, rs_5001_10000Parameter, maxrs_5001_10000Parameter, type_5001_10000Parameter);
         }
     }
 }

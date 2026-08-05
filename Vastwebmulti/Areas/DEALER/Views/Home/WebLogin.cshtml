@@ -8,6 +8,10 @@
      .slab-setting-menu li a.activee {background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;}
      .dropdown-menu tr td.active::before{display:none;}
 
+    .slab-setting-menu {
+        margin: 0;
+    }
+
      @@media screen and (max-width:768px){
          .webloginclass-responsive .table-responsive{z-index:9;position:relative !important;}
          .content.webloginclass-responsive .table-responsive {padding-bottom: 15px;}
@@ -24,7 +28,7 @@
 
 </style>
 <section class="content webloginclass-responsive">
-    <div class="container-fluid full-dealer-secondanimation">
+    <div class="container-fluid full-dealer-secondanimation" style=" padding-top: 8px;">
 
         <!--Four-Design-Admin-page-Header-Section-Start-->
         <div class="page-title-box-fourde-dealer">
@@ -39,7 +43,7 @@
 
         <div class="row clearfix">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card page-header-third">
                     <div class="row">
                         <div class="col-md-6 weblogin-webfaild" style="width:auto;float:left;">
 
@@ -48,7 +52,7 @@
                         <div class="col-md-2 recharge-report-dealer" style="width:auto;float:right;padding-left:5px;">
                             <div class="form-group" style="margin-bottom:0px;width:100%;float:left;">
                                 <div style="padding-top:0px;float:right">
-                                    @*<button class="white-success-button" style="height:32px;border:1px solid #b1a6a638;background:#b1a6a638;float: right;padding: 0px 4px;margin-top:-1px;" onclick="findtotal()">Total</button>*@
+                                    
                                     <div class="web-white-filter fil" style="float: left;margin-right: 0px;margin-top:0px;">
                                         <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
                                 background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
@@ -76,9 +80,7 @@
                                                     </div>
                                                     @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
                                                 </div>
-                                                @*<span class="input-group-addon">
-                                                    <i class="fa fa-exchange"></i>
-                                                </span>*@
+                                                
                                                 <div class="all-report-inputclass all-report-inputclass-right">
                                                     <div class="custom-date-icon" style="height: 32px;">
                                                         <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
@@ -130,8 +132,8 @@
 
 
 
-                    <div class="body" style="margin-top:-10px;padding:0px;">
-                        <div class="table-responsive tableseconddes-dealer" style="position:inherit;">
+                    <div class="body" style="padding:0px;">
+                        <div class="table-responsive tableseconddes-dealer  page-header-third" style="position:inherit;">
                             <table class="table table-bordered example-second third-design-table" style="width:100%;">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>

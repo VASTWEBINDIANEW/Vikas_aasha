@@ -805,9 +805,16 @@ namespace Vastwebmulti.Controllers
                                     DB.SaveChanges();
                                 }
                                 var emailmobilests = DB.Email_Mobile_Verify.SingleOrDefault().emailmobile_verified;
+                                var RetailerDetails = DB.Retailer_Details.FirstOrDefault(aa => aa.Email == emailmobile.Email);
+
                                 if (emailmobilests.ToUpper().Contains("OFF"))
                                 {
-                                    return RedirectToAction("Dashboard", "Home", new { area = "Retailer" });
+                                    
+                                        
+                                            return RedirectToAction("VeryFY_Profiles_users", "Home", new { area = "Retailer" });
+                                        
+                                    
+
                                 }
                                 else
                                 {
@@ -1493,6 +1500,10 @@ namespace Vastwebmulti.Controllers
         public async Task<ActionResult> Insert_retailer(RegisterViewModel rem, string CaptchaInput)
         {
 
+            
+           
+
+
             var appDbContext = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
             using (var transaction = appDbContext.Database.BeginTransaction())
             {
@@ -1609,10 +1620,33 @@ namespace Vastwebmulti.Controllers
                                     }
                                 }
 
+                                //var ch = DB.Insert_Retailer(
+                                //    distributorid, user.Id, rem.Name, Convert.ToInt32(rem.state),
+                                //    Convert.ToInt32(rem.distict), rem.Mobile, "", 0, rem.Email, "", "",
+                                //    Firmname, "", "", 0, "", enpin.ToString(), referelcode, "Signup", rem.KYCType, output
+                                //).SingleOrDefault().msg;
                                 var ch = DB.Insert_Retailer(
-                                    distributorid, user.Id, rem.Name, Convert.ToInt32(rem.state),
-                                    Convert.ToInt32(rem.distict), rem.Mobile, "", 0, rem.Email, "", "",
-                                    Firmname, "", "", 0, "", enpin.ToString(), referelcode, "Signup", output
+                                    distributorid,
+                                    user.Id,
+                                    rem.Name,
+                                    Convert.ToInt32(rem.state),
+                                    rem.KYCType,                    // <-- after state
+                                    Convert.ToInt32(rem.distict),
+                                    rem.Mobile,
+                                    "",
+                                    0,
+                                    rem.Email,
+                                    "",
+                                    "",
+                                    Firmname,
+                                    "",
+                                    "",
+                                    0,
+                                    "",
+                                    enpin.ToString(),
+                                    referelcode,
+                                    "Signup",
+                                    output
                                 ).SingleOrDefault().msg;
 
                                 if (ch == "Register SuccessFully.")

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -557,6 +557,7 @@
     <Compile Include="Areas\ADMIN\ViewModel\Microatmdeviceadd.cs" />
     <Compile Include="Areas\ADMIN\ViewModel\RegisternewEmployeeViewModel.cs" />
     <Compile Include="Areas\ADMIN\ViewModel\Sending_SMS_TemplatesViewmodel.cs" />
+    <Compile Include="Areas\ADMIN\Views\Home\cmsledgermodel.cs" />
     <Compile Include="Areas\API\Models\Whatsapp_purchase_new.cs" />
     <Compile Include="Areas\DEALER\Models\Common_status_master_dlm_Transfer_cls.cs" />
     <Compile Include="Areas\Employee\Controllers\HomeController.cs" />
@@ -569,6 +570,7 @@
     <Compile Include="Areas\Employee\ViewModel\EmployeFundtransferviewmodel.cs" />
     <Compile Include="Areas\Employee\ViewModel\Registernewemployeeviewmodel.cs" />
     <Compile Include="Areas\MASTER\Models\Common_status_master_dlm_cls.cs" />
+    <Compile Include="Areas\RETAILER\Models\CaptureResponse_NEW.cs" />
     <Compile Include="Areas\RETAILER\Models\CashDepositModel.cs" />
     <Compile Include="Areas\RETAILER\Models\HoldleanHIstrory.cs" />
     <Compile Include="Areas\RETAILER\Models\Instantpay_Payout.cs" />
@@ -1003,7 +1005,13 @@
     <Compile Include="Models\AepsChargeRetailerReport_Result.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AEPSCHMerchantinfo.cs">
+      <DependentUpon>Vastwebmulti.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AepsMposSettlementHistory.cs">
+      <DependentUpon>Vastwebmulti.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AepsVideoKyc.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Aeps_2Fa_Status.cs">
@@ -1025,16 +1033,25 @@
     <Compile Include="Models\Aeps_common_comm_new.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Aeps_Common_Comm_UPI.cs">
+      <DependentUpon>Vastwebmulti.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AEPS_comm_details.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Aeps_comm_Dlm_rem.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Aeps_comm_Dlm_rem_UPI.cs">
+      <DependentUpon>Vastwebmulti.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Aeps_comm_new.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Aeps_comm_userwise.cs">
+      <DependentUpon>Vastwebmulti.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Aeps_comm_userwise_UPI.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AEPS_Count_Result.cs">
@@ -1429,6 +1446,9 @@
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\insert_api_nm_Result.cs">
+      <DependentUpon>Vastwebmulti.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Insert_Retailer_Result.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\insert_Upi_Txn_Result.cs">
@@ -2483,9 +2503,6 @@
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Insert_RCH_Result.cs">
-      <DependentUpon>Vastwebmulti.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Insert_Retailer_Result.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\insert_slab_list_Result.cs">
@@ -4146,6 +4163,9 @@
     <Compile Include="Models\show_whitelebel_upcomming_holiday_Result.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SignupKYCSetting.cs">
+      <DependentUpon>Vastwebmulti.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SimDetail_Info.cs" />
     <Compile Include="Models\Slab_Broadband.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
@@ -4868,6 +4888,9 @@
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Upi_txn_details.cs">
+      <DependentUpon>Vastwebmulti.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UPI_TXN_ICICI_Result.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UPI_TXN_KOTAK_Result.cs">
@@ -11016,53 +11039,6 @@
     <Content Include="MainFrontDesign\css\jquery.fancybox.css" />
     <Content Include="MainFrontDesign\css\magnific-popup.css" />
     <Content Include="MainFrontDesign\css\new-design.css" />
-    <Content Include="MainFrontDesign\css\panel-modern-ui.css" />
-    <Content Include="MainFrontDesign\css\saas-admin-system.css" />
-    <Content Include="MainFrontDesign\css\admin-layout-mobile.css" />
-    <Content Include="MainFrontDesign\css\admin-modal-fix.css" />
-    <Content Include="MainFrontDesign\css\admin-modal-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-renewal-modal.css" />
-    <Content Include="MainFrontDesign\css\admin-account-page-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-fund-transfer-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-fund-transfer-mobile.css" />
-    <Content Include="MainFrontDesign\css\admin-payment-gateway-slab-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-master-list-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-retailer-list-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-retailer-to-dealer-page.css" />
-    <Content Include="MainFrontDesign\css\admin-set-target-page.css" />
-    <Content Include="MainFrontDesign\css\admin-high-security-gate.css" />
-    <Content Include="MainFrontDesign\css\admin-more-option-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-settings-page-modern.css" />
-    <Content Include="MainFrontDesign\js\admin-more-option-modal.js" />
-    <Content Include="MainFrontDesign\js\admin-settings-otp-modal.js" />
-    <Content Include="MainFrontDesign\js\admin-report-datepicker.js" />
-    <Content Include="MainFrontDesign\css\admin-report-datepicker.css" />
-    <Content Include="MainFrontDesign\css\admin-report-page-responsive.css" />
-    <Content Include="MainFrontDesign\css\admin-profile-modern.css" />
-    <Content Include="MainFrontDesign\js\admin-profile-page.js" />
-    <Content Include="MainFrontDesign\css\admin-app-option-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-app-option-tabs.css" />
-    <Content Include="MainFrontDesign\css\admin-app-option-color-theme.css" />
-    <Content Include="MainFrontDesign\js\admin-app-option-page.js" />
-    <Content Include="MainFrontDesign\css\admin-purchase-report-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-operator-report-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-operator-report-nav.css" />
-    <Content Include="MainFrontDesign\css\admin-operator-report-page.css" />
-    <Content Include="MainFrontDesign\js\admin-operator-report.js" />
-    <Content Include="MainFrontDesign\js\admin-operator-report-nav.js" />
-    <Content Include="MainFrontDesign\css\admin-incoming-report-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-roffer-report-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-report-filters-unified.css" />
-    <Content Include="MainFrontDesign\js\admin-incoming-report.js" />
-    <Content Include="MainFrontDesign\js\admin-roffer-report.js" />
-    <Content Include="MainFrontDesign\css\admin-support-pages-modern.css" />
-    <Content Include="MainFrontDesign\css\admin-showall-dispute.css" />
-    <Content Include="MainFrontDesign\js\admin-purchase-report.js" />
-    <Content Include="MainFrontDesign\js\admin-retailer-bank.js" />
-    <Content Include="MainFrontDesign\js\admin-complaint-chat.js" />
-    <Content Include="MainFrontDesign\css\admin-datatables-sort-fix.css" />
-    <Content Include="MainFrontDesign\js\admin-modal-fix.js" />
-    <Content Include="MainFrontDesign\js\admin-renewal-modal.js" />
     <Content Include="MainFrontDesign\css\plugins.css" />
     <Content Include="MainFrontDesign\css\responsive.css" />
     <Content Include="MainFrontDesign\css\retailernewdesigncss.css" />
@@ -11114,7 +11090,6 @@
     <Content Include="MainFrontDesign\js\jquery.mixitup.min.js" />
     <Content Include="MainFrontDesign\js\main.js" />
     <Content Include="MainFrontDesign\js\plugins.js" />
-    <Content Include="MainFrontDesign\js\saas-admin-modernizer.js" />
     <Content Include="MainFrontDesign\js\slick.js" />
     <Content Include="MainFrontDesign\js\vendor\bootstrap.min.js" />
     <Content Include="MainFrontDesign\js\vendor\jquery-1.11.2.min.js" />
@@ -11931,8 +11906,6 @@
     <Content Include="Areas\ADMIN\Views\Home\Admin_to_white.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\tran_pass_white.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_menupurchase.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_PurchaseApproveModal.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_PurchaseApproveModalBody.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\ShowPurchase_master.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Dealer_showpurchase.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Retailer_showpurchase.cshtml" />
@@ -12053,7 +12026,6 @@
     <Content Include="Areas\WRetailer\Views\Home\_FincialViewPendingImps.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_finicalmenureport.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\EcommerceHistory.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_EcommerceHistoryRows.cshtml" />
     <Content Include="Areas\VENDOR\Views\Home\Ecommerce_Report.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Ecommercemenu.cshtml" />
     <Content Include="Areas\RETAILER\Views\Home\_showdatabyaccountno.cshtml" />
@@ -12253,13 +12225,10 @@
     <Content Include="Areas\ADMIN\Views\Home\Hi_Security_pass.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\ForgotpassLink.cshtml" />
     <Content Include="Areas\ADMIN\Views\Hotel\CancellationQueue.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Hotel\_HotelCancellationQueueRows.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Hotel\PDFHotelCancellationReport.cshtml" />
     <Content Include="Areas\ADMIN\Views\Hotel\GuestDetails.cshtml" />
     <Content Include="Areas\ADMIN\Views\Hotel\HotelFullDetails.cshtml" />
     <Content Include="Areas\ADMIN\Views\Hotel\HotelPriceDetails.cshtml" />
     <Content Include="Areas\ADMIN\Views\Hotel\HotelReport.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Hotel\_HotelReportRows.cshtml" />
     <Content Include="Areas\RETAILER\Views\Hotel\CancellationQueue.cshtml" />
     <Content Include="Areas\RETAILER\Views\Hotel\GuestDetails.cshtml" />
     <Content Include="Areas\RETAILER\Views\Hotel\HotelFullDetails.cshtml" />
@@ -12278,7 +12247,6 @@
     <Content Include="Areas\ADMIN\Views\Home\Bus_Purchase.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\BUS_Slab.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\BusBookingReport.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_BusBookingReportRows.cshtml" />
     <Content Include="Areas\ADMIN\Views\Hotel\HotelpartialView.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\BuspartialView.cshtml" />
     <Content Include="Areas\DEALER\Views\Home\Hotel_Report.cshtml" />
@@ -12365,7 +12333,6 @@
     <Content Include="Areas\ADMIN\Views\Home\Giftcard_Slab_setting.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_UserGiftcardSlab.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Giftcard_Report.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_GiftcardReportRows.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Broadband_Slab_setting.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_UserBoradbandSlab.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Water_Slab_setting.cshtml" />
@@ -12420,7 +12387,6 @@
     <Content Include="Areas\ADMIN\Views\Home\_SwitchStatewise.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_EditSwitchStateID.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_SecurityStatus.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_WebLoginSecurityCards.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_BlockLoginUser.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_WebLoginHistory.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_Apploginhistory.cshtml" />
@@ -12430,7 +12396,6 @@
     <Content Include="Doc\Master.xlsx" />
     <Content Include="Doc\Retailer.xlsx" />
     <Content Include="Areas\ADMIN\Views\Home\_Masterlist.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_MasterlistModals.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_SelectDlmID.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_SetJoingChargeStatus.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\BulkMasterCreate.cshtml" />
@@ -12572,10 +12537,7 @@
     <Content Include="Areas\RETAILER\Views\Home\_RecentReport.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_Api_user.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_DistibutorList.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_DistibutorlistModals.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_Retailerlist.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_RetailerlistTable.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_RetailerlistModals.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_SelectRID.cshtml" />
     <Content Include="Areas\RETAILER\Views\Home\_prepaid.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Ecommerce.cshtml" />
@@ -12584,10 +12546,7 @@
     <Content Include="Areas\ADMIN\Views\Home\_LoginPagesliderImage.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_Api_user.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_DistibutorList.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_DistibutorlistModals.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_Retailerlist.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_RetailerlistTable.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_RetailerlistModals.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_SelectRID.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_WhiteLabelUser.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_REC_DetailsPartialview.cshtml" />
@@ -12652,7 +12611,6 @@
     <Content Include="Areas\ADMIN\Views\Home\_incoming.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_offer_income.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_Roffer_history.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_Roffer_comm_table.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_Update_Roffer_comm.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\PDF_Roffer_history.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\PDF_Roffer_Income.cshtml" />
@@ -12689,10 +12647,8 @@
     <Content Include="Areas\DEALER\Views\Home\_SendFund.cshtml" />
     <Content Include="Areas\DEALER\Views\Home\_SendFund1.cshtml" />
     <Content Include="Areas\ADMIN\Views\Air\_ticketReport.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Air\_CancellationReportRows.cshtml" />
     <Content Include="Areas\ADMIN\Views\Air\ExcelTicketReport.cshtml" />
     <Content Include="Areas\ADMIN\Views\Air\PDFTicketReport.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Air\PDFCancellationReport.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_prepaid_comm.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_common_Aeps.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_Common_Money_transfer.cshtml" />
@@ -12947,7 +12903,6 @@
     <Content Include="Areas\ADMIN\Views\Home\businessbyOperator.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_top100.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_topALL.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_DashboardTxnTable.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\PrintQr.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Pay_U_Gateway.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Print_QR.cshtml" />
@@ -12960,7 +12915,6 @@
     <Content Include="Areas\ADMIN\Views\Home\_UserSecuritySlab.cshtml" />
     <Content Include="Areas\RETAILER\Views\Home\SecurityReport.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\SecurityReport.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_SecurityReportRows.cshtml" />
     <Content Include="Areas\API\Views\Home\_Rechargereport.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\FundUserToUserPdfGenerate.cshtml" />
     <Content Include="Areas\ADMIN\Views\Air\_travelReportMenu.cshtml" />
@@ -13231,7 +13185,6 @@
     <Content Include="Areas\RETAILER\Views\Home\_UPIMANUALREQUESTSHOW.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Micro_Atm_Unhold_Report.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\MicroATM_Unhold_History.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\PDFMicroATMUnholdHistoryReport.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\MicroATM_Purchase_MaxLimit.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Web_Login_PDF_History.cshtml" />
     <Content Include="Areas\RETAILER\Views\Home\Micro_Atm_hold_Rem_Report.cshtml" />
@@ -13260,7 +13213,6 @@
     <Content Include="Areas\Employee\Views\Home\_finicalmenureport.cshtml" />
     <Content Include="Areas\DEALER\Views\Home\bankinfodealer.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\PDFShowPurchase_master.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\PDFRechargereport_Dispute.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\PDFShow_Whitelabelpurchase.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\PDFRetailer_showpurchase.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\PDFDealer_showpurchase.cshtml" />
@@ -13362,8 +13314,6 @@
     <Content Include="notification.json" />
     <Content Include="Areas\ADMIN\Views\Home\_POS_Retailer_MAINWallet.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\IRCTC_rem_REPORTS.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_IrctcReportRows.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\PDFIrctcReport.cshtml" />
     <Content Include="Areas\RETAILER\Views\Home\_IRCTCTC_REPORST.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Rch_Failed_success_Reports.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\AutoFundTransferMD.cshtml" />
@@ -13470,8 +13420,6 @@
     <Content Include="Areas\ADMIN\Views\Home\_common_PaytmWalletTransfer.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_UserPaytmWalletTransferSlab.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_Retailerlist_Paging.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_RetailerlistAvatar.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_RetailerlistUserCell.cshtml" />
     <Content Include="Areas\MASTER\Views\Home\Prepaid_Slab_setting.cshtml" />
     <Content Include="Areas\MASTER\Views\Home\_prepaid_comm.cshtml" />
     <Content Include="Areas\MASTER\Views\Home\_UserPrepaidSlab.cshtml" />
@@ -13498,7 +13446,6 @@
     <Content Include="Areas\API\Views\Home\WhatsappLogin.cshtml" />
     <Content Include="Areas\API\Views\Home\Whatsapp_Report.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\WhatsappPurchase.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_WhatsappPurchaseRows.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_VPAset_SelfList.cshtml" />
     <Content Include="Areas\RETAILER\Views\Home\_Aeps2.cshtml" />
     <Content Include="Areas\DEALER\Views\Home\UPIDealerCharges.cshtml" />
@@ -13689,7 +13636,6 @@
     <Content Include="Areas\ADMIN\Views\Home\LoanHistory.cshtml" />
     <Content Include="Areas\RETAILER\Views\Home\loanrepayment.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\DistibutorListforseller.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_DistibutorListforsellerRows.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\webappsetting.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\user_no_setting.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\IMEINO_setting.cshtml" />
@@ -13713,7 +13659,6 @@
     <Content Include="Areas\ADMIN\Views\Home\_UserDMTSlab_DMT_PPI.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\AadharPanVerificationCharge.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\PANAadharVerificationReport.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\pdfPANAadharVerificationReport.cshtml" />
     <Content Include="Areas\Employee\Views\Home\Api_user.cshtml" />
     <Content Include="Areas\Employee\Views\Home\AutoFundTransfer_Api_user.cshtml" />
     <Content Include="Areas\Employee\Views\Home\DeleteApi_user.cshtml" />
@@ -13751,11 +13696,6 @@
     <Content Include="Areas\RETAILER\Views\Home\WalleTransferSlab.cshtml" />
     <Content Include="Areas\RETAILER\Views\Home\_Common_Wallet_transfer.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\RadiantPrepay.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_RadiantPrepayRows.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_RadiantCMSDepositRows.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\_radiantServicesNav.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\PDFRadiantPrepayReport.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\PDFRadiantCMSDepositReport.cshtml" />
     <Content Include="MainFrontDesign\Recharge_theme_css\css\style.css.map" />
     <Content Include="MainFrontDesign\Recharge_theme_css\css\style.scss" />
     <Content Include="MainFrontDesign\Recharge_theme_css\fonts\fontawesome-webfont.ttf" />
@@ -13763,11 +13703,12 @@
     <Content Include="MainFrontDesign\Recharge_theme_css\fonts\fontawesome-webfont.woff2" />
     <Content Include="Areas\ADMIN\Views\Home\RadiantCMSDeposit.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\RadiantReferenceLocation.cshtml" />
-    <Content Include="Areas\RETAILER\Views\Home\CMSLedger.cshtml" />
-    <Content Include="Areas\RETAILER\Views\Home\HoldAndLeanAmountReport.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\CMSLedger.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\HoldAndLeanAmountReport.cshtml" />
-    <Content Include="Areas\ADMIN\Views\Home\HoldAmountRemain.cshtml" />
+    <Content Include="Areas\RETAILER\Views\Home\KYCComplete.cshtml" />
+    <Content Include="Areas\RETAILER\Views\Home\_EKYC_NEW.cshtml" />
+    <Content Include="Areas\RETAILER\Views\Home\_EKYC_Update.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Home\AepsSlabUPI.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Home\_common_aeps_UPI.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Home\_UserAepsSlab_UPI.cshtml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

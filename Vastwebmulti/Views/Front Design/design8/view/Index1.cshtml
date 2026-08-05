@@ -235,10 +235,50 @@
         <div class="icon">
 
             <div class="social">
-                <a href=""><i class="ri-twitter-fill"></i></a>
-                <a href=""><i class="ri-facebook-fill"></i></a>
-                <a href=""><i class="ri-instagram-fill"></i></a>
-                <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                @if (ViewBag.Atwi != "")
+                {
+                    <a href="@ViewBag.Atwi" target="_blank"><i class="ri-twitter-fill"></i></a>
+                }
+                else
+                {
+                    <a href=""><i class="ri-twitter-fill"></i></a>
+                }
+                @if (ViewBag.Afac != "")
+                {
+                    <a href="@ViewBag.Afac" target="_blank"><i class="ri-facebook-fill"></i></a>
+                }
+                else
+                {
+                    <a href=""><i class="ri-facebook-fill"></i></a>
+                }
+                @if (ViewBag.AInstagra != "")
+                {
+                    <a href="@ViewBag.AInstagra" target="_blank"><i class="ri-instagram-fill"></i></a>
+                }
+                else
+                {
+                    <a href=""><i class="ri-instagram-fill"></i></a>
+                }
+
+
+                @if (ViewBag.Alinked != "")
+                {
+                    <a href="@ViewBag.Alinked" target="_blank"> <i class="ri-linkedin-box-fill"></i> </a>
+                }
+                else
+                {
+                    <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                }
+                @if (ViewBag.AYoutub != "")
+                {
+                    <a href="@ViewBag.AYoutub" target="_blank"> <i class="ri-youtube-fill"></i> </a>
+                }
+                else
+                {
+                    <a href=""> <i class="ri-youtube-fill"></i> </a>
+                }
+
+
             </div>
 
         </div>

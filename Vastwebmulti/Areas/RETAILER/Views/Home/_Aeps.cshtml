@@ -390,7 +390,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                     </div>
                     <div id="otpfortransfer" class="col-md-12 amount amount_strong" style="display:none;">
                         <strong class="changere4" style=""> OTP  </strong>
-                        <input type="text" id="txtotptransfer" name="txtotptransfer" value="0" placeholder="Enter Your Service Fee" onkeypress="return isNumber(event)" />
+                        <input type="text" id="txtotptransfer" name="txtotptransfer" value="0" placeholder="Enter The OTP" onkeypress="return isNumber(event)" />
                     </div>
                     <input type="hidden" id="capAEPS" />
                     <input type="hidden" id="capxml" />
@@ -761,6 +761,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
     function AEPS() {
         $('#HDServicesname').val('');
         $('#txtusernm').val();
+        $('#txtotptransfer').val("");
         $('#firstpurAEPS').hide();
         $('#firstpurALLservice').hide();
         $('#firstpurBOTHservice').hide();
@@ -839,7 +840,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                             ddlCustomers.append(
                                 $('<option></option>').val("").html("Select Bank")
                             );
-                            for (i = 1; i < count; i++) {
+                            for (i = 0; i < count; i++) {
                                 ddlCustomers.append(
                                     $('<option></option>').val(list.Content.ADDINFO[i].BankIIN).html(list.Content.ADDINFO[i].BankName)
                                 );
@@ -995,6 +996,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
         $('#txtfee').attr('readonly', false);
         $("#nextfund").show();
         $("#nextclick").hide();
+        $('#txtotptransfer').val("");
         if (this.value == 'ministatement') {
 
             $('.with-click-block').show()
@@ -1136,19 +1138,18 @@ color: blue;margin-bottom: 3px;">Morpho</a>
 
 
     function Nextransfer() {
-        $('#showspinneraeps').show();
-        setTimeout(() => {
-        scanfing();
-        var _isAeps2 = $('#tabs .tab-link.active').text() == 'Aeps 2';
-
-        var otpss = "";
-        var txtamt = $('#txtamt').val();
+        $('#otpfortransfer').hide();
+      
         var myRadio = $("input[name=radio]");
         var checkedValue = myRadio.filter(":checked").val();
+        var txtamt = $('#txtamt').val();
         var type = "CW";
+        var otp = $('#txtotptransfer').val();
+
         if (checkedValue == "aadharpay") {
             type = "M";
             if (txtamt > 5000) {
+
                 otpss = $('#txtotptransfer').val();
             }
         }
@@ -1158,133 +1159,220 @@ color: blue;margin-bottom: 3px;">Morpho</a>
         if (checkedValue == "deposit") {
             type = "CD";
         }
-        $("#txterrortransfer").text("");
-        var txtaadhar = $('#txtaadhar').val();
-        var txtphone=$('#txtphone').val();
-        var bankname = $("#banklistshow").find("option:selected").text();
-        var iin = $('#banklistshow').val();
-        var cap = $('#capAEPS').val();
-
-            var capxml = $('#capxml').val();
-            console.log(capxml)
-        var remark = "";
-
-        var servicefee =  $('#txtfee').val();
-        var devicesrno = $('#devicesrno').val();
-        var usernm = $('#txtusernm').val();
-        var devicenm = $('#txtdevice').val();
-            var pidata = $('#pidata_doc').val();
-            var apinm = $('#checkapi').val()
-            pidata = escape(pidata);
-
-            var requestData = {
-                mobile: txtphone,
-                uid: txtaadhar,
-                bank: bankname,
-                iin: iin,
-                cap: cap,
-                type: type,
-                amount: txtamt,
-                remark: remark,
-                DeviceSrNo: devicesrno,
-                servicefee: servicefee,
-                usernm: usernm,
-                devicenm: devicenm,
-                userotp: otpss,
-                pidata: pidata,
-                _isAeps2,
-                capxml,
-                apinm
-            };
-            var jsonData = JSON.stringify(requestData);
 
 
-        if (txtaadhar != "" && txtphone != ""  && devicesrno != "" && txtamt != "" && bankname!="Select Bank") {
-            var chk = validate(txtaadhar);
-            if (chk == true) {
-                $.ajax({
-                    url: '@Url.Action("AEPS","Home")',
-                    cache: false,
-                    data: jsonData,
-                    type: "POST",
-                    contentType: "application/json", // Set content type to JSON
-                    beforeSend: function () {
-                        $('.loader').show();
-                    },
-                    success: function (data) {
-                  
-                        var sts = data.Status;
-                      
-                        if (sts == "Failed") {
-                            var msg = data.Message;
-                       
+        if (type == "CW" && txtamt > 5000 && otp=="") {
 
-                            $('#capAEPS').val("");
-                            $('#capxml').val("");
-                            $('#devicesrno').val("");
-                            $("#txterrortransfer").text(msg);
-                            $('#capAEPS').val("");
-                            $('#devicesrno').val("");
-                            $('#nextfund').html('Confirm & Withdraw')
-                        }
-                        else {
+                var txtaadhar = $('#txtaadhar').val();
+                var txtphone = $('#txtphone').val();
+            var iin = $('#banklistshow').val();
+            var devicesrno = $('#devicesrno').val();
+              var requestData = {
+                  mobile: txtphone,
+                  uid: txtaadhar,
+                  iin: iin,
+                  amount: txtamt,
+                  devicesrno
+                };
+                var jsonData = JSON.stringify(requestData);
 
-                            var userinfo = data.userinfo;
-                            var taxenable = userinfo.taxenable;
-                            var paid = 0; var tax = 0;
-                            if (taxenable == "N") {
-                                paid = parseFloat(txtamt) - parseFloat(servicefee);
+                  if (txtaadhar != "" && txtphone != "" && txtamt != "") {
+                    var chk = validate(txtaadhar);
+                    if (chk == true) {
+                        $.ajax({
+                            url: '@Url.Action("AEPSSendOtpAbove5k", "Home")',
+                            cache: false,
+                            data: jsonData,
+                            type: "POST",
+                            contentType: "application/json", // Set content type to JSON
+                            beforeSend: function () {
+                                $('.loader').show();
+                            },
+                            success: function (data) {
+
+                                var sts = data.Status;
+
+                                if (sts == "Failed") {
+                                    var msg = data.Message;
+
+
+                                    $('#capAEPS').val("");
+                                    $('#capxml').val("");
+                                    $('#devicesrno').val("");
+                                    $("#txterrortransfer").text(msg);
+                                    $('#capAEPS').val("");
+                                    $('#devicesrno').val("");
+                                    $('#nextfund').html('Confirm & Withdraw')
+                                }
+                                else {
+                                    $('#otpfortransfer').show();
+                                
+                                }
+                            },
+                            complete: function () {
+
+                                $('.loader').hide();
+                                onloaddata();
+                            },
+                            error: function () {
+
+                                $('.loader').hide();
                             }
-                            else {
-                                tax = (parseFloat(servicefee) * 18) / 100;
-                                paid = parseFloat(txtamt) - parseFloat(servicefee) - parseFloat(tax);
-                            }
+                        })
 
-                            $('#aeps-Confirm-Payment').show();
-                            $('#AEPSFOUND').hide();
-                            $('#capAEPS').val("");
-                            $('#capxml').val("");
-                            $('#devicesrno').val("");
-                            $('#amountaepssuccess').text(txtamt);
-                            var rrnno = "RRN - " + data.Message.BankRrn;
-                            $('#rrnaepssuccess').text(rrnno);
-                            $("#logochkaepssuccess").attr("src", "../.." + userinfo.logo);
-                            $('#aepssuccessfirm').text(userinfo.firmname);
-                            $('#aepssuccessBankname').text(bankname);
-                            $('#aepssuucessaadhar').text(txtaadhar);
-                            $('#aepssuccessmobile').text(txtphone);
-                            $('#aepssuccessremain').text(data.Message.BalanceAmount);
-                            $('#aepssuccessamt').text(txtamt);
-                            $('#aepssuccessfee').text(servicefee);
-                            $('#aepssuccesstax').text(tax);
-                            $('#paidamt').text(paid);
-                        }
-                    },
-                    complete: function () {
-
-                        $('.loader').hide();
-                           onloaddata();
-                    },
-                    error: function () {
-
-                        $('.loader').hide();
                     }
-                })
-
-            }
-            else {
-                $('#txterrortransfer').text("⚠ Enter Valid AADHAR");
-            }
+                    else {
+                        $('#txterrortransfer').text("⚠ Enter Valid AADHAR");
+                    }
+                }
+                else {
+                    if (cap == "") {
+                        $('#txterrortransfer').text("⚠ Try Again");
+                    }
+                    else {
+                        $('#txterrortransfer').text("⚠ All Field Are Mandatory");
+                    }
+                }
         }
         else {
-            if (cap == "") {
-                $('#txterrortransfer').text("⚠ Try Again");
-            }
-            else {
-                $('#txterrortransfer').text("⚠ All Field Are Mandatory");
-            }
-            }
-        }, 10)
+            $('#showspinneraeps').show();
+            setTimeout(() => {
+                //
+                var _isAeps2 = $('#tabs .tab-link.active').text() == 'Aeps 2';
+
+                var otpss = "";
+
+                scanfing();
+
+                $("#txterrortransfer").text("");
+                var txtaadhar = $('#txtaadhar').val();
+                var txtphone = $('#txtphone').val();
+                var bankname = $("#banklistshow").find("option:selected").text();
+                var iin = $('#banklistshow').val();
+                var cap = $('#capAEPS').val();
+
+                var capxml = $('#capxml').val();
+                console.log(capxml)
+                var remark = "";
+
+                var servicefee = $('#txtfee').val();
+                var devicesrno = $('#devicesrno').val();
+                var usernm = $('#txtusernm').val();
+                var devicenm = $('#txtdevice').val();
+                var pidata = $('#pidata_doc').val();
+                var apinm = $('#checkapi').val()
+                pidata = escape(pidata);
+
+                var requestData = {
+                    mobile: txtphone,
+                    uid: txtaadhar,
+                    bank: bankname,
+                    iin: iin,
+                    cap: cap,
+                    type: type,
+                    amount: txtamt,
+                    remark: remark,
+                    DeviceSrNo: devicesrno,
+                    servicefee: servicefee,
+                    usernm: usernm,
+                    devicenm: devicenm,
+                    userotp: otpss,
+                    pidata: pidata,
+                    _isAeps2,
+                    capxml,
+                    apinm
+                };
+                var jsonData = JSON.stringify(requestData);
+
+
+                if (txtaadhar != "" && txtphone != "" && devicesrno != "" && txtamt != "" && bankname != "Select Bank") {
+                    var chk = validate(txtaadhar);
+                    if (chk == true) {
+                        $.ajax({
+                            url: '@Url.Action("AEPS","Home")',
+                            cache: false,
+                            data: jsonData,
+                            type: "POST",
+                            contentType: "application/json", // Set content type to JSON
+                            beforeSend: function () {
+                                $('.loader').show();
+                            },
+                            success: function (data) {
+
+                                var sts = data.Status;
+
+                                if (sts == "Failed") {
+                                    var msg = data.Message;
+
+
+                                    $('#capAEPS').val("");
+                                    $('#capxml').val("");
+                                    $('#devicesrno').val("");
+                                    $("#txterrortransfer").text(msg);
+                                    $('#capAEPS').val("");
+                                    $('#devicesrno').val("");
+                                    $('#nextfund').html('Confirm & Withdraw')
+                                }
+                                else {
+
+                                    var userinfo = data.userinfo;
+                                    var taxenable = userinfo.taxenable;
+                                    var paid = 0; var tax = 0;
+                                    if (taxenable == "N") {
+                                        paid = parseFloat(txtamt) - parseFloat(servicefee);
+                                    }
+                                    else {
+                                        tax = (parseFloat(servicefee) * 18) / 100;
+                                        paid = parseFloat(txtamt) - parseFloat(servicefee) - parseFloat(tax);
+                                    }
+
+                                    $('#aeps-Confirm-Payment').show();
+                                    $('#AEPSFOUND').hide();
+                                    $('#capAEPS').val("");
+                                    $('#capxml').val("");
+                                    $('#devicesrno').val("");
+                                    $('#amountaepssuccess').text(txtamt);
+                                    var rrnno = "RRN - " + data.Message.BankRrn;
+                                    $('#rrnaepssuccess').text(rrnno);
+                                    $("#logochkaepssuccess").attr("src", "../.." + userinfo.logo);
+                                    $('#aepssuccessfirm').text(userinfo.firmname);
+                                    $('#aepssuccessBankname').text(bankname);
+                                    $('#aepssuucessaadhar').text(txtaadhar);
+                                    $('#aepssuccessmobile').text(txtphone);
+                                    $('#aepssuccessremain').text(data.Message.BalanceAmount);
+                                    $('#aepssuccessamt').text(txtamt);
+                                    $('#aepssuccessfee').text(servicefee);
+                                    $('#aepssuccesstax').text(tax);
+                                    $('#paidamt').text(paid);
+                                }
+                            },
+                            complete: function () {
+
+                                $('.loader').hide();
+                                onloaddata();
+                            },
+                            error: function () {
+
+                                $('.loader').hide();
+                            }
+                        })
+
+                    }
+                    else {
+                        $('#txterrortransfer').text("⚠ Enter Valid AADHAR");
+                    }
+                }
+                else {
+                    if (cap == "") {
+                        $('#txterrortransfer').text("⚠ Try Again");
+                    }
+                    else {
+                        $('#txterrortransfer').text("⚠ All Field Are Mandatory");
+                    }
+                }
+
+            }, 10)
+        }
     }
 </script>
 <script>
@@ -1459,6 +1547,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
 </script>
 <script>
     function Reset() {
+        $('#otpfortransfer').hide();
         $('#txtaadhar').val("");
         $('#txtphone').val("");
         //$('#banklistshow').val("");

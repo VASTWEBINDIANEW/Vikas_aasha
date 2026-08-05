@@ -10,6 +10,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 
         public string merchantTransactionId { get; set; }
         public string merchantTranId { get; set; }
+        public string serviceType { get; set; }
         public CaptureResponse captureResponse { get; set; }
         public CardnumberOruid cardnumberORUID { get; set; }
         public string languageCode { get { return "en"; } }

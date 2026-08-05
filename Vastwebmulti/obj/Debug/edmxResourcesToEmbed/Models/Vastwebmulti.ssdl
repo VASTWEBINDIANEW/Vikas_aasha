@@ -17,6 +17,7 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="type" Type="varchar" MaxLength="100" />
     <Property Name="verify_type" Type="varchar" MaxLength="100" />
+    <Property Name="VideoKycStatus" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="account_chk">
     <Key>
@@ -376,6 +377,47 @@
     <Property Name="maxrs_5001_10000" Type="decimal" Precision="18" Scale="4" />
     <Property Name="Type_5001_10000" Type="varchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="Aeps_comm_Dlm_rem_UPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="dealerid" Type="varchar" MaxLength="50" />
+    <Property Name="aadharpay" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="ministatement" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="per_500_999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_500_999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_500_999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_500_999" Type="varchar" MaxLength="50" />
+    <Property Name="per_1000_1499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1000_1499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1000_1499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1000_1499" Type="varchar" MaxLength="50" />
+    <Property Name="per_1500_1999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1500_1999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1500_1999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1500_1999" Type="varchar" MaxLength="50" />
+    <Property Name="per_2000_2499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2000_2499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2000_2499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2000_2499" Type="varchar" MaxLength="50" />
+    <Property Name="per_2500_2999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2500_2999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2500_2999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2500_2999" Type="varchar" MaxLength="50" />
+    <Property Name="per_3000_3499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3000_3499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3000_3499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3000_3499" Type="varchar" MaxLength="50" />
+    <Property Name="per_3500_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3500_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3500_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3500_5000" Type="varchar" MaxLength="50" />
+    <Property Name="per_5001_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_5001_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_5001_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_5001_10000" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="Aeps_comm_new">
     <Key>
       <PropertyRef Name="idno" />
@@ -390,6 +432,47 @@
     <Property Name="aadharpay" Type="decimal" Precision="18" Scale="4" />
   </EntityType>
   <EntityType Name="Aeps_comm_userwise">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Userid" Type="varchar" MaxLength="50" />
+    <Property Name="aadharpay" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="ministatement" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="per_500_999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_500_999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_500_999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_500_999" Type="varchar" MaxLength="50" />
+    <Property Name="per_1000_1499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1000_1499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1000_1499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1000_1499" Type="varchar" MaxLength="50" />
+    <Property Name="per_1500_1999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1500_1999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1500_1999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1500_1999" Type="varchar" MaxLength="50" />
+    <Property Name="per_2000_2499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2000_2499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2000_2499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2000_2499" Type="varchar" MaxLength="50" />
+    <Property Name="per_2500_2999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2500_2999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2500_2999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2500_2999" Type="varchar" MaxLength="50" />
+    <Property Name="per_3000_3499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3000_3499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3000_3499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3000_3499" Type="varchar" MaxLength="50" />
+    <Property Name="per_3500_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3500_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3500_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3500_5000" Type="varchar" MaxLength="50" />
+    <Property Name="per_5001_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_5001_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_5001_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_5001_10000" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Aeps_comm_userwise_UPI">
     <Key>
       <PropertyRef Name="idno" />
     </Key>
@@ -482,6 +565,47 @@
     <Property Name="minvalue" Type="decimal" Precision="18" Scale="4" />
     <Property Name="M_statement" Type="decimal" Precision="18" Scale="4" />
     <Property Name="aadharpay" Type="decimal" Precision="18" Scale="4" />
+  </EntityType>
+  <EntityType Name="Aeps_Common_Comm_UPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="usertype" Type="varchar" MaxLength="50" />
+    <Property Name="aadharpay" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="ministatement" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="per_500_999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_500_999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_500_999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_500_999" Type="varchar" MaxLength="50" />
+    <Property Name="per_1000_1499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1000_1499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1000_1499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1000_1499" Type="varchar" MaxLength="50" />
+    <Property Name="per_1500_1999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_1500_1999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_1500_1999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_1500_1999" Type="varchar" MaxLength="50" />
+    <Property Name="per_2000_2499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2000_2499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2000_2499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2000_2499" Type="varchar" MaxLength="50" />
+    <Property Name="per_2500_2999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_2500_2999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_2500_2999" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_2500_2999" Type="varchar" MaxLength="50" />
+    <Property Name="per_3000_3499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3000_3499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3000_3499" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3000_3499" Type="varchar" MaxLength="50" />
+    <Property Name="per_3500_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_3500_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_3500_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_3500_5000" Type="varchar" MaxLength="50" />
+    <Property Name="per_5001_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="rs_5001_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_5001_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_5001_10000" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Aeps_dlm_rem_comm">
     <Key>
@@ -592,6 +716,20 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.AEPS_Merchants' does not hav
     <Property Name="videolink" Type="nvarchar" MaxLength="200" />
     <Property Name="videostatus" Type="varchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="AEPSCHMerchantinfo">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Userid" Type="varchar" MaxLength="50" />
+    <Property Name="merchantid" Type="varchar" MaxLength="50" />
+    <Property Name="Mobile" Type="varchar" MaxLength="50" />
+    <Property Name="insertdate" Type="datetime" />
+    <Property Name="bankPipe" Type="varchar" MaxLength="50" />
+    <Property Name="kycStatus" Type="varchar" MaxLength="50" />
+    <Property Name="twofastatus" Type="varchar" MaxLength="50" />
+    <Property Name="twofatime" Type="datetime" />
+  </EntityType>
   <EntityType Name="AepsMposSettlementHistory">
     <Key>
       <PropertyRef Name="Idno" />
@@ -605,6 +743,16 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.AEPS_Merchants' does not hav
     <Property Name="adminPost" Type="decimal" Precision="18" Scale="4" />
     <Property Name="TxnDate" Type="datetime" Nullable="false" />
     <Property Name="SettlementDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AepsVideoKyc">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RetailerId" Type="nvarchar" MaxLength="50" />
+    <Property Name="Latitude" Type="nvarchar" MaxLength="50" />
+    <Property Name="Longitude" Type="nvarchar" MaxLength="50" />
+    <Property Name="DateTime" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="Airport_info">
     <Key>
@@ -2167,6 +2315,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.AEPS_Merchants' does not hav
     <Property Name="moneysts1" Type="bit" />
     <Property Name="moneyppi" Type="bit" />
     <Property Name="payout" Type="bit" />
+    <Property Name="OnlyCMSUser" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="dealer_seller_comm">
     <Key>
@@ -10218,6 +10367,8 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="pincode2" Type="varchar" MaxLength="50" />
     <Property Name="pincode3" Type="varchar" MaxLength="50" />
     <Property Name="pincode4" Type="varchar" MaxLength="50" />
+    <Property Name="Gender" Type="varchar" MaxLength="50" />
+    <Property Name="KYCType" Type="varchar" MaxLength="30" />
   </EntityType>
   <EntityType Name="Retailer_invoice_Numbers">
     <Key>
@@ -10655,6 +10806,15 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     </Key>
     <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="servicename" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="SignupKYCSetting">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KYCType" Type="varchar" MaxLength="30" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="DisplayName" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="Slab_Broadband">
     <Key>
@@ -16747,6 +16907,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="createdby" Type="varchar" Mode="In" />
     <Parameter Name="FinincialRolesType" Type="varchar(max)" Mode="In" />
     <Parameter Name="TransPIN" Type="nvarchar" Mode="In" />
+    <Parameter Name="OnlyCMSUser" Type="bit" Mode="In" />
     <Parameter Name="output" Type="varchar(max)" Mode="InOut" />
   </Function>
   <Function Name="insert_dealer_to_retailer_balance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -16964,6 +17125,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="Retailerid" Type="varchar" Mode="In" />
     <Parameter Name="Retailername" Type="varchar" Mode="In" />
     <Parameter Name="state" Type="int" Mode="In" />
+    <Parameter Name="KYCType" Type="varchar" Mode="In" />
     <Parameter Name="district" Type="int" Mode="In" />
     <Parameter Name="mobile" Type="varchar" Mode="In" />
     <Parameter Name="address" Type="varchar(max)" Mode="In" />
@@ -20489,6 +20651,43 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="maxrs_5001_10000" Type="decimal" Mode="In" />
     <Parameter Name="Type_5001_10000" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="Update_AEPS_All_userSlab_Again_UPI" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="role" Type="varchar" Mode="In" />
+    <Parameter Name="aadharpay" Type="decimal" Mode="In" />
+    <Parameter Name="ministatement" Type="decimal" Mode="In" />
+    <Parameter Name="per_500_999" Type="decimal" Mode="In" />
+    <Parameter Name="rs_500_999" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_500_999" Type="decimal" Mode="In" />
+    <Parameter Name="Type_500_999" Type="varchar" Mode="In" />
+    <Parameter Name="per_1000_1499" Type="decimal" Mode="In" />
+    <Parameter Name="rs_1000_1499" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_1000_1499" Type="decimal" Mode="In" />
+    <Parameter Name="Type_1000_1499" Type="varchar" Mode="In" />
+    <Parameter Name="per_1500_1999" Type="decimal" Mode="In" />
+    <Parameter Name="rs_1500_1999" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_1500_1999" Type="decimal" Mode="In" />
+    <Parameter Name="Type_1500_1999" Type="varchar" Mode="In" />
+    <Parameter Name="per_2000_2499" Type="decimal" Mode="In" />
+    <Parameter Name="rs_2000_2499" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_2000_2499" Type="decimal" Mode="In" />
+    <Parameter Name="Type_2000_2499" Type="varchar" Mode="In" />
+    <Parameter Name="per_2500_2999" Type="decimal" Mode="In" />
+    <Parameter Name="rs_2500_2999" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_2500_2999" Type="decimal" Mode="In" />
+    <Parameter Name="Type_2500_2999" Type="varchar" Mode="In" />
+    <Parameter Name="per_3000_3499" Type="decimal" Mode="In" />
+    <Parameter Name="rs_3000_3499" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_3000_3499" Type="decimal" Mode="In" />
+    <Parameter Name="Type_3000_3499" Type="varchar" Mode="In" />
+    <Parameter Name="per_3500_5000" Type="decimal" Mode="In" />
+    <Parameter Name="rs_3500_5000" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_3500_5000" Type="decimal" Mode="In" />
+    <Parameter Name="Type_3500_5000" Type="varchar" Mode="In" />
+    <Parameter Name="per_5001_10000" Type="decimal" Mode="In" />
+    <Parameter Name="rs_5001_10000" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_5001_10000" Type="decimal" Mode="In" />
+    <Parameter Name="Type_5001_10000" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="Update_AEPS_All_userSlab_new" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="role" Type="varchar" Mode="In" />
     <Parameter Name="comm" Type="decimal" Mode="In" />
@@ -20498,6 +20697,43 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="aadhar" Type="decimal" Mode="In" />
   </Function>
   <Function Name="Update_AEPS_dlm_rem_userSlab_again" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="dlmid" Type="varchar" Mode="In" />
+    <Parameter Name="aadharpay" Type="decimal" Mode="In" />
+    <Parameter Name="ministatement" Type="decimal" Mode="In" />
+    <Parameter Name="per_500_999" Type="decimal" Mode="In" />
+    <Parameter Name="rs_500_999" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_500_999" Type="decimal" Mode="In" />
+    <Parameter Name="Type_500_999" Type="varchar" Mode="In" />
+    <Parameter Name="per_1000_1499" Type="decimal" Mode="In" />
+    <Parameter Name="rs_1000_1499" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_1000_1499" Type="decimal" Mode="In" />
+    <Parameter Name="Type_1000_1499" Type="varchar" Mode="In" />
+    <Parameter Name="per_1500_1999" Type="decimal" Mode="In" />
+    <Parameter Name="rs_1500_1999" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_1500_1999" Type="decimal" Mode="In" />
+    <Parameter Name="Type_1500_1999" Type="varchar" Mode="In" />
+    <Parameter Name="per_2000_2499" Type="decimal" Mode="In" />
+    <Parameter Name="rs_2000_2499" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_2000_2499" Type="decimal" Mode="In" />
+    <Parameter Name="Type_2000_2499" Type="varchar" Mode="In" />
+    <Parameter Name="per_2500_2999" Type="decimal" Mode="In" />
+    <Parameter Name="rs_2500_2999" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_2500_2999" Type="decimal" Mode="In" />
+    <Parameter Name="Type_2500_2999" Type="varchar" Mode="In" />
+    <Parameter Name="per_3000_3499" Type="decimal" Mode="In" />
+    <Parameter Name="rs_3000_3499" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_3000_3499" Type="decimal" Mode="In" />
+    <Parameter Name="Type_3000_3499" Type="varchar" Mode="In" />
+    <Parameter Name="per_3500_5000" Type="decimal" Mode="In" />
+    <Parameter Name="rs_3500_5000" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_3500_5000" Type="decimal" Mode="In" />
+    <Parameter Name="Type_3500_5000" Type="varchar" Mode="In" />
+    <Parameter Name="per_5001_10000" Type="decimal" Mode="In" />
+    <Parameter Name="rs_5001_10000" Type="decimal" Mode="In" />
+    <Parameter Name="maxrs_5001_10000" Type="decimal" Mode="In" />
+    <Parameter Name="Type_5001_10000" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="Update_AEPS_dlm_rem_userSlab_again_UPI" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="dlmid" Type="varchar" Mode="In" />
     <Parameter Name="aadharpay" Type="decimal" Mode="In" />
     <Parameter Name="ministatement" Type="decimal" Mode="In" />
@@ -21516,6 +21752,19 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="apiname" Type="varchar" Mode="In" />
     <Parameter Name="output" Type="varchar" Mode="InOut" />
   </Function>
+  <Function Name="UPI_TXN_ICICI" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="role" Type="varchar" Mode="In" />
+    <Parameter Name="userid" Type="varchar" Mode="In" />
+    <Parameter Name="txnid" Type="varchar" Mode="In" />
+    <Parameter Name="amount" Type="decimal" Mode="In" />
+    <Parameter Name="status" Type="varchar" Mode="In" />
+    <Parameter Name="payername" Type="nvarchar" Mode="In" />
+    <Parameter Name="payvpn" Type="varchar" Mode="In" />
+    <Parameter Name="bankrrn" Type="varchar" Mode="In" />
+    <Parameter Name="response" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="apiname" Type="varchar" Mode="In" />
+    <Parameter Name="output" Type="varchar" Mode="InOut" />
+  </Function>
   <Function Name="UPI_TXN_KOTAK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="role" Type="varchar" Mode="In" />
     <Parameter Name="userid" Type="varchar" Mode="In" />
@@ -22389,15 +22638,20 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="Aeps_aadharpay_comm" EntityType="Self.Aeps_aadharpay_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AEPS_comm_details" EntityType="Self.AEPS_comm_details" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Aeps_comm_Dlm_rem" EntityType="Self.Aeps_comm_Dlm_rem" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Aeps_comm_Dlm_rem_UPI" EntityType="Self.Aeps_comm_Dlm_rem_UPI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Aeps_comm_new" EntityType="Self.Aeps_comm_new" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Aeps_comm_userwise" EntityType="Self.Aeps_comm_userwise" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Aeps_comm_userwise_UPI" EntityType="Self.Aeps_comm_userwise_UPI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Aeps_Common_Comm" EntityType="Self.Aeps_Common_Comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Aeps_common_comm_new" EntityType="Self.Aeps_common_comm_new" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Aeps_Common_Comm_UPI" EntityType="Self.Aeps_Common_Comm_UPI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Aeps_dlm_rem_comm" EntityType="Self.Aeps_dlm_rem_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Aeps_MPos_unload" EntityType="Self.Aeps_MPos_unload" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AEPS_MPOS_Wallet_Settings" EntityType="Self.AEPS_MPOS_Wallet_Settings" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AEPS_TXN_Details" EntityType="Self.AEPS_TXN_Details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AEPSCHMerchantinfo" EntityType="Self.AEPSCHMerchantinfo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AepsMposSettlementHistory" EntityType="Self.AepsMposSettlementHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AepsVideoKyc" EntityType="Self.AepsVideoKyc" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Airport_info" EntityType="Self.Airport_info" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Airtel_common_comm" EntityType="Self.Airtel_common_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Airtel_dealer_comm" EntityType="Self.Airtel_dealer_comm" Schema="dbo" store:Type="Tables" />
@@ -22930,6 +23184,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="SERVICECOLUMN" EntityType="Self.SERVICECOLUMN" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SERVICES_DATA_INFO" EntityType="Self.SERVICES_DATA_INFO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Show_Service_name" EntityType="Self.Show_Service_name" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SignupKYCSetting" EntityType="Self.SignupKYCSetting" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Slab_Broadband" EntityType="Self.Slab_Broadband" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Slab_Bus" EntityType="Self.Slab_Bus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Slab_DTH" EntityType="Self.Slab_DTH" Schema="dbo" store:Type="Tables" />

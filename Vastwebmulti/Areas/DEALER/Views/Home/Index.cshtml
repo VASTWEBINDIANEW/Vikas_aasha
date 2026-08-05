@@ -22,6 +22,21 @@
 
 }
 <style>
+
+   /* new css */
+
+    .pageheader-margin-third {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .res_div {
+        display: block !important;
+        padding: 0;
+    }
+
+   /* new css */
+
     .show_error {
         display: block;
     }
@@ -113,6 +128,10 @@
     }
 
     @@media screen and (max-width:768px) {
+        .bars.sidebar-toggle-responshiveclass {
+            top: 12px !important;
+        }
+
         #defaultModal .modal-dialog {
             width: 100% !important;
             float: left;
@@ -128,6 +147,33 @@
     }
 
     @@media screen and (max-width:580px) {
+        
+         /*  new css  */
+           .pageheader-margin-third {
+               display: table;
+               width: 100%;
+           }
+
+        .col-md-4.create-retaileruse {
+            width: 100% !important;
+            padding: 0 !important;
+        }
+        .res_div {
+            width: 100%;
+        }
+        .res_w {
+            width: 100%;
+        }
+        .btn.fullbodydycolorbg.waves-effect {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+
+
+        /*  new css  */
+
+
         .col-md-8 {
             width: 100% !important;
             text-align: center;
@@ -140,8 +186,6 @@
 
         .col-md-4.create-retaileruse {
             float: left !important;
-            padding-left: 15px !important;
-            margin-bottom: 10px;
             padding-right: 0px !important;
         }
     }
@@ -217,54 +261,52 @@
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card" style="margin-bottom: 0px; ">
-                    <div class="row">
-                        <div class="col-md-8 dealer-none-fourclass" style="width:auto;float:left;">
-                            <div class="form-group" style="margin-bottom:15px;">
-                                <ol class="" style="padding:0px;">
-                                    <li class="active" style=" color:#555; font-size:21px;font-weight:700;">All&nbsp;@favimage&nbsp;Details</li>
+                    <div class="page-header-third pageheader-margin-third">
+                        <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only res_div">
+                            <ul class="" style="padding: 0;">
+                                <li class="smli">
+                                    <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
+                                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
+                                    </a>
+                                </li>
+                                <li class="fullbodydycolorbg tmw-total-color-one">
+                                    All&nbsp;@favimage&nbsp;Details
+                                </li>
 
-                                </ol>
-                            </div>
+                            </ul>
                         </div>
 
-                        @*<div class="col-md-2 recharge-report-dealer" style="width:auto;float:right;padding-left:0px;">
-                                <div class="form-group" style="margin-bottom:0px;width:100%;float:left;">
-                                    <div style="padding-top:0px;float:right">
-                                        <button class="white-success-button" style="height:32px;border:1px solid #b1a6a638;background:#b1a6a638;float: right;padding: 0px 4px;margin-top:-1px;" onclick="findtotal()">Total</button>
-                                        <div class="web-white-filter fil" style="float: left;margin-right: 5px;margin-top:-1px;">
-                                            <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                    background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                                            <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                    background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                                        </div>
-                                    </div>
+                        <div class="web-white-filter pdfexpoer-second pdf-third-design res_div" style="float: right;">
+
+                            <div class="res_w" style="float: right;">
+
+                                <div class="col-md-4 create-retaileruse" style="width:auto;float:right;padding-right:0px;padding-left:0px;">
+                                    <button type="button" class="btn fullbodydycolorbg waves-effect" style="position: relative; top: -2px; height: 33px; float: right;" data-toggle="modal" data-target="@token_validate" onclick="handleCreate_btn('@token_validate')">
+
+                                        <span style="color:#fff;"><span class="keyfreamuse"></span>Create&nbsp;@favimage&nbsp;Account</span>
+                                    </button>
+                                    <span class="text-danger hidden" id="token_err" style="position: absolute; top: 31px;font-size:11px;padding-left: 8px;">Your Remain Token Is Low</span>
 
                                 </div>
-                            </div>*@
 
-                        <div class="col-md-4 create-retaileruse" style="width:auto;float:right;padding-right:5px;padding-left:0px;">
-                            <button type="button" class="btn fullbodydycolorbg waves-effect" style="position: relative; top: -2px; height: 33px; float: right;" data-toggle="modal" data-target="@token_validate" onclick="handleCreate_btn('@token_validate')">
-
-                                <span style="color:#fff;"><span class="keyfreamuse"></span>Create&nbsp;@favimage&nbsp;Account</span>
-                            </button><br />
-                            <span class="text-danger hidden" id="token_err" style="position: absolute; top: 31px;font-size:11px;padding-left: 8px;">Your Remain Token Is Low</span>
-
-
+                            </div>
 
                         </div>
 
-
-
                     </div>
+
+
+
+                    
                 </div>
             </div>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card all-reporttable-css new-retailer-table">
-                    <div>
+                    <div class="page-header-third">
                         <div class="table-responsive tableseconddes-dealer" style="position:inherit;">
-                            <table class="table table-bordered table-striped table-hover example-second third-design-table" style="width:100%;font-size:12px;">
+                            <table class="table table-bordered table-striped table-hover example-second third-design-table" style="width: 100%; font-size: 12px; margin: 0;">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th>S.R.</th>
@@ -277,16 +319,11 @@
                                         <th>Remain&nbsp;Bal.</th>
 
 
-                                        @*<th>Capping</th>*@
                                         <th>State</th>
                                         <th>District</th>
                                         <th>Full&nbsp;Address</th>
 
-                                        @*<th>Pancard</th>
-                                            <th>Aadharcard</th>
-                                            <th>GST</th>*@
-                                        @*<th>Status</th>*@
-                                        @*<th style="padding-right:25px;">Email&nbsp;Confirm</th>*@
+                                       
                                         <th style="padding-right:30px;">Edit</th>
                                         <th>Join&nbsp;Date</th>
 
@@ -330,36 +367,13 @@
                                                 <td>@item.Remainamount</td>
 
 
-                                                @*<td>@item.caption</td>*@
+                                                
                                                 <td>@item.State_name</td>
                                                 <td style="white-space:nowrap;">@item.Dist_Desc</td>
                                                 <td>@item.Address</td>
 
 
-                                                @*<td>@item.PanCard</td>
-                                                    <td>@item.AadharCard</td>
-                                                    <td>@item.gst</td>*@
-
-
-
-
-
-                                                @*<td style="padding:9px;">
-                                                        @if (item.Emailconfirmed == true)
-                                                        {
-                                                            <a href="#" style="text-decoration:none;border:1px solid #c7c2c2;padding:5px 7px 5px 10px">
-                                                                <span>DONE</span>
-                                                            </a>
-
-                                                        }
-                                                        else
-                                                        {
-                                                            <a href="#" style="text-decoration:none;border:1px solid #c7c2c2;padding:5px 11px 5px 11px;">
-                                                                <span>NOT&nbsp;DONE</span>
-                                                            </a>
-
-                                                        }
-                                                    </td>*@
+                                                
 
                                                 <td>
                                                     <div class="row" style="margin:0px;">
@@ -369,23 +383,7 @@
                                                             </button>
 
                                                         </div>
-                                                        @*<div class="col-xs-4" style="padding-left:0;">
-                                                                @if (item.Emailconfirmed == false)
-                                                                {
-                                                                    <button class="btn btn default" id="but" onclick="sendotpRetailer('@item.RetailerId')" style="background-color:transparent; border:none;border:1px solid #c7c2c2;height:28px; padding:1px 10px 1px 10px;margin-left:-10px;" title="Delete Information">
-                                                                        Delete
-                                                                    </button>
-                                                                }
-
-                                                            </div>
-                                                            <div class="col-xs-4" style="padding-left:0;padding-right:0;">
-                                                                @if (item.Emailconfirmed == false)
-                                                                {
-                                                                    <a class="btn btn default" href="@Url.Action("ResendRetailerEmail", "Home", new { email = item.Email })" title="Resend Email " style="border:1px solid #c7c2c2; height:28px; padding:1px 10px 1px 10px;margin-left:-6px;">
-                                                                        Resend
-                                                                    </a>
-                                                                }
-                                                            </div>*@
+                                                        
                                                     </div>
                                                 </td>
                                                 <td>@item.JoinDate</td>
@@ -436,7 +434,7 @@
                                         <div class="" style="border:1px solid #dddddd;">
                                             @Html.TextBoxFor(m => m.Email, "", new { @class = "form-control", placeholder = "Enter Email Id" })
                                         </div>
-                                        @*@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })*@
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -568,34 +566,7 @@
                             </div>
 
 
-                            @*<div class="row clearfix">
-
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="form-group">
-                                            <label for="email_address_2">Enter Password<span style="color: red">*</span></label>
-                                            <div class="" style="border:1px solid #dddddd;">
-                                                @Html.TextBoxFor(m => m.Password, "", new { @class = "form-control", placeholder = "Enter Password", required = "required" })
-                                            </div>
-                                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                </div>*@
-
-                            @*<div class="row clearfix">
-
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="form-group">
-                                            <label for="email_address_2">Enter Pin<span style="color: red">*</span></label>
-                                            <div class="" style="border:1px solid #dddddd;">
-                                                @Html.TextBoxFor(m => m.Pin, "", new { @class = "form-control", placeholder = "Enter Pin", required = "required", onkeypress = "return isNumber(event)" })
-                                            </div>
-                                            @Html.ValidationMessageFor(m => m.Pin, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                </div>*@
-
-
-
+                            
 
                             <div class="modal-footer" style="padding-right:0px;">
                                 <button type="button" class="btn  waves-effect" style=" height:34px;" data-dismiss="modal">
@@ -750,20 +721,7 @@
 
 
 
-                            @*<div class="row clearfix">
-                                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                        <label for="email_address_2">Capping </label>
-                                    </div>
-                                    <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="" style="border:1px solid #dddddd;">
-                                                @Html.TextBoxFor(m => m.Capping1, "", new { @class = "form-control", placeholder = "Enter Capping No", onkeypress = "return isNumber(event)", required = "required" })
-
-                                            </div>
-                                            @Html.ValidationMessageFor(m => m.Capping1, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                </div>*@
+                            
                             <div class="row clearfix">
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

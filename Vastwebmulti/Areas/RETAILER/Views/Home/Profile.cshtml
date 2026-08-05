@@ -563,8 +563,26 @@
             </ul>
         </div>
         <!--Four-Design-Page-Header-End-->
+        @* ⭐ NEW - Video KYC Warning*@
+        @if (ViewBag.NeedsVideoKyc == true)
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="profile-kyc">
+                        <p style="text-align: center; display: flex; align-content: center; align-items: center; justify-content: center;">
+                            <i class="material-icons" style="font-size:40px;color:#f70000;float:left;margin-top: 0px;">videocam</i>&nbsp;
+                            Please complete your Video KYC, it's mandatory
+                            <a href="@Url.Action("VideoKYCstatus", "Home")" style="margin-left:15px;padding:6px 15px;background:#28a745;color:#fff;border-radius:5px;text-decoration:none;">
+                                Start Video KYC
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
 
-        @if (ViewBag.MD_Details != null)
+
+        @*@if (ViewBag.MD_Details != null)
         {
             if (ViewBag.MD_Details.PSAStatus == "N" || ViewBag.MD_Details.AadhaarStatus == "N" || ViewBag.MD_Details.ShopwithSalfieStatus == "N")
             {
@@ -576,153 +594,155 @@
                     </div>
                 </div>
             }
-        }
-    <div class="row clearfix">
-        <div class="col-md-4">
-            <div class="page-header-third">
-                <div class="profilebackground fullbodydycolorbg changeback-four-design">
-                    <div class="card " style="height:auto;">
-                        <div class="ribbon"><span>@ViewBag.nickname</span></div>
+        }*@
 
-                        <div class="body">
-                            <center>
-                                @if (!string.IsNullOrWhiteSpace(ViewBag.MD_Details.Photo))
-                                {
-                                    <div class="image" style="margin-top:3px;">
-                                        <img src="@Url.Content("~/"+ ViewBag.MD_Details.Photo )" class="img-circle" id="uploadprofileimg" alt="User" width="60" height="60" title="Click Me Upload Profile Image" style="cursor:pointer;" onclick="uploadimage('@ViewBag.MD_Details.RetailerId')" />
 
-                                    </div>
+        <div class="row clearfix">
+            <div class="col-md-4">
+                <div class="page-header-third">
+                    <div class="profilebackground fullbodydycolorbg changeback-four-design">
+                        <div class="card " style="height:auto;">
+                            <div class="ribbon"><span>@ViewBag.nickname</span></div>
 
-                                }
-                                else
-                                {
-                                    <div class="image" style="margin-top:3px;">
-                                        <img src="~/AdminDesign/images/user.png" width="60" height="60" class="img-circle" id="uploadprofileimg" alt="User" title="Click Me Upload Profile Image" style="cursor:pointer;" onclick="uploadimage('@ViewBag.MD_Details.RetailerId')">
+                            <div class="body">
+                                <center>
+                                    @if (!string.IsNullOrWhiteSpace(ViewBag.MD_Details.Photo))
+                                    {
+                                        <div class="image" style="margin-top:3px;">
+                                            <img src="@Url.Content("~/"+ ViewBag.MD_Details.Photo )" class="img-circle" id="uploadprofileimg" alt="User" width="60" height="60" title="Click Me Upload Profile Image" style="cursor:pointer;" onclick="uploadimage('@ViewBag.MD_Details.RetailerId')" />
 
-                                    </div>
-                                }
-
-                                <div class="msg" style="padding-top:12px; font-size:19px; font-weight:600; color:#7a7676;">@ViewBag.MD_Details.RetailerName</div>
-                                <p style="margin-top:5px;font-size:14px;text-transform:uppercase;">@ViewBag.nickname</p>
-
-                            </center>
-                            <div class="" style="margin-top:-1px;">
-                                <div class="body body-profileclass" style="margin-bottom:11px;background-color:whitesmoke;min-height:113px;border-radius:5px;">
-                                    <div class="profileupload fullbodydycolorbg profileupload-second">
-                                        <h1 style="color:#fff;font-size:13px;font-weight:bold;margin-top:-7px;text-transform:uppercase;text-align:center;">
-                                            <i class="fa fa-lock"></i>&nbsp;One Time Password Security (Login OTP)
-                                        </h1>
-                                        <div class="row">
-                                            <div class="col-md-12"  style="margin-bottom:0px;">
-                                                @if (Model.TwoFactorEnabled)
-                                                {
-                                                    using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", new { area = "" }, FormMethod.Post, new { encType = "multipart/form-data", @style = "padding-left:38px;padding-top:2px;" }))
-                                                    {
-                                                        @Html.AntiForgeryToken()
-                                                        <center>
-                                                            <button type="submit" class="btn  btn-circle-lg waves-effect waves-circle waves-float" style="margin-top:-4px;height:70px;width:70px;background-color:whitesmoke;margin-left:-33px;">
-                                                                <span style="font-size:20px;font-weight:700;color:green;">OTP - ON</span>
-                                                            </button>
-                                                        </center>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", new { area = "" }, FormMethod.Post, new { encType = "multipart/form-data", @style = "padding-left:38px;padding-top:2px;" }))
-                                                    {
-                                                        @Html.AntiForgeryToken()
-                                                        <center>
-                                                            <button type="submit" class="btn  btn-circle-lg waves-effect waves-circle waves-float" style="margin-top:-4px;height:70px;width:70px;background-color:whitesmoke;margin-left:-33px;">
-                                                                <span style="font-size:20px;font-weight:700;color:red;">OTP - OFF</span>
-                                                            </button>
-                                                        </center>
-                                                    }
-                                                }
-
-                                            </div>
                                         </div>
-                                    </div>
-                                    <!--Profile-Upload-->
-                                    <div class="newupdateprofile" id="EditProfileimageModal" style="display:none;">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header" style="background-color:whitesmoke;display:none;">
-                                                    <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Upload Profile Image</h4>
-                                                    <button type="button" class="btn bg-grey waves-effect closeprofile profilecloses" style="margin-top: 4px; margin-left: -3px; height:34px;" data-dismiss="modal">
-                                                        <span style="top:-2px;color:black;">x</span>
-                                                    </button>
-                                                </div>
-                                                @using (Html.BeginForm("UploadProfileimage", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
-                                                {
-                                                    <div class="modal-body" style="margin-top:0px;">
-                                                        <div class="body">
-                                                            <form>
-                                                                <div class="row clearfix">
-                                                                    <input type="text" id="txtprofileid" name="txtprofileid" style="display:none;" />
-                                                                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label label">
-                                                                        <label for="email_address_2">Upload&nbsp;Image</label>
-                                                                    </div>
 
-                                                                    <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7 newclassfg" style="padding-right:9px;">
-                                                                        <div class="form-group">
-                                                                            <div class="" style="border:1px solid #ddd;">
-                                                                                <input type="file" class="form-control addclasimgup" id="file" name="file" />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="image" style="margin-top:3px;">
+                                            <img src="~/AdminDesign/images/user.png" width="60" height="60" class="img-circle" id="uploadprofileimg" alt="User" title="Click Me Upload Profile Image" style="cursor:pointer;" onclick="uploadimage('@ViewBag.MD_Details.RetailerId')">
 
-                                                                <div class="modal-footer">
-                                                                    <button type="submit" class="btn bg-grey waves-effect uploadimgwork" disabled="" style="margin-top: 4px; margin-right:12px; height:34px;">
-                                                                        <span style="top:-2px;color:black;">Save Image</span>
-                                                                    </button>
-                                                                    <button type="button" class="btn bg-grey waves-effect profilecloses" style="margin-top: 4px; margin-left: -3px; height:34px;" data-dismiss="modal">
-                                                                        <span style="top:-2px;color:black;">Close</span>
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                }
-
-                                            </div>
                                         </div>
-                                    </div>
+                                    }
 
-                                    <!--Profile-Upload-->
-                                    <div class="col-md-12"  style="margin: 0; padding: 0; border: 6px solid #fff; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border-top:0px;">
-                                        
-                                        <div class="row" style="padding: 6px 0px 6px 0px; margin: 0; display: flex; align-items: center; justify-content: space-between; ">
+                                    <div class="msg" style="padding-top:12px; font-size:19px; font-weight:600; color:#7a7676;">@ViewBag.MD_Details.RetailerName</div>
+                                    <p style="margin-top:5px;font-size:14px;text-transform:uppercase;">@ViewBag.nickname</p>
 
-                                            <div class="col-md-6" style="margin:0;">
-                                                <h2 style="font-size: 18px; margin: 0; color: #fff;">
-                                                   EKYC Profile
-                                                </h2>
-                                            </div>
-                                            
-                                            <div class="col-md-6" style="margin:0;">
-                                                @{
-
-                                                    var userid = User.Identity.GetUserId();
-                                                    var set = DB1.rediantremtresponses.Where(s => s.userid == userid).ToList();
-                                                    var set1 = DB1.radiantauths.ToList();
-                                                }
-                                                @if (set.Count == 0)
-                                                {
-                                                    <a href="@Url.Action("Rediantcreate", "Home")"><button style="float: right; margin: 0px !important; border: 1px solid #fff; background: green; color: #fff; "> Create </button></a>
-                                                }
-                                                else
-                                                {
-                                                    if (set[0].Sts == "Approved")
+                                </center>
+                                <div class="" style="margin-top:-1px;">
+                                    <div class="body body-profileclass" style="margin-bottom:11px;background-color:whitesmoke;min-height:113px;border-radius:5px;">
+                                        <div class="profileupload fullbodydycolorbg profileupload-second">
+                                            <h1 style="color:#fff;font-size:13px;font-weight:bold;margin-top:-7px;text-transform:uppercase;text-align:center;">
+                                                <i class="fa fa-lock"></i>&nbsp;One Time Password Security (Login OTP)
+                                            </h1>
+                                            <div class="row">
+                                                <div class="col-md-12" style="margin-bottom:0px;">
+                                                    @if (Model.TwoFactorEnabled)
                                                     {
-                                                        <div style="color: white; background: green; text-align: center;">APPROVED</div>
+                                                        using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", new { area = "" }, FormMethod.Post, new { encType = "multipart/form-data", @style = "padding-left:38px;padding-top:2px;" }))
+                                                        {
+                                                            @Html.AntiForgeryToken()
+                                                            <center>
+                                                                <button type="submit" class="btn  btn-circle-lg waves-effect waves-circle waves-float" style="margin-top:-4px;height:70px;width:70px;background-color:whitesmoke;margin-left:-33px;">
+                                                                    <span style="font-size:20px;font-weight:700;color:green;">OTP - ON</span>
+                                                                </button>
+                                                            </center>
+                                                        }
                                                     }
                                                     else
                                                     {
-                                                        <div id="redfull"><div id="redtext" style=" background: yellow; width: 59px; float: left; margin-top: 10px; text-align: center;">@set[0].Sts</div> <div id="redbutton"><button onclick="checkrediantsts();" style=" width: 78px !important; float: right; font-size: 11px; background: antiquewhite;">Check Status</button></div></div>
+                                                        using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", new { area = "" }, FormMethod.Post, new { encType = "multipart/form-data", @style = "padding-left:38px;padding-top:2px;" }))
+                                                        {
+                                                            @Html.AntiForgeryToken()
+                                                            <center>
+                                                                <button type="submit" class="btn  btn-circle-lg waves-effect waves-circle waves-float" style="margin-top:-4px;height:70px;width:70px;background-color:whitesmoke;margin-left:-33px;">
+                                                                    <span style="font-size:20px;font-weight:700;color:red;">OTP - OFF</span>
+                                                                </button>
+                                                            </center>
+                                                        }
                                                     }
-                                                }
-                                                <script>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Profile-Upload-->
+                                        <div class="newupdateprofile" id="EditProfileimageModal" style="display:none;">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header" style="background-color:whitesmoke;display:none;">
+                                                        <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Upload Profile Image</h4>
+                                                        <button type="button" class="btn bg-grey waves-effect closeprofile profilecloses" style="margin-top: 4px; margin-left: -3px; height:34px;" data-dismiss="modal">
+                                                            <span style="top:-2px;color:black;">x</span>
+                                                        </button>
+                                                    </div>
+                                                    @using (Html.BeginForm("UploadProfileimage", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
+                                                    {
+                                                        <div class="modal-body" style="margin-top:0px;">
+                                                            <div class="body">
+                                                                <form>
+                                                                    <div class="row clearfix">
+                                                                        <input type="text" id="txtprofileid" name="txtprofileid" style="display:none;" />
+                                                                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label label">
+                                                                            <label for="email_address_2">Upload&nbsp;Image</label>
+                                                                        </div>
+
+                                                                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7 newclassfg" style="padding-right:9px;">
+                                                                            <div class="form-group">
+                                                                                <div class="" style="border:1px solid #ddd;">
+                                                                                    <input type="file" class="form-control addclasimgup" id="file" name="file" />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="modal-footer">
+                                                                        <button type="submit" class="btn bg-grey waves-effect uploadimgwork" disabled="" style="margin-top: 4px; margin-right:12px; height:34px;">
+                                                                            <span style="top:-2px;color:black;">Save Image</span>
+                                                                        </button>
+                                                                        <button type="button" class="btn bg-grey waves-effect profilecloses" style="margin-top: 4px; margin-left: -3px; height:34px;" data-dismiss="modal">
+                                                                            <span style="top:-2px;color:black;">Close</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--Profile-Upload-->
+                                        <div class="col-md-12" style="margin: 0; padding: 0; border: 6px solid #fff; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border-top:0px;">
+
+                                            <div class="row" style="padding: 6px 0px 6px 0px; margin: 0; display: flex; align-items: center; justify-content: space-between; ">
+
+                                                <div class="col-md-6" style="margin:0;">
+                                                    <h2 style="font-size: 18px; margin: 0; color: #fff;">
+                                                        EKYC Profile
+                                                    </h2>
+                                                </div>
+
+                                                <div class="col-md-6" style="margin:0;">
+                                                    @{
+
+                                                        var userid = User.Identity.GetUserId();
+                                                        var set = DB1.rediantremtresponses.Where(s => s.userid == userid).ToList();
+                                                        var set1 = DB1.radiantauths.ToList();
+                                                    }
+                                                    @if (set.Count == 0)
+                                                    {
+                                                        <a href="@Url.Action("Rediantcreate", "Home")"><button style="float: right; margin: 0px !important; border: 1px solid #fff; background: green; color: #fff; "> Create </button></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (set[0].Sts == "Approved")
+                                                        {
+                                                            <div style="color: white; background: green; text-align: center;">APPROVED</div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="redfull"><div id="redtext" style=" background: yellow; width: 59px; float: left; margin-top: 10px; text-align: center;">@set[0].Sts</div> <div id="redbutton"><button onclick="checkrediantsts();" style=" width: 78px !important; float: right; font-size: 11px; background: antiquewhite;">Check Status</button></div></div>
+                                                        }
+                                                    }
+                                                    <script>
                            function checkrediantsts() {
                                $.ajax({
                                 type: "POST", url: '@Url.Action("checkrediantremsts", "Home")',
@@ -741,231 +761,231 @@
                                 }
                             });
                         }
-                                                </script>
+                                                    </script>
+                                                </div>
                                             </div>
                                         </div>
+
                                     </div>
 
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 registered-profile">
-            <div class="page-header-third">
-                <div class="card profilecard changeback-four-design">
-                    <div class="body profilebodyback profilelastdetail headingback-fourdesign" style="margin-bottom:11px;background-color:whitesmoke;height:3px;">
-                        @if (ViewBag.MD_Details.Frm_Name != null)
-                        {
-                            <h1 style="color:#49586e;font-size:20px;font-weight:bold;margin-top:-13px;text-transform:uppercase;">
-                                <img src="~/ashok-images/store.svg" />
-                                @ViewBag.MD_Details.Frm_Name
-                                @if (ViewBag.MD_Details.AadhaarStatus == "N" || ViewBag.MD_Details.PSAStatus == "N")
-                                {
-
-                                    <a style="float:right;cursor:pointer;" id="Editaddresshide"><i class="fa fa-pencil-square-o" id="EditaddressModalssee" style="font-size:22px;margin-top:0px;" onclick="editeaddress('@ViewBag.MD_Details.RetailerId')">Edit</i></a>
-                                }
-                            </h1>
-                        }
-                        else
-                        {
-                            <h1 style="color:#49586e;font-size:24px;font-weight:bold;margin-top:-13px;text-transform:uppercase;">
-                                No Data Found !
-                                <a style="float:right;cursor:pointer;" title="Edit Information"><i class="fa fa-pencil-square-o" style="font-size:22px;margin-top:0px;" onclick="editeaddress('@ViewBag.MD_Details.RetailerId')">Edit</i></a>
-                            </h1>
-                        }
-
-                    </div>
-                    <div class="body bodyprofileshow leshow-1" style="margin-top:-19px;">
-                        <ul class="list-group" id="list-groupwert" style="margin-bottom:;">
-                            <li class="list-group-item">
-                                <i class="fa fa-map-marker"></i> <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Registered Business Address</span>
-                                <span>
-                                    @if (ViewBag.MD_Details.Address != null && ViewBag.MD_Details.Address != "")
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 registered-profile">
+                <div class="page-header-third">
+                    <div class="card profilecard changeback-four-design">
+                        <div class="body profilebodyback profilelastdetail headingback-fourdesign" style="margin-bottom:11px;background-color:whitesmoke;height:3px;">
+                            @if (ViewBag.MD_Details.Frm_Name != null)
+                            {
+                                <h1 style="color:#49586e;font-size:20px;font-weight:bold;margin-top:-13px;text-transform:uppercase;">
+                                    <img src="~/ashok-images/store.svg" />
+                                    @ViewBag.MD_Details.Frm_Name
+                                    @if (ViewBag.MD_Details.AadhaarStatus == "N" || ViewBag.MD_Details.PSAStatus == "N")
                                     {
-                                        <p style="text-align:justify;margin-top:-12px;">@ViewBag.MD_Details.Address</p>
+
+                                        <a style="float:right;cursor:pointer;" id="Editaddresshide"><i class="fa fa-pencil-square-o" id="EditaddressModalssee" style="font-size:22px;margin-top:0px;" onclick="editeaddress('@ViewBag.MD_Details.RetailerId')">Edit</i></a>
+                                    }
+                                </h1>
+                            }
+                            else
+                            {
+                                <h1 style="color:#49586e;font-size:24px;font-weight:bold;margin-top:-13px;text-transform:uppercase;">
+                                    No Data Found !
+                                    <a style="float:right;cursor:pointer;" title="Edit Information"><i class="fa fa-pencil-square-o" style="font-size:22px;margin-top:0px;" onclick="editeaddress('@ViewBag.MD_Details.RetailerId')">Edit</i></a>
+                                </h1>
+                            }
+
+                        </div>
+                        <div class="body bodyprofileshow leshow-1" style="margin-top:-19px;">
+                            <ul class="list-group" id="list-groupwert" style="margin-bottom:;">
+                                <li class="list-group-item">
+                                    <i class="fa fa-map-marker"></i> <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Registered Business Address</span>
+                                    <span>
+                                        @if (ViewBag.MD_Details.Address != null && ViewBag.MD_Details.Address != "")
+                                        {
+                                            <p style="text-align:justify;margin-top:-12px;">@ViewBag.MD_Details.Address</p>
+                                        }
+                                        else
+                                        {
+                                            <p style="margin-top:-12px;">ADDRESS NOT FOUND !</p>
+                                        }
+                                    </span>
+                                </li>
+
+
+
+                                <li class="list-group-item" style="margin-top:-19px;">
+                                    <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;Town&nbsp;/&nbsp;City</span>
+                                    @if (ViewBag.MD_Details.city != null && ViewBag.MD_Details.city != "")
+                                    {
+                                        <p style="float:right;text-transform:uppercase;margin-top:4px;">@ViewBag.MD_Details.city</p>
                                     }
                                     else
                                     {
-                                        <p style="margin-top:-12px;">ADDRESS NOT FOUND !</p>
+                                        <p style="margin-top:4px;float:right;">CITY NOT FOUND !</p>
                                     }
-                                </span>
-                            </li>
-
-
-
-                            <li class="list-group-item" style="margin-top:-19px;">
-                                <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;Town&nbsp;/&nbsp;City</span>
-                                @if (ViewBag.MD_Details.city != null && ViewBag.MD_Details.city != "")
-                                {
-                                    <p style="float:right;text-transform:uppercase;margin-top:4px;">@ViewBag.MD_Details.city</p>
-                                }
-                                else
-                                {
-                                    <p style="margin-top:4px;float:right;">CITY NOT FOUND !</p>
-                                }
-                            </li>
-                            <li class="list-group-item">
-                                <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;District</span>
-                                <p style="float:right;text-transform:uppercase;">@ViewBag.district</p>
-                            </li>
-                            <li class="list-group-item">
-                                <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;State</span>
-                                <p style="float:right;text-transform:uppercase;">@ViewBag.ddlstate</p>
-                            </li>
-                            <li class="list-group-item">
-                                <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;Zip Code</span>
-                                @if (ViewBag.MD_Details.Pincode != null)
-                                {
-                                    <p style="float:right;margin-top:0px;">@ViewBag.MD_Details.Pincode</p>
-                                }
-                                else
-                                {
-                                    <p style="float:right;margin-top:0px;">ZIP CODE NOT FOUND !</p>
-                                }
-                            </li>
-
-
-                        </ul>
-
-
-                        <div class="editmodalprofile profilemodal-responsive" id="EditaddressModal" style="display:none">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header" style="background-color:whitesmoke;">
-                                        <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Update Address</h4>
-                                    </div>
-                                    @using (Html.BeginForm("UpdateRetailerProfile", "Home", FormMethod.Post))
+                                </li>
+                                <li class="list-group-item">
+                                    <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;District</span>
+                                    <p style="float:right;text-transform:uppercase;">@ViewBag.district</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;State</span>
+                                    <p style="float:right;text-transform:uppercase;">@ViewBag.ddlstate</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;Zip Code</span>
+                                    @if (ViewBag.MD_Details.Pincode != null)
                                     {
-                                        <div class="modal-body" style="margin-top:0px;">
-                                            <div class="body">
-                                                <form>
-                                                    <div class="row clearfix">
-                                                        <input type="text" id="txtid1" name="txtid1" style="display:none;" />
-                                                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                                            <label for="email_address_2" class="required">Frim Name</label>
-                                                        </div>
-
-                                                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                                            <div class="form-group">
-                                                                <div class="" style="border:1px solid #ddd;">
-                                                                    @Html.TextBox("txtfrimname", "", new { @class = "form-control", placeholder = "Enter Your Address", required = "required" })
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row clearfix">
-                                                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                                            <label for="email_address_2" class="required">Address</label>
-                                                        </div>
-
-                                                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                                            <div class="form-group">
-                                                                <div class="" style="border:1px solid #ddd;">
-                                                                    @Html.TextBox("txtaddress", "", new { @class = "form-control", placeholder = "Enter Your Address", required = "required" })
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row clearfix">
-                                                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                                            <label for="email_address_2" class="required">Town / City</label>
-                                                        </div>
-
-                                                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                                            <div class="form-group">
-                                                                <div class="" style="border:1px solid #ddd;">
-                                                                    @Html.TextBox("txtcity", "", new { @class = "form-control", placeholder = "Enter Your Town/city ", required = "required" })
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row clearfix">
-                                                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                                            <label for="email_address_2" class="required">State</label>
-                                                        </div>
-                                                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                                            <div class="form-group">
-                                                                <div class="" style="border:1px solid #ddd;">
-                                                                    @Html.DropDownList("State", (IEnumerable<SelectListItem>)ViewBag.Sate, "-- Select State--", new { @class = "form-control", @required = "required", @onchange = "FillDistict()" })
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row clearfix">
-                                                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                                            <label for="email_address_2" class="required">District</label>
-                                                        </div>
-                                                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                                            <div class="form-group">
-                                                                <div class="" style="border:1px solid #ddd;">
-                                                                    @Html.DropDownList("District", (IEnumerable<SelectListItem>)ViewBag.ALLDistrict, "-- Select District--", new { @class = "form-control", @required = "" })
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row clearfix">
-                                                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                                            <label for="email_address_2" class="required">Zip Code</label>
-                                                        </div>
-                                                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                                            <div class="form-group">
-                                                                <div class="" style="border:1px solid #ddd;">
-                                                                    @Html.TextBox("txtzipcode", "", new { @required = "required", @class = "form-control", @placeholder = "Enter Zip Code", onkeypress = "return isNumber(event)" })
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="modal-footer bank-modalpopu">
-                                                        <button type="submit" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-right:12px; height:34px;">
-                                                            <span style="top:-2px;color:black;">Save Change</span>
-                                                        </button>
-                                                        <button type="button" class="btn bg-grey waves-effect" id="modalnonelist" style="margin-top: 4px; margin-left: -3px; height:34px;">
-                                                            <span style="top:-2px;color:black;">Close</span>
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
+                                        <p style="float:right;margin-top:0px;">@ViewBag.MD_Details.Pincode</p>
                                     }
+                                    else
+                                    {
+                                        <p style="float:right;margin-top:0px;">ZIP CODE NOT FOUND !</p>
+                                    }
+                                </li>
 
+
+                            </ul>
+
+
+                            <div class="editmodalprofile profilemodal-responsive" id="EditaddressModal" style="display:none">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background-color:whitesmoke;">
+                                            <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Update Address</h4>
+                                        </div>
+                                        @using (Html.BeginForm("UpdateRetailerProfile", "Home", FormMethod.Post))
+                                        {
+                                            <div class="modal-body" style="margin-top:0px;">
+                                                <div class="body">
+                                                    <form>
+                                                        <div class="row clearfix">
+                                                            <input type="text" id="txtid1" name="txtid1" style="display:none;" />
+                                                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
+                                                                <label for="email_address_2" class="required">Frim Name</label>
+                                                            </div>
+
+                                                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
+                                                                <div class="form-group">
+                                                                    <div class="" style="border:1px solid #ddd;">
+                                                                        @Html.TextBox("txtfrimname", "", new { @class = "form-control", placeholder = "Enter Your Address", required = "required" })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row clearfix">
+                                                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
+                                                                <label for="email_address_2" class="required">Address</label>
+                                                            </div>
+
+                                                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
+                                                                <div class="form-group">
+                                                                    <div class="" style="border:1px solid #ddd;">
+                                                                        @Html.TextBox("txtaddress", "", new { @class = "form-control", placeholder = "Enter Your Address", required = "required" })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row clearfix">
+                                                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
+                                                                <label for="email_address_2" class="required">Town / City</label>
+                                                            </div>
+
+                                                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
+                                                                <div class="form-group">
+                                                                    <div class="" style="border:1px solid #ddd;">
+                                                                        @Html.TextBox("txtcity", "", new { @class = "form-control", placeholder = "Enter Your Town/city ", required = "required" })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row clearfix">
+                                                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
+                                                                <label for="email_address_2" class="required">State</label>
+                                                            </div>
+                                                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
+                                                                <div class="form-group">
+                                                                    <div class="" style="border:1px solid #ddd;">
+                                                                        @Html.DropDownList("State", (IEnumerable<SelectListItem>)ViewBag.Sate, "-- Select State--", new { @class = "form-control", @required = "required", @onchange = "FillDistict()" })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row clearfix">
+                                                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
+                                                                <label for="email_address_2" class="required">District</label>
+                                                            </div>
+                                                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
+                                                                <div class="form-group">
+                                                                    <div class="" style="border:1px solid #ddd;">
+                                                                        @Html.DropDownList("District", (IEnumerable<SelectListItem>)ViewBag.ALLDistrict, "-- Select District--", new { @class = "form-control", @required = "" })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row clearfix">
+                                                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
+                                                                <label for="email_address_2" class="required">Zip Code</label>
+                                                            </div>
+                                                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
+                                                                <div class="form-group">
+                                                                    <div class="" style="border:1px solid #ddd;">
+                                                                        @Html.TextBox("txtzipcode", "", new { @required = "required", @class = "form-control", @placeholder = "Enter Zip Code", onkeypress = "return isNumber(event)" })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="modal-footer bank-modalpopu">
+                                                            <button type="submit" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-right:12px; height:34px;">
+                                                                <span style="top:-2px;color:black;">Save Change</span>
+                                                            </button>
+                                                            <button type="button" class="btn bg-grey waves-effect" id="modalnonelist" style="margin-top: 4px; margin-left: -3px; height:34px;">
+                                                                <span style="top:-2px;color:black;">Close</span>
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    </div>
                                 </div>
                             </div>
+
+
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 retailerprofileonof-button">
+                <div class="retailer-profile-secondclass" style="width:100%;float:left;margin-bottom:20px;">
+                    <div class="page-header-third">
+                        <button type="button" class="btn bg-blue-grey waves-effect valuechangebuttonadmin valuechang-second changeback-four-design-pro-but" style="float:right !important;width:100% !important;background: #eae9e9;">
+                            <span style="display:block;color:#555;font-size:14px;">Auto Paid Services Renewal</span>
+                            <strong><p class="uptotransction classwhichknown @offwali"><span data-value="OFF">ALL Services Off</span></p><p class="uptotransction classwhichknown @allwali"><span data-value="ALL">ALL Services ON</span> </p><p class="uptotransction classwhichknown @perwali"><span data-value="PER">Individusal Services ON</span></p></strong>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
 
+
+            <div class="col-md-8 retailerprofileonof-button">
+                <div class="retailer-profile-secondclass" style="width:100%;float:left;margin-bottom:20px;">
+                    <div class="page-header-third">
+                        <button type="button" class="btn bg-blue-grey waves-effect valuechangebuttonadmin valuechang-second changeback-four-design-pro-but" style="float:right !important;width:100% !important;background: #eae9e9;">
+                            <span style="display:block;color:#555;font-size:14px;">Auto Paid Services Renewal</span>
+                            <strong><p class="uptotransction classwhichraviknown @offpasscode"><span data-value="OFF">Passcode Setting OFF</span></p><p class="uptotransction classwhichraviknown @perpasscode"><span data-value="PERDAY">Day PassCode</span> </p><p class="uptotransction classwhichraviknown @Weakpasscode"><span data-value="WEAKS">Weekly PassCode</span></p><p class="uptotransction classwhichraviknown @monthpasscode"><span data-value="MONTHS">MONTHLY PassCode</span></p></strong>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 retailerprofileonof-button">
-            <div class="retailer-profile-secondclass" style="width:100%;float:left;margin-bottom:20px;">
-                <div class="page-header-third">
-                    <button type="button" class="btn bg-blue-grey waves-effect valuechangebuttonadmin valuechang-second changeback-four-design-pro-but" style="float:right !important;width:100% !important;background: #eae9e9;">
-                        <span style="display:block;color:#555;font-size:14px;">Auto Paid Services Renewal</span>
-                        <strong><p class="uptotransction classwhichknown @offwali"><span data-value="OFF">ALL Services Off</span></p><p class="uptotransction classwhichknown @allwali"><span data-value="ALL">ALL Services ON</span> </p><p class="uptotransction classwhichknown @perwali"><span data-value="PER">Individusal Services ON</span></p></strong>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        
-
-        <div class="col-md-8 retailerprofileonof-button">
-            <div class="retailer-profile-secondclass" style="width:100%;float:left;margin-bottom:20px;">
-                <div class="page-header-third">
-                    <button type="button" class="btn bg-blue-grey waves-effect valuechangebuttonadmin valuechang-second changeback-four-design-pro-but" style="float:right !important;width:100% !important;background: #eae9e9;">
-                        <span style="display:block;color:#555;font-size:14px;">Auto Paid Services Renewal</span>
-                        <strong><p class="uptotransction classwhichraviknown @offpasscode"><span data-value="OFF">Passcode Setting OFF</span></p><p class="uptotransction classwhichraviknown @perpasscode"><span data-value="PERDAY">Day PassCode</span> </p><p class="uptotransction classwhichraviknown @Weakpasscode"><span data-value="WEAKS">Weekly PassCode</span></p><p class="uptotransction classwhichraviknown @monthpasscode"><span data-value="MONTHS">MONTHLY PassCode</span></p></strong>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
         <div class="row clearfix">
             <div class="col-md-4" style="margin-top:-3px;">
@@ -1219,53 +1239,53 @@
                                                                         <div class="">
                                                                             @Html.DropDownList("ddlBusinessType", ViewBag.BusinessType as SelectList, new { @class = "form-control for-select2", @required = "required", })
                                                                             @*@Html.DropDownList("ddlBusinessType", new List<SelectListItem>
-                                                                                 {
-                                                                       new SelectListItem{ Text="Select Type",Value=""},
-                                                                       new SelectListItem{Text="Agriculture Machinery",Value="Agriculture Machinery"},
-                                                                       new SelectListItem{Text="Agriculture Fertilizer",Value="Agriculture Fertilizer"},
-                                                                       new SelectListItem{Text="Automobiles and Vehicles",Value="Automobiles and Vehicles"},
-                                                                       new SelectListItem{Text="Automobile Tyre Supply and Service",Value="Automobile Tyre Supply and Service"},
-                                                                       new SelectListItem{Text="Beauty and Wellness",Value="Beauty and Wellness"},
-                                                                       new SelectListItem{Text="Advertising Agenices",Value="Advertising Agenices"},
-                                                                       new SelectListItem{Text="accounting & Tax Consultants",Value="accounting & Tax Consultants"},
-                                                                       new SelectListItem{Text="Employment Consultants",Value="Employment Consultants"},
-                                                                       new SelectListItem{Text="Software Development and Sales",Value="Software Development and Sales"},
-                                                                       new SelectListItem{Text="Photo and Video Studio",Value="Photo and Video Studio"},
-                                                                       new SelectListItem{Text="Computer Repair & Services",Value="Computer Repair & Services"},
-                                                                       new SelectListItem{Text="Tent And Awning Shops",Value="Tent And Awning Shops"},
-                                                                       new SelectListItem{Text="Packers and Movers",Value="Packers and Movers"},
-                                                                       new SelectListItem{Text="RealEstate Consultants",Value="RealEstate Consultants"},
-                                                                       new SelectListItem{Text="Laundy and Dry Cleaner",Value="Laundy and Dry Cleaner"},
-                                                                       new SelectListItem{Text="Matrimony Services",Value="Matrimony Services"},
-                                                                       new SelectListItem{Text="Lawyers",Value="Lawyers"},
-                                                                       new SelectListItem{Text="Charitable Organisation",Value="Charitable Organisation"},
-                                                                       new SelectListItem{Text="Driving Classes",Value="Driving Classes"},
-                                                                       new SelectListItem{Text="Elementary and Secondary Schools",Value="Elementary and Secondary Schools"},
-                                                                       new SelectListItem{Text="Correspondance Courses",Value="Correspondance Courses"},
-                                                                       new SelectListItem{Text="Other Events & Entertainment",Value="Other Events & Entertainment"},
-                                                                       new SelectListItem{Text="Security Brokers and Dealers",Value="Security Brokers and Dealers"},
-                                                                       new SelectListItem{Text="Collection Agency",Value="Collection Agency"},
-                                                                       new SelectListItem{Text="fuel Service Stations",Value="fuel Service Stations"},
-                                                                      new SelectListItem{Text="Government",Value="Government"},
-                                                                      new SelectListItem{Text="Home Services",Value="Home Services"},
-                                                                      new SelectListItem{Text="Hospitals and Healthcare",Value="Hospitals and Healthcare"},
-                                                                      new SelectListItem{Text="Hotels, Restaurants and Food",Value="Hotels, Restaurants and Food"},
-                                                                      new SelectListItem{Text="Insurance Sale",Value="Insurance Sale"},
-                                                                      new SelectListItem{Text="Computers and Acessories",Value="Computers and Acessories"},
-                                                                      new SelectListItem{Text="Silver Jewellery",Value="Silver Jewellery"},
-                                                                      new SelectListItem{Text="Hardware Shop (Paint & Building Materials)",Value="Hardware Shop (Paint & Building Materials)"},
-                                                                      new SelectListItem{Text="Mobile shop",Value="Mobile shop"},
-                                                                      new SelectListItem{Text="Home Decor",Value="Home Decor"},
-                                                                      new SelectListItem{Text="Bicycle Shop, Repair and Service",Value="Bicycle Shop, Repair and Service"},
-                                                                      new SelectListItem{Text="Tours and Travel Agency",Value="Tours and Travel Agency"},
-                                                                      new SelectListItem{Text="Trucks and Others",Value="Trucks and Others"},
-                                                                      new SelectListItem{Text="Taxi and Car Rentals",Value="Taxi and Car Rentals"},
-                                                                      new SelectListItem{Text="Cruises Service",Value="Cruises Service"},
-                                                                        new SelectListItem{Text="Tuition and Classes",Value="Tuition and Classes"},
-                                                                      new SelectListItem{Text="Cable Service Providers",Value="Cable Service Providers"},
-                                                                      new SelectListItem{Text="Recharges and Bill Payments",Value="Recharges and Bill Payments"},
+                                                                                             {
+                                                                                   new SelectListItem{ Text="Select Type",Value=""},
+                                                                                   new SelectListItem{Text="Agriculture Machinery",Value="Agriculture Machinery"},
+                                                                                   new SelectListItem{Text="Agriculture Fertilizer",Value="Agriculture Fertilizer"},
+                                                                                   new SelectListItem{Text="Automobiles and Vehicles",Value="Automobiles and Vehicles"},
+                                                                                   new SelectListItem{Text="Automobile Tyre Supply and Service",Value="Automobile Tyre Supply and Service"},
+                                                                                   new SelectListItem{Text="Beauty and Wellness",Value="Beauty and Wellness"},
+                                                                                   new SelectListItem{Text="Advertising Agenices",Value="Advertising Agenices"},
+                                                                                   new SelectListItem{Text="accounting & Tax Consultants",Value="accounting & Tax Consultants"},
+                                                                                   new SelectListItem{Text="Employment Consultants",Value="Employment Consultants"},
+                                                                                   new SelectListItem{Text="Software Development and Sales",Value="Software Development and Sales"},
+                                                                                   new SelectListItem{Text="Photo and Video Studio",Value="Photo and Video Studio"},
+                                                                                   new SelectListItem{Text="Computer Repair & Services",Value="Computer Repair & Services"},
+                                                                                   new SelectListItem{Text="Tent And Awning Shops",Value="Tent And Awning Shops"},
+                                                                                   new SelectListItem{Text="Packers and Movers",Value="Packers and Movers"},
+                                                                                   new SelectListItem{Text="RealEstate Consultants",Value="RealEstate Consultants"},
+                                                                                   new SelectListItem{Text="Laundy and Dry Cleaner",Value="Laundy and Dry Cleaner"},
+                                                                                   new SelectListItem{Text="Matrimony Services",Value="Matrimony Services"},
+                                                                                   new SelectListItem{Text="Lawyers",Value="Lawyers"},
+                                                                                   new SelectListItem{Text="Charitable Organisation",Value="Charitable Organisation"},
+                                                                                   new SelectListItem{Text="Driving Classes",Value="Driving Classes"},
+                                                                                   new SelectListItem{Text="Elementary and Secondary Schools",Value="Elementary and Secondary Schools"},
+                                                                                   new SelectListItem{Text="Correspondance Courses",Value="Correspondance Courses"},
+                                                                                   new SelectListItem{Text="Other Events & Entertainment",Value="Other Events & Entertainment"},
+                                                                                   new SelectListItem{Text="Security Brokers and Dealers",Value="Security Brokers and Dealers"},
+                                                                                   new SelectListItem{Text="Collection Agency",Value="Collection Agency"},
+                                                                                   new SelectListItem{Text="fuel Service Stations",Value="fuel Service Stations"},
+                                                                                  new SelectListItem{Text="Government",Value="Government"},
+                                                                                  new SelectListItem{Text="Home Services",Value="Home Services"},
+                                                                                  new SelectListItem{Text="Hospitals and Healthcare",Value="Hospitals and Healthcare"},
+                                                                                  new SelectListItem{Text="Hotels, Restaurants and Food",Value="Hotels, Restaurants and Food"},
+                                                                                  new SelectListItem{Text="Insurance Sale",Value="Insurance Sale"},
+                                                                                  new SelectListItem{Text="Computers and Acessories",Value="Computers and Acessories"},
+                                                                                  new SelectListItem{Text="Silver Jewellery",Value="Silver Jewellery"},
+                                                                                  new SelectListItem{Text="Hardware Shop (Paint & Building Materials)",Value="Hardware Shop (Paint & Building Materials)"},
+                                                                                  new SelectListItem{Text="Mobile shop",Value="Mobile shop"},
+                                                                                  new SelectListItem{Text="Home Decor",Value="Home Decor"},
+                                                                                  new SelectListItem{Text="Bicycle Shop, Repair and Service",Value="Bicycle Shop, Repair and Service"},
+                                                                                  new SelectListItem{Text="Tours and Travel Agency",Value="Tours and Travel Agency"},
+                                                                                  new SelectListItem{Text="Trucks and Others",Value="Trucks and Others"},
+                                                                                  new SelectListItem{Text="Taxi and Car Rentals",Value="Taxi and Car Rentals"},
+                                                                                  new SelectListItem{Text="Cruises Service",Value="Cruises Service"},
+                                                                                    new SelectListItem{Text="Tuition and Classes",Value="Tuition and Classes"},
+                                                                                  new SelectListItem{Text="Cable Service Providers",Value="Cable Service Providers"},
+                                                                                  new SelectListItem{Text="Recharges and Bill Payments",Value="Recharges and Bill Payments"},
 
-                                                                }, new { @class = "form-control for-select2", @required = "required", })*@
+                                                                            }, new { @class = "form-control for-select2", @required = "required", })*@
 
                                                                         </div>
                                                                     </div>
@@ -1308,7 +1328,7 @@
                             <h1 class="bankprofileac" style="color:#49586e;font-size:17px;font-weight:bold;margin-top:-16px;text-transform:capitalize;">
                                 <img src="~/ashok-images/save.svg" class="bankimgchange" />
 
-                                <a href="@Url.Action("AddAepsAccount", "Home")" class="btn btn-outline-secondary" aria-label="Left Align" style="float: right; border-radius: 4px; font-size: 14px !important; font-weight: 500; margin-left: 8px; border: none; padding: 4px; " >
+                                <a href="@Url.Action("AddAepsAccount", "Home")" class="btn btn-outline-secondary" aria-label="Left Align" style="float: right; border-radius: 4px; font-size: 14px !important; font-weight: 500; margin-left: 8px; border: none; padding: 4px; ">
                                     <span class="fa fa-plus" aria-hidden="true"></span>&nbsp;&nbsp;Add Aeps Account
                                 </a>
 
@@ -2182,20 +2202,20 @@ display: flex;align-items: center;justify-content: center;" />
                                     </button>
                                     <div class="modal-body" style="width:100%;float:left;padding:15px;">
                                         @*@if (ViewBag.CancelCheckFile != null)
-                            {
-                                if (ViewBag.CancelCheckFile != null && ViewBag.CancelCheckFile != "")
-                                {
+                                        {
+                                            if (ViewBag.CancelCheckFile != null && ViewBag.CancelCheckFile != "")
+                                            {
 
 
-                                    <img src="@Url.Content("~/"+ ViewBag.CancelCheckFile )" class="" id="uploadprofileim111g" alt="User" width="100" height="100" style="cursor:pointer; float:right;width: 100%;height: 340px;" />
+                                                <img src="@Url.Content("~/"+ ViewBag.CancelCheckFile )" class="" id="uploadprofileim111g" alt="User" width="100" height="100" style="cursor:pointer; float:right;width: 100%;height: 340px;" />
 
 
-                                }
-                            }
-                            else
-                            {
-                                <p style   ="float:right;margin-top:0px;">DATA NOT FOUND !</p>
-                            }*@
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p style   ="float:right;margin-top:0px;">DATA NOT FOUND !</p>
+                                        }*@
                                         <img class="" id="uploadprofileim112g" alt="User" width="100" height="100" style="cursor:pointer; float:right;width: 100%;height: 340px;" />
 
                                     </div>

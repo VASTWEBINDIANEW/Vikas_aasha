@@ -239,7 +239,7 @@ namespace Vastwebmulti.Controllers
                                     if (show == null)
                                     {
                                         dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
-                                     
+
                                         if (role == "Retailer")
                                         {
                                             try
@@ -258,7 +258,7 @@ namespace Vastwebmulti.Controllers
                                                 string amount = entry.Amount.ToString();
                                                 var model = new Backupinfo.Addinfo
                                                 {
-                                                   
+
                                                     Websitename = admininfo.WebsiteUrl,
                                                     RetailerID = entry.userid,
                                                     Email = retailerdetails.Email,
@@ -5504,8 +5504,9 @@ namespace Vastwebmulti.Controllers
                             System.Data.Entity.Core.Objects.ObjectParameter output = new
                                   System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
-                            //var chkinfo=dbsrs.upi
-                            dbsrs.UPI_TXN("Retailer", count.userid, merchantTranId, amount, TxnStatus, PayerName, PayerVA, BankRRN, outtt, "ICICI", output).SingleOrDefault();
+                            //IF YOU USE ICICI. USE THIS STORE PROC UPI_TXN_ICICI AND COMMENT THIK LINE STORE PROC UPI_TXN
+
+                            dbsrs.UPI_TXN_ICICI("Retailer", count.userid, merchantTranId, amount, TxnStatus, PayerName, PayerVA, BankRRN, outtt, "ICICI", output).SingleOrDefault();
                             try
                             {
                                 var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == count.userid).SingleOrDefault();
@@ -5518,7 +5519,7 @@ namespace Vastwebmulti.Controllers
 
                                 var admininfo = dbsrs.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                               
+
                                 var model = new Backupinfo.Addinfo
                                 {
 
@@ -5651,9 +5652,9 @@ namespace Vastwebmulti.Controllers
                                 try
                                 {
                                     var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == count.userid).SingleOrDefault();
-                                  
+
                                     var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == count.userid).SingleOrDefault();
-                                  
+
                                     var admininfo = dbsrs.Admin_details.SingleOrDefault();
                                     Backupinfo back = new Backupinfo();
 
@@ -5888,7 +5889,7 @@ namespace Vastwebmulti.Controllers
         //            string decodedString = content;
         //            try
         //            {
-                       
+
         //                string testresp = resp1.response;
         //                string chkk = testresp.Replace("{", "").Replace("}", "");
 
@@ -6047,7 +6048,7 @@ namespace Vastwebmulti.Controllers
                         string chkk = testresp.Replace("{", "").Replace("}", "");
 
                         byte[] data = Convert.FromBase64String(testresp);
-                         decodedString = Encoding.UTF8.GetString(data);
+                        decodedString = Encoding.UTF8.GetString(data);
                         WriteLogPHONEPE("PhonePe :" + decodedString);
                     }
                     catch { }
@@ -6123,7 +6124,7 @@ namespace Vastwebmulti.Controllers
 
                                 var admininfo = dbsrs.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                        
+
                                 var model = new Backupinfo.Addinfo
                                 {
 
@@ -6338,7 +6339,7 @@ namespace Vastwebmulti.Controllers
                                      Amount = rch.amount,
                                      Provider = rch.optcode,
                                      Response = rch.response_output,
-                                     rch_type=rch.rch_type
+                                     rch_type = rch.rch_type
 
                                  }).SingleOrDefault();
                     var IMPS_entry = (from rch in dbsrs.IMPS_transtion_detsils
@@ -6482,7 +6483,7 @@ namespace Vastwebmulti.Controllers
 
                                 var admininfo = dbsrs.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                  
+
                                 var model = new Backupinfo.Addinfo
                                 {
 
@@ -9945,7 +9946,7 @@ namespace Vastwebmulti.Controllers
                             if (finalstatus.ToUpper() == "SUCCESS" && failed_to_success)
                             {
                                 resp = "recharge failed to success";
-                                dbsrs.recharge_update_failed_to_success(entry.Idno,"");
+                                dbsrs.recharge_update_failed_to_success(entry.Idno, "");
 
                                 string disputerchid = Apientry.idno.ToString();
 
@@ -10752,15 +10753,15 @@ namespace Vastwebmulti.Controllers
             str += await aa.SendNotificationUsingTopic("vastweb-master", "test title", "vastweb-master");
             return str;
         }
-        
-        public  string test(string lat,string longitude)
+
+        public string test(string lat, string longitude)
         {
             decimal latlong = 0;
             decimal longlong = 0;
             try
             {
-                 latlong = Convert.ToDecimal(lat);
-                 longlong = Convert.ToDecimal(longitude);
+                latlong = Convert.ToDecimal(lat);
+                longlong = Convert.ToDecimal(longitude);
             }
             catch { }
             if (IsValidLatitudeLongitude(latlong, longlong) == false)
@@ -10832,7 +10833,7 @@ namespace Vastwebmulti.Controllers
             }
             return sMacAddress;
         }
-      
+
         private static Random random = new Random();
         public string RandomString(int length)
         {
@@ -10860,7 +10861,7 @@ namespace Vastwebmulti.Controllers
                 objNotifHub.SendNotification(objNotif.SentTo);
             }
 
-         
+
         }
         public ActionResult PhonePeResponseGatewayRecharge(string get)
         {
@@ -10898,7 +10899,7 @@ namespace Vastwebmulti.Controllers
                     {
                         content = reader.ReadToEnd();
                     }
-                
+
                     WriteLogPHONEPE("Time :" + DateTime.Now);
                     WriteLogPHONEPE("PhonePe :" + content);
                     dynamic resp1 = JsonConvert.DeserializeObject<dynamic>(content);
@@ -10906,7 +10907,7 @@ namespace Vastwebmulti.Controllers
                     string decodedString = content;
                     try
                     {
-                        
+
 
                         string testresp = resp1.response;
                         string chkk = testresp.Replace("{", "").Replace("}", "");
@@ -10948,20 +10949,20 @@ namespace Vastwebmulti.Controllers
                     }
                     catch
                     { }
-                        decimal amount = Convert.ToDecimal(amt);
-                        amount = amount / 100;
-                        if (gatewaystatus == "PAYMENT_SUCCESS")
-                        {
-                             gatewaystatus = "SUCCESS";
-                        }
-                        else if (gatewaystatus == "PAYMENT_ERROR" || gatewaystatus == "TIMED_OUT" || gatewaystatus == "PAYMENT_DECLINED")
-                        {
-                             gatewaystatus = "Failed";
-                        }
-                        else
-                        {
-                             gatewaystatus = "Pending";
-                        }
+                    decimal amount = Convert.ToDecimal(amt);
+                    amount = amount / 100;
+                    if (gatewaystatus == "PAYMENT_SUCCESS")
+                    {
+                        gatewaystatus = "SUCCESS";
+                    }
+                    else if (gatewaystatus == "PAYMENT_ERROR" || gatewaystatus == "TIMED_OUT" || gatewaystatus == "PAYMENT_DECLINED")
+                    {
+                        gatewaystatus = "Failed";
+                    }
+                    else
+                    {
+                        gatewaystatus = "Pending";
+                    }
                     if (gatewaystatus.ToUpper() == "SUCCESS")
                     {
                         var count = dbsrs.Gateway_recharge.Where(aa => aa.Uniqueid == custid).FirstOrDefault();
@@ -10987,913 +10988,127 @@ namespace Vastwebmulti.Controllers
                             var statusRetailer = dbsrs.PushNotificationStatus.Where(a => a.UserRole == "Retailer").SingleOrDefault().Status;
                             System.Data.Entity.Core.Objects.ObjectParameter output = new
                                       System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-                           
-                                var Ipaddress = GetComputer_InternetIP();
-                                var macaddress = GetMACAddress();
-                                var result = dbsrs.Update_recharge_gateway(custid, "", "", Ipaddress, macaddress, "", output).SingleOrDefault().msg;
-                                if (result.Contains("AOK"))
+
+                            var Ipaddress = GetComputer_InternetIP();
+                            var macaddress = GetMACAddress();
+                            var result = dbsrs.Update_recharge_gateway(custid, "", "", Ipaddress, macaddress, "", output).SingleOrDefault().msg;
+                            if (result.Contains("AOK"))
+                            {
+                                var idno = "";
+                                var url = result.Replace("AOK", "");
+                                var ammt = Convert.ToDecimal(Amount);
+                                string webcontent = "";
+
+                                if (url.ToUpper().Contains("API.VASTBAZAAR.COM"))
                                 {
-                                    var idno = "";
-                                    var url = result.Replace("AOK", "");
-                                    var ammt = Convert.ToDecimal(Amount);
-                                    string webcontent = "";
+                                    int idnn11 = 0;
+                                    VastBazaartoken Responsetoken = new VastBazaartoken();
+                                    Vastbillpay vb = new Vastbillpay();
+                                    idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                    idnn11 = Convert.ToInt32(idno);
+                                    string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                                    var apioptcode = dbsrs.SRS_API.Where(aa => aa.api.ToUpper().Contains("API.VASTBAZAAR.COM") && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
+                                    var tokn = Responsetoken.gettoken();
+                                    string amtstr = Amount.ToString();
+                                    var responsechk1 = vb.billpay(tokn, mobileno, apioptcode, amtstr, optional1, optional2, CommonTranid);
+                                    var responsechk = responsechk1.Content.ToString();
 
-                                    if (url.ToUpper().Contains("API.VASTBAZAAR.COM"))
+                                    var Request = responsechk1.Request.Parameters[2].Value;
+                                    var ReqUrl = url + "  RequestBody : " + Request;
+
+                                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                    var respcode = json.Content.ResponseCode.ToString();
+                                    var ADDINFO = json.Content.ADDINFO.ToString();
+                                    dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
+
+                                    webcontent = json1.ToString();
+
+                                    Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                    objCourse.Recharge_response = json1.ToString();
+                                    objCourse.Recharge_request = ReqUrl;
+                                    objCourse.Order_id = CommonTranid.ToString();
+                                    dbsrs.SaveChanges();
+
+
+
+                                    var status = json1.STATUS.ToString();
+                                    var _price = (string)json1.PRICE.ToString();
+                                    var errormsg = json1.ERRORMSG.ToString();
+                                    var TRANSID = (string)json1.TRANSID.ToString();
+
+                                    decimal PRICE = 0;
+                                    try
                                     {
-                                        int idnn11 = 0;
-                                        VastBazaartoken Responsetoken = new VastBazaartoken();
-                                        Vastbillpay vb = new Vastbillpay();
-                                        idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
-                                        idnn11 = Convert.ToInt32(idno);
-                                        string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
-                                        var apioptcode = dbsrs.SRS_API.Where(aa => aa.api.ToUpper().Contains("API.VASTBAZAAR.COM") && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
-                                        var tokn = Responsetoken.gettoken();
-                                        string amtstr = Amount.ToString();
-                                        var responsechk1 = vb.billpay(tokn, mobileno, apioptcode, amtstr, optional1, optional2, CommonTranid);
-                                        var responsechk = responsechk1.Content.ToString();
+                                        PRICE = Convert.ToDecimal(_price);
+                                    }
+                                    catch { }
 
-                                        var Request = responsechk1.Request.Parameters[2].Value;
-                                        var ReqUrl = url + "  RequestBody : " + Request;
-
-                                        dynamic json = JsonConvert.DeserializeObject(responsechk);
-                                        var respcode = json.Content.ResponseCode.ToString();
-                                        var ADDINFO = json.Content.ADDINFO.ToString();
-                                        dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
-
-                                        webcontent = json1.ToString();
-
-                                        Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                        objCourse.Recharge_response = json1.ToString();
-                                        objCourse.Recharge_request = ReqUrl;
-                                        objCourse.Order_id = CommonTranid.ToString();
-                                        dbsrs.SaveChanges();
-
-
-
-                                        var status = json1.STATUS.ToString();
-                                        var _price = (string)json1.PRICE.ToString();
-                                        var errormsg = json1.ERRORMSG.ToString();
-                                        var TRANSID = (string)json1.TRANSID.ToString();
-
-                                        decimal PRICE = 0;
-                                        try
+                                    if (status == "Success")
+                                    {
+                                        status = "Success";
+                                        dbsrs.recharge_update(idnn11.ToString(), status, TRANSID, PRICE, json.ToString(), "Response");
+                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                        if (statusRetailer == "Y")
                                         {
-                                            PRICE = Convert.ToDecimal(_price);
+                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + TRANSID + ". Balance is Rs." + remainbal + "", "Recharge Response..");
                                         }
-                                        catch { }
 
-                                        if (status == "Success")
+                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
+
+                                        if (Emailstatusretailerrechargesuccess == "Y")
                                         {
-                                            status = "Success";
-                                            dbsrs.recharge_update(idnn11.ToString(), status, TRANSID, PRICE, json.ToString(), "Response");
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + TRANSID + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                        }
+                                        responsemsg = "Recharge Success.";
+
+                                    }
+                                    else if (status == "Failed")
+                                    {
+                                        var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                        var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                        if (show == null)
+                                        {
+                                            status = "Failed";
+                                            dbsrs.recharge_update(idnn11.ToString(), status, TRANSID, PRICE, webcontent, "Response");
                                             var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
                                             if (statusRetailer == "Y")
                                             {
-                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + TRANSID + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + TRANSID + ". Balance is Rs." + remainbal + "", "Recharge Response..");
                                             }
 
-                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
+                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
 
-                                            if (Emailstatusretailerrechargesuccess == "Y")
+                                            if (Emailstatusretailerrechargefailed == "Y")
                                             {
-                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + TRANSID + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + TRANSID + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
                                             }
-                                            responsemsg = "Recharge Success.";
-
+                                            responsemsg = "Recharge Failed.";
                                         }
-                                        else if (status == "Failed")
+                                        else
                                         {
-                                            var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                            var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                            if (show == null)
+                                            var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, OrderId, ref TRANSID);
+                                            if (outputchk == "SUCCESS")
                                             {
-                                                status = "Failed";
-                                                dbsrs.recharge_update(idnn11.ToString(), status, TRANSID, PRICE, webcontent, "Response");
                                                 var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                if (statusRetailer == "Y")
+
+                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
+
+                                                if (Emailstatusretailerrechargesuccess == "Y")
                                                 {
-                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + TRANSID + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + TRANSID + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
                                                 }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                            else if (outputchk == "FAILED")
+                                            {
+                                                responsemsg = "Recharge Failed.";
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
 
                                                 smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
 
                                                 if (Emailstatusretailerrechargefailed == "Y")
                                                 {
                                                     smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + TRANSID + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                }
-                                                responsemsg = "Recharge Failed.";
-                                            }
-                                            else
-                                            {
-                                                var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, OrderId, ref TRANSID);
-                                                if (outputchk == "SUCCESS")
-                                                {
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
-
-                                                    if (Emailstatusretailerrechargesuccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + TRANSID + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                                else if (outputchk == "FAILED")
-                                                {
-                                                    responsemsg = "Recharge Failed.";
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
-
-                                                    if (Emailstatusretailerrechargefailed == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + TRANSID + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                    obj.Recharge_response = webcontent.ToString();
-                                                    dbsrs.SaveChanges();
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                    if (EmailstatusretailerrechargeProccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                            if (statusRetailer == "Y")
-                                            {
-                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                            }
-
-                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                            if (EmailstatusretailerrechargeProccess == "Y")
-                                            {
-                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                            }
-                                            responsemsg = "Recharge Pending.";
-                                        }
-                                    }
-                                    else if (url.ToUpper().Contains("INSTANTPAY.IN/WS/BBPS"))
-                                    {
-                                        int idnn11 = 0;
-
-                                        idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
-                                        idnn11 = Convert.ToInt32(idno);
-
-
-                                        var Retailer = dbsrs.Retailer_Details.Where(pp => pp.RetailerId == userid).Single();
-                                        var retailerMobile = Retailer.Mobile;
-                                        var token = dbsrs.Money_API_URLS.Where(pp => pp.API_Name.ToUpper().Contains("INSTANTPAY")).SingleOrDefault().Token;
-                                        //var token = "ca23f55293bc9c2a51fe06d2d07e5ea4";
-                                        string RetailerOutletid = Retailer.RetailerOutlet != null ? Retailer.RetailerOutlet.outlet_id : "NA";
-
-                                        InstantPay_BBPS vb = new InstantPay_BBPS();
-                                        string refid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + vb.RandomString(4);
-                                        var apioptcode = dbsrs.SRS_API.Where(aa => aa.api_nm.ToUpper().Contains("IPAYBBPS") && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
-
-                                        var responsechk1 = vb.bill_pay(token, apioptcode, refid, retailerMobile, mobileno, optional1, optional2, RetailerOutletid, Convert.ToDecimal(Amount), "");
-                                        var responsechk = responsechk1.Content.ToString();
-
-                                        var Request = responsechk1.Request.Parameters[1].Value;
-                                        var ReqUrl = url + "  RequestBody : " + Request;
-                                        Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                        objCourse.Recharge_response = responsechk.ToString();
-                                        objCourse.Recharge_request = ReqUrl;
-                                        dbsrs.SaveChanges();
-
-                                        XmlDocument xd = new XmlDocument();
-                                        xd.LoadXml(responsechk);
-                                        var statuscode = xd.SelectNodes("xml/statuscode")[0].InnerText;
-                                        var Resmsg = xd.SelectNodes("xml/status")[0].InnerText;
-
-
-                                        if (statuscode.ToString() == "TXN")
-                                        {
-                                            var ipay_id = xd.SelectNodes("xml/data/ipay_id")[0].InnerText;
-                                            var agent_id = xd.SelectNodes("xml/data/agent_id")[0].InnerText;
-                                            var optid = xd.SelectNodes("xml/data/opr_id")[0].InnerText;
-                                            var account_no = xd.SelectNodes("xml/data/account_no")[0].InnerText;
-                                            var sp_key = xd.SelectNodes("xml/data/sp_key")[0].InnerText;
-                                            var trans_amt = xd.SelectNodes("xml/data/trans_amt")[0].InnerText;
-                                            var amtd = xd.SelectNodes("xml/data/charged_amt")[0].InnerText;
-                                            var oenbal = xd.SelectNodes("xml/data/opening_bal")[0].InnerText;
-                                            var Status = xd.SelectNodes("xml/data/status")[0].InnerText;
-
-                                            var remain = Convert.ToDecimal(oenbal.ToString()) - Convert.ToDecimal(amtd.ToString());
-
-                                            dbsrs.recharge_update(idno, "SUCCESS", optid, remain, responsechk.ToString(), "Response");
-                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                            if (statusRetailer == "Y")
-                                            {
-                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                            }
-
-                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
-
-                                            if (Emailstatusretailerrechargesuccess == "Y")
-                                            {
-                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + optid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                            }
-                                            responsemsg = "Recharge Process Successfully.";
-                                        }
-                                        else if (statuscode.ToString() == "TUP")
-                                        {
-                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                            if (statusRetailer == "Y")
-                                            {
-                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                            }
-
-                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                            if (EmailstatusretailerrechargeProccess == "Y")
-                                            {
-                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                            }
-                                            responsemsg = "Recharge Process Successfully.";
-                                        }
-                                        else
-                                        {
-                                            dbsrs.recharge_update(idno, "FAILED", Resmsg, 0, responsechk.ToString(), "Response");
-                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                            if (statusRetailer == "Y")
-                                            {
-                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + Resmsg + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                            }
-
-                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                            if (Emailstatusretailerrechargefailed == "Y")
-                                            {
-                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Resmsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                            }
-                                            responsemsg = "Recharge Failed.";
-
-                                        }
-                                    }
-                                    else if (url.ToUpper().Contains("INSTANTPAY.IN/WS/API"))
-                                    {
-                                        dynamic response = JsonConvert.DeserializeObject(webcontent.ToString());
-                                        var RESCODE = response.res_code.ToString();
-                                        var optid = response.opr_id.ToString();
-                                        var openbal = response.opening_bal.ToString();
-                                        decimal remain = Convert.ToDecimal(openbal);
-                                        if (RESCODE == "TXN")
-                                        {
-                                            dbsrs.recharge_update(idno, "SUCCESS", optid, remain, webcontent, "Response");
-                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                            if (statusRetailer == "Y")
-                                            {
-                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                            }
-
-                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
-
-                                            if (Emailstatusretailerrechargesuccess == "Y")
-                                            {
-                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + optid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                            }
-                                            responsemsg = "Recharge Process Successfully.";
-                                        }
-                                        else if (RESCODE.ToString() == "TUP")
-                                        {
-                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                            if (statusRetailer == "Y")
-                                            {
-                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                            }
-
-                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                            if (EmailstatusretailerrechargeProccess == "Y")
-                                            {
-                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                            }
-                                            responsemsg = "Recharge Process Successfully.";
-                                        }
-                                        else
-                                        {
-                                            dbsrs.recharge_update(idno, "FAILED", optid, remain, webcontent, "Response");
-                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                            if (statusRetailer == "Y")
-                                            {
-                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                            }
-
-                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
-
-                                            if (Emailstatusretailerrechargefailed == "Y")
-                                            {
-                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + optid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                            }
-                                            responsemsg = "Recharge Failed.";
-                                        }
-
-                                    }
-                                    else if (url.ToUpper().Contains("RECHARGE/RECHARGE"))
-                                    {
-
-                                        var tkn = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
-                                        var tokenpriority = tkn.prioritytoken;
-                                        var token = "";
-                                        var Tokenid = "";
-                                        if (tokenpriority == "token1")
-                                        {
-                                            token = tkn.Token;
-                                            Tokenid = tkn.Token;
-                                        }
-                                        else if (tokenpriority == "token2")
-                                        {
-                                            token = tkn.token1;
-                                            Tokenid = tkn.token1;
-                                        }
-                                        else
-                                        {
-                                            token = tkn.token2;
-                                            Tokenid = tkn.token2;
-                                        }
-
-                                        var Userid = tkn.API_ID;
-
-                                        POST_API PA = new POST_API();
-
-                                        int idnn111 = 0;
-                                        idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
-                                        idnn111 = Convert.ToInt32(idno);
-                                        string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
-                                        var apioptcode = dbsrs.SRS_API.Where(aa => aa.api == url && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
-                                        var responsechk1 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
-
-
-                                        var responsechk = responsechk1.Content.ToString();
-                                        dynamic json = JsonConvert.DeserializeObject(responsechk);
-
-                                        var Request = responsechk1.Request.Parameters[2].Value;
-                                        var ReqUrl = url + "  RequestBody : " + Request;
-
-                                        Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
-                                        objCourse.Recharge_response = json.ToString();
-                                        objCourse.Recharge_request = ReqUrl;
-                                        objCourse.Order_id = CommonTranid.ToString();
-                                        dbsrs.SaveChanges();
-
-                                        var status = json.Status.ToString();
-                                        string operatorid = json.Transid.ToString();
-                                        var errormsg = json.Errormsg.ToString();
-                                        var remainamount = json.Remain.ToString();
-                                        var Yourrchid = json.Yourrchid.ToString();
-                                        var RechargeID = json.RechargeID.ToString();
-
-
-                                        if (status.ToUpper() == "SUCCESS")
-                                        {
-
-                                            status = "Success";
-                                            dbsrs.recharge_update(idnn111.ToString(), status, operatorid, Convert.ToDecimal(remainamount), json.ToString(), "Response");
-                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                            if (statusRetailer == "Y")
-                                            {
-                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                            }
-
-                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                            if (Emailstatusretailerrechargesuccess == "Y")
-                                            {
-                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                            }
-                                            responsemsg = "Recharge Process Successfully.";
-                                        }
-                                        else if (status.ToUpper() == "FAILED")
-                                        {
-                                            if (errormsg.Contains("Ip is Not Valid"))
-                                            {
-                                                var tkn1 = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
-                                                var tokenpriority1 = tkn1.prioritytoken;
-                                                var token1 = "";
-                                                var tknn = tokenpriority1.Replace("token", "");
-                                                int ttkk = Convert.ToInt32(tknn);
-                                                ttkk = ttkk + 1;
-                                                if (ttkk >= 3)
-                                                {
-                                                    ttkk = 1;
-                                                }
-                                                token1 = "token" + ttkk;
-                                                if (token1 == "token1")
-                                                {
-                                                    token = tkn.Token;
-                                                    Tokenid = tkn.Token;
-                                                }
-                                                else if (token1 == "token2")
-                                                {
-                                                    if (string.IsNullOrEmpty(tkn.token1))
-                                                    {
-                                                        token = tkn.token1;
-                                                        Tokenid = tkn.token1;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    if (string.IsNullOrEmpty(tkn.token2))
-                                                    {
-                                                        token = tkn.token2;
-                                                        Tokenid = tkn.token2;
-                                                    }
-                                                }
-
-
-                                                var Userid1 = tkn.API_ID;
-                                                var responsechk2 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
-                                                var responsechk11 = responsechk2.Content.ToString();
-                                                dynamic json1 = JsonConvert.DeserializeObject(responsechk11);
-                                                var errormsg1 = json1.Errormsg.ToString();
-                                                if (errormsg1.Contains("Ip is Not Valid"))
-                                                {
-                                                    var tkn2 = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
-                                                    var tokenpriority2 = tkn2.prioritytoken;
-                                                    var token2 = "";
-                                                    var tknn1 = tokenpriority2.Replace("token", "");
-                                                    int ttkk1 = Convert.ToInt32(tknn1);
-                                                    ttkk1 = ttkk1 + 1;
-                                                    if (ttkk1 >= 3)
-                                                    {
-                                                        ttkk1 = 1;
-                                                    }
-                                                    token2 = "token" + ttkk1;
-                                                    if (token2 == "token1")
-                                                    {
-                                                        token = tkn.Token;
-                                                        Tokenid = tkn.Token;
-                                                    }
-                                                    else if (token2 == "token2")
-                                                    {
-                                                        token = tkn.token1;
-                                                        Tokenid = tkn.token1;
-                                                    }
-                                                    else
-                                                    {
-                                                        token = tkn.token2;
-                                                        Tokenid = tkn.token2;
-                                                    }
-                                                    var responsechk3 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
-                                                    var responsechk111 = responsechk3.Content.ToString();
-                                                    dynamic json2 = JsonConvert.DeserializeObject(responsechk111);
-                                                    var errormsg2 = json2.Errormsg.ToString();
-                                                }
-                                                else
-                                                {
-                                                    tkn1.prioritytoken = token1;
-                                                    dbsrs.SaveChanges();
-                                                }
-                                            }
-                                            var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                            var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                            if (show == null)
-                                            {
-                                                status = "Failed";
-                                                dbsrs.recharge_update(idnn111.ToString(), status, operatorid, Convert.ToDecimal(0), json.ToString(), "Response");
-                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                if (statusRetailer == "Y")
-                                                {
-                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                }
-
-                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                if (Emailstatusretailerrechargefailed == "Y")
-                                                {
-                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                }
-                                                responsemsg = "Recharge Failed.";
-
-                                            }
-                                            else
-                                            {
-                                                var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn111, optcodei, CommonTranid, ref operatorid);
-                                                if (outputchk == "SUCCESS")
-                                                {
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    responsemsg = "Recharge Process Successfully.";
-
-                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                    if (Emailstatusretailerrechargesuccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                }
-                                                else if (outputchk == "FAILED")
-                                                {
-                                                    responsemsg = "Recharge Failed.";
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                    if (Emailstatusretailerrechargefailed == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
-                                                    obj.Recharge_response = json.ToString();
-                                                    dbsrs.SaveChanges();
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                    if (EmailstatusretailerrechargeProccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
-                                            obj.Recharge_response = json.ToString();
-                                            dbsrs.SaveChanges();
-                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                            if (statusRetailer == "Y")
-                                            {
-                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                            }
-
-                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                            if (EmailstatusretailerrechargeProccess == "Y")
-                                            {
-                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                            }
-                                            responsemsg = "Recharge Process Successfully.";
-                                        }
-                                    }
-                                    else if (url.ToUpper().Contains("MROBOTICS.IN"))
-                                    {
-                                        var tkn = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
-                                        var token = tkn.Token;
-                                        var Tokenid = tkn.Token;
-                                        var Userid = tkn.API_ID;
-
-                                        POST_API PA = new POST_API();
-                                        int idnn11 = 0;
-                                        decimal amt1 = Convert.ToDecimal(Amount);
-                                        idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
-                                        idnn11 = Convert.ToInt32(idno);
-                                        string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + PA.RandomString(4);
-                                        var apioptcode = dbsrs.SRS_API.Where(aa => aa.api == url && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
-
-                                        var task = Task.Run(() =>
-                                        {
-                                            return PA.RchReqMrobotics(token, mobileno, Tokenid, Userid, amt1, apioptcode, CommonTranid, optional1, optional2, OptCode, url);
-                                        });
-
-                                        bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));     // 1 minutes
-                                        if (isCompletedSuccessfully == true)
-                                        {
-                                            string status = "";
-                                            var finaloutput = task.Result;
-                                            if (finaloutput.StatusCode == HttpStatusCode.OK)
-                                            {
-                                                var responsechk = finaloutput.Content.ToString();
-
-                                                dynamic json = JsonConvert.DeserializeObject(responsechk);
-
-                                                var Request = finaloutput.Request.Parameters[1].Value;
-                                                var ReqUrl = url + "  RequestBody : " + Request;
-
-                                                Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                objCourse.Recharge_request = ReqUrl;
-                                                objCourse.Order_id = CommonTranid.ToString();
-                                                dbsrs.SaveChanges();
-
-                                                string company_id = apioptcode.ToString();
-                                                string remainamount = ""; string Transid = "";
-                                                //var errorCode = json.error.ToString();
-                                                //if (errorCode.ToUpper() == "FALSE")
-                                                //{
-                                                if (company_id == "4")
-                                                {
-                                                    webcontent = "";
-
-
-                                                    status = json.status.ToString();
-                                                    if (status.ToUpper() == "SUCCESS")
-                                                    {
-                                                        Transid = json.tnx_id.ToString();
-                                                    }
-                                                    else
-                                                    {
-                                                        Transid = "";
-                                                    }
-
-
-                                                }
-                                                else
-                                                {
-                                                    Recharge_info objCours = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                    objCours.Recharge_response = json.ToString();
-                                                    dbsrs.SaveChanges();
-                                                    webcontent = json.ToString();
-
-                                                    status = json.status.ToString();
-                                                    if (status.ToUpper() == "SUCCESS")
-                                                    {
-                                                        Transid = json.tnx_id.ToString();
-                                                    }
-                                                    else
-                                                    {
-                                                        Transid = "";
-                                                    }
-
-                                                }
-
-
-
-                                                if (status.ToUpper() == "SUCCESS")
-                                                {
-                                                    remainamount = json.balance.ToString();
-                                                    status = "Success";
-                                                    dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(remainamount), webcontent, "Response");
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + amt + ". Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
-
-                                                    if (Emailstatusretailerrechargesuccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + amt + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                                else if (status.ToUpper() == "FAILURE")
-                                                {
-                                                    var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                    var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                    if (show == null)
-                                                    {
-                                                        status = "Failed";
-                                                        dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(0), webcontent, "Response");
-                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                        if (statusRetailer == "Y")
-                                                        {
-                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + amt + " is FAILED. Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                        }
-
-                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
-
-                                                        if (Emailstatusretailerrechargefailed == "Y")
-                                                        {
-                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + amt + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                        }
-                                                        responsemsg = "Recharge Failed.";
-
-                                                    }
-                                                    else
-                                                    {
-                                                        var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, CommonTranid, ref Transid);
-                                                        if (outputchk == "SUCCESS")
-                                                        {
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
-
-                                                            if (Emailstatusretailerrechargesuccess == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Process Successfully.";
-                                                        }
-                                                        else if (outputchk == "FAILED")
-                                                        {
-                                                            responsemsg = "Recharge Failed.";
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
-
-                                                            if (Emailstatusretailerrechargefailed == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                            if (statusRetailer == "Y")
-                                                            {
-                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                            }
-
-                                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                            if (EmailstatusretailerrechargeProccess == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Process Successfully.";
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                    if (EmailstatusretailerrechargeProccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                            }
-                                            else
-                                            {
-                                                var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                if (show == null)
-                                                {
-                                                    status = "Failed";
-                                                    var Transid = "API End Issue";
-                                                    dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(0), webcontent, "Response");
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + amt + " is FAILED. Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
-
-                                                    if (Emailstatusretailerrechargefailed == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + amt + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Failed.";
-
-                                                }
-                                                else
-                                                {
-                                                    responsemsg = "Recharge Failed.";
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, "", remainbal);
-
-                                                    if (Emailstatusretailerrechargefailed == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + "" + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                            if (statusRetailer == "Y")
-                                            {
-                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                            }
-
-                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                            if (EmailstatusretailerrechargeProccess == "Y")
-                                            {
-                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                            }
-                                            responsemsg = "Recharge Process Successfully.";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        var apiinfo = dbsrs.RechargeapiInfoes.Where(aa => aa.apiendpoint.ToUpper() == url.ToUpper()).SingleOrDefault();
-                                        if (apiinfo != null)
-                                        {
-                                            var apiremain = "0"; var _status = "Pending"; var transid = ""; var errormsg = "";
-
-                                            ApiResponse rech = Vastwebmulti.Models.RechargeServices.Recharge(apiinfo, mobileno, OptCode, ammt, OrderId);
-                                            _status = rech.status;
-                                            transid = rech.operatorId;
-                                            errormsg = rech.errormsg;
-                                            apiremain = rech.apiremain;
-                                            webcontent = rech.api_response;
-                                            int idnn11 = rech.id;
-
-                                            if (_status == "Success")
-                                            {
-                                                //    status = "Success";
-                                                dbsrs.recharge_update(idnn11.ToString(), "Success", transid, Convert.ToDecimal(apiremain), webcontent, "Response");
-                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                if (statusRetailer == "Y")
-                                                {
-                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                }
-
-                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, transid, remainbal);
-
-                                                if (Emailstatusretailerrechargesuccess == "Y")
-                                                {
-                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                }
-                                                responsemsg = "Recharge Process Successfully.";
-
-                                            }
-                                            else if (_status == "Failed")
-                                            {
-                                                var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                if (show == null)
-                                                {
-                                                    //status = "Failed";
-                                                    dbsrs.recharge_update(idnn11.ToString(), "Failed", errormsg, Convert.ToDecimal(apiremain), webcontent, "Response");
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + errormsg + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, errormsg, remainbal);
-
-                                                    if (Emailstatusretailerrechargefailed == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + errormsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Failed.";
-
-                                                }
-                                                else
-                                                {
-                                                    var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, OrderId, ref transid);
-                                                    if (outputchk == "SUCCESS")
-                                                    {
-                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, transid, remainbal);
-
-                                                        if (Emailstatusretailerrechargesuccess == "Y")
-                                                        {
-                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                        }
-                                                        responsemsg = "Recharge Process Successfully.";
-                                                    }
-                                                    else if (outputchk == "FAILED")
-                                                    {
-                                                        responsemsg = "Recharge Failed.";
-                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, errormsg, remainbal);
-
-                                                        if (Emailstatusretailerrechargefailed == "Y")
-                                                        {
-                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + errormsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                        obj.Recharge_response = webcontent.ToString();
-                                                        dbsrs.SaveChanges();
-                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                        if (statusRetailer == "Y")
-                                                        {
-                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                        }
-
-                                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                        if (EmailstatusretailerrechargeProccess == "Y")
-                                                        {
-                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                        }
-                                                        responsemsg = "Recharge Process Successfully.";
-                                                    }
                                                 }
                                             }
                                             else
@@ -11914,234 +11129,586 @@ namespace Vastwebmulti.Controllers
                                                     smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
                                                 }
                                                 responsemsg = "Recharge Process Successfully.";
-
                                             }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                        if (statusRetailer == "Y")
+                                        {
+                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                        }
+
+                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                        if (EmailstatusretailerrechargeProccess == "Y")
+                                        {
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                        }
+                                        responsemsg = "Recharge Pending.";
+                                    }
+                                }
+                                else if (url.ToUpper().Contains("INSTANTPAY.IN/WS/BBPS"))
+                                {
+                                    int idnn11 = 0;
+
+                                    idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                    idnn11 = Convert.ToInt32(idno);
+
+
+                                    var Retailer = dbsrs.Retailer_Details.Where(pp => pp.RetailerId == userid).Single();
+                                    var retailerMobile = Retailer.Mobile;
+                                    var token = dbsrs.Money_API_URLS.Where(pp => pp.API_Name.ToUpper().Contains("INSTANTPAY")).SingleOrDefault().Token;
+                                    //var token = "ca23f55293bc9c2a51fe06d2d07e5ea4";
+                                    string RetailerOutletid = Retailer.RetailerOutlet != null ? Retailer.RetailerOutlet.outlet_id : "NA";
+
+                                    InstantPay_BBPS vb = new InstantPay_BBPS();
+                                    string refid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + vb.RandomString(4);
+                                    var apioptcode = dbsrs.SRS_API.Where(aa => aa.api_nm.ToUpper().Contains("IPAYBBPS") && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
+
+                                    var responsechk1 = vb.bill_pay(token, apioptcode, refid, retailerMobile, mobileno, optional1, optional2, RetailerOutletid, Convert.ToDecimal(Amount), "");
+                                    var responsechk = responsechk1.Content.ToString();
+
+                                    var Request = responsechk1.Request.Parameters[1].Value;
+                                    var ReqUrl = url + "  RequestBody : " + Request;
+                                    Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                    objCourse.Recharge_response = responsechk.ToString();
+                                    objCourse.Recharge_request = ReqUrl;
+                                    dbsrs.SaveChanges();
+
+                                    XmlDocument xd = new XmlDocument();
+                                    xd.LoadXml(responsechk);
+                                    var statuscode = xd.SelectNodes("xml/statuscode")[0].InnerText;
+                                    var Resmsg = xd.SelectNodes("xml/status")[0].InnerText;
+
+
+                                    if (statuscode.ToString() == "TXN")
+                                    {
+                                        var ipay_id = xd.SelectNodes("xml/data/ipay_id")[0].InnerText;
+                                        var agent_id = xd.SelectNodes("xml/data/agent_id")[0].InnerText;
+                                        var optid = xd.SelectNodes("xml/data/opr_id")[0].InnerText;
+                                        var account_no = xd.SelectNodes("xml/data/account_no")[0].InnerText;
+                                        var sp_key = xd.SelectNodes("xml/data/sp_key")[0].InnerText;
+                                        var trans_amt = xd.SelectNodes("xml/data/trans_amt")[0].InnerText;
+                                        var amtd = xd.SelectNodes("xml/data/charged_amt")[0].InnerText;
+                                        var oenbal = xd.SelectNodes("xml/data/opening_bal")[0].InnerText;
+                                        var Status = xd.SelectNodes("xml/data/status")[0].InnerText;
+
+                                        var remain = Convert.ToDecimal(oenbal.ToString()) - Convert.ToDecimal(amtd.ToString());
+
+                                        dbsrs.recharge_update(idno, "SUCCESS", optid, remain, responsechk.ToString(), "Response");
+                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                        if (statusRetailer == "Y")
+                                        {
+                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                        }
+
+                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
+
+                                        if (Emailstatusretailerrechargesuccess == "Y")
+                                        {
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + optid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                        }
+                                        responsemsg = "Recharge Process Successfully.";
+                                    }
+                                    else if (statuscode.ToString() == "TUP")
+                                    {
+                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                        if (statusRetailer == "Y")
+                                        {
+                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                        }
+
+                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                        if (EmailstatusretailerrechargeProccess == "Y")
+                                        {
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                        }
+                                        responsemsg = "Recharge Process Successfully.";
+                                    }
+                                    else
+                                    {
+                                        dbsrs.recharge_update(idno, "FAILED", Resmsg, 0, responsechk.ToString(), "Response");
+                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                        if (statusRetailer == "Y")
+                                        {
+                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + Resmsg + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                        }
+
+                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                        if (Emailstatusretailerrechargefailed == "Y")
+                                        {
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Resmsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                        }
+                                        responsemsg = "Recharge Failed.";
+
+                                    }
+                                }
+                                else if (url.ToUpper().Contains("INSTANTPAY.IN/WS/API"))
+                                {
+                                    dynamic response = JsonConvert.DeserializeObject(webcontent.ToString());
+                                    var RESCODE = response.res_code.ToString();
+                                    var optid = response.opr_id.ToString();
+                                    var openbal = response.opening_bal.ToString();
+                                    decimal remain = Convert.ToDecimal(openbal);
+                                    if (RESCODE == "TXN")
+                                    {
+                                        dbsrs.recharge_update(idno, "SUCCESS", optid, remain, webcontent, "Response");
+                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                        if (statusRetailer == "Y")
+                                        {
+                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                        }
+
+                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
+
+                                        if (Emailstatusretailerrechargesuccess == "Y")
+                                        {
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + optid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                        }
+                                        responsemsg = "Recharge Process Successfully.";
+                                    }
+                                    else if (RESCODE.ToString() == "TUP")
+                                    {
+                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                        if (statusRetailer == "Y")
+                                        {
+                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                        }
+
+                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                        if (EmailstatusretailerrechargeProccess == "Y")
+                                        {
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                        }
+                                        responsemsg = "Recharge Process Successfully.";
+                                    }
+                                    else
+                                    {
+                                        dbsrs.recharge_update(idno, "FAILED", optid, remain, webcontent, "Response");
+                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                        if (statusRetailer == "Y")
+                                        {
+                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                        }
+
+                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
+
+                                        if (Emailstatusretailerrechargefailed == "Y")
+                                        {
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + optid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                        }
+                                        responsemsg = "Recharge Failed.";
+                                    }
+
+                                }
+                                else if (url.ToUpper().Contains("RECHARGE/RECHARGE"))
+                                {
+
+                                    var tkn = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
+                                    var tokenpriority = tkn.prioritytoken;
+                                    var token = "";
+                                    var Tokenid = "";
+                                    if (tokenpriority == "token1")
+                                    {
+                                        token = tkn.Token;
+                                        Tokenid = tkn.Token;
+                                    }
+                                    else if (tokenpriority == "token2")
+                                    {
+                                        token = tkn.token1;
+                                        Tokenid = tkn.token1;
+                                    }
+                                    else
+                                    {
+                                        token = tkn.token2;
+                                        Tokenid = tkn.token2;
+                                    }
+
+                                    var Userid = tkn.API_ID;
+
+                                    POST_API PA = new POST_API();
+
+                                    int idnn111 = 0;
+                                    idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                    idnn111 = Convert.ToInt32(idno);
+                                    string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                                    var apioptcode = dbsrs.SRS_API.Where(aa => aa.api == url && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
+                                    var responsechk1 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
+
+
+                                    var responsechk = responsechk1.Content.ToString();
+                                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+
+                                    var Request = responsechk1.Request.Parameters[2].Value;
+                                    var ReqUrl = url + "  RequestBody : " + Request;
+
+                                    Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
+                                    objCourse.Recharge_response = json.ToString();
+                                    objCourse.Recharge_request = ReqUrl;
+                                    objCourse.Order_id = CommonTranid.ToString();
+                                    dbsrs.SaveChanges();
+
+                                    var status = json.Status.ToString();
+                                    string operatorid = json.Transid.ToString();
+                                    var errormsg = json.Errormsg.ToString();
+                                    var remainamount = json.Remain.ToString();
+                                    var Yourrchid = json.Yourrchid.ToString();
+                                    var RechargeID = json.RechargeID.ToString();
+
+
+                                    if (status.ToUpper() == "SUCCESS")
+                                    {
+
+                                        status = "Success";
+                                        dbsrs.recharge_update(idnn111.ToString(), status, operatorid, Convert.ToDecimal(remainamount), json.ToString(), "Response");
+                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                        if (statusRetailer == "Y")
+                                        {
+                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                        }
+
+                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                        if (Emailstatusretailerrechargesuccess == "Y")
+                                        {
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                        }
+                                        responsemsg = "Recharge Process Successfully.";
+                                    }
+                                    else if (status.ToUpper() == "FAILED")
+                                    {
+                                        if (errormsg.Contains("Ip is Not Valid"))
+                                        {
+                                            var tkn1 = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
+                                            var tokenpriority1 = tkn1.prioritytoken;
+                                            var token1 = "";
+                                            var tknn = tokenpriority1.Replace("token", "");
+                                            int ttkk = Convert.ToInt32(tknn);
+                                            ttkk = ttkk + 1;
+                                            if (ttkk >= 3)
+                                            {
+                                                ttkk = 1;
+                                            }
+                                            token1 = "token" + ttkk;
+                                            if (token1 == "token1")
+                                            {
+                                                token = tkn.Token;
+                                                Tokenid = tkn.Token;
+                                            }
+                                            else if (token1 == "token2")
+                                            {
+                                                if (string.IsNullOrEmpty(tkn.token1))
+                                                {
+                                                    token = tkn.token1;
+                                                    Tokenid = tkn.token1;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (string.IsNullOrEmpty(tkn.token2))
+                                                {
+                                                    token = tkn.token2;
+                                                    Tokenid = tkn.token2;
+                                                }
+                                            }
+
+
+                                            var Userid1 = tkn.API_ID;
+                                            var responsechk2 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
+                                            var responsechk11 = responsechk2.Content.ToString();
+                                            dynamic json1 = JsonConvert.DeserializeObject(responsechk11);
+                                            var errormsg1 = json1.Errormsg.ToString();
+                                            if (errormsg1.Contains("Ip is Not Valid"))
+                                            {
+                                                var tkn2 = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
+                                                var tokenpriority2 = tkn2.prioritytoken;
+                                                var token2 = "";
+                                                var tknn1 = tokenpriority2.Replace("token", "");
+                                                int ttkk1 = Convert.ToInt32(tknn1);
+                                                ttkk1 = ttkk1 + 1;
+                                                if (ttkk1 >= 3)
+                                                {
+                                                    ttkk1 = 1;
+                                                }
+                                                token2 = "token" + ttkk1;
+                                                if (token2 == "token1")
+                                                {
+                                                    token = tkn.Token;
+                                                    Tokenid = tkn.Token;
+                                                }
+                                                else if (token2 == "token2")
+                                                {
+                                                    token = tkn.token1;
+                                                    Tokenid = tkn.token1;
+                                                }
+                                                else
+                                                {
+                                                    token = tkn.token2;
+                                                    Tokenid = tkn.token2;
+                                                }
+                                                var responsechk3 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
+                                                var responsechk111 = responsechk3.Content.ToString();
+                                                dynamic json2 = JsonConvert.DeserializeObject(responsechk111);
+                                                var errormsg2 = json2.Errormsg.ToString();
+                                            }
+                                            else
+                                            {
+                                                tkn1.prioritytoken = token1;
+                                                dbsrs.SaveChanges();
+                                            }
+                                        }
+                                        var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                        var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                        if (show == null)
+                                        {
+                                            status = "Failed";
+                                            dbsrs.recharge_update(idnn111.ToString(), status, operatorid, Convert.ToDecimal(0), json.ToString(), "Response");
+                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                            if (statusRetailer == "Y")
+                                            {
+                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                            }
+
+                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                            if (Emailstatusretailerrechargefailed == "Y")
+                                            {
+                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                            }
+                                            responsemsg = "Recharge Failed.";
 
                                         }
                                         else
                                         {
-                                            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
-                                            HttpWebRequest WebRequestObject = (HttpWebRequest)HttpWebRequest.Create(url);
-                                            WebRequestObject.Timeout = (System.Int32)TimeSpan.FromSeconds(200).TotalMilliseconds;
-                                            try
+                                            var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn111, optcodei, CommonTranid, ref operatorid);
+                                            if (outputchk == "SUCCESS")
                                             {
-                                                int idnn11 = 0;
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                responsemsg = "Recharge Process Successfully.";
 
-                                                idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
-                                                idnn11 = Convert.ToInt32(idno);
-                                                WebResponse Response = WebRequestObject.GetResponse();
-                                                Stream WebStream = Response.GetResponseStream();
-                                                StreamReader Reader = new StreamReader(WebStream);
-                                                webcontent = Reader.ReadToEnd();
+                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
 
-                                                if (url.ToUpper().Contains("LIVE.VASTWEBINDIA.COM"))
+                                                if (Emailstatusretailerrechargesuccess == "Y")
                                                 {
-                                                    dynamic stuff = JsonConvert.DeserializeObject(webcontent);
-                                                    var status = stuff.Status.ToString();
-                                                    var Mobile = stuff.Mobile.ToString();
-                                                    Amount = stuff.Amount.ToString();
-                                                    var RCHID = stuff.RCHID.ToString();
-                                                    string Operatorid = stuff.Operatorid.ToString();
-                                                    var remainamount = stuff.remainamount.ToString();
-                                                    var LapuNumber = stuff.LapuNumber.ToString();
-                                                    if (status.ToUpper() == "SUCCESS")
-                                                    {
-                                                        status = "Success";
-                                                        dbsrs.recharge_update(idnn11.ToString(), status, Operatorid, Convert.ToDecimal(Amount), webcontent, "Response");
-                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                        if (statusRetailer == "Y")
-                                                        {
-                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + Operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                        }
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                            }
+                                            else if (outputchk == "FAILED")
+                                            {
+                                                responsemsg = "Recharge Failed.";
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
 
-                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
+                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                if (Emailstatusretailerrechargefailed == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
+                                                obj.Recharge_response = json.ToString();
+                                                dbsrs.SaveChanges();
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                if (EmailstatusretailerrechargeProccess == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
+                                        obj.Recharge_response = json.ToString();
+                                        dbsrs.SaveChanges();
+                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                        if (statusRetailer == "Y")
+                                        {
+                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                        }
+
+                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                        if (EmailstatusretailerrechargeProccess == "Y")
+                                        {
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                        }
+                                        responsemsg = "Recharge Process Successfully.";
+                                    }
+                                }
+                                else if (url.ToUpper().Contains("MROBOTICS.IN"))
+                                {
+                                    var tkn = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
+                                    var token = tkn.Token;
+                                    var Tokenid = tkn.Token;
+                                    var Userid = tkn.API_ID;
+
+                                    POST_API PA = new POST_API();
+                                    int idnn11 = 0;
+                                    decimal amt1 = Convert.ToDecimal(Amount);
+                                    idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                    idnn11 = Convert.ToInt32(idno);
+                                    string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + PA.RandomString(4);
+                                    var apioptcode = dbsrs.SRS_API.Where(aa => aa.api == url && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
+
+                                    var task = Task.Run(() =>
+                                    {
+                                        return PA.RchReqMrobotics(token, mobileno, Tokenid, Userid, amt1, apioptcode, CommonTranid, optional1, optional2, OptCode, url);
+                                    });
+
+                                    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));     // 1 minutes
+                                    if (isCompletedSuccessfully == true)
+                                    {
+                                        string status = "";
+                                        var finaloutput = task.Result;
+                                        if (finaloutput.StatusCode == HttpStatusCode.OK)
+                                        {
+                                            var responsechk = finaloutput.Content.ToString();
+
+                                            dynamic json = JsonConvert.DeserializeObject(responsechk);
+
+                                            var Request = finaloutput.Request.Parameters[1].Value;
+                                            var ReqUrl = url + "  RequestBody : " + Request;
+
+                                            Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                            objCourse.Recharge_request = ReqUrl;
+                                            objCourse.Order_id = CommonTranid.ToString();
+                                            dbsrs.SaveChanges();
+
+                                            string company_id = apioptcode.ToString();
+                                            string remainamount = ""; string Transid = "";
+                                            //var errorCode = json.error.ToString();
+                                            //if (errorCode.ToUpper() == "FALSE")
+                                            //{
+                                            if (company_id == "4")
+                                            {
+                                                webcontent = "";
+
+
+                                                status = json.status.ToString();
+                                                if (status.ToUpper() == "SUCCESS")
+                                                {
+                                                    Transid = json.tnx_id.ToString();
+                                                }
+                                                else
+                                                {
+                                                    Transid = "";
+                                                }
+
+
+                                            }
+                                            else
+                                            {
+                                                Recharge_info objCours = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                objCours.Recharge_response = json.ToString();
+                                                dbsrs.SaveChanges();
+                                                webcontent = json.ToString();
+
+                                                status = json.status.ToString();
+                                                if (status.ToUpper() == "SUCCESS")
+                                                {
+                                                    Transid = json.tnx_id.ToString();
+                                                }
+                                                else
+                                                {
+                                                    Transid = "";
+                                                }
+
+                                            }
+
+
+
+                                            if (status.ToUpper() == "SUCCESS")
+                                            {
+                                                remainamount = json.balance.ToString();
+                                                status = "Success";
+                                                dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(remainamount), webcontent, "Response");
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + amt + ". Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
+
+                                                if (Emailstatusretailerrechargesuccess == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + amt + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                            else if (status.ToUpper() == "FAILURE")
+                                            {
+                                                var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                if (show == null)
+                                                {
+                                                    status = "Failed";
+                                                    dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(0), webcontent, "Response");
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
+                                                    {
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + amt + " is FAILED. Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    }
+
+                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
+
+                                                    if (Emailstatusretailerrechargefailed == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + amt + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "Recharge Failed.";
+
+                                                }
+                                                else
+                                                {
+                                                    var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, CommonTranid, ref Transid);
+                                                    if (outputchk == "SUCCESS")
+                                                    {
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+
+                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
 
                                                         if (Emailstatusretailerrechargesuccess == "Y")
                                                         {
-                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
                                                         }
                                                         responsemsg = "Recharge Process Successfully.";
-
                                                     }
-                                                    else if (status.ToUpper() == "FAILED")
+                                                    else if (outputchk == "FAILED")
                                                     {
-                                                        var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                        var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                        if (show == null)
+                                                        responsemsg = "Recharge Failed.";
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+
+                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
+
+                                                        if (Emailstatusretailerrechargefailed == "Y")
                                                         {
-                                                            status = "Failed";
-                                                            dbsrs.recharge_update(idnn11.ToString(), status, Operatorid, Convert.ToDecimal(Amount), webcontent, "Response");
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                            if (statusRetailer == "Y")
-                                                            {
-                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + Operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                            }
-
-                                                            //if (statusretailerrechargefailed == "Y")
-                                                            //{
-                                                            //    string msgssss = "";
-                                                            //    string tempid = "";
-                                                            //    string urlss = "";
-
-                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                            //    if (smsstypes != null)
-                                                            //    {
-
-                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
-                                                            //        tempid = smsstypes.Templateid;
-                                                            //        urlss = smsapionsts.smsapi;
-
-                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                            //    }
-                                                            //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                            //}
-
-                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
-
-                                                            if (Emailstatusretailerrechargefailed == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Failed.";
-                                                        }
-                                                        else
-                                                        {
-                                                            var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, OrderId, ref Operatorid);
-                                                            if (outputchk == "SUCCESS")
-                                                            {
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                //if (statusretailerrechargesuccess == "Y")
-                                                                //{
-
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-                                                                //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
-
-                                                                if (Emailstatusretailerrechargesuccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
-
-                                                            }
-                                                            else if (outputchk == "FAILED")
-                                                            {
-                                                                responsemsg = "Recharge Failed.";
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                //if (statusretailerrechargefailed == "Y")
-                                                                //{
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-                                                                //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
-
-                                                                if (Emailstatusretailerrechargefailed == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                //Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                                //obj.Recharge_response = webcontent.ToString();
-                                                                //dbsrs.SaveChanges();
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                //if (statusretailerrechargeProccess == "Y")
-                                                                //{
-
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-
-                                                                //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                                if (EmailstatusretailerrechargeProccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
-                                                            }
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
                                                         }
                                                     }
                                                     else
                                                     {
-                                                        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                        obj.Recharge_response = webcontent.ToString();
-                                                        dbsrs.SaveChanges();
                                                         var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
                                                         if (statusRetailer == "Y")
                                                         {
                                                             SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
                                                         }
-                                                        //if (statusretailerrechargeProccess == "Y")
-                                                        //{
-
-                                                        //    string msgssss = "";
-                                                        //    string tempid = "";
-                                                        //    string urlss = "";
-
-                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                        //    if (smsstypes != null)
-                                                        //    {
-
-                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                        //        tempid = smsstypes.Templateid;
-                                                        //        urlss = smsapionsts.smsapi;
-
-                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                        //    }
-
-
-                                                        //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                        //}
 
                                                         smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
 
@@ -12152,497 +11719,161 @@ namespace Vastwebmulti.Controllers
                                                         responsemsg = "Recharge Process Successfully.";
                                                     }
                                                 }
-                                                else if (url.ToUpper().Contains("VASTWEBINDIA.COM"))
+                                            }
+                                            else
+                                            {
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
                                                 {
-
-                                                    dynamic stuff = Newtonsoft.Json.JsonConvert.DeserializeObject(webcontent);
-
-                                                    var status = stuff.Status.ToString();
-                                                    var mobile = stuff.Mobile.ToString();
-                                                    var amount1 = stuff.Amount.ToString();
-                                                    var R_id = stuff.RID.ToString();
-                                                    string operatorid = stuff.Operatorid.ToString();
-                                                    var remain_amount = stuff.remainamount.ToString();
-
-                                                    if (status.ToUpper() == "SUCCESS")
-                                                    {
-
-                                                        status = "Success";
-                                                        dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
-                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                        if (statusRetailer == "Y")
-                                                        {
-                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                        }
-                                                        //if (statusretailerrechargesuccess == "Y")
-                                                        //{
-
-                                                        //    string msgssss = "";
-                                                        //    string tempid = "";
-                                                        //    string urlss = "";
-
-                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                        //    if (smsstypes != null)
-                                                        //    {
-
-                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                        //        tempid = smsstypes.Templateid;
-                                                        //        urlss = smsapionsts.smsapi;
-
-                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                        //    }
-                                                        //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
-                                                        //}
-
-                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                        if (Emailstatusretailerrechargesuccess == "Y")
-                                                        {
-                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                        }
-                                                        responsemsg = "Recharge Process Successfully.";
-                                                    }
-                                                    else if (status.ToUpper() == "FAILED")
-                                                    {
-                                                        var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                        var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                        if (show == null)
-                                                        {
-                                                            status = "Failed";
-                                                            dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                            if (statusRetailer == "Y")
-                                                            {
-                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                            }
-
-                                                            //if (statusretailerrechargefailed == "Y")
-                                                            //{
-
-                                                            //    string msgssss = "";
-                                                            //    string tempid = "";
-                                                            //    string urlss = "";
-
-                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                            //    if (smsstypes != null)
-                                                            //    {
-
-                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                            //        tempid = smsstypes.Templateid;
-                                                            //        urlss = smsapionsts.smsapi;
-
-                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                            //    }
-
-                                                            //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                            //}
-
-                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                            if (Emailstatusretailerrechargefailed == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Failed.";
-                                                        }
-                                                        else
-                                                        {
-                                                            var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, OrderId, ref operatorid);
-                                                            if (outputchk == "SUCCESS")
-                                                            {
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                //if (statusretailerrechargesuccess == "Y")
-                                                                //{
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-
-                                                                //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                if (Emailstatusretailerrechargesuccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
-                                                            }
-                                                            else if (outputchk == "FAILED")
-                                                            {
-                                                                responsemsg = "Recharge Failed.";
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                //if (statusretailerrechargefailed == "Y")
-                                                                //{
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-                                                                //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                if (Emailstatusretailerrechargefailed == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                                obj.Recharge_response = webcontent.ToString();
-                                                                dbsrs.SaveChanges();
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                if (statusRetailer == "Y")
-                                                                {
-                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                }
-                                                                //if (statusretailerrechargeProccess == "Y")
-                                                                //{
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-
-                                                                //    //   smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                                if (EmailstatusretailerrechargeProccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
-                                                            }
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                        obj.Recharge_response = webcontent.ToString();
-                                                        dbsrs.SaveChanges();
-                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                        if (statusRetailer == "Y")
-                                                        {
-                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                        }
-                                                        //if (statusretailerrechargeProccess == "Y")
-                                                        //{
-
-                                                        //    string msgssss = "";
-                                                        //    string tempid = "";
-                                                        //    string urlss = "";
-
-                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                        //    if (smsstypes != null)
-                                                        //    {
-
-                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                        //        tempid = smsstypes.Templateid;
-                                                        //        urlss = smsapionsts.smsapi;
-
-                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                        //    }
-                                                        //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                        //}
-
-                                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                        if (EmailstatusretailerrechargeProccess == "Y")
-                                                        {
-                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                        }
-                                                        responsemsg = "Recharge Process Successfully.";
-                                                    }
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
                                                 }
-                                                else if (url.ToUpper().Contains("RECHARGETRAAWSERVICES.IN"))
+
+                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                if (EmailstatusretailerrechargeProccess == "Y")
                                                 {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                            var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                            if (show == null)
+                                            {
+                                                status = "Failed";
+                                                var Transid = "API End Issue";
+                                                dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(0), webcontent, "Response");
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + amt + " is FAILED. Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
 
-                                                    dynamic stuff = Newtonsoft.Json.JsonConvert.DeserializeObject(webcontent);
+                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
 
-                                                    var status = stuff.status.ToString();
+                                                if (Emailstatusretailerrechargefailed == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + amt + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Failed.";
 
-                                                    string operatorid = stuff.operatorid.ToString();
-                                                    var amount1 = stuff.remainamount.ToString();
+                                            }
+                                            else
+                                            {
+                                                responsemsg = "Recharge Failed.";
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
 
-                                                    if (amount1 == "" || amount1 == null)
+                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, "", remainbal);
+
+                                                if (Emailstatusretailerrechargefailed == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + "" + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                        if (statusRetailer == "Y")
+                                        {
+                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                        }
+
+                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                        if (EmailstatusretailerrechargeProccess == "Y")
+                                        {
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                        }
+                                        responsemsg = "Recharge Process Successfully.";
+                                    }
+                                }
+                                else
+                                {
+                                    var apiinfo = dbsrs.RechargeapiInfoes.Where(aa => aa.apiendpoint.ToUpper() == url.ToUpper()).SingleOrDefault();
+                                    if (apiinfo != null)
+                                    {
+                                        var apiremain = "0"; var _status = "Pending"; var transid = ""; var errormsg = "";
+
+                                        ApiResponse rech = Vastwebmulti.Models.RechargeServices.Recharge(apiinfo, mobileno, OptCode, ammt, OrderId);
+                                        _status = rech.status;
+                                        transid = rech.operatorId;
+                                        errormsg = rech.errormsg;
+                                        apiremain = rech.apiremain;
+                                        webcontent = rech.api_response;
+                                        int idnn11 = rech.id;
+
+                                        if (_status == "Success")
+                                        {
+                                            //    status = "Success";
+                                            dbsrs.recharge_update(idnn11.ToString(), "Success", transid, Convert.ToDecimal(apiremain), webcontent, "Response");
+                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                            if (statusRetailer == "Y")
+                                            {
+                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                            }
+
+                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, transid, remainbal);
+
+                                            if (Emailstatusretailerrechargesuccess == "Y")
+                                            {
+                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                            }
+                                            responsemsg = "Recharge Process Successfully.";
+
+                                        }
+                                        else if (_status == "Failed")
+                                        {
+                                            var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                            var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                            if (show == null)
+                                            {
+                                                //status = "Failed";
+                                                dbsrs.recharge_update(idnn11.ToString(), "Failed", errormsg, Convert.ToDecimal(apiremain), webcontent, "Response");
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + errormsg + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, errormsg, remainbal);
+
+                                                if (Emailstatusretailerrechargefailed == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + errormsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Failed.";
+
+                                            }
+                                            else
+                                            {
+                                                var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, OrderId, ref transid);
+                                                if (outputchk == "SUCCESS")
+                                                {
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+
+                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, transid, remainbal);
+
+                                                    if (Emailstatusretailerrechargesuccess == "Y")
                                                     {
-                                                        amount1 = "0";
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
                                                     }
+                                                    responsemsg = "Recharge Process Successfully.";
+                                                }
+                                                else if (outputchk == "FAILED")
+                                                {
+                                                    responsemsg = "Recharge Failed.";
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
 
-                                                    if (status.ToUpper() == "SUCCESS")
+                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, errormsg, remainbal);
+
+                                                    if (Emailstatusretailerrechargefailed == "Y")
                                                     {
-
-                                                        status = "Success";
-                                                        dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
-                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                        if (statusRetailer == "Y")
-                                                        {
-                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                        }
-                                                        //if (statusretailerrechargesuccess == "Y")
-                                                        //{
-                                                        //    string msgssss = "";
-                                                        //    string tempid = "";
-                                                        //    string urlss = "";
-
-                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                        //    if (smsstypes != null)
-                                                        //    {
-
-                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                        //        tempid = smsstypes.Templateid;
-                                                        //        urlss = smsapionsts.smsapi;
-
-                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                        //    }
-
-                                                        //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
-                                                        //}
-
-                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                        if (Emailstatusretailerrechargesuccess == "Y")
-                                                        {
-                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                        }
-                                                        responsemsg = "Recharge Process Successfully.";
-
-                                                    }
-                                                    else if (status.ToUpper() == "FAILED")
-                                                    {
-                                                        var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                        var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                        if (show == null)
-                                                        {
-                                                            status = "Failed";
-                                                            dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                            if (statusRetailer == "Y")
-                                                            {
-                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                            }
-                                                            //if (statusretailerrechargefailed == "Y")
-                                                            //{
-                                                            //    string msgssss = "";
-                                                            //    string tempid = "";
-                                                            //    string urlss = "";
-
-                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                            //    if (smsstypes != null)
-                                                            //    {
-
-                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                            //        tempid = smsstypes.Templateid;
-                                                            //        urlss = smsapionsts.smsapi;
-
-                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                            //    }
-
-                                                            //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                            //}
-
-                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                            if (Emailstatusretailerrechargefailed == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Failed.";
-
-                                                        }
-                                                        else
-                                                        {
-                                                            var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, OrderId, ref operatorid);
-                                                            if (outputchk == "SUCCESS")
-                                                            {
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                //if (statusretailerrechargesuccess == "Y")
-                                                                //{
-
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-
-
-                                                                //    //   smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
-                                                                //}
-                                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                if (Emailstatusretailerrechargesuccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
-                                                            }
-                                                            else if (outputchk == "FAILED")
-                                                            {
-                                                                responsemsg = "Recharge Failed.";
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                //if (statusretailerrechargefailed == "Y")
-                                                                //{
-
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-
-
-
-                                                                //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                if (Emailstatusretailerrechargefailed == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                                obj.Recharge_response = webcontent.ToString();
-                                                                dbsrs.SaveChanges();
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                if (statusRetailer == "Y")
-                                                                {
-                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                }
-                                                                //if (statusretailerrechargeProccess == "Y")
-                                                                //{
-
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-                                                                //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                                if (EmailstatusretailerrechargeProccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
-                                                            }
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                        obj.Recharge_response = webcontent.ToString();
-                                                        dbsrs.SaveChanges();
-                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                        if (statusRetailer == "Y")
-                                                        {
-                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                        }
-                                                        //if (statusretailerrechargeProccess == "Y")
-                                                        //{
-
-                                                        //    string msgssss = "";
-                                                        //    string tempid = "";
-                                                        //    string urlss = "";
-
-                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                        //    if (smsstypes != null)
-                                                        //    {
-
-                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                        //        tempid = smsstypes.Templateid;
-                                                        //        urlss = smsapionsts.smsapi;
-
-                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                        //    }
-
-                                                        //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                        //}
-
-                                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                        if (EmailstatusretailerrechargeProccess == "Y")
-                                                        {
-                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                        }
-                                                        responsemsg = "Recharge Process Successfully.";
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + errormsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
                                                     }
                                                 }
                                                 else
@@ -12665,16 +11896,786 @@ namespace Vastwebmulti.Controllers
                                                     responsemsg = "Recharge Process Successfully.";
                                                 }
                                             }
-                                            catch (Exception ex)
+                                        }
+                                        else
+                                        {
+                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                            obj.Recharge_response = webcontent.ToString();
+                                            dbsrs.SaveChanges();
+                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                            if (statusRetailer == "Y")
                                             {
-                                                test1 t1 = new test1();
-                                                t1.name = String.Format("Retailer Recharge Exception1 - Message: {0}, Stack: {1}, Url: {4}", ex.Message, ex.StackTrace, url);
-                                                dbsrs.test1.Add(t1);
-                                                dbsrs.SaveChanges();
+                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
                                             }
+
+                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                            if (EmailstatusretailerrechargeProccess == "Y")
+                                            {
+                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                            }
+                                            responsemsg = "Recharge Process Successfully.";
+
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+                                        HttpWebRequest WebRequestObject = (HttpWebRequest)HttpWebRequest.Create(url);
+                                        WebRequestObject.Timeout = (System.Int32)TimeSpan.FromSeconds(200).TotalMilliseconds;
+                                        try
+                                        {
+                                            int idnn11 = 0;
+
+                                            idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                            idnn11 = Convert.ToInt32(idno);
+                                            WebResponse Response = WebRequestObject.GetResponse();
+                                            Stream WebStream = Response.GetResponseStream();
+                                            StreamReader Reader = new StreamReader(WebStream);
+                                            webcontent = Reader.ReadToEnd();
+
+                                            if (url.ToUpper().Contains("LIVE.VASTWEBINDIA.COM"))
+                                            {
+                                                dynamic stuff = JsonConvert.DeserializeObject(webcontent);
+                                                var status = stuff.Status.ToString();
+                                                var Mobile = stuff.Mobile.ToString();
+                                                Amount = stuff.Amount.ToString();
+                                                var RCHID = stuff.RCHID.ToString();
+                                                string Operatorid = stuff.Operatorid.ToString();
+                                                var remainamount = stuff.remainamount.ToString();
+                                                var LapuNumber = stuff.LapuNumber.ToString();
+                                                if (status.ToUpper() == "SUCCESS")
+                                                {
+                                                    status = "Success";
+                                                    dbsrs.recharge_update(idnn11.ToString(), status, Operatorid, Convert.ToDecimal(Amount), webcontent, "Response");
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
+                                                    {
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + Operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    }
+
+                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
+
+                                                    if (Emailstatusretailerrechargesuccess == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "Recharge Process Successfully.";
+
+                                                }
+                                                else if (status.ToUpper() == "FAILED")
+                                                {
+                                                    var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                    var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                    if (show == null)
+                                                    {
+                                                        status = "Failed";
+                                                        dbsrs.recharge_update(idnn11.ToString(), status, Operatorid, Convert.ToDecimal(Amount), webcontent, "Response");
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        if (statusRetailer == "Y")
+                                                        {
+                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + Operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                        }
+
+                                                        //if (statusretailerrechargefailed == "Y")
+                                                        //{
+                                                        //    string msgssss = "";
+                                                        //    string tempid = "";
+                                                        //    string urlss = "";
+
+                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                        //    if (smsstypes != null)
+                                                        //    {
+
+                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
+                                                        //        tempid = smsstypes.Templateid;
+                                                        //        urlss = smsapionsts.smsapi;
+
+                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                        //    }
+                                                        //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                        //}
+
+                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
+
+                                                        if (Emailstatusretailerrechargefailed == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                        responsemsg = "Recharge Failed.";
+                                                    }
+                                                    else
+                                                    {
+                                                        var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, OrderId, ref Operatorid);
+                                                        if (outputchk == "SUCCESS")
+                                                        {
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            //if (statusretailerrechargesuccess == "Y")
+                                                            //{
+
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+                                                            //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
+
+                                                            if (Emailstatusretailerrechargesuccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+
+                                                        }
+                                                        else if (outputchk == "FAILED")
+                                                        {
+                                                            responsemsg = "Recharge Failed.";
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            //if (statusretailerrechargefailed == "Y")
+                                                            //{
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+                                                            //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
+
+                                                            if (Emailstatusretailerrechargefailed == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            //Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                            //obj.Recharge_response = webcontent.ToString();
+                                                            //dbsrs.SaveChanges();
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            //if (statusretailerrechargeProccess == "Y")
+                                                            //{
+
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+
+                                                            //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                            if (EmailstatusretailerrechargeProccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                    obj.Recharge_response = webcontent.ToString();
+                                                    dbsrs.SaveChanges();
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
+                                                    {
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    }
+                                                    //if (statusretailerrechargeProccess == "Y")
+                                                    //{
+
+                                                    //    string msgssss = "";
+                                                    //    string tempid = "";
+                                                    //    string urlss = "";
+
+                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                    //    if (smsstypes != null)
+                                                    //    {
+
+                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                    //        tempid = smsstypes.Templateid;
+                                                    //        urlss = smsapionsts.smsapi;
+
+                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                    //    }
+
+
+                                                    //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                    //}
+
+                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                    if (EmailstatusretailerrechargeProccess == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "Recharge Process Successfully.";
+                                                }
+                                            }
+                                            else if (url.ToUpper().Contains("VASTWEBINDIA.COM"))
+                                            {
+
+                                                dynamic stuff = Newtonsoft.Json.JsonConvert.DeserializeObject(webcontent);
+
+                                                var status = stuff.Status.ToString();
+                                                var mobile = stuff.Mobile.ToString();
+                                                var amount1 = stuff.Amount.ToString();
+                                                var R_id = stuff.RID.ToString();
+                                                string operatorid = stuff.Operatorid.ToString();
+                                                var remain_amount = stuff.remainamount.ToString();
+
+                                                if (status.ToUpper() == "SUCCESS")
+                                                {
+
+                                                    status = "Success";
+                                                    dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
+                                                    {
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    }
+                                                    //if (statusretailerrechargesuccess == "Y")
+                                                    //{
+
+                                                    //    string msgssss = "";
+                                                    //    string tempid = "";
+                                                    //    string urlss = "";
+
+                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                    //    if (smsstypes != null)
+                                                    //    {
+
+                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                    //        tempid = smsstypes.Templateid;
+                                                    //        urlss = smsapionsts.smsapi;
+
+                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                    //    }
+                                                    //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
+                                                    //}
+
+                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                    if (Emailstatusretailerrechargesuccess == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "Recharge Process Successfully.";
+                                                }
+                                                else if (status.ToUpper() == "FAILED")
+                                                {
+                                                    var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                    var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                    if (show == null)
+                                                    {
+                                                        status = "Failed";
+                                                        dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        if (statusRetailer == "Y")
+                                                        {
+                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                        }
+
+                                                        //if (statusretailerrechargefailed == "Y")
+                                                        //{
+
+                                                        //    string msgssss = "";
+                                                        //    string tempid = "";
+                                                        //    string urlss = "";
+
+                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                        //    if (smsstypes != null)
+                                                        //    {
+
+                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                        //        tempid = smsstypes.Templateid;
+                                                        //        urlss = smsapionsts.smsapi;
+
+                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                        //    }
+
+                                                        //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                        //}
+
+                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                        if (Emailstatusretailerrechargefailed == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                        responsemsg = "Recharge Failed.";
+                                                    }
+                                                    else
+                                                    {
+                                                        var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, OrderId, ref operatorid);
+                                                        if (outputchk == "SUCCESS")
+                                                        {
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            //if (statusretailerrechargesuccess == "Y")
+                                                            //{
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+
+                                                            //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                            if (Emailstatusretailerrechargesuccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+                                                        }
+                                                        else if (outputchk == "FAILED")
+                                                        {
+                                                            responsemsg = "Recharge Failed.";
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            //if (statusretailerrechargefailed == "Y")
+                                                            //{
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+                                                            //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                            if (Emailstatusretailerrechargefailed == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                            obj.Recharge_response = webcontent.ToString();
+                                                            dbsrs.SaveChanges();
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            if (statusRetailer == "Y")
+                                                            {
+                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                            }
+                                                            //if (statusretailerrechargeProccess == "Y")
+                                                            //{
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+
+                                                            //    //   smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                            if (EmailstatusretailerrechargeProccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                    obj.Recharge_response = webcontent.ToString();
+                                                    dbsrs.SaveChanges();
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
+                                                    {
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    }
+                                                    //if (statusretailerrechargeProccess == "Y")
+                                                    //{
+
+                                                    //    string msgssss = "";
+                                                    //    string tempid = "";
+                                                    //    string urlss = "";
+
+                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                    //    if (smsstypes != null)
+                                                    //    {
+
+                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                    //        tempid = smsstypes.Templateid;
+                                                    //        urlss = smsapionsts.smsapi;
+
+                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                    //    }
+                                                    //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                    //}
+
+                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                    if (EmailstatusretailerrechargeProccess == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "Recharge Process Successfully.";
+                                                }
+                                            }
+                                            else if (url.ToUpper().Contains("RECHARGETRAAWSERVICES.IN"))
+                                            {
+
+                                                dynamic stuff = Newtonsoft.Json.JsonConvert.DeserializeObject(webcontent);
+
+                                                var status = stuff.status.ToString();
+
+                                                string operatorid = stuff.operatorid.ToString();
+                                                var amount1 = stuff.remainamount.ToString();
+
+                                                if (amount1 == "" || amount1 == null)
+                                                {
+                                                    amount1 = "0";
+                                                }
+
+                                                if (status.ToUpper() == "SUCCESS")
+                                                {
+
+                                                    status = "Success";
+                                                    dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
+                                                    {
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    }
+                                                    //if (statusretailerrechargesuccess == "Y")
+                                                    //{
+                                                    //    string msgssss = "";
+                                                    //    string tempid = "";
+                                                    //    string urlss = "";
+
+                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                    //    if (smsstypes != null)
+                                                    //    {
+
+                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                    //        tempid = smsstypes.Templateid;
+                                                    //        urlss = smsapionsts.smsapi;
+
+                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                    //    }
+
+                                                    //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
+                                                    //}
+
+                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                    if (Emailstatusretailerrechargesuccess == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "Recharge Process Successfully.";
+
+                                                }
+                                                else if (status.ToUpper() == "FAILED")
+                                                {
+                                                    var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                    var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                    if (show == null)
+                                                    {
+                                                        status = "Failed";
+                                                        dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        if (statusRetailer == "Y")
+                                                        {
+                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                        }
+                                                        //if (statusretailerrechargefailed == "Y")
+                                                        //{
+                                                        //    string msgssss = "";
+                                                        //    string tempid = "";
+                                                        //    string urlss = "";
+
+                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                        //    if (smsstypes != null)
+                                                        //    {
+
+                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                        //        tempid = smsstypes.Templateid;
+                                                        //        urlss = smsapionsts.smsapi;
+
+                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                        //    }
+
+                                                        //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                        //}
+
+                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                        if (Emailstatusretailerrechargefailed == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                        responsemsg = "Recharge Failed.";
+
+                                                    }
+                                                    else
+                                                    {
+                                                        var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, OrderId, ref operatorid);
+                                                        if (outputchk == "SUCCESS")
+                                                        {
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            //if (statusretailerrechargesuccess == "Y")
+                                                            //{
+
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+
+
+                                                            //    //   smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
+                                                            //}
+                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                            if (Emailstatusretailerrechargesuccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+                                                        }
+                                                        else if (outputchk == "FAILED")
+                                                        {
+                                                            responsemsg = "Recharge Failed.";
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            //if (statusretailerrechargefailed == "Y")
+                                                            //{
+
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+
+
+
+                                                            //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                            if (Emailstatusretailerrechargefailed == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                            obj.Recharge_response = webcontent.ToString();
+                                                            dbsrs.SaveChanges();
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            if (statusRetailer == "Y")
+                                                            {
+                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                            }
+                                                            //if (statusretailerrechargeProccess == "Y")
+                                                            //{
+
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+                                                            //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                            if (EmailstatusretailerrechargeProccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                    obj.Recharge_response = webcontent.ToString();
+                                                    dbsrs.SaveChanges();
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
+                                                    {
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    }
+                                                    //if (statusretailerrechargeProccess == "Y")
+                                                    //{
+
+                                                    //    string msgssss = "";
+                                                    //    string tempid = "";
+                                                    //    string urlss = "";
+
+                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                    //    if (smsstypes != null)
+                                                    //    {
+
+                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                    //        tempid = smsstypes.Templateid;
+                                                    //        urlss = smsapionsts.smsapi;
+
+                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                    //    }
+
+                                                    //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                    //}
+
+                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                    if (EmailstatusretailerrechargeProccess == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "Recharge Process Successfully.";
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                obj.Recharge_response = webcontent.ToString();
+                                                dbsrs.SaveChanges();
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                if (EmailstatusretailerrechargeProccess == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            test1 t1 = new test1();
+                                            t1.name = String.Format("Retailer Recharge Exception1 - Message: {0}, Stack: {1}, Url: {4}", ex.Message, ex.StackTrace, url);
+                                            dbsrs.test1.Add(t1);
+                                            dbsrs.SaveChanges();
                                         }
                                     }
                                 }
+                            }
                         }
                     }
                     var resp = new
@@ -12794,961 +12795,175 @@ namespace Vastwebmulti.Controllers
                     var charge = "0";
                     var recive = "0";
 
-                  
-                        if (gatewaystatus.ToUpper() == "SUCCESS")
+
+                    if (gatewaystatus.ToUpper() == "SUCCESS")
+                    {
+                        try
                         {
-                            try
+                            var gatewayinfo = dbsrs.Gateway_Auth.SingleOrDefault();
+                            var command = "verify_payment";
+                            string hashString = gatewayinfo.merchantkey + "|" + command + "|" + txnid + "|" + gatewayinfo.merchantsalt;
+                            string hashchk = Generatehash512(hashString);
+                            var client = new RestClient("https://info.payu.in/merchant/postservice.php?form=2");
+                            client.Timeout = -1;
+                            var request = new RestRequest(Method.POST);
+                            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+                            request.AddParameter("key", gatewayinfo.merchantkey);
+                            request.AddParameter("command", "verify_payment");
+                            request.AddParameter("var1", txnid);
+                            request.AddParameter("hash", hashchk);
+                            IRestResponse response = client.Execute(request);
+                            WriteLoggateway("Status Response " + response.Content, websitename.WebsiteUrl);
+                            dynamic resp = JsonConvert.DeserializeObject(response.Content);
+                            bankcode = resp.transaction_details[txnid].bankcode.ToString();
+
+                            if (gatewaystatus.ToUpper() == "SUCCESS")
                             {
-                                var gatewayinfo = dbsrs.Gateway_Auth.SingleOrDefault();
-                                var command = "verify_payment";
-                                string hashString = gatewayinfo.merchantkey + "|" + command + "|" + txnid + "|" + gatewayinfo.merchantsalt;
-                                string hashchk = Generatehash512(hashString);
-                                var client = new RestClient("https://info.payu.in/merchant/postservice.php?form=2");
-                                client.Timeout = -1;
-                                var request = new RestRequest(Method.POST);
-                                request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-                                request.AddParameter("key", gatewayinfo.merchantkey);
-                                request.AddParameter("command", "verify_payment");
-                                request.AddParameter("var1", txnid);
-                                request.AddParameter("hash", hashchk);
-                                IRestResponse response = client.Execute(request);
-                                WriteLoggateway("Status Response " + response.Content, websitename.WebsiteUrl);
-                                dynamic resp = JsonConvert.DeserializeObject(response.Content);
-                                bankcode = resp.transaction_details[txnid].bankcode.ToString();
-
-                                if (gatewaystatus.ToUpper() == "SUCCESS")
+                                var count = dbsrs.Gateway_recharge.Where(aa => aa.Uniqueid == txnid).FirstOrDefault();
+                                if (count != null)
                                 {
-                                    var count = dbsrs.Gateway_recharge.Where(aa => aa.Uniqueid == txnid).FirstOrDefault();
-                                    if (count != null)
+                                    var userid = count.rch_from;
+                                    var Amount = count.Amount;
+                                    var mobileno = count.Mobile;
+                                    var OptCode = count.Operator;
+                                    var optional1 = count.op1;
+                                    var optional2 = count.op2;
+                                    var amt = Amount;
+                                    var useridEmail = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault().Email;
+                                    var statusretailerrechargesuccess = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "Rechsucconline").SingleOrDefault();
+                                    var statusretailerrechargefailed = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "RechFailedOnline").SingleOrDefault();
+                                    var statusretailerrechargeProccess = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "RecProconline").SingleOrDefault();
+
+                                    var Emailstatusretailerrechargesuccess = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "Rechsucconline1").SingleOrDefault().Status;
+                                    var Emailstatusretailerrechargefailed = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "RechFailedOnline1").SingleOrDefault().Status;
+                                    var EmailstatusretailerrechargeProccess = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "RecProconline1").SingleOrDefault().Status;
+                                    var AdminEmail = dbsrs.Admin_details.SingleOrDefault().email;
+                                    var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == userid).SingleOrDefault();
+                                    var responsemsg = "";
+                                    var statusRetailer = dbsrs.PushNotificationStatus.Where(a => a.UserRole == "Retailer").SingleOrDefault().Status;
+                                    System.Data.Entity.Core.Objects.ObjectParameter output = new
+                                              System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+                                    var Ipaddress = GetComputer_InternetIP();
+                                    var macaddress = GetMACAddress();
+                                    var result = dbsrs.Update_recharge_gateway(txnid, "", "", Ipaddress, macaddress, "", output).SingleOrDefault().msg;
+                                    if (result.Contains("AOK"))
                                     {
-                                        var userid = count.rch_from;
-                                        var Amount = count.Amount;
-                                        var mobileno = count.Mobile;
-                                        var OptCode = count.Operator;
-                                        var optional1 = count.op1;
-                                        var optional2 = count.op2;
-                                        var amt = Amount;
-                                        var useridEmail = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault().Email;
-                                        var statusretailerrechargesuccess = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "Rechsucconline").SingleOrDefault();
-                                        var statusretailerrechargefailed = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "RechFailedOnline").SingleOrDefault();
-                                        var statusretailerrechargeProccess = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "RecProconline").SingleOrDefault();
+                                        var idno = "";
+                                        var url = result.Replace("AOK", "");
+                                        var ammt = Convert.ToDecimal(Amount);
+                                        string webcontent = "";
 
-                                        var Emailstatusretailerrechargesuccess = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "Rechsucconline1").SingleOrDefault().Status;
-                                        var Emailstatusretailerrechargefailed = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "RechFailedOnline1").SingleOrDefault().Status;
-                                        var EmailstatusretailerrechargeProccess = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "RecProconline1").SingleOrDefault().Status;
-                                        var AdminEmail = dbsrs.Admin_details.SingleOrDefault().email;
-                                        var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == userid).SingleOrDefault();
-                                        var responsemsg = "";
-                                        var statusRetailer = dbsrs.PushNotificationStatus.Where(a => a.UserRole == "Retailer").SingleOrDefault().Status;
-                                        System.Data.Entity.Core.Objects.ObjectParameter output = new
-                                                  System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-
-                                        var Ipaddress = GetComputer_InternetIP();
-                                        var macaddress = GetMACAddress();
-                                        var result = dbsrs.Update_recharge_gateway(txnid, "", "", Ipaddress, macaddress, "", output).SingleOrDefault().msg;
-                                        if (result.Contains("AOK"))
+                                        if (url.ToUpper().Contains("API.VASTBAZAAR.COM"))
                                         {
-                                            var idno = "";
-                                            var url = result.Replace("AOK", "");
-                                            var ammt = Convert.ToDecimal(Amount);
-                                            string webcontent = "";
+                                            int idnn11 = 0;
+                                            VastBazaartoken Responsetoken = new VastBazaartoken();
+                                            Vastbillpay vb = new Vastbillpay();
+                                            idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                            idnn11 = Convert.ToInt32(idno);
+                                            string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                                            var apioptcode = dbsrs.SRS_API.Where(aa => aa.api.ToUpper().Contains("API.VASTBAZAAR.COM") && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
+                                            var tokn = Responsetoken.gettoken();
+                                            string amtstr = Amount.ToString();
+                                            var responsechk1 = vb.billpay(tokn, mobileno, apioptcode, amtstr, optional1, optional2, CommonTranid);
+                                            var responsechk = responsechk1.Content.ToString();
 
-                                            if (url.ToUpper().Contains("API.VASTBAZAAR.COM"))
+                                            var Request = responsechk1.Request.Parameters[2].Value;
+                                            var ReqUrl = url + "  RequestBody : " + Request;
+
+                                            dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                            var respcode = json.Content.ResponseCode.ToString();
+                                            var ADDINFO = json.Content.ADDINFO.ToString();
+                                            dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
+
+                                            webcontent = json1.ToString();
+
+                                            Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                            objCourse.Recharge_response = json1.ToString();
+                                            objCourse.Recharge_request = ReqUrl;
+                                            objCourse.Order_id = CommonTranid.ToString();
+                                            dbsrs.SaveChanges();
+
+
+
+                                            var status = json1.STATUS.ToString();
+                                            var _price = (string)json1.PRICE.ToString();
+                                            var errormsg = json1.ERRORMSG.ToString();
+                                            var TRANSID = (string)json1.TRANSID.ToString();
+
+                                            decimal PRICE = 0;
+                                            try
                                             {
-                                                int idnn11 = 0;
-                                                VastBazaartoken Responsetoken = new VastBazaartoken();
-                                                Vastbillpay vb = new Vastbillpay();
-                                                idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
-                                                idnn11 = Convert.ToInt32(idno);
-                                                string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
-                                                var apioptcode = dbsrs.SRS_API.Where(aa => aa.api.ToUpper().Contains("API.VASTBAZAAR.COM") && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
-                                                var tokn = Responsetoken.gettoken();
-                                                string amtstr = Amount.ToString();
-                                                var responsechk1 = vb.billpay(tokn, mobileno, apioptcode, amtstr, optional1, optional2, CommonTranid);
-                                                var responsechk = responsechk1.Content.ToString();
+                                                PRICE = Convert.ToDecimal(_price);
+                                            }
+                                            catch { }
 
-                                                var Request = responsechk1.Request.Parameters[2].Value;
-                                                var ReqUrl = url + "  RequestBody : " + Request;
-
-                                                dynamic json = JsonConvert.DeserializeObject(responsechk);
-                                                var respcode = json.Content.ResponseCode.ToString();
-                                                var ADDINFO = json.Content.ADDINFO.ToString();
-                                                dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
-
-                                                webcontent = json1.ToString();
-
-                                                Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                objCourse.Recharge_response = json1.ToString();
-                                                objCourse.Recharge_request = ReqUrl;
-                                                objCourse.Order_id = CommonTranid.ToString();
-                                                dbsrs.SaveChanges();
-
-
-
-                                                var status = json1.STATUS.ToString();
-                                                var _price = (string)json1.PRICE.ToString();
-                                                var errormsg = json1.ERRORMSG.ToString();
-                                                var TRANSID = (string)json1.TRANSID.ToString();
-
-                                                decimal PRICE = 0;
-                                                try
+                                            if (status == "Success")
+                                            {
+                                                status = "Success";
+                                                dbsrs.recharge_update(idnn11.ToString(), status, TRANSID, PRICE, json.ToString(), "Response");
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
                                                 {
-                                                    PRICE = Convert.ToDecimal(_price);
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + TRANSID + ". Balance is Rs." + remainbal + "", "Recharge Response..");
                                                 }
-                                                catch { }
 
-                                                if (status == "Success")
+                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
+
+                                                if (Emailstatusretailerrechargesuccess == "Y")
                                                 {
-                                                    status = "Success";
-                                                    dbsrs.recharge_update(idnn11.ToString(), status, TRANSID, PRICE, json.ToString(), "Response");
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + TRANSID + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Success.";
+
+                                            }
+                                            else if (status == "Failed")
+                                            {
+                                                var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                if (show == null)
+                                                {
+                                                    status = "Failed";
+                                                    dbsrs.recharge_update(idnn11.ToString(), status, TRANSID, PRICE, webcontent, "Response");
                                                     var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
                                                     if (statusRetailer == "Y")
                                                     {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + TRANSID + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + TRANSID + ". Balance is Rs." + remainbal + "", "Recharge Response..");
                                                     }
 
-                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
+                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
 
-                                                    if (Emailstatusretailerrechargesuccess == "Y")
+                                                    if (Emailstatusretailerrechargefailed == "Y")
                                                     {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + TRANSID + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + TRANSID + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
                                                     }
-                                                    responsemsg = "Recharge Success.";
-
+                                                    responsemsg = "Recharge Failed.";
                                                 }
-                                                else if (status == "Failed")
+                                                else
                                                 {
-                                                    var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                    var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                    if (show == null)
+                                                    var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, txnid, ref TRANSID);
+                                                    if (outputchk == "SUCCESS")
                                                     {
-                                                        status = "Failed";
-                                                        dbsrs.recharge_update(idnn11.ToString(), status, TRANSID, PRICE, webcontent, "Response");
                                                         var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                        if (statusRetailer == "Y")
+
+                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
+
+                                                        if (Emailstatusretailerrechargesuccess == "Y")
                                                         {
-                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + TRANSID + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + TRANSID + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
                                                         }
+                                                        responsemsg = "Recharge Process Successfully.";
+                                                    }
+                                                    else if (outputchk == "FAILED")
+                                                    {
+                                                        responsemsg = "Recharge Failed.";
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
 
                                                         smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
 
                                                         if (Emailstatusretailerrechargefailed == "Y")
                                                         {
                                                             smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + TRANSID + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                        }
-                                                        responsemsg = "Recharge Failed.";
-                                                    }
-                                                    else
-                                                    {
-                                                        var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, txnid, ref TRANSID);
-                                                        if (outputchk == "SUCCESS")
-                                                        {
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
-
-                                                            if (Emailstatusretailerrechargesuccess == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + TRANSID + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Process Successfully.";
-                                                        }
-                                                        else if (outputchk == "FAILED")
-                                                        {
-                                                            responsemsg = "Recharge Failed.";
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
-
-                                                            if (Emailstatusretailerrechargefailed == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + TRANSID + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                            obj.Recharge_response = webcontent.ToString();
-                                                            dbsrs.SaveChanges();
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                            if (statusRetailer == "Y")
-                                                            {
-                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                            }
-
-                                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                            if (EmailstatusretailerrechargeProccess == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Process Successfully.";
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                    if (EmailstatusretailerrechargeProccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Pending.";
-                                                }
-                                            }
-                                            else if (url.ToUpper().Contains("INSTANTPAY.IN/WS/BBPS"))
-                                            {
-                                                int idnn11 = 0;
-
-                                                idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
-                                                idnn11 = Convert.ToInt32(idno);
-
-
-                                                var Retailer = dbsrs.Retailer_Details.Where(pp => pp.RetailerId == userid).Single();
-                                                var retailerMobile = Retailer.Mobile;
-                                                token = dbsrs.Money_API_URLS.Where(pp => pp.API_Name.ToUpper().Contains("INSTANTPAY")).SingleOrDefault().Token;
-                                                //var token = "ca23f55293bc9c2a51fe06d2d07e5ea4";
-                                                string RetailerOutletid = Retailer.RetailerOutlet != null ? Retailer.RetailerOutlet.outlet_id : "NA";
-
-                                                InstantPay_BBPS vb = new InstantPay_BBPS();
-                                                string refid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + vb.RandomString(4);
-                                                var apioptcode = dbsrs.SRS_API.Where(aa => aa.api_nm.ToUpper().Contains("IPAYBBPS") && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
-
-                                                var responsechk1 = vb.bill_pay(token, apioptcode, refid, retailerMobile, mobileno, optional1, optional2, RetailerOutletid, Convert.ToDecimal(Amount), "");
-                                                var responsechk = responsechk1.Content.ToString();
-
-                                                var Request = responsechk1.Request.Parameters[1].Value;
-                                                var ReqUrl = url + "  RequestBody : " + Request;
-                                                Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                objCourse.Recharge_response = responsechk.ToString();
-                                                objCourse.Recharge_request = ReqUrl;
-                                                dbsrs.SaveChanges();
-
-                                                XmlDocument xd = new XmlDocument();
-                                                xd.LoadXml(responsechk);
-                                                var statuscode = xd.SelectNodes("xml/statuscode")[0].InnerText;
-                                                var Resmsg = xd.SelectNodes("xml/status")[0].InnerText;
-
-
-                                                if (statuscode.ToString() == "TXN")
-                                                {
-                                                    var ipay_id = xd.SelectNodes("xml/data/ipay_id")[0].InnerText;
-                                                    var agent_id = xd.SelectNodes("xml/data/agent_id")[0].InnerText;
-                                                    var optid = xd.SelectNodes("xml/data/opr_id")[0].InnerText;
-                                                    var account_no = xd.SelectNodes("xml/data/account_no")[0].InnerText;
-                                                    var sp_key = xd.SelectNodes("xml/data/sp_key")[0].InnerText;
-                                                    var trans_amt = xd.SelectNodes("xml/data/trans_amt")[0].InnerText;
-                                                    var amtd = xd.SelectNodes("xml/data/charged_amt")[0].InnerText;
-                                                    var oenbal = xd.SelectNodes("xml/data/opening_bal")[0].InnerText;
-                                                    var Status = xd.SelectNodes("xml/data/status")[0].InnerText;
-
-                                                    var remain = Convert.ToDecimal(oenbal.ToString()) - Convert.ToDecimal(amtd.ToString());
-
-                                                    dbsrs.recharge_update(idno, "SUCCESS", optid, remain, responsechk.ToString(), "Response");
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
-
-                                                    if (Emailstatusretailerrechargesuccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + optid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                                else if (statuscode.ToString() == "TUP")
-                                                {
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                    if (EmailstatusretailerrechargeProccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                                else
-                                                {
-                                                    dbsrs.recharge_update(idno, "FAILED", Resmsg, 0, responsechk.ToString(), "Response");
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + Resmsg + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                    if (Emailstatusretailerrechargefailed == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Resmsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Failed.";
-
-                                                }
-                                            }
-                                            else if (url.ToUpper().Contains("INSTANTPAY.IN/WS/API"))
-                                            {
-                                                dynamic response1 = JsonConvert.DeserializeObject(webcontent.ToString());
-                                                var RESCODE = response1.res_code.ToString();
-                                                var optid = response1.opr_id.ToString();
-                                                var openbal = response1.opening_bal.ToString();
-                                                decimal remain = Convert.ToDecimal(openbal);
-                                                if (RESCODE == "TXN")
-                                                {
-                                                    dbsrs.recharge_update(idno, "SUCCESS", optid, remain, webcontent, "Response");
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
-
-                                                    if (Emailstatusretailerrechargesuccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + optid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                                else if (RESCODE.ToString() == "TUP")
-                                                {
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                    if (EmailstatusretailerrechargeProccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                                else
-                                                {
-                                                    dbsrs.recharge_update(idno, "FAILED", optid, remain, webcontent, "Response");
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
-
-                                                    if (Emailstatusretailerrechargefailed == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + optid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Failed.";
-                                                }
-
-                                            }
-                                            else if (url.ToUpper().Contains("RECHARGE/RECHARGE"))
-                                            {
-
-                                                var tkn = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
-                                                var tokenpriority = tkn.prioritytoken;
-                                                //var token = "";
-                                                var Tokenid = "";
-                                                if (tokenpriority == "token1")
-                                                {
-                                                    token = tkn.Token;
-                                                    Tokenid = tkn.Token;
-                                                }
-                                                else if (tokenpriority == "token2")
-                                                {
-                                                    token = tkn.token1;
-                                                    Tokenid = tkn.token1;
-                                                }
-                                                else
-                                                {
-                                                    token = tkn.token2;
-                                                    Tokenid = tkn.token2;
-                                                }
-
-                                                var Userid = tkn.API_ID;
-
-                                                POST_API PA = new POST_API();
-
-                                                int idnn111 = 0;
-                                                idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
-                                                idnn111 = Convert.ToInt32(idno);
-                                                string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
-                                                var apioptcode = dbsrs.SRS_API.Where(aa => aa.api == url && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
-                                                var responsechk1 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
-
-
-                                                var responsechk = responsechk1.Content.ToString();
-                                                dynamic json = JsonConvert.DeserializeObject(responsechk);
-
-                                                var Request = responsechk1.Request.Parameters[2].Value;
-                                                var ReqUrl = url + "  RequestBody : " + Request;
-
-                                                Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
-                                                objCourse.Recharge_response = json.ToString();
-                                                objCourse.Recharge_request = ReqUrl;
-                                                objCourse.Order_id = CommonTranid.ToString();
-                                                dbsrs.SaveChanges();
-
-                                                var status = json.Status.ToString();
-                                                string operatorid = json.Transid.ToString();
-                                                var errormsg = json.Errormsg.ToString();
-                                                var remainamount = json.Remain.ToString();
-                                                var Yourrchid = json.Yourrchid.ToString();
-                                                var RechargeID = json.RechargeID.ToString();
-
-
-                                                if (status.ToUpper() == "SUCCESS")
-                                                {
-
-                                                    status = "Success";
-                                                    dbsrs.recharge_update(idnn111.ToString(), status, operatorid, Convert.ToDecimal(remainamount), json.ToString(), "Response");
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                    if (Emailstatusretailerrechargesuccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                                else if (status.ToUpper() == "FAILED")
-                                                {
-                                                    if (errormsg.Contains("Ip is Not Valid"))
-                                                    {
-                                                        var tkn1 = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
-                                                        var tokenpriority1 = tkn1.prioritytoken;
-                                                        var token1 = "";
-                                                        var tknn = tokenpriority1.Replace("token", "");
-                                                        int ttkk = Convert.ToInt32(tknn);
-                                                        ttkk = ttkk + 1;
-                                                        if (ttkk >= 3)
-                                                        {
-                                                            ttkk = 1;
-                                                        }
-                                                        token1 = "token" + ttkk;
-                                                        if (token1 == "token1")
-                                                        {
-                                                            token = tkn.Token;
-                                                            Tokenid = tkn.Token;
-                                                        }
-                                                        else if (token1 == "token2")
-                                                        {
-                                                            if (string.IsNullOrEmpty(tkn.token1))
-                                                            {
-                                                                token = tkn.token1;
-                                                                Tokenid = tkn.token1;
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            if (string.IsNullOrEmpty(tkn.token2))
-                                                            {
-                                                                token = tkn.token2;
-                                                                Tokenid = tkn.token2;
-                                                            }
-                                                        }
-
-
-                                                        var Userid1 = tkn.API_ID;
-                                                        var responsechk2 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
-                                                        var responsechk11 = responsechk2.Content.ToString();
-                                                        dynamic json1 = JsonConvert.DeserializeObject(responsechk11);
-                                                        var errormsg1 = json1.Errormsg.ToString();
-                                                        if (errormsg1.Contains("Ip is Not Valid"))
-                                                        {
-                                                            var tkn2 = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
-                                                            var tokenpriority2 = tkn2.prioritytoken;
-                                                            var token2 = "";
-                                                            var tknn1 = tokenpriority2.Replace("token", "");
-                                                            int ttkk1 = Convert.ToInt32(tknn1);
-                                                            ttkk1 = ttkk1 + 1;
-                                                            if (ttkk1 >= 3)
-                                                            {
-                                                                ttkk1 = 1;
-                                                            }
-                                                            token2 = "token" + ttkk1;
-                                                            if (token2 == "token1")
-                                                            {
-                                                                token = tkn.Token;
-                                                                Tokenid = tkn.Token;
-                                                            }
-                                                            else if (token2 == "token2")
-                                                            {
-                                                                token = tkn.token1;
-                                                                Tokenid = tkn.token1;
-                                                            }
-                                                            else
-                                                            {
-                                                                token = tkn.token2;
-                                                                Tokenid = tkn.token2;
-                                                            }
-                                                            var responsechk3 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
-                                                            var responsechk111 = responsechk3.Content.ToString();
-                                                            dynamic json2 = JsonConvert.DeserializeObject(responsechk111);
-                                                            var errormsg2 = json2.Errormsg.ToString();
-                                                        }
-                                                        else
-                                                        {
-                                                            tkn1.prioritytoken = token1;
-                                                            dbsrs.SaveChanges();
-                                                        }
-                                                    }
-                                                    var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                    var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                    if (show == null)
-                                                    {
-                                                        status = "Failed";
-                                                        dbsrs.recharge_update(idnn111.ToString(), status, operatorid, Convert.ToDecimal(0), json.ToString(), "Response");
-                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                        if (statusRetailer == "Y")
-                                                        {
-                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                        }
-
-                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                        if (Emailstatusretailerrechargefailed == "Y")
-                                                        {
-                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                        }
-                                                        responsemsg = "Recharge Failed.";
-
-                                                    }
-                                                    else
-                                                    {
-                                                        var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn111, optcodei, CommonTranid, ref operatorid);
-                                                        if (outputchk == "SUCCESS")
-                                                        {
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                            responsemsg = "Recharge Process Successfully.";
-
-                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                            if (Emailstatusretailerrechargesuccess == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                        }
-                                                        else if (outputchk == "FAILED")
-                                                        {
-                                                            responsemsg = "Recharge Failed.";
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                            if (Emailstatusretailerrechargefailed == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
-                                                            obj.Recharge_response = json.ToString();
-                                                            dbsrs.SaveChanges();
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                            if (statusRetailer == "Y")
-                                                            {
-                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                            }
-
-                                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                            if (EmailstatusretailerrechargeProccess == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Process Successfully.";
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
-                                                    obj.Recharge_response = json.ToString();
-                                                    dbsrs.SaveChanges();
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                    if (EmailstatusretailerrechargeProccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                            }
-                                            else if (url.ToUpper().Contains("MROBOTICS.IN"))
-                                            {
-                                                var tkn = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
-                                                token = tkn.Token;
-                                                var Tokenid = tkn.Token;
-                                                var Userid = tkn.API_ID;
-
-                                                POST_API PA = new POST_API();
-                                                int idnn11 = 0;
-                                                decimal amt1 = Convert.ToDecimal(Amount);
-                                                idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
-                                                idnn11 = Convert.ToInt32(idno);
-                                                string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + PA.RandomString(4);
-                                                var apioptcode = dbsrs.SRS_API.Where(aa => aa.api == url && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
-
-                                                var task = Task.Run(() =>
-                                                {
-                                                    return PA.RchReqMrobotics(token, mobileno, Tokenid, Userid, amt1, apioptcode, CommonTranid, optional1, optional2, OptCode, url);
-                                                });
-
-                                                bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));     // 1 minutes
-                                                if (isCompletedSuccessfully == true)
-                                                {
-                                                    string status = "";
-                                                    var finaloutput = task.Result;
-                                                    if (finaloutput.StatusCode == HttpStatusCode.OK)
-                                                    {
-                                                        var responsechk = finaloutput.Content.ToString();
-
-                                                        dynamic json = JsonConvert.DeserializeObject(responsechk);
-
-                                                        var Request = finaloutput.Request.Parameters[1].Value;
-                                                        var ReqUrl = url + "  RequestBody : " + Request;
-
-                                                        Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                        objCourse.Recharge_request = ReqUrl;
-                                                        objCourse.Order_id = CommonTranid.ToString();
-                                                        dbsrs.SaveChanges();
-
-                                                        string company_id = apioptcode.ToString();
-                                                        string remainamount = ""; string Transid = "";
-                                                        //var errorCode = json.error.ToString();
-                                                        //if (errorCode.ToUpper() == "FALSE")
-                                                        //{
-                                                        if (company_id == "4")
-                                                        {
-                                                            webcontent = "";
-
-
-                                                            status = json.status.ToString();
-                                                            if (status.ToUpper() == "SUCCESS")
-                                                            {
-                                                                Transid = json.tnx_id.ToString();
-                                                            }
-                                                            else
-                                                            {
-                                                                Transid = "";
-                                                            }
-
-
-                                                        }
-                                                        else
-                                                        {
-                                                            Recharge_info objCours = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                            objCours.Recharge_response = json.ToString();
-                                                            dbsrs.SaveChanges();
-                                                            webcontent = json.ToString();
-
-                                                            status = json.status.ToString();
-                                                            if (status.ToUpper() == "SUCCESS")
-                                                            {
-                                                                Transid = json.tnx_id.ToString();
-                                                            }
-                                                            else
-                                                            {
-                                                                Transid = "";
-                                                            }
-
-                                                        }
-
-
-
-                                                        if (status.ToUpper() == "SUCCESS")
-                                                        {
-                                                            remainamount = json.balance.ToString();
-                                                            status = "Success";
-                                                            dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(remainamount), webcontent, "Response");
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                            if (statusRetailer == "Y")
-                                                            {
-                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + amt + ". Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                            }
-
-                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
-
-                                                            if (Emailstatusretailerrechargesuccess == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + amt + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Process Successfully.";
-                                                        }
-                                                        else if (status.ToUpper() == "FAILURE")
-                                                        {
-                                                            var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                            var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                            if (show == null)
-                                                            {
-                                                                status = "Failed";
-                                                                dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(0), webcontent, "Response");
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                if (statusRetailer == "Y")
-                                                                {
-                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + amt + " is FAILED. Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                }
-
-                                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
-
-                                                                if (Emailstatusretailerrechargefailed == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + amt + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Failed.";
-
-                                                            }
-                                                            else
-                                                            {
-                                                                var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, CommonTranid, ref Transid);
-                                                                if (outputchk == "SUCCESS")
-                                                                {
-                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
-
-                                                                    if (Emailstatusretailerrechargesuccess == "Y")
-                                                                    {
-                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                    }
-                                                                    responsemsg = "Recharge Process Successfully.";
-                                                                }
-                                                                else if (outputchk == "FAILED")
-                                                                {
-                                                                    responsemsg = "Recharge Failed.";
-                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
-
-                                                                    if (Emailstatusretailerrechargefailed == "Y")
-                                                                    {
-                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                    if (statusRetailer == "Y")
-                                                                    {
-                                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                    }
-
-                                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                                    if (EmailstatusretailerrechargeProccess == "Y")
-                                                                    {
-                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                    }
-                                                                    responsemsg = "Recharge Process Successfully.";
-                                                                }
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                            if (statusRetailer == "Y")
-                                                            {
-                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                            }
-
-                                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                            if (EmailstatusretailerrechargeProccess == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Process Successfully.";
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                        var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                        if (show == null)
-                                                        {
-                                                            status = "Failed";
-                                                            var Transid = "API End Issue";
-                                                            dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(0), webcontent, "Response");
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                            if (statusRetailer == "Y")
-                                                            {
-                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + amt + " is FAILED. Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                            }
-
-                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
-
-                                                            if (Emailstatusretailerrechargefailed == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + amt + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Failed.";
-
-                                                        }
-                                                        else
-                                                        {
-                                                            responsemsg = "Recharge Failed.";
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, "", remainbal);
-
-                                                            if (Emailstatusretailerrechargefailed == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + "" + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                    if (statusRetailer == "Y")
-                                                    {
-                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                    }
-
-                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                    if (EmailstatusretailerrechargeProccess == "Y")
-                                                    {
-                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                    }
-                                                    responsemsg = "Recharge Process Successfully.";
-                                                }
-                                            }
-                                            else
-                                            {
-                                                var apiinfo = dbsrs.RechargeapiInfoes.Where(aa => aa.apiendpoint.ToUpper() == url.ToUpper()).SingleOrDefault();
-                                                if (apiinfo != null)
-                                                {
-                                                    var apiremain = "0"; var _status = "Pending"; var transid = ""; var errormsg = "";
-
-                                                    ApiResponse rech = Vastwebmulti.Models.RechargeServices.Recharge(apiinfo, mobileno, OptCode, ammt, txnid);
-                                                    _status = rech.status;
-                                                    transid = rech.operatorId;
-                                                    errormsg = rech.errormsg;
-                                                    apiremain = rech.apiremain;
-                                                    webcontent = rech.api_response;
-                                                    int idnn11 = rech.id;
-
-                                                    if (_status == "Success")
-                                                    {
-                                                        //    status = "Success";
-                                                        dbsrs.recharge_update(idnn11.ToString(), "Success", transid, Convert.ToDecimal(apiremain), webcontent, "Response");
-                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                        if (statusRetailer == "Y")
-                                                        {
-                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                        }
-
-                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, transid, remainbal);
-
-                                                        if (Emailstatusretailerrechargesuccess == "Y")
-                                                        {
-                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                        }
-                                                        responsemsg = "Recharge Process Successfully.";
-
-                                                    }
-                                                    else if (_status == "Failed")
-                                                    {
-                                                        var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                        var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                        if (show == null)
-                                                        {
-                                                            //status = "Failed";
-                                                            dbsrs.recharge_update(idnn11.ToString(), "Failed", errormsg, Convert.ToDecimal(apiremain), webcontent, "Response");
-                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                            if (statusRetailer == "Y")
-                                                            {
-                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + errormsg + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                            }
-
-                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, errormsg, remainbal);
-
-                                                            if (Emailstatusretailerrechargefailed == "Y")
-                                                            {
-                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + errormsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                            }
-                                                            responsemsg = "Recharge Failed.";
-
-                                                        }
-                                                        else
-                                                        {
-                                                            var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, txnid, ref transid);
-                                                            if (outputchk == "SUCCESS")
-                                                            {
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, transid, remainbal);
-
-                                                                if (Emailstatusretailerrechargesuccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
-                                                            }
-                                                            else if (outputchk == "FAILED")
-                                                            {
-                                                                responsemsg = "Recharge Failed.";
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-
-                                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, errormsg, remainbal);
-
-                                                                if (Emailstatusretailerrechargefailed == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + errormsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                                obj.Recharge_response = webcontent.ToString();
-                                                                dbsrs.SaveChanges();
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                if (statusRetailer == "Y")
-                                                                {
-                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                }
-
-                                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                                if (EmailstatusretailerrechargeProccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
-                                                            }
                                                         }
                                                     }
                                                     else
@@ -13769,234 +12984,586 @@ namespace Vastwebmulti.Controllers
                                                             smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
                                                         }
                                                         responsemsg = "Recharge Process Successfully.";
-
                                                     }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                if (EmailstatusretailerrechargeProccess == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Pending.";
+                                            }
+                                        }
+                                        else if (url.ToUpper().Contains("INSTANTPAY.IN/WS/BBPS"))
+                                        {
+                                            int idnn11 = 0;
+
+                                            idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                            idnn11 = Convert.ToInt32(idno);
+
+
+                                            var Retailer = dbsrs.Retailer_Details.Where(pp => pp.RetailerId == userid).Single();
+                                            var retailerMobile = Retailer.Mobile;
+                                            token = dbsrs.Money_API_URLS.Where(pp => pp.API_Name.ToUpper().Contains("INSTANTPAY")).SingleOrDefault().Token;
+                                            //var token = "ca23f55293bc9c2a51fe06d2d07e5ea4";
+                                            string RetailerOutletid = Retailer.RetailerOutlet != null ? Retailer.RetailerOutlet.outlet_id : "NA";
+
+                                            InstantPay_BBPS vb = new InstantPay_BBPS();
+                                            string refid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + vb.RandomString(4);
+                                            var apioptcode = dbsrs.SRS_API.Where(aa => aa.api_nm.ToUpper().Contains("IPAYBBPS") && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
+
+                                            var responsechk1 = vb.bill_pay(token, apioptcode, refid, retailerMobile, mobileno, optional1, optional2, RetailerOutletid, Convert.ToDecimal(Amount), "");
+                                            var responsechk = responsechk1.Content.ToString();
+
+                                            var Request = responsechk1.Request.Parameters[1].Value;
+                                            var ReqUrl = url + "  RequestBody : " + Request;
+                                            Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                            objCourse.Recharge_response = responsechk.ToString();
+                                            objCourse.Recharge_request = ReqUrl;
+                                            dbsrs.SaveChanges();
+
+                                            XmlDocument xd = new XmlDocument();
+                                            xd.LoadXml(responsechk);
+                                            var statuscode = xd.SelectNodes("xml/statuscode")[0].InnerText;
+                                            var Resmsg = xd.SelectNodes("xml/status")[0].InnerText;
+
+
+                                            if (statuscode.ToString() == "TXN")
+                                            {
+                                                var ipay_id = xd.SelectNodes("xml/data/ipay_id")[0].InnerText;
+                                                var agent_id = xd.SelectNodes("xml/data/agent_id")[0].InnerText;
+                                                var optid = xd.SelectNodes("xml/data/opr_id")[0].InnerText;
+                                                var account_no = xd.SelectNodes("xml/data/account_no")[0].InnerText;
+                                                var sp_key = xd.SelectNodes("xml/data/sp_key")[0].InnerText;
+                                                var trans_amt = xd.SelectNodes("xml/data/trans_amt")[0].InnerText;
+                                                var amtd = xd.SelectNodes("xml/data/charged_amt")[0].InnerText;
+                                                var oenbal = xd.SelectNodes("xml/data/opening_bal")[0].InnerText;
+                                                var Status = xd.SelectNodes("xml/data/status")[0].InnerText;
+
+                                                var remain = Convert.ToDecimal(oenbal.ToString()) - Convert.ToDecimal(amtd.ToString());
+
+                                                dbsrs.recharge_update(idno, "SUCCESS", optid, remain, responsechk.ToString(), "Response");
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
+
+                                                if (Emailstatusretailerrechargesuccess == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + optid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                            else if (statuscode.ToString() == "TUP")
+                                            {
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                if (EmailstatusretailerrechargeProccess == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                            else
+                                            {
+                                                dbsrs.recharge_update(idno, "FAILED", Resmsg, 0, responsechk.ToString(), "Response");
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + Resmsg + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                if (Emailstatusretailerrechargefailed == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Resmsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Failed.";
+
+                                            }
+                                        }
+                                        else if (url.ToUpper().Contains("INSTANTPAY.IN/WS/API"))
+                                        {
+                                            dynamic response1 = JsonConvert.DeserializeObject(webcontent.ToString());
+                                            var RESCODE = response1.res_code.ToString();
+                                            var optid = response1.opr_id.ToString();
+                                            var openbal = response1.opening_bal.ToString();
+                                            decimal remain = Convert.ToDecimal(openbal);
+                                            if (RESCODE == "TXN")
+                                            {
+                                                dbsrs.recharge_update(idno, "SUCCESS", optid, remain, webcontent, "Response");
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
+
+                                                if (Emailstatusretailerrechargesuccess == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + optid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                            else if (RESCODE.ToString() == "TUP")
+                                            {
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                if (EmailstatusretailerrechargeProccess == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                            else
+                                            {
+                                                dbsrs.recharge_update(idno, "FAILED", optid, remain, webcontent, "Response");
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + optid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, optid, remainbal);
+
+                                                if (Emailstatusretailerrechargefailed == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + optid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Failed.";
+                                            }
+
+                                        }
+                                        else if (url.ToUpper().Contains("RECHARGE/RECHARGE"))
+                                        {
+
+                                            var tkn = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
+                                            var tokenpriority = tkn.prioritytoken;
+                                            //var token = "";
+                                            var Tokenid = "";
+                                            if (tokenpriority == "token1")
+                                            {
+                                                token = tkn.Token;
+                                                Tokenid = tkn.Token;
+                                            }
+                                            else if (tokenpriority == "token2")
+                                            {
+                                                token = tkn.token1;
+                                                Tokenid = tkn.token1;
+                                            }
+                                            else
+                                            {
+                                                token = tkn.token2;
+                                                Tokenid = tkn.token2;
+                                            }
+
+                                            var Userid = tkn.API_ID;
+
+                                            POST_API PA = new POST_API();
+
+                                            int idnn111 = 0;
+                                            idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                            idnn111 = Convert.ToInt32(idno);
+                                            string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                                            var apioptcode = dbsrs.SRS_API.Where(aa => aa.api == url && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
+                                            var responsechk1 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
+
+
+                                            var responsechk = responsechk1.Content.ToString();
+                                            dynamic json = JsonConvert.DeserializeObject(responsechk);
+
+                                            var Request = responsechk1.Request.Parameters[2].Value;
+                                            var ReqUrl = url + "  RequestBody : " + Request;
+
+                                            Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
+                                            objCourse.Recharge_response = json.ToString();
+                                            objCourse.Recharge_request = ReqUrl;
+                                            objCourse.Order_id = CommonTranid.ToString();
+                                            dbsrs.SaveChanges();
+
+                                            var status = json.Status.ToString();
+                                            string operatorid = json.Transid.ToString();
+                                            var errormsg = json.Errormsg.ToString();
+                                            var remainamount = json.Remain.ToString();
+                                            var Yourrchid = json.Yourrchid.ToString();
+                                            var RechargeID = json.RechargeID.ToString();
+
+
+                                            if (status.ToUpper() == "SUCCESS")
+                                            {
+
+                                                status = "Success";
+                                                dbsrs.recharge_update(idnn111.ToString(), status, operatorid, Convert.ToDecimal(remainamount), json.ToString(), "Response");
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                if (Emailstatusretailerrechargesuccess == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                            else if (status.ToUpper() == "FAILED")
+                                            {
+                                                if (errormsg.Contains("Ip is Not Valid"))
+                                                {
+                                                    var tkn1 = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
+                                                    var tokenpriority1 = tkn1.prioritytoken;
+                                                    var token1 = "";
+                                                    var tknn = tokenpriority1.Replace("token", "");
+                                                    int ttkk = Convert.ToInt32(tknn);
+                                                    ttkk = ttkk + 1;
+                                                    if (ttkk >= 3)
+                                                    {
+                                                        ttkk = 1;
+                                                    }
+                                                    token1 = "token" + ttkk;
+                                                    if (token1 == "token1")
+                                                    {
+                                                        token = tkn.Token;
+                                                        Tokenid = tkn.Token;
+                                                    }
+                                                    else if (token1 == "token2")
+                                                    {
+                                                        if (string.IsNullOrEmpty(tkn.token1))
+                                                        {
+                                                            token = tkn.token1;
+                                                            Tokenid = tkn.token1;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (string.IsNullOrEmpty(tkn.token2))
+                                                        {
+                                                            token = tkn.token2;
+                                                            Tokenid = tkn.token2;
+                                                        }
+                                                    }
+
+
+                                                    var Userid1 = tkn.API_ID;
+                                                    var responsechk2 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
+                                                    var responsechk11 = responsechk2.Content.ToString();
+                                                    dynamic json1 = JsonConvert.DeserializeObject(responsechk11);
+                                                    var errormsg1 = json1.Errormsg.ToString();
+                                                    if (errormsg1.Contains("Ip is Not Valid"))
+                                                    {
+                                                        var tkn2 = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
+                                                        var tokenpriority2 = tkn2.prioritytoken;
+                                                        var token2 = "";
+                                                        var tknn1 = tokenpriority2.Replace("token", "");
+                                                        int ttkk1 = Convert.ToInt32(tknn1);
+                                                        ttkk1 = ttkk1 + 1;
+                                                        if (ttkk1 >= 3)
+                                                        {
+                                                            ttkk1 = 1;
+                                                        }
+                                                        token2 = "token" + ttkk1;
+                                                        if (token2 == "token1")
+                                                        {
+                                                            token = tkn.Token;
+                                                            Tokenid = tkn.Token;
+                                                        }
+                                                        else if (token2 == "token2")
+                                                        {
+                                                            token = tkn.token1;
+                                                            Tokenid = tkn.token1;
+                                                        }
+                                                        else
+                                                        {
+                                                            token = tkn.token2;
+                                                            Tokenid = tkn.token2;
+                                                        }
+                                                        var responsechk3 = PA.RchReq(token, mobileno, Tokenid, Userid, Convert.ToDecimal(Amount), apioptcode, CommonTranid, optional1, optional2, url);
+                                                        var responsechk111 = responsechk3.Content.ToString();
+                                                        dynamic json2 = JsonConvert.DeserializeObject(responsechk111);
+                                                        var errormsg2 = json2.Errormsg.ToString();
+                                                    }
+                                                    else
+                                                    {
+                                                        tkn1.prioritytoken = token1;
+                                                        dbsrs.SaveChanges();
+                                                    }
+                                                }
+                                                var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                if (show == null)
+                                                {
+                                                    status = "Failed";
+                                                    dbsrs.recharge_update(idnn111.ToString(), status, operatorid, Convert.ToDecimal(0), json.ToString(), "Response");
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
+                                                    {
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    }
+
+                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                    if (Emailstatusretailerrechargefailed == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "Recharge Failed.";
 
                                                 }
                                                 else
                                                 {
-                                                    ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
-                                                    HttpWebRequest WebRequestObject = (HttpWebRequest)HttpWebRequest.Create(url);
-                                                    WebRequestObject.Timeout = (System.Int32)TimeSpan.FromSeconds(200).TotalMilliseconds;
-                                                    try
+                                                    var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn111, optcodei, CommonTranid, ref operatorid);
+                                                    if (outputchk == "SUCCESS")
                                                     {
-                                                        int idnn11 = 0;
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        responsemsg = "Recharge Process Successfully.";
 
-                                                        idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
-                                                        idnn11 = Convert.ToInt32(idno);
-                                                        WebResponse Response = WebRequestObject.GetResponse();
-                                                        Stream WebStream = Response.GetResponseStream();
-                                                        StreamReader Reader = new StreamReader(WebStream);
-                                                        webcontent = Reader.ReadToEnd();
+                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
 
-                                                        if (url.ToUpper().Contains("LIVE.VASTWEBINDIA.COM"))
+                                                        if (Emailstatusretailerrechargesuccess == "Y")
                                                         {
-                                                            dynamic stuff = JsonConvert.DeserializeObject(webcontent);
-                                                            var status = stuff.Status.ToString();
-                                                            var Mobile = stuff.Mobile.ToString();
-                                                            Amount = stuff.Amount.ToString();
-                                                            var RCHID = stuff.RCHID.ToString();
-                                                            string Operatorid = stuff.Operatorid.ToString();
-                                                            var remainamount = stuff.remainamount.ToString();
-                                                            var LapuNumber = stuff.LapuNumber.ToString();
-                                                            if (status.ToUpper() == "SUCCESS")
-                                                            {
-                                                                status = "Success";
-                                                                dbsrs.recharge_update(idnn11.ToString(), status, Operatorid, Convert.ToDecimal(Amount), webcontent, "Response");
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                if (statusRetailer == "Y")
-                                                                {
-                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + Operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                }
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                    }
+                                                    else if (outputchk == "FAILED")
+                                                    {
+                                                        responsemsg = "Recharge Failed.";
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
 
-                                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
+                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                        if (Emailstatusretailerrechargefailed == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
+                                                        obj.Recharge_response = json.ToString();
+                                                        dbsrs.SaveChanges();
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        if (statusRetailer == "Y")
+                                                        {
+                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                        }
+
+                                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                        if (EmailstatusretailerrechargeProccess == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                        responsemsg = "Recharge Process Successfully.";
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn111 select p).Single();
+                                                obj.Recharge_response = json.ToString();
+                                                dbsrs.SaveChanges();
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                if (EmailstatusretailerrechargeProccess == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                        }
+                                        else if (url.ToUpper().Contains("MROBOTICS.IN"))
+                                        {
+                                            var tkn = dbsrs.Recharge_API_URLS.Where(aa => aa.url == url).SingleOrDefault();
+                                            token = tkn.Token;
+                                            var Tokenid = tkn.Token;
+                                            var Userid = tkn.API_ID;
+
+                                            POST_API PA = new POST_API();
+                                            int idnn11 = 0;
+                                            decimal amt1 = Convert.ToDecimal(Amount);
+                                            idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                            idnn11 = Convert.ToInt32(idno);
+                                            string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + PA.RandomString(4);
+                                            var apioptcode = dbsrs.SRS_API.Where(aa => aa.api == url && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
+
+                                            var task = Task.Run(() =>
+                                            {
+                                                return PA.RchReqMrobotics(token, mobileno, Tokenid, Userid, amt1, apioptcode, CommonTranid, optional1, optional2, OptCode, url);
+                                            });
+
+                                            bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));     // 1 minutes
+                                            if (isCompletedSuccessfully == true)
+                                            {
+                                                string status = "";
+                                                var finaloutput = task.Result;
+                                                if (finaloutput.StatusCode == HttpStatusCode.OK)
+                                                {
+                                                    var responsechk = finaloutput.Content.ToString();
+
+                                                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+
+                                                    var Request = finaloutput.Request.Parameters[1].Value;
+                                                    var ReqUrl = url + "  RequestBody : " + Request;
+
+                                                    Recharge_info objCourse = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                    objCourse.Recharge_request = ReqUrl;
+                                                    objCourse.Order_id = CommonTranid.ToString();
+                                                    dbsrs.SaveChanges();
+
+                                                    string company_id = apioptcode.ToString();
+                                                    string remainamount = ""; string Transid = "";
+                                                    //var errorCode = json.error.ToString();
+                                                    //if (errorCode.ToUpper() == "FALSE")
+                                                    //{
+                                                    if (company_id == "4")
+                                                    {
+                                                        webcontent = "";
+
+
+                                                        status = json.status.ToString();
+                                                        if (status.ToUpper() == "SUCCESS")
+                                                        {
+                                                            Transid = json.tnx_id.ToString();
+                                                        }
+                                                        else
+                                                        {
+                                                            Transid = "";
+                                                        }
+
+
+                                                    }
+                                                    else
+                                                    {
+                                                        Recharge_info objCours = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                        objCours.Recharge_response = json.ToString();
+                                                        dbsrs.SaveChanges();
+                                                        webcontent = json.ToString();
+
+                                                        status = json.status.ToString();
+                                                        if (status.ToUpper() == "SUCCESS")
+                                                        {
+                                                            Transid = json.tnx_id.ToString();
+                                                        }
+                                                        else
+                                                        {
+                                                            Transid = "";
+                                                        }
+
+                                                    }
+
+
+
+                                                    if (status.ToUpper() == "SUCCESS")
+                                                    {
+                                                        remainamount = json.balance.ToString();
+                                                        status = "Success";
+                                                        dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(remainamount), webcontent, "Response");
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        if (statusRetailer == "Y")
+                                                        {
+                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + amt + ". Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                        }
+
+                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
+
+                                                        if (Emailstatusretailerrechargesuccess == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + amt + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                        responsemsg = "Recharge Process Successfully.";
+                                                    }
+                                                    else if (status.ToUpper() == "FAILURE")
+                                                    {
+                                                        var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                        var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                        if (show == null)
+                                                        {
+                                                            status = "Failed";
+                                                            dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(0), webcontent, "Response");
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            if (statusRetailer == "Y")
+                                                            {
+                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + amt + " is FAILED. Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                            }
+
+                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
+
+                                                            if (Emailstatusretailerrechargefailed == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + amt + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Failed.";
+
+                                                        }
+                                                        else
+                                                        {
+                                                            var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, CommonTranid, ref Transid);
+                                                            if (outputchk == "SUCCESS")
+                                                            {
+                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+
+                                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
 
                                                                 if (Emailstatusretailerrechargesuccess == "Y")
                                                                 {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
                                                                 }
                                                                 responsemsg = "Recharge Process Successfully.";
-
                                                             }
-                                                            else if (status.ToUpper() == "FAILED")
+                                                            else if (outputchk == "FAILED")
                                                             {
-                                                                var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                                var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                                if (show == null)
+                                                                responsemsg = "Recharge Failed.";
+                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+
+                                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
+
+                                                                if (Emailstatusretailerrechargefailed == "Y")
                                                                 {
-                                                                    status = "Failed";
-                                                                    dbsrs.recharge_update(idnn11.ToString(), status, Operatorid, Convert.ToDecimal(Amount), webcontent, "Response");
-                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                    if (statusRetailer == "Y")
-                                                                    {
-                                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + Operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                    }
-
-                                                                    //if (statusretailerrechargefailed == "Y")
-                                                                    //{
-                                                                    //    string msgssss = "";
-                                                                    //    string tempid = "";
-                                                                    //    string urlss = "";
-
-                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                    //    if (smsstypes != null)
-                                                                    //    {
-
-                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
-                                                                    //        tempid = smsstypes.Templateid;
-                                                                    //        urlss = smsapionsts.smsapi;
-
-                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                    //    }
-                                                                    //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                                    //}
-
-                                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
-
-                                                                    if (Emailstatusretailerrechargefailed == "Y")
-                                                                    {
-                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                    }
-                                                                    responsemsg = "Recharge Failed.";
-                                                                }
-                                                                else
-                                                                {
-                                                                    var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, txnid, ref Operatorid);
-                                                                    if (outputchk == "SUCCESS")
-                                                                    {
-                                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                        //if (statusretailerrechargesuccess == "Y")
-                                                                        //{
-
-                                                                        //    string msgssss = "";
-                                                                        //    string tempid = "";
-                                                                        //    string urlss = "";
-
-                                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                        //    if (smsstypes != null)
-                                                                        //    {
-
-                                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
-                                                                        //        tempid = smsstypes.Templateid;
-                                                                        //        urlss = smsapionsts.smsapi;
-
-                                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                        //    }
-                                                                        //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
-                                                                        //}
-
-                                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
-
-                                                                        if (Emailstatusretailerrechargesuccess == "Y")
-                                                                        {
-                                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                        }
-                                                                        responsemsg = "Recharge Process Successfully.";
-
-                                                                    }
-                                                                    else if (outputchk == "FAILED")
-                                                                    {
-                                                                        responsemsg = "Recharge Failed.";
-                                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                        //if (statusretailerrechargefailed == "Y")
-                                                                        //{
-                                                                        //    string msgssss = "";
-                                                                        //    string tempid = "";
-                                                                        //    string urlss = "";
-
-                                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                        //    if (smsstypes != null)
-                                                                        //    {
-
-                                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
-                                                                        //        tempid = smsstypes.Templateid;
-                                                                        //        urlss = smsapionsts.smsapi;
-
-                                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                        //    }
-                                                                        //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                                        //}
-
-                                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
-
-                                                                        if (Emailstatusretailerrechargefailed == "Y")
-                                                                        {
-                                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                        }
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        //Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                                        //obj.Recharge_response = webcontent.ToString();
-                                                                        //dbsrs.SaveChanges();
-                                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                        //if (statusretailerrechargeProccess == "Y")
-                                                                        //{
-
-                                                                        //    string msgssss = "";
-                                                                        //    string tempid = "";
-                                                                        //    string urlss = "";
-
-                                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                        //    if (smsstypes != null)
-                                                                        //    {
-
-                                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                                        //        tempid = smsstypes.Templateid;
-                                                                        //        urlss = smsapionsts.smsapi;
-
-                                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                        //    }
-
-                                                                        //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                                        //}
-
-                                                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                                        if (EmailstatusretailerrechargeProccess == "Y")
-                                                                        {
-                                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                        }
-                                                                        responsemsg = "Recharge Process Successfully.";
-                                                                    }
+                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
                                                                 }
                                                             }
                                                             else
                                                             {
-                                                                Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                                obj.Recharge_response = webcontent.ToString();
-                                                                dbsrs.SaveChanges();
                                                                 var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
                                                                 if (statusRetailer == "Y")
                                                                 {
                                                                     SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
                                                                 }
-                                                                //if (statusretailerrechargeProccess == "Y")
-                                                                //{
-
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-
-
-                                                                //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                                //}
 
                                                                 smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
 
@@ -14007,497 +13574,161 @@ namespace Vastwebmulti.Controllers
                                                                 responsemsg = "Recharge Process Successfully.";
                                                             }
                                                         }
-                                                        else if (url.ToUpper().Contains("VASTWEBINDIA.COM"))
+                                                    }
+                                                    else
+                                                    {
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        if (statusRetailer == "Y")
                                                         {
-
-                                                            dynamic stuff = Newtonsoft.Json.JsonConvert.DeserializeObject(webcontent);
-
-                                                            var status = stuff.Status.ToString();
-                                                            var mobile = stuff.Mobile.ToString();
-                                                            var amount1 = stuff.Amount.ToString();
-                                                            var R_id = stuff.RID.ToString();
-                                                            string operatorid = stuff.Operatorid.ToString();
-                                                            var remain_amount = stuff.remainamount.ToString();
-
-                                                            if (status.ToUpper() == "SUCCESS")
-                                                            {
-
-                                                                status = "Success";
-                                                                dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                if (statusRetailer == "Y")
-                                                                {
-                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                }
-                                                                //if (statusretailerrechargesuccess == "Y")
-                                                                //{
-
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-                                                                //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                if (Emailstatusretailerrechargesuccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
-                                                            }
-                                                            else if (status.ToUpper() == "FAILED")
-                                                            {
-                                                                var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                                var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                                if (show == null)
-                                                                {
-                                                                    status = "Failed";
-                                                                    dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
-                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                    if (statusRetailer == "Y")
-                                                                    {
-                                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                    }
-
-                                                                    //if (statusretailerrechargefailed == "Y")
-                                                                    //{
-
-                                                                    //    string msgssss = "";
-                                                                    //    string tempid = "";
-                                                                    //    string urlss = "";
-
-                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                    //    if (smsstypes != null)
-                                                                    //    {
-
-                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                    //        tempid = smsstypes.Templateid;
-                                                                    //        urlss = smsapionsts.smsapi;
-
-                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                    //    }
-
-                                                                    //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                                    //}
-
-                                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                    if (Emailstatusretailerrechargefailed == "Y")
-                                                                    {
-                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                    }
-                                                                    responsemsg = "Recharge Failed.";
-                                                                }
-                                                                else
-                                                                {
-                                                                    var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, txnid, ref operatorid);
-                                                                    if (outputchk == "SUCCESS")
-                                                                    {
-                                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                        //if (statusretailerrechargesuccess == "Y")
-                                                                        //{
-                                                                        //    string msgssss = "";
-                                                                        //    string tempid = "";
-                                                                        //    string urlss = "";
-
-                                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                        //    if (smsstypes != null)
-                                                                        //    {
-
-                                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                        //        tempid = smsstypes.Templateid;
-                                                                        //        urlss = smsapionsts.smsapi;
-
-                                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                        //    }
-
-                                                                        //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
-                                                                        //}
-
-                                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                        if (Emailstatusretailerrechargesuccess == "Y")
-                                                                        {
-                                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                        }
-                                                                        responsemsg = "Recharge Process Successfully.";
-                                                                    }
-                                                                    else if (outputchk == "FAILED")
-                                                                    {
-                                                                        responsemsg = "Recharge Failed.";
-                                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                        //if (statusretailerrechargefailed == "Y")
-                                                                        //{
-                                                                        //    string msgssss = "";
-                                                                        //    string tempid = "";
-                                                                        //    string urlss = "";
-
-                                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                        //    if (smsstypes != null)
-                                                                        //    {
-
-                                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                        //        tempid = smsstypes.Templateid;
-                                                                        //        urlss = smsapionsts.smsapi;
-
-                                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                        //    }
-                                                                        //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                                        //}
-
-                                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                        if (Emailstatusretailerrechargefailed == "Y")
-                                                                        {
-                                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                        }
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                                        obj.Recharge_response = webcontent.ToString();
-                                                                        dbsrs.SaveChanges();
-                                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                        if (statusRetailer == "Y")
-                                                                        {
-                                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                        }
-                                                                        //if (statusretailerrechargeProccess == "Y")
-                                                                        //{
-                                                                        //    string msgssss = "";
-                                                                        //    string tempid = "";
-                                                                        //    string urlss = "";
-
-                                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                        //    if (smsstypes != null)
-                                                                        //    {
-
-                                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                                        //        tempid = smsstypes.Templateid;
-                                                                        //        urlss = smsapionsts.smsapi;
-
-                                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                        //    }
-
-                                                                        //    //   smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                                        //}
-
-                                                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                                        if (EmailstatusretailerrechargeProccess == "Y")
-                                                                        {
-                                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                        }
-                                                                        responsemsg = "Recharge Process Successfully.";
-                                                                    }
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                                obj.Recharge_response = webcontent.ToString();
-                                                                dbsrs.SaveChanges();
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                if (statusRetailer == "Y")
-                                                                {
-                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                }
-                                                                //if (statusretailerrechargeProccess == "Y")
-                                                                //{
-
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-                                                                //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                                if (EmailstatusretailerrechargeProccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
-                                                            }
+                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
                                                         }
-                                                        else if (url.ToUpper().Contains("RECHARGETRAAWSERVICES.IN"))
+
+                                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                        if (EmailstatusretailerrechargeProccess == "Y")
                                                         {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                        responsemsg = "Recharge Process Successfully.";
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                    var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                    if (show == null)
+                                                    {
+                                                        status = "Failed";
+                                                        var Transid = "API End Issue";
+                                                        dbsrs.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(0), webcontent, "Response");
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        if (statusRetailer == "Y")
+                                                        {
+                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + amt + " is FAILED. Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                        }
 
-                                                            dynamic stuff = Newtonsoft.Json.JsonConvert.DeserializeObject(webcontent);
+                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
 
-                                                            var status = stuff.status.ToString();
+                                                        if (Emailstatusretailerrechargefailed == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + amt + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                        responsemsg = "Recharge Failed.";
 
-                                                            string operatorid = stuff.operatorid.ToString();
-                                                            var amount1 = stuff.remainamount.ToString();
+                                                    }
+                                                    else
+                                                    {
+                                                        responsemsg = "Recharge Failed.";
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
 
-                                                            if (amount1 == "" || amount1 == null)
+                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, "", remainbal);
+
+                                                        if (Emailstatusretailerrechargefailed == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + "" + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+
+                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                if (EmailstatusretailerrechargeProccess == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "Recharge Process Successfully.";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var apiinfo = dbsrs.RechargeapiInfoes.Where(aa => aa.apiendpoint.ToUpper() == url.ToUpper()).SingleOrDefault();
+                                            if (apiinfo != null)
+                                            {
+                                                var apiremain = "0"; var _status = "Pending"; var transid = ""; var errormsg = "";
+
+                                                ApiResponse rech = Vastwebmulti.Models.RechargeServices.Recharge(apiinfo, mobileno, OptCode, ammt, txnid);
+                                                _status = rech.status;
+                                                transid = rech.operatorId;
+                                                errormsg = rech.errormsg;
+                                                apiremain = rech.apiremain;
+                                                webcontent = rech.api_response;
+                                                int idnn11 = rech.id;
+
+                                                if (_status == "Success")
+                                                {
+                                                    //    status = "Success";
+                                                    dbsrs.recharge_update(idnn11.ToString(), "Success", transid, Convert.ToDecimal(apiremain), webcontent, "Response");
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
+                                                    {
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    }
+
+                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, transid, remainbal);
+
+                                                    if (Emailstatusretailerrechargesuccess == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "Recharge Process Successfully.";
+
+                                                }
+                                                else if (_status == "Failed")
+                                                {
+                                                    var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                    var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                    if (show == null)
+                                                    {
+                                                        //status = "Failed";
+                                                        dbsrs.recharge_update(idnn11.ToString(), "Failed", errormsg, Convert.ToDecimal(apiremain), webcontent, "Response");
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        if (statusRetailer == "Y")
+                                                        {
+                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + errormsg + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                        }
+
+                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, errormsg, remainbal);
+
+                                                        if (Emailstatusretailerrechargefailed == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + errormsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                        responsemsg = "Recharge Failed.";
+
+                                                    }
+                                                    else
+                                                    {
+                                                        var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, txnid, ref transid);
+                                                        if (outputchk == "SUCCESS")
+                                                        {
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+
+                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, transid, remainbal);
+
+                                                            if (Emailstatusretailerrechargesuccess == "Y")
                                                             {
-                                                                amount1 = "0";
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
                                                             }
+                                                            responsemsg = "Recharge Process Successfully.";
+                                                        }
+                                                        else if (outputchk == "FAILED")
+                                                        {
+                                                            responsemsg = "Recharge Failed.";
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
 
-                                                            if (status.ToUpper() == "SUCCESS")
+                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, errormsg, remainbal);
+
+                                                            if (Emailstatusretailerrechargefailed == "Y")
                                                             {
-
-                                                                status = "Success";
-                                                                dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                if (statusRetailer == "Y")
-                                                                {
-                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                }
-                                                                //if (statusretailerrechargesuccess == "Y")
-                                                                //{
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-
-                                                                //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                if (Emailstatusretailerrechargesuccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
-
-                                                            }
-                                                            else if (status.ToUpper() == "FAILED")
-                                                            {
-                                                                var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-                                                                var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                                                if (show == null)
-                                                                {
-                                                                    status = "Failed";
-                                                                    dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
-                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                    if (statusRetailer == "Y")
-                                                                    {
-                                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                    }
-                                                                    //if (statusretailerrechargefailed == "Y")
-                                                                    //{
-                                                                    //    string msgssss = "";
-                                                                    //    string tempid = "";
-                                                                    //    string urlss = "";
-
-                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                    //    if (smsstypes != null)
-                                                                    //    {
-
-                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                    //        tempid = smsstypes.Templateid;
-                                                                    //        urlss = smsapionsts.smsapi;
-
-                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                    //    }
-
-                                                                    //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                                    //}
-
-                                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                    if (Emailstatusretailerrechargefailed == "Y")
-                                                                    {
-                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                    }
-                                                                    responsemsg = "Recharge Failed.";
-
-                                                                }
-                                                                else
-                                                                {
-                                                                    var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, txnid, ref operatorid);
-                                                                    if (outputchk == "SUCCESS")
-                                                                    {
-                                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                        //if (statusretailerrechargesuccess == "Y")
-                                                                        //{
-
-                                                                        //    string msgssss = "";
-                                                                        //    string tempid = "";
-                                                                        //    string urlss = "";
-
-                                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                        //    if (smsstypes != null)
-                                                                        //    {
-
-                                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                        //        tempid = smsstypes.Templateid;
-                                                                        //        urlss = smsapionsts.smsapi;
-
-                                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                        //    }
-
-
-                                                                        //    //   smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
-                                                                        //}
-                                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                        if (Emailstatusretailerrechargesuccess == "Y")
-                                                                        {
-                                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                        }
-                                                                        responsemsg = "Recharge Process Successfully.";
-                                                                    }
-                                                                    else if (outputchk == "FAILED")
-                                                                    {
-                                                                        responsemsg = "Recharge Failed.";
-                                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                        //if (statusretailerrechargefailed == "Y")
-                                                                        //{
-
-                                                                        //    string msgssss = "";
-                                                                        //    string tempid = "";
-                                                                        //    string urlss = "";
-
-                                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                        //    if (smsstypes != null)
-                                                                        //    {
-
-                                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
-                                                                        //        tempid = smsstypes.Templateid;
-                                                                        //        urlss = smsapionsts.smsapi;
-
-                                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                        //    }
-
-
-
-                                                                        //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
-                                                                        //}
-
-                                                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
-
-                                                                        if (Emailstatusretailerrechargefailed == "Y")
-                                                                        {
-                                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                                        }
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                                        obj.Recharge_response = webcontent.ToString();
-                                                                        dbsrs.SaveChanges();
-                                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                        if (statusRetailer == "Y")
-                                                                        {
-                                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                        }
-                                                                        //if (statusretailerrechargeProccess == "Y")
-                                                                        //{
-
-                                                                        //    string msgssss = "";
-                                                                        //    string tempid = "";
-                                                                        //    string urlss = "";
-
-                                                                        //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                        //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                        //    if (smsstypes != null)
-                                                                        //    {
-
-                                                                        //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                                        //        tempid = smsstypes.Templateid;
-                                                                        //        urlss = smsapionsts.smsapi;
-
-                                                                        //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                        //    }
-                                                                        //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                                        //}
-
-                                                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                                        if (EmailstatusretailerrechargeProccess == "Y")
-                                                                        {
-                                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                        }
-                                                                        responsemsg = "Recharge Process Successfully.";
-                                                                    }
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
-                                                                obj.Recharge_response = webcontent.ToString();
-                                                                dbsrs.SaveChanges();
-                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-                                                                if (statusRetailer == "Y")
-                                                                {
-                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-                                                                }
-                                                                //if (statusretailerrechargeProccess == "Y")
-                                                                //{
-
-                                                                //    string msgssss = "";
-                                                                //    string tempid = "";
-                                                                //    string urlss = "";
-
-                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                                //    if (smsstypes != null)
-                                                                //    {
-
-                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
-                                                                //        tempid = smsstypes.Templateid;
-                                                                //        urlss = smsapionsts.smsapi;
-
-                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                                //    }
-
-                                                                //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
-                                                                //}
-
-                                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-
-                                                                if (EmailstatusretailerrechargeProccess == "Y")
-                                                                {
-                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                                }
-                                                                responsemsg = "Recharge Process Successfully.";
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + errormsg + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
                                                             }
                                                         }
                                                         else
@@ -14520,23 +13751,793 @@ namespace Vastwebmulti.Controllers
                                                             responsemsg = "Recharge Process Successfully.";
                                                         }
                                                     }
-                                                    catch (Exception ex)
+                                                }
+                                                else
+                                                {
+                                                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                    obj.Recharge_response = webcontent.ToString();
+                                                    dbsrs.SaveChanges();
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
                                                     {
-                                                        test1 t1 = new test1();
-                                                        t1.name = String.Format("Retailer Recharge Exception1 - Message: {0}, Stack: {1}, Url: {4}", ex.Message, ex.StackTrace, url);
-                                                        dbsrs.test1.Add(t1);
-                                                        dbsrs.SaveChanges();
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
                                                     }
+
+                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                    if (EmailstatusretailerrechargeProccess == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "Recharge Process Successfully.";
+
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+                                                HttpWebRequest WebRequestObject = (HttpWebRequest)HttpWebRequest.Create(url);
+                                                WebRequestObject.Timeout = (System.Int32)TimeSpan.FromSeconds(200).TotalMilliseconds;
+                                                try
+                                                {
+                                                    int idnn11 = 0;
+
+                                                    idno = (from rch in dbsrs.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                                    idnn11 = Convert.ToInt32(idno);
+                                                    WebResponse Response = WebRequestObject.GetResponse();
+                                                    Stream WebStream = Response.GetResponseStream();
+                                                    StreamReader Reader = new StreamReader(WebStream);
+                                                    webcontent = Reader.ReadToEnd();
+
+                                                    if (url.ToUpper().Contains("LIVE.VASTWEBINDIA.COM"))
+                                                    {
+                                                        dynamic stuff = JsonConvert.DeserializeObject(webcontent);
+                                                        var status = stuff.Status.ToString();
+                                                        var Mobile = stuff.Mobile.ToString();
+                                                        Amount = stuff.Amount.ToString();
+                                                        var RCHID = stuff.RCHID.ToString();
+                                                        string Operatorid = stuff.Operatorid.ToString();
+                                                        var remainamount = stuff.remainamount.ToString();
+                                                        var LapuNumber = stuff.LapuNumber.ToString();
+                                                        if (status.ToUpper() == "SUCCESS")
+                                                        {
+                                                            status = "Success";
+                                                            dbsrs.recharge_update(idnn11.ToString(), status, Operatorid, Convert.ToDecimal(Amount), webcontent, "Response");
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            if (statusRetailer == "Y")
+                                                            {
+                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + Operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                            }
+
+                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
+
+                                                            if (Emailstatusretailerrechargesuccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+
+                                                        }
+                                                        else if (status.ToUpper() == "FAILED")
+                                                        {
+                                                            var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                            var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                            if (show == null)
+                                                            {
+                                                                status = "Failed";
+                                                                dbsrs.recharge_update(idnn11.ToString(), status, Operatorid, Convert.ToDecimal(Amount), webcontent, "Response");
+                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                if (statusRetailer == "Y")
+                                                                {
+                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + Operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                                }
+
+                                                                //if (statusretailerrechargefailed == "Y")
+                                                                //{
+                                                                //    string msgssss = "";
+                                                                //    string tempid = "";
+                                                                //    string urlss = "";
+
+                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                //    if (smsstypes != null)
+                                                                //    {
+
+                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
+                                                                //        tempid = smsstypes.Templateid;
+                                                                //        urlss = smsapionsts.smsapi;
+
+                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                //    }
+                                                                //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                                //}
+
+                                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
+
+                                                                if (Emailstatusretailerrechargefailed == "Y")
+                                                                {
+                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                                }
+                                                                responsemsg = "Recharge Failed.";
+                                                            }
+                                                            else
+                                                            {
+                                                                var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, txnid, ref Operatorid);
+                                                                if (outputchk == "SUCCESS")
+                                                                {
+                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                    //if (statusretailerrechargesuccess == "Y")
+                                                                    //{
+
+                                                                    //    string msgssss = "";
+                                                                    //    string tempid = "";
+                                                                    //    string urlss = "";
+
+                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                    //    if (smsstypes != null)
+                                                                    //    {
+
+                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
+                                                                    //        tempid = smsstypes.Templateid;
+                                                                    //        urlss = smsapionsts.smsapi;
+
+                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                    //    }
+                                                                    //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
+                                                                    //}
+
+                                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
+
+                                                                    if (Emailstatusretailerrechargesuccess == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                                    }
+                                                                    responsemsg = "Recharge Process Successfully.";
+
+                                                                }
+                                                                else if (outputchk == "FAILED")
+                                                                {
+                                                                    responsemsg = "Recharge Failed.";
+                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                    //if (statusretailerrechargefailed == "Y")
+                                                                    //{
+                                                                    //    string msgssss = "";
+                                                                    //    string tempid = "";
+                                                                    //    string urlss = "";
+
+                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                    //    if (smsstypes != null)
+                                                                    //    {
+
+                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, Operatorid, remainbal);
+                                                                    //        tempid = smsstypes.Templateid;
+                                                                    //        urlss = smsapionsts.smsapi;
+
+                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                    //    }
+                                                                    //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                                    //}
+
+                                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Operatorid, remainbal);
+
+                                                                    if (Emailstatusretailerrechargefailed == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    //Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                                    //obj.Recharge_response = webcontent.ToString();
+                                                                    //dbsrs.SaveChanges();
+                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                    //if (statusretailerrechargeProccess == "Y")
+                                                                    //{
+
+                                                                    //    string msgssss = "";
+                                                                    //    string tempid = "";
+                                                                    //    string urlss = "";
+
+                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                    //    if (smsstypes != null)
+                                                                    //    {
+
+                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                                    //        tempid = smsstypes.Templateid;
+                                                                    //        urlss = smsapionsts.smsapi;
+
+                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                    //    }
+
+                                                                    //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                                    //}
+
+                                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                                    if (EmailstatusretailerrechargeProccess == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                                    }
+                                                                    responsemsg = "Recharge Process Successfully.";
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                            obj.Recharge_response = webcontent.ToString();
+                                                            dbsrs.SaveChanges();
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            if (statusRetailer == "Y")
+                                                            {
+                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                            }
+                                                            //if (statusretailerrechargeProccess == "Y")
+                                                            //{
+
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+
+
+                                                            //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                            if (EmailstatusretailerrechargeProccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+                                                        }
+                                                    }
+                                                    else if (url.ToUpper().Contains("VASTWEBINDIA.COM"))
+                                                    {
+
+                                                        dynamic stuff = Newtonsoft.Json.JsonConvert.DeserializeObject(webcontent);
+
+                                                        var status = stuff.Status.ToString();
+                                                        var mobile = stuff.Mobile.ToString();
+                                                        var amount1 = stuff.Amount.ToString();
+                                                        var R_id = stuff.RID.ToString();
+                                                        string operatorid = stuff.Operatorid.ToString();
+                                                        var remain_amount = stuff.remainamount.ToString();
+
+                                                        if (status.ToUpper() == "SUCCESS")
+                                                        {
+
+                                                            status = "Success";
+                                                            dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            if (statusRetailer == "Y")
+                                                            {
+                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                            }
+                                                            //if (statusretailerrechargesuccess == "Y")
+                                                            //{
+
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+                                                            //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                            if (Emailstatusretailerrechargesuccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+                                                        }
+                                                        else if (status.ToUpper() == "FAILED")
+                                                        {
+                                                            var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                            var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                            if (show == null)
+                                                            {
+                                                                status = "Failed";
+                                                                dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
+                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                if (statusRetailer == "Y")
+                                                                {
+                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                                }
+
+                                                                //if (statusretailerrechargefailed == "Y")
+                                                                //{
+
+                                                                //    string msgssss = "";
+                                                                //    string tempid = "";
+                                                                //    string urlss = "";
+
+                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                //    if (smsstypes != null)
+                                                                //    {
+
+                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                                //        tempid = smsstypes.Templateid;
+                                                                //        urlss = smsapionsts.smsapi;
+
+                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                //    }
+
+                                                                //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                                //}
+
+                                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                                if (Emailstatusretailerrechargefailed == "Y")
+                                                                {
+                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                                }
+                                                                responsemsg = "Recharge Failed.";
+                                                            }
+                                                            else
+                                                            {
+                                                                var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, txnid, ref operatorid);
+                                                                if (outputchk == "SUCCESS")
+                                                                {
+                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                    //if (statusretailerrechargesuccess == "Y")
+                                                                    //{
+                                                                    //    string msgssss = "";
+                                                                    //    string tempid = "";
+                                                                    //    string urlss = "";
+
+                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                    //    if (smsstypes != null)
+                                                                    //    {
+
+                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                                    //        tempid = smsstypes.Templateid;
+                                                                    //        urlss = smsapionsts.smsapi;
+
+                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                    //    }
+
+                                                                    //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
+                                                                    //}
+
+                                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                                    if (Emailstatusretailerrechargesuccess == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                                    }
+                                                                    responsemsg = "Recharge Process Successfully.";
+                                                                }
+                                                                else if (outputchk == "FAILED")
+                                                                {
+                                                                    responsemsg = "Recharge Failed.";
+                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                    //if (statusretailerrechargefailed == "Y")
+                                                                    //{
+                                                                    //    string msgssss = "";
+                                                                    //    string tempid = "";
+                                                                    //    string urlss = "";
+
+                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                    //    if (smsstypes != null)
+                                                                    //    {
+
+                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                                    //        tempid = smsstypes.Templateid;
+                                                                    //        urlss = smsapionsts.smsapi;
+
+                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                    //    }
+                                                                    //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                                    //}
+
+                                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                                    if (Emailstatusretailerrechargefailed == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                                    obj.Recharge_response = webcontent.ToString();
+                                                                    dbsrs.SaveChanges();
+                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                    if (statusRetailer == "Y")
+                                                                    {
+                                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                                    }
+                                                                    //if (statusretailerrechargeProccess == "Y")
+                                                                    //{
+                                                                    //    string msgssss = "";
+                                                                    //    string tempid = "";
+                                                                    //    string urlss = "";
+
+                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                    //    if (smsstypes != null)
+                                                                    //    {
+
+                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                                    //        tempid = smsstypes.Templateid;
+                                                                    //        urlss = smsapionsts.smsapi;
+
+                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                    //    }
+
+                                                                    //    //   smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                                    //}
+
+                                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                                    if (EmailstatusretailerrechargeProccess == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                                    }
+                                                                    responsemsg = "Recharge Process Successfully.";
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                            obj.Recharge_response = webcontent.ToString();
+                                                            dbsrs.SaveChanges();
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            if (statusRetailer == "Y")
+                                                            {
+                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                            }
+                                                            //if (statusretailerrechargeProccess == "Y")
+                                                            //{
+
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+                                                            //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                            if (EmailstatusretailerrechargeProccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+                                                        }
+                                                    }
+                                                    else if (url.ToUpper().Contains("RECHARGETRAAWSERVICES.IN"))
+                                                    {
+
+                                                        dynamic stuff = Newtonsoft.Json.JsonConvert.DeserializeObject(webcontent);
+
+                                                        var status = stuff.status.ToString();
+
+                                                        string operatorid = stuff.operatorid.ToString();
+                                                        var amount1 = stuff.remainamount.ToString();
+
+                                                        if (amount1 == "" || amount1 == null)
+                                                        {
+                                                            amount1 = "0";
+                                                        }
+
+                                                        if (status.ToUpper() == "SUCCESS")
+                                                        {
+
+                                                            status = "Success";
+                                                            dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            if (statusRetailer == "Y")
+                                                            {
+                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                            }
+                                                            //if (statusretailerrechargesuccess == "Y")
+                                                            //{
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+
+                                                            //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                            if (Emailstatusretailerrechargesuccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+
+                                                        }
+                                                        else if (status.ToUpper() == "FAILED")
+                                                        {
+                                                            var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                            var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                            if (show == null)
+                                                            {
+                                                                status = "Failed";
+                                                                dbsrs.recharge_update(idnn11.ToString(), status, operatorid, Convert.ToDecimal(amount1), webcontent, "Response");
+                                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                if (statusRetailer == "Y")
+                                                                {
+                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + operatorid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                                }
+                                                                //if (statusretailerrechargefailed == "Y")
+                                                                //{
+                                                                //    string msgssss = "";
+                                                                //    string tempid = "";
+                                                                //    string urlss = "";
+
+                                                                //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                //    if (smsstypes != null)
+                                                                //    {
+
+                                                                //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                                //        tempid = smsstypes.Templateid;
+                                                                //        urlss = smsapionsts.smsapi;
+
+                                                                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                //    }
+
+                                                                //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                                //}
+
+                                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                                if (Emailstatusretailerrechargefailed == "Y")
+                                                                {
+                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                                }
+                                                                responsemsg = "Recharge Failed.";
+
+                                                            }
+                                                            else
+                                                            {
+                                                                var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, txnid, ref operatorid);
+                                                                if (outputchk == "SUCCESS")
+                                                                {
+                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                    //if (statusretailerrechargesuccess == "Y")
+                                                                    //{
+
+                                                                    //    string msgssss = "";
+                                                                    //    string tempid = "";
+                                                                    //    string urlss = "";
+
+                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                    //    if (smsstypes != null)
+                                                                    //    {
+
+                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                                    //        tempid = smsstypes.Templateid;
+                                                                    //        urlss = smsapionsts.smsapi;
+
+                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                    //    }
+
+
+                                                                    //    //   smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + result + ".Balance is Rs." + remainbal + "", "Recharge");
+                                                                    //}
+                                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                                    if (Emailstatusretailerrechargesuccess == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                                    }
+                                                                    responsemsg = "Recharge Process Successfully.";
+                                                                }
+                                                                else if (outputchk == "FAILED")
+                                                                {
+                                                                    responsemsg = "Recharge Failed.";
+                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                    //if (statusretailerrechargefailed == "Y")
+                                                                    //{
+
+                                                                    //    string msgssss = "";
+                                                                    //    string tempid = "";
+                                                                    //    string urlss = "";
+
+                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                    //    if (smsstypes != null)
+                                                                    //    {
+
+                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, operatorid, remainbal);
+                                                                    //        tempid = smsstypes.Templateid;
+                                                                    //        urlss = smsapionsts.smsapi;
+
+                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                    //    }
+
+
+
+                                                                    //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + result + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                                    //}
+
+                                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, operatorid, remainbal);
+
+                                                                    if (Emailstatusretailerrechargefailed == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                                    obj.Recharge_response = webcontent.ToString();
+                                                                    dbsrs.SaveChanges();
+                                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                    if (statusRetailer == "Y")
+                                                                    {
+                                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                                    }
+                                                                    //if (statusretailerrechargeProccess == "Y")
+                                                                    //{
+
+                                                                    //    string msgssss = "";
+                                                                    //    string tempid = "";
+                                                                    //    string urlss = "";
+
+                                                                    //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                    //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                    //    if (smsstypes != null)
+                                                                    //    {
+
+                                                                    //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                                    //        tempid = smsstypes.Templateid;
+                                                                    //        urlss = smsapionsts.smsapi;
+
+                                                                    //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                                    //    }
+                                                                    //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                                    //}
+
+                                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                                    if (EmailstatusretailerrechargeProccess == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                                    }
+                                                                    responsemsg = "Recharge Process Successfully.";
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                            obj.Recharge_response = webcontent.ToString();
+                                                            dbsrs.SaveChanges();
+                                                            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            if (statusRetailer == "Y")
+                                                            {
+                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                            }
+                                                            //if (statusretailerrechargeProccess == "Y")
+                                                            //{
+
+                                                            //    string msgssss = "";
+                                                            //    string tempid = "";
+                                                            //    string urlss = "";
+
+                                                            //    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                            //    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEPENDING" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                            //    if (smsstypes != null)
+                                                            //    {
+
+                                                            //        msgssss = string.Format(smsstypes.Templates, mobileno, Amount, remainbal);
+                                                            //        tempid = smsstypes.Templateid;
+                                                            //        urlss = smsapionsts.smsapi;
+
+                                                            //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                            //    }
+
+                                                            //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge");
+                                                            //}
+
+                                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                            if (EmailstatusretailerrechargeProccess == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Process Successfully.";
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn11 select p).Single();
+                                                        obj.Recharge_response = webcontent.ToString();
+                                                        dbsrs.SaveChanges();
+                                                        var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        if (statusRetailer == "Y")
+                                                        {
+                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                        }
+
+                                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+
+                                                        if (EmailstatusretailerrechargeProccess == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                        responsemsg = "Recharge Process Successfully.";
+                                                    }
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    test1 t1 = new test1();
+                                                    t1.name = String.Format("Retailer Recharge Exception1 - Message: {0}, Stack: {1}, Url: {4}", ex.Message, ex.StackTrace, url);
+                                                    dbsrs.test1.Add(t1);
+                                                    dbsrs.SaveChanges();
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                            catch { }
                         }
-                   
-                
+                        catch { }
+                    }
+
+
                 }
                 catch (Exception ex)
                 {
@@ -14581,10 +14582,10 @@ namespace Vastwebmulti.Controllers
                 }
                 return View();
             }
-          //  
+            //  
         }
 
-        public void payuhoja(string key,string OrderId,string Amount,string RetailerName,string mobile,string Email,string url,string hash)
+        public void payuhoja(string key, string OrderId, string Amount, string RetailerName, string mobile, string Email, string url, string hash)
         {
             RemotePost myremotepost = new RemotePost();
             // myremotepost.Url = "https://test.payu.in/_payment";
@@ -14609,12 +14610,12 @@ namespace Vastwebmulti.Controllers
         public ActionResult testrecharge1()
         {
             string userid = "47a3464e-fdaa-4501-8aed-8a93034611c8";
-            string url = Url.Action("hojabhai", "Response", new { userid}, Request.Url.Scheme);
+            string url = Url.Action("hojabhai", "Response", new { userid }, Request.Url.Scheme);
             return Json(url, JsonRequestBehavior.AllowGet);
         }
-    
-      
-        public ActionResult hojabhai(string userid,string txtupi_amount)
+
+
+        public ActionResult hojabhai(string userid, string txtupi_amount)
         {
             string orderId = "";
             using (VastwebmultiEntities db = new VastwebmultiEntities())
@@ -14644,12 +14645,12 @@ namespace Vastwebmulti.Controllers
                     dynamic dyrespchk = JsonConvert.DeserializeObject(respchk.Content);
                     if (dyrespchk.success == true)
                     {
-                         var expiryTime = dyrespchk.data.expiryTime;
-                         orderId = dyrespchk.data.orderId;
+                        var expiryTime = dyrespchk.data.expiryTime;
+                        orderId = dyrespchk.data.orderId;
                     }
                 }
 
-                    var responseinfo = dmt.UPIIntent(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, orderId);
+                var responseinfo = dmt.UPIIntent(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, orderId);
                 //      var responseinfo = dmt.FundtransferSendotp(radianagentid, radianttoken, senderno, otp, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
                 if (responseinfo.StatusCode == HttpStatusCode.NotAcceptable)
                 {
@@ -14692,19 +14693,19 @@ namespace Vastwebmulti.Controllers
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult updatelatlong(string Mobile,string lat,string lon)
+        public ActionResult updatelatlong(string Mobile, string lat, string lon)
         {
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
-                var sts = false;var message = "";var M_request = "";var M_response = ""; string message_info = "";
+                var sts = false; var message = ""; var M_request = ""; var M_response = ""; string message_info = "";
                 var retailerinfo = db.Retailer_Details.Where(aa => aa.Mobile == Mobile).SingleOrDefault();
                 if (retailerinfo != null)
                 {
                     var infochk = db.Update_Aeps_Info.Where(aa => aa.UserId == retailerinfo.RetailerId).SingleOrDefault();
                     if (infochk != null)
                     {
-                    
-                         UpdateAeps(retailerinfo.RetailerId, lat, lon,out message_info,out M_request,out M_response);
+
+                        UpdateAeps(retailerinfo.RetailerId, lat, lon, out message_info, out M_request, out M_response);
                         if (message_info == "TXN")
                         {
                             sts = true;
@@ -14723,7 +14724,7 @@ namespace Vastwebmulti.Controllers
                     }
                     else
                     {
-                         UpdateAeps(retailerinfo.RetailerId, lat, lon, out message_info, out M_request, out M_response);
+                        UpdateAeps(retailerinfo.RetailerId, lat, lon, out message_info, out M_request, out M_response);
                         if (message_info == "TXN")
                         {
                             sts = true;
@@ -14741,7 +14742,7 @@ namespace Vastwebmulti.Controllers
                         {
                             message = message_info;
                         }
-                       
+
                     }
                 }
                 else
@@ -14756,9 +14757,9 @@ namespace Vastwebmulti.Controllers
         {
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
-                var sts = false;var message = "";
+                var sts = false; var message = "";
                 var reminfo = db.Retailer_Details.Where(aa => aa.Mobile == Mobile).SingleOrDefault();
-                if(reminfo!=null)
+                if (reminfo!=null)
                 {
                     sts = true;
                     var twofacheck = db.Aeps_2Fa_Status.Where(aa => aa.userid == reminfo.RetailerId).ToList();
@@ -14774,11 +14775,11 @@ namespace Vastwebmulti.Controllers
                 {
                     message = "No User Found";
                 }
-                var data = new { sts, message};
+                var data = new { sts, message };
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
         }
-        public void UpdateAeps(string userid, string lattitude, string longitude,out string message_info,out string M_request,out string M_response  )
+        public void UpdateAeps(string userid, string lattitude, string longitude, out string message_info, out string M_request, out string M_response)
         {
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
@@ -14888,22 +14889,22 @@ namespace Vastwebmulti.Controllers
         {
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
-                var sts = false;var msg = "";
+                var sts = false; var msg = "";
                 var reminfo = db.Retailer_Details.Where(aa => aa.Mobile == Mobileno).SingleOrDefault();
-                if(reminfo!=null)
+                if (reminfo!=null)
                 {
-                    var micro=db.microATM_Device_Info.Where(aa=>aa.userid==reminfo.RetailerId).SingleOrDefault();
-                    if(micro!=null)
+                    var micro = db.microATM_Device_Info.Where(aa => aa.userid==reminfo.RetailerId).SingleOrDefault();
+                    if (micro!=null)
                     {
                         db.microATM_Device_Info.Remove(micro);
                     }
                     var merchant = db.microATM_merch_termi_Info.Where(aa => aa.Userid == reminfo.RetailerId).SingleOrDefault();
-                    if(merchant!=null)
+                    if (merchant!=null)
                     {
                         db.microATM_merch_termi_Info.Remove(merchant);
                     }
                     var micropass = db.microATM_LoginId_Pass.Where(aa => aa.userid == reminfo.RetailerId).SingleOrDefault();
-                    if(micropass != null)
+                    if (micropass != null)
                     {
                         db.microATM_LoginId_Pass.Remove(micropass);
                     }

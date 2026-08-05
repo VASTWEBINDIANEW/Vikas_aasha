@@ -10,53 +10,130 @@ namespace Vastwebmulti.Models
     {
         public string userid { get; set; }
 
+        //public override void OnActionExecuting(ActionExecutingContext filterContext)
+        //{
+        //    string actionName = filterContext.ActionDescriptor.ActionName;
+        //    //string controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
+        //    var userid = filterContext.HttpContext.User.Identity.GetUserId();
+
+        //    using (VastwebmultiEntities db = new VastwebmultiEntities())
+        //    {
+        //        dynamic res = EKYC_Varification_Status(userid);
+
+        //        var aadhar = (bool)res.aadhar;
+        //        var pan = (bool)res.pan;
+        //        var v_type = (string)res.v_type;
+        //       // var v_type = Convert.ToString(res.v_type);
+        //        if (actionName == "PanVerification" || actionName == "AadharVerificationOtpSent" || actionName == "AadharVerificationOtpVerify")
+        //        {
+        //            return;
+        //        }
+
+        //        bool isTrue = aadhar && pan;
+
+        //        if (v_type != "all")
+        //        {
+        //            if (v_type == "aadhar")
+        //            {
+        //                isTrue = aadhar;
+        //            }
+        //            else if (v_type == "pan")
+        //            {
+        //                isTrue = pan;
+        //            }
+        //        }
+
+        //        if (isTrue)
+        //        {
+        //            if (actionName == "Ekyc_Verification")
+        //            {
+        //                filterContext.Result = new RedirectToRouteResult(
+        //                              new RouteValueDictionary {
+        //                                   { "controller", "Home" },
+        //                                   { "action", "/" }});
+        //            }
+        //            else
+        //            {
+        //                return;
+        //            }
+
+        //        }
+        //        else
+        //        {
+        //            if (actionName == "Ekyc_Verification")
+        //            {
+        //                return;
+        //            }
+        //            else
+        //            {
+        //                filterContext.Result = new RedirectToRouteResult(
+        //                              new RouteValueDictionary {
+        //                                   { "controller", "Home" },
+        //                                   { "action", "Ekyc_Verification" }});
+        //            }
+        //        }
+
+        //    }
+        //}
+
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             string actionName = filterContext.ActionDescriptor.ActionName;
-            //string controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
             var userid = filterContext.HttpContext.User.Identity.GetUserId();
 
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
-                dynamic res = EKYC_Varification_Status(userid);
-
-                var aadhar = (bool)res.aadhar;
-                var pan = (bool)res.pan;
-                var v_type = (string)res.v_type;
-
-                if (actionName == "PanVerification" || actionName == "AadharVerificationOtpSent" || actionName == "AadharVerificationOtpVerify")
+                if (actionName == "PanVerification"
+                    || actionName == "AadharVerificationOtpSent"
+                    || actionName == "AadharVerificationOtpVerify"
+                    || actionName == "SaveZeroKYC"
+                    || actionName == "UploadKycDocuments")
                 {
                     return;
                 }
 
-                bool isTrue = aadhar && pan;
+                var retailer = db.Retailer_Details.FirstOrDefault(x => x.RetailerId == userid);
+                if (retailer == null) return;
 
-                if (v_type != "all")
+                // ⭐ NEW - Admin ne jo KYCType set kiya hai wahi check karo
+                var activeKyc = db.SignupKYCSettings.FirstOrDefault(x => x.IsActive == true);
+                string kycType = activeKyc != null ? activeKyc.KYCType : "ZERO";
+
+                bool isCompleted;
+                switch (kycType)
                 {
-                    if (v_type == "aadhar")
-                    {
-                        isTrue = aadhar;
-                    }
-                    else if (v_type == "pan")
-                    {
-                        isTrue = pan;
-                    }
+                    case "ZERO":
+                        isCompleted = !string.IsNullOrEmpty(retailer.AadharCard) && !string.IsNullOrEmpty(retailer.PanCard);
+                        break;
+                    case "DIGITAL":
+                        isCompleted = (retailer.aadhar_verification == true) && (retailer.pan_verification == true);
+                        break;
+                    case "PHYSICAL":
+                        isCompleted = !string.IsNullOrEmpty(retailer.aadharcardPath) && !string.IsNullOrEmpty(retailer.pancardPath);
+                        break;
+                    case "DIGITAL_PHYSICAL":
+                        isCompleted = (retailer.aadhar_verification == true) && (retailer.pan_verification == true)
+                            && !string.IsNullOrEmpty(retailer.aadharcardPath) && !string.IsNullOrEmpty(retailer.pancardPath);
+                        break;
+                    default:
+                        isCompleted = true;
+                        break;
                 }
 
-                if (isTrue)
+                if (isCompleted)
                 {
                     if (actionName == "Ekyc_Verification")
                     {
                         filterContext.Result = new RedirectToRouteResult(
                                       new RouteValueDictionary {
-                                           { "controller", "Home" },
-                                           { "action", "/" }});
+                                   { "controller", "Home" },
+                                   { "action", "Index" }});
                     }
                     else
                     {
                         return;
                     }
-
                 }
                 else
                 {
@@ -68,11 +145,10 @@ namespace Vastwebmulti.Models
                     {
                         filterContext.Result = new RedirectToRouteResult(
                                       new RouteValueDictionary {
-                                           { "controller", "Home" },
-                                           { "action", "Ekyc_Verification" }});
+                                   { "controller", "Home" },
+                                   { "action", "Ekyc_Verification" }});
                     }
                 }
-
             }
         }
 

@@ -4342,7 +4342,7 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                                         }
 
 
-                                        var ch = db.Insert_Retailer(RetailerId, user.Id, model.Name, model.State, model.District, model.Mobile, model.Address, Convert.ToInt32(model.Pincode), model.Email, "", "", Firmname, string.IsNullOrWhiteSpace(model.Adhaar) ? "" : model.Adhaar, string.IsNullOrWhiteSpace(model.Pan) ? "" : model.Pan, Convert.ToInt32(model.Capping), string.IsNullOrWhiteSpace(model.Gst) ? "" : model.Gst, enpin, "", RetailerId, output).Single().msg;
+                                        var ch = db.Insert_Retailer(RetailerId, user.Id, model.Name, model.State," ", model.District, model.Mobile, model.Address, Convert.ToInt32(model.Pincode), model.Email, "", "", Firmname, string.IsNullOrWhiteSpace(model.Adhaar) ? "" : model.Adhaar, string.IsNullOrWhiteSpace(model.Pan) ? "" : model.Pan, Convert.ToInt32(model.Capping), string.IsNullOrWhiteSpace(model.Gst) ? "" : model.Gst, enpin, "", RetailerId, output).Single().msg;
                                         if (ch == "Register SuccessFully.")
                                         {
                                             if (transaction.UnderlyingTransaction.Connection != null)

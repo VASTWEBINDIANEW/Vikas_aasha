@@ -11,7 +11,7 @@ using LinqToExcel;
 using LinqToExcel.Extensions;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;   
+using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Remotion.FunctionalProgramming;
@@ -52,6 +52,7 @@ using Vastwebmulti.Models;
 using ZXing;
 using static Vastwebmulti.Areas.ADMIN.Models.prepaid_card1;
 using Vastwebmulti.Controllers;
+using DocumentFormat.OpenXml.EMMA;
 
 
 namespace Vastwebmulti.Areas.ADMIN.Controllers
@@ -537,13 +538,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 var emailid = db.Admin_details.Single().email;
                 var ToCC = db.Admin_details.FirstOrDefault().email;
                 CommUtilEmail emailsend = new CommUtilEmail();
-              
+
 
                 emailsend.EmailLimitChk(emailid, emailid, "icon setting Passcode", TextMessage + pin, "No CallBackUrl");
 
 
                 var chj = db.appicons.ToList();
-                if(chj.Count > 0)
+                if (chj.Count > 0)
                 {
                     var chj1 = db.appicons.SingleOrDefault();
                     chj1.users = Convert.ToString(pin);
@@ -566,16 +567,16 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 }
                 return Json("Success", JsonRequestBehavior.AllowGet);
             }
-            catch 
+            catch
             {
                 return Json("Failed", JsonRequestBehavior.AllowGet);
             }
         }
-        public JsonResult icondesignsave(string otp , string color1 , string color2 , string bdcolor, string design)
+        public JsonResult icondesignsave(string otp, string color1, string color2, string bdcolor, string design)
         {
             try
             {
-                
+
                 var chj = db.appicons.ToList();
                 if (chj[0].users.Trim() == otp.Trim() && !string.IsNullOrEmpty(chj[0].users))
                 {
@@ -631,18 +632,18 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 {
                     return Json("Otp not matched", JsonRequestBehavior.AllowGet);
                 }
-               
+
             }
             catch
             {
                 return Json("Failed", JsonRequestBehavior.AllowGet);
             }
         }
-        public JsonResult iconfrontdesignsave(string otp , string color1 , string color2 , string bdcolor, string design)
-          {
+        public JsonResult iconfrontdesignsave(string otp, string color1, string color2, string bdcolor, string design)
+        {
             try
             {
-                
+
                 var chj = db.appicons.ToList();
                 if (chj[0].users.Trim() == otp.Trim() && !string.IsNullOrEmpty(chj[0].users))
                 {
@@ -694,7 +695,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 {
                     return Json("Otp not matched", JsonRequestBehavior.AllowGet);
                 }
-               
+
             }
             catch
             {
@@ -4888,7 +4889,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         public ActionResult CreaditSetting()
         {
             var set = db.Email_show_passcode.SingleOrDefault();
-            if(set.cr_status == true)
+            if (set.cr_status == true)
             {
                 set.cr_status = false;
             }
@@ -4908,24 +4909,15 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         {
             var userid = User.Identity.GetUserId();
             var userDetails = db.Users.Where(a => a.UserId == userid).SingleOrDefault();
-            if (userDetails == null)
-            {
-                return RedirectToAction("Login", "Account", new { area = "" });
-            }
-
-            var admindetails = db.Admin_details.SingleOrDefault() ?? new Admin_details();
+            var admindetails = db.Admin_details.SingleOrDefault();
             ViewBag.admin = admindetails;
             ViewBag.image = admindetails.Photo;
+            //state
 
-            int state = 0;
-            int district = 0;
-            int.TryParse(Convert.ToString(admindetails.State), out state);
-            int.TryParse(Convert.ToString(admindetails.District), out district);
-
-            var stateRow = db.State_Desc.FirstOrDefault(a => a.State_id == state);
-            var districtRow = db.District_Desc.FirstOrDefault(a => a.Dist_id == district && a.State_id == state);
-            ViewBag.ddlstate = stateRow != null ? stateRow.State_name : "—";
-            ViewBag.dddistrict = districtRow != null ? districtRow.Dist_Desc : "—";
+            int state = Convert.ToInt32(admindetails.State);
+            int district = Convert.ToInt32(admindetails.District);
+            ViewBag.ddlstate = db.State_Desc.Where(a => a.State_id == state).SingleOrDefault().State_name;
+            ViewBag.dddistrict = db.District_Desc.Where(a => a.Dist_id == district && a.State_id == state).SingleOrDefault().Dist_Desc;
             ViewBag.Sate = db.State_Desc.Select(a => new SelectListItem { Text = a.State_name, Value = a.State_id.ToString() }).ToList();
             ViewBag.District = db.District_Desc.Where(a => a.State_id == state).Select(a => new SelectListItem { Text = a.Dist_Desc, Value = a.Dist_id.ToString() }).ToList();
 
@@ -4937,68 +4929,113 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
             if (twowaysec == false)
             {
-                var passRow = db.passcodesettings.FirstOrDefault(x => x.userid == userid);
-                ViewBag.passcodesetings = passRow != null ? passRow.passcodetype : "OFF";
+                ViewBag.passcodesetings = db.passcodesettings.Where(x => x.userid == userid).SingleOrDefault().passcodetype;
+
             }
             else
             {
                 ViewBag.passcodesetings = "OTP";
             }
             var userroles = db.AdminProfileAllUserOTPs.ToList();
-            var twowaysecformaster = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "master" && x.Status == "N");
+            var twowaysecformaster = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "master" && x.Status == "N").FirstOrDefault();
             if (twowaysecformaster != null)
             {
-                var masterOtpRow = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "master");
-                ViewBag.masterpasscodesetings = masterOtpRow != null && !string.IsNullOrEmpty(masterOtpRow.passcodetype)
-                    ? masterOtpRow.passcodetype
-                    : "OFF";
+
+                var passcodemoster = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "master").SingleOrDefault().passcodetype;
+                if (passcodemoster != null)
+                {
+
+
+                    ViewBag.masterpasscodesetings = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "master").SingleOrDefault().passcodetype;
+                }
+                else
+                {
+                    ViewBag.masterpasscodesetings = "OFF";
+                }
+
+
             }
-            else
+            else if (twowaysecformaster == null)
             {
                 ViewBag.masterpasscodesetings = "OTP";
+
             }
 
-            var twowaysecfordealer = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Dealer" && x.Status == "N");
+
+            var twowaysecfordealer = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Dealer" && x.Status == "N").FirstOrDefault();
             if (twowaysecfordealer != null)
             {
-                var dealerOtpRow = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Dealer");
-                ViewBag.dealerpasscodesetings = dealerOtpRow != null && !string.IsNullOrEmpty(dealerOtpRow.passcodetype)
-                    ? dealerOtpRow.passcodetype
-                    : "OFF";
+
+                var passcodedealer = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Dealer").SingleOrDefault().passcodetype;
+                if (passcodedealer != null)
+                {
+
+
+                    ViewBag.dealerpasscodesetings = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Dealer").SingleOrDefault().passcodetype;
+                }
+                else
+                {
+                    ViewBag.dealerpasscodesetings = "OFF";
+                }
+
+
             }
-            else
+            else if (twowaysecfordealer == null)
             {
                 ViewBag.dealerpasscodesetings = "OTP";
+
             }
 
-            var twowaysecforretailer = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Retailer" && x.Status == "N");
+            var twowaysecforretailer = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Retailer" && x.Status == "N").FirstOrDefault();
             if (twowaysecforretailer != null)
             {
-                var retailerOtpRow = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Retailer");
-                ViewBag.Retailerpasscodesetings = retailerOtpRow != null && !string.IsNullOrEmpty(retailerOtpRow.passcodetype)
-                    ? retailerOtpRow.passcodetype
-                    : "OFF";
+
+                var passcoderetailer = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Retailer").SingleOrDefault().passcodetype;
+                if (passcoderetailer != null)
+                {
+
+
+                    ViewBag.Retailerpasscodesetings = passcoderetailer;
+                }
+                else
+                {
+                    ViewBag.Retailerpasscodesetings = "OFF";
+                }
+
+
             }
-            else
+            else if (twowaysecforretailer == null)
             {
                 ViewBag.Retailerpasscodesetings = "OTP";
+
             }
 
-            var twowaysecforAPI = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "API" && x.Status == "N");
+            var twowaysecforAPI = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "API" && x.Status == "N").FirstOrDefault();
             if (twowaysecforAPI != null)
             {
-                var apiOtpRow = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "API");
-                ViewBag.APIpasscodesetings = apiOtpRow != null && !string.IsNullOrEmpty(apiOtpRow.passcodetype)
-                    ? apiOtpRow.passcodetype
-                    : "OFF";
+
+                var passcodeAPI = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "API").SingleOrDefault().passcodetype;
+                if (passcodeAPI != null)
+                {
+
+
+                    ViewBag.APIpasscodesetings = passcodeAPI;
+                }
+                else
+                {
+                    ViewBag.APIpasscodesetings = "OFF";
+                }
+
+
             }
-            else
+            else if (twowaysecforAPI == null)
             {
                 ViewBag.APIpasscodesetings = "OTP";
+
             }
             bool? sts = false;
             var servicenm = db.Serviceallows.Where(aa => aa.ServiceName == "InstantPayAccountVerify").SingleOrDefault();
-            if(servicenm!=null)
+            if (servicenm!=null)
             {
                 sts = servicenm.Sts;
             }
@@ -5006,18 +5043,30 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             ViewBag.serviceallow = sts;
 
 
-            var twowaysecforWhitelabel = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Whitelabel" && x.Status == "N");
+            var twowaysecforWhitelabel = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Whitelabel" && x.Status == "N").FirstOrDefault();
             if (twowaysecforWhitelabel != null)
             {
-                var whitelabelOtpRow = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Whitelabel");
-                ViewBag.Whitelabelpasscodesetings = whitelabelOtpRow != null && !string.IsNullOrEmpty(whitelabelOtpRow.passcodetype)
-                    ? whitelabelOtpRow.passcodetype
-                    : "OFF";
+
+                var passcodeWhitelabel = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Whitelabel").SingleOrDefault().passcodetype;
+                if (passcodeWhitelabel != null)
+                {
+
+
+                    ViewBag.Whitelabelpasscodesetings = passcodeWhitelabel;
+                }
+                else
+                {
+                    ViewBag.Whitelabelpasscodesetings = "OFF";
+                }
+
+
             }
-            else
+            else if (twowaysecforWhitelabel == null)
             {
                 ViewBag.Whitelabelpasscodesetings = "OTP";
+
             }
+
 
             return View(userDetails);
         }
@@ -5075,10 +5124,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 ad.mobile = string.IsNullOrWhiteSpace(txtmobile) ? ad.mobile : txtmobile;
                 ad.Aadhar = txtaadhaarcard;
                 ad.pencardno = txtpancard;
-                if (!string.IsNullOrWhiteSpace(txtgst))
-                {
-                    ad.Gstno = txtgst;
-                }
+                //  ad.Gstno = txtgst;
                 ad.tanno = txtTAN;
                 ad.registrationno = txtregistration;
                 db.SaveChanges();
@@ -5410,32 +5456,24 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             return Json(ch.ToArray(), JsonRequestBehavior.AllowGet);
 
         }
-        [HttpPost]
         public JsonResult UpdateSupportData(int ID, string Email, string Mobile)
         {
             if (ID > 0)
             {
-                var admUpdate = db.Admin_details.SingleOrDefault(a => a.ID == ID);
-                if (admUpdate == null)
-                {
-                    return Json("Failed", JsonRequestBehavior.AllowGet);
-                }
-                if (Email != null)
-                {
-                    admUpdate.email1 = Email.Trim();
-                }
-                if (Mobile != null)
-                {
-                    admUpdate.mobile1 = Mobile.Trim();
-                }
+                var admUpdate = db.Admin_details.Single(a => a.ID == ID);
+                admUpdate.email1 = string.IsNullOrWhiteSpace(Email) ? admUpdate.email1 : Email;
+                admUpdate.mobile1 = string.IsNullOrWhiteSpace(Mobile) ? admUpdate.mobile1 : Mobile;
                 db.SaveChanges();
                 return Json("Success", JsonRequestBehavior.AllowGet);
             }
+            else
+            {
+                return Json("Failed", JsonRequestBehavior.AllowGet);
+            }
 
-            return Json("Failed", JsonRequestBehavior.AllowGet);
         }
         //Change Password 
-        
+
 
         [HttpGet]
         public ActionResult ChangePassword()
@@ -5447,53 +5485,53 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangePassword([Bind(Prefix = "Item1")] ChangePasswordViewModel model , string OTp)
+        public async Task<ActionResult> ChangePassword([Bind(Prefix = "Item1")] ChangePasswordViewModel model, string OTp)
         {
 
 
             if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
-                var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-                if (result.Succeeded)
-                {
+            {
+                return View(model);
+            }
+            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
                 // change security code
                 await UserManager.UpdateSecurityStampAsync(User.Identity.GetUserId());
                 var userid1 = User.Identity.GetUserId();
-                    var chk22 = db.checklogouts.Where(a => a.userid == userid1).SingleOrDefault();
-                    if (chk22 == null)
-                    {
-                        checklogout chlogout = new checklogout();
-                        chlogout.userid = userid1;
-                        chlogout.lastupdatedate = DateTime.UtcNow;
-                        db.checklogouts.Add(chlogout);
-                        db.SaveChanges();
-
-                    }
-                    else
-                    {
-                        chk22.lastupdatedate = DateTime.UtcNow;
-                        db.SaveChanges();
-                    }
-                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                    if (user != null)
-                    {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                    }
-                    TempData["success"] = "Your Password has been Changed Successfully";
-                    return RedirectToAction("ChangeSecurityPassword");
-                }
-                //AddErrors(result);
-                //return View(model);
-                try
+                var chk22 = db.checklogouts.Where(a => a.userid == userid1).SingleOrDefault();
+                if (chk22 == null)
                 {
-                    TempData["error"] = ((string[])result.Errors)[0];
+                    checklogout chlogout = new checklogout();
+                    chlogout.userid = userid1;
+                    chlogout.lastupdatedate = DateTime.UtcNow;
+                    db.checklogouts.Add(chlogout);
+                    db.SaveChanges();
+
                 }
-                catch
-                { }
-            
-           
+                else
+                {
+                    chk22.lastupdatedate = DateTime.UtcNow;
+                    db.SaveChanges();
+                }
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                TempData["success"] = "Your Password has been Changed Successfully";
+                return RedirectToAction("ChangeSecurityPassword");
+            }
+            //AddErrors(result);
+            //return View(model);
+            try
+            {
+                TempData["error"] = ((string[])result.Errors)[0];
+            }
+            catch
+            { }
+
+
             return RedirectToAction("ChangeSecurityPassword");
 
         }
@@ -5890,15 +5928,15 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         }
 
-        [HttpPost]
         public async Task<ActionResult> DisablePassCodeBYUserID(string userid, string btnval)
         {
             if (!string.IsNullOrEmpty(userid) && !string.IsNullOrEmpty(btnval))
             {
                 if (btnval == "Y")
                 {
-                    if (!string.IsNullOrEmpty(userid))
+                    if (userid != null || userid != "")
                     {
+
                         var servid = db.passcodesettings.Where(x => x.userid == userid).SingleOrDefault();
                         if (servid != null)
                         {
@@ -5906,27 +5944,34 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                             servid.passcodetype = "OFF";
                             servid.expiretime = null;
                             db.SaveChanges();
-                        }
-
-                        try
-                        {
-                            await UserManager.SetTwoFactorEnabledAsync(userid, true);
-                        }
-                        catch { }
-
-                        var chkdemo = db.Demo_User_Chk.SingleOrDefault();
-                        if (chkdemo != null && chkdemo.userid == userid)
-                        {
                             try
                             {
-                                await UserManager.SetTwoFactorEnabledAsync(userid, false);
+                                await UserManager.SetTwoFactorEnabledAsync(userid, true);
                             }
                             catch { }
+
+                            //demo user
+                            var chkdemo = db.Demo_User_Chk.SingleOrDefault();
+                            if (chkdemo != null)
+                            {
+                                if (chkdemo.userid == userid)
+                                {
+                                    try
+                                    {
+                                        await UserManager.SetTwoFactorEnabledAsync(userid, false);
+                                    }
+                                    catch { }
+                                }
+
+                            }
                         }
 
-                        var roleNamesY = UserManager.GetRoles(userid);
-                        return Json(roleNamesY.ToArray(), JsonRequestBehavior.AllowGet);
+
+                        var RoleName = UserManager.GetRoles(userid);
+                        return Json(RoleName, JsonRequestBehavior.AllowGet);
                     }
+
+
                 }
                 else if (btnval == "PERDAY" || btnval == "WEAKS" || btnval == "MONTHS")
                 {
@@ -6000,20 +6045,15 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                     }
                     db.SaveChanges();
-                    var roleNamesPc = UserManager.GetRoles(userid);
-                    return Json(roleNamesPc.ToArray(), JsonRequestBehavior.AllowGet);
+                    var RoleName = UserManager.GetRoles(userid);
+                    return Json(RoleName, JsonRequestBehavior.AllowGet);
 
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(userid))
+                    if (userid != null || userid != "")
                     {
-                        try
-                        {
-                            await UserManager.SetTwoFactorEnabledAsync(userid, false);
-                        }
-                        catch { }
-
+                        await UserManager.SetTwoFactorEnabledAsync(userid, false);
                         var passcodes = db.passcodesettings.Where(x => x.userid == userid).SingleOrDefault();
                         if (passcodes != null)
                         {
@@ -6021,15 +6061,15 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                             passcodes.expiretime = null;
                             passcodes.passcode = null;
                             db.SaveChanges();
-                        }
 
-                        var roleNamesOff = UserManager.GetRoles(userid);
-                        return Json(roleNamesOff.ToArray(), JsonRequestBehavior.AllowGet);
+                        }
+                        var RoleName = UserManager.GetRoles(userid);
+                        return Json(RoleName, JsonRequestBehavior.AllowGet);
                     }
                 }
 
             }
-            return Json(new string[0], JsonRequestBehavior.AllowGet);
+            return RedirectToAction("Profile");
         }
 
 
@@ -6814,8 +6854,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         public ActionResult AllDetails(string txt_frm_date, string txt_to_date)
         {
             ViewBag.chk = "post";
-            ViewBag.frmDate = txt_frm_date;
-            ViewBag.toDate = txt_to_date;
             return View();
 
         }
@@ -8143,17 +8181,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
             catch { return Json("Failed", JsonRequestBehavior.AllowGet); }
         }
-        private static void AppendTermConditionRow(StringBuilder html, string termText, int termId)
-        {
-            html.Append("<tr>");
-            html.Append("<td>").Append(termText).Append("</td>");
-            html.Append("<td class='st-term-delete-cell target-history-button'>");
-            html.Append("<div class='st-action-group'>");
-            html.Append("<button type='button' class='st-btn-delete button-for-click onclk'>Delete</button>");
-            html.Append("<button type='button' class='st-btn-sure button-for-sure st-btn-hidden' hidden onclick='SureDeleteAddterm(event,").Append(termId).Append(")'>Sure?</button>");
-            html.Append("</div></td></tr>");
-        }
-
         public ActionResult AddTermCondotionFor(string termcondition, string conditionfor)
         {
             StringBuilder html = new StringBuilder();
@@ -8167,7 +8194,12 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                 if (count > 0)
                 {
-                    AppendTermConditionRow(html, terms.termConditiopn, terms.termid);
+                    html.Append("<tr>");
+                    html.Append("<td>" + terms.termConditiopn + "</td>");
+                    html.Append("<td class='target-history-button'>");
+                    html.Append("<button type='button' onclick='moveconfirmsure(event)' class='btn btn-default waves-effect button-for-click' style='background-color:transparent; border:none; border: 1px solid #c7c2c2;'>Delete</button><button type='button' class='btn btn-default waves-effect fullbodydycolorbg button-for-sure' style='background-color:transparent; border:none; border: 1px solid #c7c2c2;color:#fff;display:none;' onclick='SureDeleteAddterm(event," + terms.termid + ")'> Sure ?</button>");
+                    html.Append("</td>");
+                    html.Append("</tr>");
                 }
                 else
                 {
@@ -8186,7 +8218,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             {
                 foreach (var terms in db.tblAddTermCoditions.Where(x => x.termfor == conditionfor))
                 {
-                    AppendTermConditionRow(html, terms.termConditiopn, terms.termid);
+
+                    html.Append("<tr>");
+                    html.Append("<td>" + terms.termConditiopn + "</td>");
+                    html.Append("<td class='target-history-button'>");
+                    html.Append("<button type='button' onclick='moveconfirmsure(event)' class='btn btn-default waves-effect button-for-click' style='background-color:transparent; border:none; border: 1px solid #c7c2c2;'>Delete</button><button type='button' class='btn btn-default waves-effect fullbodydycolorbg button-for-sure' style='background-color:transparent; border:none; border: 1px solid #c7c2c2;color:#fff;display:none;' onclick='SureDeleteAddterm(event," + terms.termid + ")'> Sure ?</button>");
+                    html.Append("</td>");
+                    html.Append("</tr>");
                 }
                 return Json(html.ToString(), JsonRequestBehavior.AllowGet);
             }
@@ -8555,7 +8593,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                        
+
                             var model = new Backupinfo.Addinfo
                             {
                                 Websitename = admininfo.WebsiteUrl,
@@ -8563,7 +8601,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 Email = retailerdetails.EmailId,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "WhiteLabel Fund Recived ",
-                                RemainBalance = Convert.ToDecimal( remdetails.remainbal),
+                                RemainBalance = Convert.ToDecimal(remdetails.remainbal),
                                 Usertype = "WHITELABEL"
                             };
                             back.Fundtransfer(model);
@@ -8791,7 +8829,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                       
+
                             var model = new Backupinfo.Addinfo
                             {
                                 Websitename = admininfo.WebsiteUrl,
@@ -9046,14 +9084,14 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                                 var admininfo = db.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                     
+
                                 var model = new Backupinfo.Addinfo
                                 {
                                     Websitename = admininfo.WebsiteUrl,
                                     RetailerID = RetailerId,
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
-                                    Details = "Fund Recived " ,
+                                    Details = "Fund Recived ",
                                     RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
@@ -10353,7 +10391,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                                 var admininfo = db.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                               
+
 
                                 var model2 = new Backupinfo.Addinfo
                                 {
@@ -10529,12 +10567,12 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                             try
                             {
                                 var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == DealerId).SingleOrDefault();
-                                
+
                                 var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == DealerId).SingleOrDefault();
-                             
+
                                 var admininfo = db.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                              
+
 
                                 var model1 = new Backupinfo.Addinfo
                                 {
@@ -10542,7 +10580,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     RetailerID = DealerId,
                                     Email = dealerdetails.Email,
                                     Mobile = dealerdetails.Mobile,
-                                    Details = "Admin To Dealer " ,
+                                    Details = "Admin To Dealer ",
                                     RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                     Usertype = "Dealer"
                                 };
@@ -11554,7 +11592,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             viewModel.sales = db.main_rch_total(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
             return View(viewModel);
         }
-        
+
         [HttpGet]
         public JsonResult GetRetailerByDealer(string dealerId)
         {
@@ -11674,7 +11712,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
             // ViewBag me Dealer Income set
             ViewBag.DealerIncome = dealerIncomeList.ToDictionary(d => d.DealerId, d => new { d.DealerName, d.TotalIncome });
-            
+
             return View(ch);
         }
 
@@ -13622,7 +13660,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null).ToList();
             ViewBag.apiid = new SelectList(db.API_all_apiid(), "apiid", "farmname");
             ViewBag.whitelabel = new SelectList(db.Whitelabel_all_whitelabelid(), "WhiteLabelID", "FrmName");
-            var apiname = db.money_api_status.Where(aa=>aa.catagory== "DMT" || aa.catagory== "PAYOUT").ToList();
+            var apiname = db.money_api_status.Where(aa => aa.catagory== "DMT" || aa.catagory== "PAYOUT").ToList();
             IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                         select new SelectListItem
                                                         {
@@ -13699,11 +13737,11 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
             string frm_date = Convert.ToDateTime(dt).ToShortDateString();
             string to_date = Convert.ToDateTime(dt1).AddDays(1).ToString();
-            if(APINM=="" || APINM==null)
+            if (APINM=="" || APINM==null)
             {
                 APINM = "ALL";
             }
-            
+
             if (ddlusers == "Master")
             {
                 if (allmaster == "" || allmaster.Contains("allmaster") || allmaster == null)
@@ -13820,7 +13858,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
             else if (Category == "PAYOUT")
             {
-                ch = ch.Where(x => (x.DmtType == "DMT2" && (x.Trans_type.ToUpper() == "IMPS" || x.Trans_type.ToUpper() == "NEFT")) || ( x.Trans_type == "VASTWEB")).ToList();
+                ch = ch.Where(x => (x.DmtType == "DMT2" && (x.Trans_type.ToUpper() == "IMPS" || x.Trans_type.ToUpper() == "NEFT")) || (x.Trans_type == "VASTWEB")).ToList();
             }
             else if (Category == "PPI")
             {
@@ -15054,7 +15092,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                     var admininfo = db.Admin_details.SingleOrDefault();
                     Backupinfo back = new Backupinfo();
-                   
+
                     var model = new Backupinfo.Addinfo
                     {
 
@@ -15075,7 +15113,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         Email = dealerdetails.Email,
                         Mobile = dealerdetails.Mobile,
                         Details = "Money Transfer Refund",
-               
+
                         RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                         Usertype = "Dealer"
                     };
@@ -15403,7 +15441,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         }
                         else
                         {
-                            responseall = cb1.Fund_Transfer(resout.senderno, "", Tranid, resout.amount.ToString(), Transtype, resout.accountno, resout.ifsccode, tokenapi, resout.bank_nm, resout.kycstatus, addharcradno, "","");
+                            responseall = cb1.Fund_Transfer(resout.senderno, "", Tranid, resout.amount.ToString(), Transtype, resout.accountno, resout.ifsccode, tokenapi, resout.bank_nm, resout.kycstatus, addharcradno, "", "");
 
                         }
 
@@ -15731,7 +15769,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         }
                         else
                         {
-                            responseall = cb1.Fund_Transfer(resout.senderno, "", Tranid, resout.amount.ToString(), Transtype, resout.accountno, resout.ifsccode, tokenapi, resout.bank_nm, resout.kycstatus, addharcradno, "","");
+                            responseall = cb1.Fund_Transfer(resout.senderno, "", Tranid, resout.amount.ToString(), Transtype, resout.accountno, resout.ifsccode, tokenapi, resout.bank_nm, resout.kycstatus, addharcradno, "", "");
 
                         }
                         responsechk = responseall.Content.ToString();
@@ -16143,7 +16181,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         #region Giftcard Report
 
         public ActionResult Prepaid_Card_report()
-            {
+        {
             var stands = db.Retailer_Details.ToList();
             IEnumerable<SelectListItem> selectList = from s in stands
                                                      select new SelectListItem
@@ -16157,7 +16195,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             var date = DateTime.Now.ToString();
             var date1 = Convert.ToDateTime(date).Date.ToString("yyyy-MM-dd");
             var date2 = Convert.ToDateTime(date1);
-            var report = db.prepaid_card_Transaction.Where(s=>s.Request_time >=date2).OrderByDescending(a=>a.idno).ToList();
+            var report = db.prepaid_card_Transaction.Where(s => s.Request_time >=date2).OrderByDescending(a => a.idno).ToList();
 
             return View(report);
         }
@@ -16180,8 +16218,9 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             else
             {
                 var report = db.prepaid_card_Transaction.Where(s => s.Request_time >= date2 && s.Request_time < date4 && s.REtailerid == allretailer).OrderByDescending(a => a.idno).ToList();
-           
-            return PartialView("_Prepaid_Card_report", report); }
+
+                return PartialView("_Prepaid_Card_report", report);
+            }
         }
 
 
@@ -16639,94 +16678,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         }
         public ActionResult ShowAll(int idno, string disput)
         {
-            ViewData["success"] = TempData["success"];
-            ViewData["error"] = TempData["error"];
-            TempData.Remove("success");
-            TempData.Remove("error");
             var ch = db.clear_dispute_list(idno);
             ViewBag.dis = disput == null ? "Not Region Found" : disput;
             return View(ch);
         }
-        private static DateTime ParseDisputeInputDate(string dateStr)
-        {
-            if (string.IsNullOrWhiteSpace(dateStr))
-            {
-                return DateTime.Today.Date;
-            }
-            var s = dateStr.Trim();
-            string[] formats =
-            {
-                "yyyy-MM-dd", "yyyy/MM/dd", "yyyyMMdd",
-                "MM/dd/yyyy", "M/d/yyyy", "MM-dd-yyyy",
-                "dd/MM/yyyy", "d/M/yyyy", "dd-MM-yyyy",
-                "dd-MMM-yyyy", "MMM dd, yyyy"
-            };
-            DateTime dt;
-            if (DateTime.TryParseExact(s, formats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
-            {
-                return dt.Date;
-            }
-            if (DateTime.TryParse(s, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
-            {
-                return dt.Date;
-            }
-            if (DateTime.TryParse(s, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out dt))
-            {
-                return dt.Date;
-            }
-            return DateTime.Today.Date;
-        }
-
-        private static void GetDisputeSqlDateRange(string txt_frm_date, string txt_to_date, out string frm_date, out string to_date)
-        {
-            if (string.IsNullOrWhiteSpace(txt_frm_date) || string.IsNullOrWhiteSpace(txt_to_date))
-            {
-                txt_frm_date = DateTime.Now.ToString();
-                txt_to_date = DateTime.Now.ToString();
-            }
-            else
-            {
-                txt_frm_date = ParseDisputeInputDate(txt_frm_date).ToString(System.Globalization.CultureInfo.CurrentCulture);
-                txt_to_date = ParseDisputeInputDate(txt_to_date).ToString(System.Globalization.CultureInfo.CurrentCulture);
-            }
-
-            var frm = Convert.ToDateTime(txt_frm_date).Date;
-            var to = Convert.ToDateTime(txt_to_date).Date;
-            if (to < frm)
-            {
-                var swap = frm;
-                frm = to;
-                to = swap;
-            }
-            frm_date = frm.ToString("yyyy-MM-dd");
-            to_date = to.AddDays(1).ToString("yyyy-MM-dd");
-        }
-
-        private List<all_dispute_list_Result> LoadDisputeListPage(string ddl_status, string txt_frm_date, string txt_to_date)
-        {
-            if (HttpContext != null && HttpContext.Request != null)
-            {
-                if (string.IsNullOrWhiteSpace(ddl_status))
-                {
-                    ddl_status = HttpContext.Request["ddl_status"];
-                }
-                if (string.IsNullOrWhiteSpace(txt_frm_date))
-                {
-                    txt_frm_date = HttpContext.Request["txt_frm_date"];
-                }
-                if (string.IsNullOrWhiteSpace(txt_to_date))
-                {
-                    txt_to_date = HttpContext.Request["txt_to_date"];
-                }
-            }
-
-            string frm_date;
-            string to_date;
-            GetDisputeSqlDateRange(txt_frm_date, txt_to_date, out frm_date, out to_date);
-            var status = ddl_status ?? "";
-            return db.all_dispute_list(1, 50, status, frm_date, to_date).ToList();
-        }
-
         public ActionResult Dispute_list()
         {
             ViewData["success"] = TempData["success"];
@@ -16734,35 +16689,47 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             TempData.Remove("success");
             TempData.Remove("error");
 
-            var defaultFrom = DateTime.Today.AddYears(-1);
-            var defaultTo = DateTime.Today;
-            ViewBag.txt_frm_date = defaultFrom.ToString("yyyy-MM-dd");
-            ViewBag.txt_to_date = defaultTo.ToString("yyyy-MM-dd");
-            ViewBag.ddl_status = "";
 
-            return View(LoadDisputeListPage("", ViewBag.txt_frm_date as string, ViewBag.txt_to_date as string));
+            return View();
         }
         [HttpPost]
         public ActionResult Dispute_list(string ddl_status, string txt_frm_date, string txt_to_date)
         {
             ViewBag.chk = "post";
-            ViewBag.ddl_status = ddl_status;
-            ViewBag.txt_frm_date = txt_frm_date;
-            ViewBag.txt_to_date = txt_to_date;
 
-            return View(LoadDisputeListPage(ddl_status, txt_frm_date, txt_to_date));
+            return View();
         }
         [ChildActionOnly]
         public ActionResult _Dispute_list(string ddl_status, string txt_frm_date, string txt_to_date)
         {
-            return View(LoadDisputeListPage(ddl_status, txt_frm_date, txt_to_date));
+            if (string.IsNullOrEmpty(txt_frm_date) || string.IsNullOrEmpty(txt_to_date))
+            {
+                txt_frm_date = DateTime.Now.ToString();
+                txt_to_date = DateTime.Now.ToString();
+                string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString("yyyy-MM-dd");
+                string to_date = Convert.ToDateTime(txt_to_date).AddDays(1).ToString("yyyy-MM-dd");
+                var ch = db.all_dispute_list(1, 20, ddl_status, frm_date, to_date).ToList();
+                return View(ch);
+            }
+            else
+            {
+                DateTime frm = DateTime.ParseExact(txt_frm_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime to = DateTime.ParseExact(txt_to_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                to = to.AddDays(1);
+                string frm_date = frm.ToString("yyyy-MM-dd");
+                string to_date = to.ToString("yyyy-MM-dd");
+                var ch = db.all_dispute_list(1, 20, ddl_status, frm_date, to_date).ToList();
+                return View(ch);
+            }
         }
         public ActionResult InfiniteScrollDispute(int pageindex, string ddl_status, string txt_frm_date, string txt_to_date)
         {
             int pagesize = 20;
-            string frm_date;
-            string to_date;
-            GetDisputeSqlDateRange(txt_frm_date, txt_to_date, out frm_date, out to_date);
+            DateTime frm = DateTime.ParseExact(txt_frm_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime to = DateTime.ParseExact(txt_to_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            to = to.AddDays(1);
+            string frm_date = frm.ToString("yyyy-MM-dd");
+            string to_date = to.ToString("yyyy-MM-dd");
             var tbrow = db.all_dispute_list(pageindex, pagesize, ddl_status, frm_date, to_date).ToList();
             JsonModel jsonmodel = new JsonModel();
             jsonmodel.NoMoredata = tbrow.Count < pagesize;
@@ -16786,9 +16753,11 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             dt2.Columns.Add("Transition ID", typeof(string));
             dt2.Columns.Add("Response", typeof(string));
 
-            string frm_date;
-            string to_date;
-            GetDisputeSqlDateRange(txt_frm_date, txt_to_date, out frm_date, out to_date);
+            DateTime frm = DateTime.ParseExact(txt_frm_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime to = DateTime.ParseExact(txt_to_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            to = to.AddDays(1);
+            string frm_date = frm.ToString("yyyy-MM-dd");
+            string to_date = to.ToString("yyyy-MM-dd");
             var respo = db.all_dispute_list(1, 1000000, ddl_status, frm_date, to_date).ToList();
             if (respo.Count > 0)
             {
@@ -16819,15 +16788,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             Response.Flush();
             Response.End();
             return View();
-        }
-
-        public ActionResult PDFRechargereport_Dispute(string ddl_status, string txt_frm_date, string txt_to_date)
-        {
-            string frm_date;
-            string to_date;
-            GetDisputeSqlDateRange(txt_frm_date, txt_to_date, out frm_date, out to_date);
-            var respo = db.all_dispute_list(1, 1000000, ddl_status ?? "", frm_date, to_date).ToList();
-            return new ViewAsPdf("PDFRechargereport_Dispute", respo);
         }
 
 
@@ -17154,7 +17114,20 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     up.ApkLink = txtuploadedlink;
                 }
                 db.SaveChanges();
-                TempData["success"] = "Play Store Link Saved Successfully.";
+                //if (System.IO.File.Exists(pth))
+                //{
+                //    System.IO.File.Delete(pth);
+                //}
+                //using (FileStream fs = System.IO.File.Create(pth))
+                //{
+                //    // Add some text to file    
+                //    Byte[] title = new UTF8Encoding(true).GetBytes(txtuploadedlink);
+                //    fs.Write(title, 0, title.Length);
+                //    fs.Close();
+                //    fs.Dispose();
+                //    byte[] author = new UTF8Encoding(true).GetBytes("Mahesh Chand");
+                //    fs.Write(author, 0, author.Length);
+                //}
             }
             return RedirectToAction("UploadAPK", "Home");
 
@@ -17428,7 +17401,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
             else
             {
-                return RedirectToAction("Failedall", "Home" , new { idnval = idnval, optval = optval, otpval= otpval });
+                return RedirectToAction("Failedall", "Home", new { idnval = idnval, optval = optval, otpval = otpval });
             }
         }
 
@@ -17444,7 +17417,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         #endregion
 
-         #region Live Recharge
+        #region Live Recharge
         //Live Recharge
         [HttpGet]
 
@@ -17520,7 +17493,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         {
             bool? sts = false;
 
-            var actiond = db.billfailedotps.FirstOrDefault(); 
+            var actiond = db.billfailedotps.FirstOrDefault();
             if (actiond != null)
                 sts = actiond.status;
 
@@ -17554,10 +17527,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 {
                     CountryListModel = new SelectList(query1, "mars", "mars", 0),
                     srspending = db.SRS_pending_count_ALL(),
-                    srspending1 = db.SRS_pending_count_ALL() 
+                    srspending1 = db.SRS_pending_count_ALL()
                 };
 
-                var stands = db.Superstokist_details.Select(s => new SelectListItem{Value = s.SSId,Text = s.FarmName + " - " + s.Mobile}).ToList();
+                var stands = db.Superstokist_details.Select(s => new SelectListItem { Value = s.SSId, Text = s.FarmName + " - " + s.Mobile }).ToList();
 
                 ViewBag.allmaster = new SelectList(stands, "Value", "Text");
 
@@ -17651,7 +17624,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         {
             bool? sts = false;
 
-            var actiond = db.billfailedotps.FirstOrDefault(); 
+            var actiond = db.billfailedotps.FirstOrDefault();
             if (actiond != null)
                 sts = actiond.status;
 
@@ -17690,7 +17663,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             {
                 CountryListModel = objmodeldata,
                 srspending = db.SRS_pending_count_ALL(),
-                srspending1 = db.SRS_pending_count_ALL() 
+                srspending1 = db.SRS_pending_count_ALL()
             };
 
             var stands = db.Superstokist_details
@@ -18313,7 +18286,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     dataTbl.Rows.Add(item.idno, sts, item.frm_name, item.Operator_name, item.mobile, item.amount, item.user_remain_pre, amtdec, item.remain,
                        item.portno, item.income, item.lapubal, item.dealer_remain_pre, item.dealerremain, item.master_remain_pre, item.masterremain,
                     item.opt_id, Rch_time, resp_time, item.BillDueDate, item.Circle);
-                }     
+                }
             }
             else
             {
@@ -18643,18 +18616,15 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         public ActionResult Rch_Failed_success_Reports()
         {
-            var today = DateTime.Today;
-            ViewBag.frmDate = today.ToString("yyyy-MM-dd");
-            ViewBag.toDate = today.ToString("yyyy-MM-dd");
-            var result = db.Proc_Recharge_info_Failed_TO_Success_Reports(today, today.AddDays(1), "").ToList();
+            DateTime fromdate = DateTime.Now;
+            DateTime todate = DateTime.Now.AddDays(1);
+            var result = db.Proc_Recharge_info_Failed_TO_Success_Reports(fromdate, todate, "").ToList();
             return View(result);
         }
         [HttpPost]
         public ActionResult Rch_Failed_success_Reports(DateTime txt_frm_date, DateTime txt_to_date)
         {
             ViewBag.chk = "post";
-            ViewBag.frmDate = txt_frm_date.ToString("yyyy-MM-dd");
-            ViewBag.toDate = txt_to_date.ToString("yyyy-MM-dd");
             var result = db.Proc_Recharge_info_Failed_TO_Success_Reports(txt_frm_date, txt_to_date.AddDays(1), "").ToList();
             return View(result);
         }
@@ -19001,7 +18971,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     var smsapionsts = smsapi.Where(s => s.api_type == "whatsapp").SingleOrDefault();
                     if (smsapionsts != null)
                     {
-                       var apiurls = smsapionsts.smsapi;
+                        var apiurls = smsapionsts.smsapi;
                         string text = "Failed recharge otp is " + otprem1;
                         text = string.Format(text, "1230");
 
@@ -19066,14 +19036,14 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 }
             }
         }
-        public ActionResult Failedall(string idnval, string optval, string otpval,string stats)
+        public ActionResult Failedall(string idnval, string optval, string otpval, string stats)
         {
             var ds = db.billfailedotps.SingleOrDefault();
             var errormessage = "";
             if (ds != null)
             {
                 var dws = db.billfailedotps.SingleOrDefault();
-                if(stats== "Without")
+                if (stats== "Without")
                 {
                     otpval = dws.otp;
                 }
@@ -19094,9 +19064,9 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     try
                                     {
                                         var retailerdetails = db.api_user_details.Where(aa => aa.apiid == checkforlive.Rch_from).SingleOrDefault();
-                                      
+
                                         var remdetails = db.api_remain_amount.Where(aa => aa.apiid == checkforlive.Rch_from).SingleOrDefault();
-                                       
+
                                         var admininfo = db.Admin_details.SingleOrDefault();
                                         Backupinfo back = new Backupinfo();
                                         string mobileno = checkforlive.Mobile;
@@ -19113,7 +19083,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                             Usertype = "API"
                                         };
                                         back.Rechargeandutility(model);
-                                        
+
                                     }
                                     catch { }
                                 }
@@ -19182,9 +19152,9 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     try
                                     {
                                         var retailerdetails = db.api_user_details.Where(aa => aa.apiid == checkforlive.Rch_from).SingleOrDefault();
-                                       
+
                                         var remdetails = db.api_remain_amount.Where(aa => aa.apiid == checkforlive.Rch_from).SingleOrDefault();
-                                        
+
                                         var admininfo = db.Admin_details.SingleOrDefault();
                                         Backupinfo back = new Backupinfo();
                                         string mobileno = checkforlive.Mobile;
@@ -19261,7 +19231,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     catch { }
                                 }
                                 ApiUserResponse(idno, checkforlive.Rch_from, checkforlive.refid, "FAILED", optval);
-                            
+
 
                                 var onlySuccess = db.Recharge_info.Where(aa => aa.idno == idno && aa.Rstaus == "FAILED").SingleOrDefault();
                                 if (onlySuccess != null)
@@ -19289,9 +19259,9 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                         try
                                         {
                                             var retailerdetails = db.api_user_details.Where(aa => aa.apiid == checkforold.Rch_from).SingleOrDefault();
-                                          
+
                                             var remdetails = db.api_remain_amount.Where(aa => aa.apiid == checkforold.Rch_from).SingleOrDefault();
-                                          
+
                                             var admininfo = db.Admin_details.SingleOrDefault();
                                             Backupinfo back = new Backupinfo();
                                             string mobileno = checkforold.Mobile;
@@ -19309,7 +19279,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                             };
                                             back.Rechargeandutility(model);
 
-                                           
+
                                         }
                                         catch { }
                                     }
@@ -20500,7 +20470,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         }
 
         //Manual success money transfer
-        public ActionResult Moneysucess(string trans_id, string bank_trans_id, string recivername, string currentstatus, string ddl_refund, string securitypass )
+        public ActionResult Moneysucess(string trans_id, string bank_trans_id, string recivername, string currentstatus, string ddl_refund, string securitypass)
         {
             try
             {
@@ -21047,7 +21017,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                                 var admininfo = db.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                   
+
                                 var model = new Backupinfo.Addinfo
                                 {
 
@@ -21055,7 +21025,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     RetailerID = retailerid,
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
-                                    Details = "Money Success To Failed" ,
+                                    Details = "Money Success To Failed",
                                     RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
@@ -21167,7 +21137,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                                 var admininfo = db.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                               
+
                                 var model = new Backupinfo.Addinfo
                                 {
 
@@ -21332,14 +21302,14 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                                 var admininfo = db.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                        
+
                                 var model = new Backupinfo.Addinfo
                                 {
                                     Websitename = admininfo.WebsiteUrl,
                                     RetailerID = comm1.rch_from,
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
-                                    Details = "Money Success To Failed" ,
+                                    Details = "Money Success To Failed",
                                     RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
@@ -21434,7 +21404,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                                 var admininfo = db.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                                
+
                                 var model = new Backupinfo.Addinfo
                                 {
 
@@ -21590,12 +21560,12 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 {
 
                                     var retailerdetails = db.api_user_details.Where(aa => aa.apiid == Retailerid).SingleOrDefault();
-                                   
+
                                     var remdetails = db.api_remain_amount.Where(aa => aa.apiid == Retailerid).SingleOrDefault();
-                                   
+
                                     var admininfo = db.Admin_details.SingleOrDefault();
                                     Backupinfo back = new Backupinfo();
-                                  
+
                                     string amount = Amount.ToString();
                                     var model = new Backupinfo.Addinfo
                                     {
@@ -21610,7 +21580,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     };
                                     back.Rechargeandutility(model);
 
-                                   
+
                                 }
                                 catch { }
                             }
@@ -21629,7 +21599,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                                     var admininfo = db.Admin_details.SingleOrDefault();
                                     Backupinfo back = new Backupinfo();
-                               
+
                                     string amount = Amount.ToString();
                                     var model = new Backupinfo.Addinfo
                                     {
@@ -21955,7 +21925,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         var role = (from rol in db.Roles join user in db.UserRoles on rol.RoleId equals user.RoleId where user.UserId == entry.rch_from select rol.Name).SingleOrDefault().ToString();
                         if (role == "API")
                         {
-                       
+
                             try
                             {
                                 var url = db.Recharge_Update_Url.Where(aa => aa.UserId == entry.rch_from).SingleOrDefault().responseurl.ToString();
@@ -22401,7 +22371,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         var role = (from rol in db.Roles join user in db.UserRoles on rol.RoleId equals user.RoleId where user.UserId == entry1.rch_from select rol.Name).SingleOrDefault().ToString();
                         if (role == "API")
                         {
-                        
+
                             try
                             {
                                 var url = db.Recharge_Update_Url.Where(aa => aa.UserId == entry1.rch_from).SingleOrDefault().responseurl.ToString();
@@ -24175,14 +24145,14 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                  Response = rch.Recharge_response,
                                  rch_from = rch.Rch_from,
                                  fid = rch.refid,
-                                 rchtype=rch.rch_type
+                                 rchtype = rch.rch_type
 
                              }).SingleOrDefault();
                 if (entry != null)
                 {
                     string idap = Convert.ToString(txtrefidno);
                     db.recharge_update_success_to_failed(Convert.ToInt32(idap));
-                
+
                     if (entry.rchtype == "API")
                     {
                         try
@@ -24332,7 +24302,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                       Response = rch.Recharge_response,
                                       rch_from = rch.Rch_from,
                                       fid = rch.refid,
-                                      rchtype=rch.rch_type
+                                      rchtype = rch.rch_type
                                   }).SingleOrDefault();
 
                     string idap = Convert.ToString(txtrefidno);
@@ -25917,13 +25887,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             TempData.Keep("Message");
             ViewData["ResendMail"] = TempData["ResendMAil"];
             return View(viewModel);
-        }   
+        }
         public ActionResult DistibutorListforseller()
         {
             var set = db.Recharge_sell_by_dealer.Where(s => s.registration_Status == true && s.Status == true).ToList();
             ViewBag.dealerdetailess = db.Dealer_Details.ToList();
             return View(set);
-        } 
+        }
         [HttpPost]
         public ActionResult DistibutorListforseller(string Dealertdd)
         {
@@ -26011,7 +25981,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 status = dlmsell.Status;
             }
 
-            return Json(status,JsonRequestBehavior.AllowGet);
+            return Json(status, JsonRequestBehavior.AllowGet);
         }
         public ActionResult PrintDistibutorPartialViewToPdf(string usernm)
         {
@@ -26074,10 +26044,41 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             int stateid = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).Where(ii => ii.DealerId == ssid).Select(aa => aa.State).FirstOrDefault();
             ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name", stateid).ToList();
             var ch = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).Where(ii => ii.DealerId == ssid);
-            return Json(new { list = ch, state = ViewBag.state1 }, JsonRequestBehavior.AllowGet);
+
+            //new add OnlyCMSUser
+            var cmsuser = db.Dealer_Details .Where(x => x.DealerId == ssid).Select(x => x.OnlyCMSUser).FirstOrDefault();
+
+            
+
+            return Json(new { list = ch, state = ViewBag.state1, onlycmsuser = cmsuser }, JsonRequestBehavior.AllowGet);
 
         }
 
+
+        public ActionResult OnlyCMSUser_ON_OFF(string DealerId)
+        {
+            var dealer = db.Dealer_Details
+                           .SingleOrDefault(x => x.DealerId == DealerId);
+
+            if (dealer != null)
+            {
+                dealer.OnlyCMSUser = dealer.OnlyCMSUser == true ? false : true;
+
+                db.SaveChanges();
+
+                return Json(new
+                {
+                    status = "Success",
+                    Message = dealer.OnlyCMSUser
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new
+            {
+                status = "Failed",
+                Message = "Dealer Not Found"
+            }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult ChargeBack_OTP_ON_OFF(string DealerId)
         {
             var stschk = db.Dealer_Details.Where(a => a.DealerId == DealerId).SingleOrDefault();
@@ -26433,7 +26434,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                         System.Data.Entity.Core.Objects.ObjectParameter output = new
                                                     System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
-                                                        var ch = db.Insert_Dealer(masterid, user.Id, name, firmname, stateid.ToString(), "1", phone, address, Convert.ToInt32(areapin), email, "", 0, "", pancard, aadhar, gstno, "ADMIN", "CommissionAgent", enpin, output).Single().msg.ToString();
+                                                        var ch = db.Insert_Dealer(masterid, user.Id, name, firmname, stateid.ToString(), "1", phone, address, Convert.ToInt32(areapin), email, "", 0, "", pancard, aadhar, gstno, "ADMIN", "CommissionAgent", enpin, false, output).Single().msg.ToString();
 
                                                         // Send an email with this link
                                                         string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -26695,7 +26696,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                         System.Data.Entity.Core.Objects.ObjectParameter output = new
                                                     System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
-                                                        var ch = db.Insert_Dealer(masterid, user.Id, name, firmname, stateid.ToString(), "1", phone, address, Convert.ToInt32(areapin), email, "", 0, "", pancard, aadhar, gstno, "ADMIN", "CommissionAgent", enpin, output).Single().msg.ToString();
+                                                        var ch = db.Insert_Dealer(masterid, user.Id, name, firmname, stateid.ToString(), "1", phone, address, Convert.ToInt32(areapin), email, "", 0, "", pancard, aadhar, gstno, "ADMIN", "CommissionAgent", enpin, false, output).Single().msg.ToString();
 
                                                         // Send an email with this link
                                                         string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -26950,7 +26951,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                         System.Data.Entity.Core.Objects.ObjectParameter output = new
                                                     System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
-                                                        var ch = db.Insert_Dealer(masterid, user.Id, name, firmname, stateid.ToString(), "1", phone, address, Convert.ToInt32(areapin), email, "", 0, "", pancard, aadhar, gstno, "ADMIN", "CommissionAgent", enpin, output).Single().msg.ToString();
+                                                        var ch = db.Insert_Dealer(masterid, user.Id, name, firmname, stateid.ToString(), "1", phone, address, Convert.ToInt32(areapin), email, "", 0, "", pancard, aadhar, gstno, "ADMIN", "CommissionAgent", enpin, false, output).Single().msg.ToString();
 
                                                         // Send an email with this link
                                                         string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -29187,7 +29188,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 System.Data.Entity.Core.Objects.ObjectParameter output = new
                             System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
-                                var ch = db.Insert_Dealer(masterid, user.Id, Name, FarmName, State.ToString(), District.ToString(), Mb, Address, Pincode, Email, "", 0, "", pancard, adharcard, gst, "ADMIN", ddlrole, enpin, output).Single().msg.ToString();
+                                var ch = db.Insert_Dealer(masterid, user.Id, Name, FarmName, State.ToString(), District.ToString(), Mb, Address, Pincode, Email, "", 0, "", pancard, adharcard, gst, "ADMIN", ddlrole, enpin, false, output).Single().msg.ToString();
 
 
                                 var AdminMailId = db.Admin_details.Single().email;
@@ -30084,65 +30085,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             jsonmodel.HTMLString = renderPartialViewtostring("_Retailerlist_Paging", viewmodel);
             return Json(jsonmodel);
         }
-
-        [HttpPost]
-        public ActionResult UploadRetailerTablePhoto(string retailerId)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(retailerId))
-                {
-                    return Json(new { success = false, message = "Invalid retailer id." }, JsonRequestBehavior.AllowGet);
-                }
-
-                var file = Request.Files["FileUpload"];
-                if (file == null || file.ContentLength <= 0)
-                {
-                    return Json(new { success = false, message = "Please select an image." }, JsonRequestBehavior.AllowGet);
-                }
-
-                var ext = Path.GetExtension(file.FileName);
-                if (string.IsNullOrWhiteSpace(ext))
-                {
-                    ext = ".jpg";
-                }
-                ext = ext.ToLowerInvariant();
-                var allowed = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
-                if (!allowed.Contains(ext))
-                {
-                    return Json(new { success = false, message = "Only image files are allowed." }, JsonRequestBehavior.AllowGet);
-                }
-
-                var newFileName = Guid.NewGuid().ToString() + ext;
-                var relativePath = "Retailer_image/" + newFileName;
-                var physicalPath = Server.MapPath("~/" + relativePath);
-                var dir = Path.GetDirectoryName(physicalPath);
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-                file.SaveAs(physicalPath);
-
-                var webPath = "/" + relativePath;
-
-                var retailer = db.Retailer_Details.FirstOrDefault(aa => aa.RetailerId == retailerId && aa.ISDeleteuser == false);
-                if (retailer == null)
-                {
-                    return Json(new { success = false, message = "Retailer not found." }, JsonRequestBehavior.AllowGet);
-                }
-
-                retailer.Photo = webPath;
-                retailer.aadhar_image = webPath;
-                db.SaveChanges();
-
-                return Json(new { success = true, imageUrl = webPath, message = "Photo updated successfully." }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                return Json(new { success = false, message = "Upload failed. Please try again." }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
         [HttpPost]
         public PartialViewResult RetailerSearchBy(string txtmob)
         {
@@ -30219,7 +30161,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                      };
-            return PartialView("_RetailerlistTable", viewmodel);
+            return PartialView("_Retailerlist", viewmodel);
         }
 
 
@@ -30280,8 +30222,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
             }
 
-            TempData["MoSaveSuccess"] = "Outer link name saved successfully.";
-            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            return View();
         }
 
         [HttpPost]
@@ -30323,14 +30264,14 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 }
                                 else
                                 {
-                                    TempData["MoSaveError"] = "Only PNG images are allowed.";
+                                    TempData["Errormsgtype"] = "PNGIMG";
                                     return RedirectToAction("More_Option");
                                 }
 
                             }
                             else
                             {
-                                TempData["MoSaveError"] = "Image size must be 50x50 pixels or smaller.";
+                                TempData["Errormsgtype"] = "IMGSIZE";
                                 return RedirectToAction("More_Option");
                             }
 
@@ -30348,7 +30289,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                 db.SaveChanges();
             }
-            TempData["MoSaveSuccess"] = "Manual form service saved successfully.";
             return RedirectToAction("More_Option");
         }
 
@@ -30385,21 +30325,21 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
         [HttpPost]
-        public ActionResult Addform_Userinfomation(int? idnoInput,string Name)
+        public ActionResult Addform_Userinfomation(int? idnoInput, string Name)
         {
             try
             {
-                        AddForm_information model = new AddForm_information();
-                        model.serviceid = idnoInput;
-                        model.Name = Name;
-                        db.AddForm_information.Add(model);
-                        db.SaveChanges();
-     
+                AddForm_information model = new AddForm_information();
+                model.serviceid = idnoInput;
+                model.Name = Name;
+                db.AddForm_information.Add(model);
+                db.SaveChanges();
+
             }
             catch (Exception ex)
             { }
 
-            TempData["MoSaveSuccess"] = "Form field information saved successfully.";
+
             return RedirectToAction("More_Option");
         }
 
@@ -30533,7 +30473,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                      };
-            return PartialView("_RetailerlistTable", viewmodel);
+            return PartialView("_Retailerlist", viewmodel);
         }
         public ActionResult RetailerChangePermissionStatus(int id)
         {
@@ -30558,13 +30498,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                          servicename = tbl.servicename,
                                                          serviceidno = tbl1.Show_Service_name_id,
                                                          remid = tbl1.remid,
-                                                         servicestatus = tbl1.status, 
+                                                         servicestatus = tbl1.status,
                                                          basedupdate_id = tbl1.idno
 
 
 
                                                      };
-            return PartialView("_RetailerlistTable", viewmodel);
+            return PartialView("_Retailerlist", viewmodel);
 
 
 
@@ -30626,7 +30566,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                      };
-            return PartialView("_RetailerlistTable", viewmodel);
+            return PartialView("_Retailerlist", viewmodel);
 
 
 
@@ -30729,7 +30669,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                      };
-            return PartialView("_RetailerlistTable", viewmodel);
+            return PartialView("_Retailerlist", viewmodel);
 
         }
 
@@ -30792,7 +30732,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                                                          };
 
-                return PartialView("_RetailerlistTable", viewmodel);
+                return PartialView("_Retailerlist", viewmodel);
 
             }
             catch
@@ -30815,7 +30755,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                          };
-                return PartialView("_RetailerlistTable", viewmodel);
+                return PartialView("_Retailerlist", viewmodel);
             }
 
 
@@ -31164,7 +31104,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                                                                  };
 
-                        return PartialView("_RetailerlistTable", viewmodel);
+                        return PartialView("_Retailerlist", viewmodel);
                     }
                     else
                     {
@@ -31266,7 +31206,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             //        ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
             //        viewmodel.select_retailer_details = db.Select_Retailer_Details_all("ADMIN", "ADMIN", "ADMIN").ToList();
 
-            //        return PartialView("_RetailerlistTable", viewmodel);
+            //        return PartialView("_Retailerlist", viewmodel);
             //    }
             //    else
             //    {
@@ -31340,7 +31280,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
             //viewmodel.select_retailer_details = db.Select_Retailer_Details_all("ADMIN", "ADMIN", "ADMIN").ToList();
 
-            //return PartialView("_RetailerlistTable", viewmodel);
+            //return PartialView("_Retailerlist", viewmodel);
 
 
         }
@@ -31388,7 +31328,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                                  };
-                        return PartialView("_RetailerlistTable", viewmodel);
+                        return PartialView("_Retailerlist", viewmodel);
                     }
                 }
                 else
@@ -31457,7 +31397,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                                  };
-                        return PartialView("_RetailerlistTable", viewmodel);
+                        return PartialView("_Retailerlist", viewmodel);
                     }
                 }
                 else
@@ -31536,7 +31476,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
             //viewmodel.select_retailer_details = db.Select_Retailer_Details_all("ADMIN", "ADMIN", "ADMIN").ToList();
 
-            //return PartialView("_RetailerlistTable", viewmodel);
+            //return PartialView("_Retailerlist", viewmodel);
 
 
         }
@@ -31579,7 +31519,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                      };
-            return PartialView("_RetailerlistTable", viewmodel);
+            return PartialView("_Retailerlist", viewmodel);
         }
 
 
@@ -31711,7 +31651,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                     System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
 
-                                                        var ch = db.Insert_Retailer(dealerid, user.Id, name, stateid, 1, phone, address, Convert.ToInt32(areapin), email, "", "", firmname, string.IsNullOrWhiteSpace(aadhar) ? "" : aadhar, string.IsNullOrWhiteSpace(pancard) ? "" : pancard, 0, string.IsNullOrWhiteSpace(gstno) ? "" : gstno, enpin, "", "Admin", output).Single().msg;
+                                                        var ch = db.Insert_Retailer(dealerid, user.Id, name, stateid," ", 1, phone, address, Convert.ToInt32(areapin), email, "", "", firmname, string.IsNullOrWhiteSpace(aadhar) ? "" : aadhar, string.IsNullOrWhiteSpace(pancard) ? "" : pancard, 0, string.IsNullOrWhiteSpace(gstno) ? "" : gstno, enpin, "", "Admin", output).Single().msg;
                                                         // var ch = db.Insert_Dealer(dealerid, user.Id, name, firmname, stateid.ToString(), "1", phone, address, Convert.ToInt32(areapin), email, "", 0, "", pancard, aadhar, gstno, "ADMIN", output).Single().msg.ToString();
 
                                                         // Send an email with this link
@@ -31970,7 +31910,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                         System.Data.Entity.Core.Objects.ObjectParameter output = new
                                                     System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
-                                                        var ch = db.Insert_Retailer(dealerid, user.Id, name, stateid, 1, phone, address, Convert.ToInt32(areapin), email, "", "", firmname, string.IsNullOrWhiteSpace(aadhar) ? "" : aadhar, string.IsNullOrWhiteSpace(pancard) ? "" : pancard, 0, string.IsNullOrWhiteSpace(gstno) ? "" : gstno, enpin, "", "Admin", output).Single().msg;
+                                                        var ch = db.Insert_Retailer(dealerid, user.Id, name, stateid,"", 1, phone, address, Convert.ToInt32(areapin), email, "", "", firmname, string.IsNullOrWhiteSpace(aadhar) ? "" : aadhar, string.IsNullOrWhiteSpace(pancard) ? "" : pancard, 0, string.IsNullOrWhiteSpace(gstno) ? "" : gstno, enpin, "", "Admin", output).Single().msg;
                                                         // var ch = db.Insert_Dealer(dealerid, user.Id, name, firmname, stateid.ToString(), "1", phone, address, Convert.ToInt32(areapin), email, "", 0, "", pancard, aadhar, gstno, "ADMIN", output).Single().msg.ToString();
 
                                                         // Send an email with this link
@@ -32222,7 +32162,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                         System.Data.Entity.Core.Objects.ObjectParameter output = new
                                                     System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
-                                                        var ch = db.Insert_Retailer(dealerid, user.Id, name, stateid, 1, phone, address, Convert.ToInt32(areapin), email, "", "", firmname, string.IsNullOrWhiteSpace(aadhar) ? "" : aadhar, string.IsNullOrWhiteSpace(pancard) ? "" : pancard, 0, string.IsNullOrWhiteSpace(gstno) ? "" : gstno, enpin, "", "Admin", output).Single().msg;
+                                                        var ch = db.Insert_Retailer(dealerid, user.Id, name, stateid, " ",1, phone, address, Convert.ToInt32(areapin), email, "", "", firmname, string.IsNullOrWhiteSpace(aadhar) ? "" : aadhar, string.IsNullOrWhiteSpace(pancard) ? "" : pancard, 0, string.IsNullOrWhiteSpace(gstno) ? "" : gstno, enpin, "", "Admin", output).Single().msg;
                                                         // var ch = db.Insert_Dealer(dealerid, user.Id, name, firmname, stateid.ToString(), "1", phone, address, Convert.ToInt32(areapin), email, "", 0, "", pancard, aadhar, gstno, "ADMIN", output).Single().msg.ToString();
 
                                                         // Send an email with this link
@@ -32493,7 +32433,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 {
                                     System.Data.Entity.Core.Objects.ObjectParameter output = new
                                      System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-                                    var ch = db.Insert_Retailer(DealerId, user.Id, retailename1, State1, District1, Mobile1, Address1, Convert.ToInt32(Pincode1), email1, "", "", firmnm1, string.IsNullOrWhiteSpace(txtadharcardno) ? "" : txtadharcardno, string.IsNullOrWhiteSpace(txtpencardno) ? "" : txtpencardno, txtcapping, string.IsNullOrWhiteSpace(txtgstno) ? "" : txtgstno, enpin, "", "Admin", output).Single().msg;
+                                    var ch = db.Insert_Retailer(DealerId, user.Id, retailename1, State1," ", District1, Mobile1, Address1, Convert.ToInt32(Pincode1), email1, "", "", firmnm1, string.IsNullOrWhiteSpace(txtadharcardno) ? "" : txtadharcardno, string.IsNullOrWhiteSpace(txtpencardno) ? "" : txtpencardno, txtcapping, string.IsNullOrWhiteSpace(txtgstno) ? "" : txtgstno, enpin, "", "Admin", output).Single().msg;
                                     if (ch == "Register SuccessFully.")
                                     {
                                         if (transaction.UnderlyingTransaction.Connection != null)
@@ -32544,7 +32484,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                             }
                                             catch { }
                                         }
-                                       
+
                                     }
                                     else
                                     {
@@ -33444,8 +33384,8 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 //   System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 var JoinDate = DateTime.Now;
-                             var DOB = DateTime.Now;
-                                var ch = db.Insert_new_Employee(user.Id, Employee_name, Address, Convert.ToInt32(Pincode), Mobile, JoinDate, DOB, E_mail, AadharCard, PanCard,Convert.ToInt32(State1), Convert.ToInt32(District1), "", false, output).Single().msg;
+                                var DOB = DateTime.Now;
+                                var ch = db.Insert_new_Employee(user.Id, Employee_name, Address, Convert.ToInt32(Pincode), Mobile, JoinDate, DOB, E_mail, AadharCard, PanCard, Convert.ToInt32(State1), Convert.ToInt32(District1), "", false, output).Single().msg;
 
                                 if (ch == "Register SuccessFully.")
                                 {
@@ -33472,7 +33412,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                                 var callbackUrl = Url.Action("ConfirmEmailAdmin", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                                 callbackUrl = callbackUrl.Replace("/ADMIN", "");
-                                string body = new CommonUtil().PopulateBodyDealer("", "Confirm your account", "", "" + callbackUrl + "", E_mail,Password);
+                                string body = new CommonUtil().PopulateBodyDealer("", "Confirm your account", "", "" + callbackUrl + "", E_mail, Password);
                                 string Welcomebody = new CommonUtil().PopulateBodyWelcomeforEmployee("", "", E_mail, Password);
                                 new CommonUtil().Insertsendmail(E_mail, "Confirm your account", body, callbackUrl);
                                 new CommonUtil().InsertsendmailWelcome(E_mail, "Confirm your account", Welcomebody, callbackUrl);
@@ -33524,7 +33464,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 }
 
                             }
-                        
+
 
                         }
                     }
@@ -35012,17 +34952,17 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             return Json(new { list = ch, state = ViewBag.state1 }, JsonRequestBehavior.AllowGet);
         }
 
-      
+
         public void FC_UserBYIdSearch(string RCHId, string sts)
         {
 
 
 
             var ch = db.tbl_Admin_Employee.Where(aa => aa.EmployeeID == RCHId).ToList();
-            if(ch.Count == 1)
+            if (ch.Count == 1)
             {
                 var ch1 = db.Users.Where(aa => aa.UserId == RCHId).FirstOrDefault();
-                if(ch1.EmailConfirmed = true)
+                if (ch1.EmailConfirmed = true)
                 {
                     ch1.EmailConfirmed = false;
                 }
@@ -35033,7 +34973,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 db.SaveChanges();
 
             }
-            
+
         }
         //public void update_empstatus(string RCHId)
         //{
@@ -35095,14 +35035,14 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     {
                         db.delete_RCH(RCHIddelete);
 
-                        
+
 
                         vmodel.RCHList = db.Select_show_RCH().ToList();
                         vmodel.feeCollectorsFC = null; //db.proc_SelectAllFeeColletors();
 
                         ViewBag.actionname = "Edit_Rch_User";
                     }
-                
+
                     return PartialView("_REC_DetailsPartialview", vmodel);
 
                 }
@@ -38420,12 +38360,12 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             // return Json(new { newUrl = PartialView("~/Views/Home/_PrePaidDTHService.cshtml", vmodel), status });
         }
 
-        public ActionResult Edit_opt_Setting(int? id, int? resendtime, int? nillcount, int? nilltime, string minimum, string maximum,int? dublicatetime, int? resendcount, string opertype)
+        public ActionResult Edit_opt_Setting(int? id, int? resendtime, int? nillcount, int? nilltime, string minimum, string maximum, int? dublicatetime, int? resendcount, string opertype)
         {
             OperatorIndexViewModel vmodel = new OperatorIndexViewModel();
             if (dublicatetime <= 4320 && dublicatetime>=10)
             {
-             
+
                 var result = db.Operator_Code.FirstOrDefault(z => z.Operator_id == id.Value);
                 result.resendtime = resendtime.Value;
                 result.nillcount = nillcount.Value;
@@ -38583,7 +38523,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         }
         public JsonResult AddAmountBlock(decimal? amount, string name, string User)
         {
-            if(User == "")
+            if (User == "")
             {
                 User = null;
             }
@@ -40267,7 +40207,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             ViewBag.optypelist = new SelectList(selecttypetlist, "Value", "Text");
             var bb = (from ff in db.PortManagers select ff).ToList();
             var apiport = (from jj in db.SRS_API select jj).ToList();
-           
+
             ViewBag.portno = new SelectList(bb, "PortNo", "PortNo", null);
             ViewBag.portapi = new SelectList(apiport, "apiname", "apiname", null);
             var stands = (from dlm in db.Operator_Code select dlm).ToList();
@@ -40293,11 +40233,11 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             var chk = db.SRS_API.ToList();
             if (apicd != "ALL")
             {
-            chk = db.SRS_API.Where(s => s.opt_code == apicd).ToList();
+                chk = db.SRS_API.Where(s => s.opt_code == apicd).ToList();
             }
             List<apilisst> ds = new List<apilisst>();
 
-            foreach(var i in chk)
+            foreach (var i in chk)
             {
                 apilisst d1 = new apilisst();
                 d1.apiname = i.apiname;
@@ -40550,7 +40490,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         }
 
 
-        public ActionResult AddRechargeSpecial(string ddlType, string ddlusertype, string ddluserList, string dlmMP, string ddlPT,string ByAMountopttype, string ByAmountOperator, int? txtByamount, int? txtmaxByamount)
+        public ActionResult AddRechargeSpecial(string ddlType, string ddlusertype, string ddluserList, string dlmMP, string ddlPT, string ByAMountopttype, string ByAmountOperator, int? txtByamount, int? txtmaxByamount)
         {
             if (ByAmountOperator != "ALL")
             {
@@ -42531,7 +42471,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         }
         //Edit Api 
         [HttpPost]
-        public ActionResult Editapi_nm(string txtid,string Report_url1, string txtapiname, string txtapiurl, string viewurledit, string viewdthheavyrefresh, string status_url_edit, string ipaddress_edit)
+        public ActionResult Editapi_nm(string txtid, string Report_url1, string txtapiname, string txtapiurl, string viewurledit, string viewdthheavyrefresh, string status_url_edit, string ipaddress_edit)
         {
             try
             {
@@ -42652,9 +42592,9 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     int idno = Convert.ToInt32(id);
                     //db.srs_api_blo_unblok(idno);
                     var status = db.SRS_API.Where(x => x.id == idno).SingleOrDefault();
-                    if(status != null)
+                    if (status != null)
                     {
-                        if(status.status == "Y")
+                        if (status.status == "Y")
                         {
                             status.status = "N";
                             db.SaveChanges();
@@ -42682,7 +42622,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             //if (instantpayallow==true || razorpayallow==true)
             //{
             //    serviceallowinfo = true;
-             
+
             //}
             //ViewBag.instantpaypayout = instantpayallow;
             //ViewBag.razorpayupi = razorpayallow;
@@ -42861,7 +42801,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         public ActionResult Add_MoneyApiUrls(string txtapiname, string apiid, string pwd, string tkn, string tkn1, string tkn2, string tokenpriority)
         {
             Money_API_URLS obj = new Money_API_URLS();
-        
+
             money_api_status d2 = new money_api_status();
             if (!string.IsNullOrEmpty(txtapiname))
             {
@@ -42884,7 +42824,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                         string[] catag = { "DMT", "PAYOUT", "ACCOUNT VERIFY" };
 
-                        for(int i = 0; i <3; i++)
+                        for (int i = 0; i <3; i++)
                         {
                             d2.api_name = txtapiname;
                             d2.catagory = catag[i];
@@ -42892,10 +42832,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                             db.money_api_status.Add(d2);
                             db.SaveChanges();
                         }
-                       
-                       
 
-                       
+
+
+
                         TempData["edit"] = "Insert Successfully.";
                         var ch = db.show_ALL_DMT_info(txtapiname).ToList();
                         return RedirectToAction("MoneyApiUrls");
@@ -43360,7 +43300,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
             var userid = User.Identity.GetUserId();
             var apiinfo = db.RechargeapiInfoes.Where(aa => aa.Apiid == userid).ToList();
-            ViewBag.apiinfo = new SelectList(apiinfo, "id", "apiname", apiinfomove);
+            ViewBag.apiinfo = new SelectList(apiinfo, "id", "apiname", "Select Api Name");
             List<KeyValuePair<string, string>> kvpList = new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("JSON", "JSON"),
@@ -43603,7 +43543,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 apiinfomove = "ALL";
             }
             var apiinfo = db.RechargeapiInfoes.Where(aa => aa.Apiid == userid).ToList();
-            ViewBag.apiinfo = new SelectList(apiinfo, "id", "apiname", apiinfomove);
+            ViewBag.apiinfo = new SelectList(apiinfo, "id", "apiname", "Select Api Name");
             List<KeyValuePair<string, string>> kvpList = new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("Get", "Get"),
@@ -43732,77 +43672,15 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         public ActionResult ApiCallBack()
         {
             var userid = User.Identity.GetUserId();
-            string hostName = Dns.GetHostName();
+            string hostName = Dns.GetHostName(); // Retrive the Name of HOST  
+            // Get the IP  
             string myIP = Dns.GetHostByName(hostName).AddressList[0].ToString();
             ViewBag.address = myIP;
             var resp = db.RechargeapiInfoes.Where(aa => aa.Apiid == userid).ToList();
-            ViewBag.api = GetRechargeCallbackBaseUrl();
+            String strPathAndQuery = HttpContext.Request.Url.PathAndQuery;
+            String strUrl = HttpContext.Request.Url.AbsoluteUri.Replace(strPathAndQuery, "");
+            ViewBag.api = strUrl;
             return View(resp);
-        }
-
-        private string GetRechargeCallbackBaseUrl()
-        {
-            var liveUrl = BuildRechargeLiveCallbackBaseUrl();
-            if (!string.IsNullOrWhiteSpace(liveUrl))
-            {
-                return liveUrl;
-            }
-
-            if (Request?.Url != null)
-            {
-                var pathAndQuery = Request.Url.PathAndQuery ?? string.Empty;
-                var requestBase = Request.Url.AbsoluteUri.Replace(pathAndQuery, string.Empty).TrimEnd('/');
-                if (!IsLocalCallbackBaseUrl(requestBase))
-                {
-                    return requestBase;
-                }
-            }
-
-            return string.Empty;
-        }
-
-        private string BuildRechargeLiveCallbackBaseUrl()
-        {
-            var websiteUrl = db.Admin_details.FirstOrDefault()?.WebsiteUrl;
-            if (string.IsNullOrWhiteSpace(websiteUrl))
-            {
-                return string.Empty;
-            }
-
-            var domain = websiteUrl.Trim().ToLowerInvariant();
-            domain = domain.Replace("https://www.", string.Empty)
-                .Replace("http://www.", string.Empty)
-                .Replace("https://", string.Empty)
-                .Replace("http://", string.Empty)
-                .TrimEnd('/');
-
-            if (domain.StartsWith("www."))
-            {
-                domain = domain.Substring(4);
-            }
-
-            if (string.IsNullOrWhiteSpace(domain) || IsLocalCallbackBaseUrl(domain))
-            {
-                return string.Empty;
-            }
-
-            if (!domain.StartsWith("recharge."))
-            {
-                domain = "recharge." + domain;
-            }
-
-            return "https://" + domain;
-        }
-
-        private static bool IsLocalCallbackBaseUrl(string url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                return true;
-            }
-
-            var value = url.ToLowerInvariant();
-            return value.Contains("localhost") || value.Contains("127.0.0.1");
         }
 
         #region SMS
@@ -43867,7 +43745,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         // POST : Insert SMS API
 
 
-        [HttpPost]
         public ActionResult copypastedeveloper()
         {
             var smstpiid = db.apisms.Where(x => x.sts == "Y").FirstOrDefault();
@@ -44191,17 +44068,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         {
 
             List<string> data = new List<string>();
-            if (FileUpload != null && FileUpload.ContentLength > 0)
+            if (FileUpload != null)
             {
-                var ext = Path.GetExtension(FileUpload.FileName).ToLowerInvariant();
-                if (ext == ".xls" || ext == ".xlsx")
+                // tdata.ExecuteCommand("truncate table OtherCompanyAssets");
+                if (FileUpload.ContentType == "application/vnd.ms-excel" || FileUpload.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 {
-                    string filename = Path.GetFileName(FileUpload.FileName);
+                    string filename = FileUpload.FileName;
                     string targetpath = Server.MapPath("~/Doc/");
-                    if (!Directory.Exists(targetpath))
-                    {
-                        Directory.CreateDirectory(targetpath);
-                    }
                     FileUpload.SaveAs(targetpath + filename);
                     string pathToExcelFile = targetpath + filename;
                     var connectionString = "";
@@ -44280,19 +44153,30 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     {
                         System.IO.File.Delete(pathToExcelFile);
                     }
-                    TempData["saSmsUploadMsg"] = "Excel uploaded successfully.";
                     return RedirectToAction("SMSAPI");
+                    // return Json("success", JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    TempData["saSmsUploadError"] = "Only Excel file format is allowed (.xls or .xlsx).";
+                    //alert message for invalid file format
+                    data.Add("<ul>");
+                    data.Add("<li>Only Excel file format is allowed</li>");
+                    data.Add("</ul>");
+                    data.ToArray();
+                    TempData["excelldata"] = data;
                     return RedirectToAction("SMSAPI");
+                    // return Json(data, JsonRequestBehavior.AllowGet);
                 }
             }
             else
             {
-                TempData["saSmsUploadError"] = "Please choose an Excel file.";
+                data.Add("<ul>");
+                if (FileUpload == null) data.Add("<li>Please choose Excel file</li>");
+                data.Add("</ul>");
+                data.ToArray();
+                TempData["excelldata"] = data;
                 return RedirectToAction("SMSAPI");
+                //  return Json(data, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -44300,14 +44184,12 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         public ActionResult SMS_TemplateDownload_Formate()
         {
-            var dataTbl = new DataTable();
-            dataTbl.Columns.Add("Templateid", typeof(string));
-            dataTbl.Columns.Add("SMSAPIID", typeof(string));
-            dataTbl.Columns.Add("SMS_TYPE", typeof(string));
-            dataTbl.Columns.Add("Templates", typeof(string));
-            dataTbl.Rows.Add("SAMPLE123", "https://example.com/send?", "ManualSMS", "Hello {mobile}, your OTP is {otp}");
 
-            return BuildStyledSmsTemplateExcel(dataTbl, "SMSTEMP_send_sms.xlsx");
+            var directoryPath = "~/SMSTEMPLIST.xlsx";
+            var fileName = "SMSTEMP_send_sms.xlsx";
+
+            directoryPath = directoryPath.Replace("Vastwebmulti", "");
+            return File(directoryPath, "multipart/form-data", fileName);
         }
 
 
@@ -44525,48 +44407,56 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         public ActionResult ExcelSend_API_SMS(string txt_frm_date, string txt_to_date, string txtmsg)
         {
-            var dataTbl = BuildApiSmsHistoryDataTable(txt_frm_date, txt_to_date, txtmsg);
-            return BuildStyledDataTableExcel(dataTbl, "Send_API_SMS_History.xlsx", "API SMS History", "API SMS History Report");
-        }
-
-        public ActionResult PdfSend_API_SMS(string txt_frm_date, string txt_to_date, string txtmsg)
-        {
-            var dataTbl = BuildApiSmsHistoryDataTable(txt_frm_date, txt_to_date, txtmsg);
-            return BuildStyledSmsReportPdf(dataTbl, "API SMS History Report", "Send_API_SMS_History.pdf");
-        }
-
-        private DataTable BuildApiSmsHistoryDataTable(string txt_frm_date, string txt_to_date, string txtmsg)
-        {
+            SMSViewModel vmodel = new SMSViewModel();
             DateTime frm = Convert.ToDateTime(txt_frm_date);
             DateTime to = Convert.ToDateTime(txt_to_date);
             txt_frm_date = frm.ToString("dd-MM-yyyy");
             txt_to_date = to.ToString("dd-MM-yyyy");
-            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            var userid = User.Identity.GetUserId();
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
             DateTime dt = DateTime.ParseExact(!string.IsNullOrEmpty(txt_frm_date) ? txt_frm_date : DateTime.Now.ToString("yyyy-MM-dd"), formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
             DateTime dt1 = DateTime.ParseExact(!string.IsNullOrEmpty(txt_to_date) ? txt_to_date : DateTime.Now.ToString("yyyy-MM-dd"), formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
             DateTime frm_date = Convert.ToDateTime(dt).Date;
             DateTime to_date = Convert.ToDateTime(dt1).AddDays(1);
-            var smsList = db.sms_api_entry.Where(aa => aa.m_date >= frm_date && aa.m_date <= to_date && aa.msg.Contains(txtmsg)).OrderByDescending(aa => aa.idno).ToList();
+            vmodel.sms_api_entryList = db.sms_api_entry.Where(aa => aa.m_date >= frm_date && aa.m_date <= to_date && aa.msg.Contains(txtmsg)).OrderByDescending(aa => aa.idno).ToList();
 
             DataTable dataTbl = new DataTable();
             dataTbl.Columns.Add("Date & Time", typeof(string));
             dataTbl.Columns.Add("API Response", typeof(string));
             dataTbl.Columns.Add("Sending Message", typeof(string));
 
-            foreach (var item in smsList)
+            if (vmodel.sms_api_entryList.Count > 0)
             {
-                var msg = item.msg;
-                if (!string.IsNullOrEmpty(msg) && msg.ToUpper().Contains("YOUR NEW PASSWORD"))
+                foreach (var item in vmodel.sms_api_entryList)
                 {
-                    msg = "New Password **** Successfully Send On Registered Mobile";
+                    if (item.msg.ToUpper().Contains("YOUR NEW PASSWORD"))
+                    {
+                        item.msg = "New Password **** Successfully Send On Registered Mobile";
+                    }
+                    dataTbl.Rows.Add(item.m_date, item.response, item.msg);
                 }
-                dataTbl.Rows.Add(
-                    item.m_date.HasValue ? item.m_date.Value.ToString("dd-MM-yyyy hh:mm tt") : string.Empty,
-                    item.response,
-                    msg);
             }
 
-            return dataTbl;
+            else
+            {
+                dataTbl.Rows.Add("", "", "");
+            }
+            var grid = new GridView();
+            grid.DataSource = dataTbl;
+            grid.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=Send_API_SMS_History.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            grid.RenderControl(htw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+            return PartialView("_APISMSHISTORY", vmodel);
         }
 
 
@@ -44909,35 +44799,48 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         public ActionResult Excel_SIMSMSHISTORY(string txt_frm_date, string txt_to_date, string txtmsg)
         {
-            var dataTbl = BuildSimSmsHistoryDataTable(txt_frm_date, txt_to_date, txtmsg);
-            return BuildStyledDataTableExcel(dataTbl, "SIM_SMS_HISTORY.xlsx", "SIM SMS History", "SIM SMS History Report");
-        }
-
-        public ActionResult Pdf_SIMSMSHISTORY(string txt_frm_date, string txt_to_date, string txtmsg)
-        {
-            var dataTbl = BuildSimSmsHistoryDataTable(txt_frm_date, txt_to_date, txtmsg);
-            return BuildStyledSmsReportPdf(dataTbl, "SIM SMS History Report", "SIM_SMS_HISTORY.pdf");
-        }
-
-        private DataTable BuildSimSmsHistoryDataTable(string txt_frm_date, string txt_to_date, string txtmsg)
-        {
+            SMSViewModel vmodel = new SMSViewModel();
             string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString("yyyy-MM-dd");
             string to_date = Convert.ToDateTime(txt_to_date).AddDays(1).ToString("yyyy-MM-dd");
-            var list = db.srs_show_sent_message(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), txtmsg).ToList();
 
+            vmodel.srs_show_sent_message_Result_List = db.srs_show_sent_message(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), txtmsg).ToList();
             DataTable dataTbl = new DataTable();
             dataTbl.Columns.Add("Port No", typeof(string));
-            dataTbl.Columns.Add("Retailer Id", typeof(string));
+            dataTbl.Columns.Add("Reatiler Id", typeof(string));
             dataTbl.Columns.Add("Message", typeof(string));
             dataTbl.Columns.Add("Status", typeof(string));
             dataTbl.Columns.Add("Date & Time", typeof(string));
-
-            foreach (var item in list)
+            if (vmodel.srs_show_sent_message_Result_List.Count() > 0)
             {
-                dataTbl.Rows.Add(item.portno, item.senderno, item.msg, item.sts, item.edate);
+                foreach (var item in vmodel.srs_show_sent_message_Result_List)
+                {
+
+                    dataTbl.Rows.Add(item.portno, item.senderno, item.msg, item.sts, item.edate);
+                }
+            }
+            else
+            {
+                dataTbl.Rows.Add("", "", "", "", "");
             }
 
-            return dataTbl;
+
+
+            var grid = new GridView();
+            grid.DataSource = dataTbl;
+            grid.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=SIM_SMS_HISTORY.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            grid.RenderControl(htw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+
+            return PartialView("_SIMSMSHISTORY", vmodel);
         }
 
         public ActionResult Showsendsms()
@@ -45306,27 +45209,27 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             return View(noti);
         }
         [HttpPost]
-        public ActionResult HolidayAdd(string date, string desc , string holydayimages)
+        public ActionResult HolidayAdd(string date, string desc, string holydayimages)
         {
             CultureInfo culture = new CultureInfo("en-US");
             DateTime tempDate = Convert.ToDateTime(date, culture);
 
-            
-                var chk = db.tbl_Holiday.Where(aa => aa.HolidayDate == tempDate).SingleOrDefault();
-                if (chk == null)
+
+            var chk = db.tbl_Holiday.Where(aa => aa.HolidayDate == tempDate).SingleOrDefault();
+            if (chk == null)
             {
                 var request = HttpContext.Request;
                 var baseUrl = $"{request.Url.Scheme}://{request.Url.Authority}{request.ApplicationPath.TrimEnd('/')}/";
                 tbl_Holiday tbl = new tbl_Holiday();
-                    tbl.HolidayDate = tempDate;
-                    tbl.HolidayName = desc;
-                    tbl.isAepsBlocked = false;
-                    tbl.isMposBlocked = false;
-                    tbl.images = baseUrl+holydayimages;
-                    db.tbl_Holiday.Add(tbl);
-                    db.SaveChanges();
-                }
-            
+                tbl.HolidayDate = tempDate;
+                tbl.HolidayName = desc;
+                tbl.isAepsBlocked = false;
+                tbl.isMposBlocked = false;
+                tbl.images = baseUrl+holydayimages;
+                db.tbl_Holiday.Add(tbl);
+                db.SaveChanges();
+            }
+
             return Json("", JsonRequestBehavior.AllowGet);
         }
         public ActionResult Deleteholiday(DateTime date)
@@ -46587,7 +46490,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         public ActionResult updateotpsetting()
         {
             var sts = db.Email_show_passcode.SingleOrDefault();
-            if(sts.forgetotp == true)
+            if (sts.forgetotp == true)
             {
                 sts.forgetotp = false;
 
@@ -46605,7 +46508,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             var sts = db.Email_show_passcode.SingleOrDefault();
 
 
-            if(sts.forgetotp == true)
+            if (sts.forgetotp == true)
             {
                 Session["yes"] = "ON";
             }
@@ -46687,6 +46590,27 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         }
 
 
+        public JObject fetchVideoKycStatus_Data()
+        {
+            var verify_data = db.AAdharPanEKYC_Verify.Single();
+            JObject obj = new JObject();
+            obj.Add("type", verify_data.VideoKycStatus ? "ON" : "OFF");
+            return obj;
+        }
+
+        [HttpPost]
+        public JObject ChangeVideoKycStatus()
+        {
+            var verify_data = db.AAdharPanEKYC_Verify.Single();
+            verify_data.VideoKycStatus = !verify_data.VideoKycStatus;
+            db.SaveChanges();
+
+            JObject obj = new JObject();
+            obj.Add("type", verify_data.VideoKycStatus ? "ON" : "OFF");
+            return obj;
+        }
+
+
         public JObject fetchAAdharPanVerify_Data()
         {
             var verify_data = db.AAdharPanEKYC_Verify.Single();
@@ -46739,6 +46663,163 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             obj.Add("type", verify_data.verify_type);
 
             return obj;
+        }
+
+        [HttpPost]
+        public ActionResult UploadKycDocuments(HttpPostedFileBase AadharFile, HttpPostedFileBase PanFile)
+        {
+            try
+            {
+                var userid = User.Identity.GetUserId();
+
+                var retailer = db.Retailer_Details
+                                 .FirstOrDefault(x => x.RetailerId == userid);
+
+                if (retailer == null)
+                {
+                    return Json(new
+                    {
+                        Status = false,
+                        Message = "Retailer not found."
+                    });
+                }
+
+                string folder = Server.MapPath("~/Upload/KYC/");
+
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                // Aadhaar
+                if (AadharFile != null && AadharFile.ContentLength > 0)
+                {
+                    string aadharName = Guid.NewGuid() +
+                                        Path.GetExtension(AadharFile.FileName);
+
+                    AadharFile.SaveAs(Path.Combine(folder, aadharName));
+
+                    retailer.aadharcardPath = "/Upload/KYC/" + aadharName;
+                }
+
+                // PAN
+                if (PanFile != null && PanFile.ContentLength > 0)
+                {
+                    string panName = Guid.NewGuid() +
+                                     Path.GetExtension(PanFile.FileName);
+
+                    PanFile.SaveAs(Path.Combine(folder, panName));
+
+                    retailer.pancardPath = "/Upload/KYC/" + panName;
+                }
+
+                db.SaveChanges();
+
+                return Json(new
+                {
+                    Status = true,
+                    Message = "Documents Uploaded Successfully."
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    Status = false,
+                    Message = ex.Message
+                });
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult SaveZeroKYC(string Aadhaar, string Pan)
+        {
+            try
+            {
+                var userid = User.Identity.GetUserId();
+
+                var retailer = db.Retailer_Details
+                                 .FirstOrDefault(x => x.RetailerId == userid);
+
+                retailer.AadharCard = Aadhaar;
+                retailer.PanCard = Pan;
+
+                retailer.aadhar_verification = false;
+                retailer.pan_verification = false;
+
+                db.SaveChanges();
+
+                return Json(new
+                {
+                    Status = true,
+                    Message = "Zero KYC Saved Successfully."
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    Status = false,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpGet]
+        public JsonResult fetchSignupKYCSetting_Data()
+        {
+            var data = db.SignupKYCSettings
+                         .Select(x => new {
+                             x.Id,
+                             x.KYCType,
+                             x.IsActive,
+                             x.DisplayName
+                         })
+                         .ToList();
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult ChangeSignupKYCSetting(string type)
+        {
+            try
+            {
+                var validTypes = new[] { "ZERO", "DIGITAL", "PHYSICAL", "DIGITAL_PHYSICAL" };
+
+                if (string.IsNullOrEmpty(type) || !validTypes.Contains(type))
+                {
+                    return Json(new { Status = false, Message = "Invalid KYC Type." });
+                }
+
+                var allTypes = db.SignupKYCSettings.ToList();
+                var selected = allTypes.FirstOrDefault(x => x.KYCType == type);
+
+                if (selected == null)
+                {
+                    return Json(new { Status = false, Message = "KYC Type not found in setting." });
+                }
+
+                foreach (var item in allTypes)
+                {
+                    item.IsActive = (item.KYCType == type);
+                }
+
+                db.SaveChanges();
+
+                return Json(new
+                {
+                    Status = true,
+                    Message = selected.DisplayName + " Set As Active KYC Type.",
+                    type = selected.KYCType,
+                    DisplayName = selected.DisplayName
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Status = false, Message = ex.Message });
+            }
         }
 
         public JsonResult Insert_IPaddressdata(string txtIPADDRESS, string txthighsecuritypwd, string btnnamekonsa)
@@ -48055,274 +48136,31 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             dataTbl.Columns.Add("Template", typeof(string));
             dataTbl.Columns.Add("Template ID", typeof(string));
             dataTbl.Columns.Add("SMS API", typeof(string));
-            dataTbl.Columns.Add("Uploaded", typeof(string));
+
 
             foreach (var item in result)
             {
-                var apiUrl = item.SMSAPI ?? string.Empty;
-                var apiDisplay = apiUrl.Contains("?") ? apiUrl.Substring(0, apiUrl.IndexOf("?")) : apiUrl;
-                dataTbl.Rows.Add(item.SMS_TYPE, item.Templates, item.Templateid, apiDisplay, item.UploadBy);
+                dataTbl.Rows.Add(item.SMS_TYPE, item.Templates, item.Templateid, item.SMSAPI);
             }
 
-            return BuildStyledDataTableExcel(dataTbl, "SMS_Template_Report.xlsx", "SMS Templates", "SMS Template Report");
-        }
+            var grid = new GridView();
+            grid.DataSource = dataTbl;
+            grid.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=SMS_Template_Report.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            grid.RenderControl(htw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
 
-        private FileContentResult BuildStyledDataTableExcel(DataTable dataTbl, string fileName, string sheetName, string reportTitle)
-        {
-            using (XLWorkbook wb = new XLWorkbook())
-            {
-                var ws = wb.Worksheets.Add(sheetName);
-                int colCount = Math.Max(dataTbl.Columns.Count, 1);
-                int headerRow = 4;
-                int dataStartRow = headerRow + 1;
-                int lastRow = headerRow + dataTbl.Rows.Count;
+            return View();
 
-                ws.Cell(1, 1).Value = reportTitle ?? sheetName;
-                ws.Range(1, 1, 1, colCount).Merge();
-                var titleRange = ws.Range(1, 1, 1, colCount);
-                titleRange.Style.Font.Bold = true;
-                titleRange.Style.Font.FontSize = 15;
-                titleRange.Style.Font.FontColor = XLColor.White;
-                titleRange.Style.Fill.BackgroundColor = XLColor.FromHtml("#1E3A8A");
-                titleRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-                titleRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                titleRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                titleRange.Style.Border.OutsideBorderColor = XLColor.FromHtml("#1D4ED8");
-                ws.Row(1).Height = 30;
 
-                ws.Cell(2, 1).Value = "SMS API Report Export";
-                ws.Range(2, 1, 2, colCount).Merge();
-                var subRange = ws.Range(2, 1, 2, colCount);
-                subRange.Style.Font.FontSize = 10;
-                subRange.Style.Font.FontColor = XLColor.FromHtml("#DBEAFE");
-                subRange.Style.Fill.BackgroundColor = XLColor.FromHtml("#2563EB");
-                subRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-                subRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                ws.Row(2).Height = 20;
-
-                ws.Cell(3, 1).Value = string.Format("Generated: {0:dd-MMM-yyyy hh:mm tt}   |   Total Records: {1}", DateTime.Now, dataTbl.Rows.Count);
-                ws.Range(3, 1, 3, colCount).Merge();
-                var metaRange = ws.Range(3, 1, 3, colCount);
-                metaRange.Style.Font.FontSize = 9;
-                metaRange.Style.Font.FontColor = XLColor.FromHtml("#475569");
-                metaRange.Style.Fill.BackgroundColor = XLColor.FromHtml("#F8FAFC");
-                metaRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-                metaRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                metaRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                metaRange.Style.Border.OutsideBorderColor = XLColor.FromHtml("#E2E8F0");
-                ws.Row(3).Height = 18;
-
-                for (int c = 0; c < dataTbl.Columns.Count; c++)
-                {
-                    ws.Cell(headerRow, c + 1).Value = dataTbl.Columns[c].ColumnName;
-                }
-
-                var header = ws.Range(headerRow, 1, headerRow, colCount);
-                header.Style.Font.Bold = true;
-                header.Style.Font.FontSize = 10;
-                header.Style.Font.FontColor = XLColor.White;
-                header.Style.Fill.BackgroundColor = XLColor.FromHtml("#2563EB");
-                header.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                header.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                header.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                header.Style.Border.OutsideBorderColor = XLColor.FromHtml("#1D4ED8");
-                header.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-                header.Style.Border.InsideBorderColor = XLColor.FromHtml("#1D4ED8");
-                ws.Row(headerRow).Height = 24;
-
-                for (int r = 0; r < dataTbl.Rows.Count; r++)
-                {
-                    for (int c = 0; c < dataTbl.Columns.Count; c++)
-                    {
-                        ws.Cell(dataStartRow + r, c + 1).Value = dataTbl.Rows[r][c]?.ToString() ?? string.Empty;
-                    }
-                }
-
-                if (dataTbl.Rows.Count > 0)
-                {
-                    var dataRange = ws.Range(dataStartRow, 1, lastRow, colCount);
-                    dataRange.Style.Alignment.WrapText = true;
-                    dataRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
-                    dataRange.Style.Font.FontSize = 9;
-                    dataRange.Style.Font.FontColor = XLColor.FromHtml("#334155");
-                    dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    dataRange.Style.Border.OutsideBorderColor = XLColor.FromHtml("#E2E8F0");
-                    dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-                    dataRange.Style.Border.InsideBorderColor = XLColor.FromHtml("#E2E8F0");
-
-                    for (int r = dataStartRow; r <= lastRow; r++)
-                    {
-                        if ((r - dataStartRow) % 2 == 1)
-                        {
-                            ws.Range(r, 1, r, colCount).Style.Fill.BackgroundColor = XLColor.FromHtml("#F8FAFC");
-                        }
-                    }
-
-                    if (dataTbl.Columns.Contains("Status"))
-                    {
-                        int statusCol = dataTbl.Columns.IndexOf("Status") + 1;
-                        for (int r = dataStartRow; r <= lastRow; r++)
-                        {
-                            var statusVal = (ws.Cell(r, statusCol).GetString() ?? string.Empty).Trim().ToUpperInvariant();
-                            if (statusVal.Contains("SUCCESS") || statusVal.Contains("SENT") || statusVal == "Y")
-                            {
-                                ws.Cell(r, statusCol).Style.Font.FontColor = XLColor.FromHtml("#15803D");
-                                ws.Cell(r, statusCol).Style.Font.Bold = true;
-                            }
-                            else if (statusVal.Contains("FAIL") || statusVal.Contains("PENDING") || statusVal.Contains("PAND"))
-                            {
-                                ws.Cell(r, statusCol).Style.Font.FontColor = XLColor.FromHtml("#B91C1C");
-                                ws.Cell(r, statusCol).Style.Font.Bold = true;
-                            }
-                        }
-                    }
-                }
-
-                ws.Columns().AdjustToContents();
-                for (int c = 1; c <= colCount; c++)
-                {
-                    if (ws.Column(c).Width < 14)
-                    {
-                        ws.Column(c).Width = 14;
-                    }
-                    if (ws.Column(c).Width > 52)
-                    {
-                        ws.Column(c).Width = 52;
-                    }
-                }
-
-                if (dataTbl.Columns.Count >= 2)
-                {
-                    ws.Column(2).Width = Math.Max(ws.Column(2).Width, 24);
-                }
-                if (dataTbl.Columns.Count >= 3)
-                {
-                    ws.Column(3).Width = Math.Max(ws.Column(3).Width, 36);
-                }
-
-                ws.SheetView.FreezeRows(headerRow);
-                if (lastRow > headerRow)
-                {
-                    ws.Range(headerRow, 1, lastRow, colCount).SetAutoFilter();
-                }
-
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    wb.SaveAs(stream);
-                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-                }
-            }
-        }
-
-        private FileContentResult BuildStyledSmsReportPdf(DataTable dataTbl, string reportTitle, string fileName)
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var doc = new Document(PageSize.A4.Rotate(), 18f, 18f, 18f, 18f);
-                PdfWriter.GetInstance(doc, stream);
-                doc.Open();
-
-                var titleFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 16, BaseColor.WHITE);
-                var subtitleFont = FontFactory.GetFont(FontFactory.HELVETICA, 10, new BaseColor(219, 234, 254));
-                var metaFont = FontFactory.GetFont(FontFactory.HELVETICA, 9, new BaseColor(71, 85, 105));
-                var headerFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.WHITE);
-                var cellFont = FontFactory.GetFont(FontFactory.HELVETICA, 8, new BaseColor(51, 65, 85));
-
-                var banner = new PdfPTable(1) { WidthPercentage = 100, SpacingAfter = 8f };
-                var titleCell = new PdfPCell(new Phrase(reportTitle ?? "SMS Report", titleFont))
-                {
-                    BackgroundColor = new BaseColor(30, 58, 138),
-                    Border = iTextSharp.text.Rectangle.NO_BORDER,
-                    PaddingLeft = 12f,
-                    PaddingRight = 12f,
-                    PaddingTop = 10f,
-                    PaddingBottom = 4f
-                };
-                banner.AddCell(titleCell);
-
-                var subtitleCell = new PdfPCell(new Phrase("SMS API Report Export", subtitleFont))
-                {
-                    BackgroundColor = new BaseColor(37, 99, 235),
-                    Border = iTextSharp.text.Rectangle.NO_BORDER,
-                    PaddingLeft = 12f,
-                    PaddingRight = 12f,
-                    PaddingTop = 0f,
-                    PaddingBottom = 10f
-                };
-                banner.AddCell(subtitleCell);
-                doc.Add(banner);
-
-                var meta = new Paragraph(
-                    string.Format("Generated: {0:dd-MMM-yyyy hh:mm tt}    |    Total Records: {1}", DateTime.Now, dataTbl.Rows.Count),
-                    metaFont)
-                {
-                    SpacingAfter = 10f
-                };
-                doc.Add(meta);
-
-                int colCount = Math.Max(dataTbl.Columns.Count, 1);
-                var table = new PdfPTable(colCount) { WidthPercentage = 100f, SpacingBefore = 4f };
-
-                foreach (DataColumn col in dataTbl.Columns)
-                {
-                    table.AddCell(new PdfPCell(new Phrase(col.ColumnName.ToUpperInvariant(), headerFont))
-                    {
-                        BackgroundColor = new BaseColor(37, 99, 235),
-                        BorderColor = new BaseColor(29, 78, 216),
-                        Padding = 6f,
-                        HorizontalAlignment = Element.ALIGN_CENTER
-                    });
-                }
-
-                int rowIndex = 0;
-                foreach (DataRow row in dataTbl.Rows)
-                {
-                    rowIndex++;
-                    var rowBg = rowIndex % 2 == 0 ? new BaseColor(248, 250, 252) : BaseColor.WHITE;
-                    for (int c = 0; c < dataTbl.Columns.Count; c++)
-                    {
-                        var value = row[c]?.ToString() ?? string.Empty;
-                        var font = cellFont;
-                        if (dataTbl.Columns[c].ColumnName.Equals("Status", StringComparison.OrdinalIgnoreCase))
-                        {
-                            var status = value.Trim().ToUpperInvariant();
-                            if (status.Contains("SUCCESS") || status.Contains("SENT") || status == "Y")
-                            {
-                                font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8, new BaseColor(21, 128, 61));
-                            }
-                            else if (status.Contains("FAIL") || status.Contains("PENDING") || status.Contains("PAND"))
-                            {
-                                font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8, new BaseColor(185, 28, 28));
-                            }
-                        }
-
-                        table.AddCell(new PdfPCell(new Phrase(value, font))
-                        {
-                            BackgroundColor = rowBg,
-                            BorderColor = new BaseColor(226, 232, 240),
-                            Padding = 5f,
-                            VerticalAlignment = Element.ALIGN_TOP
-                        });
-                    }
-                }
-
-                doc.Add(table);
-
-                var footerFont = FontFactory.GetFont(FontFactory.HELVETICA, 8, new BaseColor(148, 163, 184));
-                doc.Add(new Paragraph("Aasha Digital India — Confidential Report", footerFont)
-                {
-                    Alignment = Element.ALIGN_CENTER,
-                    SpacingBefore = 12f
-                });
-
-                doc.Close();
-                return File(stream.ToArray(), "application/pdf", fileName);
-            }
-        }
-
-        private FileContentResult BuildStyledSmsTemplateExcel(DataTable dataTbl, string fileName)
-        {
-            return BuildStyledDataTableExcel(dataTbl, fileName, "SMS Templates", "SMS Template Report");
         }
 
 
@@ -48418,15 +48256,11 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         }
 
 
-        [HttpPost]
         public ActionResult DeleteTemplatebyid(int id)
         {
             var tablefordelete = db.Sending_SMS_Templates.Find(id);
-            if (tablefordelete != null)
-            {
-                db.Sending_SMS_Templates.Remove(tablefordelete);
-                db.SaveChanges();
-            }
+            db.Sending_SMS_Templates.Remove(tablefordelete);
+            db.SaveChanges();
             var resultssss = GET_ALL_Template_list();
             return PartialView("_SMS_TEMPLATE_Reports", resultssss);
         }
@@ -49200,13 +49034,11 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
             else if (setof == "1")
             {
-                ViewBag.ShowEmailOtpGate = true;
-                ViewBag.OtpError = Convert.ToString(TempData["message12"]);
+                return PartialView("mail_check1");
             }
             else if (setof == "yes")
             {
                 TempData["showmassage"] = "yes1";
-                ViewBag.OtpVerified = true;
             }
 
             TempData["1234"] = TempData["showmassage"];
@@ -49714,130 +49546,130 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         {
 
 
-          
-                if (ids != null && ids != "")
+
+            if (ids != null && ids != "")
+            {
+
+                var details = db.Admin_details.SingleOrDefault();
+
+                if (details != null)
                 {
 
-                    var details = db.Admin_details.SingleOrDefault();
 
-                    if (details != null)
+                    using (VastwebmultiEntities db = new VastwebmultiEntities())
                     {
+                        Random nm = new Random();
+                        var pin = nm.Next(1000, 10000);
+                        var apiurls = "";
 
-
-                        using (VastwebmultiEntities db = new VastwebmultiEntities())
+                        var smsapi2 = db.apisms.Where(x => x.sts == "Y").ToList();
+                        var smsapionsts2 = smsapi2.Where(s => s.api_type == "whatsapp").SingleOrDefault();
+                        if (smsapionsts2 != null)
                         {
-                            Random nm = new Random();
-                            var pin = nm.Next(1000, 10000);
-                            var apiurls = "";
 
-                            var smsapi2 = db.apisms.Where(x => x.sts == "Y").ToList();
-                            var smsapionsts2 = smsapi2.Where(s => s.api_type == "whatsapp").SingleOrDefault();
-                            if (smsapionsts2 != null)
-                            {
+                            var setopt = db.Users.Where(s => s.Email == ids).SingleOrDefault();
 
-                                var setopt = db.Users.Where(s => s.Email == ids).SingleOrDefault();
-
-                                setopt.forgetpin = Convert.ToString(pin);
-                                db.SaveChanges();
+                            setopt.forgetpin = Convert.ToString(pin);
+                            db.SaveChanges();
 
 
-                                apiurls = smsapionsts2.smsapi;
-                                string text = "Your Reset Transaction Password otp is " + pin;
-                                text = string.Format(text, "1230");
+                            apiurls = smsapionsts2.smsapi;
+                            string text = "Your Reset Transaction Password otp is " + pin;
+                            text = string.Format(text, "1230");
 
-                                var apinamechange = apiurls.Replace("tttt", details.mobile).Replace("mmmm", text);
+                            var apinamechange = apiurls.Replace("tttt", details.mobile).Replace("mmmm", text);
 
-                                var client = new RestClient(apinamechange);
-                                var request = new RestRequest(Method.GET);
+                            var client = new RestClient(apinamechange);
+                            var request = new RestRequest(Method.GET);
 
-                                VastBazaartoken Responsetoken = new VastBazaartoken();
+                            VastBazaartoken Responsetoken = new VastBazaartoken();
                             var whatsts = db.Email_show_passcode.SingleOrDefault();
                             if (apinamechange.ToUpper().Contains("API.VASTBAZAAR.COM/API/WEB/WHATSAPPMSG") && whatsts.whatsappapists == true)
-                                {
-                                    var token = Responsetoken.gettoken();
-                                    request.AddHeader("authorization", "bearer " + token);
-                                    request.AddHeader("content-type", "application/json");
-                                }
-                                var task = Task.Run(() =>
-                                {
-                                    return client.Execute(request).Content;
-                                });
-                                bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
-                                var resp = "";
-                                if (isCompletedSuccessfully == true)
-                                {
-                                    resp = task.Result;
-                                }
-
-                                sms_api_entry sms = new sms_api_entry();
-                                sms.apiname = apinamechange;
-                                sms.msg = text;
-                                sms.m_date = System.DateTime.Now;
-                                sms.response = resp;
-                                sms.messagefor = details.userid;
-                                db.sms_api_entry.Add(sms);
-                                db.SaveChanges();
-
+                            {
+                                var token = Responsetoken.gettoken();
+                                request.AddHeader("authorization", "bearer " + token);
+                                request.AddHeader("content-type", "application/json");
                             }
-                            var AdminDetails = db.Admin_details.SingleOrDefault();
+                            var task = Task.Run(() =>
+                            {
+                                return client.Execute(request).Content;
+                            });
+                            bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
+                            var resp = "";
+                            if (isCompletedSuccessfully == true)
+                            {
+                                resp = task.Result;
+                            }
 
-                            smssend.SendEmailAll(details.email, "Your  Reset Transaction Password otp is " + pin, "Transaction Password otp", AdminDetails.email);
+                            sms_api_entry sms = new sms_api_entry();
+                            sms.apiname = apinamechange;
+                            sms.msg = text;
+                            sms.m_date = System.DateTime.Now;
+                            sms.response = resp;
+                            sms.messagefor = details.userid;
+                            db.sms_api_entry.Add(sms);
+                            db.SaveChanges();
 
-
-
-
-
-
-                            // var smsapionsts = smsapi2.Where(s => s.api_type == "sms").SingleOrDefault();
-                            //if (smsapionsts != null)
-                            //{
-
-                            //    apiurls = smsapionsts.smsapi;
-                            //    string text = "Your New Password is  81108706 Thank you for business with us Regards Vast Web India Pvt Ltd";
-                            //    text = string.Format(text, "1230");
-
-                            //    var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
-
-                            //    var client = new RestClient(apinamechange);
-                            //    var request = new RestRequest(Method.GET);
-
-                            //    VastBazaartoken Responsetoken = new VastBazaartoken();
-
-                            //    if (apinamechange.ToUpper().Contains("VASTBAZAAR.COM"))
-                            //    {
-                            //        var token = Responsetoken.gettoken();
-                            //        request.AddHeader("authorization", "bearer " + token);
-                            //        request.AddHeader("content-type", "application/json");
-                            //    }
-                            //    var task = Task.Run(() =>
-                            //    {
-                            //        return client.Execute(request).Content;
-                            //    });
-                            //    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
-                            //    var resp = "";
-                            //    if (isCompletedSuccessfully == true)
-                            //    {
-                            //        resp = task.Result;
-                            //    }
-
-                            //    sms_api_entry sms = new sms_api_entry();
-                            //    sms.apiname = apinamechange;
-                            //    sms.msg = text;
-                            //    sms.m_date = System.DateTime.Now;
-                            //    sms.response = resp;
-                            //    sms.messagefor = details.UserId;
-                            //    db.sms_api_entry.Add(sms);
-                            //    db.SaveChanges();
-
-                            //}
                         }
+                        var AdminDetails = db.Admin_details.SingleOrDefault();
+
+                        smssend.SendEmailAll(details.email, "Your  Reset Transaction Password otp is " + pin, "Transaction Password otp", AdminDetails.email);
+
+
+
+
+
+
+                        // var smsapionsts = smsapi2.Where(s => s.api_type == "sms").SingleOrDefault();
+                        //if (smsapionsts != null)
+                        //{
+
+                        //    apiurls = smsapionsts.smsapi;
+                        //    string text = "Your New Password is  81108706 Thank you for business with us Regards Vast Web India Pvt Ltd";
+                        //    text = string.Format(text, "1230");
+
+                        //    var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
+
+                        //    var client = new RestClient(apinamechange);
+                        //    var request = new RestRequest(Method.GET);
+
+                        //    VastBazaartoken Responsetoken = new VastBazaartoken();
+
+                        //    if (apinamechange.ToUpper().Contains("VASTBAZAAR.COM"))
+                        //    {
+                        //        var token = Responsetoken.gettoken();
+                        //        request.AddHeader("authorization", "bearer " + token);
+                        //        request.AddHeader("content-type", "application/json");
+                        //    }
+                        //    var task = Task.Run(() =>
+                        //    {
+                        //        return client.Execute(request).Content;
+                        //    });
+                        //    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
+                        //    var resp = "";
+                        //    if (isCompletedSuccessfully == true)
+                        //    {
+                        //        resp = task.Result;
+                        //    }
+
+                        //    sms_api_entry sms = new sms_api_entry();
+                        //    sms.apiname = apinamechange;
+                        //    sms.msg = text;
+                        //    sms.m_date = System.DateTime.Now;
+                        //    sms.response = resp;
+                        //    sms.messagefor = details.UserId;
+                        //    db.sms_api_entry.Add(sms);
+                        //    db.SaveChanges();
+
+                        //}
                     }
                 }
+            }
 
-            
+
         }
         [HttpPost]
-        public ActionResult Resend_Transactionpass(string txtemail , string oTP, string oTP1, string oTP2, string oTP3)
+        public ActionResult Resend_Transactionpass(string txtemail, string oTP, string oTP1, string oTP2, string oTP3)
         {
 
 
@@ -49847,7 +49679,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 OTp = null;
             }
 
-            
+
 
 
 
@@ -49990,13 +49822,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         }
                         if (smsapionsts2 != null)
                         {
-                            
+
 
                             setopt.forgetpin = Convert.ToString(pin);
                             db.SaveChanges();
 
                             apiurls = smsapionsts2.smsapi;
-                            
+
                             text = string.Format(text, "1230");
 
                             var apinamechange = apiurls.Replace("tttt", details.mobile).Replace("mmmm", text);
@@ -50220,7 +50052,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
         //}
-       
+
         public ActionResult Resend_Securitypass(string txtsecuritemail, string oTP, string oTP1, string oTP2, string oTP3)
         {
             string OTp = oTP + oTP1 + oTP2 + oTP3;
@@ -50253,7 +50085,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     catch { }
                     TempData["success"] = "Your Security Password Send Successfully in Your Mail Id . Please Check Your Mail Id.";
 
-                    if(OTp == otpcheck)
+                    if (OTp == otpcheck)
                     {
                         var otpcheck1 = db.Users.Where(s => s.Email == txtsecuritemail).SingleOrDefault();
                         otpcheck1.forgetpin = null;
@@ -50265,7 +50097,8 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     if (OTp == null)
                     {
                         TempData["success"] = "Your Security Password OTP is Wrong , please Try Again";
-                    }else
+                    }
+                    else
                     {
                         TempData["success"] = "Please Enter OTP";
                     }
@@ -50299,7 +50132,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                     var admininfo = db.Admin_details.SingleOrDefault();
                     Backupinfo back = new Backupinfo();
-               
+
                     var model = new Backupinfo.Addinfo
                     {
 
@@ -50350,7 +50183,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         }
         [HttpPost]
-        public ActionResult Pancard_Panding_success_failed_manual(int idno, string status, string transid, string sts,string textss, HttpPostedFileBase filess )
+        public ActionResult Pancard_Panding_success_failed_manual(int idno, string status, string transid, string sts, string textss, HttpPostedFileBase filess)
         {
             var chk = db.pancard_transation_manual.Where(s => s.requestid == transid).SingleOrDefault();
             if (sts == "Failed")
@@ -50371,7 +50204,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                     var admininfo = db.Admin_details.SingleOrDefault();
                     Backupinfo back = new Backupinfo();
-            
+
                     var model = new Backupinfo.Addinfo
                     {
 
@@ -50420,7 +50253,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 var se = d1.Next(999, 9999);
                 if (filess != null)
                 {
-                    
+
                     string path = Server.MapPath("~/pancardslips/");
                     if (!Directory.Exists(path))
                     {
@@ -50429,7 +50262,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                     filess.SaveAs(path + se.ToString() + Path.GetFileName(filess.FileName));
 
-                    
+
                 }
 
                 db.proc_PAN_CARD_Refund_new_manual(idno.ToString(), "Success", "Approved", transid);
@@ -50482,11 +50315,11 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             ViewBag.rechargeotpsts = db.Rechargepin_otp_status.SingleOrDefault();
 
             ViewBag.failedotpsts= db.billfailedotps.SingleOrDefault().status;
-            
+
             return View();
         }
 
-   
+
         [HttpGet]
         public ActionResult Rechargepin_otp_status_ON_OFF()
         {
@@ -50622,7 +50455,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         {
             try
             {
-               
+
                 string OTp = oTP + oTP1 + oTP2 + oTP3;
                 if (oTP == null && oTP1 == null && oTP2 == null && oTP3 == null)
                 {
@@ -50658,19 +50491,19 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         db.SaveChanges();
                         return Json(new { status = "Success", Message = "Distributors Transaction Pin Send Successfully on Your Mail Id . Please Check Your Mail Id." }, JsonRequestBehavior.AllowGet);
                     }
-               
-                  else
-                  {
-                    return Json(new { status = "Failed", Message = "Distributors Email Not Verify.Please Enter Your Corrent Registered Email." }, JsonRequestBehavior.AllowGet);
 
-                  }
+                    else
+                    {
+                        return Json(new { status = "Failed", Message = "Distributors Email Not Verify.Please Enter Your Corrent Registered Email." }, JsonRequestBehavior.AllowGet);
+
+                    }
 
                     chk1.forgetpin = null;
                     db.SaveChanges();
                 }
-             else
+                else
                 {
-                    if(OTp == "")
+                    if (OTp == "")
                     {
                         return Json(new { status = "Failed", Message = "Please Enter Otp" }, JsonRequestBehavior.AllowGet);
 
@@ -51199,12 +51032,12 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         try
                         {
                             var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == DealerId).SingleOrDefault();
-                           
-                           var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == DealerId).SingleOrDefault();
-                           
+
+                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == DealerId).SingleOrDefault();
+
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                          
+
 
                             var model1 = new Backupinfo.Addinfo
                             {
@@ -51218,7 +51051,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                             };
                             back.Fundtransfer(model1);
 
-                          
+
                         }
                         catch { }
 
@@ -51694,15 +51527,15 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                         var admininfo = db.Admin_details.SingleOrDefault();
                         Backupinfo back = new Backupinfo();
-                      
+
                         var model = new Backupinfo.Addinfo
                         {
                             Websitename = admininfo.WebsiteUrl,
                             RetailerID = api,
                             Email = retailerdetails.EmailId,
                             Mobile = retailerdetails.Mobile,
-                            Details = "Whitelabel Fund Recived" ,
-                            RemainBalance =Convert.ToDecimal( remdetails.remainbal),
+                            Details = "Whitelabel Fund Recived",
+                            RemainBalance =Convert.ToDecimal(remdetails.remainbal),
                             Usertype = "Whitelabel"
                         };
                         back.Fundtransfer(model);
@@ -52417,7 +52250,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 if (defaultht == "1111" || (lastchangedpassdtr <= currenttime))
                 {
                     TempData["error"] = "Your transaction pin is expired or have to be changed!! Please set new transaction pin";
-                    return RedirectToAction("ChangeSecurityPassword");
+                    return RedirectToAction("ChangeSecurityPassword", "Home", new { Area = "ADMIN" });
                 }
                 var password = Encrypt(txthighsec);
                 var tranpass = (from paa in db.admin_new_pass where paa.transpass == password select paa).Count();
@@ -52448,13 +52281,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         {
                             var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == rempurdetails.remid).SingleOrDefault();
                             var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                          
+
                             var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == rempurdetails.remid).SingleOrDefault();
                             var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                          
+
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                           
+
                             var modeln = new Backupinfo.Addinfo
                             {
 
@@ -52468,7 +52301,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                             };
                             back.Fundtransfer(modeln);
 
-                           
+
                         }
                         catch { }
 
@@ -52539,9 +52372,9 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             DateTime frm_date = Convert.ToDateTime(dt).Date;
             DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
             var model = db.select_rem_pur_order("ALL", userids, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
-            return PartialView("_Retailer_showpurchasePartail", model);
+            //return PartialView("_Retailer_showpurchasePartail", model);
 
-            // return RedirectToAction("Retailer_showpurchase");
+            return RedirectToAction("Retailer_showpurchase");
         }
 
         public ActionResult SearchFilterPurchaseRequest(string txt_frm_date, string txt_to_date)
@@ -52660,7 +52493,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                          
+
                             var model = new Backupinfo.Addinfo
                             {
                                 Websitename = admininfo.WebsiteUrl,
@@ -52807,7 +52640,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         type = "rejected";
                     }
                     var entry = db.Whitelabel_master_purchase.Where(a => a.idno == id).Single();
-                   var sts= entry.sts.ToUpper();
+                    var sts = entry.sts.ToUpper();
                     if (sts == "PENDING")
                     {
                         System.Data.Entity.Core.Objects.ObjectParameter output = new
@@ -52820,7 +52653,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                          
+
                             var model = new Backupinfo.Addinfo
                             {
                                 Websitename = admininfo.WebsiteUrl,
@@ -53328,12 +53161,12 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             {
                 var entry = db.WalletToBankAmountTransferRequests.Where(aa => aa.Idno == id).SingleOrDefault();
                 var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == entry.RetailerId).SingleOrDefault();
-                
+
                 var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.RetailerId).SingleOrDefault();
-              
+
                 var admininfo = db.Admin_details.SingleOrDefault();
                 Backupinfo back = new Backupinfo();
-                
+
                 var model = new Backupinfo.Addinfo
                 {
 
@@ -53347,7 +53180,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 };
                 back.Fundtransfer(model);
 
-               
+
             }
             catch { }
 
@@ -53367,7 +53200,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                 var admininfo = db.Admin_details.SingleOrDefault();
                 Backupinfo back = new Backupinfo();
-           
+
                 var model = new Backupinfo.Addinfo
                 {
 
@@ -54416,7 +54249,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             //var results = (from p in db.Slab_name where p.SlabFor == "Master" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
             //ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
             var ch = db.proc_SelectAllFeeColletors().ToList();
-            TempData.Keep("msgrem");    
+            TempData.Keep("msgrem");
             FCModel viewModel = new FCModel();
             viewModel.feeCollectors = ch;
             //  viewModel.show_master_dealer = db.show_master_dealer("").ToList();
@@ -54437,7 +54270,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 super.State = Convert.ToInt32(StateEdit);
                 super.District = Convert.ToInt32(DistrictEdit);
                 super.Address = AddressEdit;
-                super.Pincode = Convert.ToInt32(PinEdit); 
+                super.Pincode = Convert.ToInt32(PinEdit);
                 db.SaveChanges();
                 vmodel.feeCollectorsFC = db.proc_SelectAllFeeColletors();
                 vmodel.RCHList = null;
@@ -56802,21 +56635,8 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             db.SaveChanges();
             return View(entry);
         }
-        public ActionResult BusBookingReport(string export, string ddl_status, int? ddl_top, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string allwhitelabel, string TicketNo)
+        public ActionResult BusBookingReport()
         {
-            if (!string.IsNullOrWhiteSpace(export))
-            {
-                switch (export.Trim().ToLowerInvariant())
-                {
-                    case "total":
-                        return TotalBusBookingReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, allwhitelabel, TicketNo);
-                    case "excel":
-                        return ExcelBusBookingReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, allwhitelabel, TicketNo);
-                    case "pdf":
-                        return PDFBusBookingReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, allwhitelabel, TicketNo);
-                }
-            }
-
             try
             {
                 var userid = User.Identity.GetUserId();
@@ -56845,10 +56665,8 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     //Retailer 
                     ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null).ToList();
 
-                    if (string.IsNullOrWhiteSpace(txt_frm_date))
-                        txt_frm_date = DateTime.Now.ToString();
-                    if (string.IsNullOrWhiteSpace(txt_to_date))
-                        txt_to_date = DateTime.Now.ToString();
+                    string txt_frm_date = DateTime.Now.ToString();
+                    string txt_to_date = DateTime.Now.ToString();
                     var frm_date = Convert.ToDateTime(txt_frm_date).Date;
                     var to_date = Convert.ToDateTime(txt_to_date).AddDays(1);
 
@@ -57181,7 +56999,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         [HttpPost]
         public ActionResult GetCreditReport(string RoleType, string allmaster1, string alldealer, string allretailer, string allapiuser, string txt_frm_date, string txt_to_date)
         {
-            ViewBag.chk = "post";
             var User = "";
             if (RoleType == "master")
             {
@@ -57469,80 +57286,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 TempData["Status"] = "Failed";
                 TempData["Message"] = "An error occured while proccessing request.";
                 return RedirectToAction("Travel", "Home");
-            }
-        }
-
-        public ActionResult TotalBusBookingReport(string ddl_status, int? ddl_top, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string allwhitelabel, string TicketNo)
-        {
-            try
-            {
-                string retailerid = null;
-                string DealerId = null;
-                string MasterId = null;
-                using (VastwebmultiEntities db = new VastwebmultiEntities())
-                {
-                    if ((txt_frm_date == null && txt_to_date == null) || (txt_frm_date == "" && txt_to_date == ""))
-                    {
-                        txt_frm_date = DateTime.Now.ToString();
-                        txt_to_date = DateTime.Now.ToString();
-                    }
-
-                    DateTime frm = Convert.ToDateTime(txt_frm_date);
-                    DateTime to = Convert.ToDateTime(txt_to_date);
-                    txt_frm_date = frm.ToString("yyyy-MM-dd");
-                    txt_to_date = to.ToString("yyyy-MM-dd");
-                    string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-                    DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
-                    DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
-                    DateTime frm_date = dt.Date;
-                    DateTime to_date = dt1.AddDays(1);
-                    if (ddl_top == null)
-                    {
-                        ddl_top = 1000000;
-                    }
-                    TicketNo = string.IsNullOrWhiteSpace(TicketNo) ? null : TicketNo;
-                    ddl_status = string.IsNullOrWhiteSpace(ddl_status) ? null : ddl_status;
-                    if (ddlusers == "Master")
-                    {
-                        MasterId = (allmaster == "" || allmaster == null || allmaster.Contains("All Master")) ? null : allmaster;
-                    }
-                    if (ddlusers == "Dealer")
-                    {
-                        DealerId = (alldealer == "" || alldealer == null || alldealer.Contains("All Distubutor")) ? null : alldealer;
-                    }
-                    if (ddlusers == "Retailer")
-                    {
-                        retailerid = (allretailer == "" || allretailer == null || allretailer.Contains("All Retailer")) ? null : allretailer;
-                    }
-                    if (ddlusers == "Admin")
-                    {
-                        retailerid = null;
-                        DealerId = null;
-                        MasterId = null;
-                    }
-
-                    var proc_Response = db.proc_BusReport(1, ddl_top.Value, ddl_status, retailerid, DealerId, MasterId, null, TicketNo, null, null, null, frm_date, to_date).ToList();
-                    var successtotal = proc_Response
-                        .Where(s => !string.IsNullOrEmpty(s.TicketStatus) && s.TicketStatus.ToUpper().Contains("CONFIRMED"))
-                        .Sum(s => (decimal?)s.FareAmount) ?? 0;
-                    var failedtotal = proc_Response
-                        .Where(s => !string.IsNullOrEmpty(s.TicketStatus) && s.TicketStatus.ToUpper().Contains("FAILED"))
-                        .Sum(s => (decimal?)s.FareAmount) ?? 0;
-                    var pendingtotal = proc_Response
-                        .Where(s => !string.IsNullOrEmpty(s.TicketStatus) && s.TicketStatus.ToUpper().Contains("PROCCESSED"))
-                        .Sum(s => (decimal?)s.FareAmount) ?? 0;
-
-                    return Json(new
-                    {
-                        success = successtotal,
-                        failed = failedtotal,
-                        pending = pendingtotal
-                    }, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch
-            {
-                return Json(new { success = 0, failed = 0, pending = 0 }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -59078,40 +58821,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             return View();
         }
 
-        public ActionResult PDFMicroAtmReport(string ddlusers, string allwhitelabel1, string allmaster2, string alldealer, string allretailer, string ddl_status, DateTime txt_frm_date, DateTime txt_to_date)
-        {
-            var userid = "";
-            if (ddlusers == "Admin")
-            {
-                userid = "Admin";
-            }
-            else if (ddlusers == "Master")
-            {
-                userid = allmaster2;
-            }
-            else if (ddlusers == "Dealer")
-            {
-                userid = alldealer;
-            }
-            else if (ddlusers == "Retailer")
-            {
-                userid = allretailer;
-            }
-
-            DateTime to = txt_to_date.AddDays(1);
-            List<microatm_report_Result> chk;
-            if (string.IsNullOrEmpty(ddlusers))
-            {
-                chk = db.microatm_report("Admin", "Admin", txt_frm_date, to, "").ToList();
-            }
-            else
-            {
-                chk = db.microatm_report(ddlusers, userid, txt_frm_date, to, ddl_status).ToList();
-            }
-
-            return new ViewAsPdf(chk);
-        }
-
 
         //Manual Failed Money Transfer
         public ActionResult microatmsuccesstofailed(string txtrefidno, string secuirtypass)
@@ -59148,7 +58857,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                         
+
                             var model = new Backupinfo.Addinfo
                             {
 
@@ -59260,7 +58969,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                         var admininfo = db.Admin_details.SingleOrDefault();
                         Backupinfo back = new Backupinfo();
-                     
+
                         var model = new Backupinfo.Addinfo
                         {
 
@@ -63934,10 +63643,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
             else
             {
-                var perlimit = db.transtion_limit.SingleOrDefault().Perlimit;
-                var permonth = db.transtion_limit.SingleOrDefault().Permonth;
-                ViewBag.permonth = permonth;
-                ViewBag.perlimit = perlimit;
                 var commslab = db.wallet_imps_common_comm.ToList();
                 WalletTransfer model = new WalletTransfer();
                 model.common = commslab;
@@ -75490,12 +75195,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         #region DMT PPI
         public ActionResult DmtSlabPPI()
         {
-            var perlimit = db.transtion_limit.SingleOrDefault().Perlimit;
-            var permonth = db.transtion_limit.SingleOrDefault().Permonth;
-            ViewBag.permonth = permonth;
-            ViewBag.perlimit = perlimit;
-            var infochk = db.DMT_Ekyc_Charge.SingleOrDefault().Charge;
-            ViewBag.Charge = infochk;
             var commslab = db.PPI_common_comm_new.ToList();
             DMTSlabModelPPI model = new DMTSlabModelPPI();
             model.commonnew = commslab;
@@ -75626,7 +75325,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                           Email = u.Email,
                           RolesName = "Master",
-               
+
 
                       }).ToList();
                         var super = db.Superstokist_details;
@@ -75912,10 +75611,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                               comm_23000 = m.Comm_23000,
                               comm_24000 = m.Comm_24000,
                               comm_25000 = m.Comm_25000,
-                             
+
                               Email = u.Email,
                               RolesName = "Retailer",
-                            
+
 
                           }).ToList();
 
@@ -75968,10 +75667,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                             comm_23000 = m.Comm_23000,
                             comm_24000 = m.Comm_24000,
                             comm_25000 = m.Comm_25000,
-                          
+
                             Email = u.Email,
                             RolesName = "Retailer",
-                           
+
 
                         }).ToList();
                             var list = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == dlmid ? true : false }).ToList();
@@ -76025,10 +75724,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                               comm_23000 = m.Comm_23000,
                               comm_24000 = m.Comm_24000,
                               comm_25000 = m.Comm_25000,
-                             
+
                               Email = u.Email,
                               RolesName = "Retailer",
-                              
+
 
                           }).ToList();
                         var list = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == dlmid ? true : false }).ToList();
@@ -76061,7 +75760,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                  comm_8000 = m.Comm_8000,
                                                  comm_9000 = m.Comm_9000,
                                                  comm_10000 = m.Comm_10000,
-                                                                
+
                                                  comm_11000 = m.Comm_11000,
                                                  comm_12000 = m.Comm_12000,
                                                  comm_13000 = m.Comm_13000,
@@ -76072,7 +75771,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                  comm_18000 = m.Comm_18000,
                                                  comm_19000 = m.Comm_19000,
                                                  comm_20000 = m.Comm_20000,
-                                                              
+
                                                  comm_21000 = m.Comm_21000,
                                                  comm_22000 = m.Comm_22000,
                                                  comm_23000 = m.Comm_23000,
@@ -76125,7 +75824,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 entry.Comm_23000 = item.comm_23000 == null ? 0 : item.comm_23000;
                                 entry.Comm_24000 = item.comm_24000 == null ? 0 : item.comm_24000;
                                 entry.Comm_25000 = item.comm_25000 == null ? 0 : item.comm_25000;
-                              
+
                                 db.ChangeTracker.DetectChanges();
                                 db.SaveChanges();
                             }
@@ -76148,7 +75847,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     i.verifycomm = aa.verify_comm;
                                     i.Comm_1000 = aa.comm_1000; i.Comm_2000 = aa.comm_2000; i.Comm_3000 = aa.comm_3000; i.Comm_4000 = aa.comm_4000; i.Comm_5000 = aa.comm_5000; i.Comm_6000 = aa.comm_6000; i.Comm_7000 = aa.comm_7000; i.Comm_8000 = aa.comm_8000; i.Comm_9000 = aa.comm_9000; i.Comm_10000 = aa.comm_10000;
                                     i.Comm_11000 = aa.comm_11000; i.Comm_12000 = aa.comm_12000; i.Comm_13000 = aa.comm_13000; i.Comm_14000 = aa.comm_14000; i.Comm_15000 = aa.comm_15000; i.Comm_16000 = aa.comm_16000; i.Comm_17000 = aa.comm_17000; i.Comm_18000 = aa.comm_18000; i.Comm_19000 = aa.comm_19000; i.Comm_20000 = aa.comm_20000;
-                                    i.Comm_21000 = aa.comm_21000; i.Comm_22000 = aa.comm_22000; i.Comm_23000 = aa.comm_23000; i.Comm_24000 = aa.comm_24000; i.Comm_25000 = aa.comm_25000; 
+                                    i.Comm_21000 = aa.comm_21000; i.Comm_22000 = aa.comm_22000; i.Comm_23000 = aa.comm_23000; i.Comm_24000 = aa.comm_24000; i.Comm_25000 = aa.comm_25000;
 
 
                                 });
@@ -76176,13 +75875,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     entry.Comm_18000 = aa.comm_18000 == null ? 0 : aa.comm_18000;
                                     entry.Comm_19000 = aa.comm_19000 == null ? 0 : aa.comm_19000;
                                     entry.Comm_20000 = aa.comm_20000 == null ? 0 : aa.comm_20000;
-                                         
+
                                     entry.Comm_21000 = aa.comm_21000 == null ? 0 : aa.comm_21000;
                                     entry.Comm_22000 = aa.comm_22000 == null ? 0 : aa.comm_22000;
                                     entry.Comm_23000 = aa.comm_23000 == null ? 0 : aa.comm_23000;
                                     entry.Comm_24000 = aa.comm_24000 == null ? 0 : aa.comm_24000;
                                     entry.Comm_25000 = aa.comm_25000 == null ? 0 : aa.comm_25000;
-                                  
+
 
                                 }
                                 db.ChangeTracker.DetectChanges();
@@ -76232,7 +75931,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 entry.Comm_23000 = item.comm_23000 == null ? 0 : item.comm_23000;
                                 entry.Comm_24000 = item.comm_24000 == null ? 0 : item.comm_24000;
                                 entry.Comm_25000 = item.comm_25000 == null ? 0 : item.comm_25000;
-                            
+
                                 db.ChangeTracker.DetectChanges();
                                 db.SaveChanges();
                             }
@@ -76282,13 +75981,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     entry.Comm_18000 = aa.comm_18000 == null ? 0 : aa.comm_18000;
                                     entry.Comm_19000 = aa.comm_19000 == null ? 0 : aa.comm_19000;
                                     entry.Comm_20000 = aa.comm_20000 == null ? 0 : aa.comm_20000;
-                                          
+
                                     entry.Comm_21000 = aa.comm_21000 == null ? 0 : aa.comm_21000;
                                     entry.Comm_22000 = aa.comm_22000 == null ? 0 : aa.comm_22000;
                                     entry.Comm_23000 = aa.comm_23000 == null ? 0 : aa.comm_23000;
                                     entry.Comm_24000 = aa.comm_24000 == null ? 0 : aa.comm_24000;
                                     entry.Comm_25000 = aa.comm_25000 == null ? 0 : aa.comm_25000;
-                                   
+
 
                                 }
                                 db.ChangeTracker.DetectChanges();
@@ -76354,7 +76053,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     entry.Comm_23000 = item.comm_23000 == null ? 0 : item.comm_23000;
                                     entry.Comm_24000 = item.comm_24000 == null ? 0 : item.comm_24000;
                                     entry.Comm_25000 = item.comm_25000 == null ? 0 : item.comm_25000;
-                                   
+
                                     db.ChangeTracker.DetectChanges();
                                     db.SaveChanges();
                                 }
@@ -76378,7 +76077,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                         i.Verify_comm = aa.verify_comm;
                                         i.Comm_1000 = aa.comm_1000; i.Comm_2000 = aa.comm_2000; i.Comm_3000 = aa.comm_3000; i.Comm_4000 = aa.comm_4000; i.Comm_5000 = aa.comm_5000; i.Comm_6000 = aa.comm_6000; i.Comm_7000 = aa.comm_7000; i.Comm_8000 = aa.comm_8000; i.Comm_9000 = aa.comm_9000; i.Comm_10000 = aa.comm_10000;
                                         i.Comm_11000 = aa.comm_11000; i.Comm_12000 = aa.comm_12000; i.Comm_13000 = aa.comm_13000; i.Comm_14000 = aa.comm_14000; i.Comm_15000 = aa.comm_15000; i.Comm_16000 = aa.comm_16000; i.Comm_17000 = aa.comm_17000; i.Comm_18000 = aa.comm_18000; i.Comm_19000 = aa.comm_19000; i.Comm_20000 = aa.comm_20000;
-                                        i.Comm_21000 = aa.comm_21000; i.Comm_22000 = aa.comm_22000; i.Comm_23000 = aa.comm_23000; i.Comm_24000 = aa.comm_24000; i.Comm_25000 = aa.comm_25000; 
+                                        i.Comm_21000 = aa.comm_21000; i.Comm_22000 = aa.comm_22000; i.Comm_23000 = aa.comm_23000; i.Comm_24000 = aa.comm_24000; i.Comm_25000 = aa.comm_25000;
 
                                     });
                                     if (Button == "Update Existing & New Users")
@@ -76411,7 +76110,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                         entry.Comm_23000 = aa.comm_23000 == null ? 0 : aa.comm_23000;
                                         entry.Comm_24000 = aa.comm_24000 == null ? 0 : aa.comm_24000;
                                         entry.Comm_25000 = aa.comm_25000 == null ? 0 : aa.comm_25000;
-                                       
+
 
 
                                     }
@@ -76438,7 +76137,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     i.Verify_comm = aa.verify_comm;
                                     i.Comm_1000 = aa.comm_1000; i.Comm_2000 = aa.comm_2000; i.Comm_3000 = aa.comm_3000; i.Comm_4000 = aa.comm_4000; i.Comm_5000 = aa.comm_5000; i.Comm_6000 = aa.comm_6000; i.Comm_7000 = aa.comm_7000; i.Comm_8000 = aa.comm_8000; i.Comm_9000 = aa.comm_9000; i.Comm_10000 = aa.comm_10000;
                                     i.Comm_11000 = aa.comm_11000; i.Comm_12000 = aa.comm_12000; i.Comm_13000 = aa.comm_13000; i.Comm_14000 = aa.comm_14000; i.Comm_15000 = aa.comm_15000; i.Comm_16000 = aa.comm_16000; i.Comm_17000 = aa.comm_17000; i.Comm_18000 = aa.comm_18000; i.Comm_19000 = aa.comm_19000; i.Comm_20000 = aa.comm_20000;
-                                    i.Comm_21000 = aa.comm_21000; i.Comm_22000 = aa.comm_22000; i.Comm_23000 = aa.comm_23000; i.Comm_24000 = aa.comm_24000; i.Comm_25000 = aa.comm_25000; 
+                                    i.Comm_21000 = aa.comm_21000; i.Comm_22000 = aa.comm_22000; i.Comm_23000 = aa.comm_23000; i.Comm_24000 = aa.comm_24000; i.Comm_25000 = aa.comm_25000;
 
                                 });
                                 if (Button == "Update Existing & New Users")
@@ -76471,7 +76170,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     entry.Comm_23000 = aa.comm_23000 == null ? 0 : aa.comm_23000;
                                     entry.Comm_24000 = aa.comm_24000 == null ? 0 : aa.comm_24000;
                                     entry.Comm_25000 = aa.comm_25000 == null ? 0 : aa.comm_25000;
-                                   
+
 
                                 }
                                 db.ChangeTracker.DetectChanges();
@@ -76547,10 +76246,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                           comm_23000 = m.Comm_23000,
                           comm_24000 = m.Comm_24000,
                           comm_25000 = m.Comm_25000,
-                        
+
                           Email = u.Email,
                           RolesName = "Master",
-                      
+
 
                       }).ToList();
                         var super = db.Superstokist_details;
@@ -76598,9 +76297,9 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                               comm_23000 = m.Comm_23000,
                               comm_24000 = m.Comm_24000,
                               comm_25000 = m.Comm_25000,
-                             
+
                               Email = u.Email,
-                           
+
                               RolesName = "Master"
                           }).ToList();
                         var super = db.Superstokist_details;
@@ -76643,7 +76342,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                comm_23000 = m.Comm_23000,
                                                comm_24000 = m.Comm_24000,
                                                comm_25000 = m.Comm_25000,
-                                               
+
 
 
                                            }).ToList();
@@ -76696,7 +76395,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                           Email = u.Email,
 
                           RolesName = "Dealer",
-                         
+
                       }).ToList();
                         var dealer = db.Dealer_Details;
                         model.UserId = dealer.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
@@ -76746,7 +76445,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                               Email = u.Email,
 
                               RolesName = "Dealer"
-                         
+
                           }).ToList();
                         var dealer = db.Dealer_Details;
                         model.UserId = dealer.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
@@ -76850,10 +76549,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                               comm_23000 = m.Comm_23000,
                               comm_24000 = m.Comm_24000,
                               comm_25000 = m.Comm_25000,
-                            
+
                               Email = u.Email,
                               RolesName = "Retailer",
-                             
+
 
                           }).ToList();
 
@@ -76906,10 +76605,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                             comm_23000 = m.Comm_23000,
                             comm_24000 = m.Comm_24000,
                             comm_25000 = m.Comm_25000,
-                          
+
                             Email = u.Email,
                             RolesName = "Retailer",
-                          
+
 
                         }).ToList();
                             var list = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == dlmid ? true : false }).ToList();
@@ -76977,10 +76676,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                   comm_23000 = m.Comm_23000,
                                   comm_24000 = m.Comm_24000,
                                   comm_25000 = m.Comm_25000,
-                                
+
                                   Email = u.Email,
                                   RolesName = "Retailer",
-                               
+
 
                               }).ToList();
                             var list = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
@@ -77032,10 +76731,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 comm_23000 = m.Comm_23000,
                                 comm_24000 = m.Comm_24000,
                                 comm_25000 = m.Comm_25000,
-                             
+
                                 Email = u.Email,
                                 RolesName = "Retailer",
-                               
+
 
                             }).ToList();
                             var list = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
@@ -77086,7 +76785,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                  comm_23000 = m.Comm_23000,
                                                  comm_24000 = m.Comm_24000,
                                                  comm_25000 = m.Comm_25000,
-                                               
+
 
                                              }).ToList();
                     model.UpdateRetailer = UpdateAllRetailer;
@@ -77121,16 +76820,12 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             var infochk = db.DMT_Ekyc_Charge.SingleOrDefault().Charge;
             return Json(infochk, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult Update_Dlm_slab(decimal txtcharge, string returnAction)
+        public ActionResult Update_Dlm_slab(decimal txtcharge)
         {
             var chkinfo = db.DMT_Ekyc_Charge.SingleOrDefault();
             chkinfo.Charge = txtcharge;
             db.SaveChanges();
-            if (string.IsNullOrWhiteSpace(returnAction))
-            {
-                returnAction = "dmtSlab";
-            }
-            return RedirectToAction(returnAction);
+            return RedirectToAction("dmtSlab");
         }
         public ActionResult fixchargeupdate()
         {
@@ -78037,7 +77732,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                     db.ChangeTracker.DetectChanges();
                                     int count = db.SaveChanges();
                                 });
-                                
+
                             }
                             finally
                             {
@@ -78090,7 +77785,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 db.ChangeTracker.DetectChanges();
                                 int count = db.SaveChanges();
                             });
-                            
+
                         }
                         finally
                         {
@@ -79009,7 +78704,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             model1.common = commslab;
             model1.UserId = new List<SelectListItem>() { new SelectListItem { Text = "No data", Value = "No Data" } };
             return RedirectToAction("Money_Transfer_Slab_DMT2");
-        } 
+        }
 
         [HttpPost]
         public PartialViewResult _UserDMTSlab_DMT2(string role, string userid, DMT2SlabModel model2, string ddlUserId, string Button, string ddlUserIdrem, string dlmid)
@@ -83833,41 +83528,41 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
         }
 
-      [HttpPost]
-   
+        [HttpPost]
+
         public ActionResult _UserDMTSlab_DMT2_new(string role)
         {
-            if(role == "Master")
+            if (role == "Master")
             {
                 var users = db.Superstokist_details.ToList();
                 var userIds = users.Select(user => user.SSId).ToList();
                 var frmname = users.Select(user => user.FarmName).ToList();
                 var Email = users.Select(user => user.Email).ToList();
 
-                return Json(new { userid = userIds, farmname= frmname , Emails = Email }, JsonRequestBehavior.AllowGet);
+                return Json(new { userid = userIds, farmname = frmname, Emails = Email }, JsonRequestBehavior.AllowGet);
 
             }
-            else if(role == "Dealer" || role == "RDealer")
+            else if (role == "Dealer" || role == "RDealer")
             {
                 var users = db.Dealer_Details.ToList();
-                
+
                 var userIds = users.Select(user => user.DealerId).ToList();
                 var frmname = users.Select(user => user.FarmName).ToList();
                 var Email = users.Select(user => user.Email).ToList();
 
                 return Json(new { userid = userIds, farmname = frmname, Emails = Email }, JsonRequestBehavior.AllowGet);
-            }  
-           
+            }
+
 
             else if (role == "Retailer")
             {
-                var users = db.Retailer_Details.Where(s=>s.ISDeleteuser == false).ToList();
+                var users = db.Retailer_Details.Where(s => s.ISDeleteuser == false).ToList();
                 var userIds = users.Select(user => user.RetailerId).ToList();
                 var frmname = users.Select(user => user.Frm_Name).ToList();
                 var Email = users.Select(user => user.Email).ToList();
 
                 return Json(new { userid = userIds, farmname = frmname, Emails = Email }, JsonRequestBehavior.AllowGet);
-            } 
+            }
             else if (role == "API")
             {
                 var users = db.api_user_details.ToList();
@@ -83876,7 +83571,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 var Email = users.Select(user => user.emailid).ToList();
 
                 return Json(new { userid = userIds, farmname = frmname, Emails = Email }, JsonRequestBehavior.AllowGet);
-            } 
+            }
             else if (role == "Whitelabel")
             {
                 var users = db.WhiteLabel_userList.ToList();
@@ -83886,11 +83581,12 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                 return Json(new { userid = userIds, farmname = frmname, Emails = Email }, JsonRequestBehavior.AllowGet);
             }
-            else { 
-            
+            else
+            {
+
             }
             return Json("okok", JsonRequestBehavior.AllowGet);
-        } 
+        }
 
 
 
@@ -84770,7 +84466,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 entry.retailer_comm = item.retailer_comm;
                 entry.dealer_comm = item.dealer_comm;
                 entry.master_comm = item.master_comm;
-               
+
                 db.SaveChanges();
             }
             return PartialView(model);
@@ -84790,8 +84486,8 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             return PartialView(model);
         }
         [HttpPost]
-        public PartialViewResult _UserPANSlab(string role, string userid, PancardSlabModel model2, string ddlUserId, string Button, string ddlUserIdrem, string dlmid , decimal ? all_comm , decimal? all_comm1)
-         {
+        public PartialViewResult _UserPANSlab(string role, string userid, PancardSlabModel model2, string ddlUserId, string Button, string ddlUserIdrem, string dlmid, decimal? all_comm, decimal? all_comm1)
+        {
 
 
 
@@ -84849,8 +84545,8 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                     //UpdateAllMaster.userid = "ALL";
                     //UpdateAllMaster.comm = Convert.ToDecimal(0.00);
-                                             
-                                          
+
+
                     //model.UpdateMaster = UpdateAllMaster;
 
                 }
@@ -84869,7 +84565,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                       {
                           idno = m.idno,
                           userid = u.Email,
-                        comm = m.comm
+                          comm = m.comm
                       }).ToList();
 
                         var dealer = db.Dealer_Details;
@@ -84904,7 +84600,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                idno = mstcomm.idno,
                                                userid = mstcomm.userid,
                                                comm = mstcomm.comm
-                                             
+
 
 
                                            }).ToList();
@@ -84965,7 +84661,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                              {
                                  idno = m.idno,
                                  userid = u.Email,
-                                comm= m.comm
+                                 comm= m.comm
                              }).ToList();
 
                             var list = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == dlmid ? true : false }).ToList();
@@ -84990,7 +84686,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                           {
                               idno = m.idno,
                               userid = u.Email,
-                               comm = m.comm
+                              comm = m.comm
                           }).ToList();
                         var list = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == dlmid ? true : false }).ToList();
                         var rem = db.Retailer_Details.Where(aa => aa.ISDeleteuser == false);
@@ -85007,7 +84703,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     if (dlmid != null && dlmid != "")
                     {
 
-                         var UpdateAllRetailer = (from mstcomm in db.Pancard_Master_comm_new
+                        var UpdateAllRetailer = (from mstcomm in db.Pancard_Master_comm_new
                                                  select new dlmremUpdatePanComm
                                                  {
                                                      idno = mstcomm.idno,
@@ -85016,8 +84712,8 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                  }).ToList();
                         model.Updatedlmrem = UpdateAllRetailer;
                     }
-                 
-                 
+
+
 
                 }
                 //End Dealer
@@ -85172,7 +84868,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         foreach (var item in model2.Materuser)
                         {
                             var entry = db.Pancard_Master_comm_new.Single(a => a.userid == ddlUserId);
-                
+
                             entry.comm = item.comm;
                             db.SaveChanges();
                         }
@@ -85183,13 +84879,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                         foreach (var i in entry)
                         {
-                           var entry1 = db.Pancard_Master_comm_new.Where(a => a.userid == i.userid).SingleOrDefault();
+                            var entry1 = db.Pancard_Master_comm_new.Where(a => a.userid == i.userid).SingleOrDefault();
 
                             entry1.comm = all_comm;
                             db.SaveChanges();
                         }
                     }
-                  
+
                 }
                 //Dealer User
                 if (role == "Dealer")
@@ -85353,7 +85049,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 //}
                 //end API user
                 userid = ddlUserId;
-              
+
                 //List<imps_master_comm> masteruser = null;
                 //Master User
                 if (role == "Master")
@@ -85369,7 +85065,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                           idno = m.idno,
                           userid = u.Email,
                           comm = m.comm
-                      
+
                       }).ToList();
                         var master = db.Superstokist_details;
                         model.UserId = master.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId, Selected = a.SSId == userid ? true : false }).ToList();
@@ -85404,7 +85100,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                idno = 0,
                                                userid = mstcomm.userid,
                                                comm = mstcomm.comm
-                                               
+
                                            }).ToList();
                     model.UpdateMaster = UpdateAllMaster;
 
@@ -85716,7 +85412,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 //Whitelabel API
                 return PartialView(model);
             }
-            
+
         }
 
         [HttpPost]
@@ -85950,7 +85646,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                 }
-                
+
 
                 return PartialView(model);
             }
@@ -86070,7 +85766,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                     }
                 }
-              
+
                 userid = ddlUserId;
 
                 //List<imps_master_comm> masteruser = null;
@@ -91803,7 +91499,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         #region Postpaid and Utility Slab Setting
 
         [HttpPost]
-        public ActionResult Utilitycomm_Time(string commper , string commper2)
+        public ActionResult Utilitycomm_Time(string commper, string commper2)
         {
             try
             {
@@ -91822,34 +91518,25 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             catch (Exception ex)
             {
                 return RedirectToAction("PostpaidUtility_Slab_setting");
-            } 
+            }
         }
 
 
         public ActionResult RechargeB2C()
         {
-            var chek = db.RechargeB2CStatus.ToList();
+            var chek = db.RechargeB2CStatus.Where(s => s.Sts == true).ToList();
             return View(chek);
         }
 
         [HttpPost]
+
         public ActionResult RechargeB2C(string dlrid, string remid)
         {
-            IQueryable<RechargeB2CStatus> query = db.RechargeB2CStatus;
-            if (!string.IsNullOrWhiteSpace(remid))
-                query = query.Where(s => s.userid == remid);
-            else if (!string.IsNullOrWhiteSpace(dlrid))
-            {
-                var retailerIds = db.Retailer_Details
-                    .Where(r => r.DealerId == dlrid)
-                    .Select(r => r.RetailerId)
-                    .ToList();
-                query = query.Where(s => retailerIds.Contains(s.userid));
-            }
-            var chek = query.ToList();
+
+            var chek = db.RechargeB2CStatus.Where(s => s.userid == remid).ToList();
             return PartialView("_RechargeB2C", chek);
         }
-        public ActionResult B2Cupdatests(string Remid , string status)
+        public ActionResult B2Cupdatests(string Remid, string status)
         {
             try
             {
@@ -91866,7 +91553,8 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 var viewresponse1 = new { Message = "Done" };
                 return Json(viewresponse1, JsonRequestBehavior.AllowGet);
             }
-            catch{
+            catch
+            {
                 var viewresponse1 = new { Message = "NOTDone" };
                 return Json(viewresponse1, JsonRequestBehavior.AllowGet);
             }
@@ -91881,7 +91569,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             string[] setdlmname = new string[dlmid.Count];
 
             var ss = 0;
-            foreach(var i in dlmid)
+            foreach (var i in dlmid)
             {
                 setdlm[ss] = i.DealerId;
                 setdlmname[ss] = i.FarmName;
@@ -91892,7 +91580,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
 
-            var viewresponse1 = new { Dlmid = setdlm, dlmname = setdlmname};
+            var viewresponse1 = new { Dlmid = setdlm, dlmname = setdlmname };
             return Json(viewresponse1, JsonRequestBehavior.AllowGet);
         }
 
@@ -91915,7 +91603,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             var viewresponse1 = new { Remid = setdlm, Remname = setdlmname };
             return Json(viewresponse1, JsonRequestBehavior.AllowGet);
         }
-       
+
         public ActionResult PostpaidUtility_Slab_setting()
         {
             var data = TempData.Peek("data");
@@ -91940,7 +91628,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 var comper = db.utility_comm_bytiming.Where(a => a.Typefor == "Utilities").SingleOrDefault();
                 ViewBag.unload1 = comper.commper;
                 ViewBag.unload2 = comper.commper1;
-               var ent = Convert.ToDateTime(comper.Date);
+                var ent = Convert.ToDateTime(comper.Date);
                 ViewBag.date123 = ent.ToShortDateString();
                 var ent1 = Convert.ToDateTime(comper.date1);
                 ViewBag.date321 = ent1.ToShortDateString();
@@ -91987,17 +91675,17 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 model.Extra = info;
                 var infoAPI = (from p in db.Utility_extra_comm_Api
                                join opt in db.Operator_Code on p.optcode equals opt.Operator_id.ToString()
-                            select new ExtraCommonAPI
-                            {
-                                optcode = p.optcode,
-                                move1 = p.move1,
-                                move2 = p.move2,
-                                move3 = p.move3,
-                                move4 = p.move4,
-                                move5 = p.move5,
-                                operator_Name = opt.operator_Name,
-                                Operator_type = opt.Operator_type
-                            }).Where(aa => aa.Operator_type == "Broadband").ToList();
+                               select new ExtraCommonAPI
+                               {
+                                   optcode = p.optcode,
+                                   move1 = p.move1,
+                                   move2 = p.move2,
+                                   move3 = p.move3,
+                                   move4 = p.move4,
+                                   move5 = p.move5,
+                                   operator_Name = opt.operator_Name,
+                                   Operator_type = opt.Operator_type
+                               }).Where(aa => aa.Operator_type == "Broadband").ToList();
                 model.ExtraAPI = infoAPI;
                 ViewBag.comm = 50;
 
@@ -93843,19 +93531,19 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
         [HttpPost]
         public ActionResult ExtraInfo(string Opttype)
         {
-          var info=  (from p in db.Utility_extra_comm_Retailer
-                      join opt in db.Operator_Code on p.optcode equals opt.Operator_id.ToString()
-             select new Extrainfochk
-             {
-                 optcode=p.optcode,
-                 move1=p.move1,
-                 move2=p.move2,
-                 move3=p.move3,
-                 move4=p.move4,
-                 move5=p.move5,
-                 operator_Name= opt.operator_Name,
-                 Operator_type=opt.Operator_type
-             }).Where(aa=>aa.Operator_type== Opttype).ToList();
+            var info = (from p in db.Utility_extra_comm_Retailer
+                        join opt in db.Operator_Code on p.optcode equals opt.Operator_id.ToString()
+                        select new Extrainfochk
+                        {
+                            optcode=p.optcode,
+                            move1=p.move1,
+                            move2=p.move2,
+                            move3=p.move3,
+                            move4=p.move4,
+                            move5=p.move5,
+                            operator_Name= opt.operator_Name,
+                            Operator_type=opt.Operator_type
+                        }).Where(aa => aa.Operator_type== Opttype).ToList();
             return Json(info, JsonRequestBehavior.AllowGet);
         }
 
@@ -94385,6 +94073,2219 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             }
             db.SaveChanges();
             return RedirectToAction("Loan_Slab_setting");
+        }
+        #endregion
+
+        #region SlabAEPS UPI
+        public ActionResult AepsSlabUPI()
+        {
+            var data = TempData.Peek("data");
+            if (data == "" || data == null)
+            {
+                return RedirectToAction("tran_passslabsetting");
+            }
+            else
+            {
+                var commonSlab = db.Aeps_Common_Comm_UPI.ToList();
+                AEPSCommonModel model = new AEPSCommonModel();
+                model.commonUPI = commonSlab;
+                //model. = userwiseSalb;
+                model.UserId = new List<SelectListItem>() { new SelectListItem { Text = "No data", Value = "No Data" } };
+                return View(model);
+            }
+        }
+        [HttpPost]
+        public ActionResult _common_aeps_UPI(AEPSCommonModel model)
+        {
+            foreach (var item in model.commonUPI)
+            {
+                var entry = db.Aeps_Common_Comm_UPI.Find(item.idno);
+                entry.aadharpay = item.aadharpay;
+                entry.ministatement = item.ministatement;
+                entry.per_500_999 = item.per_500_999;
+                entry.rs_500_999 = item.rs_500_999;
+                entry.maxrs_500_999 = item.maxrs_500_999;
+                entry.Type_500_999 = item.Type_500_999;
+                entry.per_1000_1499 = item.per_1000_1499;
+                entry.rs_1000_1499 = item.rs_1000_1499;
+                entry.maxrs_1000_1499 = item.maxrs_1000_1499;
+                entry.Type_1000_1499 = item.Type_1000_1499;
+                entry.per_1500_1999 = item.per_1500_1999;
+                entry.rs_1500_1999 = item.rs_1500_1999;
+                entry.maxrs_1500_1999 = item.maxrs_1500_1999;
+                entry.Type_1500_1999 = item.Type_1500_1999;
+                entry.per_2000_2499 = item.per_2000_2499;
+                entry.rs_2000_2499 = item.rs_2000_2499;
+                entry.maxrs_2000_2499 = item.maxrs_2000_2499;
+                entry.Type_2000_2499 = item.Type_2000_2499;
+                entry.per_2500_2999 = item.per_2500_2999;
+                entry.rs_2500_2999 = item.rs_2500_2999;
+                entry.maxrs_2500_2999 = item.maxrs_2500_2999;
+                entry.Type_2500_2999 = item.Type_2500_2999;
+                entry.per_3000_3499 = item.per_3000_3499;
+                entry.rs_3000_3499 = item.rs_3000_3499;
+                entry.maxrs_3000_3499 = item.maxrs_3000_3499;
+                entry.Type_3000_3499 = item.Type_3000_3499;
+                entry.per_3500_5000 = item.per_3500_5000;
+                entry.rs_3500_5000 = item.rs_3500_5000;
+                entry.maxrs_3500_5000 = item.maxrs_3500_5000;
+                entry.Type_3500_5000 = item.Type_3500_5000;
+                entry.per_5001_10000 = item.per_5001_10000;
+                entry.rs_5001_10000 = item.rs_5001_10000;
+                entry.maxrs_5001_10000 = item.maxrs_5001_10000;
+                entry.Type_5001_10000 = item.Type_5001_10000;
+                db.SaveChanges();
+            }
+            var commonSlab = db.Aeps_Common_Comm_UPI.ToList();
+            model.commonUPI = commonSlab;
+            return PartialView(model);
+        }
+        [HttpPost]
+        public PartialViewResult _UserAepsSlab_UPI(string role, string userid, AEPSCommonModel model2, string ddlUserId, string Button, string ddlUserIdrem, string dlmid, string ddldealer)
+        {
+            if (dlmid == null)
+            {
+                dlmid = ddldealer;
+            }
+            List<SelectListItem> Provinces = new List<SelectListItem>();
+            if (ddlUserId == null)
+            {
+                AEPSCommonModel model = new AEPSCommonModel();
+                //Master User
+                if (role == "Master")
+                {
+                    if (string.IsNullOrWhiteSpace(userid))
+                    {
+                        model.Materuser =
+                        (from m in db.Aeps_comm_userwise_UPI
+                         join u in db.Users on m.Userid equals u.UserId
+                         where m.Userid == userid
+                         select new AEPSMasterComm
+                         {
+                             idno = m.idno,
+                             userid = m.Userid,
+                             aadharpay = m.aadharpay,
+                             ministatement = m.ministatement,
+                             per_500_999 = m.per_500_999,
+                             rs_500_999 = m.rs_500_999,
+                             maxrs_500_999 = m.maxrs_500_999,
+                             Type_500_999 = m.Type_500_999,
+                             per_1000_1499 = m.per_1000_1499,
+                             rs_1000_1499 = m.rs_1000_1499,
+                             maxrs_1000_1499 = m.maxrs_1000_1499,
+                             Type_1000_1499 = m.Type_1000_1499,
+                             per_1500_1999 = m.per_1500_1999,
+                             rs_1500_1999 = m.rs_1500_1999,
+                             maxrs_1500_1999 = m.maxrs_1500_1999,
+                             Type_1500_1999 = m.Type_1500_1999,
+                             per_2000_2499 = m.per_2000_2499,
+                             rs_2000_2499 = m.rs_2000_2499,
+                             maxrs_2000_2499 = m.maxrs_2000_2499,
+                             Type_2000_2499 = m.Type_2000_2499,
+                             per_2500_2999 = m.per_2500_2999,
+                             rs_2500_2999 = m.rs_2500_2999,
+                             maxrs_2500_2999 = m.maxrs_2500_2999,
+                             Type_2500_2999 = m.Type_2500_2999,
+                             per_3000_3499 = m.per_3000_3499,
+                             rs_3000_3499 = m.rs_3000_3499,
+                             maxrs_3000_3499 = m.maxrs_3000_3499,
+                             Type_3000_3499 = m.Type_3000_3499,
+                             per_3500_5000 = m.per_3500_5000,
+                             rs_3500_5000 = m.rs_3500_5000,
+                             maxrs_3500_5000 = m.maxrs_3500_5000,
+                             Type_3500_5000 = m.Type_3500_5000,
+                             per_5001_10000 = m.per_5001_10000,
+                             rs_5001_10000 = m.rs_5001_10000,
+                             maxrs_5001_10000 = m.maxrs_5001_10000,
+                             Type_5001_10000 = m.Type_5001_10000,
+                             Email = u.Email,
+                             RolesName = "Master"
+                         }).ToList();
+                        var master = db.Superstokist_details;
+                        model.UserId = master.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId, Selected = a.SSId == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Name = "";
+                        model.Phone = "";
+                        model.Email = "";
+                    }
+                    else
+                    {
+                        model.Materuser =
+                         (from m in db.Aeps_comm_userwise_UPI
+                          join u in db.Users on m.Userid equals u.UserId
+                          where m.Userid == userid
+                          select new AEPSMasterComm
+                          {
+                              idno = m.idno,
+                              userid = m.Userid,
+                              aadharpay = m.aadharpay,
+                              ministatement = m.ministatement,
+                              per_500_999 = m.per_500_999,
+                              rs_500_999 = m.rs_500_999,
+                              maxrs_500_999 = m.maxrs_500_999,
+                              Type_500_999 = m.Type_500_999,
+                              per_1000_1499 = m.per_1000_1499,
+                              rs_1000_1499 = m.rs_1000_1499,
+                              maxrs_1000_1499 = m.maxrs_1000_1499,
+                              Type_1000_1499 = m.Type_1000_1499,
+                              per_1500_1999 = m.per_1500_1999,
+                              rs_1500_1999 = m.rs_1500_1999,
+                              maxrs_1500_1999 = m.maxrs_1500_1999,
+                              Type_1500_1999 = m.Type_1500_1999,
+                              per_2000_2499 = m.per_2000_2499,
+                              rs_2000_2499 = m.rs_2000_2499,
+                              maxrs_2000_2499 = m.maxrs_2000_2499,
+                              Type_2000_2499 = m.Type_2000_2499,
+                              per_2500_2999 = m.per_2500_2999,
+                              rs_2500_2999 = m.rs_2500_2999,
+                              maxrs_2500_2999 = m.maxrs_2500_2999,
+                              Type_2500_2999 = m.Type_2500_2999,
+                              per_3000_3499 = m.per_3000_3499,
+                              rs_3000_3499 = m.rs_3000_3499,
+                              maxrs_3000_3499 = m.maxrs_3000_3499,
+                              Type_3000_3499 = m.Type_3000_3499,
+                              per_3500_5000 = m.per_3500_5000,
+                              rs_3500_5000 = m.rs_3500_5000,
+                              maxrs_3500_5000 = m.maxrs_3500_5000,
+                              Type_3500_5000 = m.Type_3500_5000,
+                              per_5001_10000 = m.per_5001_10000,
+                              rs_5001_10000 = m.rs_5001_10000,
+                              maxrs_5001_10000 = m.maxrs_5001_10000,
+                              Type_5001_10000 = m.Type_5001_10000,
+                              Email = u.Email,
+                              RolesName = "Master"
+                          }).ToList();
+                        var master = db.Superstokist_details;
+                        model.UserId = master.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId, Selected = a.SSId == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Name = master.Where(aa => aa.SSId == userid).SingleOrDefault().SuperstokistName;
+                        model.Phone = master.Where(aa => aa.SSId == userid).SingleOrDefault().Mobile;
+                        model.Email = master.Where(aa => aa.SSId == userid).SingleOrDefault().Email;
+                    }
+                    var UpdateAllMaster = (from m in db.Aeps_Common_Comm_UPI
+                                           where m.usertype == "Master"
+                                           select new AEPSUpdateMasterComm
+                                           {
+                                               idno = 0,
+                                               aadharpay = m.aadharpay,
+                                               ministatement = m.ministatement,
+                                               per_500_999 = m.per_500_999,
+                                               rs_500_999 = m.rs_500_999,
+                                               maxrs_500_999 = m.maxrs_500_999,
+                                               Type_500_999 = m.Type_500_999,
+                                               per_1000_1499 = m.per_1000_1499,
+                                               rs_1000_1499 = m.rs_1000_1499,
+                                               maxrs_1000_1499 = m.maxrs_1000_1499,
+                                               Type_1000_1499 = m.Type_1000_1499,
+                                               per_1500_1999 = m.per_1500_1999,
+                                               rs_1500_1999 = m.rs_1500_1999,
+                                               maxrs_1500_1999 = m.maxrs_1500_1999,
+                                               Type_1500_1999 = m.Type_1500_1999,
+                                               per_2000_2499 = m.per_2000_2499,
+                                               rs_2000_2499 = m.rs_2000_2499,
+                                               maxrs_2000_2499 = m.maxrs_2000_2499,
+                                               Type_2000_2499 = m.Type_2000_2499,
+                                               per_2500_2999 = m.per_2500_2999,
+                                               rs_2500_2999 = m.rs_2500_2999,
+                                               maxrs_2500_2999 = m.maxrs_2500_2999,
+                                               Type_2500_2999 = m.Type_2500_2999,
+                                               per_3000_3499 = m.per_3000_3499,
+                                               rs_3000_3499 = m.rs_3000_3499,
+                                               maxrs_3000_3499 = m.maxrs_3000_3499,
+                                               Type_3000_3499 = m.Type_3000_3499,
+                                               per_3500_5000 = m.per_3500_5000,
+                                               rs_3500_5000 = m.rs_3500_5000,
+                                               maxrs_3500_5000 = m.maxrs_3500_5000,
+                                               Type_3500_5000 = m.Type_3500_5000,
+                                               per_5001_10000 = m.per_5001_10000,
+                                               rs_5001_10000 = m.rs_5001_10000,
+                                               maxrs_5001_10000 = m.maxrs_5001_10000,
+                                               Type_5001_10000 = m.Type_5001_10000,
+                                           }).ToList();
+                    model.UpdateMaster = UpdateAllMaster;
+                }
+                //End Master
+                //Dealer User
+                if (role == "Dealer")
+                {
+                    if (string.IsNullOrWhiteSpace(userid))
+                    {
+                        model.Dealeruser =
+                     (from m in db.Aeps_comm_userwise_UPI
+                      join u in db.Users on m.Userid equals u.UserId
+                      where m.Userid == userid
+                      select new AEPSDealerComm
+                      {
+                          idno = m.idno,
+                          userid = m.Userid,
+                          aadharpay = m.aadharpay,
+                          ministatement = m.ministatement,
+                          per_500_999 = m.per_500_999,
+                          rs_500_999 = m.rs_500_999,
+                          maxrs_500_999 = m.maxrs_500_999,
+                          Type_500_999 = m.Type_500_999,
+                          per_1000_1499 = m.per_1000_1499,
+                          rs_1000_1499 = m.rs_1000_1499,
+                          maxrs_1000_1499 = m.maxrs_1000_1499,
+                          Type_1000_1499 = m.Type_1000_1499,
+                          per_1500_1999 = m.per_1500_1999,
+                          rs_1500_1999 = m.rs_1500_1999,
+                          maxrs_1500_1999 = m.maxrs_1500_1999,
+                          Type_1500_1999 = m.Type_1500_1999,
+                          per_2000_2499 = m.per_2000_2499,
+                          rs_2000_2499 = m.rs_2000_2499,
+                          maxrs_2000_2499 = m.maxrs_2000_2499,
+                          Type_2000_2499 = m.Type_2000_2499,
+                          per_2500_2999 = m.per_2500_2999,
+                          rs_2500_2999 = m.rs_2500_2999,
+                          maxrs_2500_2999 = m.maxrs_2500_2999,
+                          Type_2500_2999 = m.Type_2500_2999,
+                          per_3000_3499 = m.per_3000_3499,
+                          rs_3000_3499 = m.rs_3000_3499,
+                          maxrs_3000_3499 = m.maxrs_3000_3499,
+                          Type_3000_3499 = m.Type_3000_3499,
+                          per_3500_5000 = m.per_3500_5000,
+                          rs_3500_5000 = m.rs_3500_5000,
+                          maxrs_3500_5000 = m.maxrs_3500_5000,
+                          Type_3500_5000 = m.Type_3500_5000,
+                          per_5001_10000 = m.per_5001_10000,
+                          rs_5001_10000 = m.rs_5001_10000,
+                          maxrs_5001_10000 = m.maxrs_5001_10000,
+                          Type_5001_10000 = m.Type_5001_10000,
+                          Email = u.Email,
+                          RolesName = "Dealer"
+                      }).ToList();
+                        var dealer = db.Dealer_Details;
+                        model.UserId = dealer.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Phone = "";
+                        model.Email = "";
+                        model.Name = "";
+                    }
+                    else
+                    {
+                        model.Dealeruser =
+                         (from m in db.Aeps_comm_userwise_UPI
+                          join u in db.Users on m.Userid equals u.UserId
+                          where m.Userid == userid
+                          select new AEPSDealerComm
+                          {
+                              idno = m.idno,
+                              userid = m.Userid,
+                              aadharpay = m.aadharpay,
+                              ministatement = m.ministatement,
+                              per_500_999 = m.per_500_999,
+                              rs_500_999 = m.rs_500_999,
+                              maxrs_500_999 = m.maxrs_500_999,
+                              Type_500_999 = m.Type_500_999,
+                              per_1000_1499 = m.per_1000_1499,
+                              rs_1000_1499 = m.rs_1000_1499,
+                              maxrs_1000_1499 = m.maxrs_1000_1499,
+                              Type_1000_1499 = m.Type_1000_1499,
+                              per_1500_1999 = m.per_1500_1999,
+                              rs_1500_1999 = m.rs_1500_1999,
+                              maxrs_1500_1999 = m.maxrs_1500_1999,
+                              Type_1500_1999 = m.Type_1500_1999,
+                              per_2000_2499 = m.per_2000_2499,
+                              rs_2000_2499 = m.rs_2000_2499,
+                              maxrs_2000_2499 = m.maxrs_2000_2499,
+                              Type_2000_2499 = m.Type_2000_2499,
+                              per_2500_2999 = m.per_2500_2999,
+                              rs_2500_2999 = m.rs_2500_2999,
+                              maxrs_2500_2999 = m.maxrs_2500_2999,
+                              Type_2500_2999 = m.Type_2500_2999,
+                              per_3000_3499 = m.per_3000_3499,
+                              rs_3000_3499 = m.rs_3000_3499,
+                              maxrs_3000_3499 = m.maxrs_3000_3499,
+                              Type_3000_3499 = m.Type_3000_3499,
+                              per_3500_5000 = m.per_3500_5000,
+                              rs_3500_5000 = m.rs_3500_5000,
+                              maxrs_3500_5000 = m.maxrs_3500_5000,
+                              Type_3500_5000 = m.Type_3500_5000,
+                              per_5001_10000 = m.per_5001_10000,
+                              rs_5001_10000 = m.rs_5001_10000,
+                              maxrs_5001_10000 = m.maxrs_5001_10000,
+                              Type_5001_10000 = m.Type_5001_10000,
+                              Email = u.Email,
+                              RolesName = "Dealer"
+                          }).ToList();
+                        var dealer = db.Dealer_Details;
+                        model.UserId = dealer.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Phone = dealer.Where(aa => aa.DealerId == userid).SingleOrDefault().Mobile;
+                        model.Email = dealer.Where(aa => aa.DealerId == userid).SingleOrDefault().Email;
+                        model.Name = dealer.Where(aa => aa.DealerId == userid).SingleOrDefault().DealerName;
+                    }
+                    var UpdateAllMaster = (from m in db.Aeps_Common_Comm_UPI
+                                           where m.usertype == "Distributor"
+                                           select new AEPSUpdateDealerComm
+                                           {
+                                               idno = 0,
+                                               aadharpay = m.aadharpay,
+                                               ministatement = m.ministatement,
+                                               per_500_999 = m.per_500_999,
+                                               rs_500_999 = m.rs_500_999,
+                                               maxrs_500_999 = m.maxrs_500_999,
+                                               Type_500_999 = m.Type_500_999,
+                                               per_1000_1499 = m.per_1000_1499,
+                                               rs_1000_1499 = m.rs_1000_1499,
+                                               maxrs_1000_1499 = m.maxrs_1000_1499,
+                                               Type_1000_1499 = m.Type_1000_1499,
+                                               per_1500_1999 = m.per_1500_1999,
+                                               rs_1500_1999 = m.rs_1500_1999,
+                                               maxrs_1500_1999 = m.maxrs_1500_1999,
+                                               Type_1500_1999 = m.Type_1500_1999,
+                                               per_2000_2499 = m.per_2000_2499,
+                                               rs_2000_2499 = m.rs_2000_2499,
+                                               maxrs_2000_2499 = m.maxrs_2000_2499,
+                                               Type_2000_2499 = m.Type_2000_2499,
+                                               per_2500_2999 = m.per_2500_2999,
+                                               rs_2500_2999 = m.rs_2500_2999,
+                                               maxrs_2500_2999 = m.maxrs_2500_2999,
+                                               Type_2500_2999 = m.Type_2500_2999,
+                                               per_3000_3499 = m.per_3000_3499,
+                                               rs_3000_3499 = m.rs_3000_3499,
+                                               maxrs_3000_3499 = m.maxrs_3000_3499,
+                                               Type_3000_3499 = m.Type_3000_3499,
+                                               per_3500_5000 = m.per_3500_5000,
+                                               rs_3500_5000 = m.rs_3500_5000,
+                                               maxrs_3500_5000 = m.maxrs_3500_5000,
+                                               Type_3500_5000 = m.Type_3500_5000,
+                                               per_5001_10000 = m.per_5001_10000,
+                                               rs_5001_10000 = m.rs_5001_10000,
+                                               maxrs_5001_10000 = m.maxrs_5001_10000,
+                                               Type_5001_10000 = m.Type_5001_10000
+                                           }).ToList();
+                    model.UpdateDealer = UpdateAllMaster;
+
+                }
+                //End Dealer
+                //Retailer User
+                if (role == "Retailer")
+                {
+                    if (string.IsNullOrWhiteSpace(userid))
+                    {
+                        var upchk = "REM";
+                        //
+                        var dlmchk = db.Dealer_Details.Where(aa => aa.DealerId == dlmid).SingleOrDefault();
+                        if (dlmchk != null)
+                        {
+                            upchk = "DLM";
+                            var remchk = db.Retailer_Details.Where(aa => aa.RetailerId == ddlUserIdrem).SingleOrDefault();
+                            if (remchk != null)
+                            {
+                                upchk = "REM";
+                            }
+                        }
+                        if (upchk == "REM")
+                        {
+                            model.Retaileruser =
+                     (from m in db.Aeps_comm_userwise_UPI
+                      join u in db.Users on m.Userid equals u.UserId
+                      where m.Userid == userid
+                      select new AEPSRetailerComm
+                      {
+                          idno = m.idno,
+                          userid = m.Userid,
+                          aadharpay = m.aadharpay,
+                          ministatement = m.ministatement,
+                          per_500_999 = m.per_500_999,
+                          rs_500_999 = m.rs_500_999,
+                          maxrs_500_999 = m.maxrs_500_999,
+                          Type_500_999 = m.Type_500_999,
+                          per_1000_1499 = m.per_1000_1499,
+                          rs_1000_1499 = m.rs_1000_1499,
+                          maxrs_1000_1499 = m.maxrs_1000_1499,
+                          Type_1000_1499 = m.Type_1000_1499,
+                          per_1500_1999 = m.per_1500_1999,
+                          rs_1500_1999 = m.rs_1500_1999,
+                          maxrs_1500_1999 = m.maxrs_1500_1999,
+                          Type_1500_1999 = m.Type_1500_1999,
+                          per_2000_2499 = m.per_2000_2499,
+                          rs_2000_2499 = m.rs_2000_2499,
+                          maxrs_2000_2499 = m.maxrs_2000_2499,
+                          Type_2000_2499 = m.Type_2000_2499,
+                          per_2500_2999 = m.per_2500_2999,
+                          rs_2500_2999 = m.rs_2500_2999,
+                          maxrs_2500_2999 = m.maxrs_2500_2999,
+                          Type_2500_2999 = m.Type_2500_2999,
+                          per_3000_3499 = m.per_3000_3499,
+                          rs_3000_3499 = m.rs_3000_3499,
+                          maxrs_3000_3499 = m.maxrs_3000_3499,
+                          Type_3000_3499 = m.Type_3000_3499,
+                          per_3500_5000 = m.per_3500_5000,
+                          rs_3500_5000 = m.rs_3500_5000,
+                          maxrs_3500_5000 = m.maxrs_3500_5000,
+                          Type_3500_5000 = m.Type_3500_5000,
+                          per_5001_10000 = m.per_5001_10000,
+                          rs_5001_10000 = m.rs_5001_10000,
+                          maxrs_5001_10000 = m.maxrs_5001_10000,
+                          Type_5001_10000 = m.Type_5001_10000,
+                          RolesName = "Retailer"
+                      }).ToList();
+                            var listm = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == dlmid ? true : false }).ToList();
+                            var remm = db.Retailer_Details.Where(aa => aa.ISDeleteuser == false);
+                            var list1m = remm.Where(aa => aa.DealerId == dlmid).Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId, Selected = a.DealerId == userid ? true : false }).ToList();
+
+                            model.UserId = listm;
+                            model.Retailerid = list1m;
+                            model.Name = "";
+                            model.Phone = "";
+                            model.Email = "";
+                            model.role = "Retailer";
+                        }
+                        else
+                        {
+                            model.Retaileruser =
+                    (from m in db.Aeps_comm_Dlm_rem_UPI
+                     join u in db.Users on m.dealerid equals u.UserId
+                     where m.dealerid == dlmid
+                     select new AEPSRetailerComm
+                     {
+                         idno = m.idno,
+                         userid = m.dealerid,
+                         aadharpay = m.aadharpay,
+                         ministatement = m.ministatement,
+                         per_500_999 = m.per_500_999,
+                         rs_500_999 = m.rs_500_999,
+                         maxrs_500_999 = m.maxrs_500_999,
+                         Type_500_999 = m.Type_500_999,
+                         per_1000_1499 = m.per_1000_1499,
+                         rs_1000_1499 = m.rs_1000_1499,
+                         maxrs_1000_1499 = m.maxrs_1000_1499,
+                         Type_1000_1499 = m.Type_1000_1499,
+                         per_1500_1999 = m.per_1500_1999,
+                         rs_1500_1999 = m.rs_1500_1999,
+                         maxrs_1500_1999 = m.maxrs_1500_1999,
+                         Type_1500_1999 = m.Type_1500_1999,
+                         per_2000_2499 = m.per_2000_2499,
+                         rs_2000_2499 = m.rs_2000_2499,
+                         maxrs_2000_2499 = m.maxrs_2000_2499,
+                         Type_2000_2499 = m.Type_2000_2499,
+                         per_2500_2999 = m.per_2500_2999,
+                         rs_2500_2999 = m.rs_2500_2999,
+                         maxrs_2500_2999 = m.maxrs_2500_2999,
+                         Type_2500_2999 = m.Type_2500_2999,
+                         per_3000_3499 = m.per_3000_3499,
+                         rs_3000_3499 = m.rs_3000_3499,
+                         maxrs_3000_3499 = m.maxrs_3000_3499,
+                         Type_3000_3499 = m.Type_3000_3499,
+                         per_3500_5000 = m.per_3500_5000,
+                         rs_3500_5000 = m.rs_3500_5000,
+                         maxrs_3500_5000 = m.maxrs_3500_5000,
+                         Type_3500_5000 = m.Type_3500_5000,
+                         per_5001_10000 = m.per_5001_10000,
+                         rs_5001_10000 = m.rs_5001_10000,
+                         maxrs_5001_10000 = m.maxrs_5001_10000,
+                         Type_5001_10000 = m.Type_5001_10000,
+                         RolesName = "Retailer"
+                     }).ToList();
+                            var list = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == dlmid ? true : false }).ToList();
+                            var rem = db.Retailer_Details.Where(aa => aa.ISDeleteuser == false);
+                            var list1 = rem.Where(aa => aa.DealerId == dlmid && aa.ISDeleteuser == false).Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId }).ToList();
+
+                            model.UserId = list;
+                            model.Retailerid = list1;
+                            model.Name = "";
+                            model.Phone = "";
+                            model.Email = "";
+                            model.role = "Retailer";
+                        }
+                    }
+                    else
+                    {
+                        model.Retaileruser =
+                         (from m in db.Aeps_comm_userwise_UPI
+                          join u in db.Users on m.Userid equals u.UserId
+                          where m.Userid == userid
+                          select new AEPSRetailerComm
+                          {
+                              idno = m.idno,
+                              userid = m.Userid,
+                              aadharpay = m.aadharpay,
+                              ministatement = m.ministatement,
+                              per_500_999 = m.per_500_999,
+                              rs_500_999 = m.rs_500_999,
+                              maxrs_500_999 = m.maxrs_500_999,
+                              Type_500_999 = m.Type_500_999,
+                              per_1000_1499 = m.per_1000_1499,
+                              rs_1000_1499 = m.rs_1000_1499,
+                              maxrs_1000_1499 = m.maxrs_1000_1499,
+                              Type_1000_1499 = m.Type_1000_1499,
+                              per_1500_1999 = m.per_1500_1999,
+                              rs_1500_1999 = m.rs_1500_1999,
+                              maxrs_1500_1999 = m.maxrs_1500_1999,
+                              Type_1500_1999 = m.Type_1500_1999,
+                              per_2000_2499 = m.per_2000_2499,
+                              rs_2000_2499 = m.rs_2000_2499,
+                              maxrs_2000_2499 = m.maxrs_2000_2499,
+                              Type_2000_2499 = m.Type_2000_2499,
+                              per_2500_2999 = m.per_2500_2999,
+                              rs_2500_2999 = m.rs_2500_2999,
+                              maxrs_2500_2999 = m.maxrs_2500_2999,
+                              Type_2500_2999 = m.Type_2500_2999,
+                              per_3000_3499 = m.per_3000_3499,
+                              rs_3000_3499 = m.rs_3000_3499,
+                              maxrs_3000_3499 = m.maxrs_3000_3499,
+                              Type_3000_3499 = m.Type_3000_3499,
+                              per_3500_5000 = m.per_3500_5000,
+                              rs_3500_5000 = m.rs_3500_5000,
+                              maxrs_3500_5000 = m.maxrs_3500_5000,
+                              Type_3500_5000 = m.Type_3500_5000,
+                              per_5001_10000 = m.per_5001_10000,
+                              rs_5001_10000 = m.rs_5001_10000,
+                              maxrs_5001_10000 = m.maxrs_5001_10000,
+                              Type_5001_10000 = m.Type_5001_10000,
+                              RolesName = "Retailer"
+                          }).ToList();
+                        var list = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == dlmid ? true : false }).ToList();
+                        var rem = db.Retailer_Details.Where(aa => aa.ISDeleteuser == false);
+                        var list1 = rem.Where(aa => aa.DealerId == dlmid && aa.ISDeleteuser == false).Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId, Selected = a.RetailerId == userid ? true : false }).ToList();
+                        try
+                        {
+                            model.UserId = list;
+                            model.Retailerid = list1;
+                            model.Name = rem.Where(aa => aa.RetailerId == userid).SingleOrDefault().RetailerName;
+                            model.Phone = rem.Where(aa => aa.RetailerId == userid).SingleOrDefault().Mobile;
+                            model.Email = rem.Where(aa => aa.RetailerId == userid).SingleOrDefault().Email;
+                            model.role = "Retailer";
+                        }
+                        catch { }
+                    }
+                    var UpdateAllMaster = (from m in db.Aeps_Common_Comm_UPI
+                                           where m.usertype == "Retailer"
+                                           select new AEPSUpdateRetailerComm
+                                           {
+                                               idno = 0,
+                                               aadharpay = m.aadharpay,
+                                               ministatement = m.ministatement,
+                                               per_500_999 = m.per_500_999,
+                                               rs_500_999 = m.rs_500_999,
+                                               maxrs_500_999 = m.maxrs_500_999,
+                                               Type_500_999 = m.Type_500_999,
+                                               per_1000_1499 = m.per_1000_1499,
+                                               rs_1000_1499 = m.rs_1000_1499,
+                                               maxrs_1000_1499 = m.maxrs_1000_1499,
+                                               Type_1000_1499 = m.Type_1000_1499,
+                                               per_1500_1999 = m.per_1500_1999,
+                                               rs_1500_1999 = m.rs_1500_1999,
+                                               maxrs_1500_1999 = m.maxrs_1500_1999,
+                                               Type_1500_1999 = m.Type_1500_1999,
+                                               per_2000_2499 = m.per_2000_2499,
+                                               rs_2000_2499 = m.rs_2000_2499,
+                                               maxrs_2000_2499 = m.maxrs_2000_2499,
+                                               Type_2000_2499 = m.Type_2000_2499,
+                                               per_2500_2999 = m.per_2500_2999,
+                                               rs_2500_2999 = m.rs_2500_2999,
+                                               maxrs_2500_2999 = m.maxrs_2500_2999,
+                                               Type_2500_2999 = m.Type_2500_2999,
+                                               per_3000_3499 = m.per_3000_3499,
+                                               rs_3000_3499 = m.rs_3000_3499,
+                                               maxrs_3000_3499 = m.maxrs_3000_3499,
+                                               Type_3000_3499 = m.Type_3000_3499,
+                                               per_3500_5000 = m.per_3500_5000,
+                                               rs_3500_5000 = m.rs_3500_5000,
+                                               maxrs_3500_5000 = m.maxrs_3500_5000,
+                                               Type_3500_5000 = m.Type_3500_5000,
+                                               per_5001_10000 = m.per_5001_10000,
+                                               rs_5001_10000 = m.rs_5001_10000,
+                                               maxrs_5001_10000 = m.maxrs_5001_10000,
+                                               Type_5001_10000 = m.Type_5001_10000,
+                                           }).ToList();
+                    model.UpdateRetailer = UpdateAllMaster;
+
+                }
+                //End Dealer
+                //Whitelabel User
+                if (role == "Whitelabel")
+                {
+                    if (string.IsNullOrWhiteSpace(userid))
+                    {
+
+                        model.Whitelabeluser =
+                     (from m in db.Aeps_comm_userwise_UPI
+                      join u in db.Users on m.Userid equals u.UserId
+                      where m.Userid == userid
+                      select new AEPSWhitelabelComm
+                      {
+                          idno = m.idno,
+                          userid = m.Userid,
+                          aadharpay = m.aadharpay,
+                          ministatement = m.ministatement,
+                          per_500_999 = m.per_500_999,
+                          rs_500_999 = m.rs_500_999,
+                          maxrs_500_999 = m.maxrs_500_999,
+                          Type_500_999 = m.Type_500_999,
+                          per_1000_1499 = m.per_1000_1499,
+                          rs_1000_1499 = m.rs_1000_1499,
+                          maxrs_1000_1499 = m.maxrs_1000_1499,
+                          Type_1000_1499 = m.Type_1000_1499,
+                          per_1500_1999 = m.per_1500_1999,
+                          rs_1500_1999 = m.rs_1500_1999,
+                          maxrs_1500_1999 = m.maxrs_1500_1999,
+                          Type_1500_1999 = m.Type_1500_1999,
+                          per_2000_2499 = m.per_2000_2499,
+                          rs_2000_2499 = m.rs_2000_2499,
+                          maxrs_2000_2499 = m.maxrs_2000_2499,
+                          Type_2000_2499 = m.Type_2000_2499,
+                          per_2500_2999 = m.per_2500_2999,
+                          rs_2500_2999 = m.rs_2500_2999,
+                          maxrs_2500_2999 = m.maxrs_2500_2999,
+                          Type_2500_2999 = m.Type_2500_2999,
+                          per_3000_3499 = m.per_3000_3499,
+                          rs_3000_3499 = m.rs_3000_3499,
+                          maxrs_3000_3499 = m.maxrs_3000_3499,
+                          Type_3000_3499 = m.Type_3000_3499,
+                          per_3500_5000 = m.per_3500_5000,
+                          rs_3500_5000 = m.rs_3500_5000,
+                          maxrs_3500_5000 = m.maxrs_3500_5000,
+                          Type_3500_5000 = m.Type_3500_5000,
+                          per_5001_10000 = m.per_5001_10000,
+                          rs_5001_10000 = m.rs_5001_10000,
+                          maxrs_5001_10000 = m.maxrs_5001_10000,
+                          Type_5001_10000 = m.Type_5001_10000,
+                          RolesName = "Whitelabel"
+                      }).ToList();
+                        var white = db.WhiteLabel_userList;
+                        model.UserId = white.Select(a => new SelectListItem { Text = a.FrmName, Value = a.WhiteLabelID, Selected = a.WhiteLabelID == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Phone = "";
+                        model.Email = "";
+                        model.Name = "";
+                    }
+                    else
+                    {
+                        model.Whitelabeluser =
+                         (from m in db.Aeps_comm_userwise_UPI
+                          join u in db.Users on m.Userid equals u.UserId
+                          where m.Userid == userid
+                          select new AEPSWhitelabelComm
+                          {
+                              idno = m.idno,
+                              userid = m.Userid,
+                              aadharpay = m.aadharpay,
+                              ministatement = m.ministatement,
+                              per_500_999 = m.per_500_999,
+                              rs_500_999 = m.rs_500_999,
+                              maxrs_500_999 = m.maxrs_500_999,
+                              Type_500_999 = m.Type_500_999,
+                              per_1000_1499 = m.per_1000_1499,
+                              rs_1000_1499 = m.rs_1000_1499,
+                              maxrs_1000_1499 = m.maxrs_1000_1499,
+                              Type_1000_1499 = m.Type_1000_1499,
+                              per_1500_1999 = m.per_1500_1999,
+                              rs_1500_1999 = m.rs_1500_1999,
+                              maxrs_1500_1999 = m.maxrs_1500_1999,
+                              Type_1500_1999 = m.Type_1500_1999,
+                              per_2000_2499 = m.per_2000_2499,
+                              rs_2000_2499 = m.rs_2000_2499,
+                              maxrs_2000_2499 = m.maxrs_2000_2499,
+                              Type_2000_2499 = m.Type_2000_2499,
+                              per_2500_2999 = m.per_2500_2999,
+                              rs_2500_2999 = m.rs_2500_2999,
+                              maxrs_2500_2999 = m.maxrs_2500_2999,
+                              Type_2500_2999 = m.Type_2500_2999,
+                              per_3000_3499 = m.per_3000_3499,
+                              rs_3000_3499 = m.rs_3000_3499,
+                              maxrs_3000_3499 = m.maxrs_3000_3499,
+                              Type_3000_3499 = m.Type_3000_3499,
+                              per_3500_5000 = m.per_3500_5000,
+                              rs_3500_5000 = m.rs_3500_5000,
+                              maxrs_3500_5000 = m.maxrs_3500_5000,
+                              Type_3500_5000 = m.Type_3500_5000,
+                              per_5001_10000 = m.per_5001_10000,
+                              rs_5001_10000 = m.rs_5001_10000,
+                              maxrs_5001_10000 = m.maxrs_5001_10000,
+                              Type_5001_10000 = m.Type_5001_10000,
+                              Email = u.Email,
+                              RolesName = "Whitelabel"
+                          }).ToList();
+                        var white = db.WhiteLabel_userList;
+                        model.UserId = white.Select(a => new SelectListItem { Text = a.FrmName, Value = a.WhiteLabelID, Selected = a.WhiteLabelID == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Phone = white.Where(aa => aa.WhiteLabelID == userid).SingleOrDefault().Mobile;
+                        model.Email = white.Where(aa => aa.WhiteLabelID == userid).SingleOrDefault().EmailId;
+                        model.Name = white.Where(aa => aa.WhiteLabelID == userid).SingleOrDefault().Name;
+                    }
+                    var UpdateAllMaster = (from m in db.Aeps_Common_Comm_UPI
+                                           where m.usertype == "Whitelabel"
+                                           select new AEPSUpdateWhitelabelComm
+                                           {
+                                               idno = 0,
+                                               aadharpay = m.aadharpay,
+                                               ministatement = m.ministatement,
+                                               per_500_999 = m.per_500_999,
+                                               rs_500_999 = m.rs_500_999,
+                                               maxrs_500_999 = m.maxrs_500_999,
+                                               Type_500_999 = m.Type_500_999,
+                                               per_1000_1499 = m.per_1000_1499,
+                                               rs_1000_1499 = m.rs_1000_1499,
+                                               maxrs_1000_1499 = m.maxrs_1000_1499,
+                                               Type_1000_1499 = m.Type_1000_1499,
+                                               per_1500_1999 = m.per_1500_1999,
+                                               rs_1500_1999 = m.rs_1500_1999,
+                                               maxrs_1500_1999 = m.maxrs_1500_1999,
+                                               Type_1500_1999 = m.Type_1500_1999,
+                                               per_2000_2499 = m.per_2000_2499,
+                                               rs_2000_2499 = m.rs_2000_2499,
+                                               maxrs_2000_2499 = m.maxrs_2000_2499,
+                                               Type_2000_2499 = m.Type_2000_2499,
+                                               per_2500_2999 = m.per_2500_2999,
+                                               rs_2500_2999 = m.rs_2500_2999,
+                                               maxrs_2500_2999 = m.maxrs_2500_2999,
+                                               Type_2500_2999 = m.Type_2500_2999,
+                                               per_3000_3499 = m.per_3000_3499,
+                                               rs_3000_3499 = m.rs_3000_3499,
+                                               maxrs_3000_3499 = m.maxrs_3000_3499,
+                                               Type_3000_3499 = m.Type_3000_3499,
+                                               per_3500_5000 = m.per_3500_5000,
+                                               rs_3500_5000 = m.rs_3500_5000,
+                                               maxrs_3500_5000 = m.maxrs_3500_5000,
+                                               Type_3500_5000 = m.Type_3500_5000,
+                                               per_5001_10000 = m.per_5001_10000,
+                                               rs_5001_10000 = m.rs_5001_10000,
+                                               maxrs_5001_10000 = m.maxrs_5001_10000,
+                                               Type_5001_10000 = m.Type_5001_10000,
+                                           }).ToList();
+                    model.UpdateWhitelabel = UpdateAllMaster;
+
+                }
+                //Whitelabel API
+                return PartialView(model);
+            }
+            else
+            {
+                if (role == "Master")
+                {
+                    if (ddlUserId != "")
+                    {
+                        foreach (var m in model2.Materuser)
+                        {
+                            var entry = db.Aeps_comm_userwise_UPI.Single(a => a.Userid == ddlUserId);
+                            entry.aadharpay = m.aadharpay;
+                            entry.ministatement = m.ministatement;
+                            entry.per_500_999 = m.per_500_999;
+                            entry.rs_500_999 = m.rs_500_999;
+                            entry.maxrs_500_999 = m.maxrs_500_999;
+                            entry.Type_500_999 = m.Type_500_999;
+                            entry.per_1000_1499 = m.per_1000_1499;
+                            entry.rs_1000_1499 = m.rs_1000_1499;
+                            entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                            entry.Type_1000_1499 = m.Type_1000_1499;
+                            entry.per_1500_1999 = m.per_1500_1999;
+                            entry.rs_1500_1999 = m.rs_1500_1999;
+                            entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                            entry.Type_1500_1999 = m.Type_1500_1999;
+                            entry.per_2000_2499 = m.per_2000_2499;
+                            entry.rs_2000_2499 = m.rs_2000_2499;
+                            entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                            entry.Type_2000_2499 = m.Type_2000_2499;
+                            entry.per_2500_2999 = m.per_2500_2999;
+                            entry.rs_2500_2999 = m.rs_2500_2999;
+                            entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                            entry.Type_2500_2999 = m.Type_2500_2999;
+                            entry.per_3000_3499 = m.per_3000_3499;
+                            entry.rs_3000_3499 = m.rs_3000_3499;
+                            entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                            entry.Type_3000_3499 = m.Type_3000_3499;
+                            entry.per_3500_5000 = m.per_3500_5000;
+                            entry.rs_3500_5000 = m.rs_3500_5000;
+                            entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                            entry.Type_3500_5000 = m.Type_3500_5000;
+                            entry.per_5001_10000 = m.per_5001_10000;
+                            entry.rs_5001_10000 = m.rs_5001_10000;
+                            entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                            entry.Type_5001_10000 = m.Type_5001_10000;
+                            db.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        foreach (var m in model2.UpdateMaster)
+                        {
+                            db.Update_AEPS_All_userSlab_Again_UPI("Master", m.aadharpay, m.ministatement, m.per_500_999, m.rs_500_999,
+                                m.maxrs_500_999, m.Type_500_999, m.per_1000_1499, m.rs_1000_1499, m.maxrs_1000_1499,
+                                m.Type_1000_1499, m.per_1500_1999, m.rs_1500_1999, m.maxrs_1500_1999, m.Type_1500_1999,
+                                m.per_2000_2499, m.rs_2000_2499, m.maxrs_2000_2499, m.Type_2000_2499, m.per_2500_2999,
+                                m.rs_2500_2999, m.maxrs_2500_2999, m.Type_2500_2999, m.per_3000_3499, m.rs_3000_3499,
+                                m.maxrs_3000_3499, m.Type_3000_3499, m.per_3500_5000, m.rs_3500_5000, m.maxrs_3500_5000,
+                                m.Type_3500_5000, m.per_5001_10000, m.rs_5001_10000, m.maxrs_5001_10000, m.Type_5001_10000);
+                            // db.Update_AEPS_All_userSlab_new("Master", item.comm, item.maxrs, item.minbal, item.M_statement, item.aadharpay);
+                            if (Button == "Update Existing & New Users")
+                            {
+                                var entry = db.Aeps_Common_Comm_UPI.Where(aa => aa.usertype == "Master").Single();
+                                entry.aadharpay = m.aadharpay;
+                                entry.ministatement = m.ministatement;
+                                entry.per_500_999 = m.per_500_999;
+                                entry.rs_500_999 = m.rs_500_999;
+                                entry.maxrs_500_999 = m.maxrs_500_999;
+                                entry.Type_500_999 = m.Type_500_999;
+                                entry.per_1000_1499 = m.per_1000_1499;
+                                entry.rs_1000_1499 = m.rs_1000_1499;
+                                entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                                entry.Type_1000_1499 = m.Type_1000_1499;
+                                entry.per_1500_1999 = m.per_1500_1999;
+                                entry.rs_1500_1999 = m.rs_1500_1999;
+                                entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                                entry.Type_1500_1999 = m.Type_1500_1999;
+                                entry.per_2000_2499 = m.per_2000_2499;
+                                entry.rs_2000_2499 = m.rs_2000_2499;
+                                entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                                entry.Type_2000_2499 = m.Type_2000_2499;
+                                entry.per_2500_2999 = m.per_2500_2999;
+                                entry.rs_2500_2999 = m.rs_2500_2999;
+                                entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                                entry.Type_2500_2999 = m.Type_2500_2999;
+                                entry.per_3000_3499 = m.per_3000_3499;
+                                entry.rs_3000_3499 = m.rs_3000_3499;
+                                entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                                entry.Type_3000_3499 = m.Type_3000_3499;
+                                entry.per_3500_5000 = m.per_3500_5000;
+                                entry.rs_3500_5000 = m.rs_3500_5000;
+                                entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                                entry.Type_3500_5000 = m.Type_3500_5000;
+                                entry.per_5001_10000 = m.per_5001_10000;
+                                entry.rs_5001_10000 = m.rs_5001_10000;
+                                entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                                entry.Type_5001_10000 = m.Type_5001_10000;
+                                db.SaveChanges();
+                            }
+                        }
+
+                    }
+                }
+                //Dealer User
+                if (role == "Dealer")
+                {
+                    if (ddlUserId != "")
+                    {
+                        foreach (var m in model2.Dealeruser)
+                        {
+                            var entry = db.Aeps_comm_userwise_UPI.Single(a => a.Userid == ddlUserId);
+                            entry.aadharpay = m.aadharpay;
+                            entry.ministatement = m.ministatement;
+                            entry.per_500_999 = m.per_500_999;
+                            entry.rs_500_999 = m.rs_500_999;
+                            entry.maxrs_500_999 = m.maxrs_500_999;
+                            entry.Type_500_999 = m.Type_500_999;
+                            entry.per_1000_1499 = m.per_1000_1499;
+                            entry.rs_1000_1499 = m.rs_1000_1499;
+                            entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                            entry.Type_1000_1499 = m.Type_1000_1499;
+                            entry.per_1500_1999 = m.per_1500_1999;
+                            entry.rs_1500_1999 = m.rs_1500_1999;
+                            entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                            entry.Type_1500_1999 = m.Type_1500_1999;
+                            entry.per_2000_2499 = m.per_2000_2499;
+                            entry.rs_2000_2499 = m.rs_2000_2499;
+                            entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                            entry.Type_2000_2499 = m.Type_2000_2499;
+                            entry.per_2500_2999 = m.per_2500_2999;
+                            entry.rs_2500_2999 = m.rs_2500_2999;
+                            entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                            entry.Type_2500_2999 = m.Type_2500_2999;
+                            entry.per_3000_3499 = m.per_3000_3499;
+                            entry.rs_3000_3499 = m.rs_3000_3499;
+                            entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                            entry.Type_3000_3499 = m.Type_3000_3499;
+                            entry.per_3500_5000 = m.per_3500_5000;
+                            entry.rs_3500_5000 = m.rs_3500_5000;
+                            entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                            entry.Type_3500_5000 = m.Type_3500_5000;
+                            entry.per_5001_10000 = m.per_5001_10000;
+                            entry.rs_5001_10000 = m.rs_5001_10000;
+                            entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                            entry.Type_5001_10000 = m.Type_5001_10000;
+                            db.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        foreach (var m in model2.UpdateDealer)
+                        {
+                            db.Update_AEPS_All_userSlab_Again_UPI("Dealer", m.aadharpay, m.ministatement, m.per_500_999, m.rs_500_999,
+                              m.maxrs_500_999, m.Type_500_999, m.per_1000_1499, m.rs_1000_1499, m.maxrs_1000_1499,
+                              m.Type_1000_1499, m.per_1500_1999, m.rs_1500_1999, m.maxrs_1500_1999, m.Type_1500_1999,
+                              m.per_2000_2499, m.rs_2000_2499, m.maxrs_2000_2499, m.Type_2000_2499, m.per_2500_2999,
+                              m.rs_2500_2999, m.maxrs_2500_2999, m.Type_2500_2999, m.per_3000_3499, m.rs_3000_3499,
+                              m.maxrs_3000_3499, m.Type_3000_3499, m.per_3500_5000, m.rs_3500_5000, m.maxrs_3500_5000,
+                              m.Type_3500_5000, m.per_5001_10000, m.rs_5001_10000, m.maxrs_5001_10000, m.Type_5001_10000);
+                            //   db.Update_AEPS_All_userSlab_new("Dealer", item.comm, item.maxrs, item.minbal, item.M_statement, item.aadharpay);
+                            if (Button == "Update Existing & New Users")
+                            {
+                                var entry = db.Aeps_Common_Comm_UPI.Where(aa => aa.usertype == "Distributor").Single();
+                                entry.aadharpay = m.aadharpay;
+                                entry.ministatement = m.ministatement;
+                                entry.per_500_999 = m.per_500_999;
+                                entry.rs_500_999 = m.rs_500_999;
+                                entry.maxrs_500_999 = m.maxrs_500_999;
+                                entry.Type_500_999 = m.Type_500_999;
+                                entry.per_1000_1499 = m.per_1000_1499;
+                                entry.rs_1000_1499 = m.rs_1000_1499;
+                                entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                                entry.Type_1000_1499 = m.Type_1000_1499;
+                                entry.per_1500_1999 = m.per_1500_1999;
+                                entry.rs_1500_1999 = m.rs_1500_1999;
+                                entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                                entry.Type_1500_1999 = m.Type_1500_1999;
+                                entry.per_2000_2499 = m.per_2000_2499;
+                                entry.rs_2000_2499 = m.rs_2000_2499;
+                                entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                                entry.Type_2000_2499 = m.Type_2000_2499;
+                                entry.per_2500_2999 = m.per_2500_2999;
+                                entry.rs_2500_2999 = m.rs_2500_2999;
+                                entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                                entry.Type_2500_2999 = m.Type_2500_2999;
+                                entry.per_3000_3499 = m.per_3000_3499;
+                                entry.rs_3000_3499 = m.rs_3000_3499;
+                                entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                                entry.Type_3000_3499 = m.Type_3000_3499;
+                                entry.per_3500_5000 = m.per_3500_5000;
+                                entry.rs_3500_5000 = m.rs_3500_5000;
+                                entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                                entry.Type_3500_5000 = m.Type_3500_5000;
+                                entry.per_5001_10000 = m.per_5001_10000;
+                                entry.rs_5001_10000 = m.rs_5001_10000;
+                                entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                                entry.Type_5001_10000 = m.Type_5001_10000;
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                }
+                //end dealer user
+                //Retailer User
+                if (role == "Retailer")
+                {
+                    if (ddlUserId != "")
+                    {
+                        //
+                        var upchk = "REM";
+                        //
+                        var dlmchk = db.Dealer_Details.Where(aa => aa.DealerId == ddlUserId).SingleOrDefault();
+                        if (dlmchk != null)
+                        {
+                            upchk = "DLM";
+                            var remchk = db.Retailer_Details.Where(aa => aa.RetailerId == ddlUserIdrem).SingleOrDefault();
+                            if (remchk != null)
+                            {
+                                upchk = "REM";
+                            }
+                        }
+                        if (upchk == "REM")
+                        {
+                            foreach (var m in model2.Retaileruser)
+                            {
+                                var entry = db.Aeps_comm_userwise_UPI.Single(a => a.Userid == ddlUserIdrem);
+                                entry.aadharpay = m.aadharpay;
+                                entry.ministatement = m.ministatement;
+                                entry.per_500_999 = m.per_500_999;
+                                entry.rs_500_999 = m.rs_500_999;
+                                entry.maxrs_500_999 = m.maxrs_500_999;
+                                entry.Type_500_999 = m.Type_500_999;
+                                entry.per_1000_1499 = m.per_1000_1499;
+                                entry.rs_1000_1499 = m.rs_1000_1499;
+                                entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                                entry.Type_1000_1499 = m.Type_1000_1499;
+                                entry.per_1500_1999 = m.per_1500_1999;
+                                entry.rs_1500_1999 = m.rs_1500_1999;
+                                entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                                entry.Type_1500_1999 = m.Type_1500_1999;
+                                entry.per_2000_2499 = m.per_2000_2499;
+                                entry.rs_2000_2499 = m.rs_2000_2499;
+                                entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                                entry.Type_2000_2499 = m.Type_2000_2499;
+                                entry.per_2500_2999 = m.per_2500_2999;
+                                entry.rs_2500_2999 = m.rs_2500_2999;
+                                entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                                entry.Type_2500_2999 = m.Type_2500_2999;
+                                entry.per_3000_3499 = m.per_3000_3499;
+                                entry.rs_3000_3499 = m.rs_3000_3499;
+                                entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                                entry.Type_3000_3499 = m.Type_3000_3499;
+                                entry.per_3500_5000 = m.per_3500_5000;
+                                entry.rs_3500_5000 = m.rs_3500_5000;
+                                entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                                entry.Type_3500_5000 = m.Type_3500_5000;
+                                entry.per_5001_10000 = m.per_5001_10000;
+                                entry.rs_5001_10000 = m.rs_5001_10000;
+                                entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                                entry.Type_5001_10000 = m.Type_5001_10000;
+                                db.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+
+                            foreach (var m in model2.Retaileruser)
+                            {
+                                db.Update_AEPS_dlm_rem_userSlab_again_UPI(ddlUserId, m.aadharpay, m.ministatement, m.per_500_999, m.rs_500_999,
+                            m.maxrs_500_999, m.Type_500_999, m.per_1000_1499, m.rs_1000_1499, m.maxrs_1000_1499,
+                            m.Type_1000_1499, m.per_1500_1999, m.rs_1500_1999, m.maxrs_1500_1999, m.Type_1500_1999,
+                            m.per_2000_2499, m.rs_2000_2499, m.maxrs_2000_2499, m.Type_2000_2499, m.per_2500_2999,
+                            m.rs_2500_2999, m.maxrs_2500_2999, m.Type_2500_2999, m.per_3000_3499, m.rs_3000_3499,
+                            m.maxrs_3000_3499, m.Type_3000_3499, m.per_3500_5000, m.rs_3500_5000, m.maxrs_3500_5000,
+                            m.Type_3500_5000, m.per_5001_10000, m.rs_5001_10000, m.maxrs_5001_10000, m.Type_5001_10000);
+                                //   db.Update_AEPS_dlm_rem_userSlab_new(ddlUserId, item.comm, item.maxrs, item.minbal, item.M_statement, item.aadharpay);
+                                if (Button == "Update Existing & New Users")
+                                {
+                                    var entry = db.Aeps_comm_Dlm_rem_UPI.Single(a => a.dealerid == ddlUserId);
+                                    entry.aadharpay = m.aadharpay;
+                                    entry.ministatement = m.ministatement;
+                                    entry.per_500_999 = m.per_500_999;
+                                    entry.rs_500_999 = m.rs_500_999;
+                                    entry.maxrs_500_999 = m.maxrs_500_999;
+                                    entry.Type_500_999 = m.Type_500_999;
+                                    entry.per_1000_1499 = m.per_1000_1499;
+                                    entry.rs_1000_1499 = m.rs_1000_1499;
+                                    entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                                    entry.Type_1000_1499 = m.Type_1000_1499;
+                                    entry.per_1500_1999 = m.per_1500_1999;
+                                    entry.rs_1500_1999 = m.rs_1500_1999;
+                                    entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                                    entry.Type_1500_1999 = m.Type_1500_1999;
+                                    entry.per_2000_2499 = m.per_2000_2499;
+                                    entry.rs_2000_2499 = m.rs_2000_2499;
+                                    entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                                    entry.Type_2000_2499 = m.Type_2000_2499;
+                                    entry.per_2500_2999 = m.per_2500_2999;
+                                    entry.rs_2500_2999 = m.rs_2500_2999;
+                                    entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                                    entry.Type_2500_2999 = m.Type_2500_2999;
+                                    entry.per_3000_3499 = m.per_3000_3499;
+                                    entry.rs_3000_3499 = m.rs_3000_3499;
+                                    entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                                    entry.Type_3000_3499 = m.Type_3000_3499;
+                                    entry.per_3500_5000 = m.per_3500_5000;
+                                    entry.rs_3500_5000 = m.rs_3500_5000;
+                                    entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                                    entry.Type_3500_5000 = m.Type_3500_5000;
+                                    entry.per_5001_10000 = m.per_5001_10000;
+                                    entry.rs_5001_10000 = m.rs_5001_10000;
+                                    entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                                    entry.Type_5001_10000 = m.Type_5001_10000;
+                                    db.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var m in model2.UpdateRetailer)
+                        {
+                            db.Update_AEPS_All_userSlab_Again_UPI("Retailer", m.aadharpay, m.ministatement, m.per_500_999, m.rs_500_999,
+                              m.maxrs_500_999, m.Type_500_999, m.per_1000_1499, m.rs_1000_1499, m.maxrs_1000_1499,
+                              m.Type_1000_1499, m.per_1500_1999, m.rs_1500_1999, m.maxrs_1500_1999, m.Type_1500_1999,
+                              m.per_2000_2499, m.rs_2000_2499, m.maxrs_2000_2499, m.Type_2000_2499, m.per_2500_2999,
+                              m.rs_2500_2999, m.maxrs_2500_2999, m.Type_2500_2999, m.per_3000_3499, m.rs_3000_3499,
+                              m.maxrs_3000_3499, m.Type_3000_3499, m.per_3500_5000, m.rs_3500_5000, m.maxrs_3500_5000,
+                              m.Type_3500_5000, m.per_5001_10000, m.rs_5001_10000, m.maxrs_5001_10000, m.Type_5001_10000);
+                            //  db.Update_AEPS_All_userSlab_new("Retailer", item.comm, item.maxrs, item.minbal, item.M_statement, item.aadharpay);
+                            if (Button == "Update Existing & New Users")
+                            {
+
+                                var entry = db.Aeps_Common_Comm_UPI.Where(aa => aa.usertype == "Retailer").Single();
+                                entry.aadharpay = m.aadharpay;
+                                entry.ministatement = m.ministatement;
+                                entry.per_500_999 = m.per_500_999;
+                                entry.rs_500_999 = m.rs_500_999;
+                                entry.maxrs_500_999 = m.maxrs_500_999;
+                                entry.Type_500_999 = m.Type_500_999;
+                                entry.per_1000_1499 = m.per_1000_1499;
+                                entry.rs_1000_1499 = m.rs_1000_1499;
+                                entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                                entry.Type_1000_1499 = m.Type_1000_1499;
+                                entry.per_1500_1999 = m.per_1500_1999;
+                                entry.rs_1500_1999 = m.rs_1500_1999;
+                                entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                                entry.Type_1500_1999 = m.Type_1500_1999;
+                                entry.per_2000_2499 = m.per_2000_2499;
+                                entry.rs_2000_2499 = m.rs_2000_2499;
+                                entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                                entry.Type_2000_2499 = m.Type_2000_2499;
+                                entry.per_2500_2999 = m.per_2500_2999;
+                                entry.rs_2500_2999 = m.rs_2500_2999;
+                                entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                                entry.Type_2500_2999 = m.Type_2500_2999;
+                                entry.per_3000_3499 = m.per_3000_3499;
+                                entry.rs_3000_3499 = m.rs_3000_3499;
+                                entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                                entry.Type_3000_3499 = m.Type_3000_3499;
+                                entry.per_3500_5000 = m.per_3500_5000;
+                                entry.rs_3500_5000 = m.rs_3500_5000;
+                                entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                                entry.Type_3500_5000 = m.Type_3500_5000;
+                                entry.per_5001_10000 = m.per_5001_10000;
+                                entry.rs_5001_10000 = m.rs_5001_10000;
+                                entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                                entry.Type_5001_10000 = m.Type_5001_10000;
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                    ddlUserId = null;
+                }
+                //end Retailer user
+                //Whitelabel User
+                if (role == "Whitelabel")
+                {
+                    if (ddlUserId != "")
+                    {
+                        foreach (var m in model2.Whitelabeluser)
+                        {
+                            var entry = db.Aeps_comm_userwise_UPI.Single(a => a.Userid == ddlUserId);
+                            entry.aadharpay = m.aadharpay;
+                            entry.ministatement = m.ministatement;
+                            entry.per_500_999 = m.per_500_999;
+                            entry.rs_500_999 = m.rs_500_999;
+                            entry.maxrs_500_999 = m.maxrs_500_999;
+                            entry.Type_500_999 = m.Type_500_999;
+                            entry.per_1000_1499 = m.per_1000_1499;
+                            entry.rs_1000_1499 = m.rs_1000_1499;
+                            entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                            entry.Type_1000_1499 = m.Type_1000_1499;
+                            entry.per_1500_1999 = m.per_1500_1999;
+                            entry.rs_1500_1999 = m.rs_1500_1999;
+                            entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                            entry.Type_1500_1999 = m.Type_1500_1999;
+                            entry.per_2000_2499 = m.per_2000_2499;
+                            entry.rs_2000_2499 = m.rs_2000_2499;
+                            entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                            entry.Type_2000_2499 = m.Type_2000_2499;
+                            entry.per_2500_2999 = m.per_2500_2999;
+                            entry.rs_2500_2999 = m.rs_2500_2999;
+                            entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                            entry.Type_2500_2999 = m.Type_2500_2999;
+                            entry.per_3000_3499 = m.per_3000_3499;
+                            entry.rs_3000_3499 = m.rs_3000_3499;
+                            entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                            entry.Type_3000_3499 = m.Type_3000_3499;
+                            entry.per_3500_5000 = m.per_3500_5000;
+                            entry.rs_3500_5000 = m.rs_3500_5000;
+                            entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                            entry.Type_3500_5000 = m.Type_3500_5000;
+                            entry.per_5001_10000 = m.per_5001_10000;
+                            entry.rs_5001_10000 = m.rs_5001_10000;
+                            entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                            entry.Type_5001_10000 = m.Type_5001_10000;
+                            db.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        foreach (var m in model2.UpdateWhitelabel)
+                        {
+                            db.Update_AEPS_All_userSlab_Again_UPI("Whitelabel", m.aadharpay, m.ministatement, m.per_500_999, m.rs_500_999,
+                             m.maxrs_500_999, m.Type_500_999, m.per_1000_1499, m.rs_1000_1499, m.maxrs_1000_1499,
+                             m.Type_1000_1499, m.per_1500_1999, m.rs_1500_1999, m.maxrs_1500_1999, m.Type_1500_1999,
+                             m.per_2000_2499, m.rs_2000_2499, m.maxrs_2000_2499, m.Type_2000_2499, m.per_2500_2999,
+                             m.rs_2500_2999, m.maxrs_2500_2999, m.Type_2500_2999, m.per_3000_3499, m.rs_3000_3499,
+                             m.maxrs_3000_3499, m.Type_3000_3499, m.per_3500_5000, m.rs_3500_5000, m.maxrs_3500_5000,
+                             m.Type_3500_5000, m.per_5001_10000, m.rs_5001_10000, m.maxrs_5001_10000, m.Type_5001_10000);
+                            //   db.Update_AEPS_All_userSlab_new("Whitelabel", item.comm, item.maxrs, item.minbal, item.M_statement, item.aadharpay);
+                            if (Button == "Update Existing & New Users")
+                            {
+                                var entry = db.Aeps_Common_Comm_UPI.Where(aa => aa.usertype == "Whitelabel").Single();
+                                entry.aadharpay = m.aadharpay;
+                                entry.ministatement = m.ministatement;
+                                entry.per_500_999 = m.per_500_999;
+                                entry.rs_500_999 = m.rs_500_999;
+                                entry.maxrs_500_999 = m.maxrs_500_999;
+                                entry.Type_500_999 = m.Type_500_999;
+                                entry.per_1000_1499 = m.per_1000_1499;
+                                entry.rs_1000_1499 = m.rs_1000_1499;
+                                entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                                entry.Type_1000_1499 = m.Type_1000_1499;
+                                entry.per_1500_1999 = m.per_1500_1999;
+                                entry.rs_1500_1999 = m.rs_1500_1999;
+                                entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                                entry.Type_1500_1999 = m.Type_1500_1999;
+                                entry.per_2000_2499 = m.per_2000_2499;
+                                entry.rs_2000_2499 = m.rs_2000_2499;
+                                entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                                entry.Type_2000_2499 = m.Type_2000_2499;
+                                entry.per_2500_2999 = m.per_2500_2999;
+                                entry.rs_2500_2999 = m.rs_2500_2999;
+                                entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                                entry.Type_2500_2999 = m.Type_2500_2999;
+                                entry.per_3000_3499 = m.per_3000_3499;
+                                entry.rs_3000_3499 = m.rs_3000_3499;
+                                entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                                entry.Type_3000_3499 = m.Type_3000_3499;
+                                entry.per_3500_5000 = m.per_3500_5000;
+                                entry.rs_3500_5000 = m.rs_3500_5000;
+                                entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                                entry.Type_3500_5000 = m.Type_3500_5000;
+                                entry.per_5001_10000 = m.per_5001_10000;
+                                entry.rs_5001_10000 = m.rs_5001_10000;
+                                entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                                entry.Type_5001_10000 = m.Type_5001_10000;
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                }
+
+                userid = ddlUserId;
+
+                AEPSCommonModel model = new AEPSCommonModel();
+                //Master User
+                if (role == "Master")
+                {
+                    if (string.IsNullOrWhiteSpace(userid))
+                    {
+                        model.Materuser =
+                        (from m in db.Aeps_comm_userwise_UPI
+                         join u in db.Users on m.Userid equals u.UserId
+                         where m.Userid == userid
+                         select new AEPSMasterComm
+                         {
+                             idno = m.idno,
+                             userid = m.Userid,
+                             aadharpay = m.aadharpay,
+                             ministatement = m.ministatement,
+                             per_500_999 = m.per_500_999,
+                             rs_500_999 = m.rs_500_999,
+                             maxrs_500_999 = m.maxrs_500_999,
+                             Type_500_999 = m.Type_500_999,
+                             per_1000_1499 = m.per_1000_1499,
+                             rs_1000_1499 = m.rs_1000_1499,
+                             maxrs_1000_1499 = m.maxrs_1000_1499,
+                             Type_1000_1499 = m.Type_1000_1499,
+                             per_1500_1999 = m.per_1500_1999,
+                             rs_1500_1999 = m.rs_1500_1999,
+                             maxrs_1500_1999 = m.maxrs_1500_1999,
+                             Type_1500_1999 = m.Type_1500_1999,
+                             per_2000_2499 = m.per_2000_2499,
+                             rs_2000_2499 = m.rs_2000_2499,
+                             maxrs_2000_2499 = m.maxrs_2000_2499,
+                             Type_2000_2499 = m.Type_2000_2499,
+                             per_2500_2999 = m.per_2500_2999,
+                             rs_2500_2999 = m.rs_2500_2999,
+                             maxrs_2500_2999 = m.maxrs_2500_2999,
+                             Type_2500_2999 = m.Type_2500_2999,
+                             per_3000_3499 = m.per_3000_3499,
+                             rs_3000_3499 = m.rs_3000_3499,
+                             maxrs_3000_3499 = m.maxrs_3000_3499,
+                             Type_3000_3499 = m.Type_3000_3499,
+                             per_3500_5000 = m.per_3500_5000,
+                             rs_3500_5000 = m.rs_3500_5000,
+                             maxrs_3500_5000 = m.maxrs_3500_5000,
+                             Type_3500_5000 = m.Type_3500_5000,
+                             per_5001_10000 = m.per_5001_10000,
+                             rs_5001_10000 = m.rs_5001_10000,
+                             maxrs_5001_10000 = m.maxrs_5001_10000,
+                             Type_5001_10000 = m.Type_5001_10000,
+                             Email = u.Email,
+                             RolesName = "Master"
+                         }).ToList();
+                        var master = db.Superstokist_details;
+                        model.UserId = master.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId, Selected = a.SSId == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Name = "";
+                        model.Phone = "";
+                        model.Email = "";
+                    }
+                    else
+                    {
+                        model.Materuser =
+                         (from m in db.Aeps_comm_userwise_UPI
+                          join u in db.Users on m.Userid equals u.UserId
+                          where m.Userid == userid
+                          select new AEPSMasterComm
+                          {
+                              idno = m.idno,
+                              userid = m.Userid,
+                              aadharpay = m.aadharpay,
+                              ministatement = m.ministatement,
+                              per_500_999 = m.per_500_999,
+                              rs_500_999 = m.rs_500_999,
+                              maxrs_500_999 = m.maxrs_500_999,
+                              Type_500_999 = m.Type_500_999,
+                              per_1000_1499 = m.per_1000_1499,
+                              rs_1000_1499 = m.rs_1000_1499,
+                              maxrs_1000_1499 = m.maxrs_1000_1499,
+                              Type_1000_1499 = m.Type_1000_1499,
+                              per_1500_1999 = m.per_1500_1999,
+                              rs_1500_1999 = m.rs_1500_1999,
+                              maxrs_1500_1999 = m.maxrs_1500_1999,
+                              Type_1500_1999 = m.Type_1500_1999,
+                              per_2000_2499 = m.per_2000_2499,
+                              rs_2000_2499 = m.rs_2000_2499,
+                              maxrs_2000_2499 = m.maxrs_2000_2499,
+                              Type_2000_2499 = m.Type_2000_2499,
+                              per_2500_2999 = m.per_2500_2999,
+                              rs_2500_2999 = m.rs_2500_2999,
+                              maxrs_2500_2999 = m.maxrs_2500_2999,
+                              Type_2500_2999 = m.Type_2500_2999,
+                              per_3000_3499 = m.per_3000_3499,
+                              rs_3000_3499 = m.rs_3000_3499,
+                              maxrs_3000_3499 = m.maxrs_3000_3499,
+                              Type_3000_3499 = m.Type_3000_3499,
+                              per_3500_5000 = m.per_3500_5000,
+                              rs_3500_5000 = m.rs_3500_5000,
+                              maxrs_3500_5000 = m.maxrs_3500_5000,
+                              Type_3500_5000 = m.Type_3500_5000,
+                              per_5001_10000 = m.per_5001_10000,
+                              rs_5001_10000 = m.rs_5001_10000,
+                              maxrs_5001_10000 = m.maxrs_5001_10000,
+                              Type_5001_10000 = m.Type_5001_10000,
+                              Email = u.Email,
+                              RolesName = "Master"
+                          }).ToList();
+                        var master = db.Superstokist_details;
+                        model.UserId = master.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId, Selected = a.SSId == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Name = master.Where(aa => aa.SSId == userid).SingleOrDefault().SuperstokistName;
+                        model.Phone = master.Where(aa => aa.SSId == userid).SingleOrDefault().Mobile;
+                        model.Email = master.Where(aa => aa.SSId == userid).SingleOrDefault().Email;
+                    }
+                    var UpdateAllMaster = (from m in db.Aeps_Common_Comm_UPI
+                                           where m.usertype == "Master"
+                                           select new AEPSUpdateMasterComm
+                                           {
+                                               idno = 0,
+                                               aadharpay = m.aadharpay,
+                                               ministatement = m.ministatement,
+                                               per_500_999 = m.per_500_999,
+                                               rs_500_999 = m.rs_500_999,
+                                               maxrs_500_999 = m.maxrs_500_999,
+                                               Type_500_999 = m.Type_500_999,
+                                               per_1000_1499 = m.per_1000_1499,
+                                               rs_1000_1499 = m.rs_1000_1499,
+                                               maxrs_1000_1499 = m.maxrs_1000_1499,
+                                               Type_1000_1499 = m.Type_1000_1499,
+                                               per_1500_1999 = m.per_1500_1999,
+                                               rs_1500_1999 = m.rs_1500_1999,
+                                               maxrs_1500_1999 = m.maxrs_1500_1999,
+                                               Type_1500_1999 = m.Type_1500_1999,
+                                               per_2000_2499 = m.per_2000_2499,
+                                               rs_2000_2499 = m.rs_2000_2499,
+                                               maxrs_2000_2499 = m.maxrs_2000_2499,
+                                               Type_2000_2499 = m.Type_2000_2499,
+                                               per_2500_2999 = m.per_2500_2999,
+                                               rs_2500_2999 = m.rs_2500_2999,
+                                               maxrs_2500_2999 = m.maxrs_2500_2999,
+                                               Type_2500_2999 = m.Type_2500_2999,
+                                               per_3000_3499 = m.per_3000_3499,
+                                               rs_3000_3499 = m.rs_3000_3499,
+                                               maxrs_3000_3499 = m.maxrs_3000_3499,
+                                               Type_3000_3499 = m.Type_3000_3499,
+                                               per_3500_5000 = m.per_3500_5000,
+                                               rs_3500_5000 = m.rs_3500_5000,
+                                               maxrs_3500_5000 = m.maxrs_3500_5000,
+                                               Type_3500_5000 = m.Type_3500_5000,
+                                               per_5001_10000 = m.per_5001_10000,
+                                               rs_5001_10000 = m.rs_5001_10000,
+                                               maxrs_5001_10000 = m.maxrs_5001_10000,
+                                               Type_5001_10000 = m.Type_5001_10000,
+                                           }).ToList();
+                    model.UpdateMaster = UpdateAllMaster;
+                }
+                //End Master
+                //Dealer User
+                if (role == "Dealer")
+                {
+                    if (string.IsNullOrWhiteSpace(userid))
+                    {
+                        model.Dealeruser =
+                     (from m in db.Aeps_comm_userwise_UPI
+                      join u in db.Users on m.Userid equals u.UserId
+                      where m.Userid == userid
+                      select new AEPSDealerComm
+                      {
+                          idno = m.idno,
+                          userid = m.Userid,
+                          aadharpay = m.aadharpay,
+                          ministatement = m.ministatement,
+                          per_500_999 = m.per_500_999,
+                          rs_500_999 = m.rs_500_999,
+                          maxrs_500_999 = m.maxrs_500_999,
+                          Type_500_999 = m.Type_500_999,
+                          per_1000_1499 = m.per_1000_1499,
+                          rs_1000_1499 = m.rs_1000_1499,
+                          maxrs_1000_1499 = m.maxrs_1000_1499,
+                          Type_1000_1499 = m.Type_1000_1499,
+                          per_1500_1999 = m.per_1500_1999,
+                          rs_1500_1999 = m.rs_1500_1999,
+                          maxrs_1500_1999 = m.maxrs_1500_1999,
+                          Type_1500_1999 = m.Type_1500_1999,
+                          per_2000_2499 = m.per_2000_2499,
+                          rs_2000_2499 = m.rs_2000_2499,
+                          maxrs_2000_2499 = m.maxrs_2000_2499,
+                          Type_2000_2499 = m.Type_2000_2499,
+                          per_2500_2999 = m.per_2500_2999,
+                          rs_2500_2999 = m.rs_2500_2999,
+                          maxrs_2500_2999 = m.maxrs_2500_2999,
+                          Type_2500_2999 = m.Type_2500_2999,
+                          per_3000_3499 = m.per_3000_3499,
+                          rs_3000_3499 = m.rs_3000_3499,
+                          maxrs_3000_3499 = m.maxrs_3000_3499,
+                          Type_3000_3499 = m.Type_3000_3499,
+                          per_3500_5000 = m.per_3500_5000,
+                          rs_3500_5000 = m.rs_3500_5000,
+                          maxrs_3500_5000 = m.maxrs_3500_5000,
+                          Type_3500_5000 = m.Type_3500_5000,
+                          per_5001_10000 = m.per_5001_10000,
+                          rs_5001_10000 = m.rs_5001_10000,
+                          maxrs_5001_10000 = m.maxrs_5001_10000,
+                          Type_5001_10000 = m.Type_5001_10000,
+                          Email = u.Email,
+                          RolesName = "Dealer"
+                      }).ToList();
+                        var dealer = db.Dealer_Details;
+                        model.UserId = dealer.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Phone = "";
+                        model.Email = "";
+                        model.Name = "";
+                    }
+                    else
+                    {
+                        model.Dealeruser =
+                         (from m in db.Aeps_comm_userwise_UPI
+                          join u in db.Users on m.Userid equals u.UserId
+                          where m.Userid == userid
+                          select new AEPSDealerComm
+                          {
+                              idno = m.idno,
+                              userid = m.Userid,
+                              aadharpay = m.aadharpay,
+                              ministatement = m.ministatement,
+                              per_500_999 = m.per_500_999,
+                              rs_500_999 = m.rs_500_999,
+                              maxrs_500_999 = m.maxrs_500_999,
+                              Type_500_999 = m.Type_500_999,
+                              per_1000_1499 = m.per_1000_1499,
+                              rs_1000_1499 = m.rs_1000_1499,
+                              maxrs_1000_1499 = m.maxrs_1000_1499,
+                              Type_1000_1499 = m.Type_1000_1499,
+                              per_1500_1999 = m.per_1500_1999,
+                              rs_1500_1999 = m.rs_1500_1999,
+                              maxrs_1500_1999 = m.maxrs_1500_1999,
+                              Type_1500_1999 = m.Type_1500_1999,
+                              per_2000_2499 = m.per_2000_2499,
+                              rs_2000_2499 = m.rs_2000_2499,
+                              maxrs_2000_2499 = m.maxrs_2000_2499,
+                              Type_2000_2499 = m.Type_2000_2499,
+                              per_2500_2999 = m.per_2500_2999,
+                              rs_2500_2999 = m.rs_2500_2999,
+                              maxrs_2500_2999 = m.maxrs_2500_2999,
+                              Type_2500_2999 = m.Type_2500_2999,
+                              per_3000_3499 = m.per_3000_3499,
+                              rs_3000_3499 = m.rs_3000_3499,
+                              maxrs_3000_3499 = m.maxrs_3000_3499,
+                              Type_3000_3499 = m.Type_3000_3499,
+                              per_3500_5000 = m.per_3500_5000,
+                              rs_3500_5000 = m.rs_3500_5000,
+                              maxrs_3500_5000 = m.maxrs_3500_5000,
+                              Type_3500_5000 = m.Type_3500_5000,
+                              per_5001_10000 = m.per_5001_10000,
+                              rs_5001_10000 = m.rs_5001_10000,
+                              maxrs_5001_10000 = m.maxrs_5001_10000,
+                              Type_5001_10000 = m.Type_5001_10000,
+                              Email = u.Email,
+                              RolesName = "Dealer"
+                          }).ToList();
+                        var dealer = db.Dealer_Details;
+                        model.UserId = dealer.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Phone = dealer.Where(aa => aa.DealerId == userid).SingleOrDefault().Mobile;
+                        model.Email = dealer.Where(aa => aa.DealerId == userid).SingleOrDefault().Email;
+                        model.Name = dealer.Where(aa => aa.DealerId == userid).SingleOrDefault().DealerName;
+                    }
+                    var UpdateAllMaster = (from m in db.Aeps_Common_Comm_UPI
+                                           where m.usertype == "Dealer"
+                                           select new AEPSUpdateDealerComm
+                                           {
+                                               idno = 0,
+                                               aadharpay = m.aadharpay,
+                                               ministatement = m.ministatement,
+                                               per_500_999 = m.per_500_999,
+                                               rs_500_999 = m.rs_500_999,
+                                               maxrs_500_999 = m.maxrs_500_999,
+                                               Type_500_999 = m.Type_500_999,
+                                               per_1000_1499 = m.per_1000_1499,
+                                               rs_1000_1499 = m.rs_1000_1499,
+                                               maxrs_1000_1499 = m.maxrs_1000_1499,
+                                               Type_1000_1499 = m.Type_1000_1499,
+                                               per_1500_1999 = m.per_1500_1999,
+                                               rs_1500_1999 = m.rs_1500_1999,
+                                               maxrs_1500_1999 = m.maxrs_1500_1999,
+                                               Type_1500_1999 = m.Type_1500_1999,
+                                               per_2000_2499 = m.per_2000_2499,
+                                               rs_2000_2499 = m.rs_2000_2499,
+                                               maxrs_2000_2499 = m.maxrs_2000_2499,
+                                               Type_2000_2499 = m.Type_2000_2499,
+                                               per_2500_2999 = m.per_2500_2999,
+                                               rs_2500_2999 = m.rs_2500_2999,
+                                               maxrs_2500_2999 = m.maxrs_2500_2999,
+                                               Type_2500_2999 = m.Type_2500_2999,
+                                               per_3000_3499 = m.per_3000_3499,
+                                               rs_3000_3499 = m.rs_3000_3499,
+                                               maxrs_3000_3499 = m.maxrs_3000_3499,
+                                               Type_3000_3499 = m.Type_3000_3499,
+                                               per_3500_5000 = m.per_3500_5000,
+                                               rs_3500_5000 = m.rs_3500_5000,
+                                               maxrs_3500_5000 = m.maxrs_3500_5000,
+                                               Type_3500_5000 = m.Type_3500_5000,
+                                               per_5001_10000 = m.per_5001_10000,
+                                               rs_5001_10000 = m.rs_5001_10000,
+                                               maxrs_5001_10000 = m.maxrs_5001_10000,
+                                               Type_5001_10000 = m.Type_5001_10000
+                                           }).ToList();
+                    model.UpdateDealer = UpdateAllMaster;
+
+                }
+                //End Dealer
+                //Retailer User
+                if (role == "Retailer")
+                {
+                    userid = ddlUserIdrem;
+                    if (string.IsNullOrWhiteSpace(userid))
+                    {
+                        var upchk = "REM";
+                        //
+                        var dlmchk = db.Dealer_Details.Where(aa => aa.DealerId == dlmid).SingleOrDefault();
+                        if (dlmchk != null)
+                        {
+                            upchk = "DLM";
+                            var remchk = db.Retailer_Details.Where(aa => aa.RetailerId == ddlUserIdrem).SingleOrDefault();
+                            if (remchk != null)
+                            {
+                                upchk = "REM";
+                            }
+                        }
+                        if (upchk == "REM")
+                        {
+                            model.Retaileruser =
+                     (from m in db.Aeps_comm_userwise_UPI
+                      join u in db.Users on m.Userid equals u.UserId
+                      where m.Userid == userid
+                      select new AEPSRetailerComm
+                      {
+                          idno = m.idno,
+                          userid = m.Userid,
+                          aadharpay = m.aadharpay,
+                          ministatement = m.ministatement,
+                          per_500_999 = m.per_500_999,
+                          rs_500_999 = m.rs_500_999,
+                          maxrs_500_999 = m.maxrs_500_999,
+                          Type_500_999 = m.Type_500_999,
+                          per_1000_1499 = m.per_1000_1499,
+                          rs_1000_1499 = m.rs_1000_1499,
+                          maxrs_1000_1499 = m.maxrs_1000_1499,
+                          Type_1000_1499 = m.Type_1000_1499,
+                          per_1500_1999 = m.per_1500_1999,
+                          rs_1500_1999 = m.rs_1500_1999,
+                          maxrs_1500_1999 = m.maxrs_1500_1999,
+                          Type_1500_1999 = m.Type_1500_1999,
+                          per_2000_2499 = m.per_2000_2499,
+                          rs_2000_2499 = m.rs_2000_2499,
+                          maxrs_2000_2499 = m.maxrs_2000_2499,
+                          Type_2000_2499 = m.Type_2000_2499,
+                          per_2500_2999 = m.per_2500_2999,
+                          rs_2500_2999 = m.rs_2500_2999,
+                          maxrs_2500_2999 = m.maxrs_2500_2999,
+                          Type_2500_2999 = m.Type_2500_2999,
+                          per_3000_3499 = m.per_3000_3499,
+                          rs_3000_3499 = m.rs_3000_3499,
+                          maxrs_3000_3499 = m.maxrs_3000_3499,
+                          Type_3000_3499 = m.Type_3000_3499,
+                          per_3500_5000 = m.per_3500_5000,
+                          rs_3500_5000 = m.rs_3500_5000,
+                          maxrs_3500_5000 = m.maxrs_3500_5000,
+                          Type_3500_5000 = m.Type_3500_5000,
+                          per_5001_10000 = m.per_5001_10000,
+                          rs_5001_10000 = m.rs_5001_10000,
+                          maxrs_5001_10000 = m.maxrs_5001_10000,
+                          Type_5001_10000 = m.Type_5001_10000,
+                          RolesName = "Retailer"
+                      }).ToList();
+                            var listm = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == dlmid ? true : false }).ToList();
+                            var remm = db.Retailer_Details.Where(aa => aa.ISDeleteuser == false);
+                            var list1m = remm.Where(aa => aa.DealerId == dlmid).Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId, Selected = a.DealerId == userid ? true : false }).ToList();
+
+                            model.UserId = listm;
+                            model.Retailerid = list1m;
+                            model.Name = "";
+                            model.Phone = "";
+                            model.Email = "";
+                            model.role = "Retailer";
+                        }
+                        else
+                        {
+                            model.Retaileruser =
+                    (from m in db.Aeps_comm_Dlm_rem_UPI
+                     join u in db.Users on m.dealerid equals u.UserId
+                     where m.dealerid == dlmid
+                     select new AEPSRetailerComm
+                     {
+                         idno = m.idno,
+                         userid = m.dealerid,
+                         aadharpay = m.aadharpay,
+                         ministatement = m.ministatement,
+                         per_500_999 = m.per_500_999,
+                         rs_500_999 = m.rs_500_999,
+                         maxrs_500_999 = m.maxrs_500_999,
+                         Type_500_999 = m.Type_500_999,
+                         per_1000_1499 = m.per_1000_1499,
+                         rs_1000_1499 = m.rs_1000_1499,
+                         maxrs_1000_1499 = m.maxrs_1000_1499,
+                         Type_1000_1499 = m.Type_1000_1499,
+                         per_1500_1999 = m.per_1500_1999,
+                         rs_1500_1999 = m.rs_1500_1999,
+                         maxrs_1500_1999 = m.maxrs_1500_1999,
+                         Type_1500_1999 = m.Type_1500_1999,
+                         per_2000_2499 = m.per_2000_2499,
+                         rs_2000_2499 = m.rs_2000_2499,
+                         maxrs_2000_2499 = m.maxrs_2000_2499,
+                         Type_2000_2499 = m.Type_2000_2499,
+                         per_2500_2999 = m.per_2500_2999,
+                         rs_2500_2999 = m.rs_2500_2999,
+                         maxrs_2500_2999 = m.maxrs_2500_2999,
+                         Type_2500_2999 = m.Type_2500_2999,
+                         per_3000_3499 = m.per_3000_3499,
+                         rs_3000_3499 = m.rs_3000_3499,
+                         maxrs_3000_3499 = m.maxrs_3000_3499,
+                         Type_3000_3499 = m.Type_3000_3499,
+                         per_3500_5000 = m.per_3500_5000,
+                         rs_3500_5000 = m.rs_3500_5000,
+                         maxrs_3500_5000 = m.maxrs_3500_5000,
+                         Type_3500_5000 = m.Type_3500_5000,
+                         per_5001_10000 = m.per_5001_10000,
+                         rs_5001_10000 = m.rs_5001_10000,
+                         maxrs_5001_10000 = m.maxrs_5001_10000,
+                         Type_5001_10000 = m.Type_5001_10000,
+                         RolesName = "Retailer"
+                     }).ToList();
+                            var list = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == dlmid ? true : false }).ToList();
+                            var rem = db.Retailer_Details.Where(aa => aa.ISDeleteuser == false);
+                            var list1 = rem.Where(aa => aa.DealerId == dlmid && aa.ISDeleteuser == false).Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId }).ToList();
+
+                            model.UserId = list;
+                            model.Retailerid = list1;
+                            model.Name = "";
+                            model.Phone = "";
+                            model.Email = "";
+                            model.role = "Retailer";
+                        }
+                    }
+                    else
+                    {
+                        model.Retaileruser =
+                         (from m in db.Aeps_comm_userwise_UPI
+                          join u in db.Users on m.Userid equals u.UserId
+                          where m.Userid == userid
+                          select new AEPSRetailerComm
+                          {
+                              idno = m.idno,
+                              userid = m.Userid,
+                              aadharpay = m.aadharpay,
+                              ministatement = m.ministatement,
+                              per_500_999 = m.per_500_999,
+                              rs_500_999 = m.rs_500_999,
+                              maxrs_500_999 = m.maxrs_500_999,
+                              Type_500_999 = m.Type_500_999,
+                              per_1000_1499 = m.per_1000_1499,
+                              rs_1000_1499 = m.rs_1000_1499,
+                              maxrs_1000_1499 = m.maxrs_1000_1499,
+                              Type_1000_1499 = m.Type_1000_1499,
+                              per_1500_1999 = m.per_1500_1999,
+                              rs_1500_1999 = m.rs_1500_1999,
+                              maxrs_1500_1999 = m.maxrs_1500_1999,
+                              Type_1500_1999 = m.Type_1500_1999,
+                              per_2000_2499 = m.per_2000_2499,
+                              rs_2000_2499 = m.rs_2000_2499,
+                              maxrs_2000_2499 = m.maxrs_2000_2499,
+                              Type_2000_2499 = m.Type_2000_2499,
+                              per_2500_2999 = m.per_2500_2999,
+                              rs_2500_2999 = m.rs_2500_2999,
+                              maxrs_2500_2999 = m.maxrs_2500_2999,
+                              Type_2500_2999 = m.Type_2500_2999,
+                              per_3000_3499 = m.per_3000_3499,
+                              rs_3000_3499 = m.rs_3000_3499,
+                              maxrs_3000_3499 = m.maxrs_3000_3499,
+                              Type_3000_3499 = m.Type_3000_3499,
+                              per_3500_5000 = m.per_3500_5000,
+                              rs_3500_5000 = m.rs_3500_5000,
+                              maxrs_3500_5000 = m.maxrs_3500_5000,
+                              Type_3500_5000 = m.Type_3500_5000,
+                              per_5001_10000 = m.per_5001_10000,
+                              rs_5001_10000 = m.rs_5001_10000,
+                              maxrs_5001_10000 = m.maxrs_5001_10000,
+                              Type_5001_10000 = m.Type_5001_10000,
+                              RolesName = "Retailer"
+                          }).ToList();
+                        var list = db.Dealer_Details.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == dlmid ? true : false }).ToList();
+                        var rem = db.Retailer_Details.Where(aa => aa.ISDeleteuser == false);
+                        var list1 = rem.Where(aa => aa.DealerId == dlmid && aa.ISDeleteuser == false).Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId, Selected = a.RetailerId == userid ? true : false }).ToList();
+                        try
+                        {
+                            model.UserId = list;
+                            model.Retailerid = list1;
+                            model.Name = rem.Where(aa => aa.RetailerId == userid).SingleOrDefault().RetailerName;
+                            model.Phone = rem.Where(aa => aa.RetailerId == userid).SingleOrDefault().Mobile;
+                            model.Email = rem.Where(aa => aa.RetailerId == userid).SingleOrDefault().Email;
+                            model.role = "Retailer";
+                        }
+                        catch { }
+                    }
+                    var UpdateAllMaster = (from m in db.Aeps_Common_Comm_UPI
+                                           where m.usertype == "Retailer"
+                                           select new AEPSUpdateRetailerComm
+                                           {
+                                               idno = 0,
+                                               aadharpay = m.aadharpay,
+                                               ministatement = m.ministatement,
+                                               per_500_999 = m.per_500_999,
+                                               rs_500_999 = m.rs_500_999,
+                                               maxrs_500_999 = m.maxrs_500_999,
+                                               Type_500_999 = m.Type_500_999,
+                                               per_1000_1499 = m.per_1000_1499,
+                                               rs_1000_1499 = m.rs_1000_1499,
+                                               maxrs_1000_1499 = m.maxrs_1000_1499,
+                                               Type_1000_1499 = m.Type_1000_1499,
+                                               per_1500_1999 = m.per_1500_1999,
+                                               rs_1500_1999 = m.rs_1500_1999,
+                                               maxrs_1500_1999 = m.maxrs_1500_1999,
+                                               Type_1500_1999 = m.Type_1500_1999,
+                                               per_2000_2499 = m.per_2000_2499,
+                                               rs_2000_2499 = m.rs_2000_2499,
+                                               maxrs_2000_2499 = m.maxrs_2000_2499,
+                                               Type_2000_2499 = m.Type_2000_2499,
+                                               per_2500_2999 = m.per_2500_2999,
+                                               rs_2500_2999 = m.rs_2500_2999,
+                                               maxrs_2500_2999 = m.maxrs_2500_2999,
+                                               Type_2500_2999 = m.Type_2500_2999,
+                                               per_3000_3499 = m.per_3000_3499,
+                                               rs_3000_3499 = m.rs_3000_3499,
+                                               maxrs_3000_3499 = m.maxrs_3000_3499,
+                                               Type_3000_3499 = m.Type_3000_3499,
+                                               per_3500_5000 = m.per_3500_5000,
+                                               rs_3500_5000 = m.rs_3500_5000,
+                                               maxrs_3500_5000 = m.maxrs_3500_5000,
+                                               Type_3500_5000 = m.Type_3500_5000,
+                                               per_5001_10000 = m.per_5001_10000,
+                                               rs_5001_10000 = m.rs_5001_10000,
+                                               maxrs_5001_10000 = m.maxrs_5001_10000,
+                                               Type_5001_10000 = m.Type_5001_10000,
+                                           }).ToList();
+                    model.UpdateRetailer = UpdateAllMaster;
+
+                }
+                //End Dealer
+                //Whitelabel User
+                if (role == "Whitelabel")
+                {
+                    if (string.IsNullOrWhiteSpace(userid))
+                    {
+
+                        model.Whitelabeluser =
+                     (from m in db.Aeps_comm_userwise_UPI
+                      join u in db.Users on m.Userid equals u.UserId
+                      where m.Userid == userid
+                      select new AEPSWhitelabelComm
+                      {
+                          idno = m.idno,
+                          userid = m.Userid,
+                          aadharpay = m.aadharpay,
+                          ministatement = m.ministatement,
+                          per_500_999 = m.per_500_999,
+                          rs_500_999 = m.rs_500_999,
+                          maxrs_500_999 = m.maxrs_500_999,
+                          Type_500_999 = m.Type_500_999,
+                          per_1000_1499 = m.per_1000_1499,
+                          rs_1000_1499 = m.rs_1000_1499,
+                          maxrs_1000_1499 = m.maxrs_1000_1499,
+                          Type_1000_1499 = m.Type_1000_1499,
+                          per_1500_1999 = m.per_1500_1999,
+                          rs_1500_1999 = m.rs_1500_1999,
+                          maxrs_1500_1999 = m.maxrs_1500_1999,
+                          Type_1500_1999 = m.Type_1500_1999,
+                          per_2000_2499 = m.per_2000_2499,
+                          rs_2000_2499 = m.rs_2000_2499,
+                          maxrs_2000_2499 = m.maxrs_2000_2499,
+                          Type_2000_2499 = m.Type_2000_2499,
+                          per_2500_2999 = m.per_2500_2999,
+                          rs_2500_2999 = m.rs_2500_2999,
+                          maxrs_2500_2999 = m.maxrs_2500_2999,
+                          Type_2500_2999 = m.Type_2500_2999,
+                          per_3000_3499 = m.per_3000_3499,
+                          rs_3000_3499 = m.rs_3000_3499,
+                          maxrs_3000_3499 = m.maxrs_3000_3499,
+                          Type_3000_3499 = m.Type_3000_3499,
+                          per_3500_5000 = m.per_3500_5000,
+                          rs_3500_5000 = m.rs_3500_5000,
+                          maxrs_3500_5000 = m.maxrs_3500_5000,
+                          Type_3500_5000 = m.Type_3500_5000,
+                          per_5001_10000 = m.per_5001_10000,
+                          rs_5001_10000 = m.rs_5001_10000,
+                          maxrs_5001_10000 = m.maxrs_5001_10000,
+                          Type_5001_10000 = m.Type_5001_10000,
+                          RolesName = "Whitelabel"
+                      }).ToList();
+                        var white = db.WhiteLabel_userList;
+                        model.UserId = white.Select(a => new SelectListItem { Text = a.FrmName, Value = a.WhiteLabelID, Selected = a.WhiteLabelID == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Phone = "";
+                        model.Email = "";
+                        model.Name = "";
+                    }
+                    else
+                    {
+                        model.Whitelabeluser =
+                         (from m in db.Aeps_comm_userwise_UPI
+                          join u in db.Users on m.Userid equals u.UserId
+                          where m.Userid == userid
+                          select new AEPSWhitelabelComm
+                          {
+                              idno = m.idno,
+                              userid = m.Userid,
+                              aadharpay = m.aadharpay,
+                              ministatement = m.ministatement,
+                              per_500_999 = m.per_500_999,
+                              rs_500_999 = m.rs_500_999,
+                              maxrs_500_999 = m.maxrs_500_999,
+                              Type_500_999 = m.Type_500_999,
+                              per_1000_1499 = m.per_1000_1499,
+                              rs_1000_1499 = m.rs_1000_1499,
+                              maxrs_1000_1499 = m.maxrs_1000_1499,
+                              Type_1000_1499 = m.Type_1000_1499,
+                              per_1500_1999 = m.per_1500_1999,
+                              rs_1500_1999 = m.rs_1500_1999,
+                              maxrs_1500_1999 = m.maxrs_1500_1999,
+                              Type_1500_1999 = m.Type_1500_1999,
+                              per_2000_2499 = m.per_2000_2499,
+                              rs_2000_2499 = m.rs_2000_2499,
+                              maxrs_2000_2499 = m.maxrs_2000_2499,
+                              Type_2000_2499 = m.Type_2000_2499,
+                              per_2500_2999 = m.per_2500_2999,
+                              rs_2500_2999 = m.rs_2500_2999,
+                              maxrs_2500_2999 = m.maxrs_2500_2999,
+                              Type_2500_2999 = m.Type_2500_2999,
+                              per_3000_3499 = m.per_3000_3499,
+                              rs_3000_3499 = m.rs_3000_3499,
+                              maxrs_3000_3499 = m.maxrs_3000_3499,
+                              Type_3000_3499 = m.Type_3000_3499,
+                              per_3500_5000 = m.per_3500_5000,
+                              rs_3500_5000 = m.rs_3500_5000,
+                              maxrs_3500_5000 = m.maxrs_3500_5000,
+                              Type_3500_5000 = m.Type_3500_5000,
+                              per_5001_10000 = m.per_5001_10000,
+                              rs_5001_10000 = m.rs_5001_10000,
+                              maxrs_5001_10000 = m.maxrs_5001_10000,
+                              Type_5001_10000 = m.Type_5001_10000,
+                              Email = u.Email,
+                              RolesName = "Whitelabel"
+                          }).ToList();
+                        var white = db.WhiteLabel_userList;
+                        model.UserId = white.Select(a => new SelectListItem { Text = a.FrmName, Value = a.WhiteLabelID, Selected = a.WhiteLabelID == userid ? true : false }).ToList();
+                        model.Retailerid = Provinces;
+                        model.Phone = white.Where(aa => aa.WhiteLabelID == userid).SingleOrDefault().Mobile;
+                        model.Email = white.Where(aa => aa.WhiteLabelID == userid).SingleOrDefault().EmailId;
+                        model.Name = white.Where(aa => aa.WhiteLabelID == userid).SingleOrDefault().Name;
+                    }
+                    var UpdateAllMaster = (from m in db.Aeps_Common_Comm_UPI
+                                           where m.usertype == "Whitelabel"
+                                           select new AEPSUpdateWhitelabelComm
+                                           {
+                                               idno = 0,
+                                               aadharpay = m.aadharpay,
+                                               ministatement = m.ministatement,
+                                               per_500_999 = m.per_500_999,
+                                               rs_500_999 = m.rs_500_999,
+                                               maxrs_500_999 = m.maxrs_500_999,
+                                               Type_500_999 = m.Type_500_999,
+                                               per_1000_1499 = m.per_1000_1499,
+                                               rs_1000_1499 = m.rs_1000_1499,
+                                               maxrs_1000_1499 = m.maxrs_1000_1499,
+                                               Type_1000_1499 = m.Type_1000_1499,
+                                               per_1500_1999 = m.per_1500_1999,
+                                               rs_1500_1999 = m.rs_1500_1999,
+                                               maxrs_1500_1999 = m.maxrs_1500_1999,
+                                               Type_1500_1999 = m.Type_1500_1999,
+                                               per_2000_2499 = m.per_2000_2499,
+                                               rs_2000_2499 = m.rs_2000_2499,
+                                               maxrs_2000_2499 = m.maxrs_2000_2499,
+                                               Type_2000_2499 = m.Type_2000_2499,
+                                               per_2500_2999 = m.per_2500_2999,
+                                               rs_2500_2999 = m.rs_2500_2999,
+                                               maxrs_2500_2999 = m.maxrs_2500_2999,
+                                               Type_2500_2999 = m.Type_2500_2999,
+                                               per_3000_3499 = m.per_3000_3499,
+                                               rs_3000_3499 = m.rs_3000_3499,
+                                               maxrs_3000_3499 = m.maxrs_3000_3499,
+                                               Type_3000_3499 = m.Type_3000_3499,
+                                               per_3500_5000 = m.per_3500_5000,
+                                               rs_3500_5000 = m.rs_3500_5000,
+                                               maxrs_3500_5000 = m.maxrs_3500_5000,
+                                               Type_3500_5000 = m.Type_3500_5000,
+                                               per_5001_10000 = m.per_5001_10000,
+                                               rs_5001_10000 = m.rs_5001_10000,
+                                               maxrs_5001_10000 = m.maxrs_5001_10000,
+                                               Type_5001_10000 = m.Type_5001_10000,
+                                           }).ToList();
+                    model.UpdateWhitelabel = UpdateAllMaster;
+
+                }
+                //Whitelabel API
+                return PartialView(model);
+            }
+        }
+        [HttpPost]
+        public ActionResult AepsUserWise_UPI(AEPSCommonModel model, string ddlUserId, string role)
+        {
+
+            //master User
+            if (role == "Master")
+            {
+                if (ddlUserId != "")
+                {
+                    foreach (var m in model.Materuser)
+                    {
+                        var entry = db.Aeps_comm_userwise_UPI.Single(a => a.Userid == ddlUserId);
+                        entry.aadharpay = m.aadharpay;
+                        entry.ministatement = m.ministatement;
+                        entry.per_500_999 = m.per_500_999;
+                        entry.rs_500_999 = m.rs_500_999;
+                        entry.maxrs_500_999 = m.maxrs_500_999;
+                        entry.Type_500_999 = m.Type_500_999;
+                        entry.per_1000_1499 = m.per_1000_1499;
+                        entry.rs_1000_1499 = m.rs_1000_1499;
+                        entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                        entry.Type_1000_1499 = m.Type_1000_1499;
+                        entry.per_1500_1999 = m.per_1500_1999;
+                        entry.rs_1500_1999 = m.rs_1500_1999;
+                        entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                        entry.Type_1500_1999 = m.Type_1500_1999;
+                        entry.per_2000_2499 = m.per_2000_2499;
+                        entry.rs_2000_2499 = m.rs_2000_2499;
+                        entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                        entry.Type_2000_2499 = m.Type_2000_2499;
+                        entry.per_2500_2999 = m.per_2500_2999;
+                        entry.rs_2500_2999 = m.rs_2500_2999;
+                        entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                        entry.Type_2500_2999 = m.Type_2500_2999;
+                        entry.per_3000_3499 = m.per_3000_3499;
+                        entry.rs_3000_3499 = m.rs_3000_3499;
+                        entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                        entry.Type_3000_3499 = m.Type_3000_3499;
+                        entry.per_3500_5000 = m.per_3500_5000;
+                        entry.rs_3500_5000 = m.rs_3500_5000;
+                        entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                        entry.Type_3500_5000 = m.Type_3500_5000;
+                        entry.per_5001_10000 = m.per_5001_10000;
+                        entry.rs_5001_10000 = m.rs_5001_10000;
+                        entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                        entry.Type_5001_10000 = m.Type_5001_10000;
+
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    foreach (var m in model.UpdateMaster)
+                    {
+                        db.Update_AEPS_All_userSlab_Again_UPI("Master", m.aadharpay, m.ministatement, m.per_500_999, m.rs_500_999,
+                  m.maxrs_500_999, m.Type_500_999, m.per_1000_1499, m.rs_1000_1499, m.maxrs_1000_1499,
+                  m.Type_1000_1499, m.per_1500_1999, m.rs_1500_1999, m.maxrs_1500_1999, m.Type_1500_1999,
+                  m.per_2000_2499, m.rs_2000_2499, m.maxrs_2000_2499, m.Type_2000_2499, m.per_2500_2999,
+                  m.rs_2500_2999, m.maxrs_2500_2999, m.Type_2500_2999, m.per_3000_3499, m.rs_3000_3499,
+                  m.maxrs_3000_3499, m.Type_3000_3499, m.per_3500_5000, m.rs_3500_5000, m.maxrs_3500_5000,
+                  m.Type_3500_5000, m.per_5001_10000, m.rs_5001_10000, m.maxrs_5001_10000, m.Type_5001_10000);
+                        // db.Update_AEPS_All_userSlab_new("Master", item.comm, item.maxrs, item.minbal, item.M_statement, item.aadharpay);
+                    }
+
+                }
+            }
+            //Dealer User
+            if (role == "Dealer")
+            {
+                if (ddlUserId != "")
+                {
+                    foreach (var m in model.Dealeruser)
+                    {
+                        var entry = db.Aeps_comm_userwise_UPI.Single(a => a.Userid == ddlUserId);
+                        entry.aadharpay = m.aadharpay;
+                        entry.ministatement = m.ministatement;
+                        entry.per_500_999 = m.per_500_999;
+                        entry.rs_500_999 = m.rs_500_999;
+                        entry.maxrs_500_999 = m.maxrs_500_999;
+                        entry.Type_500_999 = m.Type_500_999;
+                        entry.per_1000_1499 = m.per_1000_1499;
+                        entry.rs_1000_1499 = m.rs_1000_1499;
+                        entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                        entry.Type_1000_1499 = m.Type_1000_1499;
+                        entry.per_1500_1999 = m.per_1500_1999;
+                        entry.rs_1500_1999 = m.rs_1500_1999;
+                        entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                        entry.Type_1500_1999 = m.Type_1500_1999;
+                        entry.per_2000_2499 = m.per_2000_2499;
+                        entry.rs_2000_2499 = m.rs_2000_2499;
+                        entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                        entry.Type_2000_2499 = m.Type_2000_2499;
+                        entry.per_2500_2999 = m.per_2500_2999;
+                        entry.rs_2500_2999 = m.rs_2500_2999;
+                        entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                        entry.Type_2500_2999 = m.Type_2500_2999;
+                        entry.per_3000_3499 = m.per_3000_3499;
+                        entry.rs_3000_3499 = m.rs_3000_3499;
+                        entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                        entry.Type_3000_3499 = m.Type_3000_3499;
+                        entry.per_3500_5000 = m.per_3500_5000;
+                        entry.rs_3500_5000 = m.rs_3500_5000;
+                        entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                        entry.Type_3500_5000 = m.Type_3500_5000;
+                        entry.per_5001_10000 = m.per_5001_10000;
+                        entry.rs_5001_10000 = m.rs_5001_10000;
+                        entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                        entry.Type_5001_10000 = m.Type_5001_10000;
+
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    foreach (var m in model.UpdateDealer)
+                    {
+                        db.Update_AEPS_All_userSlab_Again_UPI("Dealer", m.aadharpay, m.ministatement, m.per_500_999, m.rs_500_999,
+                m.maxrs_500_999, m.Type_500_999, m.per_1000_1499, m.rs_1000_1499, m.maxrs_1000_1499,
+                m.Type_1000_1499, m.per_1500_1999, m.rs_1500_1999, m.maxrs_1500_1999, m.Type_1500_1999,
+                m.per_2000_2499, m.rs_2000_2499, m.maxrs_2000_2499, m.Type_2000_2499, m.per_2500_2999,
+                m.rs_2500_2999, m.maxrs_2500_2999, m.Type_2500_2999, m.per_3000_3499, m.rs_3000_3499,
+                m.maxrs_3000_3499, m.Type_3000_3499, m.per_3500_5000, m.rs_3500_5000, m.maxrs_3500_5000,
+                m.Type_3500_5000, m.per_5001_10000, m.rs_5001_10000, m.maxrs_5001_10000, m.Type_5001_10000);
+                        //  db.Update_AEPS_All_userSlab_new("Dealer", item.comm, item.maxrs, item.minbal, item.M_statement, item.aadharpay);
+                    }
+                }
+            }
+            //end dealer user
+            //Retailer User
+            if (role == "Retailer")
+            {
+                if (ddlUserId != "")
+                {
+                    foreach (var m in model.Retaileruser)
+                    {
+                        var entry = db.Aeps_comm_userwise_UPI.Single(a => a.Userid == ddlUserId);
+                        entry.aadharpay = m.aadharpay;
+                        entry.ministatement = m.ministatement;
+                        entry.per_500_999 = m.per_500_999;
+                        entry.rs_500_999 = m.rs_500_999;
+                        entry.maxrs_500_999 = m.maxrs_500_999;
+                        entry.Type_500_999 = m.Type_500_999;
+                        entry.per_1000_1499 = m.per_1000_1499;
+                        entry.rs_1000_1499 = m.rs_1000_1499;
+                        entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                        entry.Type_1000_1499 = m.Type_1000_1499;
+                        entry.per_1500_1999 = m.per_1500_1999;
+                        entry.rs_1500_1999 = m.rs_1500_1999;
+                        entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                        entry.Type_1500_1999 = m.Type_1500_1999;
+                        entry.per_2000_2499 = m.per_2000_2499;
+                        entry.rs_2000_2499 = m.rs_2000_2499;
+                        entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                        entry.Type_2000_2499 = m.Type_2000_2499;
+                        entry.per_2500_2999 = m.per_2500_2999;
+                        entry.rs_2500_2999 = m.rs_2500_2999;
+                        entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                        entry.Type_2500_2999 = m.Type_2500_2999;
+                        entry.per_3000_3499 = m.per_3000_3499;
+                        entry.rs_3000_3499 = m.rs_3000_3499;
+                        entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                        entry.Type_3000_3499 = m.Type_3000_3499;
+                        entry.per_3500_5000 = m.per_3500_5000;
+                        entry.rs_3500_5000 = m.rs_3500_5000;
+                        entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                        entry.Type_3500_5000 = m.Type_3500_5000;
+                        entry.per_5001_10000 = m.per_5001_10000;
+                        entry.rs_5001_10000 = m.rs_5001_10000;
+                        entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                        entry.Type_5001_10000 = m.Type_5001_10000;
+
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    foreach (var m in model.UpdateRetailer)
+                    {
+                        db.Update_AEPS_All_userSlab_Again_UPI("Retailer", m.aadharpay, m.ministatement, m.per_500_999, m.rs_500_999,
+               m.maxrs_500_999, m.Type_500_999, m.per_1000_1499, m.rs_1000_1499, m.maxrs_1000_1499,
+               m.Type_1000_1499, m.per_1500_1999, m.rs_1500_1999, m.maxrs_1500_1999, m.Type_1500_1999,
+               m.per_2000_2499, m.rs_2000_2499, m.maxrs_2000_2499, m.Type_2000_2499, m.per_2500_2999,
+               m.rs_2500_2999, m.maxrs_2500_2999, m.Type_2500_2999, m.per_3000_3499, m.rs_3000_3499,
+               m.maxrs_3000_3499, m.Type_3000_3499, m.per_3500_5000, m.rs_3500_5000, m.maxrs_3500_5000,
+               m.Type_3500_5000, m.per_5001_10000, m.rs_5001_10000, m.maxrs_5001_10000, m.Type_5001_10000);
+                        //  db.Update_AEPS_All_userSlab_new("Retailer", item.comm, item.maxrs, item.minbal, item.M_statement, item.aadharpay);
+                    }
+                }
+            }
+            //end Retailer user
+            //Whitelabel User
+            if (role == "Whitelabel")
+            {
+                if (ddlUserId != "")
+                {
+                    foreach (var m in model.Whitelabeluser)
+                    {
+                        var entry = db.Aeps_comm_userwise_UPI.Single(a => a.Userid == ddlUserId);
+                        entry.aadharpay = m.aadharpay;
+                        entry.ministatement = m.ministatement;
+                        entry.per_500_999 = m.per_500_999;
+                        entry.rs_500_999 = m.rs_500_999;
+                        entry.maxrs_500_999 = m.maxrs_500_999;
+                        entry.Type_500_999 = m.Type_500_999;
+                        entry.per_1000_1499 = m.per_1000_1499;
+                        entry.rs_1000_1499 = m.rs_1000_1499;
+                        entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                        entry.Type_1000_1499 = m.Type_1000_1499;
+                        entry.per_1500_1999 = m.per_1500_1999;
+                        entry.rs_1500_1999 = m.rs_1500_1999;
+                        entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                        entry.Type_1500_1999 = m.Type_1500_1999;
+                        entry.per_2000_2499 = m.per_2000_2499;
+                        entry.rs_2000_2499 = m.rs_2000_2499;
+                        entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                        entry.Type_2000_2499 = m.Type_2000_2499;
+                        entry.per_2500_2999 = m.per_2500_2999;
+                        entry.rs_2500_2999 = m.rs_2500_2999;
+                        entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                        entry.Type_2500_2999 = m.Type_2500_2999;
+                        entry.per_3000_3499 = m.per_3000_3499;
+                        entry.rs_3000_3499 = m.rs_3000_3499;
+                        entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                        entry.Type_3000_3499 = m.Type_3000_3499;
+                        entry.per_3500_5000 = m.per_3500_5000;
+                        entry.rs_3500_5000 = m.rs_3500_5000;
+                        entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                        entry.Type_3500_5000 = m.Type_3500_5000;
+                        entry.per_5001_10000 = m.per_5001_10000;
+                        entry.rs_5001_10000 = m.rs_5001_10000;
+                        entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                        entry.Type_5001_10000 = m.Type_5001_10000;
+
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    foreach (var m in model.UpdateWhitelabel)
+                    {
+                        db.Update_AEPS_All_userSlab_Again_UPI("Whitelabel", m.aadharpay, m.ministatement, m.per_500_999, m.rs_500_999,
+              m.maxrs_500_999, m.Type_500_999, m.per_1000_1499, m.rs_1000_1499, m.maxrs_1000_1499,
+              m.Type_1000_1499, m.per_1500_1999, m.rs_1500_1999, m.maxrs_1500_1999, m.Type_1500_1999,
+              m.per_2000_2499, m.rs_2000_2499, m.maxrs_2000_2499, m.Type_2000_2499, m.per_2500_2999,
+              m.rs_2500_2999, m.maxrs_2500_2999, m.Type_2500_2999, m.per_3000_3499, m.rs_3000_3499,
+              m.maxrs_3000_3499, m.Type_3000_3499, m.per_3500_5000, m.rs_3500_5000, m.maxrs_3500_5000,
+              m.Type_3500_5000, m.per_5001_10000, m.rs_5001_10000, m.maxrs_5001_10000, m.Type_5001_10000);
+                        //  db.Update_AEPS_All_userSlab_new("Whitelabel", item.comm, item.maxrs, item.minbal, item.M_statement, item.aadharpay);
+                    }
+                }
+            }
+            //end API user
+            return RedirectToAction("AepsSlabUPI");
         }
         #endregion
 
@@ -100538,7 +102439,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             try
             {
                 var charge = db.PanAadharVerificationCharges.FirstOrDefault();
-                if(charge != null)
+                if (charge != null)
                 {
                     charge.PanCharge = PanCharge;
                     charge.AadharCharge = AadharCharge;
@@ -100546,7 +102447,8 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                 }
                 return RedirectToAction("AadharPanVerificationCharge");
             }
-            catch {
+            catch
+            {
                 return RedirectToAction("AadharPanVerificationCharge");
             }
         }
@@ -103751,7 +105653,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                         var StatusSendEmailAEPSSuccess = db.EmailSendAlls.Where(a => a.ServiceName == "aepssucconline1").SingleOrDefault().Status;
 
                         var userid = User.Identity.GetUserId();
-                                                 
+
                         var Retailerid = aepstxn.UserId;
                         var bankname = aepstxn.BankName;
                         var Amount = aepstxn.Amount;
@@ -103781,7 +105683,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                                     var admininfo = db.Admin_details.SingleOrDefault();
                                     Backupinfo back = new Backupinfo();
-                                  
+
                                     var model = new Backupinfo.Addinfo
                                     {
 
@@ -103837,7 +105739,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                                     var admininfo = db.Admin_details.SingleOrDefault();
                                     Backupinfo back = new Backupinfo();
-                                    
+
                                     var model = new Backupinfo.Addinfo
                                     {
 
@@ -103892,7 +105794,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                                     var admininfo = db.Admin_details.SingleOrDefault();
                                     Backupinfo back = new Backupinfo();
-                              
+
                                     var model = new Backupinfo.Addinfo
                                     {
 
@@ -103952,7 +105854,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                                     var admininfo = db.Admin_details.SingleOrDefault();
                                     Backupinfo back = new Backupinfo();
-                                 
+
                                     var model = new Backupinfo.Addinfo
                                     {
 
@@ -104030,7 +105932,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                          
+
                             var model = new Backupinfo.Addinfo
                             {
 
@@ -104174,7 +106076,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                                         var admininfo = db.Admin_details.SingleOrDefault();
                                         Backupinfo back = new Backupinfo();
-                                        
+
                                         var model = new Backupinfo.Addinfo
                                         {
 
@@ -104314,7 +106216,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                                 var admininfo = db.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                       
+
                                 var model = new Backupinfo.Addinfo
                                 {
 
@@ -104322,7 +106224,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                                     RetailerID = Retailerid,
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
-                                    Details = "Mini Statement Refund" ,
+                                    Details = "Mini Statement Refund",
                                     RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
@@ -104374,7 +106276,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                                 var admininfo = db.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                        
+
                                 var model = new Backupinfo.Addinfo
                                 {
 
@@ -105385,7 +107287,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             model.role = "Master";
             return PartialView("_UserAirtelSlab", model);
         }
-      
+
         #endregion
 
         #region AIRTEL CMS
@@ -106546,31 +108448,6 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             return View();
         }
 
-        public ActionResult PDFCashDepositReport(string ddl_status, DateTime txt_frm_date, DateTime txt_to_date, string ddlusers, string allmaster1, string alldealer, string allretailer)
-        {
-            if (ddlusers == "")
-            {
-                ddlusers = "Admin";
-            }
-
-            var userid = "";
-            if (allmaster1 != "")
-            {
-                userid = allmaster1;
-            }
-            else if (alldealer != "")
-            {
-                userid = alldealer;
-            }
-            else if (allretailer != "")
-            {
-                userid = allretailer;
-            }
-            DateTime to = txt_to_date.AddDays(1);
-            var chk = db.report_cash_deposit(txt_frm_date, to, ddl_status, ddlusers, userid).ToList();
-            return new ViewAsPdf(chk);
-        }
-
         public ActionResult FindcashdepositTotal(string ddl_status, DateTime txt_frm_date, DateTime txt_to_date, string ddlusers, string allmaster1, string alldealer, string allretailer)
         {
             if (ddlusers == "")
@@ -106642,7 +108519,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
         [HttpGet]
         public ActionResult TokenPurchaseReport()
-            {
+        {
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
                 var userid = User.Identity.GetUserId();
@@ -106692,7 +108569,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                                                               Text = s.FrmName.ToString()
                                                           };
                 ViewBag.whitelabel = new SelectList(selectList1, "Value", "Text");
-                var apiname = db.money_api_status.Where(aa=>aa.api_name== "VASTWEB").ToList();
+                var apiname = db.money_api_status.Where(aa => aa.api_name== "VASTWEB").ToList();
                 IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                             select new SelectListItem
                                                             {
@@ -106702,8 +108579,8 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                 ViewBag.apiname = new SelectList(selectapiname, "Value", "Text");
 
-              var  txt_frm_date = DateTime.Now.ToString();
-              var  txt_to_date = DateTime.Now.ToString();
+                var txt_frm_date = DateTime.Now.ToString();
+                var txt_to_date = DateTime.Now.ToString();
                 var ddlusers = "Admin";
 
                 DateTime frm = Convert.ToDateTime(txt_frm_date);
@@ -106725,18 +108602,18 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                 int pagesize = 20;
                 pancard_reports p1 = new pancard_reports();
-                p1.p_Transations_report_olds11 = db.PAN_CARD_IPAY_Token_report_paging(1, pagesize, userid, ddlusers,"ALL", Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+                p1.p_Transations_report_olds11 = db.PAN_CARD_IPAY_Token_report_paging(1, pagesize, userid, ddlusers, "ALL", Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
                 var asas = Convert.ToDateTime(frm_date);
                 p1.pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asas).ToList();
                 return View(p1);
             }
 
         }
-      
+
         [HttpPost]
-        public ActionResult TokenPurchaseReport(string ddlusers, string allmaster, string alldealer, string allretailer, string allapiuser, string Whitelabel, string ddl_status, string txt_frm_date, string txt_to_date , string check)
+        public ActionResult TokenPurchaseReport(string ddlusers, string allmaster, string alldealer, string allretailer, string allapiuser, string Whitelabel, string ddl_status, string txt_frm_date, string txt_to_date, string check)
         {
-              
+
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
                 ViewBag.chk = "post";
@@ -106787,7 +108664,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                                                               Text = s.FrmName.ToString()
                                                           };
                 ViewBag.whitelabel = new SelectList(selectList1, "Value", "Text");
-                var apiname = db.money_api_status.Where(aa=>aa.api_name== "VASTWEB").ToList();
+                var apiname = db.money_api_status.Where(aa => aa.api_name== "VASTWEB").ToList();
                 IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                             select new SelectListItem
                                                             {
@@ -106807,7 +108684,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                     ddlusers = "Admin";
                 }
 
-               
+
                 if (ddlusers == "Master")
                 {
                     if (allmaster == "" || allmaster.Contains("Master") || allmaster == null)
@@ -106905,7 +108782,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                 {
                     p1.pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asd).ToList();
                 }
-                 else
+                else
                 {
                     if (string.IsNullOrEmpty(allretailer))
                     {
@@ -106936,7 +108813,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                 return View(p1);
 
             }
-          }
+        }
 
         public ActionResult Pancard_new_manual()
         {
@@ -107058,16 +108935,16 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
             DateTime frm_date = Convert.ToDateTime(dt).Date;
             DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
-           
-            
+
+
             pancard_reports p1 = new pancard_reports();
-          var asas = Convert.ToDateTime(frm_date);
-            p1.pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asas).OrderByDescending(s=>s.idno).ToList();
+            var asas = Convert.ToDateTime(frm_date);
+            p1.pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asas).OrderByDescending(s => s.idno).ToList();
             return View(p1);
 
         }
         [HttpPost]
-        public ActionResult Pancard_new( string allretailer,  string ddl_status, string txt_frm_date, string txt_to_date)
+        public ActionResult Pancard_new(string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
         {
             var allretailername = (db.select_retailer_for_ddl("Admin")).ToList();
             IEnumerable<SelectListItem> selectallretailer = from p in allretailername
@@ -107420,7 +109297,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             }
             var loginid = User.Identity.GetUserId();
             //show all retailer 
-            
+
 
 
             DateTime frm = Convert.ToDateTime(txt_frm_date);
@@ -107488,7 +109365,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             dataTbl.Columns.Add("distributor post", typeof(string));
             dataTbl.Columns.Add("master pre", typeof(string));
             dataTbl.Columns.Add("master post", typeof(string));
-         
+
 
             if (proc_Response.Count() > 0)
             {
@@ -107633,39 +109510,39 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
             DateTime frm_date = Convert.ToDateTime(dt).Date;
             DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
-    
+
             var asd = Convert.ToDateTime(frm_date);
             var asd1 = Convert.ToDateTime(to_date);
-           
-               var pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asd).OrderByDescending(s => s.idno).ToList();
-            
-           
-                if (string.IsNullOrEmpty(allretailer))
-                {
-                    if (ddl_status == "ALL")
-                    {
-                        pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time >= asd && s.request_time <= asd1).OrderByDescending(s => s.idno).ToList();
-                    }
-                    else
-                    {
-                        pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asd && s.request_time < asd1 && s.status.ToUpper() == ddl_status.ToUpper()).OrderByDescending(s => s.idno).ToList();
 
-                    }
+            var pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asd).OrderByDescending(s => s.idno).ToList();
+
+
+            if (string.IsNullOrEmpty(allretailer))
+            {
+                if (ddl_status == "ALL")
+                {
+                    pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time >= asd && s.request_time <= asd1).OrderByDescending(s => s.idno).ToList();
                 }
                 else
                 {
-                    if (ddl_status == "ALL")
-                    {
-                        pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asd && s.request_time < asd1 && s.Reailerid == allretailer).OrderByDescending(s => s.idno).ToList();
-                    }
-                    else
-                    {
-                        pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asd && s.request_time < asd1 && s.Reailerid == allretailer && s.status.ToUpper() == ddl_status.ToUpper()).OrderByDescending(s => s.idno).ToList();
+                    pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asd && s.request_time < asd1 && s.status.ToUpper() == ddl_status.ToUpper()).OrderByDescending(s => s.idno).ToList();
 
-                    }
                 }
+            }
+            else
+            {
+                if (ddl_status == "ALL")
+                {
+                    pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asd && s.request_time < asd1 && s.Reailerid == allretailer).OrderByDescending(s => s.idno).ToList();
+                }
+                else
+                {
+                    pancard_Transations_report_new = db.pancard_transation.Where(s => s.request_time > asd && s.request_time < asd1 && s.Reailerid == allretailer && s.status.ToUpper() == ddl_status.ToUpper()).OrderByDescending(s => s.idno).ToList();
 
-            
+                }
+            }
+
+
             return new ViewAsPdf(pancard_Transations_report_new);
         }
 
@@ -108427,6 +110304,10 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             ViewBag.msg = TempData["msgu"];
             TempData.Remove("msgu");
             var entry = db.RetailerCreationCharges.ToList();
+
+            var kycSetting = db.SignupKYCSettings.ToList();
+            ViewBag.KYCSetting = kycSetting;
+
             var entries = db.PaidServicesChargeLists.ToList();
             var tokenvaluedlmmd = db.TokenValueByAdmins.ToList();
             if (tokenvaluedlmmd.Count() > 0)
@@ -108474,33 +110355,8 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             var TokenAssignEntriess = db.DealerCreationTokensAssignHistories.Join(db.Superstokist_details, tknn => tknn.MasterId, dlmn => dlmn.SSId, (tknn, dlmn) => new { tknn, dlmn });
             var dealerss = dealrss.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId }).ToList();
             ViewBag.ddlMaster = dealerss;
-            Tkn_PaidSer.DealerCreationTokenVM = TokenAssignEntriess.Select(a => new DealerCreationTokenVM
-            {
-                Masterid = a.dlmn.SSId,
-                Email = a.dlmn.FarmName,
-                Idno = a.tknn.Idno,
-                Tokens = a.tknn.Tokens,
-                CteatedOn = a.tknn.CreatedOn,
-                pre = a.tknn.RemainTokenPre,
-                post = a.tknn.RemainTokenPost,
-                MasterPre = a.tknn.MasterPre,
-                MasterPost = a.tknn.MasterPost,
-                AdminPre = a.tknn.AdminPre,
-                AdminPost = a.tknn.AdminPost,
-                PerTokenValue = a.tknn.PerTokenValue,
-                TotalDebit = a.tknn.TotalDebit,
-            }).OrderByDescending(aa => aa.CteatedOn).ToList();
-            /**************End MD*******/
 
-            /* Remain tokens + Sign Up Rights data for initial page load */
-            Tkn_PaidSer.master_remain_token_report_Result = db.master_remain_token_report().ToList();
-            Tkn_PaidSer.dealer_remain_token_report_Result = db.dealer_remain_token_report().ToList();
-            var adminUser = db.Admin_details.SingleOrDefault();
-            if (adminUser != null)
-            {
-                Tkn_PaidSer.Select_dealer_list = db.Select_Dealer_total("ADMIN")
-                    .Where(x => x.masterid == adminUser.userid).ToList();
-            }
+            
 
             return View(Tkn_PaidSer);
         }
@@ -108518,28 +110374,31 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             var dealerss = dealrss.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId }).ToList();
             ViewBag.ddlMaster = dealerss;
             /************End Fill DropDownList DLM and MD***************/
-            var JoinTokenentries = db.RetailerCreationTokensAssignHistories.Where(a => a.CommonId == "Admin").Join(db.Dealer_Details, tkn => tkn.DealerId, dlm => dlm.DealerId, (tkn, dlm) => new RetailerCreationTokenVM
+            if (dealerId != null)
             {
-                DealerId = dlm.DealerId,
-                Email = dlm.FarmName,
-                Idno = tkn.Idno,
-                Tokens = tkn.Tokens,
-                CteatedOn = tkn.CreatedOn,
-                pre = tkn.RemainTokenPre,
-                post = tkn.RemainTokenPost,
-                DealerPre = tkn.DealerPre,
-                DealerPost = tkn.DealerPost,
-                AdminPre = tkn.AdminPre,
-                AdminPost = tkn.AdminPost,
-                PerTokenValue = tkn.PerTokenValue,
-                TotalDebit = tkn.TotalDebit
-            }).OrderByDescending(aa => aa.CteatedOn);
+                var JoinTokenentries = db.RetailerCreationTokensAssignHistories.Where(a => a.CommonId == "Admin").Join(db.Dealer_Details, tkn => tkn.DealerId, dlm => dlm.DealerId, (tkn, dlm) => new RetailerCreationTokenVM
+                {
+                    DealerId = dlm.DealerId,
+                    Email = dlm.FarmName,
+                    Idno = tkn.Idno,
+                    Tokens = tkn.Tokens,
+                    CteatedOn = tkn.CreatedOn,
+                    pre = tkn.RemainTokenPre,
+                    post = tkn.RemainTokenPost,
+                    DealerPre = tkn.DealerPre,
+                    DealerPost = tkn.DealerPost,
+                    AdminPre = tkn.AdminPre,
+                    AdminPost = tkn.AdminPost,
+                    PerTokenValue = tkn.PerTokenValue,
+                    TotalDebit = tkn.TotalDebit
+                }).OrderByDescending(aa => aa.CteatedOn);
 
-            if (!string.IsNullOrWhiteSpace(dealerId) && dealerId != "ALL")
-            {
-                JoinTokenentries = JoinTokenentries.Where(a => a.DealerId == dealerId).OrderByDescending(aa => aa.CteatedOn);
+                if (!string.IsNullOrWhiteSpace(dealerId) && dealerId != "ALL")
+                {
+                    JoinTokenentries = JoinTokenentries.Where(a => a.DealerId == dealerId).OrderByDescending(aa => aa.CteatedOn);
+                }
+                Tkn_PaidSer.RetailerCreationTokenVM = JoinTokenentries.ToList();
             }
-            Tkn_PaidSer.RetailerCreationTokenVM = JoinTokenentries.ToList();
             /******End DLM*******/
 
             Tkn_PaidSer.dealer_remain_token_report_Result = db.dealer_remain_token_report().ToList();
@@ -108562,27 +110421,30 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
 
             /**************Start MD*******/
-            var TokenAssignEntriess = db.DealerCreationTokensAssignHistories.Join(db.Superstokist_details, tkn => tkn.MasterId, dlm => dlm.SSId, (tkn, dlm) => new DealerCreationTokenVM
+            if (masterId != null)
             {
-                Masterid = dlm.SSId,
-                Email = dlm.FarmName,
-                Idno = tkn.Idno,
-                Tokens = tkn.Tokens,
-                CteatedOn = tkn.CreatedOn,
-                pre = tkn.RemainTokenPre,
-                post = tkn.RemainTokenPost,
-                MasterPre = tkn.MasterPre,
-                MasterPost = tkn.MasterPost,
-                AdminPre = tkn.AdminPre,
-                AdminPost = tkn.AdminPost,
-                PerTokenValue = tkn.PerTokenValue,
-                TotalDebit = tkn.TotalDebit
-            }).OrderByDescending(aa => aa.CteatedOn);
-            if (!string.IsNullOrWhiteSpace(masterId) && masterId != "ALL")
-            {
-                TokenAssignEntriess = TokenAssignEntriess.Where(a => a.Masterid == masterId).OrderByDescending(aa => aa.CteatedOn);
+                var TokenAssignEntriess = db.DealerCreationTokensAssignHistories.Join(db.Superstokist_details, tkn => tkn.MasterId, dlm => dlm.SSId, (tkn, dlm) => new DealerCreationTokenVM
+                {
+                    Masterid = dlm.SSId,
+                    Email = dlm.FarmName,
+                    Idno = tkn.Idno,
+                    Tokens = tkn.Tokens,
+                    CteatedOn = tkn.CreatedOn,
+                    pre = tkn.RemainTokenPre,
+                    post = tkn.RemainTokenPost,
+                    MasterPre = tkn.MasterPre,
+                    MasterPost = tkn.MasterPost,
+                    AdminPre = tkn.AdminPre,
+                    AdminPost = tkn.AdminPost,
+                    PerTokenValue = tkn.PerTokenValue,
+                    TotalDebit = tkn.TotalDebit
+                }).OrderByDescending(aa => aa.CteatedOn);
+                if (!string.IsNullOrWhiteSpace(masterId) && masterId != "ALL")
+                {
+                    TokenAssignEntriess = TokenAssignEntriess.Where(a => a.Masterid == masterId).OrderByDescending(aa => aa.CteatedOn);
+                }
+                Tkn_PaidSer.DealerCreationTokenVM = TokenAssignEntriess.ToList();
             }
-            Tkn_PaidSer.DealerCreationTokenVM = TokenAssignEntriess.ToList();
             /**************End MD*******/
             Tkn_PaidSer.master_remain_token_report_Result = db.master_remain_token_report().ToList();
 
@@ -108889,7 +110751,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
             Token_PaidService_VM Tkn_PaidSer = new Token_PaidService_VM();
             var Details = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).ToList();
-            Tkn_PaidSer.Select_dealer_list = Details;
+            Tkn_PaidSer.Select_dealer_list = Details.Where(aa => aa.DefaultStatus == "Y");
 
             return PartialView("_DlmSignUpRight", Tkn_PaidSer);
         }
@@ -108935,6 +110797,43 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             Token_PaidService_VM Vmmm = new Token_PaidService_VM();
             Vmmm.RetailerCreationCharge = db.RetailerCreationCharges.ToList();
             return PartialView("_SetJoingChargeStatus", Vmmm);
+        }
+
+        [HttpPost]
+        public ActionResult SaveSignupKYC(List<string> KYCType)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                // Sabko OFF karo
+                var list = db.SignupKYCSettings.ToList();
+
+                foreach (var item in list)
+                {
+                    item.IsActive = false;
+                }
+
+                // Jo select hue unko ON karo
+                if (KYCType != null)
+                {
+                    foreach (var item in KYCType)
+                    {
+                        var kyc = db.SignupKYCSettings.FirstOrDefault(x => x.KYCType == item);
+
+                        if (kyc != null)
+                        {
+                            kyc.IsActive = true;
+                        }
+                    }
+                }
+
+                db.SaveChanges();
+            }
+
+            return Json(new
+            {
+                Status = true,
+                Message = "KYC Setting Saved Successfully"
+            });
         }
 
         [HttpPost]
@@ -109328,7 +111227,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             //api users 
             ViewBag.apiid = new SelectList(db.select_apiusers_for_ddl("Admin"), "apiid", "username", null);
             //apiname
-            var apiname = db.money_api_status.Where(aa=>aa.api_name== "VASTWEB").ToList();
+            var apiname = db.money_api_status.Where(aa => aa.api_name== "VASTWEB").ToList();
             IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                         select new SelectListItem
                                                         {
@@ -109380,7 +111279,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             //api users 
             ViewBag.apiid = new SelectList(db.select_apiusers_for_ddl("Admin"), "apiid", "username", null);
             //apiname
-            var apiname = db.money_api_status.Where(aa=>aa.api_name== "VASTWEB").ToList();
+            var apiname = db.money_api_status.Where(aa => aa.api_name== "VASTWEB").ToList();
             IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                         select new SelectListItem
                                                         {
@@ -110233,7 +112132,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             {
                 var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerId).SingleOrDefault();
                 var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-               
+
                 var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == RetailerId).SingleOrDefault();
                 var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
                 var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
@@ -110266,7 +112165,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                 };
                 back.Fundtransfer(model1);
 
-          
+
             }
             catch { }
 
@@ -110343,15 +112242,15 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             var msg = db.master_to_delaer_byAdmin(Masterid, DealerId, bal, 0, ddl_fund_type, txtcomment, "", "", "", "", "", output).SingleOrDefault().msg;
             try
             {
-               var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == DealerId).SingleOrDefault();
+                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == DealerId).SingleOrDefault();
                 var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
 
-                 var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == DealerId).SingleOrDefault();
+                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == DealerId).SingleOrDefault();
                 var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
 
                 var admininfo = db.Admin_details.SingleOrDefault();
                 Backupinfo back = new Backupinfo();
-                
+
 
                 var model1 = new Backupinfo.Addinfo
                 {
@@ -110510,7 +112409,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                             ch = db.master_to_delaer_byAdmin(hdSuperstokistID, hdMDDLM, amount1, 0, type, comment, collectionby, bankname, adminacco, "Direct", transferid, output).SingleOrDefault().msg;
                             try
                             {
-                               var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == hdMDDLM).SingleOrDefault();
+                                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == hdMDDLM).SingleOrDefault();
                                 var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
 
                                 var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == hdMDDLM).SingleOrDefault();
@@ -110518,7 +112417,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                                 var admininfo = db.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                              
+
 
                                 var model1 = new Backupinfo.Addinfo
                                 {
@@ -110787,13 +112686,13 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                             {
                                 var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == hdMDDLM).SingleOrDefault();
                                 var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                               
+
                                 var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == hdMDDLM).SingleOrDefault();
                                 var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                               
+
                                 var admininfo = db.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                              
+
                                 var model = new Backupinfo.Addinfo
                                 {
 
@@ -111084,13 +112983,13 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                         {
                             var retailerdetailsto = db.Retailer_Details.Where(aa => aa.RetailerId == reatilerto).SingleOrDefault();
                             var retailerdetailsfrom = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                       
+
                             var remdetailsto = db.Remain_reteller_balance.Where(aa => aa.RetellerId == reatilerto).SingleOrDefault();
                             var remdetailsfrom = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
-                           
+
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                      
+
                             var model = new Backupinfo.Addinfo
                             {
 
@@ -111098,7 +112997,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                                 RetailerID = reatilerto,
                                 Email = retailerdetailsto.Email,
                                 Mobile = retailerdetailsto.Mobile,
-                                Details = "Fund transfer to Retailer" ,
+                                Details = "Fund transfer to Retailer",
                                 RemainBalance = (decimal)remdetailsto.Remainamount,
                                 Usertype = "Retailer"
                             };
@@ -111118,7 +113017,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                             };
                             back.Fundtransfer(model2);
 
-                     
+
 
                         }
                         catch { }
@@ -111572,14 +113471,14 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             }
             if (statecircle != "ALL")
             {
-               
+
                 //if (amount == "")
                 //{
                 //    amount = "ALL";
                 //}
 
 
-               
+
                 try
                 {
                     db.insert_switch_state(statecircle, operatorbtstate, textminbycircle, Apinm, ddlstateuserList, ddlstateusertype, textmaxbycircle);
@@ -111589,7 +113488,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                 }
 
-               
+
             }
             else
             {
@@ -111598,7 +113497,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                        ,"Maharashtra","Mumbai","North East","Orissa","Punjab","Rajasthan","Tamil Nadu"
                       ,"Orissa","Punjab","Rajasthan","Tamil Nadu","UP East","UP West","West Bengal"};
 
-                foreach(var i in ares)
+                foreach (var i in ares)
                 {
                     try
                     {
@@ -111744,30 +113643,44 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
         #endregion
         #region AdminIncome
+        //public ActionResult Actual_Admin_income()
+        //{
+        //    string txt_from_date = DateTime.Now.ToString();
+        //    string frm_date = Convert.ToDateTime(txt_from_date).ToShortDateString();
+        //    string to_date = Convert.ToDateTime(txt_from_date).AddDays(1).ToShortDateString();
+        //    //var ch1 = db.money_transfer_report_old("Admin", "ALL", 50000, "ALL", "ALL", Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+        //    //ViewData["totals"] = ch1.Where(s => s.status.ToUpper().Contains("SUCCESS")).Sum(s => Convert.ToInt32(s.amount));
+        //    //ViewData["totalf"] = ch1.Where(s => s.status.ToUpper().Contains("FAILED")).Sum(s => Convert.ToInt32(s.amount));
+        //    //ViewData["totalp"] = ch1.Where(s => s.status.ToUpper().Contains("PENDING")).Sum(s => Convert.ToInt32(s.amount));
+        //    var ch = db.admin_income_report(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+        //    return View(ch);
+        //}
+
         public ActionResult Actual_Admin_income()
         {
-            string txt_from_date = DateTime.Now.ToString();
-            string frm_date = Convert.ToDateTime(txt_from_date).ToShortDateString();
-            string to_date = Convert.ToDateTime(txt_from_date).AddDays(1).ToShortDateString();
-            //var ch1 = db.money_transfer_report_old("Admin", "ALL", 50000, "ALL", "ALL", Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
-            //ViewData["totals"] = ch1.Where(s => s.status.ToUpper().Contains("SUCCESS")).Sum(s => Convert.ToInt32(s.amount));
-            //ViewData["totalf"] = ch1.Where(s => s.status.ToUpper().Contains("FAILED")).Sum(s => Convert.ToInt32(s.amount));
-            //ViewData["totalp"] = ch1.Where(s => s.status.ToUpper().Contains("PENDING")).Sum(s => Convert.ToInt32(s.amount));
-            var ch = db.admin_income_report(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+            DateTime frm_date = DateTime.Today;
+            DateTime to_date = DateTime.Today;
+
+            var ch = db.admin_income_report(frm_date, to_date).ToList();
             return View(ch);
         }
+
         [HttpPost]
         public ActionResult Actual_Admin_income(DateTime txt_frm_date, DateTime txt_to_date, string btnExport, string hdttable)
         {
-            ViewBag.chk = "post";
-            txt_to_date = txt_to_date.AddDays(1);
+            //ViewBag.chk = "post";
+            //txt_to_date = txt_to_date.AddDays(1);
             //string frm_date = Convert.ToDateTime(txt_frm_date).ToShortDateString();
             //string to_date = Convert.ToDateTime(txt_frm_date).AddDays(1).ToString();
             //var ch1 = db.money_transfer_report_old("Admin", "ALL", 50000, "ALL", "ALL", Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
             //ViewData["totals"] = ch1.Where(s => s.status.ToUpper().Contains("SUCCESS")).Sum(s => Convert.ToInt32(s.amount));
             //ViewData["totalf"] = ch1.Where(s => s.status.ToUpper().Contains("FAILED")).Sum(s => Convert.ToInt32(s.amount));
             //ViewData["totalp"] = ch1.Where(s => s.status.ToUpper().Contains("PENDING")).Sum(s => Convert.ToInt32(s.amount));
-            var ch = db.admin_income_report(Convert.ToDateTime(txt_frm_date), Convert.ToDateTime(txt_to_date)).ToList();
+            //var ch = db.admin_income_report(Convert.ToDateTime(txt_frm_date), Convert.ToDateTime(txt_to_date)).ToList();
+
+            ViewBag.chk = "post";
+
+            var ch = db.admin_income_report(txt_frm_date, txt_to_date).ToList();
             DataTable dtt = new DataTable();
             if (btnExport == "Export")
             {
@@ -112182,9 +114095,9 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                 var acDts = db.UpdateREMAccounts.Where(a => a.Idno == Idno).SingleOrDefault();
                 var isdeleteallow = true;
 
-                if(acDts.Status== "Approved")
+                if (acDts.Status== "Approved")
                 {
-                    if(  Convert.ToDateTime(acDts.Approved_Date).AddMonths(1) >= DateTime.Now)
+                    if (Convert.ToDateTime(acDts.Approved_Date).AddMonths(1) >= DateTime.Now)
                     {
                         isdeleteallow = false;
                     }
@@ -112488,7 +114401,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                 totalmdcr += item.cr1;
                 dt.Rows.Add(item.Frm_Name, item.FarmName, item.RetailerName, item.Mobile, item.remainbal, item.posbalance, item.cr, item.cr1);
             }
-            dt.Rows.Add("Total","", "", "", totalremain, totalposbalance, totaladmincr, totalmdcr);
+            dt.Rows.Add("Total", "", "", "", totalremain, totalposbalance, totaladmincr, totalmdcr);
             var grid = new GridView();
             grid.DataSource = dt;
             grid.DataBind();
@@ -113679,13 +115592,13 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             }
             return Json(isupdateauto, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult Payment_Gateway_UPIGATEWAYSTS(string val,int idno)
+        public ActionResult Payment_Gateway_UPIGATEWAYSTS(string val, int idno)
         {
             var sts = false;
-            if(val== "upiandgateway")
+            if (val== "upiandgateway")
             {
                 var chk = db.UPIandGatewayStatus.Where(aa => aa.Idno == idno).SingleOrDefault();
-                if(chk.Status==false)
+                if (chk.Status==false)
                 {
                     sts = true;
                 }
@@ -113694,7 +115607,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             }
             else if (val== "upiqr")
             {
-                foreach (var entry in db.UPI_QR_API.Where(aa=>aa.Idno!=idno).ToList())
+                foreach (var entry in db.UPI_QR_API.Where(aa => aa.Idno!=idno).ToList())
                 {
                     entry.Sts = false;
                     db.SaveChanges();
@@ -113708,9 +115621,9 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                 chk.Sts = sts;
                 db.SaveChanges();
             }
-            else if(val== "upiintent")
+            else if (val== "upiintent")
             {
-                foreach (var entry in db.UPI_Intent_API.Where(aa=>aa.Idno!=idno).ToList())
+                foreach (var entry in db.UPI_Intent_API.Where(aa => aa.Idno!=idno).ToList())
                 {
                     entry.Sts = false;
                     db.SaveChanges();
@@ -113726,10 +115639,10 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             }
             else if (val == "upicollection")
             {
-                foreach (var entry in db.UPI_Collection_API.Where(aa=>aa.Idno!=idno).ToList())
+                foreach (var entry in db.UPI_Collection_API.Where(aa => aa.Idno!=idno).ToList())
                 {
                     entry.sts = false;
-                   db.SaveChanges();
+                    db.SaveChanges();
                 }
                 var chk = db.UPI_Collection_API.Where(aa => aa.Idno == idno).SingleOrDefault();
                 if (chk.sts == false)
@@ -113741,7 +115654,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             }
             else
             {
-                foreach (var entry in db.Payment_GateWay_API.Where(aa=>aa.idno!=idno).ToList())
+                foreach (var entry in db.Payment_GateWay_API.Where(aa => aa.idno!=idno).ToList())
                 {
                     entry.Sts = false;
                     db.SaveChanges();
@@ -113754,7 +115667,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                 chk.Sts = sts;
                 db.SaveChanges();
             }
-            
+
             return Json("", JsonRequestBehavior.AllowGet);
         }
         public ActionResult UPIAndGatewaySetting()
@@ -114438,13 +116351,13 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                         var entry = db.Upi_txn_details.Where(aa => aa.idno == hideupiidres).SingleOrDefault();
                         var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == entry.userid).SingleOrDefault();
                         var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                      
+
                         var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.userid).SingleOrDefault();
                         var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                       
+
                         var admininfo = db.Admin_details.SingleOrDefault();
                         Backupinfo back = new Backupinfo();
-                     
+
                         var model = new Backupinfo.Addinfo
                         {
 
@@ -114470,7 +116383,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                         };
                         back.Fundtransfer(model1);
 
-                    
+
                     }
                     catch { }
 
@@ -114568,7 +116481,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
                 var admininfo = db.Admin_details.SingleOrDefault();
                 Backupinfo back = new Backupinfo();
-          
+
                 var model = new Backupinfo.Addinfo
                 {
 
@@ -114823,18 +116736,13 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
         public ActionResult MicroATM_Unhold_History()
         {
-            var today = DateTime.Today;
-            ViewBag.frmDate = today.ToString("yyyy-MM-dd");
-            ViewBag.toDate = today.ToString("yyyy-MM-dd");
-            var result = db.Show_MicroAtM_UnholdHistory(today, today.AddDays(1)).ToList();
+            var result = db.Show_MicroAtM_UnholdHistory(DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).ToList();
             return View(result);
         }
         [HttpPost]
         public ActionResult MicroATM_Unhold_History(DateTime txt_frm_date, DateTime txt_to_date)
         {
             ViewBag.chk = "post";
-            ViewBag.frmDate = txt_frm_date.ToString("yyyy-MM-dd");
-            ViewBag.toDate = txt_to_date.ToString("yyyy-MM-dd");
             var result = db.Show_MicroAtM_UnholdHistory(txt_frm_date, txt_to_date.AddDays(1)).ToList();
             return View(result);
         }
@@ -114939,7 +116847,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             }
 
             d.devicelist = db.show_microatm_deviceinfo();
-            return PartialView("_Get_ALL_DeviceList", d);
+            return PartialView("Editmicroatm_user", d);
         }
 
         public ActionResult Get_allDeviceList()
@@ -115063,29 +116971,6 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             return View();
         }
 
-        public ActionResult PDFMicroATMUnholdHistoryReport(string txt_frm_date, string txt_to_date)
-        {
-            DateTime fromdate;
-            DateTime todateDisplay;
-            if (!DateTime.TryParse(txt_frm_date, out fromdate))
-            {
-                fromdate = DateTime.Today;
-            }
-            if (!DateTime.TryParse(txt_to_date, out todateDisplay))
-            {
-                todateDisplay = DateTime.Today;
-            }
-            if (todateDisplay < fromdate)
-            {
-                todateDisplay = fromdate;
-            }
-
-            ViewBag.frmDate = fromdate.ToString("yyyy-MM-dd");
-            ViewBag.toDate = todateDisplay.ToString("yyyy-MM-dd");
-            var result = db.Show_MicroAtM_UnholdHistory(fromdate, todateDisplay.AddDays(1)).ToList();
-            return new ViewAsPdf("PDFMicroATMUnholdHistoryReport", result);
-        }
-
         public ActionResult Show_ManualUPI_REQ()
         {
             DateTime txt_frm_date = DateTime.Now.Date;
@@ -115169,13 +117054,13 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                         {
                             var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == Rem_UPI_REQUEST.retailerid).SingleOrDefault();
                             var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                           
+
                             var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == Rem_UPI_REQUEST.retailerid).SingleOrDefault();
                             var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                           
+
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                           
+
                             var model = new Backupinfo.Addinfo
                             {
 
@@ -115201,7 +117086,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                             };
                             back.Fundtransfer(model1);
 
-                            
+
                         }
                         catch { }
 
@@ -115296,12 +117181,12 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
         }
 
-       
+
         public ActionResult SENDOTP()
         {
 
             var Admindetails = db.Admin_details.SingleOrDefault();
-          
+
             Random ran = new Random();
             var otpn = ran.Next(1111, 9999);
             MobileOtp mob = new MobileOtp();
@@ -115407,7 +117292,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
         public ActionResult AddVpaID(string upiid, string otp, string paymenttype)
         {
-     
+
             var totalselfcount = db.admin_VPAID.Count();
             if (totalselfcount < 5)
             {
@@ -115511,14 +117396,14 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
             DateTime txt_frm_date = DateTime.Now.Date;
             DateTime to = DateTime.Now.AddDays(1).Date;
-      
+
             model.upiqr = db.UPI_QR_API.ToList();
             model.upiintent = db.UPI_Intent_API.ToList();
             model.upicollection = db.UPI_Collection_API.ToList();
             model.gateway = db.Payment_GateWay_API.ToList();
             model.upiandgateway = db.UPIandGatewayStatus.ToList();
             model.Upi_slabs = db.Upi_slab.ToList();
-          
+
             model.UPIREPORT = db.show_upi_txn_details("Admin", "", "ALL", txt_frm_date, to).Where(x => x.From_users == "Admin" || string.IsNullOrWhiteSpace(x.From_users));
             model.Admin_UPIs = db.Admin_UPI.ToList();
             model.admin_VPAIDs = db.admin_VPAID.ToList();
@@ -115856,7 +117741,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             {
                 return RedirectToAction("CreditCard_Retailer_Slab", "Home");
             }
-           
+
         }
         [HttpPost]
         public ActionResult UpdateCreditCardAllUser(decimal AllCharge)
@@ -115875,7 +117760,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             {
                 return RedirectToAction("CreditCard_Retailer_Slab", "Home");
             }
-            
+
         }
         public ActionResult Retailer_Aeps_Aadharpay_slab()
         {
@@ -116094,7 +117979,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
                         var admininfo = db.Admin_details.SingleOrDefault();
                         Backupinfo back = new Backupinfo();
-               
+
                         var modeln = new Backupinfo.Addinfo
                         {
 
@@ -117252,7 +119137,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                      
+
                             var model = new Backupinfo.Addinfo
                             {
 
@@ -117260,7 +119145,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                 RetailerID = rchFrom,
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
-                                Details = "Recharge Refund" ,
+                                Details = "Recharge Refund",
                                 RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
@@ -117338,7 +119223,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-            
+
                             var model = new Backupinfo.Addinfo
                             {
 
@@ -117346,7 +119231,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                 RetailerID = rchFrom,
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
-                                Details = "Recharge Refund" ,
+                                Details = "Recharge Refund",
                                 RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
@@ -117395,7 +119280,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                          
+
                             var model = new Backupinfo.Addinfo
                             {
 
@@ -117489,7 +119374,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                        
+
                             var model = new Backupinfo.Addinfo
                             {
 
@@ -117509,7 +119394,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                 RetailerID = dealerdetails.DealerId,
                                 Email = dealerdetails.Email,
                                 Mobile = dealerdetails.Mobile,
-                                Details = "Recharge Refund " ,
+                                Details = "Recharge Refund ",
                                 RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                 Usertype = "Dealer"
                             };
@@ -117546,7 +119431,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
                             var admininfo = db.Admin_details.SingleOrDefault();
                             Backupinfo back = new Backupinfo();
-                           
+
                             var model = new Backupinfo.Addinfo
                             {
 
@@ -117566,7 +119451,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                 RetailerID = dealerdetails.DealerId,
                                 Email = dealerdetails.Email,
                                 Mobile = dealerdetails.Mobile,
-                                Details = "Recharge Refund " ,
+                                Details = "Recharge Refund ",
                                 RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                 Usertype = "Dealer"
                             };
@@ -117578,7 +119463,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                 RetailerID = masterdetails.SSId,
                                 Email = masterdetails.Email,
                                 Mobile = masterdetails.Mobile,
-                                Details = "Recharge Refund " ,
+                                Details = "Recharge Refund ",
                                 RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
                                 Usertype = "Master"
                             };
@@ -118534,178 +120419,15 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
         }
         #region IRCTC
 
-        public ActionResult IRCTC_rem_REPORTS(string export, string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
+        public ActionResult IRCTC_rem_REPORTS(string allmaster, string alldealer, string allretailer, string ddl_status)
         {
-            if (!string.IsNullOrWhiteSpace(export))
+            if (string.IsNullOrEmpty(allretailer))
             {
-                switch (export.Trim().ToLowerInvariant())
-                {
-                    case "total":
-                        return TotalIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
-                    case "excel":
-                        return ExcelIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
-                    case "pdf":
-                        return PDFIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
-                }
+                allretailer = "ALL";
             }
 
-            try
-            {
-                PopulateIrctcViewBags();
-                var reposts = new IRCTC_report_model
-                {
-                    Admin_IRCTC_reports = QueryIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date)
-                };
-                return View(reposts);
-            }
-            catch
-            {
-                TempData["Status"] = "Failed";
-                TempData["Message"] = "An error occured while proccessing request.";
-                return RedirectToAction("Travel", "Home");
-            }
-        }
-
-        [HttpPost]
-        public ActionResult IRCTC_rem_REPORTS(string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
-        {
-            try
-            {
-                ViewBag.chk = "post";
-                PopulateIrctcViewBags();
-                var reposts = new IRCTC_report_model
-                {
-                    Admin_IRCTC_reports = QueryIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date)
-                };
-                return View(reposts);
-            }
-            catch
-            {
-                TempData["Status"] = "Failed";
-                TempData["Message"] = "An error occured while proccessing request.";
-                return RedirectToAction("Travel", "Home");
-            }
-        }
-
-        public ActionResult TotalIrctcReport(string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
-        {
-            try
-            {
-                var rows = QueryIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
-                var successTotal = rows.Where(s => !string.IsNullOrEmpty(s.status) && s.status.Contains("Success")).Sum(s => s.amount ?? 0);
-                var failedTotal = rows.Where(s => !string.IsNullOrEmpty(s.status) && (s.status.ToUpper().Contains("FAILED") || s.status.Contains("Refund"))).Sum(s => s.amount ?? 0);
-                var pendingTotal = rows.Where(s => !string.IsNullOrEmpty(s.status) && (s.status.Contains("Pending") || s.status.Contains("Proccessed"))).Sum(s => s.amount ?? 0);
-
-                return Json(new
-                {
-                    success = successTotal,
-                    failed = failedTotal,
-                    pending = pendingTotal
-                }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                return Json(new { success = 0, failed = 0, pending = 0 }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        public ActionResult ExcelIrctcReport(string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
-        {
-            try
-            {
-                var rows = QueryIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
-
-                DataTable dtt = new DataTable();
-                dtt.Columns.Add("Status", typeof(string));
-                dtt.Columns.Add("Order ID", typeof(string));
-                dtt.Columns.Add("Retailer Name", typeof(string));
-                dtt.Columns.Add("Mobile", typeof(string));
-                dtt.Columns.Add("Secondary Mobile", typeof(string));
-                dtt.Columns.Add("Email", typeof(string));
-                dtt.Columns.Add("Secondary Email", typeof(string));
-                dtt.Columns.Add("Amount", typeof(string));
-                dtt.Columns.Add("Transection date", typeof(string));
-                dtt.Columns.Add("Expire time", typeof(string));
-                dtt.Columns.Add("Retailer OLD balance", typeof(string));
-                dtt.Columns.Add("Retailer Latest Balance", typeof(string));
-                dtt.Columns.Add("Distributor OLD balance", typeof(string));
-                dtt.Columns.Add("Distributor Latest Balance", typeof(string));
-                dtt.Columns.Add("MasterDistributor OLD balance", typeof(string));
-                dtt.Columns.Add("MasterDistributor Latest Balance", typeof(string));
-
-                if (rows.Count > 0)
-                {
-                    foreach (var item in rows)
-                    {
-                        dtt.Rows.Add(
-                            item.status,
-                            item.TxnID,
-                            item.RetailerName,
-                            item.remmobile,
-                            item.secondmobile,
-                            item.remEmail,
-                            item.secondemail,
-                            item.amount,
-                            item.txn_date.HasValue ? item.txn_date.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
-                            item.expire_time.HasValue ? item.expire_time.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
-                            item.remain_pre,
-                            item.remain,
-                            item.dealer_remain_pre,
-                            item.dealerremain,
-                            item.master_remain_pre,
-                            item.masterremain);
-                    }
-                }
-                else
-                {
-                    dtt.Rows.Add(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
-                }
-
-                var grid = new GridView();
-                grid.DataSource = dtt;
-                grid.DataBind();
-                Response.ClearContent();
-                Response.Buffer = true;
-                Response.AddHeader("content-disposition", "attachment; filename=IRCTC_Report.xls");
-                Response.ContentType = "application/ms-excel";
-                Response.Charset = "";
-                StringWriter sw = new StringWriter();
-                HtmlTextWriter htw = new HtmlTextWriter(sw);
-                grid.RenderControl(htw);
-                Response.Output.Write(sw.ToString());
-                Response.Flush();
-                Response.End();
-
-                return View();
-            }
-            catch
-            {
-                TempData["Status"] = "Failed";
-                TempData["Message"] = "An error occured while proccessing request.";
-                return RedirectToAction("IRCTC_rem_REPORTS", "Home");
-            }
-        }
-
-        public ActionResult PDFIrctcReport(string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
-        {
-            try
-            {
-                var rows = QueryIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
-                return new ViewAsPdf("PDFIrctcReport", rows)
-                {
-                    FileName = "IRCTC_Report.pdf"
-                };
-            }
-            catch
-            {
-                TempData["Status"] = "Failed";
-                TempData["Message"] = "An error occured while proccessing request.";
-                return RedirectToAction("IRCTC_rem_REPORTS", "Home");
-            }
-        }
-
-        private void PopulateIrctcViewBags()
-        {
+            IRCTC_report_model reposts = new IRCTC_report_model();
+            reposts.Admin_IRCTC_reports = db.Rem_IRCTC_TokenPurchase_reports(allretailer, DateTime.Now, DateTime.Now.AddDays(1));
             IEnumerable<SelectListItem> mdList = from s in db.Superstokist_details.ToList()
                                                  select new SelectListItem
                                                  {
@@ -118720,7 +120442,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                                       Value = s.DealerId,
                                                       Text = s.FarmName + "_" + s.Mobile
                                                   };
-            ViewBag.alldealer = new SelectList(dlmList, "Value", "Text");
+            ViewBag.alldealer = new SelectList(mdList, "Value", "Text");
 
             IEnumerable<SelectListItem> remList = from s in db.Retailer_Details.Where(aa => aa.ISDeleteuser == false).ToList()
                                                   select new SelectListItem
@@ -118729,77 +120451,64 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                                       Text = s.Frm_Name + "_" + s.Mobile
                                                   };
             ViewBag.allretailer = new SelectList(remList, "Value", "Text");
-        }
 
-        private static bool IsIrctcSuccessStatus(string status)
-        {
-            return !string.IsNullOrWhiteSpace(status)
-                && status.IndexOf("success", StringComparison.OrdinalIgnoreCase) >= 0;
-        }
 
-        private static bool IsIrctcFailedStatus(string status)
-        {
-            return !string.IsNullOrWhiteSpace(status)
-                && (status.IndexOf("failed", StringComparison.OrdinalIgnoreCase) >= 0
-                    || status.IndexOf("refund", StringComparison.OrdinalIgnoreCase) >= 0);
-        }
 
-        private static bool IsIrctcPendingStatus(string status)
-        {
-            return !string.IsNullOrWhiteSpace(status)
-                && status.IndexOf("pending", StringComparison.OrdinalIgnoreCase) >= 0;
-        }
 
-        private List<Rem_IRCTC_TokenPurchase_reports_Result> QueryIrctcReport(string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
+
+            return View(reposts);
+        }
+        [HttpPost]
+        public ActionResult IRCTC_rem_REPORTS(string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
         {
-            try
+            ViewBag.chk = "post";
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
+
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime frm_date = Convert.ToDateTime(dt).Date;
+            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+            if (string.IsNullOrEmpty(allretailer))
             {
-                if ((txt_frm_date == null && txt_to_date == null) || (txt_frm_date == "" && txt_to_date == ""))
-                {
-                    txt_frm_date = DateTime.Now.ToString("yyyy-MM-dd");
-                    txt_to_date = DateTime.Now.ToString("yyyy-MM-dd");
-                }
-
-                DateTime frm = Convert.ToDateTime(txt_frm_date);
-                DateTime to = Convert.ToDateTime(txt_to_date);
-                txt_frm_date = frm.ToString("yyyy-MM-dd");
-                txt_to_date = to.ToString("yyyy-MM-dd");
-                string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-                DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
-                DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
-                DateTime frm_date = dt.Date;
-                DateTime to_date = dt1.Date.AddDays(1);
-
-                var retailerId = "ALL";
-                if (!string.IsNullOrWhiteSpace(allretailer) && allretailer.IndexOf("All Retailer", StringComparison.OrdinalIgnoreCase) < 0)
-                {
-                    retailerId = allretailer;
-                }
-
-                var rows = db.Rem_IRCTC_TokenPurchase_reports(retailerId, frm_date, to_date).ToList();
-
-                if (!string.IsNullOrWhiteSpace(ddl_status))
-                {
-                    if (ddl_status == "Confirmed")
-                    {
-                        rows = rows.Where(r => IsIrctcSuccessStatus(r.status)).ToList();
-                    }
-                    else if (ddl_status == "PROCCESSED")
-                    {
-                        rows = rows.Where(r => IsIrctcPendingStatus(r.status)).ToList();
-                    }
-                    else if (ddl_status == "Failed")
-                    {
-                        rows = rows.Where(r => IsIrctcFailedStatus(r.status)).ToList();
-                    }
-                }
-
-                return rows;
+                allretailer = "ALL";
             }
-            catch
-            {
-                return new List<Rem_IRCTC_TokenPurchase_reports_Result>();
-            }
+
+            IRCTC_report_model reposts = new IRCTC_report_model();
+            reposts.Admin_IRCTC_reports = db.Rem_IRCTC_TokenPurchase_reports(allretailer, frm_date, to_date);
+            IEnumerable<SelectListItem> mdList = from s in db.Superstokist_details.ToList()
+                                                 select new SelectListItem
+                                                 {
+                                                     Value = s.SSId,
+                                                     Text = s.FarmName + "_" + s.Mobile
+                                                 };
+            ViewBag.allmasters = new SelectList(mdList, "Value", "Text");
+
+            IEnumerable<SelectListItem> dlmList = from s in db.Dealer_Details.ToList()
+                                                  select new SelectListItem
+                                                  {
+                                                      Value = s.DealerId,
+                                                      Text = s.FarmName + "_" + s.Mobile
+                                                  };
+            ViewBag.alldealer = new SelectList(mdList, "Value", "Text");
+
+            IEnumerable<SelectListItem> remList = from s in db.Retailer_Details.Where(aa => aa.ISDeleteuser == false).ToList()
+                                                  select new SelectListItem
+                                                  {
+                                                      Value = s.RetailerId,
+                                                      Text = s.Frm_Name + "_" + s.Mobile
+                                                  };
+            ViewBag.allretailer = new SelectList(remList, "Value", "Text");
+
+
+
+
+
+            return View(reposts);
         }
 
 
@@ -118848,7 +120557,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
                 var admininfo = db.Admin_details.SingleOrDefault();
                 Backupinfo back = new Backupinfo();
-         
+
                 var model = new Backupinfo.Addinfo
                 {
 
@@ -118856,7 +120565,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                     RetailerID = entry.remid,
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
-                    Details = "Irctc Refund" ,
+                    Details = "Irctc Refund",
                     RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
@@ -123599,16 +125308,16 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 return View(model);
             }
         }
-      
+
         [HttpPost]
-        public void updatesetpccomm(string id , decimal? comm , string roles, string Emails)
+        public void updatesetpccomm(string id, decimal? comm, string roles, string Emails)
         {
 
-            if(roles == "Master1")
+            if (roles == "Master1")
             {
                 var masterset = db.prepaid_card_master_comm.ToList();
                 var masterset1 = db.prepaid_card_master_comm.Where(s => s.userid == "").SingleOrDefault();
-                foreach(var i in masterset)
+                foreach (var i in masterset)
                 {
 
                     masterset1 = db.prepaid_card_master_comm.Where(s => s.userid == i.userid).SingleOrDefault();
@@ -123619,16 +125328,16 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
 
             }
-            else if(roles == "Master")
+            else if (roles == "Master")
             {
 
-              
+
                 var masterset1 = db.Superstokist_details.Where(s => s.Email == Emails).SingleOrDefault();
-               
-                 var  masterset2 = db.prepaid_card_master_comm.Where(s => s.userid == masterset1.SSId).SingleOrDefault();
-                    masterset2.comm = comm;
-                    db.SaveChanges();
-                
+
+                var masterset2 = db.prepaid_card_master_comm.Where(s => s.userid == masterset1.SSId).SingleOrDefault();
+                masterset2.comm = comm;
+                db.SaveChanges();
+
             }
             else if (roles == "Dealer1")
             {
@@ -123646,20 +125355,20 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             }
             else if (roles == "Dealer")
             {
-          
+
                 var dlmset1 = db.Dealer_Details.Where(s => s.Email == Emails).SingleOrDefault();
-                
-                  var  dlmset2 = db.prepaid_card_dlm_comm.Where(s => s.userid == dlmset1.DealerId).SingleOrDefault();
-                    dlmset2.comm = comm;
-                    db.SaveChanges();
-                
+
+                var dlmset2 = db.prepaid_card_dlm_comm.Where(s => s.userid == dlmset1.DealerId).SingleOrDefault();
+                dlmset2.comm = comm;
+                db.SaveChanges();
+
             }
             else if (roles == "Retailer1")
             {
                 var dlm = db.Dealer_Details.Where(s => s.Email == Emails).SingleOrDefault();
                 var rem = db.Retailer_Details.Where(s => s.DealerId == dlm.DealerId).ToList();
 
-                
+
                 var remset = db.prepaid_card_rem_comm.Where(s => s.userid == "").SingleOrDefault();
                 foreach (var i in rem)
                 {
@@ -123694,208 +125403,93 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
             //if (model2 == null)
             //{
-                if (role == "Master")
+            if (role == "Master")
+            {
+                if (string.IsNullOrWhiteSpace(userid))
                 {
-                    if (string.IsNullOrWhiteSpace(userid))
-                    {
-                        var model = db.prepaid_card_master_comm.ToList();
+                    var model = db.prepaid_card_master_comm.ToList();
 
-                        model1.usersd =
-                           (from m in db.prepaid_card_master_comm
-                            join u in db.Users on m.userid equals u.UserId
-                            where m.userid == userid
-                            select new commmm
+                    model1.usersd =
+                       (from m in db.prepaid_card_master_comm
+                        join u in db.Users on m.userid equals u.UserId
+                        where m.userid == userid
+                        select new commmm
+                        {
+                            idno = m.idno,
+                            Comm = m.comm,
+                            Email = u.Email
+
+                        }).ToList();
+
+
+                    model1.updateset =
+                           (from m in db.prepaid_card_common_comm
+                            select new update_set
                             {
                                 idno = m.idno,
-                                Comm = m.comm,
-                                Email = u.Email
-
+                                Comm = m.master_comm,
+                                Email = "ALL",
+                                Role = "Master1"
                             }).ToList();
-
-
-                        model1.updateset =
-                               (from m in db.prepaid_card_common_comm
-                                select new update_set
-                                {
-                                    idno = m.idno,
-                                    Comm = m.master_comm,
-                                    Email = "ALL",
-                                    Role = "Master1"
-                                }).ToList();
                     model1.Name = "ALL";
                     model1.Phone = "ALL";
 
                     model1.role = "Master";
 
-                        var super = db.Superstokist_details.ToList();
+                    var super = db.Superstokist_details.ToList();
 
-                        var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId, Selected = a.SSId == userid ? true : false }).ToList();
-                        model1.UserId = list;
-                    }
-                    else
-                    {
-                        var model = db.prepaid_card_master_comm.Where(m => m.userid == userid).ToList();
+                    var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId, Selected = a.SSId == userid ? true : false }).ToList();
+                    model1.UserId = list;
+                }
+                else
+                {
+                    var model = db.prepaid_card_master_comm.Where(m => m.userid == userid).ToList();
 
-                        model1.usersd =
-                           (from m in db.prepaid_card_master_comm
-                            join u in db.Users on m.userid equals u.UserId
-                            where m.userid == userid
-                            select new commmm
-                            {
-                                idno = m.idno,
-                                Comm = m.comm,
-                                Email = u.Email
-                            }).ToList();
+                    model1.usersd =
+                       (from m in db.prepaid_card_master_comm
+                        join u in db.Users on m.userid equals u.UserId
+                        where m.userid == userid
+                        select new commmm
+                        {
+                            idno = m.idno,
+                            Comm = m.comm,
+                            Email = u.Email
+                        }).ToList();
 
-                        model1.updateset =
-                              (from m in db.prepaid_card_master_comm
-                               join u in db.Users on m.userid equals u.UserId
-                               where m.userid == userid
-                               select new update_set
-                               {
-                                   idno = m.idno,
-                                   Comm = m.comm,
-                                   Email = u.Email,
-                                   Role = "Master"
-                                  
-                               }).ToList();
-                        model1.role = "Master";
-                    var super3 = db.Superstokist_details.Where(s=>s.SSId == userid).SingleOrDefault();
+                    model1.updateset =
+                          (from m in db.prepaid_card_master_comm
+                           join u in db.Users on m.userid equals u.UserId
+                           where m.userid == userid
+                           select new update_set
+                           {
+                               idno = m.idno,
+                               Comm = m.comm,
+                               Email = u.Email,
+                               Role = "Master"
+
+                           }).ToList();
+                    model1.role = "Master";
+                    var super3 = db.Superstokist_details.Where(s => s.SSId == userid).SingleOrDefault();
 
                     model1.Name = super3.SuperstokistName;
                     model1.Phone = super3.Mobile;
 
                     var super = db.Superstokist_details.ToList();
-                       
-                        var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId, Selected = a.SSId == userid ? true : false }).ToList();
-                        model1.UserId = list;
-                    }
 
+                    var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId, Selected = a.SSId == userid ? true : false }).ToList();
+                    model1.UserId = list;
                 }
-                else if (role == "Dealer")
+
+            }
+            else if (role == "Dealer")
+            {
+                if (string.IsNullOrWhiteSpace(userid))
                 {
-                    if (string.IsNullOrWhiteSpace(userid))
-                    {
-                        var model = db.prepaid_card_dlm_comm.ToList();
+                    var model = db.prepaid_card_dlm_comm.ToList();
 
 
-                        model1.usersd =
-                         (from m in db.prepaid_card_dlm_comm
-                          join u in db.Users on m.userid equals u.UserId
-                          where m.userid == userid
-                          select new commmm
-                          {
-                              idno = m.idno,
-                              Comm = m.comm,
-                              Email = u.Email
-                          }).ToList();
-
-                        model1.updateset =
-                      (from m in db.prepaid_card_common_comm
-                       select new update_set
-                       {
-                           idno = m.idno,
-                           Comm = m.dlm_comm,
-                           Email = "ALL",
-                           Role = "Dealer1"
-                       }).ToList();
-
-                    model1.Name = "ALL";
-                    model1.Phone = "ALL";
-
-                    model1.role = "Dealer";
-                        var super = db.Dealer_Details.ToList();
-
-                        var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
-                        model1.UserId = list;
-                    }
-                    else
-                    {
-                        var model = db.prepaid_card_dlm_comm.Where(m => m.userid == userid).ToList();
-
-                        model1.usersd =
-                      (from m in db.prepaid_card_dlm_comm
-                       join u in db.Users on m.userid equals u.UserId
-                       where u.UserId == userid
-                       select new commmm
-                       {
-                           idno = m.idno,
-                           Comm = m.comm,
-                           Email = u.Email
-                       }).ToList();
-
-                        model1.updateset =
-                              (from m in db.prepaid_card_dlm_comm
-                               join u in db.Users on m.userid equals u.UserId
-                               where m.userid == userid
-                               select new update_set
-                               {
-                                   idno = m.idno,
-                                   Comm = m.comm,
-                                   Email = u.Email,
-                                   Role = "Dealer"
-                               }).ToList();
-                        model1.role = "Dealer";
-                        var super = db.Dealer_Details.ToList();
-
-                    var super3 = db.Dealer_Details.Where(s => s.DealerId == userid).SingleOrDefault();
-
-                    model1.Name = super3.DealerName;
-                    model1.Phone = super3.Mobile;
-
-                    var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
-                        model1.UserId = list;
-                    }
-                }
-                else if (role == "Retailer")
-                {
-                    if (string.IsNullOrWhiteSpace(userid))
-                    {
-                        var model = db.prepaid_card_rem_comm.ToList();
-
-                        model1.usersd =
-                        (from m in db.prepaid_card_rem_comm
-                         join u in db.Users on m.userid equals u.UserId
-                         where m.userid == userid
-                         select new commmm
-                         {
-                             idno = m.idno,
-                             Comm = m.comm,
-                             Email = u.Email
-                         }).ToList();
-
-                        model1.updateset =
-                            (from m in db.prepaid_card_rem_comm
-                             join u in db.Users on m.userid equals u.UserId
-                             where m.userid == userid
-
-                             select new update_set
-                             {
-                                 idno = m.idno,
-                                 Comm = m.comm,
-                                 Email = u.Email,
-                                 Role = ""
-                             }).ToList();
-                    model1.Name = "ALL";
-                    model1.Phone = "ALL";
-
-                    model1.role = "Retailer";
-                        var super = db.Dealer_Details.ToList();
-
-                        var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
-                        model1.UserId = list;
-                        var super1 = db.Retailer_Details.Where(s => s.DealerId == userid).ToList();
-                        var list1 = super1.Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId, Selected = a.RetailerId == userid ? true : false }).ToList();
-                        model1.RetailerId = list1;
-
-                    }
-                    else if (string.IsNullOrWhiteSpace(ddlUserIdrem))
-                    {
-
-                        var model = db.prepaid_card_rem_comm.ToList();
-
-                        model1.usersd =
-                     (from m in db.prepaid_card_rem_comm
+                    model1.usersd =
+                     (from m in db.prepaid_card_dlm_comm
                       join u in db.Users on m.userid equals u.UserId
                       where m.userid == userid
                       select new commmm
@@ -123904,35 +125498,150 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                           Comm = m.comm,
                           Email = u.Email
                       }).ToList();
-                        model1.role = "Retailer";
-                        var super = db.Dealer_Details.ToList();
+
+                    model1.updateset =
+                  (from m in db.prepaid_card_common_comm
+                   select new update_set
+                   {
+                       idno = m.idno,
+                       Comm = m.dlm_comm,
+                       Email = "ALL",
+                       Role = "Dealer1"
+                   }).ToList();
+
+                    model1.Name = "ALL";
+                    model1.Phone = "ALL";
+
+                    model1.role = "Dealer";
+                    var super = db.Dealer_Details.ToList();
+
+                    var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
+                    model1.UserId = list;
+                }
+                else
+                {
+                    var model = db.prepaid_card_dlm_comm.Where(m => m.userid == userid).ToList();
+
+                    model1.usersd =
+                  (from m in db.prepaid_card_dlm_comm
+                   join u in db.Users on m.userid equals u.UserId
+                   where u.UserId == userid
+                   select new commmm
+                   {
+                       idno = m.idno,
+                       Comm = m.comm,
+                       Email = u.Email
+                   }).ToList();
+
+                    model1.updateset =
+                          (from m in db.prepaid_card_dlm_comm
+                           join u in db.Users on m.userid equals u.UserId
+                           where m.userid == userid
+                           select new update_set
+                           {
+                               idno = m.idno,
+                               Comm = m.comm,
+                               Email = u.Email,
+                               Role = "Dealer"
+                           }).ToList();
+                    model1.role = "Dealer";
+                    var super = db.Dealer_Details.ToList();
+
+                    var super3 = db.Dealer_Details.Where(s => s.DealerId == userid).SingleOrDefault();
+
+                    model1.Name = super3.DealerName;
+                    model1.Phone = super3.Mobile;
+
+                    var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
+                    model1.UserId = list;
+                }
+            }
+            else if (role == "Retailer")
+            {
+                if (string.IsNullOrWhiteSpace(userid))
+                {
+                    var model = db.prepaid_card_rem_comm.ToList();
+
+                    model1.usersd =
+                    (from m in db.prepaid_card_rem_comm
+                     join u in db.Users on m.userid equals u.UserId
+                     where m.userid == userid
+                     select new commmm
+                     {
+                         idno = m.idno,
+                         Comm = m.comm,
+                         Email = u.Email
+                     }).ToList();
+
+                    model1.updateset =
+                        (from m in db.prepaid_card_rem_comm
+                         join u in db.Users on m.userid equals u.UserId
+                         where m.userid == userid
+
+                         select new update_set
+                         {
+                             idno = m.idno,
+                             Comm = m.comm,
+                             Email = u.Email,
+                             Role = ""
+                         }).ToList();
+                    model1.Name = "ALL";
+                    model1.Phone = "ALL";
+
+                    model1.role = "Retailer";
+                    var super = db.Dealer_Details.ToList();
+
+                    var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
+                    model1.UserId = list;
+                    var super1 = db.Retailer_Details.Where(s => s.DealerId == userid).ToList();
+                    var list1 = super1.Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId, Selected = a.RetailerId == userid ? true : false }).ToList();
+                    model1.RetailerId = list1;
+
+                }
+                else if (string.IsNullOrWhiteSpace(ddlUserIdrem))
+                {
+
+                    var model = db.prepaid_card_rem_comm.ToList();
+
+                    model1.usersd =
+                 (from m in db.prepaid_card_rem_comm
+                  join u in db.Users on m.userid equals u.UserId
+                  where m.userid == userid
+                  select new commmm
+                  {
+                      idno = m.idno,
+                      Comm = m.comm,
+                      Email = u.Email
+                  }).ToList();
+                    model1.role = "Retailer";
+                    var super = db.Dealer_Details.ToList();
 
 
-                        model1.updateset =
-                              (from m in db.prepaid_card_dlm_rem_comm
-                               join u in db.Users on m.userid equals u.UserId
-                               where m.userid == userid
-                               select new update_set
-                               {
-                                   idno = m.idno,
-                                   Comm = m.comm,
-                                   Email = u.Email,
-                                   Role = "Retailer1"
-                               }).ToList();
+                    model1.updateset =
+                          (from m in db.prepaid_card_dlm_rem_comm
+                           join u in db.Users on m.userid equals u.UserId
+                           where m.userid == userid
+                           select new update_set
+                           {
+                               idno = m.idno,
+                               Comm = m.comm,
+                               Email = u.Email,
+                               Role = "Retailer1"
+                           }).ToList();
                     var super3 = db.Dealer_Details.Where(s => s.DealerId == userid).SingleOrDefault();
 
                     model1.Name = super3.DealerName;
                     model1.Phone = super3.Mobile;
                     var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
-                        model1.UserId = list;
-                        var super1 = db.Retailer_Details.Where(s => s.DealerId == userid).ToList();
-                        var list1 = super1.Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId, Selected = a.RetailerId == userid ? true : false }).ToList();
-                        model1.RetailerId = list1;
+                    model1.UserId = list;
+                    var super1 = db.Retailer_Details.Where(s => s.DealerId == userid).ToList();
+                    var list1 = super1.Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId, Selected = a.RetailerId == userid ? true : false }).ToList();
+                    model1.RetailerId = list1;
 
-                    }
-                    else
-                    {
-                        var model = db.prepaid_card_rem_comm.Where(s => s.userid == ddlUserIdrem).ToList();
+                }
+                else
+                {
+                    var model = db.prepaid_card_rem_comm.Where(s => s.userid == ddlUserIdrem).ToList();
 
                     var super3 = db.Retailer_Details.Where(s => s.RetailerId == ddlUserIdrem).SingleOrDefault();
 
@@ -123950,32 +125659,32 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                          Email = u.Email
                      }).ToList();
 
-                        model1.updateset =
-                           (from m in db.prepaid_card_rem_comm
-                            join u in db.Users on m.userid equals u.UserId
-                            where m.userid == ddlUserIdrem
-                            select new update_set
-                            {
-                                idno = m.idno,
-                                Comm = m.comm,
-                                Email = u.Email,
-                                Role = "Retailer"
-                            }).ToList();
-                        model1.role = "Retailer";
-                        var super = db.Dealer_Details.ToList();
-                   
-                    var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
-                        model1.UserId = list;
-                        var super1 = db.Retailer_Details.Where(s => s.DealerId == userid).ToList();
-                        var list1 = super1.Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId, Selected = a.DealerId == userid ? true : false }).ToList();
-                        model1.RetailerId = list1;
+                    model1.updateset =
+                       (from m in db.prepaid_card_rem_comm
+                        join u in db.Users on m.userid equals u.UserId
+                        where m.userid == ddlUserIdrem
+                        select new update_set
+                        {
+                            idno = m.idno,
+                            Comm = m.comm,
+                            Email = u.Email,
+                            Role = "Retailer"
+                        }).ToList();
+                    model1.role = "Retailer";
+                    var super = db.Dealer_Details.ToList();
 
-                    }
+                    var list = super.Select(a => new SelectListItem { Text = a.FarmName, Value = a.DealerId, Selected = a.DealerId == userid ? true : false }).ToList();
+                    model1.UserId = list;
+                    var super1 = db.Retailer_Details.Where(s => s.DealerId == userid).ToList();
+                    var list1 = super1.Select(a => new SelectListItem { Text = a.Frm_Name, Value = a.RetailerId, Selected = a.DealerId == userid ? true : false }).ToList();
+                    model1.RetailerId = list1;
 
                 }
 
+            }
 
-                return PartialView(model1);
+
+            return PartialView(model1);
 
             //}
             //else
@@ -124009,7 +125718,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
         [HttpPost]
 
-        public ActionResult updatesetpccommcommon(decimal ? remcom , decimal ? dlmcom, decimal? mastercomm)
+        public ActionResult updatesetpccommcommon(decimal? remcom, decimal? dlmcom, decimal? mastercomm)
         {
             var set = db.prepaid_card_common_comm.SingleOrDefault();
             set.rem_comm = remcom;
@@ -124031,7 +125740,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             var chk = db.ADDNEWSERVICES.ToList();
             return View(chk);
         }
-       
+
         [HttpPost]
         public ActionResult ADDNEWSERVICES(string servies)
         {
@@ -124059,17 +125768,17 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
 
             var chk = db.ADDNEWSERVICES.ToList();
-            return PartialView("ADDNEWSERVICES_report",chk);
+            return PartialView("ADDNEWSERVICES_report", chk);
         }
         public ActionResult ADDNEWFIELD(string servies)
-                {
+        {
             Session["Servis"] = servies;
 
             ServiceReport df = new ServiceReport();
 
-             df.s11 = db.SERVICECOLUMNs.Where(s => s.SERVICESNAME == servies).ToList();
-             var setss1 = db.SERVICECOLUMNs.Where(s => s.SERVICESNAME == servies).ToList();
-             df.s22 = db.SERVICES_DATA_INFO.Where(s => s.SERVICESNAME == servies).ToList();
+            df.s11 = db.SERVICECOLUMNs.Where(s => s.SERVICESNAME == servies).ToList();
+            var setss1 = db.SERVICECOLUMNs.Where(s => s.SERVICESNAME == servies).ToList();
+            df.s22 = db.SERVICES_DATA_INFO.Where(s => s.SERVICESNAME == servies).ToList();
             Session["coo"] = df.s11.Count();
             Session["coo1"] = df.s22.Count();
             Session["coo2"] = servies;
@@ -124083,7 +125792,8 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
         public object saveFields(string set, string sess)
         {
             var medssage = "";
-          if(!string.IsNullOrEmpty(set) && !string.IsNullOrEmpty(sess)){
+            if (!string.IsNullOrEmpty(set) && !string.IsNullOrEmpty(sess))
+            {
                 char setd = Convert.ToChar("स");
                 var save = set.Split(setd);
                 var sdddf = "";
@@ -124116,18 +125826,18 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                     }
                     j++;
                 }
-                var chdk = db.SERVICECOLUMNs.Where(s=>s.SERVICESNAME == sess).ToList();
+                var chdk = db.SERVICECOLUMNs.Where(s => s.SERVICESNAME == sess).ToList();
                 var rns = "";
                 if (chdk.Count == 0)
                 {
                     Random dew = new Random();
-                  var rns1 = dew.Next(9999, 99999);
+                    var rns1 = dew.Next(9999, 99999);
                     rns = Convert.ToString(rns1);
                 }
                 else
                 {
-                    var chdk1 = db.SERVICECOLUMNs.Where(s=>s.SERVICESNAME == sess).Take(1).SingleOrDefault();
-                     rns = chdk1.uniqueid;
+                    var chdk1 = db.SERVICECOLUMNs.Where(s => s.SERVICESNAME == sess).Take(1).SingleOrDefault();
+                    rns = chdk1.uniqueid;
                 }
                 SERVICECOLUMN d2 = new SERVICECOLUMN();
 
@@ -124135,7 +125845,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 {
                     var hesd = it[z];
                     var chdfk = db.SERVICECOLUMNs.Where(s => s.header == hesd && s.SERVICESNAME == sess).ToList();
-                    var chdfk11 = db.SERVICES_DATA_INFO.Where(s =>s.SERVICESNAME == sess).ToList();
+                    var chdfk11 = db.SERVICES_DATA_INFO.Where(s => s.SERVICESNAME == sess).ToList();
                     if (chdfk11.Count == 0)
                     {
                         if (chdfk.Count == 0)
@@ -124166,14 +125876,15 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                         medssage = "Cant Add New Column";
                     }
                 }
-           }
+            }
 
 
             var chg = db.SERVICECOLUMNs.Where(s => s.SERVICESNAME == sess).ToList();
 
-            return new {status = true, message = medssage };
+            return new { status = true, message = medssage };
         }
-       public ActionResult Delete_servicefield(int? id,string serv)     {
+        public ActionResult Delete_servicefield(int? id, string serv)
+        {
 
             var chk = db.SERVICECOLUMNs.Where(s => s.idno == id && s.SERVICESNAME == serv).ToList();
             if (chk.Count == 1)
@@ -124183,7 +125894,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 db.SaveChanges();
             }
 
-            return RedirectToAction("ADDNEWFIELD",new { servies= serv });
+            return RedirectToAction("ADDNEWFIELD", new { servies = serv });
         }
         public ActionResult ADD_servicefield(int? id, string serv)
         {
@@ -124197,7 +125908,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             }
 
             return RedirectToAction("ADDNEWFIELD", new { servies = serv });
-        }   
+        }
         public object UpdateFields(string set, string set1, string sess)
         {
             char setd = Convert.ToChar("स");
@@ -124250,7 +125961,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                     db.SaveChanges();
 
                 }
-                return new { Message = "Successfully Updated"};
+                return new { Message = "Successfully Updated" };
             }
             else
             {
@@ -124262,7 +125973,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
         public ActionResult servicestatus12(string service)
         {
             var check = db.ADDNEWSERVICES.Where(s => s.SERVICENAME == service).SingleOrDefault();
-            if(check.status == true)
+            if (check.status == true)
             {
                 check.status = false;
                 db.SaveChanges();
@@ -124280,14 +125991,14 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             else
             {
                 Session["onoff"] = "1";
-                check.status = false;   
+                check.status = false;
                 db.SaveChanges();
             }
 
-            return RedirectToAction("ADDNEWFIELD","Home",new { servies = service });
+            return RedirectToAction("ADDNEWFIELD", "Home", new { servies = service });
         }
         [HttpPost]
-        public ActionResult ServicesALLREport_all_report(DateTime Date1, DateTime Date2,string servies)
+        public ActionResult ServicesALLREport_all_report(DateTime Date1, DateTime Date2, string servies)
         {
             Session["Servis"] = servies;
 
@@ -124299,15 +126010,15 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             Session["coo"] = df.s11.Count();
             Session["coo1"] = df.s22.Count();
             ViewBag.entry = db.SERVICES_DATA_INFO.Where(s => s.date >= Date1 && s.date < Date2 && s.SERVICESNAME == servies).ToList();
-            return PartialView("ServicesALLREport_all",df);
+            return PartialView("ServicesALLREport_all", df);
         }
 
         [HttpPost]
-        public object dealerrechSellUpdate(string ssid , string Type)
+        public object dealerrechSellUpdate(string ssid, string Type)
         {
             var message = "";
             if (Type == "SELL STATUS")
-                    {
+            {
                 var chk = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == ssid).ToList();
 
                 if (chk.Count == 0)
@@ -124325,14 +126036,14 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
                 return Json(new { list = chk1.Status, list1 = chk1.registration_Status, Mess = message }, JsonRequestBehavior.AllowGet);
             }
-            else if(Type == "Registration")
+            else if (Type == "Registration")
             {
                 var check = db.Money_API_URLS.Where(s => s.API_Name.Contains("VASTWEB")).ToList();
 
                 if (check.Count > 0)
                 {
                     var check1 = db.Money_API_URLS.Where(s => s.API_Name.Contains("VASTWEB")).Take(1).SingleOrDefault();
-                    var  checkdlm = db.Dealer_Details.Where(s => s.DealerId == ssid).SingleOrDefault();
+                    var checkdlm = db.Dealer_Details.Where(s => s.DealerId == ssid).SingleOrDefault();
 
                     var client = new RestClient("https://www.vastwebindia.com/DLMAPI/Register");
                     var request = new RestRequest(Method.POST);
@@ -124350,10 +126061,10 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                     var response = client.Execute(request);
                     dynamic json = JsonConvert.DeserializeObject(response.Content);
                     // Convert the response content to JSON and return it as JsonResult
-                   
 
 
-                    
+
+
                     var chk11 = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == ssid).SingleOrDefault();
 
                     if (json.Responsecode == 1 || json.Message == "This WebSite Allready Register With Us." || json.Message == "User Already Exists")
@@ -124367,9 +126078,9 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                     {
                         message = "Rejected";
                     }
-                     chk11 = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == ssid).SingleOrDefault();
+                    chk11 = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == ssid).SingleOrDefault();
 
-                    return Json(new { list = chk11.Status, list1 = chk11.registration_Status , Mess = message}, JsonRequestBehavior.AllowGet);
+                    return Json(new { list = chk11.Status, list1 = chk11.registration_Status, Mess = message }, JsonRequestBehavior.AllowGet);
 
 
 
@@ -124386,17 +126097,17 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 }
 
             }
-            else if(Type == "Sell RECHARGE ON")
+            else if (Type == "Sell RECHARGE ON")
             {
 
                 var chk3 = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == ssid).SingleOrDefault();
                 chk3.Status = false;
                 db.SaveChanges();
                 message = "SELL RECHARGE STATUS OFF";
-                 chk3 = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == ssid).SingleOrDefault();
+                chk3 = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == ssid).SingleOrDefault();
                 return Json(new { list = chk3.Status, list1 = chk3.registration_Status, Mess = message }, JsonRequestBehavior.AllowGet);
             }
-            else if(Type == "Sell RECHARGE OFF")
+            else if (Type == "Sell RECHARGE OFF")
             {
                 var chk31 = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == ssid).SingleOrDefault();
                 chk31.Status = true;
@@ -124409,7 +126120,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             else
             {
                 var chk311 = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == ssid).SingleOrDefault();
-               
+
                 message = "failed";
                 return Json(new { list = chk311.Status, list1 = chk311.registration_Status, Mess = message }, JsonRequestBehavior.AllowGet);
 
@@ -124426,7 +126137,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
                 if (chk.Count == 0)
                 {
-                   Recharge_sell_by_dealer d1 = new Recharge_sell_by_dealer();
+                    Recharge_sell_by_dealer d1 = new Recharge_sell_by_dealer();
                     d1.Dealerid = ssid;
                     d1.datetimes = DateTime.Now;
                     d1.registration_Status = false;
@@ -124533,20 +126244,20 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
 
         public ActionResult sellrechargeoptList()
-            {
+        {
             optmergeforsell d1 = new optmergeforsell();
             ViewBag.OPTCODEOFAPI = new SelectList(db.operatorcommforsells, "optcode", "optname", null).ToList();
             ViewBag.OPTCODEOFService = new SelectList(db.Operator_Code.Where(s => s.status == "Y" && s.Operator_type == "PrePaid" || s.Operator_type == "DTH"), "new_opt_code", "operator_Name", null).ToList();
             d1.optcomm = db.operatorcommforsellStatus.OrderByDescending(s => s.Timing).ToList();
             d1.optmerge = db.operatorMerges.ToList();
-            
+
             return View(d1);
         }
         public ActionResult merge_opt1(string OPTCODEOFAPI, string OPTCODEOFService)
         {
             if (!string.IsNullOrEmpty(OPTCODEOFAPI) && !string.IsNullOrEmpty(OPTCODEOFService))
             {
-                
+
                 var check1 = db.Operator_Code.Where(s => s.new_opt_code == OPTCODEOFService).SingleOrDefault();
                 var check2 = db.operatorcommforsells.Where(s => s.optcode == OPTCODEOFAPI).SingleOrDefault();
                 var chk = db.operatorMerges.Where(s => s.api_operator == check2.optname).ToList();
@@ -124557,7 +126268,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
                     d1.self_optcode = OPTCODEOFService;
                     d1.api_optcode = OPTCODEOFAPI;
-                    d1.self_operator = check1.operator_Name ;
+                    d1.self_operator = check1.operator_Name;
                     d1.api_operator = check2.optname;
                     db.operatorMerges.Add(d1);
                     db.SaveChanges();
@@ -124577,11 +126288,11 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             return RedirectToAction("sellrechargeoptList");
 
         }
-        public ActionResult sellrechargeoptUpdate(int? idno , string status)
+        public ActionResult sellrechargeoptUpdate(int? idno, string status)
         {
-            var chek = db.operatorcommforsellStatus.Where(s=>s.idno == idno).SingleOrDefault();
+            var chek = db.operatorcommforsellStatus.Where(s => s.idno == idno).SingleOrDefault();
             chek.status = status;
-           
+
             db.SaveChanges();
             return RedirectToAction("sellrechargeoptList");
 
@@ -124706,7 +126417,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             {
                 return Json("Failed", JsonRequestBehavior.AllowGet);
             }
-        } 
+        }
         public JsonResult updatemanatroryfild(string fild)
         {
             try
@@ -124725,7 +126436,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                         db.SaveChanges();
                     }
                     var chk1 = db.manatorypermisions.SingleOrDefault();
-                    if(fild == "S")
+                    if (fild == "S")
                     {
                         if (chk1.skips == "N")
                         {
@@ -124775,14 +126486,14 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                     }
                     db.SaveChanges();
                     chk1 = db.manatorypermisions.SingleOrDefault();
-                    return Json(new { Mess = "Success", skip = chk1.skips , gsts = chk1.gst , agreement = chk1.agreement , address = chk1.addressproof}, JsonRequestBehavior.AllowGet);
+                    return Json(new { Mess = "Success", skip = chk1.skips, gsts = chk1.gst, agreement = chk1.agreement, address = chk1.addressproof }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                   var chk1 = db.manatorypermisions.SingleOrDefault();
-                    return Json(new {Mess = "Filed null", skip = chk1.skips, gsts = chk1.gst, agreement = chk1.agreement, address = chk1.addressproof }, JsonRequestBehavior.AllowGet);
+                    var chk1 = db.manatorypermisions.SingleOrDefault();
+                    return Json(new { Mess = "Filed null", skip = chk1.skips, gsts = chk1.gst, agreement = chk1.agreement, address = chk1.addressproof }, JsonRequestBehavior.AllowGet);
 
-                }   
+                }
             }
             catch
             {
@@ -124896,205 +126607,55 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
         }
         public ActionResult PANAadharVerificationReport()
         {
-            var today = DateTime.Today;
-            return PANAadharVerificationReportCore(today, today, today, today.AddDays(1));
+            DateTime fromdate = DateTime.Today;
+            DateTime todate = DateTime.Today.AddDays(1);
+            List<PanAadharReportViewModel> result = (from a in db.PANAADHARVERIFICATIONREPORTs
+                                                     join b in db.Retailer_Details
+                                                     on a.RetailerId equals b.RetailerId
+                                                     where a.CreatedAt >= fromdate && a.CreatedAt <= todate
+                                                     select new PanAadharReportViewModel
+                                                     {
+                                                         RetailerId = a.RetailerId,
+                                                         TransactionId = a.TransactionId,
+                                                         PanCharge = (decimal)a.PanCharge,
+                                                         AadharCharge = (decimal)a.AadharCharge,
+                                                         ChargeType = a.ChargeType,
+                                                         CreatedAt = a.CreatedAt.ToString(),
+                                                         RetailerName = b.RetailerName,
+                                                         Email = b.Email,
+                                                         Mobile = b.Mobile,
+                                                         Frm_Name = b.Frm_Name
+                                                     }).ToList();
+            return View(result);
         }
 
         [HttpPost]
-        public ActionResult PANAadharVerificationReport(string txt_frm_date, string txt_to_date)
+        public ActionResult PANAadharVerificationReport(DateTime txt_frm_date, DateTime txt_to_date)
         {
-            DateTime fromdate;
-            DateTime todateDisplay;
-            DateTime queryFrom;
-            DateTime queryToExclusive;
-            ParsePanAadharReportDateRange(txt_frm_date, txt_to_date, out fromdate, out todateDisplay, out queryFrom, out queryToExclusive);
-            return PANAadharVerificationReportCore(fromdate, todateDisplay, queryFrom, queryToExclusive);
-        }
-
-        public ActionResult pdfPANAadharVerificationReport(string txt_frm_date, string txt_to_date)
-        {
-            DateTime fromdate;
-            DateTime todateDisplay;
-            DateTime queryFrom;
-            DateTime queryToExclusive;
-            ParsePanAadharReportDateRange(txt_frm_date, txt_to_date, out fromdate, out todateDisplay, out queryFrom, out queryToExclusive);
-            ViewBag.frmDate = fromdate.ToString("yyyy-MM-dd");
-            ViewBag.toDate = todateDisplay.ToString("yyyy-MM-dd");
-            var result = GetPanAadharReportList(queryFrom, queryToExclusive);
-            return new ViewAsPdf(result);
-        }
-
-        public ActionResult ExcelPANAadharVerificationReport(string txt_frm_date, string txt_to_date)
-        {
-            DateTime fromdate;
-            DateTime todateDisplay;
-            DateTime queryFrom;
-            DateTime queryToExclusive;
-            ParsePanAadharReportDateRange(txt_frm_date, txt_to_date, out fromdate, out todateDisplay, out queryFrom, out queryToExclusive);
-            var entries = GetPanAadharReportList(queryFrom, queryToExclusive);
-
-            var dataTbl = new DataTable();
-            dataTbl.Columns.Add("SR NO", typeof(string));
-            dataTbl.Columns.Add("Retailer Name", typeof(string));
-            dataTbl.Columns.Add("Firm Name", typeof(string));
-            dataTbl.Columns.Add("Email", typeof(string));
-            dataTbl.Columns.Add("Mobile", typeof(string));
-            dataTbl.Columns.Add("Txn ID", typeof(string));
-            dataTbl.Columns.Add("Pan Charge", typeof(string));
-            dataTbl.Columns.Add("Aadhar Charge", typeof(string));
-            dataTbl.Columns.Add("Charge Type", typeof(string));
-            dataTbl.Columns.Add("Date", typeof(string));
-
-            decimal totalPan = 0;
-            decimal totalAadhar = 0;
-            var sr = 0;
-            foreach (var item in entries)
-            {
-                sr++;
-                totalPan += item.PanCharge;
-                totalAadhar += item.AadharCharge;
-                dataTbl.Rows.Add(
-                    sr.ToString(),
-                    item.RetailerName,
-                    item.Frm_Name,
-                    item.Email,
-                    item.Mobile,
-                    item.TransactionId,
-                    item.PanCharge.ToString("N2"),
-                    item.AadharCharge.ToString("N2"),
-                    item.ChargeType,
-                    item.CreatedAt);
-            }
-            dataTbl.Rows.Add("Total", "", "", "", "", "", totalPan.ToString("N2"), totalAadhar.ToString("N2"), "", fromdate.ToString("yyyy-MM-dd") + " to " + todateDisplay.ToString("yyyy-MM-dd"));
-
-            var grid = new GridView();
-            grid.DataSource = dataTbl;
-            grid.DataBind();
-            Response.ClearContent();
-            Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment; filename=PAN_Aadhar_Verification_Report.xls");
-            Response.ContentType = "application/ms-excel";
-            Response.Charset = "";
-            var sw = new StringWriter();
-            var htw = new HtmlTextWriter(sw);
-            grid.RenderControl(htw);
-            Response.Output.Write(sw.ToString());
-            Response.Flush();
-            Response.End();
-            return View();
-        }
-
-        private static void ParsePanAadharReportDateRange(
-            string txt_frm_date,
-            string txt_to_date,
-            out DateTime fromdate,
-            out DateTime todateDisplay,
-            out DateTime queryFrom,
-            out DateTime queryToExclusive)
-        {
-            if (!DateTime.TryParse(txt_frm_date, out fromdate))
-            {
-                fromdate = DateTime.Today;
-            }
-            if (!DateTime.TryParse(txt_to_date, out todateDisplay))
-            {
-                todateDisplay = DateTime.Today;
-            }
-            if (todateDisplay < fromdate)
-            {
-                todateDisplay = fromdate;
-            }
-            queryFrom = fromdate;
-            queryToExclusive = todateDisplay.AddDays(1);
-        }
-
-        private List<PanAadharReportViewModel> GetPanAadharReportList(DateTime queryFrom, DateTime queryToExclusive)
-        {
-            const string sql = @"
-SELECT
-    a.RetailerId,
-    a.TransactionId,
-    a.PanCharge,
-    a.AadharCharge,
-    a.ChargeType,
-    a.CreatedAt,
-    b.RetailerName,
-    b.Email,
-    b.Mobile,
-    b.Frm_Name
-FROM dbo.PANAADHARVERIFICATIONREPORT AS a
-LEFT JOIN dbo.Retailer_Details AS b ON a.RetailerId = b.RetailerId
-WHERE a.CreatedAt >= @p0 AND a.CreatedAt < @p1
-ORDER BY a.CreatedAt DESC";
-
-            var rows = db.Database.SqlQuery<PanAadharReportSqlRow>(
-                sql,
-                new SqlParameter("@p0", SqlDbType.DateTime) { Value = queryFrom },
-                new SqlParameter("@p1", SqlDbType.DateTime) { Value = queryToExclusive }).ToList();
-
-            return rows.Select(x => new PanAadharReportViewModel
-            {
-                RetailerId = x.RetailerId,
-                TransactionId = x.TransactionId,
-                PanCharge = x.PanCharge ?? 0m,
-                AadharCharge = x.AadharCharge ?? 0m,
-                ChargeType = x.ChargeType,
-                CreatedAt = x.CreatedAt.HasValue
-                    ? x.CreatedAt.Value.ToString("dd-MM-yyyy HH:mm")
-                    : string.Empty,
-                RetailerName = x.RetailerName ?? string.Empty,
-                Email = x.Email ?? string.Empty,
-                Mobile = x.Mobile ?? string.Empty,
-                Frm_Name = x.Frm_Name ?? string.Empty
-            }).ToList();
-        }
-
-        private ActionResult PANAadharVerificationReportCore(
-            DateTime displayFrom,
-            DateTime displayTo,
-            DateTime queryFrom,
-            DateTime queryToExclusive)
-        {
-            ViewBag.frmDate = displayFrom.ToString("yyyy-MM-dd");
-            ViewBag.toDate = displayTo.ToString("yyyy-MM-dd");
-            var result = GetPanAadharReportList(queryFrom, queryToExclusive);
+            txt_to_date = txt_to_date.AddDays(1);
+            List<PanAadharReportViewModel> result = (from a in db.PANAADHARVERIFICATIONREPORTs
+                                                     join b in db.Retailer_Details
+                                                     on a.RetailerId equals b.RetailerId
+                                                     where a.CreatedAt >= txt_frm_date && a.CreatedAt <= txt_to_date
+                                                     select new PanAadharReportViewModel
+                                                     {
+                                                         RetailerId = a.RetailerId,
+                                                         TransactionId = a.TransactionId,
+                                                         PanCharge = (decimal)a.PanCharge,
+                                                         AadharCharge = (decimal)a.AadharCharge,
+                                                         ChargeType = a.ChargeType,
+                                                         CreatedAt = a.CreatedAt.ToString(),
+                                                         RetailerName = b.RetailerName,
+                                                         Email = b.Email,
+                                                         Mobile = b.Mobile,
+                                                         Frm_Name = b.Frm_Name
+                                                     }).ToList();
             return View(result);
         }
-        // VM — App Option page
         public ActionResult APP_Option()
         {
             var Image = db.sliderimages.ToList();
-            try
-            {
-                ViewBag.AppMessages = db.AppMessages.OrderByDescending(x => x.InsertDate).ToList();
-            }
-            catch
-            {
-                ViewBag.AppMessages = new List<AppMessage>();
-            }
             return View(Image);
-        }
-
-        [HttpPost]
-        public ActionResult GetAppMessages()
-        {
-            try
-            {
-                var list = db.AppMessages
-                    .OrderByDescending(x => x.InsertDate)
-                    .Select(x => new
-                    {
-                        id = x.id,
-                        App_Message = x.App_Message,
-                        InsertDate = x.InsertDate
-                    })
-                    .ToList();
-                return Json(new { status = true, message = "", data = list }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { status = false, message = ex.Message, data = new object[0] }, JsonRequestBehavior.AllowGet);
-            }
         }
         [HttpPost]
         public ActionResult ChangeIconTheam(string theam)
@@ -125102,10 +126663,6 @@ ORDER BY a.CreatedAt DESC";
             try
             {
                 var data = db.appicons.FirstOrDefault();
-                if (data == null)
-                {
-                    return Json(new { status = false, theam = theam, message = "App icon settings not found." });
-                }
                 data.theam = theam;
                 data.istrue = true;
                 data.updatedate = DateTime.Now;
@@ -125113,143 +126670,79 @@ ORDER BY a.CreatedAt DESC";
                 data.isTraveltrue = true;
                 data.isOtherstrue = true;
                 db.SaveChanges();
-                return Json(new { status = true, theam = theam, updatedate = data.updatedate, message = "Update successfully."});
+                return Json(new { status = true, theam = theam, updatedate = data.updatedate, message = "Update successfully." });
             }
             catch (Exception ex)
             {
                 return Json(new { status = false, theam = theam, message = ex.Message });
             }
         }
-
-        [HttpPost]
-        public ActionResult ChangeIconTheamWithOtp(string theam, string otp)
-        {
-            try
-            {
-                var row = db.appicons.FirstOrDefault();
-                if (row == null)
-                {
-                    return Json(new { status = false, theam = theam, message = "App icon settings not found." });
-                }
-                if (string.IsNullOrEmpty(row.users) || row.users.Trim() != (otp ?? "").Trim())
-                {
-                    return Json(new { status = false, theam = theam, message = "Otp not matched" });
-                }
-                row.theam = theam;
-                row.istrue = true;
-                row.updatedate = DateTime.Now;
-                row.isFinancialtrue = true;
-                row.isTraveltrue = true;
-                row.isOtherstrue = true;
-                row.users = null;
-                db.SaveChanges();
-                return Json(new { status = true, theam = theam, updatedate = row.updatedate, message = "Update successfully." });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { status = false, theam = theam, message = ex.Message });
-            }
-        }
-
         public ActionResult CheckTheamactive()
         {
             try
             {
-                var row = db.appicons.FirstOrDefault();
-                var theam = row != null && !string.IsNullOrEmpty(row.theam) ? row.theam : "1";
-                return Json(new { success = true, theam = theam, message = "" });
+                var theam = db.appicons.FirstOrDefault().theam;
+                return Json(new { success = true, theam = theam });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return Json(new { success = false, theam = "1", message = ex.Message });
+                return Json(new { success = false, theam = "1" });
             }
         }
         [HttpPost]
         public ActionResult InsertAppMessage(string Message)
         {
-            try
+            var MsgCount = db.AppMessages.ToList();
+            if (!string.IsNullOrEmpty(Message))
             {
-                var msgList = db.AppMessages
-                    .OrderByDescending(x => x.InsertDate)
-                    .Select(x => new
-                    {
-                        id = x.id,
-                        App_Message = x.App_Message,
-                        InsertDate = x.InsertDate
-                    })
-                    .ToList();
-
-                if (!string.IsNullOrEmpty(Message))
+                if (MsgCount.Count < 4)
                 {
-                    if (msgList.Count < 4)
+                    var data = new AppMessage()
                     {
-                        var data = new AppMessage()
-                        {
-                            App_Message = Message,
-                            InsertDate = DateTime.Now
-                        };
-                        db.AppMessages.Add(data);
-                        db.SaveChanges();
-                        msgList = db.AppMessages
-                            .OrderByDescending(x => x.InsertDate)
-                            .Select(x => new
-                            {
-                                id = x.id,
-                                App_Message = x.App_Message,
-                                InsertDate = x.InsertDate
-                            })
-                            .ToList();
-                        return Json(new { status = true, message = "Insert Successfully.", data = msgList }, JsonRequestBehavior.AllowGet);
-                    }
-
-                    return Json(new
-                    {
-                        status = false,
-                        message = "Alredy insert 4 notifications. To add a new notification, please delete an existing one.",
-                        data = msgList
-                    }, JsonRequestBehavior.AllowGet);
+                        App_Message = Message,
+                        InsertDate = DateTime.Now
+                    };
+                    db.AppMessages.Add(data);
+                    db.SaveChanges();
+                    var InsertData = db.AppMessages.ToList();
+                    return Json(new { status = true, message = "Insert Successfully.", data = InsertData });
                 }
-
-                return Json(new { status = true, message = "", data = msgList }, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    return Json(new { status = false, message = "Alredy insert 4 notifications. To add a new notification, please delete an existing one.", data = MsgCount });
+                }
             }
-            catch (Exception ex)
+            else
             {
-                return Json(new { status = false, message = ex.Message, data = new object[0] }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = true, message = "", data = MsgCount });
             }
         }
 
         [HttpPost]
         public ActionResult DeleteAppMessage(int id)
         {
+            var InsertData = db.AppMessages.ToList();
             try
             {
                 var data = db.AppMessages.Where(x => x.id == id).FirstOrDefault();
-                if (data != null)
+                if (!string.IsNullOrEmpty(data.ToString()))
                 {
                     db.AppMessages.Remove(data);
                     db.SaveChanges();
+                    InsertData = db.AppMessages.ToList();
+                    return Json(new { status = true, message = "Delete SuccessFully.", data = InsertData });
                 }
-                var msgList = db.AppMessages
-                    .OrderByDescending(x => x.InsertDate)
-                    .Select(x => new
-                    {
-                        id = x.id,
-                        App_Message = x.App_Message,
-                        InsertDate = x.InsertDate
-                    })
-                    .ToList();
-                if (data != null)
+                else
                 {
-                    return Json(new { status = true, message = "Delete SuccessFully.", data = msgList }, JsonRequestBehavior.AllowGet);
+                    return Json(new { status = false, message = "Getting some issue. Plese Try after Some time.", data = InsertData });
                 }
-                return Json(new { status = false, message = "Getting some issue. Plese Try after Some time.", data = msgList }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { status = false, message = ex.Message, data = new object[0] }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = false, message = ex.Message, data = InsertData });
             }
         }
-        public async Task<ActionResult> sliderimages() 
+        public async Task<ActionResult> sliderimages()
         {
             VastBazaartoken Responsetoken = new VastBazaartoken();
             var token = Responsetoken.gettoken();
@@ -125263,12 +126756,12 @@ ORDER BY a.CreatedAt DESC";
             IRestResponse responsecheck = client.Execute(request);
             dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(responsecheck.Content);
             var add = responseData.Content.ADDINFO;
-           
-            List<String> list = new List<String>(); 
+
+            List<String> list = new List<String>();
             List<String> Type = new List<String>();
             List<String> Category = new List<String>();
             List<String> Language = new List<String>();
-          
+
             foreach (var i in add)
             {
                 var set = i.Image;
@@ -125282,7 +126775,7 @@ ORDER BY a.CreatedAt DESC";
                 list.Add(set1);
                 Type.Add(Type1);
                 Category.Add(Category1);
-                Language.Add(Language1); 
+                Language.Add(Language1);
 
             }
 
@@ -125378,7 +126871,7 @@ ORDER BY a.CreatedAt DESC";
                     }
                 }
 
-                else if(chk.catagory == "ACCOUNT VERIFY")
+                else if (chk.catagory == "ACCOUNT VERIFY")
                 {
                     var chks = db.money_api_status.Where(s => s.catagory == "ACCOUNT VERIFY").ToList();
                     foreach (var i in chks)
@@ -125388,7 +126881,7 @@ ORDER BY a.CreatedAt DESC";
                         db.SaveChanges();
                     }
                 }
-                chk.status = sts;   
+                chk.status = sts;
                 db.SaveChanges();
 
                 return Json("Success", JsonRequestBehavior.AllowGet);
@@ -125446,19 +126939,20 @@ ORDER BY a.CreatedAt DESC";
         }
         public ActionResult updateLogintosim(bool sts)
         {
-            try { 
-            var chk = db.Login_to_sim.ToList();
-            if(chk.Count == 0)
+            try
             {
-                Login_to_sim d1 = new Login_to_sim();
-                d1.status = false;
-                db.Login_to_sim.Add(d1);
+                var chk = db.Login_to_sim.ToList();
+                if (chk.Count == 0)
+                {
+                    Login_to_sim d1 = new Login_to_sim();
+                    d1.status = false;
+                    db.Login_to_sim.Add(d1);
+                    db.SaveChanges();
+                }
+                var chk1 = db.Login_to_sim.SingleOrDefault();
+                chk1.status = sts;
                 db.SaveChanges();
-            }
-            var chk1 = db.Login_to_sim.SingleOrDefault();
-            chk1.status = sts;
-            db.SaveChanges();
-            return Json(sts, JsonRequestBehavior.AllowGet);
+                return Json(sts, JsonRequestBehavior.AllowGet);
             }
             catch
             {
@@ -125511,31 +127005,31 @@ ORDER BY a.CreatedAt DESC";
             var radiantauthchk = db.radiantauths.SingleOrDefault();
             Radiantdmt data = new Radiantdmt();
             var chek = data.Radiantstate(radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
-           
-                dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(chek.Content);
-                var dis = responseData.dst;
-                List<rediantstateids> rediantstateList = new List<rediantstateids>();
 
-                foreach (var item in dis)
-                {
-                    rediantstateids d1 = new rediantstateids();
-                    d1.id = item.id;
-                    d1.state_code = item.state_code;
-                    d1.dist = item.dist;
-                    d1.state = item.state;
-                    rediantstateList.Add(d1);
-                }
-                var entry = rediantstateList.Where(a => a.state_code == state).ToList();
+            dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(chek.Content);
+            var dis = responseData.dst;
+            List<rediantstateids> rediantstateList = new List<rediantstateids>();
 
-            
+            foreach (var item in dis)
+            {
+                rediantstateids d1 = new rediantstateids();
+                d1.id = item.id;
+                d1.state_code = item.state_code;
+                d1.dist = item.dist;
+                d1.state = item.state;
+                rediantstateList.Add(d1);
+            }
+            var entry = rediantstateList.Where(a => a.state_code == state).ToList();
 
-            return Json(entry,0);
+
+
+            return Json(entry, 0);
         }
         [HttpPost]
-        public ActionResult rediantdisform(string firstname, string lastname, string email, string phoneno, string address, string dob, string pincode, string landmark, string state, string district, HttpPostedFileBase file , HttpPostedFileBase file1)
+        public ActionResult rediantdisform(string firstname, string lastname, string email, string phoneno, string address, string dob, string pincode, string landmark, string state, string district, HttpPostedFileBase file, HttpPostedFileBase file1)
         {
             var cheks = db.rediantdistresponses.ToList();
-            if(cheks.Count>0 && (cheks[0].status.ToUpper() == "PENDING" || cheks[0].status.ToUpper() == "APPROVE"))
+            if (cheks.Count>0 && (cheks[0].status.ToUpper() == "PENDING" || cheks[0].status.ToUpper() == "APPROVE"))
             {
                 return RedirectToAction("Profile");
             }
@@ -125580,16 +127074,17 @@ ORDER BY a.CreatedAt DESC";
                             d1.code = code;
                             db.rediantdistresponses.Add(d1);
                             db.SaveChanges();
-                         }
+                        }
 
-                        
+
                     }
 
                     ViewBag.message = responseData.message;
-                    if(ViewBag.message == "" || ViewBag.message == null){
+                    if (ViewBag.message == "" || ViewBag.message == null)
+                    {
                         var erroes = responseData.errors;
                         var set = "";
-                       foreach(var item in erroes)
+                        foreach (var item in erroes)
                         {
                             set += item;
                         }
@@ -125604,7 +127099,7 @@ ORDER BY a.CreatedAt DESC";
             }
             else
             {
-               ViewBag.message = "No Kyc front file provided";
+                ViewBag.message = "No Kyc front file provided";
             }
             var radiantauthchk = db.radiantauths.SingleOrDefault();
             Radiantdmt data = new Radiantdmt();
@@ -125632,7 +127127,7 @@ ORDER BY a.CreatedAt DESC";
                     Value = a.state_code.ToString()
                 }).ToList();
             }
-            if(ViewBag.message == "Distributor Created Successfully.")
+            if (ViewBag.message == "Distributor Created Successfully.")
             {
                 return RedirectToAction("Profile");
             }
@@ -125642,7 +127137,7 @@ ORDER BY a.CreatedAt DESC";
         public ActionResult Whatsaapupdate()
         {
             var chk = db.Email_show_passcode.SingleOrDefault();
-            if(chk.whatsappapists == true)
+            if (chk.whatsappapists == true)
             {
                 chk.whatsappapists = false;
             }
@@ -125651,7 +127146,7 @@ ORDER BY a.CreatedAt DESC";
                 chk.whatsappapists = true;
             }
             db.SaveChanges();
-             chk = db.Email_show_passcode.SingleOrDefault();
+            chk = db.Email_show_passcode.SingleOrDefault();
             return Json(chk.whatsappapists);
         }
         public class userdd
@@ -125668,8 +127163,8 @@ ORDER BY a.CreatedAt DESC";
                 Value = a.RetailerId.ToString()
             }).ToList();
             List<userdd> userList = new List<userdd>();
-            string[] userddd = { "Master", "Dealer","Retailer"};
-           foreach(var i in userddd)
+            string[] userddd = { "Master", "Dealer", "Retailer" };
+            foreach (var i in userddd)
             {
                 userdd d1 = new userdd();
                 d1.roll = i;
@@ -125684,23 +127179,23 @@ ORDER BY a.CreatedAt DESC";
             }).ToList();
 
             var userchk = db.retailerwise_whatsappsts.Where(s => s.userid == "ALL").ToList();
-                if (userchk.Count == 0)
-                {
-                    retailerwise_whatsappsts d1 = new retailerwise_whatsappsts();
-                    d1.userid = "ALL";
-                    d1.sts = true;
-                    d1.role = "ALL";
-                    db.retailerwise_whatsappsts.Add(d1);
-                    db.SaveChanges(); 
-                }
-                
-               
-            
-          var  userchk1 = db.retailerwise_whatsappsts.Where(s=>s.userid == "ALL").ToList();
+            if (userchk.Count == 0)
+            {
+                retailerwise_whatsappsts d1 = new retailerwise_whatsappsts();
+                d1.userid = "ALL";
+                d1.sts = true;
+                d1.role = "ALL";
+                db.retailerwise_whatsappsts.Add(d1);
+                db.SaveChanges();
+            }
+
+
+
+            var userchk1 = db.retailerwise_whatsappsts.Where(s => s.userid == "ALL").ToList();
             return View(userchk1);
         }
         [HttpPost]
-        public ActionResult userwisewhatsappstatus(string user , string Role)
+        public ActionResult userwisewhatsappstatus(string user, string Role)
         {
             List<userdd> userList = new List<userdd>();
             string[] userddd = { "Master", "Dealer", "Retailer" };
@@ -125720,7 +127215,8 @@ ORDER BY a.CreatedAt DESC";
 
             if (!string.IsNullOrEmpty(Role))
             {
-                if (Role == "Retailer") {
+                if (Role == "Retailer")
+                {
                     var userdd = db.Retailer_Details.Where(a => a.ISDeleteuser != true).ToList();
                     ViewBag.userss = userdd.Select(a => new SelectListItem
                     {
@@ -125750,7 +127246,7 @@ ORDER BY a.CreatedAt DESC";
                     }
                     else
                     {
-                       
+
                         foreach (var i in userdd)
                         {
                             var userchk = db.retailerwise_whatsappsts.Where(s => s.userid == i.RetailerId).ToList();
@@ -125766,15 +127262,15 @@ ORDER BY a.CreatedAt DESC";
 
 
                         }
-                        var userchk1 = db.retailerwise_whatsappsts.Where(s=>s.role == "Retailer").ToList();
+                        var userchk1 = db.retailerwise_whatsappsts.Where(s => s.role == "Retailer").ToList();
                         return View(userchk1);
                     }
-                
 
 
-                
+
+
                 }
-                else if(Role == "Dealer")
+                else if (Role == "Dealer")
                 {
                     var userdd = db.Dealer_Details.ToList();
                     ViewBag.userss = userdd.Select(a => new SelectListItem
@@ -125903,21 +127399,21 @@ ORDER BY a.CreatedAt DESC";
                     Text = a.Frm_Name,
                     Value = a.RetailerId.ToString()
                 }).ToList();
-                var userchk1 = db.retailerwise_whatsappsts.Where(s=>s.userid == "ALL").ToList();
+                var userchk1 = db.retailerwise_whatsappsts.Where(s => s.userid == "ALL").ToList();
                 return View(userchk1);
             }
-            
+
         }
-        public ActionResult Whatsaapupdateuser(bool sts , string user)
+        public ActionResult Whatsaapupdateuser(bool sts, string user)
         {
             var userchk = db.retailerwise_whatsappsts.Where(s => s.userid == user).SingleOrDefault();
             userchk.sts = sts;
             db.SaveChanges();
 
-            if(user == "ALL")
+            if (user == "ALL")
             {
                 var userchk11 = db.retailerwise_whatsappsts.ToList();
-                foreach(var i in userchk11)
+                foreach (var i in userchk11)
                 {
                     var userchk1 = db.retailerwise_whatsappsts.Where(s => s.userid == i.userid).SingleOrDefault();
                     userchk1.sts = sts;
@@ -125928,13 +127424,13 @@ ORDER BY a.CreatedAt DESC";
             return Json(sts);
         }
 
-        public ActionResult AddSliderImage(string Image, string catagory, string type , string Language)
+        public ActionResult AddSliderImage(string Image, string catagory, string type, string Language)
         {
             var ImageList = db.sliderimages.ToList();
             if (ImageList.Count < 5)
             {
                 var CheckImage = ImageList.Where(x => x.images == Image).FirstOrDefault();
-                if(CheckImage == null)
+                if (CheckImage == null)
                 {
                     var NewImage = new sliderimage()
                     {
@@ -125955,10 +127451,10 @@ ORDER BY a.CreatedAt DESC";
             }
             else
             {
-                return Json(new {Status = false, data = ImageList, Message = "You can not add more then 5 image." });
+                return Json(new { Status = false, data = ImageList, Message = "You can not add more then 5 image." });
             }
-          
-        } 
+
+        }
         public ActionResult DeleteSliderImage(int idno, string image)
         {
             var ImageList = db.sliderimages.ToList();
@@ -125985,7 +127481,7 @@ ORDER BY a.CreatedAt DESC";
             var chk = db.radiantauths.ToList();
             var chk1 = db.rediantdistresponses.ToList();
             Radiantdmt d1 = new Radiantdmt();
-           var chk2 = d1.DistributorStatus(chk1[0].code,chk[0].clientID, chk[0].clientSecret, chk[0].APIKey);
+            var chk2 = d1.DistributorStatus(chk1[0].code, chk[0].clientID, chk[0].clientSecret, chk[0].APIKey);
             dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(chk2.Content);
             if (chk2.StatusCode == HttpStatusCode.OK)
             {
@@ -126004,14 +127500,14 @@ ORDER BY a.CreatedAt DESC";
             }
             else
             {
-            return Json(chk1[0].status);
+                return Json(chk1[0].status);
             }
-            
+
         }
 
-        public ActionResult faqsave(string q , string a)
+        public ActionResult faqsave(string q, string a)
         {
-            if(!string.IsNullOrEmpty(q) && !string.IsNullOrEmpty(a))
+            if (!string.IsNullOrEmpty(q) && !string.IsNullOrEmpty(a))
             {
                 FAQ d1 = new FAQ();
                 d1.question = q;
@@ -126020,9 +127516,9 @@ ORDER BY a.CreatedAt DESC";
                 db.FAQs.Add(d1);
                 db.SaveChanges();
             }
-            var chk = db.FAQs.ToList(); 
+            var chk = db.FAQs.ToList();
             return Json(chk, 0);
-        }  
+        }
         public ActionResult faqdelete(int? id)
         {
             var chk = db.FAQs.Where(s => s.idno == id).SingleOrDefault();
@@ -126032,7 +127528,7 @@ ORDER BY a.CreatedAt DESC";
             return Json(chk1, 0);
         }
 
-         public ActionResult CreditCard()
+        public ActionResult CreditCard()
         {
             var data = TempData.Peek("data");
             if (data == "" || data == null)
@@ -126047,13 +127543,13 @@ ORDER BY a.CreatedAt DESC";
 
         public ActionResult commoncreaditcard()
         {
-            
-            string[] role = new string[3]{ "Master", "Dealer", "Retailer" };
-           
-            foreach(var y in role)
+
+            string[] role = new string[3] { "Master", "Dealer", "Retailer" };
+
+            foreach (var y in role)
             {
                 var chk = db.creaditcard_comm.Where(s => s.role == "Common" && s.userid == y).ToList();
-                if(chk.Count == 0)
+                if (chk.Count == 0)
                 {
                     creaditcard_comm d1 = new creaditcard_comm();
                     d1.userid = y;
@@ -126073,11 +127569,11 @@ ORDER BY a.CreatedAt DESC";
                 }
             }
             var chk1 = db.creaditcard_comm.Where(s => s.role == "Common").ToList();
-            return Json(chk1,0);
+            return Json(chk1, 0);
         }
         public ActionResult Savecommoncreaditcard(string[] roles, decimal[] comm1, decimal[] comm2, decimal[] comm3, decimal[] comm4, decimal[] comm5, decimal[] comm6)
         {
-            for(int i = 0; i < roles.Length; i++)
+            for (int i = 0; i < roles.Length; i++)
             {
                 var user = roles[i];
                 var chk = db.creaditcard_comm.Where(s => s.role == "Common" && s.userid == user).SingleOrDefault();
@@ -126093,10 +127589,10 @@ ORDER BY a.CreatedAt DESC";
             return Json(chk1, 0);
         }
 
-        public ActionResult Savecreaditcardcomm(string roles, string userid , decimal[] comm1, decimal[] comm2, decimal[] comm3, decimal[] comm4, decimal[] comm5, decimal[] comm6)
+        public ActionResult Savecreaditcardcomm(string roles, string userid, decimal[] comm1, decimal[] comm2, decimal[] comm3, decimal[] comm4, decimal[] comm5, decimal[] comm6)
         {
             var username = "";
-            if(roles == "Master")
+            if (roles == "Master")
             {
                 var hh = db.Superstokist_details.Where(s => s.SSId == userid).SingleOrDefault();
                 username = hh.FarmName;
@@ -126115,20 +127611,20 @@ ORDER BY a.CreatedAt DESC";
 
 
             var chk = db.creaditcard_comm.Where(s => s.role == roles && s.userid == userid).SingleOrDefault();
-                chk.comm_100_5000 = comm1[0];
-                chk.comm_5001_10000 = comm2[0];
-                chk.comm_10001_25000 = comm3[0];
-                chk.comm_25001_50000 = comm4[0];
-                chk.comm_50001_75000 = comm5[0];
-                chk.comm_75001_100000 = comm6[0];
-                db.SaveChanges();
-            
-            if(roles == "RDealer")
+            chk.comm_100_5000 = comm1[0];
+            chk.comm_5001_10000 = comm2[0];
+            chk.comm_10001_25000 = comm3[0];
+            chk.comm_25001_50000 = comm4[0];
+            chk.comm_50001_75000 = comm5[0];
+            chk.comm_75001_100000 = comm6[0];
+            db.SaveChanges();
+
+            if (roles == "RDealer")
             {
                 var hh = db.Dealer_Details.Where(s => s.DealerId == userid).SingleOrDefault();
                 username = hh.FarmName;
                 var chk11 = db.Retailer_Details.Where(s => s.DealerId == userid).ToList();
-                foreach(var i in chk11)
+                foreach (var i in chk11)
                 {
                     var tt = db.creaditcard_comm.Where(s => s.userid == i.RetailerId).SingleOrDefault();
 
@@ -126272,17 +127768,17 @@ ORDER BY a.CreatedAt DESC";
         {
             var chk = db.creaditcard_comm.Where(s => s.role == role && s.userid == userid).SingleOrDefault();
 
-            if(role == "Master")
+            if (role == "Master")
             {
                 var ck = db.Superstokist_details.Where(s => s.SSId == userid).SingleOrDefault();
-                return Json(new {data=chk,frm = ck.FarmName , Email = ck.Email , mobile = ck.Mobile });
+                return Json(new { data = chk, frm = ck.FarmName, Email = ck.Email, mobile = ck.Mobile });
             }
             else if (role == "Dealer")
             {
                 var ck = db.Dealer_Details.Where(s => s.DealerId == userid).SingleOrDefault();
                 return Json(new { data = chk, frm = ck.FarmName, Email = ck.Email, mobile = ck.Mobile });
             }
-            else if(role== "RDealer")
+            else if (role== "RDealer")
             {
                 var ck = db.Dealer_Details.Where(s => s.DealerId == userid).SingleOrDefault();
                 return Json(new { data = chk, frm = ck.FarmName, Email = ck.Email, mobile = ck.Mobile });
@@ -126292,7 +127788,7 @@ ORDER BY a.CreatedAt DESC";
                 var ck = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
                 return Json(new { data = chk, frm = ck.Frm_Name, Email = ck.Email, mobile = ck.Mobile });
             }
-          
+
         }
 
         public ActionResult passbyretailerdmtsd()
@@ -126377,7 +127873,7 @@ ORDER BY a.CreatedAt DESC";
                     // Redirect to the file
                     string baseUrl = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath;
                     /* return Json(url + "/"+ "pancardslips/" + Path.GetFileName(chk.imageurl)); */// Adjust content type as needed
-                    return Json( baseUrl + "/" + "pancardslips/" + Path.GetFileName(chk.imageurl));
+                    return Json(baseUrl + "/" + "pancardslips/" + Path.GetFileName(chk.imageurl));
                 }
                 catch (Exception ex)
                 {
@@ -126397,7 +127893,7 @@ ORDER BY a.CreatedAt DESC";
         {
 
             ViewBag.allretailer = db.api_user_details.Select(a => new SelectListItem { Text = a.farmname, Value = a.apiid.ToString() }).ToList();
-          
+
             var chk = db.api_user_details.ToList();
 
             foreach (var i in chk)
@@ -126483,39 +127979,6 @@ ORDER BY a.CreatedAt DESC";
 
 
             return Json("OK");
-        }
-
-        [HttpGet]
-        public JsonResult GetDealerDetails(string masterId)
-        {
-            if (string.IsNullOrWhiteSpace(masterId))
-            {
-                return Json(new object[0], JsonRequestBehavior.AllowGet);
-            }
-
-            var dealers = db.Dealer_Details
-                .Where(x => x.SSId == masterId)
-                .OrderBy(x => x.FarmName)
-                .Select(x => new { DealerId = x.DealerId, FarmName = x.FarmName })
-                .ToList();
-
-            return Json(dealers, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public JsonResult GetReailerDetails(string masterId)
-        {
-            var dealerId = masterId;
-            if (string.IsNullOrWhiteSpace(dealerId))
-            {
-                return Json(new object[0], JsonRequestBehavior.AllowGet);
-            }
-
-            var retailers = db.select_retailer_for_ddl(dealerId)
-                .Select(r => new { RetailerId = r.RetailerId, Frm_Name = r.Frm_Name })
-                .ToList();
-
-            return Json(retailers, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -126746,46 +128209,33 @@ ORDER BY a.CreatedAt DESC";
 
 
             var chk = db.daywisesettelecomms.SingleOrDefault();
-            
-                chk.sts = sts;
-                
-                
-                db.SaveChanges();
-            
-            
+
+            chk.sts = sts;
+
+
+            db.SaveChanges();
+
+
             return RedirectToAction("daywisecomm");
         }
 
         public ActionResult daywisecommhistory()
         {
-            DateTime frm_date = DateTime.Today;
-            DateTime to_date = DateTime.Today.AddDays(1);
-            var allretailername = (db.select_retailer_for_ddl("Admin")).ToList();
-            IEnumerable<SelectListItem> selectallretailer = from p in allretailername
-                                                            select new SelectListItem
-                                                            {
-                                                                Value = p.RetailerId,
-                                                                Text = p.Frm_Name,
-                                                            };
-            ViewBag.allretailer = new SelectList(selectallretailer, "Value", "Text");
-            var df = db.daywisecomms.Where(s => s.date >= frm_date && s.date < to_date).OrderByDescending(s => s.date).ToList();
-            return View(df);
-        }
-        [HttpPost]
-         public ActionResult daywisecommhistory(string allretailer, string txt_frm_date, string txt_to_date)
-        {
-            if (string.IsNullOrWhiteSpace(txt_frm_date) && string.IsNullOrWhiteSpace(txt_to_date))
-            {
-                txt_frm_date = DateTime.Today.ToString("yyyy-MM-dd");
-                txt_to_date = DateTime.Today.ToString("yyyy-MM-dd");
-            }
+            var txt_frm_date = DateTime.Now.ToString();
+            var txt_to_date = DateTime.Now.ToString();
+
+
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
 
             string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
                             "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date.Trim(), formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Today;
-            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date.Trim(), formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Today;
-            DateTime frm_date = dt.Date;
-            DateTime to_date = dt1.Date.AddDays(1);
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime frm_date = Convert.ToDateTime(dt).Date;
+            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
             var allretailername = (db.select_retailer_for_ddl("Admin")).ToList();
             IEnumerable<SelectListItem> selectallretailer = from p in allretailername
                                                             select new SelectListItem
@@ -126794,17 +128244,40 @@ ORDER BY a.CreatedAt DESC";
                                                                 Text = p.Frm_Name,
                                                             };
             ViewBag.allretailer = new SelectList(selectallretailer, "Value", "Text");
-            ViewBag.chk = "post";
-
-            var query = db.daywisecomms.Where(s => s.date >= frm_date && s.date < to_date);
-            if (!string.IsNullOrWhiteSpace(allretailer))
-            {
-                query = query.Where(s => s.userid == allretailer);
-            }
-
-            var df = query.OrderByDescending(s => s.date).ToList();
+            var df = db.daywisecomms.Where(s => s.date>=frm_date).OrderByDescending(s => s.date).ToList();
             return View(df);
-            
+        }
+        [HttpPost]
+        public ActionResult daywisecommhistory(string allretailer, string txt_frm_date, string txt_to_date)
+        {
+            if (txt_frm_date == null && txt_to_date == null)
+            {
+                txt_frm_date = DateTime.Now.ToString();
+                txt_to_date = DateTime.Now.ToString();
+
+            }
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
+
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime frm_date = Convert.ToDateTime(dt).Date;
+            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+            var allretailername = (db.select_retailer_for_ddl("Admin")).ToList();
+            IEnumerable<SelectListItem> selectallretailer = from p in allretailername
+                                                            select new SelectListItem
+                                                            {
+                                                                Value = p.RetailerId,
+                                                                Text = p.Frm_Name,
+                                                            };
+            ViewBag.allretailer = new SelectList(selectallretailer, "Value", "Text");
+            var df = db.daywisecomms.Where(s => s.userid.Contains(allretailer)&&s.date>frm_date && s.date< to_date).OrderByDescending(s => s.date).ToList();
+            return View(df);
+
         }
 
         public ActionResult allonoffextracommsts(bool sts)
@@ -126827,7 +128300,7 @@ ORDER BY a.CreatedAt DESC";
                 chk.Comm_2000_5000 = comm1[i];
                 chk.Comm_5001_10000 = comm2[i];
                 chk.Comm_10001_max = comm3[i];
-               
+
                 db.SaveChanges();
             }
             var chk1 = db.comm_daywiseslab.ToList();
@@ -126836,7 +128309,7 @@ ORDER BY a.CreatedAt DESC";
 
 
         public ActionResult Daywisewiseusercomm(string role, string userid)
-        {  
+        {
 
 
 
@@ -126880,7 +128353,7 @@ ORDER BY a.CreatedAt DESC";
             {
 
                 var chk = db.Dealer_Details.ToList();
-                
+
                 return Json(chk, 0);
             }
             else if (role == "RDealer")
@@ -126921,7 +128394,7 @@ ORDER BY a.CreatedAt DESC";
                     db.daywisecommsetforusers.Add(d1);
                     db.SaveChanges();
                 }
-               
+
 
                 var chk = db.Retailer_Details.Where(s => s.DealerId == userid&&s.ISDeleteuser !=true).ToList();
                 string[] retailess = new string[chk.Count];
@@ -126944,7 +128417,7 @@ ORDER BY a.CreatedAt DESC";
             {
                 var chk = db.daywisecommsetforusers.Where(s => s.role == "Master").ToList();
 
-                foreach(var i in chk)
+                foreach (var i in chk)
                 {
                     var chk1 = db.daywisecommsetforusers.Where(s => s.userid == i.userid).SingleOrDefault();
                     chk1.Comm_2000_5000 = comm1[0];
@@ -126957,9 +128430,9 @@ ORDER BY a.CreatedAt DESC";
                 {
                     userid = "ALL",
                     Comm_2000_5000 = comm1[0],
-               Comm_5001_10000 = comm2[0],
-                Comm_10001_max = comm3[0]
-            };
+                    Comm_5001_10000 = comm2[0],
+                    Comm_10001_max = comm3[0]
+                };
 
 
 
@@ -127066,10 +128539,10 @@ ORDER BY a.CreatedAt DESC";
 
         public ActionResult Showclosingbalance()
         {
-               var txt_frm_date = DateTime.Now.ToString();
-              var txt_to_date = DateTime.Now.ToString();
+            var txt_frm_date = DateTime.Now.ToString();
+            var txt_to_date = DateTime.Now.ToString();
 
-            
+
             DateTime frm = Convert.ToDateTime(txt_frm_date);
             DateTime to = Convert.ToDateTime(txt_to_date);
             txt_frm_date = frm.ToString("dd-MM-yyyy");
@@ -127089,12 +128562,12 @@ ORDER BY a.CreatedAt DESC";
                                                                 Text = p.Frm_Name,
                                                             };
             ViewBag.allretailer = new SelectList(selectallretailer, "Value", "Text");
-            var chk = db.closingbalances.Where(s=>s.date> frm_date).OrderByDescending(s=>s.date).ToList();
+            var chk = db.closingbalances.Where(s => s.date> frm_date).OrderByDescending(s => s.date).ToList();
 
             return View(chk);
         }
         [HttpPost]
-        public ActionResult Showclosingbalance(string allretailer ,string txt_frm_date , string txt_to_date)
+        public ActionResult Showclosingbalance(string allretailer, string txt_frm_date, string txt_to_date)
         {
             if (txt_frm_date == null && txt_to_date == null)
             {
@@ -127122,11 +128595,10 @@ ORDER BY a.CreatedAt DESC";
                                                                 Text = p.Frm_Name,
                                                             };
             ViewBag.allretailer = new SelectList(selectallretailer, "Value", "Text");
-            ViewBag.chk = "post";
-            var chk = db.closingbalances.Where(s=>s.userid.Contains(allretailer) && s.date > frm_date && s.date < to_date).OrderByDescending(s => s.date).ToList();
+            var chk = db.closingbalances.Where(s => s.userid.Contains(allretailer) && s.date > frm_date && s.date < to_date).OrderByDescending(s => s.date).ToList();
 
             return View(chk);
-        }   
+        }
 
         public ActionResult Loanlimitset()
         {
@@ -127146,14 +128618,14 @@ ORDER BY a.CreatedAt DESC";
 
             chk = db.loanlimits.ToList();
             return View(chk);
-        } 
+        }
         [HttpPost]
         public ActionResult Loanlimitset(int? mindays, decimal? charge)
         {
             var chk = db.loanlimits.SingleOrDefault();
             chk.charge = charge;
             chk.min_days = mindays;
-            
+
             db.SaveChanges();
 
             var chk1 = db.loanlimits.ToList();
@@ -127164,7 +128636,7 @@ ORDER BY a.CreatedAt DESC";
         {
             var chk = db.loanlimits.SingleOrDefault();
             chk.fullorpartialpayment = sts;
-            
+
 
             db.SaveChanges();
             return RedirectToAction("Loanlimitset");
@@ -127244,7 +128716,7 @@ ORDER BY a.CreatedAt DESC";
             return View(df);
         }
 
-        public ActionResult LoanreqUpdate(string sts ,int? idno,string Loanid)
+        public ActionResult LoanreqUpdate(string sts, int? idno, string Loanid)
         {
             try
             {
@@ -127266,15 +128738,15 @@ ORDER BY a.CreatedAt DESC";
         {
             var chek = db.appwebloginsettings.ToList();
             return View(chek);
-        }  
+        }
         [HttpPost]
         public ActionResult webappsetting(string ids)
         {
-            var chek = db.appwebloginsettings.Where(s=>s.Retailerid.Contains(ids)).ToList();
+            var chek = db.appwebloginsettings.Where(s => s.Retailerid.Contains(ids)).ToList();
             return View(chek);
         }
-        public ActionResult websettingsts(string userid , bool sts, string otp)
-         {
+        public ActionResult websettingsts(string userid, bool sts, string otp)
+        {
             var userids = User.Identity.GetUserId();
             var userd = db.Users.Where(s => s.UserId == userids).SingleOrDefault();
             if (userd.forgetpin == otp)
@@ -127282,7 +128754,7 @@ ORDER BY a.CreatedAt DESC";
                 var chek = db.appwebloginsettings.Where(s => s.Retailerid == userid).SingleOrDefault();
                 chek.webLoginoff = sts;
                 db.SaveChanges();
-                return Json(new { status=sts,status1 = true } , JsonRequestBehavior.AllowGet);
+                return Json(new { status = sts, status1 = true }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -127296,8 +128768,8 @@ ORDER BY a.CreatedAt DESC";
             if (userd.forgetpin == otp)
             {
                 var chek = db.appwebloginsettings.Where(s => s.Retailerid == userid).SingleOrDefault();
-            chek.appLoginoff = sts;
-            db.SaveChanges();
+                chek.appLoginoff = sts;
+                db.SaveChanges();
                 userd.forgetpin = null;
                 db.SaveChanges();
                 return Json(new { status = sts, status1 = true }, JsonRequestBehavior.AllowGet);
@@ -127306,7 +128778,7 @@ ORDER BY a.CreatedAt DESC";
             {
                 return Json(new { status = sts, status1 = false }, JsonRequestBehavior.AllowGet);
             }
-        } 
+        }
         public ActionResult otpsentforsts()
         {
             var whatsts = db.Email_show_passcode.SingleOrDefault();
@@ -127373,14 +128845,14 @@ ORDER BY a.CreatedAt DESC";
                 var usess = db.Users.Where(s => s.UserId == userddd.userid).SingleOrDefault();
                 usess.forgetpin = Convert.ToString(pin);
                 db.SaveChanges();
-            
+
             }
             catch
             {
 
             }
-            return Json(""); 
-        }   
+            return Json("");
+        }
         public ActionResult otpsentforsts11()
         {
             var whatsts = db.Email_show_passcode.SingleOrDefault();
@@ -127447,15 +128919,15 @@ ORDER BY a.CreatedAt DESC";
                 var usess = db.Users.Where(s => s.UserId == userddd.userid).SingleOrDefault();
                 usess.forgetpin = Convert.ToString(pin);
                 db.SaveChanges();
-            
+
             }
             catch
             {
 
             }
 
-                return Json(""); 
-        }      
+            return Json("");
+        }
         public ActionResult otpsentforstsimei()
         {
             var whatsts = db.Email_show_passcode.SingleOrDefault();
@@ -127522,14 +128994,14 @@ ORDER BY a.CreatedAt DESC";
                 var usess = db.Users.Where(s => s.UserId == userddd.userid).SingleOrDefault();
                 usess.forgetpin = Convert.ToString(pin);
                 db.SaveChanges();
-            
+
             }
             catch
             {
 
             }
 
-                return Json(""); 
+            return Json("");
         }
         public ActionResult usernumbersts(string userid, bool sts, string otp)
         {
@@ -127538,8 +129010,8 @@ ORDER BY a.CreatedAt DESC";
             if (userd.forgetpin == otp)
             {
                 var chek = db.User_number_status.Where(s => s.Userid == userid).SingleOrDefault();
-            chek.NumberStatus = sts;
-            db.SaveChanges();
+                chek.NumberStatus = sts;
+                db.SaveChanges();
 
                 userd.forgetpin = null;
                 db.SaveChanges();
@@ -127554,7 +129026,7 @@ ORDER BY a.CreatedAt DESC";
         {
             var chek = db.User_number_status.ToList();
             return View(chek);
-        }  
+        }
         public ActionResult IMEINO_setting()
         {
             var chk1 = db.totalimeinoes.ToList();
@@ -127572,7 +129044,7 @@ ORDER BY a.CreatedAt DESC";
         [HttpPost]
         public ActionResult IMEINO_setting(string ids)
         {
-           
+
 
             var chek = db.appimeis.Where(s => s.Retailerid.Contains(ids)).ToList();
             return View(chek);
@@ -127585,7 +129057,7 @@ ORDER BY a.CreatedAt DESC";
             db.SaveChanges();
             return RedirectToAction("IMEINO_setting");
         }
-        public ActionResult deleteimeis(string userid,int? idno, string otp)
+        public ActionResult deleteimeis(string userid, int? idno, string otp)
         {
             var userids = User.Identity.GetUserId();
             var userd = db.Users.Where(s => s.UserId == userids).SingleOrDefault();
@@ -127620,7 +129092,7 @@ ORDER BY a.CreatedAt DESC";
             var todate = fromdate.AddDays(1);
             var reminfo = db.Retailer_to_Dealer.Where(aa => aa.insertdate>=fromdate && aa.insertdate <= todate).ToList();
 
-            var stands = db.Retailer_Details.Where(aa=>aa.ISDeleteuser==false).ToList();
+            var stands = db.Retailer_Details.Where(aa => aa.ISDeleteuser==false).ToList();
             IEnumerable<SelectListItem> selectList = from s in stands
                                                      select new SelectListItem
                                                      {
@@ -127630,13 +129102,13 @@ ORDER BY a.CreatedAt DESC";
 
             ViewBag.retailer = new SelectList(selectList, "Value", "Text");
 
-            var superinfo= db.Superstokist_details.ToList();
+            var superinfo = db.Superstokist_details.ToList();
             IEnumerable<SelectListItem> selectList_super = from s in superinfo
                                                            select new SelectListItem
-                                                     {
-                                                         Value = s.SSId,
-                                                         Text = s.Email + "--" + s.FarmName.ToString()
-                                                     };
+                                                           {
+                                                               Value = s.SSId,
+                                                               Text = s.Email + "--" + s.FarmName.ToString()
+                                                           };
 
             ViewBag.superinfo = new SelectList(selectList_super, "Value", "Text");
 
@@ -127644,7 +129116,7 @@ ORDER BY a.CreatedAt DESC";
             return View(reminfo);
         }
         [HttpPost]
-        public ActionResult Retailer_to_dealer(DateTime txt_frm_date,DateTime txt_to_date)
+        public ActionResult Retailer_to_dealer(DateTime txt_frm_date, DateTime txt_to_date)
         {
             ViewBag.chk = "post";
             var fromdate = txt_frm_date;
@@ -127674,7 +129146,7 @@ ORDER BY a.CreatedAt DESC";
 
             return View(reminfo);
         }
-        public ActionResult Transfer_Retailer_to_dealer(string rem,string dlm)
+        public ActionResult Transfer_Retailer_to_dealer(string rem, string dlm)
         {
             var reminfo = db.Retailer_Details.Where(aa => aa.RetailerId == rem).SingleOrDefault();
             var otp = generatenum();
@@ -127696,7 +129168,7 @@ ORDER BY a.CreatedAt DESC";
             catch { }
             return Json("OTP", JsonRequestBehavior.AllowGet);
         }
-        public ActionResult Transfer_Retailer_to_dealer_Verify_OTP(string rem,string dlm,string otp)
+        public ActionResult Transfer_Retailer_to_dealer_Verify_OTP(string rem, string dlm, string otp)
         {
             var otpcheck = db.MobileOtps.Where(aa => aa.Type == "TRANSFERTODELAER" && aa.Userid == "ADMIN").OrderByDescending(aa => aa.Date).Take(1).SingleOrDefault();
             if (otpcheck.Otp == otp)
@@ -127710,88 +129182,41 @@ ORDER BY a.CreatedAt DESC";
             {
                 return Json("OTPMissmatch", JsonRequestBehavior.AllowGet);
             }
-           
+
         }
-        private void GetRadiantPrepayDateRange(string txt_frm_date, string txt_to_date, out DateTime fromdate, out DateTime todate)
+        public ActionResult RadiantPrepay()
         {
-            if (string.IsNullOrWhiteSpace(txt_frm_date) && string.IsNullOrWhiteSpace(txt_to_date))
-            {
-                fromdate = DateTime.Now.Date;
-                todate = fromdate.AddDays(1);
-                return;
-            }
+            var fromdate = DateTime.Now.Date;
+            var todate = fromdate.AddDays(1);
+            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null);
 
-            DateTime parsedFrom;
-            DateTime parsedTo;
-            fromdate = DateTime.TryParse(txt_frm_date, out parsedFrom) ? parsedFrom.Date : DateTime.Now.Date;
-            todate = DateTime.TryParse(txt_to_date, out parsedTo) ? parsedTo.Date.AddDays(1) : fromdate.AddDays(1);
-        }
+            var results = (
+    from rpt in db.RadiantPrepayTransfers
+        .Where(x => x.Insertdate >= fromdate && x.Insertdate < todate)
 
-        private List<RadiantPrepayReportVM> QueryRadiantPrepayReports(DateTime fromdate, DateTime todate, string allretailer, string status)
-        {
-            var query = db.RadiantPrepayTransfers.Where(x => x.Insertdate >= fromdate && x.Insertdate < todate);
+    join rem in db.Retailer_Details
+        on rpt.Userid equals rem.RetailerId.ToString()
 
-            if (!string.IsNullOrWhiteSpace(allretailer))
-            {
-                query = query.Where(x => x.Userid == allretailer);
-            }
+    select new RadiantPrepayReportVM
+    {
+        Firmname = rem.Frm_Name,
+        UserId = rpt.Userid,
+        CEID = rpt.CEID,
+        Amount = rpt.Amount,
+        RemainPre = rpt.RemainPre,
+        RemainPost = rpt.RemainPost,
+        InsertDate = rpt.Insertdate,
+        UpdateDate = rpt.Updatedate,
+        Status = rpt.sts,
+        AdminRemainPre = rpt.Adminremainpre,
+        AdminRemainPost = rpt.Adminremainpost,
+        RequestID = rpt.RequestID,
+        Mobile = rem.Mobile
+    }
+).OrderByDescending(aa => aa.InsertDate).ToList();
+            var total = results.Sum(aa => aa.Amount);
+            ViewBag.total = total;
 
-            if (!string.IsNullOrWhiteSpace(status))
-            {
-                query = query.Where(x => x.sts == status);
-            }
-
-            return (
-                from rpt in query
-                join rem in db.Retailer_Details on rpt.Userid equals rem.RetailerId.ToString()
-                select new RadiantPrepayReportVM
-                {
-                    Firmname = rem.Frm_Name,
-                    UserId = rpt.Userid,
-                    CEID = rpt.CEID,
-                    Amount = rpt.Amount,
-                    RemainPre = rpt.RemainPre,
-                    RemainPost = rpt.RemainPost,
-                    InsertDate = rpt.Insertdate,
-                    UpdateDate = rpt.Updatedate,
-                    Status = rpt.sts,
-                    AdminRemainPre = rpt.Adminremainpre,
-                    AdminRemainPost = rpt.Adminremainpost,
-                    RequestID = rpt.RequestID,
-                    Mobile = rem.Mobile
-                }
-            ).OrderByDescending(aa => aa.InsertDate).ToList();
-        }
-
-        private void PopulateRadiantPrepayViewBags(List<RadiantPrepayReportVM> results, string selectedRetailer)
-        {
-            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", selectedRetailer);
-            ViewBag.total = results.Sum(aa => aa.Amount ?? 0);
-            ViewBag.totalSuccess = results.Where(x => x.Status == "Success").Sum(x => x.Amount ?? 0);
-            ViewBag.totalFailed = results.Where(x => x.Status == "Failed").Sum(x => x.Amount ?? 0);
-            ViewBag.totalPending = results.Where(x => x.Status == "Pending").Sum(x => x.Amount ?? 0);
-        }
-
-        public ActionResult RadiantPrepay(string export, string allretailer, string Status, string txt_frm_date, string txt_to_date)
-        {
-            if (!string.IsNullOrWhiteSpace(export))
-            {
-                switch (export.Trim().ToLowerInvariant())
-                {
-                    case "total":
-                        return TotalRadiantPrepayReport(allretailer, Status, txt_frm_date, txt_to_date);
-                    case "excel":
-                        return ExcelRadiantPrepayReport(allretailer, Status, txt_frm_date, txt_to_date);
-                    case "pdf":
-                        return PDFRadiantPrepayReport(allretailer, Status, txt_frm_date, txt_to_date);
-                }
-            }
-
-            DateTime fromdate;
-            DateTime todate;
-            GetRadiantPrepayDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
-            var results = QueryRadiantPrepayReports(fromdate, todate, allretailer, Status);
-            PopulateRadiantPrepayViewBags(results, allretailer);
             return View(results);
         }
         [HttpPost]
@@ -127800,118 +129225,35 @@ ORDER BY a.CreatedAt DESC";
             ViewBag.chk = "post";
             var fromdate = txt_frm_date;
             var todate = txt_to_date.AddDays(1);
-            var results = QueryRadiantPrepayReports(fromdate, todate, allretailer, Status);
-            PopulateRadiantPrepayViewBags(results, allretailer);
+            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null);
+            var results = (
+                     from rpt in db.RadiantPrepayTransfers
+                         .Where(x => x.Insertdate >= fromdate && x.Insertdate < todate && x.Userid.Contains(allretailer) && x.sts.Contains(Status))
+
+                     join rem in db.Retailer_Details
+                         on rpt.Userid equals rem.RetailerId.ToString()
+
+                     select new RadiantPrepayReportVM
+                     {
+                         Firmname = rem.Frm_Name,
+                         UserId = rpt.Userid,
+                         CEID = rpt.CEID,
+                         Amount = rpt.Amount,
+                         RemainPre = rpt.RemainPre,
+                         RemainPost = rpt.RemainPost,
+                         InsertDate = rpt.Insertdate,
+                         UpdateDate = rpt.Updatedate,
+                         Status = rpt.sts,
+                         AdminRemainPre = rpt.Adminremainpre,
+                         AdminRemainPost = rpt.Adminremainpost,
+                         RequestID = rpt.RequestID,
+                         Mobile = rem.Mobile
+                     }
+                 ).OrderByDescending(aa => aa.InsertDate).ToList();
+            var total = results.Sum(aa => aa.Amount);
+            ViewBag.total = total;
+
             return View(results);
-        }
-
-        public ActionResult TotalRadiantPrepayReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
-        {
-            try
-            {
-                DateTime fromdate;
-                DateTime todate;
-                GetRadiantPrepayDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
-                var rows = QueryRadiantPrepayReports(fromdate, todate, allretailer, Status);
-                return Json(new
-                {
-                    total = rows.Sum(x => x.Amount ?? 0),
-                    success = rows.Where(x => x.Status == "Success").Sum(x => x.Amount ?? 0),
-                    failed = rows.Where(x => x.Status == "Failed").Sum(x => x.Amount ?? 0),
-                    pending = rows.Where(x => x.Status == "Pending").Sum(x => x.Amount ?? 0)
-                }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                return Json(new { total = 0, success = 0, failed = 0, pending = 0 }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        public ActionResult ExcelRadiantPrepayReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
-        {
-            try
-            {
-                DateTime fromdate;
-                DateTime todate;
-                GetRadiantPrepayDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
-                var rows = QueryRadiantPrepayReports(fromdate, todate, allretailer, Status);
-
-                DataTable dtt = new DataTable();
-                dtt.Columns.Add("Firm Name", typeof(string));
-                dtt.Columns.Add("RCEID", typeof(string));
-                dtt.Columns.Add("Amount", typeof(string));
-                dtt.Columns.Add("Remain Pre", typeof(string));
-                dtt.Columns.Add("Remain Post", typeof(string));
-                dtt.Columns.Add("Request ID", typeof(string));
-                dtt.Columns.Add("Insert Date", typeof(string));
-                dtt.Columns.Add("Update Date", typeof(string));
-                dtt.Columns.Add("Status", typeof(string));
-
-                if (rows.Count > 0)
-                {
-                    foreach (var item in rows)
-                    {
-                        dtt.Rows.Add(
-                            item.Firmname,
-                            item.CEID,
-                            item.Amount,
-                            item.RemainPre,
-                            item.RemainPost,
-                            item.RequestID,
-                            item.InsertDate.HasValue ? item.InsertDate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
-                            item.UpdateDate.HasValue ? item.UpdateDate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
-                            item.Status);
-                    }
-                }
-                else
-                {
-                    dtt.Rows.Add(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
-                }
-
-                var grid = new GridView();
-                grid.DataSource = dtt;
-                grid.DataBind();
-                Response.ClearContent();
-                Response.Buffer = true;
-                Response.AddHeader("content-disposition", "attachment; filename=Radiant_Prepay_Report.xls");
-                Response.ContentType = "application/ms-excel";
-                Response.Charset = "";
-                StringWriter sw = new StringWriter();
-                HtmlTextWriter htw = new HtmlTextWriter(sw);
-                grid.RenderControl(htw);
-                Response.Output.Write(sw.ToString());
-                Response.Flush();
-                Response.End();
-
-                return View();
-            }
-            catch
-            {
-                TempData["Status"] = "Failed";
-                TempData["Message"] = "An error occured while proccessing request.";
-                return RedirectToAction("RadiantPrepay", "Home");
-            }
-        }
-
-        public ActionResult PDFRadiantPrepayReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
-        {
-            try
-            {
-                DateTime fromdate;
-                DateTime todate;
-                GetRadiantPrepayDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
-                var rows = QueryRadiantPrepayReports(fromdate, todate, allretailer, Status);
-                return new ViewAsPdf("PDFRadiantPrepayReport", rows)
-                {
-                    FileName = "Radiant_Prepay_Report.pdf"
-                };
-            }
-            catch
-            {
-                TempData["Status"] = "Failed";
-                TempData["Message"] = "An error occured while proccessing request.";
-                return RedirectToAction("RadiantPrepay", "Home");
-            }
         }
         [HttpPost]
         public ActionResult UpdatePrepayStatus(string id, string status)
@@ -128048,251 +129390,6 @@ ORDER BY a.CreatedAt DESC";
 
             return View(results);
         }
-
-        private void GetRadiantCMSDepositDateRange(string txt_frm_date, string txt_to_date, out DateTime fromdate, out DateTime todate)
-        {
-            if (string.IsNullOrWhiteSpace(txt_frm_date) && string.IsNullOrWhiteSpace(txt_to_date))
-            {
-                fromdate = DateTime.Now.Date;
-                todate = fromdate.AddDays(1);
-                return;
-            }
-
-            DateTime parsedFrom;
-            DateTime parsedTo;
-            fromdate = DateTime.TryParse(txt_frm_date, out parsedFrom) ? parsedFrom.Date : DateTime.Now.Date;
-            todate = DateTime.TryParse(txt_to_date, out parsedTo) ? parsedTo.Date.AddDays(1) : fromdate.AddDays(1);
-        }
-
-        private string GetRadiantCMSDepositSlipBaseUrl()
-        {
-            string websiteurl = db.Admin_details.SingleOrDefault().WebsiteUrl;
-            string cleanUrl = websiteurl
-                .Replace("https://", "")
-                .Replace("http://", "")
-                .Replace("www.", "")
-                .Trim();
-            return "http://native." + cleanUrl;
-        }
-
-        private List<radiantcashdepositlist> QueryRadiantCMSDepositReports(DateTime fromdate, DateTime todate, string allretailer, string status)
-        {
-            var query = db.RadiantCashDeposites.Where(x => x.Insertdate >= fromdate && x.Insertdate < todate);
-
-            if (!string.IsNullOrWhiteSpace(allretailer))
-            {
-                query = query.Where(x => x.Userid == allretailer);
-            }
-
-            if (!string.IsNullOrWhiteSpace(status))
-            {
-                query = query.Where(x => x.Status == status);
-            }
-
-            return (
-                from rpt in query
-                join rem in db.Retailer_Details on rpt.Userid equals rem.RetailerId.ToString()
-                select new radiantcashdepositlist
-                {
-                    Firmanme = rem.Frm_Name,
-                    Userid = rpt.Userid,
-                    Amount = rpt.Amount,
-                    Remainpre = rpt.Remainpre,
-                    Remainpost = rpt.Remainpost,
-                    Adminremainpre = rpt.Adminremainpre,
-                    Adminremainpost = rpt.Adminremainpost,
-                    Insertdate = rpt.Insertdate,
-                    Updatedate = rpt.Updatedate,
-                    Status = rpt.Status,
-                    BankName = rpt.BankName,
-                    Ifsccode = rpt.Ifsccode,
-                    Accountnumber = rpt.Accountnumber,
-                    Charge = rpt.Charge,
-                    FinalCharge = rpt.FinalCharge,
-                    Gst = rpt.Gst,
-                    Tds = rpt.Tds,
-                    Mode = rpt.Mode,
-                    Slipid = rpt.Slipid,
-                    Slipname = rpt.Slipname,
-                    RejectedReson = rpt.RejectedReson,
-                    ResponseBy = rpt.ResponseBy,
-                    Requestid = rpt.Requestid
-                }
-            ).OrderByDescending(aa => aa.Insertdate).ToList();
-        }
-
-        private void PopulateRadiantCMSDepositViewBags(List<radiantcashdepositlist> results, string selectedRetailer)
-        {
-            ViewBag.url = GetRadiantCMSDepositSlipBaseUrl();
-            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", selectedRetailer);
-            ViewBag.total = results.Sum(aa => aa.Amount ?? 0);
-            ViewBag.totalSuccess = results.Where(x => x.Status == "Success").Sum(x => x.Amount ?? 0);
-            ViewBag.totalFailed = results.Where(x => x.Status == "Failed").Sum(x => x.Amount ?? 0);
-            ViewBag.totalPending = results.Where(x => x.Status == "Pending").Sum(x => x.Amount ?? 0);
-        }
-
-        public ActionResult RadiantCMSDepositReport(string export, string allretailer, string Status, string txt_frm_date, string txt_to_date)
-        {
-            if (!string.IsNullOrWhiteSpace(export))
-            {
-                switch (export.Trim().ToLowerInvariant())
-                {
-                    case "total":
-                        return TotalRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
-                    case "excel":
-                        return ExcelRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
-                    case "pdf":
-                        return PDFRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
-                }
-            }
-
-            return RedirectToAction("RadiantCMSDeposit", "Home", new { area = "ADMIN" });
-        }
-
-        [HttpGet]
-        public ActionResult RadiantCMSDepositSearch(string export, string allretailer, string Status, string txt_frm_date, string txt_to_date)
-        {
-            if (!string.IsNullOrWhiteSpace(export))
-            {
-                switch (export.Trim().ToLowerInvariant())
-                {
-                    case "total":
-                        return TotalRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
-                    case "excel":
-                        return ExcelRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
-                    case "pdf":
-                        return PDFRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
-                }
-            }
-
-            return RedirectToAction("RadiantCMSDeposit", "Home", new { area = "ADMIN" });
-        }
-
-        [HttpPost]
-        public ActionResult RadiantCMSDepositSearch(string allretailer, DateTime txt_frm_date, DateTime txt_to_date, string Status = "")
-        {
-            ViewBag.chk = "post";
-            var fromdate = txt_frm_date;
-            var todate = txt_to_date.AddDays(1);
-            var results = QueryRadiantCMSDepositReports(fromdate, todate, allretailer, Status);
-            PopulateRadiantCMSDepositViewBags(results, allretailer);
-            return View("RadiantCMSDeposit", results);
-        }
-
-        [HttpGet]
-        public ActionResult TotalRadiantCMSDepositReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
-        {
-            try
-            {
-                DateTime fromdate;
-                DateTime todate;
-                GetRadiantCMSDepositDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
-                var rows = QueryRadiantCMSDepositReports(fromdate, todate, allretailer, Status);
-                return Json(new
-                {
-                    total = Convert.ToDouble(rows.Sum(x => x.Amount ?? 0)),
-                    success = Convert.ToDouble(rows.Where(x => x.Status == "Success").Sum(x => x.Amount ?? 0)),
-                    failed = Convert.ToDouble(rows.Where(x => x.Status == "Failed").Sum(x => x.Amount ?? 0)),
-                    pending = Convert.ToDouble(rows.Where(x => x.Status == "Pending").Sum(x => x.Amount ?? 0))
-                }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                return Json(new { total = 0d, success = 0d, failed = 0d, pending = 0d }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        public ActionResult ExcelRadiantCMSDepositReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
-        {
-            try
-            {
-                DateTime fromdate;
-                DateTime todate;
-                GetRadiantCMSDepositDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
-                var rows = QueryRadiantCMSDepositReports(fromdate, todate, allretailer, Status);
-
-                DataTable dtt = new DataTable();
-                dtt.Columns.Add("Firm Name", typeof(string));
-                dtt.Columns.Add("Req ID", typeof(string));
-                dtt.Columns.Add("Mode", typeof(string));
-                dtt.Columns.Add("Bank Info", typeof(string));
-                dtt.Columns.Add("Slip/ Bank RRN", typeof(string));
-                dtt.Columns.Add("Amount", typeof(string));
-                dtt.Columns.Add("Remain Pre", typeof(string));
-                dtt.Columns.Add("Remain Post", typeof(string));
-                dtt.Columns.Add("Insert Date", typeof(string));
-                dtt.Columns.Add("Update Date", typeof(string));
-                dtt.Columns.Add("Status", typeof(string));
-
-                if (rows.Count > 0)
-                {
-                    foreach (var item in rows)
-                    {
-                        dtt.Rows.Add(
-                            item.Firmanme,
-                            item.Requestid,
-                            item.Mode,
-                            item.BankName,
-                            item.Slipid,
-                            item.Amount,
-                            item.Remainpre,
-                            item.Remainpost,
-                            item.Insertdate.HasValue ? item.Insertdate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
-                            item.Updatedate.HasValue ? item.Updatedate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
-                            item.Status);
-                    }
-                }
-                else
-                {
-                    dtt.Rows.Add(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
-                }
-
-                var grid = new GridView();
-                grid.DataSource = dtt;
-                grid.DataBind();
-                Response.ClearContent();
-                Response.Buffer = true;
-                Response.AddHeader("content-disposition", "attachment; filename=Radiant_CMS_Deposit_Report.xls");
-                Response.ContentType = "application/ms-excel";
-                Response.Charset = "";
-                StringWriter sw = new StringWriter();
-                HtmlTextWriter htw = new HtmlTextWriter(sw);
-                grid.RenderControl(htw);
-                Response.Output.Write(sw.ToString());
-                Response.Flush();
-                Response.End();
-
-                return View();
-            }
-            catch
-            {
-                TempData["Status"] = "Failed";
-                TempData["Message"] = "An error occured while proccessing request.";
-                return RedirectToAction("RadiantCMSDeposit", "Home");
-            }
-        }
-
-        public ActionResult PDFRadiantCMSDepositReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
-        {
-            try
-            {
-                DateTime fromdate;
-                DateTime todate;
-                GetRadiantCMSDepositDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
-                var rows = QueryRadiantCMSDepositReports(fromdate, todate, allretailer, Status);
-                return new ViewAsPdf("PDFRadiantCMSDepositReport", rows)
-                {
-                    FileName = "Radiant_CMS_Deposit_Report.pdf"
-                };
-            }
-            catch
-            {
-                TempData["Status"] = "Failed";
-                TempData["Message"] = "An error occured while proccessing request.";
-                return RedirectToAction("RadiantCMSDeposit", "Home");
-            }
-        }
-
         public ActionResult RadiantReferenceLocation()
         {
             var stateList = db.State_Desc

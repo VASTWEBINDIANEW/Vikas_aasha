@@ -75,5 +75,6 @@ namespace Vastwebmulti.Models
         public Nullable<bool> moneysts1 { get; set; }
         public Nullable<bool> moneyppi { get; set; }
         public Nullable<bool> payout { get; set; }
+        public bool OnlyCMSUser { get; set; }
     }
 }

@@ -31,6 +31,7 @@ namespace Vastwebmulti.API
         [Route("Recharge/Recharge_Get")]
         public async Task<IHttpActionResult> test11(string UserID, string Customernumber, string Optcode, string Amount, string Yourrchid, string optional1, string optional2, string Tokenid)
         {
+            Tokenid = Tokenid.Replace(" ", "+");
             var corrId = string.Format("{0}{1}", DateTime.Now.Ticks, Thread.CurrentThread.ManagedThreadId);
             var requestInfo = string.Format("{0} {1}", Request.Method, Request.RequestUri);
             var requestMessage = Request.Content.ReadAsByteArrayAsync().Result;
@@ -1651,6 +1652,7 @@ namespace Vastwebmulti.API
         [CacheFilter(TimeDuration = 100)]
         public async Task<IHttpActionResult> Recharge(ApiRecharge api)
         {
+            api.Tokenid = api.Tokenid.Replace(" ", "+");
             var corrId = string.Format("{0}{1}", DateTime.Now.Ticks, Thread.CurrentThread.ManagedThreadId);
             var requestInfo = string.Format("{0} {1}", Request.Method, Request.RequestUri);
             var requestMessage = Request.Content.ReadAsByteArrayAsync().Result;
@@ -3232,6 +3234,7 @@ namespace Vastwebmulti.API
         {
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
+                api.tokenid = api.tokenid.Replace(" ", "+");
                 if (api.userid != null && api.tokenid != null && api.ClientRchid != null)
                 {
                     var userid = db.Users.Where(aa => aa.UserName == api.userid).SingleOrDefault();
@@ -3307,7 +3310,6 @@ namespace Vastwebmulti.API
         [Route("Recharge/StatusCheck")]
         public IHttpActionResult StatusCheck(string emailid, string tokenid, string ClientRchid)
         {
-
             tokenid = tokenid.Replace(" ", "+");
             RchSTS api = new RchSTS()
             {
@@ -3394,6 +3396,7 @@ namespace Vastwebmulti.API
         {
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
+                api.tokenid = api.tokenid.Replace(" ", "+");
                 if (api.userid != null && api.tokenid != null)
                 {
                     var userid = db.Users.Where(aa => aa.UserName == api.userid).SingleOrDefault();
@@ -3451,6 +3454,7 @@ namespace Vastwebmulti.API
         [Route("Recharge/BalanceCheck")]
         public IHttpActionResult BalanceCheck(string emailid, string tokenid)
         {
+            tokenid = tokenid.Replace(" ", "+");
             RchSTS api = new RchSTS()
             {
                 userid = emailid,
@@ -3517,6 +3521,7 @@ namespace Vastwebmulti.API
         [Route("Recharge/Dispute")]
         public IHttpActionResult Dispute(string emailid, string tokenid, string Rchid, string reason)
         {
+            tokenid = tokenid.Replace(" ", "+");
             RchSTS api = new RchSTS()
             {
                 userid = emailid,

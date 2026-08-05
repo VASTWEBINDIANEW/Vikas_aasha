@@ -6,6 +6,11 @@
     var Userid = User.Identity.GetUserId();
     var retailerinfor = DB1.Retailer_Details.Where(x => x.RetailerId == Userid).SingleOrDefault();
     var dealerinfor = DB1.Dealer_Details.Where(x => x.DealerId == retailerinfor.DealerId).FirstOrDefault().DealerName;
+
+    // ⭐ NEW - Admin ka global Video KYC toggle
+    var isVideoKycOn = DB1.AAdharPanEKYC_Verify.Single().VideoKycStatus;
+
+
     var logoimage = "";
     var logo = DB1.tblHeaderLogoes.Where(p => p.Role == "ADMIN").ToList();
     if (logo.Count > 0)
@@ -547,7 +552,13 @@
 </head>
 <body>
 
-    @if (retailerinfor.videokycstatus == "N" && retailerinfor.videokycpath != null)
+    @if (!isVideoKycOn)
+    {
+        // ⭐ NEW - Feature OFF hai, seedha Dashboard bhej do, kuch bhi render mat karo
+        @Html.Action("Dashboard", "Home");
+    }
+   
+    else if (retailerinfor.videokycstatus == "N" && retailerinfor.videokycpath != null)
     {
         <div class="kyc-headerclass">
             <div class="col-md-3" style="float:left;width:50%;">
@@ -560,8 +571,8 @@
                 </div>
 
             </div>
-            <div class="col-md-3"style="width: 50%; float: right;">
- 
+            <div class="col-md-3" style="width: 50%; float: right;">
+
                 @using (Html.BeginForm("LogOff", "Account", new { Area = "", id = "logoutForm" }))
                 {
                     @Html.AntiForgeryToken()
@@ -630,7 +641,7 @@
                         <img src="~/ashok-images/recordvideokyc.png" />Start Video KYC
                     </button>
                     <p><strong style="color: red; font-size: 20px; letter-spacing: 1px; font-weight: 900; animation: backgrounder 2s linear infinite !important;">Note:- You Need a Webcam With Microphone and SSL is required before uploading video Kyc </strong></p>
-        
+
                 </div>
             </div>
 

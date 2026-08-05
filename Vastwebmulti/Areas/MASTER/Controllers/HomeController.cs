@@ -2460,7 +2460,7 @@ namespace Vastwebmulti.Areas.MASTER.Controllers
                                         System.Data.Entity.Core.Objects.ObjectParameter output = new
                                  System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
 
-                                        var ch = db.Insert_Dealer(MasterId, user.Id, model.Name, model.Firm, model.State.ToString(), model.District.ToString(), model.Mobile, model.Address, Convert.ToInt32(model.Pincode), model.Email, "", 0, "", model.Pan, model.Adhaar, model.Gst, "ADMIN", ddlrole, enpin, output).Single().msg;
+                                        var ch = db.Insert_Dealer(MasterId, user.Id, model.Name, model.Firm, model.State.ToString(), model.District.ToString(), model.Mobile, model.Address, Convert.ToInt32(model.Pincode), model.Email, "", 0, "", model.Pan, model.Adhaar, model.Gst, "ADMIN", ddlrole, enpin, false, output).Single().msg;
                                         transaction.Commit();
 
 

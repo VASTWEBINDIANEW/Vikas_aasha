@@ -1,7 +1,9 @@
-﻿@model Vastwebmulti.Models.Retailer_Details
+﻿@using Microsoft.AspNet.Identity;
+@model Vastwebmulti.Models.Retailer_Details
 @{
     ViewBag.Title = "Ekyc_Verification";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+    string KYCType = Convert.ToString(ViewBag.KYCType);
 }
 <style>
     input#aadharno {
@@ -66,7 +68,6 @@
     input#panno {
         width: 29%;
         border: 1px solid #ccc;
-        /* background-color: #fff !important; */
         height: 34px;
         margin-top: 1.5rem;
         margin-left: 19.2rem;
@@ -95,11 +96,11 @@
         position: relative;
         border: 2px solid #ddd;
         text-align: center;
-        height: 300px;
+        height: 400px;
         margin: auto;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, 50%);
+        transform: translate(-60%, 34%);
         background: var(--main-bg-lcolor) !important;
     }
 
@@ -136,7 +137,34 @@
 
 
 <section class="content" style="margin:90px 0px 0px 0px;">
-    <div class="aadhar_center" id="aadhar_container">
+
+    <input type="hidden" id="hdnKYCType" value="@KYCType" />
+
+    <!-- ======================= ZERO KYC ======================= -->
+    <div class="aadhar_center" id="zero_container" style="display:none;">
+        <div class="border_1">
+            <div class="row">
+                <h3 style="letter-spacing: 1px; font-size: 36px; text-transform: uppercase;">Zero KYC</h3>
+                <hr class="aadhar_ver" />
+                <small style="font-size: 18px; text-transform: capitalize; word-spacing: 3px;">Enter Aadhaar &amp; Pan Number</small>
+
+                <div class="for-border-effect">
+                    <input type="text" id="ZeroAadhar" maxlength="12" value="@Model.AadharCard" class="form-control" placeholder="Aadhar" style="width:42%;border:1px solid #ccc;color:#000;margin-top:10px;margin-left:14.7rem;background-color:#ddd;" />
+                </div>
+
+                <div class="for-border-effect" style="margin-top:15px;">
+                    <input type="text" id="ZeroPan" maxlength="10" value="@Model.PanCard" class="form-control" placeholder="Pan" style="width:42%;border:1px solid #ccc;height:34px;margin-left:14.7rem;background-color:#ddd !important;" />
+                </div>
+
+                <div class="for-border-effect" style="display: flex; align-items: center; justify-content: center;margin-top:20px;">
+                    <input id="btnZeroSave" type="button" value="Save" style="padding: 4px 6px; font-size:16px; background: #ccc;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================= DIGITAL (aadhar) ======================= -->
+    <div class="aadhar_center" id="aadhar_container" style="display:none;">
         <div class="border_1">
             <div class="">
                 <div class="row">
@@ -167,6 +195,8 @@
 
         </div>
     </div>
+
+    <!-- ======================= DIGITAL (pan) ======================= -->
     <div class="aadhar_center" id="pan_container" style="display: none;">
         <div class="border_1">
             <div class="">
@@ -193,9 +223,42 @@
             </div>
         </div>
     </div>
+
+    <!-- ======================= PHYSICAL ======================= -->
+    <div class="aadhar_center" id="physical_container" style="display:none;">
+        <div class="border_1">
+            <div class="row">
+                <h3 style="letter-spacing: 1px; font-size: 32px; text-transform: uppercase;">Upload Documents</h3>
+                <hr class="aadhar_ver" />
+
+                <div class="for-border-effect">
+                    <input type="text" id="PhysicalAadhar" value="@Model.AadharCard" maxlength="12" class="form-control" placeholder="Aadhar" style="width:42%;border:1px solid #ccc;color:#000;margin-top:10px;margin-left:14.7rem;background-color:#ddd;" />
+                </div>
+
+                <div class="for-border-effect" style="margin-top:15px;">
+                    <input type="text" id="PhysicalPan" value="@Model.PanCard" maxlength="10" class="form-control" placeholder="Pan" style="width:42%;border:1px solid #ccc;height:34px;margin-left:14.7rem;background-color:#ddd !important;" />
+                </div>
+
+                <div style="margin-top:15px;font-size:14px;">
+                    <label style="display: block; width: 42%; color: #000; margin-top: 10px; margin-left: 14.7rem; text-align: left;"><b>Aadhaar Image</b></label>
+                    <input type="file" id="AadharImage" style="width:60%;margin:auto;" />
+                </div>
+
+                <div style="margin-top:10px;font-size:14px;">
+                    <label style="display: block; width: 42%; color: #000; margin-top: 10px; margin-left: 14.7rem; text-align: left;"><b>PAN Image</b></label>
+                    <input type="file" id="PanImage" style="width:60%;margin:auto;" />
+                </div>
+
+                <div class="for-border-effect" style="display: flex; align-items: center; justify-content: center;margin-top:10px;">
+                    <input id="btnUpload" type="button" value="Upload Documents" style="padding: 4px 6px; font-size:16px; background: #ccc;">
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(() => {
         var clientId;
@@ -203,11 +266,34 @@
         var aadhar;
         var loading = false;
 
+        var KYCType = $('#hdnKYCType').val();
         var v_type = '@ViewBag.aadhar_status';
 
-        if (v_type == 'True') {
-            $('#aadhar_container').hide();
-            $('#pan_container').show();
+        showOnlyRelevantBox();
+
+        function showOnlyRelevantBox() {
+            $('#zero_container, #aadhar_container, #pan_container, #physical_container').hide();
+
+            if (KYCType == 'ZERO') {
+                $('#zero_container').show();
+            }
+            else if (KYCType == 'DIGITAL') {
+                if (v_type == 'True') {
+                    $('#pan_container').show();
+                } else {
+                    $('#aadhar_container').show();
+                }
+            }
+            else if (KYCType == 'PHYSICAL') {
+                $('#physical_container').show();
+            }
+            else if (KYCType == 'DIGITAL_PHYSICAL') {
+                if (v_type == 'True') {
+                    $('#pan_container').show();
+                } else {
+                    $('#aadhar_container').show();
+                }
+            }
         }
 
         if (document.getElementById('aadharno'))
@@ -224,7 +310,6 @@
         });
 
         $('#sendOtp').click(() => {
-            debugger
             if (loading) return;
             $('#aadhar_error').text('');
 
@@ -243,7 +328,7 @@
 
             loading = true;
             $.ajax({
-                url: '@Url.Action("AadharVerificationOtpSent")' + query,
+                url: '@Url.Action("AadharVerificationOtpSent", "Home", new { Area = "RETAILER" })' + query,
                 method: 'GET',
                 success: (data) => {
                     data = JSON.parse(data);
@@ -253,7 +338,6 @@
                         clientId = data.clientId;
                         txnid = data.txnid;
                         aadhar = data.aadhar;
-
                         toggleHidden_aadhar();
                     }
                     else {
@@ -265,8 +349,6 @@
 
         $('#resendOtp').click(() => {
             if (loading) return;
-            debugger;
-
             $('#aadhar_error').text('');
 
             var aadhar_val = '@Model.AadharCard';
@@ -284,7 +366,7 @@
 
             loading = true;
             $.ajax({
-                url: '@Url.Action("AadharVerificationOtpSent")' + query,
+                url: '@Url.Action("AadharVerificationOtpSent", "Home", new { Area = "RETAILER" })' + query,
                 method: 'GET',
                 success: (data) => {
                     data = JSON.parse(data);
@@ -301,7 +383,6 @@
                 }
             })
         })
-
 
         $('#verifyOtp').click(() => {
             if (loading) return;
@@ -314,7 +395,7 @@
             }
             loading = true;
             $.ajax({
-                url: '@Url.Action("AadharVerificationOtpVerify")?client_id=' + clientId + '&otp=' + otp + '&txnid=' + txnid + '&aadhar=' + aadhar,
+                url: '@Url.Action("AadharVerificationOtpVerify", "Home", new { Area = "RETAILER" })?client_id=' + clientId + '&otp=' + otp + '&txnid=' + txnid + '&aadhar=' + aadhar,
                 method: 'GET',
                 success: (data) => {
                     data = JSON.parse(data);
@@ -323,7 +404,6 @@
                     if (Status) {
                         clientId = null;
                         txnid = null;
-                        //window.location.href = '@Url.Action("/")';
                         toggleHidden_aadhar();
                         $('#aadhar_container').hide();
                         $('#pan_container').show();
@@ -333,84 +413,73 @@
                     }
                 }
             })
-
         })
 
         $('#pan_verification').click(() => {
             if (loading) return;
-            debugger
 
             $('#pan_error').text('');
 
             var pan_val = '@Model.PanCard';
-            //var query = '?pan=';
             var query = {};
 
             if (pan_val) {
-                //query = query + pan_val;
                 query.pan = pan_val;
-
             }
             else {
                 if ($('#panno').val().length != 10) {
                     return $('#pan_error').text('Invalid Pan Number');
                 }
-                //query = query + $('#panno').val();
                 query.pan = $('#panno').val();
             }
-            query.userid = '@Model.RetailerId'
+            query.userid = '@Model.RetailerId';
+            query.KYCType = KYCType;   // ⭐ NEW - controller ko batao current flow kya hai
             loading = true;
 
-            fetch('@Url.Action("PanVerification")', {
+            fetch('@Url.Action("PanVerification", "Home", new { Area = "RETAILER" })', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(query)
             })
                 .then(res => res.text())
                 .then(data => {
-                    debugger
                     data = JSON.parse(data);
                     const { Status, Message } = data;
                     loading = false;
                     if (Status) {
-                        alert('pan verification success');
-                        window.location.href = '@Url.Action("/")';
+                        if (KYCType == 'DIGITAL_PHYSICAL') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'PAN Verified',
+                                text: 'PAN verification successful. Please upload your documents now.',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                $('#pan_container').hide();
+                                $('#physical_container').show();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'PAN verification successful.',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.href = '@Url.Action("Index", "Home", new { Area = "RETAILER" })';
+                            });
+                        }
                     }
                     else {
                         $('#pan_error').text(Message);
                     }
                 })
                 .catch(err => {
-                    debugger;
                     console.log('err', err);
                 })
-            @*$.ajax({
-                url: '@Url.Action("PanVerification")' + query,
-                method: 'POST',
-                contentType: 'application/json',
-                //data: query,
-                success: (data) => {
-                    debugger
-                    data = JSON.parse(data);
-                    const { Status, Message } = data;
-                    loading = false;
-                    if (Status) {
-                        alert('pan verification success');
-                        window.location.href = '@Url.Action("/")';
-                    }
-                    else {
-                        $('#pan_error').text(Message);
-                    }
-                }
-            })*@
         })
 
         function toggleHidden_aadhar() {
             $('#aadharOtp').toggleClass('hidden');
             $('#aadharno').toggleClass('hidden');
-
             $('#sendOtpContainer').toggleClass('hidden');
             $('#verifyOtpContainer').toggleClass('hidden');
         }
@@ -426,10 +495,150 @@
         })
 
         $('#skip_pan').click(() => {
-            window.location.href = '@Url.Action("/")';
+            window.location.href = '@Url.Action("Index", "Home", new { Area = "RETAILER" })';
         })
+
+        // ⭐ ZERO KYC Save
+        $("#btnZeroSave").click(function () {
+            $.ajax({
+                url: '@Url.Action("SaveZeroKYC", "Home", new { Area = "RETAILER" })',
+                type: "POST",
+                data: {
+                    Aadhaar: $("#ZeroAadhar").val(),
+                    Pan: $("#ZeroPan").val()
+                },
+                dataType: "json",
+                success: function (res) {
+                    if (typeof res === "string") {
+                        try { res = JSON.parse(res); } catch (e) { res = { Status: false, Message: "Something went wrong." }; }
+                    }
+
+                    if (res.Status) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: res.Message || 'Zero KYC saved successfully.',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.location.href = '@Url.Action("Index", "Home", new { Area = "RETAILER" })';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: res.Message || 'Something went wrong.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    console.log('STATUS:', xhr.status);
+                    console.log('RESPONSE TEXT:', xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Server error occurred. Please try again.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+
+        // ⭐ PHYSICAL Upload
+        $("#btnUpload").click(function () {
+            var fd = new FormData();
+
+
+            fd.append("AadharNo", $("#PhysicalAadhar").val());
+            fd.append("PanNo", $("#PhysicalPan").val());
+            fd.append("AadharFile", $("#AadharImage")[0].files[0]);   // ⭐ naam AadharFile kiya
+            fd.append("PanFile", $("#PanImage")[0].files[0]);          // ⭐ naam PanFile kiya
+            fd.append("KYCType", KYCType);
+
+            $.ajax({
+                url: '@Url.Action("UploadKycDocuments", "Home", new { Area = "RETAILER" })',
+                type: "POST",
+                data: fd,
+                processData: false,
+                contentType: false,
+                dataType: "json",
+                success: function (res) {
+                    if (typeof res === "string") {
+                        try { res = JSON.parse(res); } catch (e) { res = { Status: false, Message: "Something went wrong." }; }
+                    }
+
+                    if (res.Status) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: res.Message || 'Documents uploaded successfully.',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.location.href = '@Url.Action("Index", "Home", new { Area = "RETAILER" })';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: res.Message || 'Something went wrong.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    console.log('STATUS:', xhr.status);
+                    console.log('RESPONSE TEXT:', xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Server error occurred. Please try again.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
 
     })
 
-</script>
+    $("#btnUpload").click(function () {
+    var aadharFile = $("#AadharImage")[0].files[0];
+    var panFile = $("#PanImage")[0].files[0];
 
+    if (!$("#PhysicalAadhar").val() || !$("#PhysicalPan").val()) {
+        Swal.fire({ icon: 'warning', title: 'Missing Info', text: 'Please enter Aadhaar and PAN number.' });
+        return;
+    }
+
+    if (!aadharFile || !panFile) {
+        Swal.fire({ icon: 'warning', title: 'Missing Files', text: 'Please select both Aadhaar and PAN images.' });
+        return;
+    }
+
+    var fd = new FormData();
+    fd.append("AadharNo", $("#PhysicalAadhar").val());
+    fd.append("PanNo", $("#PhysicalPan").val());
+    fd.append("AadharFile", aadharFile);
+    fd.append("PanFile", panFile);
+    fd.append("KYCType", KYCType);
+
+    $.ajax({
+        url: '@Url.Action("UploadKycDocuments", "Home", new { Area = "RETAILER" })',
+        type: "POST",
+        data: fd,
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        success: function (res) {
+            if (res.Status) {
+                Swal.fire({ icon: 'success', title: 'Success', text: res.Message, confirmButtonText: 'OK' })
+                    .then(() => { window.location.href = '@Url.Action("Index", "Home", new { Area = "RETAILER" })'; });
+            } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: res.Message, confirmButtonText: 'OK' });
+            }
+        },
+        error: function (xhr) {
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Server error occurred. Please try again.' });
+        }
+    });
+});
+</script>
