@@ -2958,9 +2958,15 @@ body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav-scroll.is-scrollab
         overflow: hidden !important;
     }
 
-    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link:nth-child(5) {
-        grid-column: 1 / -1;
-        max-width: calc(50% - 4px);
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link:nth-child(5),
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link:nth-child(6) {
+        grid-column: auto !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-toolbar .vm-logo-quick-nav,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     }
 
     body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__label--short {
@@ -3066,10 +3072,6 @@ body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav-scroll.is-scrollab
         min-height: 36px !important;
         padding: 0 8px 0 6px !important;
         font-size: 0.66rem !important;
-    }
-
-    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link:nth-child(5) {
-        max-width: 100%;
     }
 }
 

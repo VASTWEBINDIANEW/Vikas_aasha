@@ -42,11 +42,6 @@
         }
 
 
-
-        //var admindetail = db2.Admin_details.ToList();
-        //string RYear = admindetail.FirstOrDefault().Date.ToString();
-        //string[] gg = RDate.Split('-');
-        //var RYear = gg[2].Split(' ')[0].ToString();
     }
     <link rel="icon" href="@Url.Content("~/" + @favimage)" type="image/x-icon" />
     <!-- Google Fonts -->
@@ -60,20 +55,15 @@
 
     <!-- Wait Me Css -->
     <link href="~/AdminDesign/plugins/waitme/waitMe.css" rel="stylesheet" />
-    <!-- Bootstrap Core Css -->
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/AdminDesign/plugins/bootstrap/css/bootstrap.css" rel="stylesheet"> *@
-    <!-- Waves Effect Css -->
-    @*<link href="~/AdminDesign/plugins/node-waves/waves.css" rel="stylesheet" />*@
+ 
     <!-- Animation Css -->
     <link href="~/AdminDesign/plugins/animate-css/animate.css" rel="stylesheet" />
     <!-- Morris Chart Css-->
     <link href="~/AdminDesign/plugins/morrisjs/morris.css" rel="stylesheet" />
     <!-- Custom Css -->
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/AdminDesign/css/style.css" rel="stylesheet"> *@
     <link href="~/fonts/icofont.css" rel="stylesheet" />
     <link href="~/AdminDesign/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/AdminDesign/css/themes/all-themes.css" rel="stylesheet" /> *@
     <link href="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-datatables-sort-fix.css" rel="stylesheet" />
 
@@ -83,17 +73,7 @@
     <link href="~/ClanderCss/bootstrap-datepicker3.min.css" rel="stylesheet" />
     <link href="~/ClanderCss/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="~/ClanderCss/daterangepicker.min.css" rel="stylesheet" />
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" /> *@
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/Areas/ADMIN/css/admincss.css" rel="stylesheet" /> *@
-    <!-- fullbodycolor css -->
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/MainFrontDesign/css/globalallcss.css" rel="stylesheet" /> *@
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/MainFrontDesign/css/admin-Second-design.css" rel="stylesheet" /> *@
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/MainFrontDesign/css/Admin-fourth-design.css" rel="stylesheet" /> *@
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/MainFrontDesign/css/Admin-third-design.css" rel="stylesheet" /> *@
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/MainFrontDesign/css/retailernewdesigncss.css" rel="stylesheet" /> *@
     <link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/MainFrontDesign/css/new-design.css" rel="stylesheet" /> *@
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/MainFrontDesign/css/design-one.css" rel="stylesheet" /> *@
     <link href="~/MainFrontDesign/Bootstrap5/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/Bootstrap5/vendor/bootstrap/css/bootstrap-utilities.min.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/Bootstrap5/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
@@ -113,9 +93,7 @@
     }
 
     @*    .seven_design css link   *@
-    @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/MainFrontDesign/css/seven_design.css" rel="stylesheet" /> *@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    @*    .seven_design css link   *@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -1160,6 +1138,44 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <link href="~/MainFrontDesign/css/saas-admin-system.css" rel="stylesheet" />
+    @{
+        var adminLayoutThemeJson = "{\"id\":\"default\",\"name\":\"Classic\",\"topbarBg\":\"#ffffff\",\"sidebarBg\":\"#0b1220\",\"topbarDark\":false}";
+        try
+        {
+            JSONReadWrite adminThemeRw = new JSONReadWrite();
+            adminLayoutThemeJson = adminThemeRw.Read("admin-layout-theme.json", "~/JsonData/");
+        }
+        catch { }
+    }
+    <script>
+        window.__vmAdminServerTheme = @Html.Raw(adminLayoutThemeJson);
+        (function () {
+            try {
+                var theme = window.__vmAdminServerTheme;
+                if (!theme || !theme.topbarBg) return;
+                localStorage.setItem("vmAdminLayoutTheme", JSON.stringify(theme));
+                if (theme.topbarBg) {
+                    document.documentElement.style.setProperty("--vm-admin-topbar-bg", theme.topbarBg);
+                    var topHeader = document.getElementById("admin-top-header");
+                    if (topHeader) {
+                        topHeader.style.setProperty("background", theme.topbarBg, "important");
+                        topHeader.style.setProperty("background-image", theme.topbarBg, "important");
+                    }
+                }
+                if (theme && theme.sidebarBg) {
+                    document.documentElement.style.setProperty("--vm-admin-sidebar-bg", theme.sidebarBg);
+                    var sidebar = document.getElementById("leftsidebar");
+                    if (sidebar) {
+                        sidebar.style.setProperty("background", theme.sidebarBg, "important");
+                        sidebar.style.setProperty("background-image", theme.sidebarBg, "important");
+                    }
+                }
+                if (theme && theme.topbarDark) {
+                    document.documentElement.classList.add("vm-admin-topbar-dark-pending");
+                }
+            } catch (e) { }
+        })();
+    </script>
 
     <style>
         body.saas-admin-ui {
@@ -1176,7 +1192,8 @@
             z-index: 1040;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(180deg, #0b1220 0%, #111827 55%, #080d18 100%) !important;
+            background: var(--vm-admin-sidebar-bg, #0b1220) !important;
+            background-image: var(--vm-admin-sidebar-bg, #0b1220) !important;
             border-right: 1px solid rgba(148, 163, 184, 0.12);
             box-shadow: 12px 0 36px rgba(2, 6, 23, 0.25);
             overflow: hidden;
@@ -1374,12 +1391,14 @@
         #leftsidebar.admin-sidebar-shell .admin-sidebar-legal {
             flex-shrink: 0;
             padding: 10px 12px 12px;
-            border-top: 1px solid rgba(148, 163, 184, 0.14);
-            background: linear-gradient(180deg, transparent, rgba(8, 13, 24, 0.92) 30%);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: #000000 !important;
+            background-image: none !important;
+            text-align: center;
         }
 
         #leftsidebar.admin-sidebar-shell .admin-sidebar-legal .copyright {
-            color: #94a3b8 !important;
+            color: #cbd5e1 !important;
             font-size: 11px;
             line-height: 1.5;
             margin: 0;
@@ -1438,13 +1457,15 @@
             left: 0;
             right: 0;
             z-index: 1050;
-            background: #ffffff;
+            background: var(--vm-admin-topbar-bg, #ffffff);
+            background-image: var(--vm-admin-topbar-bg, #ffffff);
         }
 
         body.saas-admin-ui .admin-header-v2 {
             min-height: 58px !important;
-            background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%) !important;
-            border-bottom: 1px solid #e2e8f0 !important;
+            background: var(--vm-admin-topbar-bg, #ffffff) !important;
+            background-image: var(--vm-admin-topbar-bg, #ffffff) !important;
+            border-bottom: 1px solid var(--vm-admin-topbar-border, #e2e8f0) !important;
             box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06) !important;
             padding: 0 !important;
             margin: 0 !important;
@@ -1820,6 +1841,7 @@
     <link href="~/MainFrontDesign/css/admin-report-page-responsive.css?v=2" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-dynamic-theme.css?v=11" rel="stylesheet" />
 
 </head>
 @{
@@ -2035,7 +2057,7 @@
                             <li><a class="pin-ped" href="@Url.Action("RadiantPrepay", "Home")"><span class="on_off">Radiant Prepay</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("RadiantCMSDeposit", "Home")"><span class="on_off">CMS Cash Deposit</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("RadiantReferenceLocation", "Home")"><span class="on_off">Reference Location</span></a></li>
-                            <li><a class="pin-ped" href="~/ADMIN/Home/EcommerceHistory"><span class="on_off">Ecommerce</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("EcommerceHistory", "Home")"><span class="on_off">Ecommerce</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("SecurityReport", "Home")"><span class="on_off">Security Services</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("WhatsappPurchase", "Home")"><span class="on_off">WhatsApp Sell</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("Giftcard_Report", "Home")"><span class="on_off">Gift Card</span></a></li>
@@ -2080,7 +2102,7 @@
                         Copyright 2019 - <span>@DateTime.Now.Year</span>
                     </div>
                     <div class="copyright">
-                        <a href="javascript:void(0);" class="tmw-total-color-one" style="background: #1a1a1a;">@comnyname1</a>
+                        <a href="javascript:void(0);" class="tmw-total-color-one">@comnyname1</a>
                     </div>
                 </div>
             </div>
@@ -6598,5 +6620,6 @@ OnSuccess = "ONSUCCESSGETDATA"
             }, 150);
         })(jQuery);
     </script>
+    <script src="~/MainFrontDesign/js/admin-dynamic-theme.js?v=10"></script>
 </body>
 </html>

@@ -72,6 +72,28 @@
         element.style.setProperty(property, value, "important");
     }
 
+    function isAdminThemeManagedSidebar(element) {
+        if (!element) {
+            return false;
+        }
+
+        if (element.id === "leftsidebar" && element.classList.contains("admin-sidebar-shell")) {
+            return true;
+        }
+
+        if (element.closest && element.closest("#leftsidebar.admin-sidebar-shell")) {
+            return true;
+        }
+
+        if (document.body && document.body.classList.contains("vm-admin-theme-active")) {
+            if (element.matches("#leftsidebar, #leftsidebar .menu, #leftsidebar #custnav, #leftsidebar .admin-sidebar-nav")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     function normalizeInlineVisuals(root) {
         var scope = root && root.querySelectorAll ? root : document;
         var selector = [
@@ -113,6 +135,9 @@
             }
 
             if (element.matches(".fullbodydycolorbg, .alagimgwithlinear, #leftsidebar, .sidebar, .menu")) {
+                if (isAdminThemeManagedSidebar(element)) {
+                    return;
+                }
                 forceStyle(element, "background-image", "linear-gradient(180deg, #0b1220 0%, #111827 58%, #080d18 100%)");
             }
 

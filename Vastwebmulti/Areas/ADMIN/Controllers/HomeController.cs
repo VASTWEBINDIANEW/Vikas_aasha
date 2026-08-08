@@ -343,6 +343,68 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             return View();
         }
 
+        //admin layout theme — save/load JsonData/admin-layout-theme.json only
+        [HttpPost]
+        public JsonResult SaveAdminLayoutTheme(string themeJson)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(themeJson))
+                {
+                    return Json(new { success = false, message = "Theme data is empty." }, JsonRequestBehavior.AllowGet);
+                }
+
+                var incoming = JObject.Parse(themeJson);
+                var saved = new JObject
+                {
+                    ["id"] = string.IsNullOrWhiteSpace((string)incoming["id"]) ? "custom" : (string)incoming["id"],
+                    ["name"] = string.IsNullOrWhiteSpace((string)incoming["name"]) ? "Custom" : (string)incoming["name"],
+                    ["topbarBg"] = string.IsNullOrWhiteSpace((string)incoming["topbarBg"]) ? "#ffffff" : (string)incoming["topbarBg"],
+                    ["sidebarBg"] = string.IsNullOrWhiteSpace((string)incoming["sidebarBg"]) ? "#0b1220" : (string)incoming["sidebarBg"],
+                    ["topbarDark"] = incoming["topbarDark"] != null && incoming["topbarDark"].Type == JTokenType.Boolean
+                        ? incoming["topbarDark"].Value<bool>()
+                        : false,
+                    ["sidebarDark"] = incoming["sidebarDark"] != null && incoming["sidebarDark"].Type == JTokenType.Boolean
+                        ? incoming["sidebarDark"].Value<bool>()
+                        : true
+                };
+
+                JSONReadWrite readWrite = new JSONReadWrite();
+                readWrite.Write("admin-layout-theme.json", "~/JsonData/", saved.ToString(Formatting.Indented));
+
+                return Json(new { success = true, theme = saved }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Failed to save theme.", error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetAdminLayoutTheme()
+        {
+            try
+            {
+                JSONReadWrite readWrite = new JSONReadWrite();
+                var json = readWrite.Read("admin-layout-theme.json", "~/JsonData/");
+                var theme = JObject.Parse(json);
+                return Json(new { success = true, theme = theme }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                var theme = new JObject
+                {
+                    ["id"] = "default",
+                    ["name"] = "Classic",
+                    ["topbarBg"] = "#ffffff",
+                    ["sidebarBg"] = "#0b1220",
+                    ["topbarDark"] = false,
+                    ["sidebarDark"] = true
+                };
+                return Json(new { success = true, theme = theme }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         //admin theme
         [HttpPost]
         public JsonResult changetheme(string themetype)

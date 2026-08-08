@@ -1,0 +1,1005 @@
+/*
+ * Admin dynamic layout theme — topbar + sidebar color switcher (v2 modern panel)
+ */
+
+:root {
+    --vm-admin-topbar-bg: #ffffff;
+    --vm-admin-sidebar-bg: #0b1220;
+    --vm-admin-topbar-border: #e2e8f0;
+    --vm-admin-topbar-text: #334155;
+    --vm-admin-topbar-text-hover: #2563eb;
+    --vm-admin-topbar-btn-hover-bg: #eaf1ff;
+    --vm-admin-sidebar-text: #f8fafc;
+    --vm-admin-sidebar-muted: #e2e8f0;
+    --vm-admin-sidebar-active-bg: rgba(255, 255, 255, 0.18);
+    --vm-admin-sidebar-hover-bg: rgba(255, 255, 255, 0.12);
+    --vm-admin-sidebar-icon-bg: rgba(255, 255, 255, 0.96);
+    --vm-admin-sidebar-icon-color: #334155;
+    --vm-admin-sidebar-sub-text: rgba(248, 250, 252, 0.9);
+}
+
+/* Icon visibility fix — Font Awesome + admin icons */
+body.saas-admin-ui i.fas,
+body.saas-admin-ui i.fa-solid,
+body.saas-admin-ui i.far,
+body.saas-admin-ui i.fa-regular,
+body.saas-admin-ui i.fab,
+body.saas-admin-ui .admin-topbar-icon,
+body.saas-admin-ui .admin-sidebar-icon,
+body.saas-admin-ui .saas-dash-menu-icon i,
+body.saas-admin-ui .saas-dash-stat-icon i,
+body.saas-admin-ui .saas-dash-panel-title i {
+    font-family: "Font Awesome 6 Free", "Font Awesome 5 Free", FontAwesome !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    line-height: 1 !important;
+}
+
+body.saas-admin-ui i.fas,
+body.saas-admin-ui i.fa-solid,
+body.saas-admin-ui .admin-topbar-icon.fas,
+body.saas-admin-ui .admin-sidebar-icon.fas {
+    font-weight: 900 !important;
+}
+
+body.saas-admin-ui i.far,
+body.saas-admin-ui i.fa-regular {
+    font-weight: 400 !important;
+}
+
+/* Topbar overrides */
+body.saas-admin-ui .admin-top-header,
+body.saas-admin-ui .admin-header-v2,
+body.saas-admin-ui .saas-admin-topbar {
+    background: var(--vm-admin-topbar-bg) !important;
+    background-image: var(--vm-admin-topbar-bg) !important;
+    border-bottom-color: var(--vm-admin-topbar-border) !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-btn,
+body.saas-admin-ui.vm-admin-topbar-dark .saas-topbar-btn {
+    color: var(--vm-admin-topbar-text) !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-btn i,
+body.saas-admin-ui.vm-admin-topbar-dark .saas-topbar-btn i,
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-icon,
+body.saas-admin-ui.vm-admin-topbar-dark .saas-topbar-icon {
+    background: rgba(255, 255, 255, 0.96) !important;
+    color: #334155 !important;
+    border: 1px solid rgba(255, 255, 255, 0.65) !important;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12) !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-label,
+body.saas-admin-ui.vm-admin-topbar-dark .saas-topbar-label {
+    color: #f8fafc !important;
+    text-shadow: 0 1px 2px rgba(15, 23, 42, 0.35);
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-btn:hover,
+body.saas-admin-ui.vm-admin-topbar-dark .saas-topbar-btn:hover,
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-btn:focus,
+body.saas-admin-ui.vm-admin-topbar-dark .saas-topbar-btn:focus {
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: var(--vm-admin-topbar-text-hover) !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-btn:hover .admin-topbar-icon,
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-btn:focus .admin-topbar-icon,
+body.saas-admin-ui.vm-admin-topbar-dark .saas-topbar-btn:hover .saas-topbar-icon,
+body.saas-admin-ui.vm-admin-topbar-dark .saas-topbar-btn:focus .saas-topbar-icon {
+    background: #ffffff !important;
+    color: #2563eb !important;
+    border-color: #bfdbfe !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-btn:hover i,
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-btn:focus i {
+    color: #2563eb !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-logout-btn {
+    color: #fecaca !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-logout-btn .admin-topbar-icon {
+    background: rgba(255, 255, 255, 0.96) !important;
+    color: #dc2626 !important;
+    border: 1px solid #fecaca !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-logout-btn:hover,
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-logout-btn:focus {
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: #fee2e2 !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-badge {
+    border-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-header-toggle {
+    background: rgba(255, 255, 255, 0.96) !important;
+    color: #334155 !important;
+    border-color: rgba(255, 255, 255, 0.65) !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-header-toggle i,
+body.saas-admin-ui.vm-admin-topbar-dark .admin-header-toggle .admin-topbar-icon {
+    background: transparent !important;
+    color: #334155 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Light topbar — dark icons on soft pills */
+body.saas-admin-ui:not(.vm-admin-topbar-dark) .admin-topbar-icon,
+body.saas-admin-ui:not(.vm-admin-topbar-dark) .saas-topbar-icon {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui:not(.vm-admin-topbar-dark) .admin-topbar-btn,
+body.saas-admin-ui:not(.vm-admin-topbar-dark) .saas-topbar-btn {
+    color: #475569 !important;
+}
+
+body.saas-admin-ui:not(.vm-admin-topbar-dark) .admin-topbar-label,
+body.saas-admin-ui:not(.vm-admin-topbar-dark) .saas-topbar-label {
+    color: #475569 !important;
+}
+
+body.saas-admin-ui:not(.vm-admin-topbar-dark) .admin-topbar-btn:hover .admin-topbar-icon,
+body.saas-admin-ui:not(.vm-admin-topbar-dark) .admin-topbar-btn:focus .admin-topbar-icon {
+    background: #dbeafe !important;
+    color: #2563eb !important;
+}
+
+body.saas-admin-ui:not(.vm-admin-topbar-dark) .admin-header-toggle {
+    background: #f1f5f9 !important;
+    color: #334155 !important;
+    border-color: #e2e8f0 !important;
+}
+
+body.saas-admin-ui:not(.vm-admin-topbar-dark) .admin-header-toggle i {
+    color: #334155 !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-sep {
+    background: rgba(255, 255, 255, 0.22) !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-header-brand,
+body.saas-admin-ui.vm-admin-topbar-dark .saas-admin-brand {
+    border-right-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Sidebar overrides — highest priority, loads last */
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell,
+body.saas-admin-ui #leftsidebar.sidebar.admin-sidebar-shell,
+body.saas-admin-ui aside#leftsidebar.admin-sidebar-shell,
+body.saas-admin-ui #leftsidebar.saas-clean-sidebar {
+    background: var(--vm-admin-sidebar-bg) !important;
+    background-image: var(--vm-admin-sidebar-bg) !important;
+    background-color: transparent !important;
+}
+
+/* Sidebar inner menu must stay transparent so aside background shows */
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .menu,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell #custnav,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-nav,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .saas-admin-sidebar {
+    background: transparent !important;
+    background-image: none !important;
+}
+body.saas-admin-ui.vm-admin-theme-active #leftsidebar.admin-sidebar-shell::before,
+body.saas-admin-ui.vm-admin-theme-active #leftsidebar.sidebar::before,
+body.saas-admin-ui.vm-admin-theme-active aside.sidebar::before {
+    display: none !important;
+    content: none !important;
+    background: none !important;
+}
+
+body.saas-admin-ui.vm-admin-theme-active #leftsidebar.admin-sidebar-shell .admin-sidebar-legal,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-legal,
+body.saas-admin-ui .saas-admin-sidebar .legal.admin-sidebar-legal {
+    background: #000000 !important;
+    background-image: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-legal .copyright,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-legal .copyright a {
+    color: #cbd5e1 !important;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-legal .tmw-total-color-one {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #111827 !important;
+    color: #f1f5f9 !important;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none !important;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-group > .llkj,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a .on_off {
+    color: var(--vm-admin-sidebar-text, #f8fafc) !important;
+    text-shadow: 0 1px 2px rgba(15, 23, 42, 0.18);
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-icon {
+    background: var(--vm-admin-sidebar-icon-bg, rgba(255, 255, 255, 0.96)) !important;
+    color: var(--vm-admin-sidebar-icon-color, #334155) !important;
+    border: 1px solid rgba(255, 255, 255, 0.55) !important;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.14) !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-caret {
+    color: rgba(248, 250, 252, 0.82) !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a:hover,
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-group > .llkj:hover {
+    background: var(--vm-admin-sidebar-hover-bg, rgba(255, 255, 255, 0.12)) !important;
+    color: #ffffff !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a:hover .admin-sidebar-icon,
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-group > .llkj:hover .admin-sidebar-icon {
+    background: #ffffff !important;
+    color: #2563eb !important;
+    border-color: #bfdbfe !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a.activee,
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.activee,
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-group.admin-sidebar-open > .llkj {
+    background: var(--vm-admin-sidebar-active-bg, rgba(255, 255, 255, 0.18)) !important;
+    color: #ffffff !important;
+    box-shadow: inset 3px 0 0 rgba(56, 189, 248, 0.85);
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a.activee .admin-sidebar-icon,
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-group > .llkj:hover .admin-sidebar-icon,
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.activee .admin-sidebar-icon,
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-group.admin-sidebar-open > .llkj .admin-sidebar-icon {
+    background: linear-gradient(135deg, #2563eb, #38bdf8) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35) !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-sub {
+    border-left-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a {
+    color: var(--vm-admin-sidebar-sub-text, rgba(248, 250, 252, 0.9)) !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.pin-ped::before,
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-sub-nested a::before {
+    background: rgba(255, 255, 255, 0.62) !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.pin-ped.activee::before,
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.pin-ped:hover::before,
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-sub-nested a.activee::before,
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-sub-nested a:hover::before {
+    background: #38bdf8 !important;
+    box-shadow: 0 0 6px rgba(56, 189, 248, 0.55);
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-group {
+    border-top-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-prepaid-label {
+    color: rgba(248, 250, 252, 0.72) !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-group.admin-sidebar-open > .llkj .admin-sidebar-caret {
+    color: #ffffff !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-dark #leftsidebar.admin-sidebar-shell .admin-sidebar-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.28) !important;
+}
+
+/* Light sidebar variant */
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a,
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-group > .llkj,
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a {
+    color: var(--vm-admin-sidebar-text, #1e293b) !important;
+    text-shadow: none;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-icon {
+    background: var(--vm-admin-sidebar-icon-bg, #f1f5f9) !important;
+    color: var(--vm-admin-sidebar-icon-color, #475569) !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-caret {
+    color: #64748b !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a:hover .admin-sidebar-icon,
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a.activee .admin-sidebar-icon,
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.activee .admin-sidebar-icon {
+    background: linear-gradient(135deg, #2563eb, #38bdf8) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a {
+    color: var(--vm-admin-sidebar-sub-text, #475569) !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.pin-ped::before {
+    background: #94a3b8 !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-legal {
+    background: rgba(15, 23, 42, 0.04) !important;
+    border-top-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-legal .copyright,
+body.saas-admin-ui.vm-admin-sidebar-light #leftsidebar.admin-sidebar-shell .admin-sidebar-legal .copyright a {
+    color: #64748b !important;
+}
+
+/* Overlay */
+.vm-admin-theme-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1055;
+    background: rgba(15, 23, 42, 0.35);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.vm-admin-theme-overlay.vm-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* FAB button */
+.vm-admin-theme-fab {
+    position: fixed;
+    right: 20px;
+    bottom: 24px;
+    z-index: 1060;
+    width: 54px;
+    height: 54px;
+    border: 0;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 14px 36px rgba(37, 99, 235, 0.4);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vm-admin-theme-fab:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 18px 44px rgba(37, 99, 235, 0.48);
+}
+
+.vm-admin-theme-fab.vm-open {
+    background: linear-gradient(135deg, #1e40af, #6d28d9);
+}
+
+.vm-admin-theme-fab-icon {
+    display: block;
+    pointer-events: none;
+}
+
+/* Panel */
+.vm-admin-theme-panel {
+    position: fixed;
+    right: 20px;
+    bottom: 92px;
+    z-index: 1060;
+    width: min(380px, calc(100vw - 32px));
+    max-height: min(580px, calc(100vh - 110px));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border-radius: 22px;
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: 0 28px 80px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(16px) scale(0.97);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+    font-family: "Inter", "Nunito", "Segoe UI", Arial, sans-serif;
+}
+
+.vm-admin-theme-panel.vm-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* Embedded on Outside_logo page — inline card, always visible */
+.vm-admin-theme-panel--embedded {
+    position: static !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    z-index: 1 !important;
+    width: 100% !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+    overflow: visible;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-layout-theme-wrap {
+    margin-top: 4px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-panel--embedded {
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-live-preview {
+    margin: 16px 18px 0;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-section,
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-custom {
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-actions {
+    padding-bottom: 18px;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.vm-admin-theme-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px 18px 14px;
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    border-bottom: 1px solid #eef2f7;
+    flex-shrink: 0;
+}
+
+.vm-admin-theme-head-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.28);
+}
+
+.vm-admin-theme-head-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.vm-admin-theme-head h4 {
+    margin: 0 0 2px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+}
+
+.vm-admin-theme-head p {
+    margin: 0;
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.vm-admin-theme-close {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #fff;
+    color: #64748b;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.vm-admin-theme-close:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+/* Live preview mini mockup */
+.vm-admin-theme-live-preview {
+    margin: 0 16px 12px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    flex-shrink: 0;
+}
+
+.vm-preview-top {
+    height: 22px;
+    background: var(--vm-admin-topbar-bg, #fff);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.vm-preview-body {
+    display: flex;
+    height: 52px;
+}
+
+.vm-preview-side {
+    width: 28%;
+    background: var(--vm-admin-sidebar-bg, #0b1220);
+}
+
+.vm-preview-content {
+    flex: 1;
+    background: #f1f5f9;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.vm-preview-content span {
+    display: block;
+    height: 6px;
+    border-radius: 999px;
+    background: #cbd5e1;
+}
+
+.vm-preview-content span:first-child { width: 70%; }
+.vm-preview-content span:nth-child(2) { width: 90%; }
+.vm-preview-content span:nth-child(3) { width: 55%; }
+
+/* Scrollable body */
+.vm-admin-theme-panel > .vm-admin-theme-section,
+.vm-admin-theme-panel > .vm-admin-theme-custom {
+    overflow-y: auto;
+    padding: 0 16px 16px;
+}
+
+.vm-admin-theme-section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+    margin-bottom: 10px;
+}
+
+.vm-admin-theme-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.vm-admin-theme-swatch {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    border: 2px solid #e8edf3;
+    border-radius: 14px;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 6px 6px 5px;
+    background: #fff;
+    transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.vm-admin-theme-swatch:hover {
+    transform: translateY(-2px);
+    border-color: #93c5fd;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.14);
+}
+
+.vm-admin-theme-swatch.vm-active {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.vm-admin-theme-swatch-preview {
+    display: flex;
+    flex-direction: column;
+    height: 44px;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.vm-admin-theme-swatch-top {
+    flex: 0 0 38%;
+}
+
+.vm-admin-theme-swatch-side {
+    flex: 1;
+}
+
+.vm-admin-theme-swatch-name {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    color: #64748b;
+    text-align: center;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vm-admin-theme-swatch.vm-active .vm-admin-theme-swatch-name {
+    color: #2563eb;
+}
+
+.vm-admin-theme-swatch.vm-active::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #2563eb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/9px no-repeat;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+}
+
+.vm-admin-theme-custom {
+    border-top: 1px solid #eef2f7;
+    padding-top: 14px !important;
+}
+
+.vm-admin-theme-block {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+.vm-admin-theme-block-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.vm-admin-theme-block-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.vm-admin-theme-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.vm-admin-theme-switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.vm-admin-theme-switch-ui {
+    width: 36px;
+    height: 20px;
+    border-radius: 999px;
+    background: #cbd5e1;
+    position: relative;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+}
+
+.vm-admin-theme-switch-ui::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease;
+}
+
+.vm-admin-theme-switch input:checked + .vm-admin-theme-switch-ui {
+    background: #2563eb;
+}
+
+.vm-admin-theme-switch input:checked + .vm-admin-theme-switch-ui::after {
+    transform: translateX(16px);
+}
+
+.vm-admin-theme-switch-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.vm-admin-theme-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.vm-admin-theme-color-field label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.vm-admin-theme-color-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 4px 8px 4px 4px;
+}
+
+.vm-admin-theme-color-wrap input[type="color"] {
+    width: 32px;
+    height: 28px;
+    border: 0;
+    border-radius: 6px;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+}
+
+.vm-admin-theme-hex {
+    font-size: 10px;
+    font-weight: 700;
+    color: #475569;
+    font-family: ui-monospace, Consolas, monospace;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vm-admin-theme-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.vm-admin-theme-actions button {
+    flex: 1;
+    min-height: 40px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.vm-admin-theme-actions button:hover {
+    transform: translateY(-1px);
+}
+
+.vm-admin-theme-apply {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    border-color: transparent !important;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
+}
+
+.vm-admin-theme-reset {
+    background: #fff;
+    color: #475569;
+}
+
+.vm-admin-theme-reset:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1 !important;
+}
+
+@media (max-width: 575px) {
+    .vm-admin-theme-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .vm-admin-theme-fab {
+        right: 14px;
+        bottom: 16px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .vm-admin-theme-panel {
+        right: 14px;
+        bottom: 78px;
+        left: 14px;
+        width: auto;
+    }
+}
+
+/* Theme Color panel — tablet & mobile on Outside_logo page */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-live-preview {
+        margin: 12px 12px 0;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-section,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-custom {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-swatch-preview {
+        height: 40px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-block-head {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-toolbar .vm-logo-quick-nav,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link:nth-child(5),
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav__link:nth-child(6) {
+        grid-column: auto !important;
+        max-width: none !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-row {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-color-wrap {
+        flex-wrap: wrap;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-reset,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-apply {
+        width: 100%;
+        justify-content: center;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-panel--embedded {
+        border-radius: 12px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__head {
+        flex-wrap: wrap;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section__desc {
+        font-size: 0.76rem;
+        line-height: 1.5;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-page-toolbar .vm-logo-quick-nav,
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-quick-nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-swatch-name {
+        font-size: 8px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-block {
+        padding: 10px;
+    }
+
+    body.saas-admin-ui .saas-outside-logo-page .vm-logo-section--layout-theme .vm-admin-theme-switch-label {
+        font-size: 10px;
+    }
+}
