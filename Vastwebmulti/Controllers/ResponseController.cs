@@ -5436,6 +5436,34 @@ namespace Vastwebmulti.Controllers
                             dbsrs.SaveChanges();
                         }
                     }
+                    else if(Type=="AEPSUPI")
+                    {
+                        var splitmsg = MSG.Split(')');
+                        string PayerVPA = splitmsg[0].ToString();
+                        string PayerName = splitmsg[1].ToString();
+                        string FingpayTransID = splitmsg[2].ToString();
+                        string Transtimestamp = splitmsg[3].ToString();
+                        if (Status.ToUpper()=="SUCCESS")
+                        {
+                            DateTime transtime = DateTime.Now;
+                            try
+                            {
+                                transtime = Convert.ToDateTime(Transtimestamp);
+                            }
+                            catch { }
+                            dbsrs.updateAEPSUPITXn(Reqid, "Success", "", Transid, PayerVPA, PayerName, FingpayTransID, transtime);
+                        }
+                        else if(Status.ToUpper()=="FAILED")
+                        {
+                            DateTime transtime = DateTime.Now;
+                            try
+                            {
+                                transtime = Convert.ToDateTime(transtime);
+                            }
+                            catch { }
+                            dbsrs.updateAEPSUPITXn(Reqid, "Failed", "", Transid, PayerVPA, PayerName, FingpayTransID, transtime);
+                        }
+                    }
                 }
                 catch
                 {

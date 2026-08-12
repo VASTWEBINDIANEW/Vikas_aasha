@@ -924,6 +924,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Aeps_comm_Dlm_rem_UPI> Aeps_comm_Dlm_rem_UPI { get; set; }
         public virtual DbSet<Aeps_comm_userwise_UPI> Aeps_comm_userwise_UPI { get; set; }
         public virtual DbSet<Aeps_Common_Comm_UPI> Aeps_Common_Comm_UPI { get; set; }
+        public virtual DbSet<AepsUPIHistory> AepsUPIHistories { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -24419,6 +24420,72 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("Type_5001_10000", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Update_AEPS_dlm_rem_userSlab_again_UPI", dlmidParameter, aadharpayParameter, ministatementParameter, per_500_999Parameter, rs_500_999Parameter, maxrs_500_999Parameter, type_500_999Parameter, per_1000_1499Parameter, rs_1000_1499Parameter, maxrs_1000_1499Parameter, type_1000_1499Parameter, per_1500_1999Parameter, rs_1500_1999Parameter, maxrs_1500_1999Parameter, type_1500_1999Parameter, per_2000_2499Parameter, rs_2000_2499Parameter, maxrs_2000_2499Parameter, type_2000_2499Parameter, per_2500_2999Parameter, rs_2500_2999Parameter, maxrs_2500_2999Parameter, type_2500_2999Parameter, per_3000_3499Parameter, rs_3000_3499Parameter, maxrs_3000_3499Parameter, type_3000_3499Parameter, per_3500_5000Parameter, rs_3500_5000Parameter, maxrs_3500_5000Parameter, type_3500_5000Parameter, per_5001_10000Parameter, rs_5001_10000Parameter, maxrs_5001_10000Parameter, type_5001_10000Parameter);
+        }
+    
+        public virtual ObjectResult<AEPSUPITXnInsert_Result> AEPSUPITXnInsert(string userid, Nullable<decimal> amount, string uniqueid, string apirequest, string merchantid, string reqtype, ObjectParameter output)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var uniqueidParameter = uniqueid != null ?
+                new ObjectParameter("uniqueid", uniqueid) :
+                new ObjectParameter("uniqueid", typeof(string));
+    
+            var apirequestParameter = apirequest != null ?
+                new ObjectParameter("apirequest", apirequest) :
+                new ObjectParameter("apirequest", typeof(string));
+    
+            var merchantidParameter = merchantid != null ?
+                new ObjectParameter("merchantid", merchantid) :
+                new ObjectParameter("merchantid", typeof(string));
+    
+            var reqtypeParameter = reqtype != null ?
+                new ObjectParameter("reqtype", reqtype) :
+                new ObjectParameter("reqtype", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AEPSUPITXnInsert_Result>("AEPSUPITXnInsert", useridParameter, amountParameter, uniqueidParameter, apirequestParameter, merchantidParameter, reqtypeParameter, output);
+        }
+    
+        public virtual int updateAEPSUPITXn(string uniqueid, string status, string apiresponse, string bankrrn, string payerVPA, string payerName, string fingpaytxnid, Nullable<System.DateTime> transtimestemp)
+        {
+            var uniqueidParameter = uniqueid != null ?
+                new ObjectParameter("uniqueid", uniqueid) :
+                new ObjectParameter("uniqueid", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var apiresponseParameter = apiresponse != null ?
+                new ObjectParameter("apiresponse", apiresponse) :
+                new ObjectParameter("apiresponse", typeof(string));
+    
+            var bankrrnParameter = bankrrn != null ?
+                new ObjectParameter("Bankrrn", bankrrn) :
+                new ObjectParameter("Bankrrn", typeof(string));
+    
+            var payerVPAParameter = payerVPA != null ?
+                new ObjectParameter("PayerVPA", payerVPA) :
+                new ObjectParameter("PayerVPA", typeof(string));
+    
+            var payerNameParameter = payerName != null ?
+                new ObjectParameter("PayerName", payerName) :
+                new ObjectParameter("PayerName", typeof(string));
+    
+            var fingpaytxnidParameter = fingpaytxnid != null ?
+                new ObjectParameter("Fingpaytxnid", fingpaytxnid) :
+                new ObjectParameter("Fingpaytxnid", typeof(string));
+    
+            var transtimestempParameter = transtimestemp.HasValue ?
+                new ObjectParameter("transtimestemp", transtimestemp) :
+                new ObjectParameter("transtimestemp", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateAEPSUPITXn", uniqueidParameter, statusParameter, apiresponseParameter, bankrrnParameter, payerVPAParameter, payerNameParameter, fingpaytxnidParameter, transtimestempParameter);
         }
     }
 }

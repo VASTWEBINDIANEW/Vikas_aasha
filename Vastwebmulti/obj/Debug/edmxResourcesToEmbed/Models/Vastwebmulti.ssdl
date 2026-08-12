@@ -744,6 +744,40 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.AEPS_Merchants' does not hav
     <Property Name="TxnDate" Type="datetime" Nullable="false" />
     <Property Name="SettlementDate" Type="datetime" Nullable="false" />
   </EntityType>
+  <EntityType Name="AepsUPIHistories">
+    <Key>
+      <PropertyRef Name="Idno" />
+    </Key>
+    <Property Name="Idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Retailerid" Type="varchar" MaxLength="50" />
+    <Property Name="Merchantid" Type="varchar" MaxLength="50" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="comm" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="totalcomm" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Remainpre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Gst" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="tds" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="txndate" Type="datetime" />
+    <Property Name="updatedate" Type="datetime" />
+    <Property Name="Apirequest" Type="nvarchar(max)" />
+    <Property Name="ApiResponse" Type="nvarchar(max)" />
+    <Property Name="StatusResponse" Type="nvarchar(max)" />
+    <Property Name="Bankrrn" Type="varchar" MaxLength="50" />
+    <Property Name="reqtype" Type="varchar" MaxLength="50" />
+    <Property Name="customermobile" Type="varchar" MaxLength="50" />
+    <Property Name="txntype" Type="varchar" MaxLength="50" />
+    <Property Name="PayerVPA" Type="varchar" MaxLength="50" />
+    <Property Name="Fingpaytxnid" Type="varchar" MaxLength="50" />
+    <Property Name="transtimestemp" Type="datetime" />
+    <Property Name="Txnid" Type="varchar" MaxLength="50" />
+    <Property Name="Adminremainpre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Adminremainpost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="posremainpre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="posremainpost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="PayerName" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="AepsVideoKyc">
     <Key>
       <PropertyRef Name="Id" />
@@ -16067,6 +16101,15 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="From" Type="datetime" Mode="In" />
     <Parameter Name="to" Type="datetime" Mode="In" />
   </Function>
+  <Function Name="AEPSUPITXnInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userid" Type="varchar" Mode="In" />
+    <Parameter Name="amount" Type="decimal" Mode="In" />
+    <Parameter Name="uniqueid" Type="varchar" Mode="In" />
+    <Parameter Name="apirequest" Type="varchar" Mode="In" />
+    <Parameter Name="merchantid" Type="varchar" Mode="In" />
+    <Parameter Name="reqtype" Type="varchar" Mode="In" />
+    <Parameter Name="output" Type="varchar" Mode="InOut" />
+  </Function>
   <Function Name="Airtel_Report_paging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="role" Type="varchar" Mode="In" />
     <Parameter Name="userid" Type="varchar" Mode="In" />
@@ -21704,6 +21747,16 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="dealierid" Type="varchar" Mode="In" />
     <Parameter Name="whitelabelid" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="updateAEPSUPITXn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="uniqueid" Type="varchar" Mode="In" />
+    <Parameter Name="status" Type="varchar" Mode="In" />
+    <Parameter Name="apiresponse" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="Bankrrn" Type="varchar" Mode="In" />
+    <Parameter Name="PayerVPA" Type="varchar" Mode="In" />
+    <Parameter Name="PayerName" Type="varchar" Mode="In" />
+    <Parameter Name="Fingpaytxnid" Type="varchar" Mode="In" />
+    <Parameter Name="transtimestemp" Type="datetime" Mode="In" />
+  </Function>
   <Function Name="updatemicroatm" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="uniqueid" Type="nvarchar(max)" Mode="In" />
     <Parameter Name="transaction_id" Type="varchar" Mode="In" />
@@ -22651,6 +22704,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="AEPS_TXN_Details" EntityType="Self.AEPS_TXN_Details" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AEPSCHMerchantinfo" EntityType="Self.AEPSCHMerchantinfo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AepsMposSettlementHistory" EntityType="Self.AepsMposSettlementHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AepsUPIHistories" EntityType="Self.AepsUPIHistories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AepsVideoKyc" EntityType="Self.AepsVideoKyc" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Airport_info" EntityType="Self.Airport_info" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Airtel_common_comm" EntityType="Self.Airtel_common_comm" Schema="dbo" store:Type="Tables" />

@@ -15254,6 +15254,28 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         {
             return View();
         }
+        public ActionResult AepsUPIReport()
+        {
+            var userid = User.Identity.GetUserId();
+            var fromdate = DateTime.Now.Date;
+            var todate = fromdate.AddDays(1);
+            var infochk = db.AepsUPIHistories.Where(aa => aa.Retailerid == userid && aa.txndate>= fromdate && aa.txndate<= todate).OrderByDescending(aa => aa.txndate).ToList();
+            return View(infochk);
+        }
+        [HttpPost]
+        public ActionResult AepsUPIReport(string ddl_status,DateTime txt_frm_date,DateTime txt_to_date)
+        {
+            if(ddl_status=="ALL")
+            {
+                ddl_status = "";
+            }
+            ViewBag.chk = "post";
+            var userid = User.Identity.GetUserId();
+            var todate = txt_to_date.AddDays(1);
+            var infochk = db.AepsUPIHistories.Where(aa => aa.Retailerid == userid && aa.txndate>= txt_frm_date && aa.txndate<= todate && aa.Status.Contains(ddl_status)).OrderByDescending(aa => aa.txndate).ToList();
+            return View(infochk);
+        }
+
         //END
         #region AEPS_Report
         [HttpGet]
@@ -34037,7 +34059,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
 
         #endregion
-        #region MONEYTRANSFER DMT       
+        #region MONEYTRANSFER DMT    
         [HttpGet]
         public ActionResult Money_transfer2(string info)
         {
@@ -34137,6 +34159,21 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var api2 = respchknew.Content.ADDINFO.apinm2;
                 var api1sts = respchknew.Content.ADDINFO.status1;
                 var api2sts = respchknew.Content.ADDINFO.status2;
+
+                var checkekycn = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (checkekycn == null)
+                {
+                    ViewBag.reqn = "REQUIREDOTP";
+                }
+                else
+                {
+                    var sts = checkekycn.isvalid;
+                    if (sts == false)
+                    {
+                        ViewBag.reqn = "REQUIREDSCAN";
+                    }
+                }
+
 
                 if (info == "A2")
                 {
@@ -34734,6 +34771,147 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 ViewBag.ChkKYC = "Firstly Complete Your Full KYC !";
                 return RedirectToAction("Profile");
             }
+        }
+
+        [HttpPost]
+        public ActionResult GenerateAEPSQRCode(decimal amount)
+        {
+            var userid = User.Identity.GetUserId();
+            var admininfo = db.Admin_details.SingleOrDefault();
+
+            string url = admininfo.WebsiteUrl;
+
+            if (!url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+                !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                url = "https://" + url;
+            }
+
+            string websiteName = new Uri(url)
+                .Host
+                .Replace("www.", "")
+                .Split('.')[0];
+
+            string first3Chars = websiteName.Length >= 3
+                ? websiteName.Substring(0, 3)
+                : websiteName;
+
+            var reminfo = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+
+            string uniqueId = first3Chars+ DateTime.Now.ToString("yyyyMMddHHmmssfff") +
+                  new Random().Next(1000, 9999);
+            string lattitude = string.Empty;
+            string longitude = string.Empty;
+            if (reminfo.UserLocation == null)
+            {
+                insertGeoLocation(reminfo.RetailerId, out lattitude, out longitude);
+            }
+            else
+            {
+                lattitude = reminfo.UserLocation.Lattitude;
+                longitude = reminfo.UserLocation.Longitute;
+            }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                var data = new Update_Aeps_Info()
+                {
+                    UserId = userid,
+                    latitude = lattitude,
+                    longitude = longitude,
+                    UpdateTime = DateTime.Now,
+                    status = true,
+                    RequestFrom = "Web"
+                };
+                db.Update_Aeps_Info.Add(data);
+                db.SaveChanges();
+            }
+
+
+
+            var apireq = new
+            {
+                Reqid = uniqueId,
+                Merchantid = reminfo.AepsMerchandId,
+                Amount= amount.ToString("0.00"),
+                Latitude=  lattitude,
+                Longitude= longitude,
+                Mobile= reminfo.Mobile
+            };
+            var jsondata = JsonConvert.SerializeObject(apireq);
+            System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+            var msgoutput = db.AEPSUPITXnInsert(userid, amount, uniqueId, jsondata, reminfo.AepsMerchandId, "WEB", outputchk).SingleOrDefault().msg;
+            if(msgoutput=="OK")
+            {
+                var token = string.Empty;
+                token = getAuthToken();
+
+                var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/UPI/WEB/Transaction");
+                client2.Timeout = -1;
+                var request2 = new RestRequest(Method.POST);
+                request2.AddHeader("Authorization", "Bearer " + token);
+                request2.AddHeader("Content-Type", "application/json");
+                request2.AddParameter("application/json", jsondata, ParameterType.RequestBody);
+                IRestResponse response2 = client2.Execute(request2);
+                if(response2.StatusCode==HttpStatusCode.OK)
+                {
+                    dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                    var sts = resp.Content.ADDINFO.status;
+                    string msg = resp.Content.ADDINFO.message;
+               
+                    if (sts==true)
+                    {
+                        string qrCode = resp.Content.ADDINFO.data.intentLink;
+                        var resp1 = new
+                        {
+                            sts = true,
+                            message = msg,
+                            qrCode= qrCode,
+                            txnId=uniqueId
+                        };
+                        return Json(resp1, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+
+                        db.updateAEPSUPITXn(uniqueId, "Failed", response2.Content, msg, "", "", "", null);
+                        var resp1 = new
+                        {
+                            sts = false,
+                            message = msg
+                        };
+                        return Json(resp1, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    db.updateAEPSUPITXn(uniqueId, "Failed", response2.Content, "UPI SERVER ISSUE", "", "", "", null);
+                    var resp = new
+                    {
+                        sts = false,
+                        message = "UPI SERVER ISSUE"
+                    };
+                    return Json(resp, JsonRequestBehavior.AllowGet);
+                }
+              
+                //if(resp.s)
+            }
+            else
+            {
+                var resp = new
+                {
+                    sts=false,
+                    message= msgoutput
+                };
+                return Json(resp, JsonRequestBehavior.AllowGet);
+            }
+
         }
 
         [HttpPost]
@@ -47220,7 +47398,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
         }
         [HttpPost]
-        public ActionResult AEPS(string mobile, string uid, string bank, long iin, string cap, string capxml, string type, string tabvalue, int? amount, string remark, string DeviceSrNo, decimal servicefee, string usernm, string devicenm, string userotp, string pidata, bool _isAeps2, string apinm)
+        public ActionResult AEPS(string mobile, string uid, string bank, long iin, string cap, string capxml, string type, string tabvalue, int? amount, string remark, string DeviceSrNo, decimal servicefee, string usernm, string devicenm, string userotp, string pidata, bool _isAeps2, string apinm,string hidefingpay)
         {
             try
             {
@@ -48100,6 +48278,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             if (amount != null && amount > 0)
                                                             {
                                                                 reqObject.transactionAmount = (int)amount;
+
+                                                                if(amount>5000)
+                                                                {
+                                                                    reqObject.txnOtpRequestId = hidefingpay;
+                                                                }
                                                             }
                                                             else
                                                             {
@@ -50659,12 +50842,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             if(response.StatusCode==HttpStatusCode.OK)
             {
                 dynamic resp = JsonConvert.DeserializeObject(response.Content);
-                var sts = resp.Content.ADDINFO.Status;
+                var sts = resp.Content.ADDINFO.Staus;
                 string msg = resp.Content.ADDINFO.Message;
                 if (sts==true)
                 {
-                 
-                    var viewresponse = new { Status = "Success", Message = msg };
+                    string fpTransactionId= resp.Content.ADDINFO.fpTransactionId;
+                    var viewresponse = new { Status = "Success", Message = msg, fpTransactionId };
                     return Json(viewresponse, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -54431,6 +54614,49 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             recent.Recent_mPosInfo = null;
             return PartialView("_RecentReport", recent);
         }
+        public ActionResult AEPSUPIreportnew()
+        {
+            var userid = User.Identity.GetUserId();
+            Recent_report recent = new Recent_report();
+            recent.Recent_report_imps = null;
+            recent.Recent_report_Aeps = null;
+            recent.Recent_Aeps_UPI = db.AepsUPIHistories.Where(aa => aa.Retailerid == userid).OrderByDescending(aa => aa.txndate).Take(10).ToList();
+            recent.Recent_PAN_CARD_IPAY = null;
+            recent.Recent_mPosInfo = null;
+            return PartialView("_RecentReport", recent);
+        }
+
+        public ActionResult CheckAEPSQRStatus(string txnId)
+        {
+           var stschk = db.AepsUPIHistories.Where(aa => aa.Txnid == txnId && aa.Status.ToUpper() == "PENDING").SingleOrDefault();
+            if(stschk!=null)
+            {
+                var data = new
+                {
+                    sts=false,
+                    Status="",
+                    message=""
+                };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                string msg = stschk.Bankrrn;
+                if (stschk.Status.ToUpper()=="SUCCESS")
+                {
+                    msg = "Payment received successfully";
+                }
+                var data = new
+                {
+                    sts = true,
+                    Status = stschk.Status,
+                    message = msg
+                };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+        
+        }
+
         [HttpGet]
         [ValidateInput(false)]
         public ActionResult Print_aeps_ministatement_Pdf(string txtbankstate, string txtfrmstate, string txtbankaadhar, string txtfrmdate, string txtfeeservice, string statementtbody)

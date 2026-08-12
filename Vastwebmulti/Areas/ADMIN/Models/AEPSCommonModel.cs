@@ -8,7 +8,7 @@ namespace Vastwebmulti.Areas.ADMIN.Models
 {
     public class AEPSCommonModel
     {
-        internal List<Aeps_Common_Comm_UPI> commonUPI;
+        public List<Aeps_Common_Comm_UPI> commonUPI { get; set; }
 
         public List<Aeps_comm_userwise> userWise { get; set; }
         public List<Aeps_Common_Comm> common { get; set; }

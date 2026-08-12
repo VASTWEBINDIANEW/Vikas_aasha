@@ -1,0 +1,305 @@
+﻿@model IEnumerable<Vastwebmulti.Areas.ADMIN.Models.AepsUPIHistoryVM>
+@{
+    ViewBag.Title = "AepsUPIReport";
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var rows = Model ?? Enumerable.Empty<Vastwebmulti.Areas.ADMIN.Models.AepsUPIHistoryVM>();
+}
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<script src="~/MainFrontDesign/js/admin-financial-report.js?v=6"></script>
+<script src="~/MainFrontDesign/js/admin-money-transfer-report.js?v=7"></script>
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page">
+    <div class="container-fluid vm-opr-page-shell">
+
+        @using (Html.BeginForm("AepsUPIReport", "Home", FormMethod.Post, new { id = "aepsUpiReportForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Financial Services</li>
+                        <li>AEPS UPI Report</li>
+                    </ol>
+                    <div class="vm-dmt-fin-nav-row">
+                        @Html.Partial("_finicalmenureport")
+                    </div>
+                </div>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="aepsUpiTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Transaction totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideAepsUpiTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value" id="successtotal">&#8377;0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value" id="Failedtotal">&#8377;0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="Pendingtotal">&#8377;0.00</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-rpt-filters-panel__bar">
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control", @title = "Retailer" })
+                        </div>
+                        <div class="vm-opr-field vm-dmt-field" id="sts">
+                            @Html.DropDownList("ddl_status", new List<SelectListItem>
+                            {
+                                new SelectListItem{ Text="All Status", Value="ALL" },
+                                new SelectListItem{ Text="SUCCESS", Value="SUCCESS" },
+                                new SelectListItem{ Text="Pending", Value="Pending" },
+                                new SelectListItem{ Text="FAILED", Value="FAILED" }
+                            }, new { @class = "vm-opr-select vm-dmt-select form-control", @title = "Status" })
+                        </div>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" value="Old" name="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-university" aria-hidden="true"></i>
+                        <span>AEPS UPI transactions</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn" onclick="findtotalAepsUpi()" title="Show totals" aria-expanded="false" aria-controls="aepsUpiTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="tblAepsUPI" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Retailer</th>
+                                    <th>Unique&nbsp;Id</th>
+                                    <th>Status</th>
+                                    <th>Remain&nbsp;Pre</th>
+                                    <th>Amount</th>
+                                    <th>Remain&nbsp;Post</th>
+                                    <th>Txn&nbsp;Date</th>
+                                    <th>Update&nbsp;Date</th>
+                                    <th>Bank&nbsp;RRN</th>
+                                    <th>Payer&nbsp;VPA</th>
+                                    <th>Payer&nbsp;Name</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trow">
+                                @if (rows.Any())
+                                {
+                                    foreach (var item in rows)
+                                    {
+                                        var status = (item.Status ?? "").Trim().ToUpper();
+                                        var reqtype = (item.reqtype ?? "").Trim().ToUpper();
+                                        var img = "";
+                                        var color = "";
+                                        var style = "";
+
+                                        if (status == "SUCCESS")
+                                        {
+                                            img = "../../ashok-images/correct.svg";
+                                            color = "green";
+                                            style = "height:20px;width:20px;margin-right:3px;float:left;padding: 3px 4px;border-radius:50%;";
+                                        }
+                                        else if (status == "PENDING")
+                                        {
+                                            img = "../../ashok-images/clock.svg";
+                                            style = "height: 20px;width: 20px;margin-right:3px;float:left;max-width: 100%;";
+                                        }
+                                        else
+                                        {
+                                            img = "../../ashok-images/closes.svg";
+                                            color = "red";
+                                            style = "height: 20px;width: 20px;margin-right:3px;float:left;max-width: 100%;padding: 3px 4px;border-radius:50%;";
+                                        }
+
+                                        <tr data-status="@status" data-amount="@(item.Amount ?? 0)">
+                                            <td>@item.Idno</td>
+                                            <td>@item.Firmname</td>
+                                            <td>
+                                                @if (reqtype == "WEB")
+                                                {
+                                                    <span class="status-icon-wrap icon-web" title="Website"><i class="fa fa-globe"></i></span>
+                                                }
+                                                else if (reqtype == "APP")
+                                                {
+                                                    <span class="status-icon-wrap icon-app" title="Mobile App"><i class="fa fa-mobile"></i></span>
+                                                }
+                                                @item.Txnid
+                                            </td>
+                                            <td>
+                                                <img style="@style background-color:@color;" src="@img" alt="" />
+                                                @item.Status
+                                            </td>
+                                            <td>@(item.Remainpre.HasValue ? item.Remainpre.Value.ToString("N2") : "")</td>
+                                            <td>
+                                                <div><strong>₹@item.Amount</strong></div>
+                                                <small class="text-muted">Comm: ₹@item.totalcomm</small>
+                                            </td>
+                                            <td>@(item.RemainPost.HasValue ? item.RemainPost.Value.ToString("N2") : "")</td>
+                                            <td>@(item.txndate.HasValue ? item.txndate.Value.ToString("dd-MM-yyyy HH:mm:ss") : "")</td>
+                                            <td>@(item.updatedate.HasValue ? item.updatedate.Value.ToString("dd-MM-yyyy HH:mm:ss") : "")</td>
+                                            <td>@item.Bankrrn</td>
+                                            <td>@item.PayerVPA</td>
+                                            <td>@item.PayerName</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="12" class="text-center">No AEPS UPI transactions found for the selected filters.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div id="loadingdiv" class="vm-opr-table-loading" style="display:none;">
+                            <img src="~/img/ajax-loader.gif" alt="Loading" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+<script>
+    function formatMoney(n) {
+        var num = Number(n || 0);
+        return '₹' + num.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function hideAepsUpiTotals() {
+        $('#aepsUpiTotalsPanel').hide().attr('aria-hidden', 'true');
+        $('.vm-dmt-totals-btn').attr('aria-expanded', 'false');
+    }
+
+    function findtotalAepsUpi() {
+        var success = 0, failed = 0, pending = 0;
+        $('#trow tr').not('.vm-opr-table-empty-row').each(function () {
+            var st = String($(this).data('status') || '').toUpperCase();
+            var amt = Number($(this).data('amount') || 0);
+            if (st === 'SUCCESS') { success += amt; }
+            else if (st === 'PENDING') { pending += amt; }
+            else if (st === 'FAILED') { failed += amt; }
+        });
+        $('#successtotal').text(formatMoney(success));
+        $('#Failedtotal').text(formatMoney(failed));
+        $('#Pendingtotal').text(formatMoney(pending));
+        $('#aepsUpiTotalsPanel').show().attr('aria-hidden', 'false');
+        $('.vm-dmt-totals-btn').attr('aria-expanded', 'true');
+    }
+
+    function tableToExcel(tableId, filename) {
+        var table = document.getElementById(tableId);
+        if (!table) { return; }
+        var html = table.outerHTML.replace(/ /g, '%20');
+        var link = document.createElement('a');
+        link.href = 'data:application/vnd.ms-excel,' + html;
+        link.download = filename || 'AepsUPIReport.xls';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function tableToPdf(tableId) {
+        var table = document.getElementById(tableId);
+        if (!table) { return; }
+        var w = window.open('', '_blank');
+        w.document.write('<html><head><title>AEPS UPI Report</title>');
+        w.document.write('<style>table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #ccc;padding:6px;text-align:left}th{background:#f5f5f5}</style>');
+        w.document.write('</head><body>');
+        w.document.write('<h3>AEPS UPI Report</h3>');
+        w.document.write(table.outerHTML);
+        w.document.write('</body></html>');
+        w.document.close();
+        w.focus();
+        w.print();
+    }
+
+    $(document).ready(function () {
+        $('#txt_frm_date, #txt_to_date').datepicker({
+            format: "yyyy-mm-dd",
+            todayHighlight: true,
+            autoclose: true,
+            orientation: "bottom auto"
+        });
+
+        var val = '@ViewBag.chk';
+        if (val != "post") {
+            $("#txt_frm_date").datepicker("setDate", new Date());
+            $("#txt_to_date").datepicker("setDate", new Date());
+        }
+
+        if ($.fn.select2) {
+            $('#allretailer').select2({
+                width: '100%',
+                dropdownAutoWidth: false,
+                minimumResultsForSearch: 6
+            });
+        }
+    });
+
+    $("#btnExport").click(function () {
+        tableToExcel('tblAepsUPI', 'AepsUPIReport.xls');
+    });
+
+    $("#btnPDF").click(function () {
+        tableToPdf('tblAepsUPI');
+    });
+
+    $(function () {
+        if (window.location.href.indexOf('/ADMIN/Home/AepsUPIReport') !== -1) {
+            $('.sidebar .kkli li:nth-child(2) a').addClass('activee');
+        }
+    });
+</script>

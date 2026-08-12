@@ -17,6 +17,7 @@
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Pancard_Slab_Setting","Home")">Pan Card</a></li>
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Pancard_Slab_Setting_manual","Home")">Pan Card Manual</a></li>
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("AepsSlab","Home")">AEPS Comm</a></li>
+        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("AepsSlabUPI","Home")">AEPS UPI</a></li>
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("CreditCard","Home")">Credit Card</a></li>
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("M_Poss","Home")">M-Poss</a></li>
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Micro_Atm","Home")">VM30 Sale (m-pos)</a></li>
@@ -28,13 +29,24 @@
 </nav>
 <script>
     $(document).ready(function () {
-        var current = location.pathname.toLowerCase();
+        var current = (location.pathname || '').toLowerCase().replace(/\/+$/, '');
+        var $best = null;
+        var bestLen = -1;
         $('#vmFinSlabNav li a').each(function () {
             var $this = $(this);
-            var href = ($this.attr('href') || '').toLowerCase();
-            if (href && current.indexOf(href.split('?')[0]) !== -1) {
-                $this.addClass('is-active activee');
+            $this.removeClass('is-active activee');
+            var href = ($this.attr('href') || '').toLowerCase().split('?')[0].replace(/\/+$/, '');
+            if (!href) { return; }
+            // Match full action path; prefer longest match so AepsSlab != AepsSlabUPI
+            if (current === href || current.indexOf(href) !== -1) {
+                if (href.length > bestLen) {
+                    bestLen = href.length;
+                    $best = $this;
+                }
             }
         });
+        if ($best) {
+            $best.addClass('is-active activee');
+        }
     });
 </script>

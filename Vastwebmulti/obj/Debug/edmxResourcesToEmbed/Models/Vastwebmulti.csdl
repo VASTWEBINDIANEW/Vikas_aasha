@@ -7781,6 +7781,26 @@
       <Parameter Name="maxrs_5001_10000" Mode="In" Type="Decimal" />
       <Parameter Name="Type_5001_10000" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="AEPSUPITXnInsert" ReturnType="Collection(VastwebmultiModel.AEPSUPITXnInsert_Result)">
+      <Parameter Name="userid" Mode="In" Type="String" />
+      <Parameter Name="amount" Mode="In" Type="Decimal" />
+      <Parameter Name="uniqueid" Mode="In" Type="String" />
+      <Parameter Name="apirequest" Mode="In" Type="String" />
+      <Parameter Name="merchantid" Mode="In" Type="String" />
+      <Parameter Name="reqtype" Mode="In" Type="String" />
+      <Parameter Name="output" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="updateAEPSUPITXn">
+      <Parameter Name="uniqueid" Mode="In" Type="String" />
+      <Parameter Name="status" Mode="In" Type="String" />
+      <Parameter Name="apiresponse" Mode="In" Type="String" />
+      <Parameter Name="Bankrrn" Mode="In" Type="String" />
+      <Parameter Name="PayerVPA" Mode="In" Type="String" />
+      <Parameter Name="PayerName" Mode="In" Type="String" />
+      <Parameter Name="Fingpaytxnid" Mode="In" Type="String" />
+      <Parameter Name="transtimestemp" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <EntitySet Name="AepsUPIHistories" EntityType="VastwebmultiModel.AepsUPIHistory" />
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -34462,5 +34482,42 @@
     <Property Name="rs_5001_10000" Type="Decimal" Precision="18" Scale="4" />
     <Property Name="maxrs_5001_10000" Type="Decimal" Precision="18" Scale="4" />
     <Property Name="Type_5001_10000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <ComplexType Name="AEPSUPITXnInsert_Result">
+    <Property Type="String" Name="msg" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <EntityType Name="AepsUPIHistory">
+    <Key>
+      <PropertyRef Name="Idno" />
+    </Key>
+    <Property Name="Idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Retailerid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Merchantid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="comm" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="totalcomm" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Remainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Gst" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="tds" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="txndate" Type="DateTime" Precision="3" />
+    <Property Name="updatedate" Type="DateTime" Precision="3" />
+    <Property Name="Apirequest" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ApiResponse" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="StatusResponse" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Bankrrn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="reqtype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="customermobile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="txntype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PayerVPA" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Fingpaytxnid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="transtimestemp" Type="DateTime" Precision="3" />
+    <Property Name="Txnid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Adminremainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Adminremainpost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="posremainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="posremainpost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="PayerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

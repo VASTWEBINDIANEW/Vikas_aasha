@@ -1,0 +1,150 @@
+@using Microsoft.AspNet.Identity
+@{
+    var logoImage = ViewBag.AdminLogoImage as string ?? "";
+    var logoBgColor = ViewBag.AdminLogoBgColor as string ?? "";
+    var hasSellRecharge = ViewBag.HasSellRecharge as bool? ?? false;
+    var dealerTokenVal = ViewBag.DealerTokenVal ?? 0;
+    var notificount = ViewBag.notificount ?? 0;
+    var purchasereq = ViewBag.purchasereq ?? 0;
+    var dealerNickName = ViewBag.DealerNickName as string ?? "Retailer";
+    var dealerRemainBalance = ViewBag.DealerRemainBalance ?? 0;
+}
+
+<header class="admin-top-header tmw-layoutht naw-none-fourdesign" id="admin-top-header">
+    <div class="admin-header-v2 saas-admin-topbar admin-header-row saas-admin-topbar-inner">
+        <div class="admin-header-brand saas-admin-brand">
+            <a href="#" id="sidebar-open" class="admin-header-toggle" title="Navigation menu" aria-label="Navigation menu">
+                <i class="fas fa-bars admin-topbar-icon" aria-hidden="true"></i>
+            </a>
+            <button type="button" id="admin-topmenu-open" class="admin-topmenu-toggle admin-header-toggle" title="Quick menu" aria-label="Open quick menu" aria-controls="navbar-collapse" aria-expanded="false">
+                <i class="fas fa-th admin-topbar-icon" aria-hidden="true"></i>
+            </button>
+            <a href="~/DEALER/Home/Dashboard" class="admin-header-logo-link saas-admin-logo-link">
+                @if (string.IsNullOrEmpty(logoImage))
+                {
+                    <img src="~/Default_Img_Logo/Default_Header_Logo.svg" class="admin-header-logo saas-admin-logo img-responsive" alt="Logo" style="background-color:@logoBgColor;" />
+                }
+                else
+                {
+                    <img src="@Url.Content("~/" + logoImage)" class="admin-header-logo saas-admin-logo img-responsive" alt="Logo" style="background-color:@logoBgColor;" />
+                }
+            </a>
+        </div>
+
+        <div class="admin-topmenu-panel admin-header-menu" id="navbar-collapse" role="navigation" aria-label="Dealer quick menu" aria-hidden="true">
+            <div class="admin-mobile-topmenu-head">
+                <span class="admin-mobile-topmenu-title"><i class="fas fa-th" aria-hidden="true"></i> Quick Menu</span>
+                <button type="button" class="admin-topmenu-close" id="admin-topmenu-close" aria-label="Close quick menu">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="admin-topmenu-scroll">
+                <ul class="admin-header-actions four-top-nav intro1 saas-admin-topnav">
+                    @if (hasSellRecharge)
+                    {
+                        <li class="admin-topbar-item saas-topbar-item">
+                            <a href="@Url.Action("ADDSELLINGOPT", "Home")" class="admin-topbar-btn" title="Recharge Com">
+                                <i class="fas fa-percent admin-topbar-icon" aria-hidden="true"></i>
+                                <span class="admin-topbar-label">Recharge </span>
+                            </a>
+                        </li>
+                    }
+                    <li class="admin-topbar-item saas-topbar-item dropdown">
+                        <a href="javascript:void(0);" class="admin-topbar-btn dropdown-toggle" title="Transfer" data-toggle="dropdown" role="button" aria-expanded="false" onclick="showtransferbal()">
+                            <i class="fas fa-right-left admin-topbar-icon" aria-hidden="true"></i>
+                            <span class="admin-topbar-label">Transfer</span>
+                        </a>
+                        <ul id="showtransfer" class="dropdown-menu admin-header-dropdown admin-topbar-flyout transfershow-detailsclass">
+                            <li class="header admin-header-dropdown-title">
+                                <span class="admin-topbar-flyout-title"><i class="fas fa-right-left" aria-hidden="true"></i> Today Fund Transfer</span>
+                            </li>
+                            <li class="body">
+                                <table class="admin-topbar-stat-table">
+                                    <tbody class="showtransferbalancetableidclass"></tbody>
+                                </table>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="admin-topbar-item saas-topbar-item dropdown">
+                        <a href="javascript:void(0);" class="admin-topbar-btn dropdown-toggle" title="Due List" data-toggle="dropdown" role="button" aria-expanded="false" onclick="showoutstandingbal()">
+                            <i class="fas fa-chart-pie admin-topbar-icon" aria-hidden="true"></i>
+                            <span class="admin-topbar-label">Due List</span>
+                        </a>
+                        <ul id="showpp" class="dropdown-menu admin-header-dropdown admin-topbar-flyout show-due-listclass">
+                            <li class="header admin-header-dropdown-title">
+                                <span class="admin-topbar-flyout-title"><i class="fas fa-chart-pie" aria-hidden="true"></i> Due List / Outstanding</span>
+                            </li>
+                            <li class="body">
+                                <table class="admin-topbar-stat-table">
+                                    <tbody class="showoutstandingbalanceclass"></tbody>
+                                </table>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="admin-topbar-item saas-topbar-item">
+                        <a href="@Url.Action("tokenPurchaseHistory", "Home")" class="admin-topbar-btn" title="Tokens (@dealerTokenVal)">
+                            <i class="fas fa-coins admin-topbar-icon" aria-hidden="true"></i>
+                            <span class="admin-topbar-label">Tokens</span>
+                            @if (Convert.ToDecimal(dealerTokenVal) != 0)
+                            {
+                                <span class="admin-topbar-badge">@dealerTokenVal</span>
+                            }
+                        </a>
+                    </li>
+                    <li class="admin-topbar-item saas-topbar-item">
+                        <a href="@Url.Action("Complaint", "Home")" class="admin-topbar-btn" title="Chat's">
+                            <i class="fas fa-comments admin-topbar-icon" aria-hidden="true"></i>
+                            @if (Convert.ToDecimal(notificount) != 0)
+                            {
+                                <span class="admin-topbar-badge">@notificount</span>
+                            }
+                            <span class="admin-topbar-label">Chat's</span>
+                        </a>
+                    </li>
+                    <li class="admin-topbar-sep" role="separator" aria-hidden="true"></li>
+                    <li class="admin-topbar-item saas-topbar-item dropdown admin-topbar-dropdown-right">
+                        <a href="javascript:void(0);" class="admin-topbar-btn dropdown-toggle" title="Wallet Request's" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <i class="fas fa-wallet admin-topbar-icon" aria-hidden="true"></i>
+                            @if (Convert.ToDecimal(purchasereq) != 0)
+                            {
+                                <span class="admin-topbar-badge">@purchasereq</span>
+                            }
+                            <span class="admin-topbar-label">Fund-Q</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right admin-header-dropdown admin-header-wallet-dropdown admin-topbar-flyout">
+                            <li class="header admin-header-dropdown-title">
+                                <span class="admin-topbar-flyout-title"><i class="fas fa-wallet" aria-hidden="true"></i> Wallet Request's</span>
+                            </li>
+                            <li class="body">
+                                <ul class="menu custom-bank-name admin-header-wallet-list">
+                                    <li>
+                                        <a href="@Url.Action("FundTransferDealer", "Home", new { tabname = "RetailerRequest" })" class="admin-header-wallet-link waves-effect waves-block">
+                                            <span class="admin-header-wallet-count">@purchasereq</span>
+                                            <span class="admin-header-wallet-text"><strong>@dealerNickName Wallet Request</strong><small>Go to Details</small></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="admin-topbar-item saas-topbar-item">
+                        <a href="javascript:void(0);" class="admin-topbar-btn" title="Balance (@dealerRemainBalance)">
+                            <i class="fas fa-indian-rupee-sign admin-topbar-icon" aria-hidden="true"></i>
+                            <span class="admin-topbar-balance-val">@dealerRemainBalance</span>
+                        </a>
+                    </li>
+                    <li class="admin-topbar-item saas-topbar-item admin-topbar-logout logout-four">
+                        @using (Html.BeginForm("LogOff", "Account", new { Area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "admin-logout-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="admin-topbar-btn admin-topbar-logout-btn" title="Logout">
+                                <i class="fas fa-right-from-bracket admin-topbar-icon" aria-hidden="true"></i>
+                                <span class="admin-topbar-label">Logout</span>
+                            </button>
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

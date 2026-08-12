@@ -1,0 +1,232 @@
+/* Dealer top bar — modern flyout panels + active pill states */
+
+body.saas-admin-ui .admin-header-actions .admin-topbar-item.dropdown {
+    position: relative !important;
+}
+
+/* Hover bridge — mouse button se menu tak gap par dropdown open rahe */
+body.saas-admin-ui .admin-topbar-item.dropdown.open::before {
+    content: "" !important;
+    position: absolute !important;
+    left: -4px !important;
+    right: -4px !important;
+    top: 100% !important;
+    height: 14px !important;
+    z-index: 1199 !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui .admin-topbar-item.dropdown.open .admin-topbar-flyout {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .admin-header-actions .dropdown.open > .admin-topbar-btn,
+body.saas-admin-ui .admin-header-actions .admin-topbar-item.open > .admin-topbar-btn {
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%) !important;
+    border-color: #93c5fd !important;
+    color: #1d4ed8 !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.18) !important;
+}
+
+body.saas-admin-ui .admin-header-actions .dropdown.open > .admin-topbar-btn .admin-topbar-icon,
+body.saas-admin-ui .admin-header-actions .admin-topbar-item.open > .admin-topbar-btn .admin-topbar-icon {
+    background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35) !important;
+}
+
+/* Override legacy AdminBSB style.css dropdown offsets inside top bar */
+body.saas-admin-ui .admin-top-header .navbar .dropdown-menu,
+body.saas-admin-ui .admin-top-header .dropdown-menu.admin-header-dropdown,
+body.saas-admin-ui .admin-top-header .dropdown-menu.admin-topbar-flyout {
+    position: absolute !important;
+    top: 100% !important;
+    float: none !important;
+    margin-top: 4px !important;
+    margin-left: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    transform: none !important;
+    z-index: 1200 !important;
+}
+
+body.saas-admin-ui .admin-top-header .admin-topbar-item.admin-topbar-dropdown-right > .dropdown-menu,
+body.saas-admin-ui .admin-top-header .admin-topbar-item.admin-topbar-dropdown-right > .dropdown-menu.admin-topbar-flyout {
+    left: auto !important;
+    right: 0 !important;
+}
+
+body.saas-admin-ui .admin-header-dropdown.admin-topbar-flyout {
+    min-width: 300px !important;
+    max-width: 340px !important;
+    padding: 0 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 0 20px 48px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(255, 255, 255, 0.6) inset !important;
+    background: #ffffff !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-header-dropdown-title,
+body.saas-admin-ui .admin-topbar-flyout > li.header,
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-flyout-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 14px 16px !important;
+    background: linear-gradient(135deg, #2563eb 0%, #0284c7 52%, #0ea5e9 100%) !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.02em !important;
+    border-bottom: none !important;
+    list-style: none !important;
+    text-align: left !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-header-dropdown-title span,
+body.saas-admin-ui .admin-topbar-flyout > li.header span,
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-flyout-title,
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-flyout-title span {
+    color: #ffffff !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-header-dropdown-title i,
+body.saas-admin-ui .admin-topbar-flyout > li.header i,
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-flyout-title i {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.18) !important;
+    font-size: 13px !important;
+    color: #ffffff !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout > li.body {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-stat-table {
+    width: 100% !important;
+    margin: 0 !important;
+    border-collapse: collapse !important;
+    background: #ffffff !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-stat-row td {
+    padding: 12px 16px !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    background: #ffffff !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-stat-row:last-child td {
+    border-bottom: none !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-stat-row:hover td {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-stat-label,
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-stat-label a,
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-stat-label p {
+    margin: 0 !important;
+    color: #334155 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    text-decoration: none !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-stat-label a:hover {
+    color: #2563eb !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-stat-value,
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-stat-value p {
+    margin: 0 !important;
+    text-align: right !important;
+    color: #0f172a !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-topbar-stat-value {
+    width: 72px !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-header-wallet-dropdown .body {
+    padding: 8px !important;
+    background: #ffffff !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-header-wallet-list,
+body.saas-admin-ui .admin-topbar-flyout .admin-header-wallet-list li {
+    background: #ffffff !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-header-wallet-link {
+    background: #ffffff !important;
+    transition: background-color 0.18s ease, transform 0.18s ease !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-header-wallet-link:hover {
+    background: #eff6ff !important;
+    transform: translateX(2px);
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-header-wallet-text strong {
+    font-size: 13px !important;
+    color: #0f172a !important;
+}
+
+body.saas-admin-ui .admin-topbar-flyout .admin-header-wallet-text small {
+    font-size: 11px !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .admin-topbar-balance-val {
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    color: #059669 !important;
+    line-height: 1.1 !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-header-dropdown.admin-topbar-flyout {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 24px 56px rgba(0, 0, 0, 0.45) !important;
+}
+
+body.saas-admin-ui.vm-admin-topbar-dark .admin-topbar-flyout .admin-topbar-stat-row td {
+    background: #ffffff !important;
+    border-bottom-color: #f1f5f9 !important;
+}
+
+@media (max-width: 1199px) {
+    body.saas-admin-ui .admin-top-header .dropdown-menu.admin-topbar-flyout {
+        position: static !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        margin-top: 8px !important;
+        left: auto !important;
+        right: auto !important;
+        box-shadow: none !important;
+        border-radius: 12px !important;
+    }
+}

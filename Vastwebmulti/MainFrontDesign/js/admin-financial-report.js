@@ -4,16 +4,55 @@
 (function (window, document, $) {
     'use strict';
 
+    function normalizePath(path) {
+        return String(path || '')
+            .toLowerCase()
+            .replace(/^~/, '')
+            .split('?')[0]
+            .replace(/\/+$/, '');
+    }
+
     function initFinNavActive() {
-        var current = (window.location.pathname || '').toLowerCase();
-        $('#fin-report-nav .vm-fin-nav__link, #fin-report-nav li a, #auto-fund-nav .vm-fin-nav__link, #auto-fund-nav li a, #invoice-gst-nav .vm-fin-nav__link, #invoice-retailer-nav .vm-fin-nav__link, #invoice-dealer-nav .vm-fin-nav__link, #invoice-master-nav .vm-fin-nav__link, #invoice-api-nav .vm-fin-nav__link').each(function () {
-            var $link = $(this);
-            var href = ($link.attr('href') || '').toLowerCase();
-            if (!href) {
+        var current = normalizePath(window.location.pathname);
+        var groups = [
+            '#fin-report-nav .vm-fin-nav__link, #fin-report-nav li a',
+            '#auto-fund-nav .vm-fin-nav__link, #auto-fund-nav li a',
+            '#invoice-gst-nav .vm-fin-nav__link',
+            '#invoice-retailer-nav .vm-fin-nav__link',
+            '#invoice-dealer-nav .vm-fin-nav__link',
+            '#invoice-master-nav .vm-fin-nav__link',
+            '#invoice-api-nav .vm-fin-nav__link'
+        ];
+
+        groups.forEach(function (selector) {
+            var $links = $(selector);
+            if (!$links.length) {
                 return;
             }
-            if (current.indexOf(href.replace(/^~/, '')) !== -1 || href.indexOf(current) !== -1) {
-                $link.addClass('is-active activee');
+
+            $links.removeClass('is-active activee');
+
+            var $best = null;
+            var bestLen = -1;
+
+            $links.each(function () {
+                var $link = $(this);
+                var href = normalizePath($link.attr('href'));
+                if (!href) {
+                    return;
+                }
+
+                // Prefer exact / longest match so AepsReport != AepsUPIReport
+                if (current === href || current.indexOf(href) !== -1 || href.indexOf(current) !== -1) {
+                    if (href.length > bestLen) {
+                        bestLen = href.length;
+                        $best = $link;
+                    }
+                }
+            });
+
+            if ($best) {
+                $best.addClass('is-active activee');
             }
         });
     }

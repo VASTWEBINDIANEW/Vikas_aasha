@@ -8,6 +8,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
     public class AepsModel
     {
 
+        public string txnOtpRequestId { get; set; }
         public string merchantTransactionId { get; set; }
         public string merchantTranId { get; set; }
         public string serviceType { get; set; }

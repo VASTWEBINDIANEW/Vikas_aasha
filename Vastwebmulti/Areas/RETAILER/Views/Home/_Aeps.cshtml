@@ -389,6 +389,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                         <input type="text" id="txtfee" value="0" placeholder="Enter Your Service Fee" onkeypress="return isNumber(event)" />
                     </div>
                     <div id="otpfortransfer" class="col-md-12 amount amount_strong" style="display:none;">
+                        <input type="hidden" id="txthidefpTransactionId" />
                         <strong class="changere4" style=""> OTP  </strong>
                         <input type="text" id="txtotptransfer" name="txtotptransfer" value="0" placeholder="Enter The OTP" onkeypress="return isNumber(event)" />
                     </div>
@@ -1139,7 +1140,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
 
     function Nextransfer() {
         $('#otpfortransfer').hide();
-      
+        var hidefingpay = $('#txthidefpTransactionId').val();
         var myRadio = $("input[name=radio]");
         var checkedValue = myRadio.filter(":checked").val();
         var txtamt = $('#txtamt').val();
@@ -1205,6 +1206,8 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                                     $('#nextfund').html('Confirm & Withdraw')
                                 }
                                 else {
+                                    var ftid = data.fpTransactionId;
+                                    $('#txthidefpTransactionId').val(ftid);
                                     $('#otpfortransfer').show();
                                 
                                 }
@@ -1280,7 +1283,8 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                     pidata: pidata,
                     _isAeps2,
                     capxml,
-                    apinm
+                    apinm,
+                    hidefingpay
                 };
                 var jsonData = JSON.stringify(requestData);
 

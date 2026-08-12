@@ -104979,6 +104979,78 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
         }
         #endregion
 
+        public ActionResult AepsUPIReport()
+        {
+            //Retailer 
+            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null);
+            var fromdate = DateTime.Now.Date;
+            var todate = fromdate.AddDays(1);
+            var infochk = (from aa in db.AepsUPIHistories
+                           join rd in db.Retailer_Details
+                           on aa.Retailerid equals rd.RetailerId
+                           where aa.txndate >= fromdate && aa.txndate <= todate
+                           orderby aa.txndate descending
+                           select new AepsUPIHistoryVM
+                           {
+                               Idno = aa.Idno,
+                               Retailerid = aa.Retailerid,
+                               Status = aa.Status,
+                               reqtype = aa.reqtype,
+                               Amount = aa.Amount,
+                               totalcomm = aa.totalcomm,
+                               Remainpre = aa.Remainpre,
+                               RemainPost = aa.RemainPost,
+                               txndate = aa.txndate,
+                               updatedate = aa.updatedate,
+                               Bankrrn = aa.Bankrrn,
+                               PayerVPA = aa.PayerVPA,
+                               PayerName = aa.PayerName,
+                               Txnid = aa.Txnid,
+                               Firmname = rd.Frm_Name,          // adjust field name to match your table
+                           }).ToList();
+
+            return View(infochk);
+        }
+        [HttpPost]
+        public ActionResult AepsUPIReport(string allretailer, string ddl_status, DateTime txt_frm_date, DateTime txt_to_date)
+        {
+            if (ddl_status == "ALL")
+            {
+                ddl_status = "";
+            }
+            ViewBag.chk = "post";
+            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null);
+            var userid = User.Identity.GetUserId();
+            var todate = txt_to_date.AddDays(1);
+            var infochk = (from aa in db.AepsUPIHistories
+                           join rd in db.Retailer_Details
+                           on aa.Retailerid equals rd.RetailerId
+                           where aa.txndate >= txt_frm_date && aa.txndate <= todate 
+                           && aa.Status.Contains(ddl_status) 
+                           && aa.Retailerid.Contains(allretailer)
+                           orderby aa.txndate descending
+                           select new AepsUPIHistoryVM
+                           {
+                               Idno = aa.Idno,
+                               Retailerid = aa.Retailerid,
+                               Status = aa.Status,
+                               reqtype = aa.reqtype,
+                               Amount = aa.Amount,
+                               totalcomm = aa.totalcomm,
+                               Remainpre = aa.Remainpre,
+                               RemainPost = aa.RemainPost,
+                               txndate = aa.txndate,
+                               updatedate = aa.updatedate,
+                               Bankrrn = aa.Bankrrn,
+                               PayerVPA = aa.PayerVPA,
+                               PayerName = aa.PayerName,
+                               Txnid = aa.Txnid,
+                               Firmname = rd.Frm_Name,          // adjust field name to match your table
+                           }).ToList();
+            return View(infochk);
+        }
+
+
         #region AEPS_Report
         [HttpGet]
         public ActionResult AepsReport()

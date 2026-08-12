@@ -1,0 +1,103 @@
+@{
+    var companyName = ViewBag.companyname as string ?? "";
+    var hasSellRecharge = ViewBag.HasSellRecharge as bool? ?? false;
+    var dealerNickName = ViewBag.DealerNickName as string ?? "Retailer";
+}
+
+<ul class="list admin-sidebar-list">
+    <li class="admin-sidebar-item">
+        <a href="~/DEALER/Home/Dashboard">
+            <i class="fas fa-gauge-high admin-sidebar-icon" aria-hidden="true"></i>
+            <span class="on_off">Dashboard</span>
+        </a>
+    </li>
+    <li class="admin-sidebar-item">
+        <a href="@Url.Action("Profile", "Home")">
+            <i class="fas fa-user admin-sidebar-icon" aria-hidden="true"></i>
+            <span class="on_off">My Profile</span>
+        </a>
+    </li>
+
+    <li class="admin-sidebar-item admin-sidebar-group admin-sidebar-open">
+        <a href="javascript:void(0);" class="llkj" aria-expanded="true">
+            <i class="fas fa-chart-line admin-sidebar-icon" aria-hidden="true"></i>
+            <span class="on_off">Reports</span>
+        </a>
+        <ul class="account-menu hhu admin-sidebar-sub">
+            <li><a class="pin-ped" href="@Url.Action("DthBookingReport", "Home")"><span class="on_off">Common Report</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("Recharge_Report", "Home")"><span class="on_off">Prepaid &amp; Utilities</span></a></li>
+            @if (hasSellRecharge)
+            {
+                <li><a class="pin-ped" href="@Url.Action("sellRechargeReport", "Home")"><span class="on_off">Sell Recharge</span></a></li>
+            }
+            <li><a class="pin-ped" href="@Url.Action("Flight_Report", "Home")"><span class="on_off">Travels</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("Money_Transfer_Report", "Home")"><span class="on_off">Financial</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("Ecommerce_Report", "Home")"><span class="on_off">Ecommerce</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("Giftcard", "Home")"><span class="on_off">Gift Cards</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("Dealerhold_comm_reports", "Home")"><span class="on_off">Commission Hold</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("Extracomm_Report", "Home")"><span class="on_off">Extra comm</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("Dealer_Microatm_rental_report", "Home")"><span class="on_off">Microatm Rental</span></a></li>
+        </ul>
+    </li>
+
+    <li class="admin-sidebar-item admin-sidebar-group admin-sidebar-open">
+        <a href="javascript:void(0);" class="llkj" aria-expanded="true">
+            <i class="fas fa-wallet admin-sidebar-icon" aria-hidden="true"></i>
+            <span class="on_off">Wallet+</span>
+        </a>
+        <ul class="account-menu hhu admin-sidebar-sub">
+            <li><a class="pin-ped" href="@Url.Action("FundTransferDealer", "Home")"><span class="on_off">Fund Transfer</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("AutoFundTransfer_Dealer_To_rem", "Home")"><span class="on_off">Auto Fund Setting</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("WalletRequestSend", "Home")"><span class="on_off">Request Manually</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("GatewayTRANSFER", "Home")"><span class="on_off">Add By Gateway</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("Wallethistory_Dealer", "Home")"><span class="on_off">Wallet History</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("UPITRANSFER_Dealer", "Home")"><span class="on_off">Add By UPI</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("UPIDealerCharges", "Home")"><span class="on_off">Self UPI payment</span></a></li>
+        </ul>
+    </li>
+
+    @if (hasSellRecharge)
+    {
+        <li class="admin-sidebar-item admin-sidebar-group admin-sidebar-open">
+            <a href="javascript:void(0);" class="llkj" aria-expanded="true">
+                <i class="fas fa-store admin-sidebar-icon" aria-hidden="true"></i>
+                <span class="on_off">Seller</span>
+            </a>
+            <ul class="account-menu hhu admin-sidebar-sub">
+                <li><a class="pin-ped" href="@Url.Action("ADDSELLINGOPT", "Home")"><span class="on_off">Seller Setting</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("sellRechargeReport", "Home")"><span class="on_off">Seller Report</span></a></li>
+            </ul>
+        </li>
+    }
+
+    <li class="admin-sidebar-item">
+        <a href="~/DEALER/Home/Gst_Invocing_Dealer_report">
+            <i class="fas fa-file-invoice admin-sidebar-icon" aria-hidden="true"></i>
+            <span class="on_off">GST Invoice Report</span>
+        </a>
+    </li>
+
+    <li style="padding-bottom:120px;" class="admin-sidebar-item admin-sidebar-group admin-sidebar-open">
+        <a href="javascript:void(0);" class="llkj" aria-expanded="true">
+            <i class="fas fa-cog admin-sidebar-icon" aria-hidden="true"></i>
+            <span class="on_off">Operator</span>
+        </a>
+        <ul class="account-menu hhu admin-sidebar-sub">
+            <li><a class="pin-ped" href="@Url.Action("All_Operator_Info", "Home")"><span class="on_off">Operator Info</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("BlockOPT", "Home")"><span class="on_off">@dealerNickName</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("TDSReport", "Home")"><span class="on_off">Tax Setting</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("bankinfodealer", "Home")"><span class="on_off">Settlements</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("DealerSellgst", "Home")"><span class="on_off">Invoices</span></a></li>
+            <li><a class="pin-ped" href="@Url.Action("DealerLedger", "Home")"><span class="on_off">Ledger Book</span></a></li>
+        </ul>
+    </li>
+</ul>
+
+<div class="legal admin-sidebar-legal">
+    <div class="copyright">
+        Copyright 2019 - <span>@DateTime.Now.Year</span>
+    </div>
+    <div class="copyright">
+        <a href="javascript:void(0);" class="tmw-total-color-one">@companyName</a>
+    </div>
+</div>

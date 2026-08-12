@@ -1,0 +1,594 @@
+﻿@* Views/Shared/_GenerateQR.cshtml *@
+
+<div class="qrgen-card">
+    <div class="qrgen-header">
+        <span class="qrgen-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2" />
+                <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2" />
+                <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2" />
+                <path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 21h3M21 14v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </span>
+        <div>
+            <h6 class="qrgen-title">Generate Payment QR</h6>
+            <p class="qrgen-subtitle">Create a scannable code for instant collection</p>
+        </div>
+    </div>
+
+    <div class="qrgen-body">
+        <!-- Amount input -->
+        <label class="qrgen-label" for="txtAmount">Amount</label>
+        <div class="qrgen-input-wrap">
+            <span class="qrgen-prefix">₹</span>
+            <input type="number" id="txtAmount" class="qrgen-input" placeholder="0.00" min="1" step="0.01" />
+        </div>
+
+        <!-- Generate button -->
+        <button type="button" id="btnGenerateQR" class="qrgen-btn">
+            <span class="qrgen-btn-text">Generate QR Code</span>
+            <span class="qrgen-spinner" style="display:none;"></span>
+        </button>
+
+        <!-- Error / status message -->
+        <div id="msgContainer" class="qrgen-msg" style="display:none;"></div>
+
+        <!-- QR display -->
+        <div id="qrContainer" class="qrgen-qr-wrap" style="display:none;">
+            <div class="qrgen-qr-frame">
+                <img id="qrImage" src="" alt="Payment QR Code" class="qrgen-qr-img" />
+            </div>
+
+            <div class="qrgen-timer">
+                <svg class="qrgen-ring" width="52" height="52" viewBox="0 0 52 52">
+                    <circle class="qrgen-ring-bg" cx="26" cy="26" r="23" />
+                    <circle id="qrRingProgress" class="qrgen-ring-progress" cx="26" cy="26" r="23" />
+                </svg>
+                <div class="qrgen-timer-text">
+                    <span id="qrTimer">60</span>
+                </div>
+            </div>
+            <p class="qrgen-expiry-label">QR expires automatically</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .qrgen-card {
+        max-width: 380px;
+        margin: 0 auto;
+        background: #ffffff;
+        border: 1px solid #e4e8ee;
+        border-radius: 14px;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px rgba(16, 24, 40, 0.06);
+        font-family: -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+        overflow: hidden;
+    }
+
+    .qrgen-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 18px 20px;
+        background: linear-gradient(135deg, #0B1F3A 0%, #14335E 100%);
+        color: #fff;
+    }
+
+    .qrgen-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 9px;
+        flex-shrink: 0;
+    }
+
+    .qrgen-title {
+        margin: 0;
+        font-size: 14.5px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+    }
+
+    .qrgen-subtitle {
+        margin: 2px 0 0;
+        font-size: 12px;
+        color: #b9c6de;
+    }
+
+    .qrgen-body {
+        padding: 20px;
+    }
+
+    .qrgen-label {
+        display: block;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #475467;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    .qrgen-input-wrap {
+        display: flex;
+        align-items: center;
+        border: 1.5px solid #d7dde5;
+        border-radius: 9px;
+        background: #f9fafb;
+        transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+        .qrgen-input-wrap:focus-within {
+            border-color: #1E5EFF;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(30, 94, 255, 0.12);
+        }
+
+    .qrgen-prefix {
+        padding: 0 0 0 14px;
+        font-weight: 600;
+        color: #667085;
+        font-size: 15px;
+    }
+
+    .qrgen-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        outline: none;
+        padding: 11px 14px 11px 8px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #101828;
+        -moz-appearance: textfield;
+    }
+
+        .qrgen-input::-webkit-outer-spin-button,
+        .qrgen-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .qrgen-input[readonly] {
+            color: #98a2b3;
+            cursor: not-allowed;
+        }
+
+    .qrgen-input-wrap:has(.qrgen-input[readonly]) {
+        background: #f2f4f7;
+    }
+
+    .qrgen-btn {
+        width: 100%;
+        margin-top: 14px;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 9px;
+        background: #1E5EFF;
+        color: #fff;
+        font-size: 14.5px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: background 0.15s ease, transform 0.05s ease;
+    }
+
+        .qrgen-btn:hover:not(:disabled) {
+            background: #174ed1;
+        }
+
+        .qrgen-btn:active:not(:disabled) {
+            transform: scale(0.99);
+        }
+
+        .qrgen-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+    .qrgen-spinner {
+        width: 15px;
+        height: 15px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: qrgen-spin 0.7s linear infinite;
+    }
+
+    @@keyframes qrgen-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .qrgen-msg {
+        margin-top: 12px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: #fef3f2;
+        border: 1px solid #fda29b;
+        color: #b42318;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .qrgen-qr-wrap {
+        margin-top: 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        animation: qrgen-fade-in 0.25s ease;
+    }
+
+    @@keyframes qrgen-fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(4px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .qrgen-qr-frame {
+        padding: 12px;
+        background: #fff;
+        border: 1px solid #e4e8ee;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+    }
+
+    .qrgen-qr-img {
+        display: block;
+        width: 200px;
+        height: 200px;
+        object-fit: contain;
+    }
+
+    .qrgen-timer {
+        position: relative;
+        width: 52px;
+        height: 52px;
+        margin-top: 14px;
+    }
+
+    .qrgen-ring {
+        transform: rotate(-90deg);
+    }
+
+    .qrgen-ring-bg {
+        fill: none;
+        stroke: #eaecf0;
+        stroke-width: 4;
+    }
+
+    .qrgen-ring-progress {
+        fill: none;
+        stroke: #1E5EFF;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-dasharray: 144.5;
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+    }
+
+    .qrgen-timer-text {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #101828;
+    }
+
+    .qrgen-expiry-label {
+        margin: 8px 0 0;
+        font-size: 12px;
+        color: #98a2b3;
+        font-weight: 500;
+    }
+    .qrgen-msg-success {
+        background: #ecfdf3;
+        border: 1px solid #6ce9a6;
+        color: #027a48;
+    }
+
+    .qrgen-msg-error {
+        background: #fef3f2;
+        border: 1px solid #fda29b;
+        color: #b42318;
+    }
+</style>
+
+@*<script>
+    (function () {
+        var timerInterval = null;
+        var TOTAL_SECONDS = 60;
+        var CIRCUMFERENCE = 144.5; // 2 * PI * 23
+
+        function resetForm() {
+            $("#qrContainer").hide();
+            $("#qrImage").attr("src", "");
+            $("#btnGenerateQR").prop("disabled", false);
+            $("#btnGenerateQR .qrgen-btn-text").text("Generate QR Code");
+            $("#txtAmount").prop("readonly", false);
+            AEPSUPI();
+            clearInterval(timerInterval);
+        }
+
+        function startTimer(seconds) {
+            var remaining = seconds;
+            var $ring = $("#qrRingProgress");
+            var $timerText = $("#qrTimer");
+
+            $timerText.text(remaining);
+            $ring.css("stroke-dashoffset", 0);
+
+            timerInterval = setInterval(function () {
+                remaining--;
+                $timerText.text(remaining);
+
+                var offset = CIRCUMFERENCE * (1 - remaining / TOTAL_SECONDS);
+                $ring.css("stroke-dashoffset", offset);
+
+                if (remaining <= 10) {
+                    $ring.css("stroke", "#DC2626");
+                }
+
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    resetForm();
+                }
+            }, 1000);
+        }
+
+        $("#btnGenerateQR").on("click", function () {
+            var amount = $("#txtAmount").val();
+            $("#msgContainer").hide().text("");
+
+            if (!amount || parseFloat(amount) <= 0) {
+                $("#msgContainer").text("Please enter a valid amount.").show();
+                return;
+            }
+
+            var $btn = $(this);
+            $btn.prop("disabled", true);
+            $btn.find(".qrgen-btn-text").text("Generating...");
+            $btn.find(".qrgen-spinner").show();
+
+            $.ajax({
+                url: "@Url.Action("GenerateAEPSQRCode", "Home")", // change to your actual endpoint
+                type: "POST",
+                data: { amount: amount },
+                dataType: "json",
+                success: function (res) {
+                    $btn.find(".qrgen-spinner").hide();
+
+                    if (res.sts === true) {
+                        // Lock the form
+                        $("#txtAmount").prop("readonly", true);
+                        $btn.prop("disabled", true);
+                        $btn.find(".qrgen-btn-text").text("Generate QR Code");
+
+                        // Reset ring color/state before showing
+                        $("#qrRingProgress").css("stroke", "#1E5EFF");
+
+                        // Show QR
+                        $("#qrImage").attr("src", "data:image/png;base64," + res.qrCode);
+                        // If your API returns a direct URL instead of base64, use:
+                        // $("#qrImage").attr("src", res.qrCode);
+
+                        $("#qrContainer").show();
+                        AEPSUPI();
+                        startTimer(TOTAL_SECONDS);
+                    } else {
+                        $btn.prop("disabled", false);
+                        $btn.find(".qrgen-btn-text").text("Generate QR Code");
+                        $("#msgContainer").text(res.message || "Failed to generate QR code.").show();
+                    }
+                },
+                error: function () {
+                    $btn.prop("disabled", false);
+                    $btn.find(".qrgen-btn-text").text("Generate QR Code");
+                    $("#msgContainer").text("Something went wrong. Please try again.").show();
+                }
+            });
+        });
+    })();
+</script>*@
+
+<script>
+    (function () {
+        var timerInterval = null;
+        var statusCheckInterval = null;
+        var TOTAL_SECONDS = 60;
+        var STATUS_CHECK_MS = 20000; // 20 sec
+        var CIRCUMFERENCE = 144.5; // 2 * PI * 23
+        var currentTxnId = null;
+        var isFinished = false; // guard so resetForm() never runs twice
+
+        function stopAllTimers() {
+            clearInterval(timerInterval);
+            clearInterval(statusCheckInterval);
+            timerInterval = null;
+            statusCheckInterval = null;
+        }
+
+        function resetForm(message, type) {
+            if (isFinished) return;
+            isFinished = true;
+
+            stopAllTimers();
+
+            $("#qrContainer").hide();
+            $("#qrImage").attr("src", "");
+            $("#btnGenerateQR").prop("disabled", false);
+            $("#btnGenerateQR .qrgen-btn-text").text("Generate QR Code");
+            $("#txtAmount").prop("readonly", false);
+            currentTxnId = null;
+
+            if (message) {
+                $("#msgContainer")
+                    .removeClass("qrgen-msg-success qrgen-msg-error")
+                    .addClass(type === "success" ? "qrgen-msg-success" : "qrgen-msg-error")
+                    .text(message)
+                    .show();
+            }
+
+            AEPSUPI();
+        }
+
+        function startTimer(seconds) {
+            var remaining = seconds;
+            var $ring = $("#qrRingProgress");
+            var $timerText = $("#qrTimer");
+
+            $timerText.text(remaining);
+            $ring.css("stroke-dashoffset", 0);
+
+            timerInterval = setInterval(function () {
+                remaining--;
+                $timerText.text(remaining);
+
+                var offset = CIRCUMFERENCE * (1 - remaining / TOTAL_SECONDS);
+                $ring.css("stroke-dashoffset", offset);
+
+                if (remaining <= 10) {
+                    $ring.css("stroke", "#DC2626");
+                }
+
+                if (remaining <= 0) {
+                    // Countdown reached 0. If the status-check interval's
+                    // final (60s) call hasn't resolved yet, give it a brief
+                    // moment; otherwise just terminate here.
+                    if (!isFinished) {
+                        resetForm(); // expired, no success message
+                    }
+                }
+            }, 1000);
+        }
+
+        function checkQRStatus() {
+            if (isFinished || !currentTxnId) return;
+
+            $.ajax({
+                url: "@Url.Action("CheckAEPSQRStatus", "Home")", // change to your actual status-check endpoint
+                type: "POST",
+                data: { txnId: currentTxnId },
+                dataType: "json",
+                success: function (res) {
+                    if (isFinished) return; // already terminated by countdown expiry
+
+                    if (res.sts === true) {
+                        // Payment confirmed — stop everything now, don't wait for 60s
+                        if (res.Status === "Success") {
+                            resetForm(res.message || "Payment received successfully.", "success");
+                        } else if (res.Status === "Failed") {
+                            resetForm(res.message || "Payment failed.", "error");
+                        }
+                    }
+                    // if res.sts === false, do nothing — interval will fire again
+                    // at the next 20s mark (or terminate at 60s via the countdown)
+                },
+                error: function () {
+                    // Network/status-check failure: don't kill the QR on a single
+                    // failed poll, just let it retry on the next 20s tick or
+                    // expire naturally at 60s.
+                }
+            });
+        }
+
+        function startStatusPolling(txnId) {
+            currentTxnId = txnId;
+            isFinished = false;
+
+            // Fires at 20s, 40s, 60s — the 60s tick coincides with countdown expiry
+            statusCheckInterval = setInterval(checkQRStatus, STATUS_CHECK_MS);
+        }
+
+        $("#btnGenerateQR").on("click", function () {
+            var amount = $("#txtAmount").val();
+            $("#msgContainer").hide().removeClass("qrgen-msg-success qrgen-msg-error").text("");
+            var amt = parseFloat(amount);
+            if (!amount || isNaN(amt) || amt < 100 || amt > 5000) {
+                $("#msgContainer").addClass("qrgen-msg-error")
+                    .text("Please enter an amount between ₹100 and ₹5000.")
+                    .show();
+                return;
+            }
+            
+
+            var $btn = $(this);
+            $btn.prop("disabled", true);
+            $btn.find(".qrgen-btn-text").text("Generating...");
+            $btn.find(".qrgen-spinner").show();
+
+            $.ajax({
+                url: "@Url.Action("GenerateAEPSQRCode", "Home")",
+                type: "POST",
+                data: { amount: amount },
+                dataType: "json",
+                success: function (res) {
+                    $btn.find(".qrgen-spinner").hide();
+                    AEPSUPI();
+                    if (res.sts === true) {
+                        // Lock the form
+                        $("#txtAmount").prop("readonly", true);
+                        $btn.prop("disabled", true);
+                        $btn.find(".qrgen-btn-text").text("Generate QR Code");
+
+                        // Reset ring color/state before showing
+                        $("#qrRingProgress").css("stroke", "#1E5EFF");
+
+                        // Show QR
+                        $("#qrImage").attr("src", "data:image/png;base64," + res.qrCode);
+                        // If your API returns a direct URL instead of base64, use:
+                        // $("#qrImage").attr("src", res.qrCode);
+
+                        $("#qrContainer").show();
+                   
+
+                        isFinished = false;
+                        startTimer(TOTAL_SECONDS);
+                        startStatusPolling(res.txnId); // <-- pass whatever unique id your API returns
+                    } else {
+                        $btn.prop("disabled", false);
+                        $btn.find(".qrgen-btn-text").text("Generate QR Code");
+                        $("#msgContainer").addClass("qrgen-msg-error").text(res.message || "Failed to generate QR code.").show();
+                    }
+                },
+                error: function () {
+                    $btn.prop("disabled", false);
+                    $btn.find(".qrgen-btn-text").text("Generate QR Code");
+                    $("#msgContainer").addClass("qrgen-msg-error").text("Something went wrong. Please try again.").show();
+                }
+            });
+        });
+    })();
+</script>
+
+<script>
+    function AEPSUPI() {
+        $.ajax({
+            url: '@Url.Action("AEPSUPIreportnew", "Home")',
+            cache: false,
+            type: "GET",
+            cache: false,
+            dataType: "html",
+            success: function (data) {
+                $('#reportallinone').html(data);
+            }
+        })
+    }
+    
+</script>

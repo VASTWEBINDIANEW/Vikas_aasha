@@ -1,0 +1,455 @@
+    <script>
+        (function () {
+            var $body = $("body");
+            var $sidebar = $("#leftsidebar");
+            var $overlay = $(".overlay");
+            var $topMenu = $("#navbar-collapse");
+            var $topMenuHost = $("#admin-top-header");
+            var $topMenuBtn = $("#admin-topmenu-open");
+            var topMenuMoved = false;
+
+            function isMobileLayout() {
+                return window.matchMedia("(max-width: 1199px)").matches;
+            }
+
+            function mountMobileTopMenu() {
+                if (!$topMenu.length) {
+                    return;
+                }
+
+                if (isMobileLayout()) {
+                    if (!topMenuMoved) {
+                        $topMenu.appendTo($body);
+                        topMenuMoved = true;
+                    }
+                } else if (topMenuMoved && $topMenuHost.length) {
+                    $topMenu.appendTo($topMenuHost.find(".admin-header-row").first());
+                    topMenuMoved = false;
+                }
+            }
+
+            function syncTopMenuPanelState() {
+                mountMobileTopMenu();
+
+                if (!$topMenu.length) {
+                    return;
+                }
+
+                $topMenu.removeClass("collapse collapsing navbar-collapse show");
+
+                if (isMobileLayout()) {
+                    $topMenu.removeAttr("style");
+                    if ($body.hasClass("admin-topmenu-open")) {
+                        $topMenu.attr("aria-hidden", "false");
+                        $topMenuBtn.attr("aria-expanded", "true");
+                    } else {
+                        $topMenu.attr("aria-hidden", "true");
+                        $topMenuBtn.attr("aria-expanded", "false");
+                    }
+                } else {
+                    $body.removeClass("admin-topmenu-open");
+                    $topMenu.attr("aria-hidden", "false");
+                    $topMenuBtn.attr("aria-expanded", "false");
+                    $topMenu.css({
+                        display: "flex",
+                        visibility: "visible",
+                        height: "auto",
+                        opacity: 1
+                    });
+                }
+            }
+
+            window.closeAdminSidebar = function () {
+                $sidebar.removeClass("me-left admin-sidebar-visible");
+                $body.removeClass("saas-sidebar-collapsed admin-sidebar-open");
+                if (!$body.hasClass("admin-topmenu-open")) {
+                    $body.removeClass("overlay-open");
+                }
+            };
+
+            window.openAdminSidebar = function () {
+                closeAdminTopMenu();
+                $sidebar.addClass("me-left admin-sidebar-visible");
+                $body.addClass("saas-sidebar-collapsed admin-sidebar-open overlay-open");
+            };
+
+            function toggleAdminSidebar() {
+                if ($sidebar.hasClass("me-left")) closeAdminSidebar();
+                else openAdminSidebar();
+            }
+
+            window.closeAdminTopMenu = function () {
+                $body.removeClass("admin-topmenu-open");
+                $topMenuBtn.attr("aria-expanded", "false");
+                if ($topMenu.length) {
+                    $topMenu.attr("aria-hidden", "true");
+                }
+                if (!$body.hasClass("admin-sidebar-open")) {
+                    $body.removeClass("overlay-open");
+                }
+                syncTopMenuPanelState();
+            };
+
+            window.openAdminTopMenu = function () {
+                closeAdminSidebar();
+                mountMobileTopMenu();
+                $body.addClass("admin-topmenu-open overlay-open");
+                $topMenuBtn.attr("aria-expanded", "true");
+                if ($topMenu.length) {
+                    $topMenu.attr("aria-hidden", "false");
+                }
+                syncTopMenuPanelState();
+            };
+
+            function toggleAdminTopMenu() {
+                if ($body.hasClass("admin-topmenu-open")) closeAdminTopMenu();
+                else openAdminTopMenu();
+            }
+
+            window.showAdminLoader = function () {
+                $("#admin-global-loader, #loader").addClass("is-active").css("display", "flex").attr("aria-hidden", "false");
+            };
+
+            window.hideAdminLoader = function () {
+                $("#admin-global-loader, #loader").removeClass("is-active").css("display", "none").attr("aria-hidden", "true");
+            };
+
+            $(document).on("click", "#sidebar-open", function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                if (isMobileLayout()) toggleAdminSidebar();
+                else $body.toggleClass("saas-sidebar-collapsed");
+            });
+
+            $(document).on("click", "#admin-topmenu-open", function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                if (!isMobileLayout()) {
+                    return;
+                }
+                toggleAdminTopMenu();
+            });
+
+            $(document).on("click", "#admin-sidebar-close", function (e) {
+                e.preventDefault();
+                closeAdminSidebar();
+            });
+
+            $(document).on("click", "#admin-topmenu-close", function (e) {
+                e.preventDefault();
+                closeAdminTopMenu();
+            });
+
+            $overlay.on("click", function () {
+                if (isMobileLayout()) {
+                    closeAdminSidebar();
+                    closeAdminTopMenu();
+                }
+            });
+
+            $sidebar.on("click", ".admin-sidebar-item > a, .admin-sidebar-sub a", function () {
+                if (isMobileLayout() && $(this).attr("href") && $(this).attr("href").indexOf("javascript") !== 0) {
+                    closeAdminSidebar();
+                }
+            });
+
+            $(document).on("click", "#navbar-collapse .admin-header-actions a[href], #navbar-collapse .admin-header-actions button[type='submit']", function () {
+                var href = $(this).attr("href");
+                var dataToggle = $(this).attr("data-toggle");
+                if (isMobileLayout() && href && href.indexOf("javascript") !== 0 && !$(this).hasClass("dropdown-toggle") && dataToggle !== "dropdown") {
+                    closeAdminTopMenu();
+                }
+            });
+
+            $(document).on("keydown", function (e) {
+                if (e.key === "Escape") {
+                    closeAdminSidebar();
+                    closeAdminTopMenu();
+                }
+            });
+
+            $(window).on("resize", function () {
+                if (!isMobileLayout()) {
+                    closeAdminSidebar();
+                    closeAdminTopMenu();
+                }
+                syncTopMenuPanelState();
+            });
+
+            window.syncAdminTopMenuPanel = syncTopMenuPanelState;
+
+            $(function () {
+                if (!$body.hasClass("saas-admin-ui")) {
+                    return;
+                }
+
+                $(".bars").off("click");
+
+                if ($.AdminBSB && $.AdminBSB.leftSideBar) {
+                    $.AdminBSB.leftSideBar.isOpen = function () {
+                        return $body.hasClass("admin-sidebar-open");
+                    };
+                }
+
+                syncTopMenuPanelState();
+            });
+        })();
+    </script>
+    <script src="~/MainFrontDesign/js/saas-admin-modernizer.js"></script>
+    <script>
+        (function ($) {
+            function cleanupAdminSidebarIcons() {
+                var $sidebar = $("#leftsidebar.admin-sidebar-shell");
+                if (!$sidebar.length) {
+                    return;
+                }
+
+                $sidebar.find(".saas-nav-icon, .saas-menu-caret").remove();
+                $sidebar.find("a").each(function () {
+                    this.setAttribute("data-saas-icon-ready", "true");
+                });
+
+                $sidebar.find(".llkj").each(function () {
+                    var $link = $(this);
+                    var $carets = $link.find(".admin-sidebar-caret");
+                    if ($carets.length > 1) {
+                        $carets.slice(1).remove();
+                    }
+                });
+            }
+
+            function syncAdminHeaderHeight() {
+                var header = document.getElementById("admin-top-header");
+                if (!header) {
+                    return;
+                }
+
+                var height = Math.ceil(header.getBoundingClientRect().height);
+                document.documentElement.style.setProperty("--admin-header-height", height + "px");
+            }
+
+            function cleanupAdminTopbarIcons() {
+                var $topbar = $(".admin-header-v2, .admin-top-header");
+                if (!$topbar.length) {
+                    return;
+                }
+
+                var $navCollapse = $("#navbar-collapse");
+                $navCollapse.removeClass("collapse collapsing navbar-collapse show");
+                if (window.syncAdminTopMenuPanel) {
+                    window.syncAdminTopMenuPanel();
+                } else if (window.matchMedia("(min-width: 1200px)").matches) {
+                    $navCollapse.css({
+                        display: "flex",
+                        visibility: "visible",
+                        height: "auto",
+                        opacity: 1
+                    });
+                } else {
+                    $navCollapse.removeAttr("style");
+                }
+
+                $topbar.find("img.four-image-nav, img.four-image-nav-second, img.secend1-image-nav, .fab1, .material-icons.four-image-nav").remove();
+                $topbar.find(".admin-topbar-btn").each(function () {
+                    var $btn = $(this);
+                    var $icons = $btn.find(".admin-topbar-icon");
+                    if ($icons.length > 1) {
+                        $icons.slice(1).remove();
+                    }
+                    $btn.find(".admin-topbar-label").show();
+                });
+            }
+
+            $(function () {
+                cleanupAdminSidebarIcons();
+                cleanupAdminTopbarIcons();
+                syncAdminHeaderHeight();
+            });
+            $(window).on("load resize", function () {
+                cleanupAdminSidebarIcons();
+                cleanupAdminTopbarIcons();
+                syncAdminHeaderHeight();
+            });
+            setTimeout(function () {
+                cleanupAdminSidebarIcons();
+                cleanupAdminTopbarIcons();
+                syncAdminHeaderHeight();
+            }, 150);
+        })(jQuery);
+    </script>
+
+    <script>
+        (function ($) {
+            function normalizeAdminHref(href) {
+                if (!href) {
+                    return "";
+                }
+                return String(href)
+                    .replace(/^~\//, "/")
+                    .replace(/^https?:\/\/[^/]+/i, "")
+                    .replace(/\?.*$/, "")
+                    .replace(/#.*$/, "")
+                    .replace(/\/+$/, "")
+                    .toLowerCase();
+            }
+
+            function sidebarPathsMatch(currentPath, linkHref) {
+                var linkPath = normalizeAdminHref(linkHref);
+                var path = normalizeAdminHref(currentPath);
+
+                if (!linkPath || !path || linkPath.indexOf("javascript:") === 0) {
+                    return false;
+                }
+
+                if (path === linkPath) {
+                    return true;
+                }
+
+                if (path.endsWith(linkPath) || linkPath.endsWith(path)) {
+                    return true;
+                }
+
+                var pathParts = path.split("/").filter(Boolean);
+                var linkParts = linkPath.split("/").filter(Boolean);
+                var tailLength = Math.min(3, pathParts.length, linkParts.length);
+
+                if (tailLength > 0 &&
+                    pathParts.slice(-tailLength).join("/") === linkParts.slice(-tailLength).join("/")) {
+                    return true;
+                }
+
+                return false;
+            }
+
+            function initAdminSidebarAccordion() {
+                var $sidebar = $("#leftsidebar.admin-sidebar-shell");
+                if (!$sidebar.length) {
+                    return;
+                }
+
+                var currentPath = window.location.pathname;
+                var $groups = $sidebar.find(".admin-sidebar-group");
+                var $bestLink = null;
+                var bestScore = 0;
+
+                $sidebar.find(".admin-sidebar-list a[href]").each(function () {
+                    var $link = $(this);
+                    if ($link.hasClass("llkj")) {
+                        return;
+                    }
+
+                    var href = $link.attr("href");
+                    if (!sidebarPathsMatch(currentPath, href)) {
+                        return;
+                    }
+
+                    var score = normalizeAdminHref(href).length;
+                    if (score > bestScore) {
+                        bestScore = score;
+                        $bestLink = $link;
+                    }
+                });
+
+                $sidebar.find(".admin-sidebar-list a.activee").removeClass("activee");
+                $groups.removeClass("admin-sidebar-has-active");
+                $groups.children(".llkj").removeClass("activee");
+
+                if ($bestLink && $bestLink.length) {
+                    $bestLink.addClass("activee");
+
+                    var $group = $bestLink.closest(".admin-sidebar-group");
+                    if ($group.length) {
+                        $group.addClass("admin-sidebar-has-active admin-sidebar-open");
+                        $group.children(".admin-sidebar-sub").show();
+                        $group.children(".llkj")
+                            .attr("aria-expanded", "true")
+                            .addClass("activee");
+                    }
+                }
+
+                $groups.each(function () {
+                    var $group = $(this);
+                    var $trigger = $group.children(".llkj");
+                    var $submenu = $group.children(".admin-sidebar-sub");
+
+                    if (!$group.hasClass("admin-sidebar-has-active")) {
+                        $group.addClass("admin-sidebar-open");
+                        $submenu.show();
+                        $trigger.attr("aria-expanded", "true");
+                    }
+                });
+
+                $groups.children(".llkj").off("click.adminSidebar").on("click.adminSidebar", function (event) {
+                    event.preventDefault();
+
+                    var $trigger = $(this);
+                    var $group = $trigger.closest(".admin-sidebar-group");
+                    var $submenu = $group.children(".admin-sidebar-sub");
+                    var isOpen = $group.hasClass("admin-sidebar-open");
+
+                    if (isOpen) {
+                        $group.removeClass("admin-sidebar-open");
+                        $submenu.slideUp(260);
+                        $trigger.attr("aria-expanded", "false");
+                    } else {
+                        $group.addClass("admin-sidebar-open");
+                        $submenu.slideDown(260);
+                        $trigger.attr("aria-expanded", "true");
+                    }
+                });
+            }
+
+            $(initAdminSidebarAccordion);
+            $(window).on("load", initAdminSidebarAccordion);
+        })(jQuery);
+    </script>
+
+    <script>
+        (function ($) {
+            var topbarDropdownRoot = ".admin-top-header .admin-topbar-item.dropdown";
+
+            // AdminBSB fadeOut breaks topbar flyout clicks — disable animation on header dropdowns
+            $(function () {
+                $(topbarDropdownRoot).each(function () {
+                    $(this).data("effect-in", null);
+                    $(this).data("effect-out", null);
+                });
+            });
+
+            // Keep flyout open when clicking inside (Bootstrap 3 only stops form clicks by default)
+            $(document).on("click.bs.dealerTopbar", ".admin-top-header .admin-topbar-flyout", function (e) {
+                e.stopPropagation();
+            });
+
+            $(document).on("click.bs.dealerTopbar", ".admin-top-header .admin-topbar-flyout a[href]", function () {
+                var $dropdown = $(this).closest(".dropdown");
+                $dropdown.removeClass("open");
+            });
+
+            function syncDealerTopbarDropdownState() {
+                $(topbarDropdownRoot).each(function () {
+                    var $item = $(this);
+                    var isOpen = $item.hasClass("open") || $item.find(".dropdown-menu").hasClass("open");
+                    $item.toggleClass("open", isOpen);
+                });
+            }
+
+            $(document).on("shown.bs.dropdown hidden.bs.dropdown", topbarDropdownRoot, syncDealerTopbarDropdownState);
+
+            $(document).on("hide.bs.dropdown", topbarDropdownRoot, function (e) {
+                if (!e.clickEvent) {
+                    return;
+                }
+                var $target = $(e.clickEvent.target);
+                if ($target.closest(".admin-topbar-flyout").length && !$target.hasClass("dropdown-toggle")) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    return false;
+                }
+            });
+
+            $(syncDealerTopbarDropdownState);
+        })(jQuery);
+    </script>
+
+    <script src="~/MainFrontDesign/js/admin-dynamic-theme.js?v=11"></script>

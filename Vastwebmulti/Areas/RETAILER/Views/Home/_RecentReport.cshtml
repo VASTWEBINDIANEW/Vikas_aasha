@@ -105,466 +105,488 @@
     @if (Model.Recent_report_imps != null)
 
     {
-        <thead>
-            <tr>
-                <th style="width: 155px;">Beneficiary&nbsp;Account</th>
+<thead>
+    <tr>
+        <th style="width: 155px;">Beneficiary&nbsp;Account</th>
 
-                <th>Name</th>
-                <th>Amount</th>
-                <th>Beneficiary&nbsp;Bank&nbsp;Name</th>
-                <th>Time</th>
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Beneficiary&nbsp;Bank&nbsp;Name</th>
+        <th>Time</th>
 
-                <th>Bank&nbsp;RRN</th>
-                <th style="white-space: nowrap; text-align: center;padding:3px;">
-                    <button class="" style="background: #a4a0a0 !important; border: 1px solid #a4a0a0; width: 84px; height: 33px;"><div onclick="fetchDmtReport(this)" style="padding: 2px !important;" title="DMT Reload"> <i class="fa fa-refresh icon-rotate" style="font-size: 24px; color: #fff; margin-top: 1px;"></i> <p style="width: 67%; color: #fff; float: right; font-size: 14px; line-height: 1;">TABLE<br /><span class="aadharpaysup-1" style="font-size:11px;">Refresh</span></p></div></button>
-                </th>
+        <th>Bank&nbsp;RRN</th>
+        <th style="white-space: nowrap; text-align: center;padding:3px;">
+            <button class="" style="background: #a4a0a0 !important; border: 1px solid #a4a0a0; width: 84px; height: 33px;"><div onclick="fetchDmtReport(this)" style="padding: 2px !important;" title="DMT Reload"> <i class="fa fa-refresh icon-rotate" style="font-size: 24px; color: #fff; margin-top: 1px;"></i> <p style="width: 67%; color: #fff; float: right; font-size: 14px; line-height: 1;">TABLE<br /><span class="aadharpaysup-1" style="font-size:11px;">Refresh</span></p></div></button>
+        </th>
 
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Recent_report_imps)
-            {
-                var pendingColor = "";
-
-                var type = item.Trans_Type;
-                var img = ""; var color = ""; var style = "";
-                if (item.Trans_Type.ToUpper() == "IMPS_VERIFY")
-                {
-                    type = "Verify";
-                    style = "height:20px;width:20px;margin-right:3px;float:left;";
-
-                }
-                if (item.Status.ToUpper() == "SUCCESS")
-                {
-                    img = "../../ashok-images/correct.svg";
-                    color = "green";
-                    style = "height:20px;width:20px;margin-right:3px;float:left;";
-                }
-                else if (item.Status.ToUpper() == "PENDING")
-                {
-                    double difftime = DateTime.Now.Subtract(item.trans_time.Value).TotalMinutes;
-                    if (difftime < 2)
+    </tr>
+</thead>
+                <tbody>
+                    @foreach (var item in Model.Recent_report_imps)
                     {
-                        pendingColor = "#ffbf00";
-                    }
-                    else
-                    {
-                        pendingColor = "#fff8d1";
-                    }
-                    img = "../../ashok-images/clock.svg";
-                    style = "height: 20px;width: 20px;margin-right:3px;float:left;max-width: 100%;padding: 0;";
-                    //color = "#ff9e00";
+                        var pendingColor = "";
 
-                }
-                else if (item.Status.ToUpper() == "FAILED")
-                {
-                    img = "../../ashok-images/closes.svg";
-                    color = "red";
-                    style = "height:20px;width:20px;margin-right:3px;float:left;";
-                }
-                else
-                {
-                    img = "../../ashok-images/closes.svg";
-                    color = "red";
-                    style = "height:20px;width:20px;margin-right:3px;float:left;";
-                }
+                        var type = item.Trans_Type;
+                        var img = ""; var color = ""; var style = "";
+                        if (item.Trans_Type.ToUpper() == "IMPS_VERIFY")
+                        {
+                            type = "Verify";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
 
-
-                <tr style="background-color:@pendingColor">
-                    <td>
-                        <img style="@style background-color:@color;" src=@img />
-                        @Html.DisplayFor(modelItem => item.accountno)
-                    </td>
-
-                    <td>@Html.DisplayFor(modelItem => item.recivername)</td>
-                    <td>@Html.DisplayFor(modelItem => item.amount)</td>
-                    <td>@Html.DisplayFor(modelItem => item.bank_nm)</td>
-                    <td>@Html.DisplayFor(modelItem => item.trans_time)</td>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.bank_trans_id)
-                    </td>
-                    <td class="text-center">
-                        @*@if (item.Status.ToUpper() == "SUCCESS" && item.Trans_Type.ToUpper() == "IMPS_VERIFY" && !String.IsNullOrEmpty(item.recivername))
+                        }
+                        if (item.Status.ToUpper() == "SUCCESS")
+                        {
+                            img = "../../ashok-images/correct.svg";
+                            color = "green";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
+                        else if (item.Status.ToUpper() == "PENDING")
+                        {
+                            double difftime = DateTime.Now.Subtract(item.trans_time.Value).TotalMinutes;
+                            if (difftime < 2)
                             {
-                                <button class="btn status" style="background: #a4a0a0 !important; word-break: break-all " onclick="RegisterAccount('@item.senderno', '@item.accountno', '@item.ifsccode', '@item.bank_nm', '@item.recivername')">Add <small>Beneficiary</small></button>
+                                pendingColor = "#ffbf00";
                             }
-                            else if (!item.Status.ToUpper().Contains("REFUND") && item.Status.ToUpper() != "PENDING" && item.Trans_Type.ToUpper() != "IMPS_VERIFY")
+                            else
                             {
-                                <button class="btn status" style="background: #a4a0a0 !important;" onclick="PayAgain('@item.senderno', '@item.Trans_Type', '@item.accountno', '@item.amount')">Again Payment</button>
+                                pendingColor = "#fff8d1";
                             }
-                            else if (item.Status.ToUpper() == "PENDING" && item.Trans_Type.ToUpper() != "IMPS_VERIFY")
+                            img = "../../ashok-images/clock.svg";
+                            style = "height: 20px;width: 20px;margin-right:3px;float:left;max-width: 100%;padding: 0;";
+                            //color = "#ff9e00";
+
+                        }
+                        else if (item.Status.ToUpper() == "FAILED")
+                        {
+                            img = "../../ashok-images/closes.svg";
+                            color = "red";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
+                        else
+                        {
+                            img = "../../ashok-images/closes.svg";
+                            color = "red";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
+
+
+    <tr style="background-color:@pendingColor">
+        <td>
+            <img style="@style background-color:@color;" src=@img />
+            @Html.DisplayFor(modelItem => item.accountno)
+        </td>
+
+        <td>@Html.DisplayFor(modelItem => item.recivername)</td>
+        <td>@Html.DisplayFor(modelItem => item.amount)</td>
+        <td>@Html.DisplayFor(modelItem => item.bank_nm)</td>
+        <td>@Html.DisplayFor(modelItem => item.trans_time)</td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.bank_trans_id)
+        </td>
+        <td class="text-center">
+            @*@if (item.Status.ToUpper() == "SUCCESS" && item.Trans_Type.ToUpper() == "IMPS_VERIFY" && !String.IsNullOrEmpty(item.recivername))
+                {
+                    <button class="btn status" style="background: #a4a0a0 !important; word-break: break-all " onclick="RegisterAccount('@item.senderno', '@item.accountno', '@item.ifsccode', '@item.bank_nm', '@item.recivername')">Add <small>Beneficiary</small></button>
+                }
+                else if (!item.Status.ToUpper().Contains("REFUND") && item.Status.ToUpper() != "PENDING" && item.Trans_Type.ToUpper() != "IMPS_VERIFY")
+                {
+                    <button class="btn status" style="background: #a4a0a0 !important;" onclick="PayAgain('@item.senderno', '@item.Trans_Type', '@item.accountno', '@item.amount')">Again Payment</button>
+                }
+                else if (item.Status.ToUpper() == "PENDING" && item.Trans_Type.ToUpper() != "IMPS_VERIFY")
+                {
+                    <button class="btn status" onclick="Dmt_status_check()" style="width: 40%; float: left; line-height: 0.1; padding: 0px;"><p style="text-transform: uppercase; font-size: 8px;">Status</p><br /><span style="margin:0px;font-size:10px;">Check</span></button>
+                    <button class="btn status" data-toggle="modal" data-target="#dmtdetails" onclick="Dmt_more_detail('@item.trans_id')" style="width: 58%; float: right; line-height: 0.1; padding: 0px; background: #878080; border: 1px solid #5b5858; "><p style="font-size: 10px; margin: 6px 12px -11px 0px;">MORE&nbsp;</p><br /><span style="margin: 0px; font-size: 9px;">Details</span><i class="fa fa-angle-right" style="top: 0px; font-size: 29px; margin-left: 4px;"></i></button>
+                }*@
+        </td>
+    </tr>}
+                </tbody> }
+                            else if (Model.Recent_report_Aeps != null)
                             {
-                                <button class="btn status" onclick="Dmt_status_check()" style="width: 40%; float: left; line-height: 0.1; padding: 0px;"><p style="text-transform: uppercase; font-size: 8px;">Status</p><br /><span style="margin:0px;font-size:10px;">Check</span></button>
-                                <button class="btn status" data-toggle="modal" data-target="#dmtdetails" onclick="Dmt_more_detail('@item.trans_id')" style="width: 58%; float: right; line-height: 0.1; padding: 0px; background: #878080; border: 1px solid #5b5858; "><p style="font-size: 10px; margin: 6px 12px -11px 0px;">MORE&nbsp;</p><br /><span style="margin: 0px; font-size: 9px;">Details</span><i class="fa fa-angle-right" style="top: 0px; font-size: 29px; margin-left: 4px;"></i></button>
-                            }*@
-                    </td>
-                </tr>
-            }
-        </tbody>
-    }
-    else if (Model.Recent_report_Aeps != null)
-    {
-        <thead class="aepsdetailstabale-respons">
-            <tr>
-                <th>Transaction&nbsp;Status</th>
-                <th>User&nbsp;Bank</th>
-                <th>User&nbsp;A/c</th>
-                <th>User&nbsp;Aadhaar</th>
-                <th>Net&nbsp;Amount</th>
-                <th>Cr&nbsp;/&nbsp;Dr</th>
-                <th>Bank&nbsp;RRN</th>
-                <th>Request&nbsp;Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Recent_report_Aeps)
-            {
-                var color = ""; var img = "";
-                if (item.Status.ToUpper().Contains("SUCCESS"))
-                {
-                    img = "../../ashok-images/correct.svg";
-                    color = "green";
-                }
-                else if (item.Status.ToUpper().Contains("BALANCE"))
-                {
-                    img = "../../ashok-images/correct.svg";
-                    color = "blue";
-                }
-                else if (item.Status.ToUpper() == "PENDING")
-                {
-                    img = "../../ashok-images/clock.svg";
+                <thead class="aepsdetailstabale-respons">
+                    <tr>
+                        <th>Transaction&nbsp;Status</th>
+                        <th>User&nbsp;Bank</th>
+                        <th>User&nbsp;A/c</th>
+                        <th>User&nbsp;Aadhaar</th>
+                        <th>Net&nbsp;Amount</th>
+                        <th>Cr&nbsp;/&nbsp;Dr</th>
+                        <th>Bank&nbsp;RRN</th>
+                        <th>Request&nbsp;Time</th>
+                    </tr>
+                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Recent_report_Aeps)
+                                    {
+                                        var color = ""; var img = "";
+                                        if (item.Status.ToUpper().Contains("SUCCESS"))
+                                        {
+                                            img = "../../ashok-images/correct.svg";
+                                            color = "green";
+                                        }
+                                        else if (item.Status.ToUpper().Contains("BALANCE"))
+                                        {
+                                            img = "../../ashok-images/correct.svg";
+                                            color = "blue";
+                                        }
+                                        else if (item.Status.ToUpper() == "PENDING")
+                                        {
+                                            img = "../../ashok-images/clock.svg";
 
-                    color = "#ff9e00";
-                }
-                else
-                {
-                    img = "../../ashok-images/closes.svg";
-                    color = "red";
-                }
-                var type = item.Type;
-                <tr>
-                    <td>
-                        <img style="height:17px;width:17px; background-color:@color;" src=@img />@type
-                    </td>
-                    <td>@Html.DisplayFor(modelItem => item.BankName)</td>
-                    <td>A/c</td>
-                    <td>@Html.DisplayFor(modelItem => item.AccountHolderAadhaar)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                    <td>cr</td>
-                    <td style="width:50px;">@Html.DisplayFor(modelItem => item.BankRRN)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Txn_Date)</td>
-                </tr>
-            }
-        </tbody>
-    }
-    else if (Model.Recent_PAN_CARD_IPAY != null)
-    {
-        <thead>
-            <tr>
-                <th>Status</th>
-                <th>Amount</th>
-                <th>Time</th>
-                <th>Income</th>
-                <th>TDS</th>
+                                            color = "#ff9e00";
+                                        }
+                                        else
+                                        {
+                                            img = "../../ashok-images/closes.svg";
+                                            color = "red";
+                                        }
+                                        var type = item.Type;
+                    <tr>
+                        <td>
+                            <img style="height:17px;width:17px; background-color:@color;" src=@img />@type
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.BankName)</td>
+                        <td>A/c</td>
+                        <td>@Html.DisplayFor(modelItem => item.AccountHolderAadhaar)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                        <td>cr</td>
+                        <td style="width:50px;">@Html.DisplayFor(modelItem => item.BankRRN)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Txn_Date)</td>
+                    </tr>}
+                                </tbody> }
+                                            else if (Model.Recent_PAN_CARD_IPAY != null)
+                                            {
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                        <th>Time</th>
+                                        <th>Income</th>
+                                        <th>TDS</th>
 
-                <th>Total</th>
+                                        <th>Total</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Recent_PAN_CARD_IPAY)
-            {
+                                    </tr>
+                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.Recent_PAN_CARD_IPAY)
+                                                    {
 
 
-                <tr>
+                                    <tr>
 
-                    @{
-                        var sts = item.status;
+                                        @{ var sts = item.status;
 
 
-                        if (item.status.Contains("Refund"))
-                        {
-                            sts = "Refund";
-                        }
-                    }
+                                                                if (item.status.Contains("Refund"))
+                                                                {
+                                                                    sts = "Refund";
+                                                                } }
 
 
 
 
 
-                    <td>
-                        @if (item.status.Contains("PENDING"))
-                        {
-                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png"> @sts
-
-
-                        }
-                        @if (item.status.Contains("Refund"))
-                        {
-                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown" src="../../ashok-images/backresnd.svg"> @sts
-
-                        }
-                        @if (item.status.Contains("Failed"))
-                        {
-                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red" src="../../ashok-images/closes.svg"> @sts
-
-                        }
-                        @if (item.status.Contains("Success"))
-                        {
-                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green" src="../../ashok-images/correct.svg"> @sts
-
-                        }
-                    </td>
+                                        <td>
+                                            @if (item.status.Contains("PENDING"))
+                                            {
+                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png"> @sts}
+                                            @if (item.status.Contains("Refund"))
+                                            {
+                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown" src="../../ashok-images/backresnd.svg"> @sts}
+                                            @if (item.status.Contains("Failed"))
+                                            {
+                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red" src="../../ashok-images/closes.svg"> @sts}
+                                            @if (item.status.Contains("Success"))
+                                            {
+                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green" src="../../ashok-images/correct.svg"> @sts}
+                                        </td>
 
 
 
 
 
-                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                    <td>@Html.DisplayFor(modelItem => item.request_time)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Rem_comm)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Rem_tds)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Rem_final)</td>
-                </tr>
-            }
-        </tbody>
-    }
-    else if (Model.Recent_pancard_transation_manual != null)
-    {
-        <thead>
-            <tr>
-                <th>Status</th>
-                <th>Amount</th>
-                <th>Time</th>
-                <th>Name</th>
-                <th>Mobile</th>
-                <th>Email</th>
-                <th>Father Name</th>
-                <th>DOB</th>
-                <th>Aadhaar</th>
-                <th>Gender</th>
-                <th>Income</th>
-                <th>State</th>
+                                        <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.request_time)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Rem_comm)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Rem_tds)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Rem_final)</td>
+                                    </tr>}
+                                                </tbody> }
+                                                            else if (Model.Recent_pancard_transation_manual != null)
+                                                            {
+                                                <thead>
+                                                    <tr>
+                                                        <th>Status</th>
+                                                        <th>Amount</th>
+                                                        <th>Time</th>
+                                                        <th>Name</th>
+                                                        <th>Mobile</th>
+                                                        <th>Email</th>
+                                                        <th>Father Name</th>
+                                                        <th>DOB</th>
+                                                        <th>Aadhaar</th>
+                                                        <th>Gender</th>
+                                                        <th>Income</th>
+                                                        <th>State</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Recent_pancard_transation_manual)
-            {
+                                                    </tr>
+                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var item in Model.Recent_pancard_transation_manual)
+                                                                    {
 
 
-                <tr>
+                                                    <tr>
 
-                    @{
-                        var sts = item.status;
-
-
-                        if (item.status.Contains("Refund"))
-                        {
-                            sts = "Refund";
-                        }
-                    }
-
-                    <td>
-                        @if (item.status.Contains("PENDING"))
-                        {
-                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png"> @sts
+                                                        @{ var sts = item.status;
 
 
-                        }
-                        @if (item.status.Contains("Refund"))
-                        {
-                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown" src="../../ashok-images/backresnd.svg"> @sts
+                                                                                if (item.status.Contains("Refund"))
+                                                                                {
+                                                                                    sts = "Refund";
+                                                                                } }
 
-                        }
-                        @if (item.status.Contains("Failed"))
-                        {
-                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red" src="../../ashok-images/closes.svg"> @sts
-
-                        }
-                        @if (item.status.Contains("Success"))
-                        {
-                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green" src="../../ashok-images/correct.svg"> @sts
-
-                        }
-                    </td>
-                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                    <td>@Html.DisplayFor(modelItem => item.request_time)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Title) @Html.DisplayFor(modelItem => item.Name)</td>
-                    <td>AAdhar=@Html.DisplayFor(modelItem => item.AadharregNumber)<br />Customer =@Html.DisplayFor(modelItem => item.Mobile)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Fathername)</td>
-                    <td>@Html.DisplayFor(modelItem => item.DOB)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Aadharno)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Gender)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Rem_comm)</td>
-                    <td>@Html.DisplayFor(modelItem => item.State)</td>
-                </tr>
-            }
-        </tbody>
-    }
-    else if (Model.Recent_mPosInfo != null)
-    {
-        <thead>
-            <tr>
-                <th>Trans&nbsp;Type</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Time</th>
-                <th>Bank&nbsp;RRN</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Recent_mPosInfo)
-            {
-                var sts = "Pending";
-                if (item.status == "00")
-                {
-                    sts = "SUCCESS";
-                }
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.transType)</td>
-                    <td>@Html.DisplayFor(modelItem => item.amount)</td>
-                    <td>@sts</td>
-                    <td>@Html.DisplayFor(modelItem => item.date)</td>
-                    <td>@Html.DisplayFor(modelItem => item.BankRRN)</td>
-                </tr>
-            }
-        </tbody>
-    }
+                                                        <td>
+                                                            @if (item.status.Contains("PENDING"))
+                                                            {
+                                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png"> @sts}
+                                                            @if (item.status.Contains("Refund"))
+                                                            {
+                                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown" src="../../ashok-images/backresnd.svg"> @sts}
+                                                            @if (item.status.Contains("Failed"))
+                                                            {
+                                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red" src="../../ashok-images/closes.svg"> @sts}
+                                                            @if (item.status.Contains("Success"))
+                                                            {
+                                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green" src="../../ashok-images/correct.svg"> @sts}
+                                                        </td>
+                                                        <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.request_time)</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.Title) @Html.DisplayFor(modelItem => item.Name)</td>
+                                                        <td>AAdhar=@Html.DisplayFor(modelItem => item.AadharregNumber)<br />Customer =@Html.DisplayFor(modelItem => item.Mobile)</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.Fathername)</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.DOB)</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.Aadharno)</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.Gender)</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.Rem_comm)</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.State)</td>
+                                                    </tr>}
+                                                                </tbody> }
+                                                                            else if (Model.Recent_mPosInfo != null)
+                                                                            {
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Trans&nbsp;Type</th>
+                                                                        <th>Amount</th>
+                                                                        <th>Status</th>
+                                                                        <th>Time</th>
+                                                                        <th>Bank&nbsp;RRN</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                                <tbody>
+                                                                                    @foreach (var item in Model.Recent_mPosInfo)
+                                                                                    {
+                                                                                        var sts = "Pending";
+                                                                                        if (item.status == "00")
+                                                                                        {
+                                                                                            sts = "SUCCESS";
+                                                                                        }
+                                                                    <tr>
+                                                                        <td>@Html.DisplayFor(modelItem => item.transType)</td>
+                                                                        <td>@Html.DisplayFor(modelItem => item.amount)</td>
+                                                                        <td>@sts</td>
+                                                                        <td>@Html.DisplayFor(modelItem => item.date)</td>
+                                                                        <td>@Html.DisplayFor(modelItem => item.BankRRN)</td>
+                                                                    </tr>}
+                                                                                </tbody>}
     @if (Model.Recent_microatm != null)
 
     {
-        <thead>
-            <tr style="color: black;">
+<thead>
+    <tr style="color: black;">
 
-                <th>Status</th>
-                <th>Amount</th>
-                <th>Time</th>
-                <th>BankRRN&nbsp;No</th>
-                <th>Tran&nbsp;Type</th>
-                <th>Card&nbsp;Type</th>
+        <th>Status</th>
+        <th>Amount</th>
+        <th>Time</th>
+        <th>BankRRN&nbsp;No</th>
+        <th>Tran&nbsp;Type</th>
+        <th>Card&nbsp;Type</th>
 
-                <th>Net&nbsp;Work</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Recent_microatm)
-            {
-                var type = item.transaction_type;
-                var img = ""; var color = ""; var style = "";
+        <th>Net&nbsp;Work</th>
+    </tr>
+</thead>
+                <tbody>
+                    @foreach (var item in Model.Recent_microatm)
+                    {
+                        var type = item.transaction_type;
+                        var img = ""; var color = ""; var style = "";
 
-                if (item.status.ToUpper() == "SUCCESS")
-                {
-                    img = "../../ashok-images/correct.svg";
-                    color = "green";
-                    style = "height:20px;width:20px;margin-right:3px;float:left;";
-                }
-                else if (item.status.ToUpper() == "PENDING")
-                {
-                    img = "../../ashok-images/clock.svg";
-                    style = "height: 20px;width: 20px;margin-right:3px;float:left;max-width: 100%;padding: 0;";
-                    //color = "#ff9e00";
+                        if (item.status.ToUpper() == "SUCCESS")
+                        {
+                            img = "../../ashok-images/correct.svg";
+                            color = "green";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
+                        else if (item.status.ToUpper() == "PENDING")
+                        {
+                            img = "../../ashok-images/clock.svg";
+                            style = "height: 20px;width: 20px;margin-right:3px;float:left;max-width: 100%;padding: 0;";
+                            //color = "#ff9e00";
 
-                }
-                else if (item.status.ToUpper() == "FAILED")
-                {
-                    img = "../../ashok-images/closes.svg";
-                    color = "red";
-                    style = "height:20px;width:20px;margin-right:3px;float:left;";
-                }
-                else
-                {
-                    img = "../../ashok-images/closes.svg";
-                    color = "red";
-                    style = "height:20px;width:20px;margin-right:3px;float:left;";
-                }
-
-
-                <tr>
-                    <td>
-                        <img style="@style background-color:@color;" src=@img />
-                        @item.status
-                    </td>
+                        }
+                        else if (item.status.ToUpper() == "FAILED")
+                        {
+                            img = "../../ashok-images/closes.svg";
+                            color = "red";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
+                        else
+                        {
+                            img = "../../ashok-images/closes.svg";
+                            color = "red";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
 
 
-                    <td>@item.amount</td>
-                    <td>@item.transtime</td>
-                    <td>@item.rrn</td>
-                    <td>@item.transaction_type</td>
-                    <td>@item.card_payment_type</td>
-                    <td>@item.network</td>
+    <tr>
+        <td>
+            <img style="@style background-color:@color;" src=@img />
+            @item.status
+        </td>
 
-                </tr>
-            }
-        </tbody>
-    }
+
+        <td>@item.amount</td>
+        <td>@item.transtime</td>
+        <td>@item.rrn</td>
+        <td>@item.transaction_type</td>
+        <td>@item.card_payment_type</td>
+        <td>@item.network</td>
+
+    </tr>}
+                </tbody>}
     @if (Model.Recent_cash_deposit != null)
 
     {
-        <thead>
-            <tr style="color: black;">
-                <th>Status</th>
-                <th>Amount</th>
-                <th>Time</th>
-                <th>BankRRN&nbsp;No</th>
-                <th>Account&nbsp;no</th>
-                <th>Bank&nbsp;Name</th>
-                <th>Ben&nbsp;Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Recent_cash_deposit)
-            {
-                var img = ""; var color = ""; var style = "";
+<thead>
+    <tr style="color: black;">
+        <th>Status</th>
+        <th>Amount</th>
+        <th>Time</th>
+        <th>BankRRN&nbsp;No</th>
+        <th>Account&nbsp;no</th>
+        <th>Bank&nbsp;Name</th>
+        <th>Ben&nbsp;Name</th>
+    </tr>
+</thead>
+                <tbody>
+                    @foreach (var item in Model.Recent_cash_deposit)
+                    {
+                        var img = ""; var color = ""; var style = "";
 
-                if (item.status.ToUpper() == "SUCCESS")
-                {
-                    img = "../../ashok-images/correct.svg";
-                    color = "green";
-                    style = "height:20px;width:20px;margin-right:3px;float:left;";
-                }
-                else if (item.status.ToUpper() == "PENDING")
-                {
-                    img = "../../ashok-images/clock.svg";
-                    style = "height: 20px;width: 20px;margin-right:3px;float:left;max-width: 100%;padding: 0;";
-                    //color = "#ff9e00";
+                        if (item.status.ToUpper() == "SUCCESS")
+                        {
+                            img = "../../ashok-images/correct.svg";
+                            color = "green";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
+                        else if (item.status.ToUpper() == "PENDING")
+                        {
+                            img = "../../ashok-images/clock.svg";
+                            style = "height: 20px;width: 20px;margin-right:3px;float:left;max-width: 100%;padding: 0;";
+                            //color = "#ff9e00";
 
-                }
-                else if (item.status.ToUpper() == "FAILED")
-                {
-                    img = "../../ashok-images/closes.svg";
-                    color = "red";
-                    style = "height:20px;width:20px;margin-right:3px;float:left;";
-                }
-                else
-                {
-                    img = "../../ashok-images/closes.svg";
-                    color = "red";
-                    style = "height:20px;width:20px;margin-right:3px;float:left;";
-                }
-
-
-                <tr>
-                    <td>
-                        <img style="@style background-color:@color;" src=@img />
-                        @item.status
-                    </td>
+                        }
+                        else if (item.status.ToUpper() == "FAILED")
+                        {
+                            img = "../../ashok-images/closes.svg";
+                            color = "red";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
+                        else
+                        {
+                            img = "../../ashok-images/closes.svg";
+                            color = "red";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
 
 
-                    <td>@item.amount</td>
-                    <td>@item.req_date</td>
-                    <td>@item.bankrrn</td>
-                    <td>@item.accountno</td>
-                    <td>@item.bankname</td>
-                    <td>@item.benname</td>
+    <tr>
+        <td>
+            <img style="@style background-color:@color;" src=@img />
+            @item.status
+        </td>
 
-                </tr>
-            }
-        </tbody>
-    }
 
+        <td>@item.amount</td>
+        <td>@item.req_date</td>
+        <td>@item.bankrrn</td>
+        <td>@item.accountno</td>
+        <td>@item.bankname</td>
+        <td>@item.benname</td>
+
+    </tr>}
+                </tbody>}
+    @if (Model.Recent_Aeps_UPI != null)
+
+    {
+<thead>
+    <tr style="color: black;">
+        <th>Status</th>
+        <th>Amount</th>
+        <th>Time</th>
+        <th>Payer&nbsp;Name</th>
+        <th>Payer&nbsp;VPA</th>
+        <th>Bank&nbsp;RRN</th>
+    </tr>
+</thead>
+                <tbody>
+                    @foreach (var item in Model.Recent_Aeps_UPI)
+                    {
+                        var img = ""; var color = ""; var style = "";
+
+                        if (item.Status.ToUpper() == "SUCCESS")
+                        {
+                            img = "../../ashok-images/correct.svg";
+                            color = "green";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
+                        else if (item.Status.ToUpper() == "PENDING")
+                        {
+                            img = "../../ashok-images/clock.svg";
+                            style = "height: 20px;width: 20px;margin-right:3px;float:left;max-width: 100%;padding: 0;";
+                            //color = "#ff9e00";
+
+                        }
+                        else if (item.Status.ToUpper() == "FAILED")
+                        {
+                            img = "../../ashok-images/closes.svg";
+                            color = "red";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
+                        else
+                        {
+                            img = "../../ashok-images/closes.svg";
+                            color = "red";
+                            style = "height:20px;width:20px;margin-right:3px;float:left;";
+                        }
+
+
+    <tr>
+        <td>
+            <img style="@style background-color:@color;" src=@img />
+            @item.Status
+        </td>
+
+
+        <td>@item.Amount</td>
+        <td>@item.txndate</td>
+        <td>@item.PayerName</td>
+        <td>@item.PayerVPA</td>
+        <td>@item.Bankrrn</td>
+    </tr>}
+                </tbody>}
 </table>
 @*<script>
         $(document).ready(function () {
