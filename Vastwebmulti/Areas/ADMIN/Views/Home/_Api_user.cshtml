@@ -72,7 +72,7 @@
                     <div>
                         <div class="wl-modal-header__label">API User</div>
                         <div class="wl-modal-header__balance" id="auModalTitle">
-                            <i class="fas fa-wallet" style="font-size:.75rem;margin-right:5px;opacity:.8;"></i>Balance:&nbsp;<span id="apiremain">�</span>
+                            <i class="fas fa-wallet" style="font-size:.75rem;margin-right:5px;opacity:.8;"></i>Balance:&nbsp;<span id="apiremain">-</span>
                         </div>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
             <!-- Body -->
             <div class="wl-modal-body">
 
-                <!-- Shared hidden � always accessible regardless of which form is active -->
+                <!-- Shared hidden - always accessible regardless of which form is active -->
                 <input type="hidden" id="au_apiid_shared" value="" />
 
                 <!-- VIEW form (read-only) -->
@@ -103,47 +103,47 @@
                     <div class="wl-view-row">
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-envelope" style="margin-right:3px;"></i>Email</div>
-                            <div class="wl-view-field__val" id="view_Email">�</div>
+                            <div class="wl-view-field__val" id="view_Email">-</div>
                             @Html.Hidden("Email11")
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-id-card" style="margin-right:3px;"></i>PAN Card</div>
-                            <div class="wl-view-field__val" id="view_Pan">�</div>
+                            <div class="wl-view-field__val" id="view_Pan">-</div>
                             @Html.Hidden("Pancard11")
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-fingerprint" style="margin-right:3px;"></i>Aadhaar</div>
-                            <div class="wl-view-field__val" id="view_Aadhar">�</div>
+                            <div class="wl-view-field__val" id="view_Aadhar">-</div>
                             @Html.Hidden("Aadhar11")
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-map-pin" style="margin-right:3px;"></i>Pin Code</div>
-                            <div class="wl-view-field__val" id="view_Pin">�</div>
+                            <div class="wl-view-field__val" id="view_Pin">-</div>
                             @Html.Hidden("pincode11")
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-percent" style="margin-right:3px;"></i>Margin (Offline)</div>
-                            <div class="wl-view-field__val" id="offmargine">�</div>
+                            <div class="wl-view-field__val" id="offmargine">-</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-file-invoice" style="margin-right:3px;"></i>GST No</div>
-                            <div class="wl-view-field__val" id="view_GST">�</div>
+                            <div class="wl-view-field__val" id="view_GST">-</div>
                             @Html.Hidden("GSTRegistrationNo11")
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-map" style="margin-right:3px;"></i>State</div>
-                            <div class="wl-view-field__val" id="view_State">�</div>
+                            <div class="wl-view-field__val" id="view_State">-</div>
                             @Html.Hidden("State11")
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-city" style="margin-right:3px;"></i>District</div>
-                            <div class="wl-view-field__val" id="view_District">�</div>
+                            <div class="wl-view-field__val" id="view_District">-</div>
                             @Html.Hidden("District11")
                         </div>
                     </div>
                     <div class="wl-view-field" style="margin-top:6px;">
                         <div class="wl-view-field__label"><i class="fas fa-location-arrow" style="margin-right:3px;"></i>Address</div>
-                        <div class="wl-view-field__val" id="view_Address">�</div>
+                        <div class="wl-view-field__val" id="view_Address">-</div>
                         @Html.Hidden("address11")
                     </div>
 
@@ -349,9 +349,9 @@
     </div></div>
 </div>
 
-<!-- JS � use namespaced events to prevent duplicate registration on AJAX refresh -->
+<!-- JS - use namespaced events to prevent duplicate registration on AJAX refresh -->
 <script>
-    // Edit button � switch to edit form
+    // Edit button - switch to edit form
     $(document).off('click.auEdit').on('click.auEdit', '.mastetr222Modal button.wl-mf-btn[value="Edit"]', function () {
         $(".mastetr222Modal .first-form").hide();
         $(".mastetr222Modal .second-form").show();
@@ -361,12 +361,12 @@
         $(".mastetr222Modal .second-form").hide();
         $(".mastetr222Modal .first-form").show();
     });
-    // Delegated click on detail arrow � works after AJAX table refresh
+    // Delegated click on detail arrow - works after AJAX table refresh
     $(document).off('click.auOpenModal').on('click.auOpenModal', '.js-au-open-modal', function () {
         var apiid = $(this).data('apiid');
         mdActionBtn(apiid);
     });
-    // Modal close � refresh table once (namespace prevents double-fire on re-render)
+    // Modal close - refresh table once (namespace prevents double-fire on re-render)
     $(document).off('hide.bs.modal.auModal').on('hide.bs.modal.auModal', '#defaultModal222', function () {
         $.ajax({
             url: '@Url.Action("ApiUserlistPart","Home")', type: 'GET', cache: false,
@@ -394,7 +394,7 @@
     }
     function OnFailureotperror(data) {
         $('#otpmodal').modal('show');
-        $('#otpwrong').text("OTP Mismatch � Please enter Correct OTP");
+        $('#otpwrong').text("OTP Mismatch - Please enter Correct OTP");
     }
 </script>
 <script>
@@ -482,7 +482,7 @@
 </script>
 <script>
     function Deleteuser() {
-        // Use shared hidden field � accessible from both view and edit form
+        // Use shared hidden field - accessible from both view and edit form
         var apiid = $('#au_apiid_shared').val() || $('#apiid').val();
         $.ajax({
             url: '@Url.Action("DeleteApiuserByID","Home")', type: 'POST', data: { apiid: apiid }, cache: false,
@@ -531,14 +531,14 @@
                 $("#FirmEdit").val(data2.list[0].farmname);
                 $("#RegisteredDate").text(createddate);
                 // View fields
-                $("#view_Email").text(data2.list[0].emailid || '�');
-                $("#view_Pan").text(data2.list[0].pancard || '�');
-                $("#view_Aadhar").text(CCNValue || '�');
-                $("#view_Pin").text(data2.list[0].pincode || '�');
-                $("#view_GST").text(data2.list[0].gst || '�');
-                $("#view_State").text(data2.list[0].State_name || '�');
-                $("#view_District").text(data2.list[0].Dist_Desc || '�');
-                $("#view_Address").text(data2.list[0].address || '�');
+                $("#view_Email").text(data2.list[0].emailid || '-');
+                $("#view_Pan").text(data2.list[0].pancard || '-');
+                $("#view_Aadhar").text(CCNValue || '-');
+                $("#view_Pin").text(data2.list[0].pincode || '-');
+                $("#view_GST").text(data2.list[0].gst || '-');
+                $("#view_State").text(data2.list[0].State_name || '-');
+                $("#view_District").text(data2.list[0].Dist_Desc || '-');
+                $("#view_Address").text(data2.list[0].address || '-');
                 // Hidden fields
                 $("#Email11").val(data2.list[0].emailid);
                 $("#Pancard11").val(data2.list[0].pancard);
@@ -554,7 +554,7 @@
                 $("#gstEdit").val(data2.list[0].gst);
                 $("#PinEdit").val(data2.list[0].pincode);
                 $("#offmargineEdit").val(data2.list[0].marginecomm);
-                $("#offmargine").text(data2.list[0].marginecomm || '�');
+                $("#offmargine").text(data2.list[0].marginecomm || '-');
                 $("#apiremain").html(data2.list[0].allremain);
                 $("#AddressEdit").val(data2.list[0].address);
                 // KYC doc visibility
@@ -577,7 +577,7 @@
                             $("#frmagrdocnotshow").hide(); $('#frmagrapproved').hide();
                             var link = $("<a>").attr("href","#").text("Certificate").addClass("link");
                             $('#alinks').html(link); $('#frmagrimageshow').attr('src', "../.." + frmagmnt);
-                            $('#frmagrEdit').val('Agreement Approved � Check Certificate.');
+                            $('#frmagrEdit').val('Agreement Approved - Check Certificate.');
                         }
                     }
                 } else { $('#frmagrdocshow').hide(); $('#frmagrapproved').hide(); $('#frmagrEdit').val('KYC Due'); }

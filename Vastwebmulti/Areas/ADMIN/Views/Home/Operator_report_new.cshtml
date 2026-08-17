@@ -8,10 +8,15 @@
     if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
     var dateMode = (ViewBag.chk as string) == "post" ? "post" : "get";
     var statusFilter = (Request["ddl_status"] ?? ViewBag.ddl_status as string ?? "").Trim();
-    var hasPortStats = (Model.srspending != null && Model.srspending.Any())
-        || (Model.srspending_old != null && Model.srspending_old.Any());
-    var reportRows = ViewBag.ReportRows as IEnumerable<Vastwebmulti.Models.proc_Recharge_operator_report_newPaging_Result>
+    var oprPortList = Model.srspending != null ? Model.srspending.ToList() : null;
+    var oprPortCounts = Model.srspending1 != null ? Model.srspending1.ToList() : new List<Vastwebmulti.Models.SRS_pending_count_ALL_Result>();
+    var oprPortListOld = Model.srspending_old != null ? Model.srspending_old.ToList() : null;
+    var oprPortCountsOld = Model.srspending1_old != null ? Model.srspending1_old.ToList() : new List<Vastwebmulti.Models.SRS_pending_count_ALL_old_Result>();
+    var hasPortStats = (oprPortList != null && oprPortList.Any())
+        || (oprPortListOld != null && oprPortListOld.Any());
+    var reportRowsSource = ViewBag.ReportRows as IEnumerable<Vastwebmulti.Models.proc_Recharge_operator_report_newPaging_Result>
         ?? Enumerable.Empty<Vastwebmulti.Models.proc_Recharge_operator_report_newPaging_Result>();
+    var reportRows = reportRowsSource.ToList();
 }
 
 <link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=2" rel="stylesheet" />
@@ -22,7 +27,7 @@
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=48" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-operator-report-page">
@@ -60,43 +65,6 @@
                     @Html.Partial("menuoperatorreport")
                 </div>
             </div>
-
-                @if (hasPortStats)
-                {
-                <div class="vm-opr-utility-strip">
-                        <div id="all" class="vm-opr-port-chips">
-                            @{
-                                var oprPortIdx = 0;
-                            }
-                            @if (Model.srspending != null)
-                            {
-                                var oprCounts = Model.srspending1 != null ? Model.srspending1.ToList() : new List<Vastwebmulti.Models.SRS_pending_count_ALL_Result>();
-                                foreach (var item in Model.srspending)
-                                {
-                                    var cntVal = oprCounts.Count > oprPortIdx ? oprCounts[oprPortIdx].cnt : null;
-                                    <button type="button" class="vm-opr-port-chip @(item.portname == null ? "vm-opr-port-chip--nil" : "")" name="prtname" value="@(item.portname ?? "pen")" onclick="getval(this)">
-                                        <span class="vm-opr-port-chip__name">@(item.portname ?? "NILL COM")</span>
-                                        <span class="vm-opr-port-chip__count">@(cntVal.HasValue ? cntVal.Value : 0)</span>
-                                    </button>
-                                    oprPortIdx++;
-                                }
-                            }
-                            else if (Model.srspending_old != null)
-                            {
-                                var oprCountsOld = Model.srspending1_old != null ? Model.srspending1_old.ToList() : new List<Vastwebmulti.Models.SRS_pending_count_ALL_old_Result>();
-                                foreach (var item in Model.srspending_old)
-                                {
-                                    var cntVal = oprCountsOld.Count > oprPortIdx ? oprCountsOld[oprPortIdx].cnt : null;
-                                    <button type="button" class="vm-opr-port-chip @(item.portname == null ? "vm-opr-port-chip--nil" : "")" name="prtname" value="@(item.portname ?? "pen")" onclick="getval(this)">
-                                        <span class="vm-opr-port-chip__name">@(item.portname ?? "NILL COM")</span>
-                                        <span class="vm-opr-port-chip__count">@(cntVal.HasValue ? cntVal.Value : 0)</span>
-                                    </button>
-                                    oprPortIdx++;
-                                }
-                            }
-                        </div>
-                </div>
-                }
 
             <div class="vm-rpt-filters-panel">
             @using (Html.BeginForm("Operator_report_new", "Home", FormMethod.Post, new { id = "operatorReportForm", @class = "vm-opr-inline-form vm-rpt-filters-panel__form", data_date_mode = dateMode, data_frm_date = frmDate, data_to_date = toDate, data_ddlusers = ViewBag.ddlusers, data_user = ViewBag.user, data_search_url = Url.Action("_showRechargeReport", "Home") }))
@@ -207,9 +175,67 @@
 
             <div class="vm-opr-table-panel" id="showreport">
                 <div class="vm-opr-table-panel__head">
-                    <div class="vm-opr-table-panel__title">
-                        <i class="fas fa-list-alt" aria-hidden="true"></i>
-                        <span>Transaction report</span>
+                    <div class="vm-opr-table-panel__head-main">
+                        <div class="vm-opr-table-panel__title">
+                            <i class="fas fa-list-alt" aria-hidden="true"></i>
+                            <span>Transaction report</span>
+                        </div>
+                        <div class="for-new-button vm-opr-table-panel__bulk" style="display:none;" aria-live="polite">
+                            <div class="for-new-button-inner vm-opr-bulk-toolbar">
+                                <button type="button" class="vm-opr-bulk-btn vm-opr-bulk-btn--success" data-toggle="modal" onclick="checkboxinfo()" data-target="#s-b-pop">
+                                    <i class="fas fa-check" aria-hidden="true"></i><span>Success</span>
+                                </button>
+                                <button type="button" class="vm-opr-bulk-btn vm-opr-bulk-btn--failed" data-toggle="modal" onclick="checkboxinfoF()" data-target="#f-b-pop">
+                                    <i class="fas fa-times" aria-hidden="true"></i><span>Failed</span>
+                                </button>
+                                <button type="button" class="vm-opr-bulk-btn vm-opr-bulk-btn--resend" data-toggle="modal" onclick="checkboxinfoR()" data-target="#r-b-pop">
+                                    <i class="fas fa-redo" aria-hidden="true"></i><span>Resend</span>
+                                </button>
+                            </div>
+                        </div>
+                        @if (hasPortStats)
+                        {
+                        <div class="vm-opr-table-panel__ports" id="vm-opr-table-ports">
+                            <span class="vm-opr-table-panel__ports-label"><i class="fas fa-broadcast-tower" aria-hidden="true"></i> Live ports</span>
+                            <div id="all" class="vm-opr-port-chips vm-opr-table-panel__port-chips">
+                                @{
+                                    var oprPortIdxHead = 0;
+                                }
+                                @if (oprPortList != null)
+                                {
+                                    foreach (var item in oprPortList)
+                                    {
+                                        var cntValHead = oprPortCounts.Count > oprPortIdxHead ? oprPortCounts[oprPortIdxHead].cnt : null;
+                                        <button type="button" class="vm-opr-port-chip vm-opr-port-chip--table @(item.portname == null ? "vm-opr-port-chip--nil" : "")" name="prtname" value="@(item.portname ?? "pen")" onclick="getval(this)">
+                                            <span class="vm-opr-port-chip__lead" aria-hidden="true"><i class="fas fa-plug"></i></span>
+                                            <span class="vm-opr-port-chip__info">
+                                                <span class="vm-opr-port-chip__name">@(item.portname ?? "NILL COM")</span>
+                                                <span class="vm-opr-port-chip__sub">Pending txns</span>
+                                            </span>
+                                            <span class="vm-opr-port-chip__count">@(cntValHead.HasValue ? cntValHead.Value : 0)</span>
+                                        </button>
+                                        oprPortIdxHead++;
+                                    }
+                                }
+                                else if (oprPortListOld != null)
+                                {
+                                    foreach (var item in oprPortListOld)
+                                    {
+                                        var cntValHead = oprPortCountsOld.Count > oprPortIdxHead ? oprPortCountsOld[oprPortIdxHead].cnt : null;
+                                        <button type="button" class="vm-opr-port-chip vm-opr-port-chip--table @(item.portname == null ? "vm-opr-port-chip--nil" : "")" name="prtname" value="@(item.portname ?? "pen")" onclick="getval(this)">
+                                            <span class="vm-opr-port-chip__lead" aria-hidden="true"><i class="fas fa-plug"></i></span>
+                                            <span class="vm-opr-port-chip__info">
+                                                <span class="vm-opr-port-chip__name">@(item.portname ?? "NILL COM")</span>
+                                                <span class="vm-opr-port-chip__sub">Pending txns</span>
+                                            </span>
+                                            <span class="vm-opr-port-chip__count">@(cntValHead.HasValue ? cntValHead.Value : 0)</span>
+                                        </button>
+                                        oprPortIdxHead++;
+                                    }
+                                }
+                            </div>
+                        </div>
+                        }
                     </div>
                     <span class="vm-opr-table-panel__hint">Scroll horizontally for all columns</span>
                 </div>
@@ -473,200 +499,214 @@
 
 
 <!--for s/b popup-->
-<div class="modal fade mastetr222Modal saas-admin-modal" id="s-b-pop" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header saas-admin-modal-header accent-emerald">
+<div class="modal fade mastetr222Modal saas-admin-modal vm vm-opr-bulk-modal vm-opr-bulk-success-modal" id="s-b-pop" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog vm-opr-bulk-modal-dialog vm-opr-bulk-success-dialog" role="document">
+        <div class="modal-content vm-opr-bulk-modal-content vm-opr-bulk-success-content">
+            <div class="modal-header saas-admin-modal-header accent-emerald vm-opr-bulk-success-header">
                 <div class="saas-admin-modal-head-main">
-                    <div class="saas-admin-modal-icon"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-icon vm-opr-bulk-success-header__icon"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
                     <div>
-                        <h4 class="saas-admin-modal-title">Bulk success</h4>
-                        <p class="saas-admin-modal-sub">Mark selected transactions as success</p>
+                        <h4 class="saas-admin-modal-title vm-opr-bulk-success-header__title">Bulk success</h4>
+                        <p class="saas-admin-modal-sub vm-opr-bulk-success-header__sub">Mark selected transactions as success</p>
                     </div>
                 </div>
                 <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
             </div>
-            <div class="modal-body">
-                <div class="vm-opr-bulk-panel">
-                <div class="s-b-pop-first">
-                    <fieldset>
-                        <p>Failed transactions can only Success. Transaction history shown in report  <b>fail &gt; Success</b>.</p>
-                        <p>Pending transactions can success or fail. Transaction history shown in report  <b>success</b> or <b>fail</b>.</p>
-                    </fieldset>
-                </div>
-                <div class="s-b-pop-second">
-                    <div class="s-b-pop-second-top">
-                        <label>Operator Id (Optional)</label>
-                        <input id="hiddenid" type="hidden" />
-                        <input id="optidsuccess" type="text" placeholder="Enter" />
+            <div class="modal-body saas-admin-modal-body vm-opr-bulk-modal-body vm-opr-bulk-success-body">
+                <input id="hiddenid" type="hidden" />
+
+                <div class="vm-opr-bulk-panel vm-opr-bulk-success-form">
+                    <div class="vm-opr-bulk-note vm-opr-bulk-note--success vm-opr-bulk-success-note">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        <div>
+                            <p>Failed transactions can only success. History: <b>fail &gt; success</b>.</p>
+                            <p>Pending transactions can success or fail. History: <b>success</b> or <b>fail</b>.</p>
+                        </div>
                     </div>
-                    <div class="s-b-pop-second-button">
-                        <button type="button" onclick="successall()" class="saas-admin-modal-btn saas-admin-modal-btn--success">Go To Success</button>
-                        <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
+                    <div class="vm-opr-bulk-form-field vm-opr-bulk-success-field">
+                        <label for="optidsuccess">Operator Id (optional)</label>
+                        <input id="optidsuccess" type="text" class="form-control vm-opr-bulk-input vm-opr-bulk-success-input" placeholder="Enter operator id" />
                     </div>
                 </div>
+
+                <div class="vm-opr-bulk-modal-table-card vm-opr-bulk-success-table-card">
+                    <div class="vm-opr-bulk-modal-table-head vm-opr-bulk-success-table-head">
+                        <span class="vm-opr-bulk-modal-table-title"><i class="fas fa-list-ul" aria-hidden="true"></i> Selected transactions</span>
+                        <span class="vm-opr-bulk-modal-table-hint"><i class="fas fa-arrows-alt-h" aria-hidden="true"></i> Scroll table</span>
+                    </div>
+                    <div class="table-responsive vm-opr-bulk-modal-table-wrap vm-opr-bulk-success-table-wrap">
+                        <table class="table table-bordered table-striped table-hover vm-opr-bulk-modal-table vm-opr-bulk-success-table">
+                            <thead>
+                                <tr>
+                                    <th>Sr</th>
+                                    <th>Status</th>
+                                    <th>User Information</th>
+                                    <th>Consumer No.</th>
+                                    <th>Operator Name</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="restable"></tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>Sr</th>
-                                <th>Status</th>
-                                <th>User Information</th>
-                                <th>Consumer No.</th>
-                                <th>Operator Name</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody id="restable">
-                        </tbody>
-                    </table>
+
+                <div class="vm-opr-bulk-modal-footer vm-opr-bulk-success-footer">
+                    <div class="vm-opr-bulk-success-actions">
+                        <button type="button" onclick="successall()" class="saas-admin-modal-btn saas-admin-modal-btn--success vm-opr-bulk-success-btn vm-opr-bulk-success-btn--go">Go To Success</button>
+                        <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost vm-opr-bulk-success-btn vm-opr-bulk-success-btn--close" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade mastetr222Modal saas-admin-modal" id="f-b-pop" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header saas-admin-modal-header accent-danger">
+<div class="modal fade mastetr222Modal saas-admin-modal vm vm-opr-bulk-modal vm-opr-bulk-failed-modal" id="f-b-pop" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog vm-opr-bulk-modal-dialog vm-opr-bulk-failed-dialog" role="document">
+        <div class="modal-content vm-opr-bulk-modal-content vm-opr-bulk-failed-content">
+            <div class="modal-header saas-admin-modal-header accent-danger vm-opr-bulk-failed-header">
                 <div class="saas-admin-modal-head-main">
-                    <div class="saas-admin-modal-icon"><i class="fas fa-times-circle" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-icon vm-opr-bulk-failed-header__icon"><i class="fas fa-times-circle" aria-hidden="true"></i></div>
                     <div>
-                        <h4 class="saas-admin-modal-title">Bulk failed</h4>
-                        <p class="saas-admin-modal-sub">Mark selected transactions as failed</p>
+                        <h4 class="saas-admin-modal-title vm-opr-bulk-failed-header__title">Bulk failed</h4>
+                        <p class="saas-admin-modal-sub vm-opr-bulk-failed-header__sub">Mark selected transactions as failed</p>
                     </div>
                 </div>
                 <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
             </div>
-            <div class="modal-body">
-                <div class="vm-opr-bulk-panel">
-                <div class="s-b-pop-first">
-                    <fieldset>
-                        <p>Successful transactions can only fail. Transaction history shown in report <b>success &gt; fail</b>.</p>
-                        <p>Pending transactions can success or fail. Transaction history shown in report  <b>success</b> or <b>fail</b>.</p>
-                    </fieldset>
-                </div>
-                <div class="s-b-pop-second">
-                    @*<div class="s-b-pop-second-top">
-                            <label>Operator Id (Optional)</label>
-                            <input id="hiddenidF" type="hidden" />
-                            <input id="optidsuccess" type="text" placeholder="Enter" />
-                        </div>*@
-                    <div class="s-b-pop-second-top">
-                        <input id="hiddenidF" type="hidden" />
-                        <label>Select Reason</label>
+            <div class="modal-body saas-admin-modal-body vm-opr-bulk-modal-body vm-opr-bulk-failed-body">
+                <input id="hiddenidF" type="hidden" />
 
-                        <div class="custom-icon-one" id="hidecustomize">
-                            <button id="showhide">
-                                <select id="failedidnn">
-                                    <option value="Failed Due To Invalid Choice">Failed Due To Invalid Choice</option>
-                                    <option value="Network Down">Network Down</option>
-                                    <option value="Unsupported Network">Unsupported Network</option>
-                                    <option value="Network issue">Network issue</option>
-                                    <option value="Insufficient Fund">Insufficient Fund </option>
-                                    <option value="Customize" id="hcustomize">Customize</option>
-                                </select>
-                            </button>
-                        </div>
-                        <div id="showcustomize" style="display: none;">
-                            <input id="customizemessage" type="text" placeholder="Enter the Reason" required />
+                <div class="vm-opr-bulk-panel vm-opr-bulk-panel--failed vm-opr-bulk-failed-form">
+                    <div class="vm-opr-bulk-note vm-opr-bulk-note--danger vm-opr-bulk-failed-note">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        <div>
+                            <p>Successful transactions can only fail. History: <b>success &gt; fail</b>.</p>
+                            <p>Pending transactions can success or fail. History: <b>success</b> or <b>fail</b>.</p>
                         </div>
                     </div>
 
-                    <div class="Popupbox">
-                        @TempData["otpnot"]
-                        <input type="number" id="failedidnncustomize" required placeholder="Enter the otp" />
-                        <button class="firstbutton" onclick="Failedall('with')" id="firstbutton">Submit</button>
-                        <button class="secondbutton" id="secondbutton" onclick="sendotp()">Resend</button>
+                    <div class="vm-opr-bulk-form-field vm-opr-bulk-failed-field">
+                        <label for="failedidnn">Select reason</label>
+                        <div class="vm-opr-bulk-reason" id="hidecustomize">
+                            <select id="failedidnn" class="form-control vm-opr-bulk-select vm-opr-bulk-failed-select">
+                                <option value="Failed Due To Invalid Choice">Failed Due To Invalid Choice</option>
+                                <option value="Network Down">Network Down</option>
+                                <option value="Unsupported Network">Unsupported Network</option>
+                                <option value="Network issue">Network issue</option>
+                                <option value="Insufficient Fund">Insufficient Fund</option>
+                                <option value="Customize" id="hcustomize">Customize</option>
+                            </select>
+                        </div>
+                        <div id="showcustomize" class="vm-opr-bulk-custom-reason vm-opr-bulk-failed-custom" style="display:none;">
+                            <input id="customizemessage" type="text" class="form-control vm-opr-bulk-input vm-opr-bulk-failed-input" placeholder="Enter custom reason" required />
+                        </div>
                     </div>
-                    @*<div class="s-b-pop-second-top" style="display:none;">
-                        <h4 style="font-size: 19px;font-weight: 800;">Please verify first and resend carefully</h4>
-                        </div>*@
-                    <div class="s-b-pop-second-button">
+                </div>
 
-                        @if (@ViewBag.checkfailedstatus)
-                        {
-
-                            <button type="button" id="showpopupbox" class="saas-admin-modal-btn saas-admin-modal-btn--danger" onclick="sendotp()">Go To Failed</button>
-                            <button id="closepopupbox" type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
-
-                        }
-                        else
-                        {
-                            <button type="button" onclick="Failedall('Without')" class="saas-admin-modal-btn saas-admin-modal-btn--danger">Go To Failed</button>
-                            <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
-                        }
-
+                <div class="vm-opr-bulk-modal-table-card vm-opr-bulk-failed-table-card">
+                    <div class="vm-opr-bulk-modal-table-head vm-opr-bulk-failed-table-head">
+                        <span class="vm-opr-bulk-modal-table-title"><i class="fas fa-list-ul" aria-hidden="true"></i> Selected transactions</span>
+                        <span class="vm-opr-bulk-modal-table-hint"><i class="fas fa-arrows-alt-h" aria-hidden="true"></i> Scroll table</span>
                     </div>
-                    <span id="txterrormsg" style="color:red;"></span>
+                    <div class="table-responsive vm-opr-bulk-modal-table-wrap vm-opr-bulk-failed-table-wrap">
+                        <table class="table table-bordered table-striped table-hover vm-opr-bulk-modal-table vm-opr-bulk-failed-table">
+                            <thead>
+                                <tr>
+                                    <th>Sr</th>
+                                    <th>Status</th>
+                                    <th>User Information</th>
+                                    <th>Consumer No.</th>
+                                    <th>Operator Name</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resfailedtable"></tbody>
+                        </table>
+                    </div>
+                </div>
 
-                </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>Sr</th>
-                                <th>Status</th>
-                                <th>User Information</th>
-                                <th>Consumer No.</th>
-                                <th>Operator Name</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resfailedtable">
-                        </tbody>
-                    </table>
+                <div class="vm-opr-bulk-modal-footer vm-opr-bulk-failed-footer">
+                    <div class="vm-opr-bulk-otp-step vm-opr-bulk-failed-actions">
+                        <div class="vm-opr-bulk-otp-field-wrap vm-opr-bulk-failed-otp">
+                            @TempData["otpnot"]
+                            <label for="failedidnncustomize" class="vm-opr-bulk-otp-label">OTP verification</label>
+                            <input type="number" id="failedidnncustomize" class="form-control vm-opr-bulk-input vm-opr-bulk-otp-input vm-opr-bulk-failed-input" required placeholder="Enter OTP" />
+                        </div>
+                        <div class="vm-opr-bulk-action-bar vm-opr-bulk-failed-action-bar">
+                            <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--success vm-opr-bulk-action-otp vm-opr-bulk-failed-btn vm-opr-bulk-failed-btn--submit" onclick="Failedall('with')" id="firstbutton">Submit</button>
+                            <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost vm-opr-bulk-action-otp vm-opr-bulk-failed-btn vm-opr-bulk-failed-btn--resend" id="secondbutton" onclick="sendotp()">Resend OTP</button>
+                            @if (@ViewBag.checkfailedstatus)
+                            {
+                                <button type="button" id="showpopupbox" class="saas-admin-modal-btn saas-admin-modal-btn--danger vm-opr-bulk-action-primary vm-opr-bulk-failed-btn vm-opr-bulk-failed-btn--go" onclick="openBulkFailedOtp()">Go To Failed</button>
+                                <button type="button" id="closepopupbox" class="saas-admin-modal-btn saas-admin-modal-btn--ghost vm-opr-bulk-failed-btn vm-opr-bulk-failed-btn--close" data-dismiss="modal">Close</button>
+                            }
+                            else
+                            {
+                                <button type="button" onclick="Failedall('Without')" class="saas-admin-modal-btn saas-admin-modal-btn--danger vm-opr-bulk-failed-btn vm-opr-bulk-failed-btn--go">Go To Failed</button>
+                                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost vm-opr-bulk-failed-btn vm-opr-bulk-failed-btn--close" data-dismiss="modal">Close</button>
+                            }
+                        </div>
+                    </div>
+                    <span id="txterrormsg" class="vm-opr-bulk-error-msg vm-opr-bulk-failed-error"></span>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade mastetr222Modal saas-admin-modal" id="r-b-pop" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header saas-admin-modal-header accent-amber">
+<div class="modal fade mastetr222Modal saas-admin-modal vm vm-opr-bulk-modal vm-opr-bulk-resend-modal" id="r-b-pop" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog vm-opr-bulk-modal-dialog vm-opr-bulk-resend-dialog" role="document">
+        <div class="modal-content vm-opr-bulk-modal-content vm-opr-bulk-resend-content">
+            <div class="modal-header saas-admin-modal-header accent-amber vm-opr-bulk-resend-header">
                 <div class="saas-admin-modal-head-main">
-                    <div class="saas-admin-modal-icon"><i class="fas fa-redo" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-icon vm-opr-bulk-resend-header__icon"><i class="fas fa-redo" aria-hidden="true"></i></div>
                     <div>
-                        <h4 class="saas-admin-modal-title">Bulk resend</h4>
-                        <p class="saas-admin-modal-sub">Resend selected pending transactions</p>
+                        <h4 class="saas-admin-modal-title vm-opr-bulk-resend-header__title">Bulk resend</h4>
+                        <p class="saas-admin-modal-sub vm-opr-bulk-resend-header__sub">Resend selected pending transactions</p>
                     </div>
                 </div>
                 <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
             </div>
-            <div class="modal-body">
-                <div class="vm-opr-bulk-panel">
-                <div class="s-b-pop-first">
-                    <fieldset>
-                        <p>Verify selected amount entries very well, aggregated transactions are more risky.</p>
-                        <p>Resend process applicable only for the pending transactions. history showing in the live report.</p>
-                    </fieldset>
-                </div>
-                <div class="s-b-pop-second">
-                    <input id="hiddenidR" type="hidden" />
-                    <div class="s-b-pop-second-button" style="float:right;">
-                        <button type="button" onclick="Resendall()" class="saas-admin-modal-btn saas-admin-modal-btn--warning">Go To Resend</button>
-                        <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
+            <div class="modal-body saas-admin-modal-body vm-opr-bulk-modal-body vm-opr-bulk-resend-body">
+                <input id="hiddenidR" type="hidden" />
+
+                <div class="vm-opr-bulk-panel vm-opr-bulk-resend-form">
+                    <div class="vm-opr-bulk-note vm-opr-bulk-note--warning vm-opr-bulk-resend-note">
+                        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                        <div>
+                            <p>Verify selected amount entries very well, aggregated transactions are more risky.</p>
+                            <p>Resend process applicable only for pending transactions. History shows in the live report.</p>
+                        </div>
                     </div>
                 </div>
+
+                <div class="vm-opr-bulk-modal-table-card vm-opr-bulk-resend-table-card">
+                    <div class="vm-opr-bulk-modal-table-head vm-opr-bulk-resend-table-head">
+                        <span class="vm-opr-bulk-modal-table-title"><i class="fas fa-list-ul" aria-hidden="true"></i> Selected transactions</span>
+                        <span class="vm-opr-bulk-modal-table-hint"><i class="fas fa-arrows-alt-h" aria-hidden="true"></i> Scroll table</span>
+                    </div>
+                    <div class="table-responsive vm-opr-bulk-modal-table-wrap vm-opr-bulk-resend-table-wrap">
+                        <table class="table table-bordered table-striped table-hover vm-opr-bulk-modal-table vm-opr-bulk-resend-table">
+                            <thead>
+                                <tr>
+                                    <th>Sr</th>
+                                    <th>Status</th>
+                                    <th>User Information</th>
+                                    <th>Consumer No.</th>
+                                    <th>Operator Name</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resresendtable"></tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>Sr</th>
-                                <th>Status</th>
-                                <th>User Information</th>
-                                <th>Consumer No.</th>
-                                <th>Operator Name</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resresendtable">
-                        </tbody>
-                    </table>
+
+                <div class="vm-opr-bulk-modal-footer vm-opr-bulk-resend-footer">
+                    <div class="vm-opr-bulk-resend-actions">
+                        <button type="button" onclick="Resendall()" class="saas-admin-modal-btn saas-admin-modal-btn--warning vm-opr-bulk-resend-btn vm-opr-bulk-resend-btn--go">Go To Resend</button>
+                        <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost vm-opr-bulk-resend-btn vm-opr-bulk-resend-btn--close" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -693,7 +733,12 @@
 <script>
     //$(".for-new [type='checkbox']").change(function () {
     function functionch() {
-        /* Checkbox change � consumer lookup always stays visible */
+        var count = $("input[name='datavalue']:checked").length;
+        if (count > 0) {
+            $('.for-new-button').addClass('is-visible').show();
+        } else {
+            $('.for-new-button').removeClass('is-visible').hide();
+        }
     }
     // alert(count);
     //alert("gg");
@@ -750,7 +795,7 @@
             if (rstatus.toUpperCase() != "SUCCESS") {
                 tableBody = $("#restable");
 
-                markup = "<tr><td>" + int + "</td><td>" + rstatus + "</td><td>" + name + "</td><td>" + mobile + " <br/> <small>" + circle + "</small></td><td>" + Operator_name + "</td><td>" + amount + "</td></tr>";
+                markup = "<tr><td>" + int + "</td><td>" + rstatus + "</td><td>" + name + "</td><td><span class='vm-opr-bulk-cell-main'>" + mobile + "</span><span class='vm-opr-bulk-cell-sub'>" + circle + "</span></td><td>" + Operator_name + "</td><td>" + amount + "</td></tr>";
                 tableBody.append(markup);
                 favorite.push(id);
                 int++;
@@ -816,7 +861,7 @@
                 tableBody = $("#resfailedtable");
 
 
-                markup = "<tr><td>" + int + "</td><td>" + rstatus + "</td><td>" + name + "</td><td>" + mobile + " <br/> <small>" + circle + "</small></td><td>" + Operator_name + "</td><td>" + amount + "</td></tr>";
+                markup = "<tr><td>" + int + "</td><td>" + rstatus + "</td><td>" + name + "</td><td><span class='vm-opr-bulk-cell-main'>" + mobile + "</span><span class='vm-opr-bulk-cell-sub'>" + circle + "</span></td><td>" + Operator_name + "</td><td>" + amount + "</td></tr>";
 
                 tableBody.append(markup);
                 favorite.push(id);
@@ -828,23 +873,38 @@
 </script>
 
 <script>
-    $("#showhide").click(function () {
-        let optval = $('#failedidnn').val();
+    $('#failedidnn').on('change', function () {
+        let optval = $(this).val();
         if (optval == 'Customize') {
             $('#hidecustomize').hide();
             $('#showcustomize').show();
-
+        } else {
+            $('#hidecustomize').show();
+            $('#showcustomize').hide();
         }
     });
-    $('#showpopupbox').click(function () {
-        $('.Popupbox').show();
+    function openBulkFailedOtp() {
+        sendotp();
+        $('#f-b-pop').addClass('is-otp-step');
+    }
+
+    $('#f-b-pop').on('show.bs.modal', function () {
+        $(this).removeClass('is-otp-step');
     });
 
-    $('#closepopupbox').click(function () {
-        $('.Popupbox').hide();
+    $('#f-b-pop').on('hidden.bs.modal', function () {
+        $(this).removeClass('is-otp-step');
+        $('#showcustomize').hide();
+        $('#hidecustomize').show();
+        $('#txterrormsg').text('');
+    });
+
+    $('#closepopupbox').on('click', function () {
         $('#hidecustomize').show();
         $('#showcustomize').hide();
-        document.getElementById("failedidnn")[1].setAttribute('selected', 'selected');
+        if (document.getElementById("failedidnn") && document.getElementById("failedidnn").options.length > 1) {
+            document.getElementById("failedidnn").options[1].selected = true;
+        }
     });
     function sendotp() {
         $.ajax({
@@ -856,7 +916,6 @@
 
 <script>
     function Failedall(stats) {
-        debugger;
             var idnval = $('#hiddenidF').val();
             var optval = $('#failedidnn').val();
             var otpval = $('#failedidnncustomize').val();
@@ -925,7 +984,7 @@
             if (rstatus.toUpperCase() == "PENDING") {
                 tableBody = $("#resresendtable");
 
-                markup = "<tr><td>" + int + "</td><td>" + rstatus + "</td><td>" + name + "</td><td>" + mobile + " <br/> <small>" + circle + "</small> </td><td>" + Operator_name + "</td><td>" + amount + "</td></tr>";
+                markup = "<tr><td>" + int + "</td><td>" + rstatus + "</td><td>" + name + "</td><td><span class='vm-opr-bulk-cell-main'>" + mobile + "</span><span class='vm-opr-bulk-cell-sub'>" + circle + "</span></td><td>" + Operator_name + "</td><td>" + amount + "</td></tr>";
                 tableBody.append(markup);
                 favorite.push(id);
                 int++;

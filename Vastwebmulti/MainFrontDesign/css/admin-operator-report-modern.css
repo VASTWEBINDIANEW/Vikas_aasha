@@ -1378,7 +1378,7 @@ body.saas-admin-ui .saas-operator-report-page #defaultModal222 .vm-opr-detail-fi
     background: #eff6ff !important;
 }
 
-body.saas-admin-ui .saas-operator-report-page .saas-admin-modal .modal-body > .table-responsive {
+body.saas-admin-ui .saas-operator-report-page .saas-admin-modal .modal-body > .table-responsive:not(.vm-opr-bulk-modal-table-wrap) {
     margin-top: 12px;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
@@ -1403,7 +1403,12 @@ body.saas-admin-ui .saas-operator-report-page .saas-admin-modal .modal-body > .t
 }
 
 body.saas-admin-ui .saas-operator-report-page .s-b-pop-second-button .saas-admin-modal-btn {
-    flex: 1 1 140px;
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-actions .saas-admin-modal-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
 }
 
 @media (max-width: 767px) {
@@ -1424,14 +1429,343 @@ body.saas-admin-ui .saas-operator-report-page .s-b-pop-second-button .saas-admin
 }
 
 /* Bulk action modals */
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal .modal-dialog,
 body.saas-admin-ui .saas-operator-report-page #s-b-pop .modal-dialog,
 body.saas-admin-ui .saas-operator-report-page #f-b-pop .modal-dialog,
 body.saas-admin-ui .saas-operator-report-page #r-b-pop .modal-dialog {
     width: auto !important;
-    max-width: 640px !important;
+    max-width: min(920px, calc(100vw - 32px)) !important;
     top: auto !important;
     right: auto !important;
-    margin: 1.5rem auto !important;
+    margin: 1.25rem auto !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-content {
+    border: none !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22) !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page #f-b-pop.mastetr222Modal .modal-header,
+body.saas-admin-ui .saas-operator-report-page #s-b-pop.mastetr222Modal .modal-header,
+body.saas-admin-ui .saas-operator-report-page #r-b-pop.mastetr222Modal .modal-header {
+    float: none !important;
+    background: var(--adm-modal-header-grad) !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page #f-b-pop .saas-admin-modal-header.accent-danger,
+body.saas-admin-ui .saas-operator-report-page #f-b-pop.mastetr222Modal .modal-header.saas-admin-modal-header.accent-danger {
+    background: linear-gradient(135deg, #991b1b, #dc2626 50%, #ef4444) !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page #s-b-pop .saas-admin-modal-header.accent-emerald {
+    background: linear-gradient(135deg, #047857, #059669 50%, #10b981) !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page #r-b-pop .saas-admin-modal-header.accent-amber {
+    background: linear-gradient(135deg, #b45309, #d97706 50%, #f59e0b) !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page #f-b-pop .modal-body,
+body.saas-admin-ui .saas-operator-report-page #s-b-pop .modal-body,
+body.saas-admin-ui .saas-operator-report-page #r-b-pop .modal-body {
+    float: none !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal .saas-admin-modal-sub {
+    margin: 4px 0 0 !important;
+    font-size: 0.78rem !important;
+    color: rgba(255, 255, 255, 0.88) !important;
+    line-height: 1.35 !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-body {
+    padding: 16px 18px 18px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-input,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-select {
+    width: 100%;
+    min-height: 38px;
+    border-radius: 10px !important;
+    border: 1px solid #dbe4f0 !important;
+    padding: 8px 12px !important;
+    font-size: 0.82rem !important;
+    background: #fff !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-reason {
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-otp-box {
+    display: none;
+    margin-top: 10px;
+    padding: 12px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    background: #fff;
+    gap: 8px;
+}
+
+/* Failed modal — modern layout */
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+    font-size: 0.8rem;
+    line-height: 1.45;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-note p {
+    margin: 0 0 4px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-note p:last-child {
+    margin-bottom: 0;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-note--danger {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #7f1d1d;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-note--danger i {
+    color: #dc2626;
+    margin-top: 2px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-form-field > label,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-otp-label {
+    display: block;
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-custom-reason {
+    margin-top: 8px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table-card .vm-opr-bulk-modal-table-head {
+    padding: 10px 14px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table-card .vm-opr-bulk-modal-table-wrap {
+    border: none !important;
+    border-radius: 0 !important;
+    max-height: 220px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-footer.vm-opr-bulk-failed-footer {
+    padding: 12px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #f8fafc, #fff);
+    margin-top: 4px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-otp-step {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    gap: 10px;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-otp-field-wrap {
+    display: none;
+    flex: 0 1 200px;
+    min-width: 160px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-failed-footer.is-otp-open .vm-opr-bulk-otp-field-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-otp-input {
+    min-height: 38px !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-action-bar {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-action-bar .saas-admin-modal-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 38px !important;
+    padding: 8px 14px !important;
+    font-size: 0.76rem !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-action-otp {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-failed-footer.is-otp-open .vm-opr-bulk-action-otp {
+    display: inline-flex !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-failed-footer.is-otp-open .vm-opr-bulk-action-primary {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-error-msg {
+    display: block;
+    margin-top: 8px;
+    color: #dc2626;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-otp-box .saas-admin-modal-btn {
+    margin-top: 6px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    width: 100% !important;
+    margin-top: 10px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #334155;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table-hint {
+    font-size: 0.68rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table-wrap {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 240px;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    background: #fff;
+    scrollbar-width: thin;
+    scrollbar-color: #64748b #e2e8f0;
+    margin-top: 0 !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table-wrap::-webkit-scrollbar-track {
+    background: #e2e8f0;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table-wrap::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table-wrap::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table {
+    width: max-content !important;
+    min-width: 720px !important;
+    margin: 0 !important;
+    font-size: 0.8rem !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 10px 12px !important;
+    border-color: #e2e8f0 !important;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-modal-table tbody td {
+    padding: 10px 12px !important;
+    font-size: 0.8rem !important;
+    vertical-align: middle !important;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-operator-report-page .s-b-pop-second-top label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 body.saas-admin-ui .saas-operator-report-page .s-b-pop-first,
@@ -2169,7 +2503,7 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-toolbar__label i {
 body.saas-admin-ui .saas-operator-report-page .vm-opr-utility-strip .for-new-button-inner,
 body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-toolbar {
     display: inline-flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 6px;
     padding: 4px;
@@ -2212,6 +2546,45 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-btn--success {
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-btn--failed {
     background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__head-main {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__bulk.for-new-button.is-visible {
+    display: inline-flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    gap: 0;
+    width: auto;
+    padding: 0;
+    margin: 0;
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__bulk .vm-opr-bulk-toolbar {
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+    padding: 3px !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__bulk .vm-opr-bulk-btn {
+    flex: 0 0 auto !important;
+    min-height: 32px !important;
+    height: 32px !important;
+    padding: 0 12px !important;
+    font-size: 0.72rem !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__bulk .vm-opr-bulk-btn span {
+    white-space: nowrap;
 }
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-bulk-btn--resend {
@@ -3085,4 +3458,1214 @@ body.saas-admin-ui .select2-dropdown,
 body.saas-admin-ui .select2-dropdown.select2-dropdown--below,
 body.saas-admin-ui .select2-dropdown.select2-dropdown--above {
     z-index: 1030 !important;
+}
+
+/* —— Page scroll lock: wide table scrolls inside card only (Chrome) —— */
+body.saas-admin-ui section.content.saas-operator-report-page {
+    overflow-x: hidden !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page,
+body.saas-admin-ui .saas-operator-report-page .container-fluid,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-page-shell {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-main-card,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-wrap,
+body.saas-admin-ui .saas-operator-report-page #showreport {
+    max-width: 100%;
+    min-width: 0;
+}
+
+/* Card clips outer bleed; table scroll stays inside .vm-opr-table-scroll */
+body.saas-admin-ui .saas-operator-report-page .vm-opr-main-card {
+    overflow-x: clip;
+    overflow-y: visible;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-scroll,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel .table-responsive,
+body.saas-admin-ui .saas-operator-report-page #showreport .table-responsive {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 #f1f5f9;
+    padding-bottom: 6px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-scroll::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-scroll::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table,
+body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table {
+    width: max-content !important;
+    min-width: 1280px !important;
+    max-width: none !important;
+}
+
+/* ============================================================
+   vm — Bulk Failed modal (#f-b-pop) latest design
+   ============================================================ */
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal.mastetr222Modal .modal-dialog,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-dialog {
+    float: none !important;
+    width: auto !important;
+    max-width: min(920px, calc(100vw - 32px)) !important;
+    margin: 1.25rem auto !important;
+    right: auto !important;
+    left: auto !important;
+    top: auto !important;
+    min-height: 0 !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-content {
+    border: none !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    box-shadow: 0 28px 64px rgba(15, 23, 42, 0.24) !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-header,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .modal-header.saas-admin-modal-header {
+    float: none !important;
+    background: linear-gradient(135deg, #991b1b 0%, #dc2626 52%, #ef4444 100%) !important;
+    border: none !important;
+    padding: 18px 22px !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-header__sub {
+    margin: 4px 0 0 !important;
+    font-size: 0.78rem !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-body {
+    float: none !important;
+    width: 100% !important;
+    padding: 16px 18px 18px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-form {
+    margin: 0;
+    padding: 14px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-select,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-input {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 40px;
+    border-radius: 10px !important;
+    border: 1px solid #dbe4f0 !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-table-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-table-wrap {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 220px !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    border: none !important;
+    margin: 0 !important;
+    scrollbar-width: thin;
+    scrollbar-color: #64748b #e2e8f0;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-table {
+    width: max-content !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #f1f5f9 !important;
+    white-space: nowrap;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    padding: 10px 12px !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-table tbody td {
+    white-space: nowrap;
+    padding: 10px 12px !important;
+    font-size: 0.8rem !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-footer {
+    padding: 12px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #f8fafc, #fff);
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    gap: 10px;
+    width: 100%;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-otp {
+    display: none !important;
+    flex: 0 1 190px;
+    min-width: 150px;
+    flex-direction: column;
+    gap: 6px;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-action-bar {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    flex: 1 1 auto;
+    margin-left: auto;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-btn {
+    display: none !important;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 38px !important;
+    padding: 8px 14px !important;
+    font-size: 0.76rem !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-btn--go,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-btn--close {
+    display: inline-flex !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal.is-otp-step .vm-opr-bulk-failed-otp {
+    display: flex !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal.is-otp-step .vm-opr-bulk-failed-btn--submit,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal.is-otp-step .vm-opr-bulk-failed-btn--resend,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal.is-otp-step .vm-opr-bulk-failed-btn--close {
+    display: inline-flex !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal.is-otp-step .vm-opr-bulk-failed-btn--go {
+    display: none !important;
+}
+
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal:not(.is-otp-step) .vm-opr-bulk-failed-btn--submit,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal:not(.is-otp-step) .vm-opr-bulk-failed-btn--resend {
+    display: none !important;
+}
+
+@media (max-width: 640px) {
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-actions {
+        flex-wrap: wrap;
+    }
+
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-action-bar {
+        width: 100%;
+        justify-content: stretch;
+        flex-wrap: wrap;
+    }
+
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-btn {
+        flex: 1 1 calc(50% - 4px);
+    }
+}
+
+/* ============================================================
+   vm — Bulk Success (#s-b-pop) & Resend (#r-b-pop) — same design as Failed
+   Modals sit outside .saas-operator-report-page — use global #id scope
+   ============================================================ */
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal.mastetr222Modal .modal-dialog,
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-dialog,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal.mastetr222Modal .modal-dialog,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-dialog {
+    float: none !important;
+    width: auto !important;
+    max-width: min(920px, calc(100vw - 32px)) !important;
+    margin: 1.25rem auto !important;
+    right: auto !important;
+    left: auto !important;
+    top: auto !important;
+    min-height: 0 !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-content,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-content {
+    border: none !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    box-shadow: 0 28px 64px rgba(15, 23, 42, 0.24) !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-header,
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .modal-header.saas-admin-modal-header {
+    float: none !important;
+    background: linear-gradient(135deg, #047857 0%, #059669 52%, #10b981 100%) !important;
+    border: none !important;
+    padding: 18px 22px !important;
+}
+
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-header,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .modal-header.saas-admin-modal-header {
+    float: none !important;
+    background: linear-gradient(135deg, #b45309 0%, #d97706 52%, #f59e0b 100%) !important;
+    border: none !important;
+    padding: 18px 22px !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-header__sub,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-header__sub {
+    margin: 4px 0 0 !important;
+    font-size: 0.78rem !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-body,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-body {
+    float: none !important;
+    width: 100% !important;
+    padding: 16px 18px 18px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-form,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-form {
+    margin: 0;
+    padding: 14px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-note,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-note,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin-bottom: 0;
+    font-size: 0.8rem;
+    line-height: 1.45;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-note p,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-note p,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-note p {
+    margin: 0 0 4px;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-note p:last-child,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-note p:last-child,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-note p:last-child {
+    margin-bottom: 0;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-note--success {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-note--success i {
+    color: #059669;
+    margin-top: 2px;
+}
+
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-note--warning {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}
+
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-note--warning i {
+    color: #d97706;
+    margin-top: 2px;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-form-field > label {
+    display: block;
+    margin: 10px 0 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    float: none !important;
+    width: auto !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-input {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 40px;
+    border-radius: 10px !important;
+    border: 1px solid #dbe4f0 !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-table-card,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-table-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    width: 100%;
+    min-width: 0;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-table-head,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-table-head,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-failed-table-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-modal-table-title,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-modal-table-title,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-modal-table-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #334155;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-modal-table-hint,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-modal-table-hint,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-failed-modal .vm-opr-bulk-modal-table-hint {
+    font-size: 0.68rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-table-wrap,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-table-wrap {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 220px !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    border: none !important;
+    margin: 0 !important;
+    scrollbar-width: thin;
+    scrollbar-color: #64748b #e2e8f0;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-table,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-table {
+    width: max-content !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-table thead th,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #f1f5f9 !important;
+    white-space: nowrap;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    padding: 10px 12px !important;
+    border-color: #e2e8f0 !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-table tbody td,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-table tbody td {
+    white-space: nowrap;
+    padding: 10px 12px !important;
+    font-size: 0.8rem !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-footer,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-footer {
+    padding: 12px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #f8fafc, #fff);
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-actions,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-btn,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 38px !important;
+    padding: 8px 14px !important;
+    font-size: 0.76rem !important;
+    border-radius: 10px !important;
+    margin: 0 !important;
+}
+
+@media (max-width: 640px) {
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-actions,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-actions {
+        flex-wrap: wrap;
+        justify-content: stretch;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-success-modal .vm-opr-bulk-success-btn,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-resend-modal .vm-opr-bulk-resend-btn {
+        flex: 1 1 calc(50% - 4px);
+    }
+}
+
+/* ============================================================
+   vm — All 3 bulk modals: full-width table + top/bottom scroll
+   ============================================================ */
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-content,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-content,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-content {
+    max-height: calc(100vh - 40px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .modal-header,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .modal-header,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .modal-header {
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-body,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-body,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #64748b #e2e8f0;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-body::-webkit-scrollbar,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-body::-webkit-scrollbar,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-body::-webkit-scrollbar-thumb,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-body::-webkit-scrollbar-thumb,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-body::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-form,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-form,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-form {
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-table-card,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-table-card,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-table-card {
+    flex: 0 0 auto;
+    min-height: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-table-wrap,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-table-wrap,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-table-wrap,
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table-wrap,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table-wrap,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table-wrap {
+    flex: 0 0 auto;
+    min-height: 0;
+    max-height: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-x pan-y;
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
+    border: none !important;
+    margin: 0 !important;
+    scrollbar-width: thin;
+    scrollbar-color: #64748b #e2e8f0;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-table-wrap::-webkit-scrollbar,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-table-wrap::-webkit-scrollbar,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-table-wrap::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-table-wrap::-webkit-scrollbar-thumb,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-table-wrap::-webkit-scrollbar-thumb,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-table-wrap::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-table,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-table,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-table,
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table {
+    width: max-content !important;
+    min-width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    table-layout: auto !important;
+    border-collapse: collapse !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th,
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td {
+    white-space: nowrap !important;
+    vertical-align: top !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(1),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(1),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(1),
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(1),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(1),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(1) {
+    min-width: 52px;
+    width: 52px;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(2),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(2),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(2),
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(2),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(2),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(2) {
+    min-width: 96px;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(3),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(3),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(3),
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(3),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(3),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(3) {
+    min-width: 168px;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(4),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(4),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(4),
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(4),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(4),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(4) {
+    min-width: 158px;
+    white-space: normal !important;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(5),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(5),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(5),
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(5),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(5),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(5) {
+    min-width: 118px;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(6),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(6),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(6),
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(6),
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(6),
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(6) {
+    min-width: 92px;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-table thead th,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-table thead th,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-table thead th,
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table thead th,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table thead th,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #f1f5f9 !important;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-table tbody td,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-table tbody td,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-table tbody td,
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table tbody td,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table tbody td,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table tbody td {
+    white-space: nowrap;
+    vertical-align: top;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-footer,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-footer,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-footer {
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+/* Bulk modal table cell helpers */
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-cell-main,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-cell-main,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-cell-main {
+    display: block;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-cell-sub,
+body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-cell-sub,
+body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-cell-sub {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.72rem;
+    color: #64748b;
+    line-height: 1.25;
+}
+
+/* Mobile + tablet — modal body top/bottom scroll */
+@media (max-width: 991px) {
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal.mastetr222Modal .modal-dialog,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal.mastetr222Modal .modal-dialog,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal.mastetr222Modal .modal-dialog {
+        max-width: calc(100vw - 16px) !important;
+        width: calc(100vw - 16px) !important;
+        margin: 8px auto !important;
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: calc(100dvh - 16px) !important;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-content,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-content,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-content {
+        max-height: calc(100vh - 16px) !important;
+        max-height: calc(100dvh - 16px) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .modal-header,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .modal-header,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .modal-header {
+        flex: 0 0 auto !important;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-body,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-body,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-body {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        overscroll-behavior: contain;
+        padding: 12px 12px 14px !important;
+        gap: 10px !important;
+        scrollbar-width: thin;
+        scrollbar-color: #64748b #e2e8f0;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-body::-webkit-scrollbar,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-body::-webkit-scrollbar,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-body::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-body::-webkit-scrollbar-thumb,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-body::-webkit-scrollbar-thumb,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-body::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 999px;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-form,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-form,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-form {
+        flex: 0 0 auto;
+        padding: 10px 12px;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-table-card,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-table-card,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-table-card {
+        flex: 0 0 auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-table-wrap,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-table-wrap,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-table-wrap,
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table-wrap,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table-wrap,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table-wrap {
+        flex: 0 0 auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        touch-action: pan-x pan-y;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+        z-index: 1;
+        isolation: isolate;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-footer,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-footer,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-footer {
+        flex: 0 0 auto !important;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-success-table,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-table,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-resend-table,
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table {
+        width: max-content !important;
+        min-width: 700px !important;
+        table-layout: auto !important;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:last-child,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:last-child,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:last-child,
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:last-child,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:last-child,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:last-child {
+        width: auto !important;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table thead th,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table thead th,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table thead th {
+        position: static !important;
+        top: auto !important;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th,
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td {
+        white-space: nowrap !important;
+        vertical-align: top !important;
+        min-width: 88px;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(3),
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(3),
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(3),
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(3),
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(3),
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(3) {
+        min-width: 120px;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(4),
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(4),
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table th:nth-child(4),
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(4),
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(4),
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table td:nth-child(4) {
+        min-width: 140px;
+        white-space: normal !important;
+    }
+
+    body.saas-admin-ui #s-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table-hint,
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table-hint,
+    body.saas-admin-ui #r-b-pop.vm-opr-bulk-modal .vm-opr-bulk-modal-table-hint {
+        font-size: 0.62rem;
+    }
+
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-actions {
+        flex-wrap: wrap;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui #f-b-pop.vm-opr-bulk-modal .vm-opr-bulk-failed-action-bar {
+        width: 100%;
+        margin-left: 0;
+        justify-content: stretch;
+        flex-wrap: wrap;
+    }
+}
+
+/* Port chips — inside transaction table header (latest design) */
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__ports {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 6px;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background:
+        radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.07), transparent 48%),
+        linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__ports-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1e40af, #2563eb);
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__ports-label i {
+    font-size: 0.72rem;
+    opacity: 0.95;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__port-chips {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    flex: 1 1 auto;
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 4px 4px 0;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 #eef2f7;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__port-chips::-webkit-scrollbar {
+    height: 4px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__port-chips::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    min-width: 168px;
+    max-width: 220px;
+    padding: 8px 10px 8px 8px;
+    border: 1px solid #dbe4f0;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+    cursor: pointer;
+    transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #f59e0b, #d97706);
+    border-radius: 12px 0 0 12px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table.vm-opr-port-chip--nil::before {
+    background: linear-gradient(180deg, #94a3b8, #64748b);
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table:hover {
+    transform: translateY(-1px);
+    border-color: #93c5fd;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.14);
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table.is-active,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table:focus {
+    border-color: #2563eb;
+    background: linear-gradient(180deg, #eff6ff, #fff);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18), 0 6px 16px rgba(37, 99, 235, 0.12);
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table .vm-opr-port-chip__lead {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #b45309;
+    font-size: 0.78rem;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table.vm-opr-port-chip--nil .vm-opr-port-chip__lead {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table.is-active .vm-opr-port-chip__lead {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    color: #1d4ed8;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table .vm-opr-port-chip__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table .vm-opr-port-chip__name {
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #1e293b;
+    line-height: 1.15;
+    text-align: left;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table .vm-opr-port-chip__sub {
+    font-size: 0.58rem;
+    font-weight: 600;
+    color: #94a3b8;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table .vm-opr-port-chip__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 999px;
+    flex-shrink: 0;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    background: linear-gradient(135deg, #ea580c, #f97316);
+    box-shadow: 0 2px 8px rgba(234, 88, 12, 0.35);
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table.vm-opr-port-chip--nil .vm-opr-port-chip__count {
+    background: linear-gradient(135deg, #64748b, #94a3b8);
+    box-shadow: 0 2px 8px rgba(100, 116, 139, 0.3);
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table.is-active .vm-opr-port-chip__count {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__head-main {
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__title {
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__bulk.for-new-button.is-visible {
+    flex: 0 0 auto;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__head {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__head-main {
+        flex: 1 1 100%;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__ports {
+        flex: 1 1 100%;
+        order: 3;
+        width: 100%;
+        flex-wrap: nowrap;
+        padding: 8px;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__ports-label {
+        display: none;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__hint {
+        flex: 0 0 auto;
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table {
+        min-width: 148px;
+        max-width: 190px;
+        gap: 8px;
+        padding: 7px 8px 7px 7px;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table .vm-opr-port-chip__lead {
+        width: 26px;
+        height: 26px;
+        font-size: 0.7rem;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table .vm-opr-port-chip__name {
+        font-size: 0.62rem;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table .vm-opr-port-chip__sub {
+        font-size: 0.54rem;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-port-chip--table .vm-opr-port-chip__count {
+        min-width: 24px;
+        height: 24px;
+        font-size: 0.74rem;
+    }
 }

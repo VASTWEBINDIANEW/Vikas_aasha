@@ -230,22 +230,51 @@
         resetSlabSaveButtons();
     }
 
+    function syncRetailerSlabFormFields() {
+        if (roleshow !== 'Retailer') {
+            return;
+        }
+        var ddldlm = $('#ddldealer').val();
+        var $ddlUserId = $('#ddlUserId');
+        if (!$ddlUserId.length) {
+            return;
+        }
+        if (ddldlm) {
+            $ddlUserId.val(ddldlm);
+        } else {
+            $ddlUserId.val('');
+        }
+    }
+
     function showSlabEditMode() {
         $('#tbodyshow').addClass('vm-pg-slab-tbody--hidden').removeClass('vm-pg-slab-tbody--view');
         $('#tbodyedit, #tbodyeditAll').addClass('vm-pg-slab-tbody--hidden').removeClass('vm-pg-slab-tbody--edit');
 
         var ddlVal = $('#ddlUserId').val();
+        var ddldlm = $('#ddldealer').length ? $('#ddldealer').val() : null;
         var ddlrem = $('#ddlUserIdrem').length ? $('#ddlUserIdrem').val() : null;
-        var rol = $('#role').val();
         var useEditAll = false;
 
         if ($('#tbodyeditAll').length) {
-            if (ddlVal === '' || ddlVal === null) {
-                useEditAll = true;
-            } else if (ddlVal !== '' && ddlrem === '' && rol === 'Retailer') {
-                useEditAll = true;
-            } else if (ddlVal !== null && ddlVal !== '') {
-                useEditAll = false;
+            if (roleshow === 'Retailer') {
+                if ((!ddldlm || ddldlm === '') && (!ddlrem || ddlrem === '')) {
+                    useEditAll = true;
+                } else {
+                    useEditAll = false;
+                }
+            } else {
+                if (ddlVal === '' || ddlVal === null) {
+                    useEditAll = true;
+                }
+                if (ddlrem !== null && ddlrem === '') {
+                    useEditAll = true;
+                }
+                if (ddlrem !== null && ddlrem !== '') {
+                    useEditAll = false;
+                }
+                if (ddlVal !== null && ddlVal !== '') {
+                    useEditAll = false;
+                }
             }
         }
 
@@ -271,14 +300,19 @@
         if ($('#btnsubmituser').length) {
             $('#btnsubmituser').show().addClass('is-visible');
         }
-        if (val === '' || val === null) {
+        if (roleshow === 'Retailer') {
+            if (ddldlm !== '' && ddldlm !== null && (ddlrem === '' || ddlrem === null)) {
+                if ($('#btnsubmitusercommondlmrem').length) {
+                    $('#btnsubmitusercommondlmrem').show().addClass('is-visible');
+                }
+            } else if ((!ddldlm || ddldlm === '') && (!ddlrem || ddlrem === '')) {
+                if ($('#btnsubmitusercommon').length) {
+                    $('#btnsubmitusercommon').show().addClass('is-visible');
+                }
+            }
+        } else if (val === '' || val === null) {
             if ($('#btnsubmitusercommon').length) {
                 $('#btnsubmitusercommon').show().addClass('is-visible');
-            }
-        }
-        if (roleshow === 'Retailer' && ddldlm !== '' && ddlrem === '') {
-            if ($('#btnsubmitusercommondlmrem').length) {
-                $('#btnsubmitusercommondlmrem').show().addClass('is-visible');
             }
         }
     }
@@ -332,7 +366,14 @@
     }
 
     function funcSave() {
-        $("#" + FormId + "").submit();
+        syncRetailerSlabFormFields();
+        var $form = FormId ? $('#' + FormId) : $();
+        if (!$form.length) {
+            $form = $('#divEditFormComm form').first();
+        }
+        if ($form.length) {
+            $form.submit();
+        }
     }
 
     function editUserWise(userRole, frmId) {
@@ -415,5 +456,9 @@
         initPgSlabPartialUi();
         resetSlabViewMode();
         setSlabTabActive('#Comm');
+
+        $(document).on('submit', '#divEditFormComm form', function () {
+            syncRetailerSlabFormFields();
+        });
     });
 </script>

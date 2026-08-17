@@ -1,5 +1,11 @@
 @model Vastwebmulti.Areas.ADMIN.Models.Fundtransferviewmodel
 @{ decimal? runningTotal = 0M; decimal? Totalcharges = 0M; decimal? TotalNetTransfer = 0M; decimal? total = 0M; decimal? oldcrs; decimal? currentcr; decimal? totalcrsattelment = 0; }
+
+@helper NetTransferAmount(decimal? amount)
+{
+    var value = Convert.ToDecimal(amount ?? 0);
+    <span class="vm-ft-net-tf@(value < 0 ? " vm-ft-net-tf--negative" : "")">@value.ToString("0.00")</span>
+}
 <table class="table table-bordered table-striped table-hover third-design-table">
     @if (Model.Superstocklistbalance != null)
     {
@@ -87,22 +93,7 @@
         <td><p style="margin-top:6px;">@item.cr</p></td>*@
 
                 <td>
-                    <p style="margin-top:6px;">
-
-                        @if (@item.fund_transfer < 0)
-                        {
-                            decimal bb = Convert.ToDecimal(item.fund_transfer);
-                            bb = -bb;
-                            <span>  (-) @bb</span>
-                        }
-                        else
-                        {
-                            @item.fund_transfer
-                        }
-
-
-
-                    </p>
+                    <p style="margin-top:6px;">@NetTransferAmount(item.fund_transfer)</p>
                 </td>
                 @*
         <td><p style="margin-top:6px;">@item.oldcrbalance</p></td>*@
@@ -213,23 +204,7 @@
         <td><p style="margin-top:6px;">@item.cr</p></td>*@
 
                 <td>
-                    <p style="margin-top:6px;">
-
-                        @if (@item.balance < 0)
-                        {
-                            decimal bb = Convert.ToDecimal(item.balance);
-                            bb = -bb;
-                            <span>  (-) @bb</span>
-                        }
-                        else
-                        {
-                            @item.balance
-                        }
-
-
-
-
-                    </p>
+                    <p style="margin-top:6px;">@NetTransferAmount(item.balance)</p>
                 </td>
                 @*
         <td><p style="margin-top:6px;">@item.oldcrbalance</p></td>*@
@@ -335,22 +310,7 @@
         <td><p style="margin-top:6px;">@item.cr</p></td>*@
 
                 <td>
-                    <p style="margin-top:6px;">
-
-
-                        @if (@item.Balance < 0)
-                        {
-                            decimal bb = Convert.ToDecimal(item.Balance);
-                            bb = -bb;
-                            <span>  (-) @bb</span>
-                        }
-                        else
-                        {
-                            @item.Balance
-                        }
-
-
-                    </p>
+                    <p style="margin-top:6px;">@NetTransferAmount(item.Balance)</p>
                 </td>
                 @*
         <td><p style="margin-top:6px;">@item.oldcrbalance</p></td>*@
@@ -452,20 +412,7 @@
                 <td><p style="margin-top:6px;">@item.cr</p></td>*@
 
                     <td>
-                        <p style="margin-top:6px;">
-                            @if (@item.balance < 0)
-                            {
-                                decimal bb = Convert.ToDecimal(item.balance);
-                                bb = -bb;
-                                <span>  (-) @bb</span>
-                            }
-                            else
-                            {
-                                @item.balance
-                            }
-
-
-                        </p>
+                        <p style="margin-top:6px;">@NetTransferAmount(item.balance)</p>
                     </td>
                     @*
                 <td><p style="margin-top:6px;">@item.oldcrbalance</p></td>*@
@@ -578,21 +525,7 @@
 
                     <td>
 
-                        <p style="margin-top:6px;">
-
-                            @if (@item.balance < 0)
-                            {
-                                decimal bb = Convert.ToDecimal(item.balance);
-                                bb = -bb;
-                                <span>  (-) @bb</span>
-                            }
-                            else
-                            {
-                                @item.balance
-                            }
-
-
-                        </p>
+                        <p style="margin-top:6px;">@NetTransferAmount(item.balance)</p>
                     </td>
                     @*
                 <td><p style="margin-top:6px;">@item.oldcrbalance</p></td>*@

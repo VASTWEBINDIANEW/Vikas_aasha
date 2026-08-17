@@ -1,3 +1,32 @@
+    <script src="~/MainFrontDesign/js/admin-modal-fix.js"></script>
+    <script>
+        (function ($) {
+            window.hideSaasPageLoader = function () {
+                var $loader = $("#saas-page-loader");
+                if ($loader.length) {
+                    $loader.removeClass("is-active").attr("aria-hidden", "true");
+                    window.setTimeout(function () {
+                        $loader.hide();
+                    }, 280);
+                }
+                $(".page-loader-wrapper").stop(true, true).hide();
+            };
+
+            window.showSaasPageLoader = function () {
+                var $loader = $("#saas-page-loader");
+                if (!$loader.length) {
+                    return;
+                }
+                $loader.show().addClass("is-active").attr("aria-hidden", "false");
+            };
+
+            $(function () {
+                window.setTimeout(window.hideSaasPageLoader, 120);
+            });
+
+            $(window).on("load", window.hideSaasPageLoader);
+        })(jQuery);
+    </script>
     <script>
         (function () {
             var $body = $("body");
@@ -112,6 +141,20 @@
 
             window.hideAdminLoader = function () {
                 $("#admin-global-loader, #loader").removeClass("is-active").css("display", "none").attr("aria-hidden", "true");
+            };
+
+            window.showAdminModal = window.showAdminModal || function (selector) {
+                var $modal = $(selector);
+                if ($modal.length && $.fn.modal) {
+                    $modal.modal("show");
+                }
+            };
+
+            window.hideAdminModal = window.hideAdminModal || function (selector) {
+                var $modal = $(selector);
+                if ($modal.length && $.fn.modal) {
+                    $modal.modal("hide");
+                }
             };
 
             $(document).on("click", "#sidebar-open", function (e) {

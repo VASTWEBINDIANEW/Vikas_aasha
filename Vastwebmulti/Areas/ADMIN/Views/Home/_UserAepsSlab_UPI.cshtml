@@ -1,5 +1,5 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.AEPSCommonModel
-@using (Ajax.BeginForm("_UserAepsSlab_UPI", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess1", OnFailure = "onfailed", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
+@using (Ajax.BeginForm("_UserAepsSlab_UPI", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess1", OnFailure = "onfailed", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }, new { id = "EditFormUserWise" }))
 {
     <input id="btnsubmituser" type="submit" value="Update For Existing Users" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
     <input id="btnsubmitusercommon" type="submit" name="Button" value="Update Existing & New Users" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
@@ -1767,7 +1767,7 @@
                 }
                 <!--End Dealer-->
                 <!--Retailer-->
-                @if (Model.Retaileruser != null)
+                @if (Model.UpdateRetailer != null)
                 {
                     for (int i = 0; i < Model.UpdateRetailer.Count; i++)
                     {

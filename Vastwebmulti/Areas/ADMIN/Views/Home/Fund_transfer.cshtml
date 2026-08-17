@@ -17,12 +17,47 @@
     }
 }
 
+@helper FundTransferUserDetails(string boxId, string title, string prefix, string iconClass, string nameFieldId = null)
+{
+    var nameId = string.IsNullOrEmpty(nameFieldId) ? ("lbl" + prefix + "name") : nameFieldId;
+    <div id="@boxId" class="vm-ft-user-details col-md-12 col-sm-12 col-xs-12" style="display:none;">
+        <div class="vm-ft-user-details__card">
+            <div class="vm-ft-user-details__head">
+                <span class="vm-ft-user-details__icon"><i class="fas @iconClass" aria-hidden="true"></i></span>
+                <span class="vm-ft-user-details__title">@title</span>
+            </div>
+            <div class="vm-ft-user-details__grid">
+                <div class="vm-ft-user-details__item">
+                    <span class="vm-ft-user-details__label"><i class="fas fa-building" aria-hidden="true"></i> Firm Name</span>
+                    <strong class="vm-ft-user-details__value" id="@("lbl" + prefix + "frmname")">N/A</strong>
+                </div>
+                <div class="vm-ft-user-details__item">
+                    <span class="vm-ft-user-details__label"><i class="fas fa-user" aria-hidden="true"></i> Name</span>
+                    <strong class="vm-ft-user-details__value" id="@nameId">N/A</strong>
+                </div>
+                <div class="vm-ft-user-details__item">
+                    <span class="vm-ft-user-details__label"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile</span>
+                    <strong class="vm-ft-user-details__value" id="@("lbl" + prefix + "mobile")">N/A</strong>
+                </div>
+                <div class="vm-ft-user-details__item">
+                    <span class="vm-ft-user-details__label"><i class="fas fa-envelope" aria-hidden="true"></i> Email ID</span>
+                    <strong class="vm-ft-user-details__value" id="@("lbl" + prefix + "email")">N/A</strong>
+                </div>
+                <div class="vm-ft-user-details__item vm-ft-user-details__item--full">
+                    <span class="vm-ft-user-details__label"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Address</span>
+                    <strong class="vm-ft-user-details__value" id="@("lbl" + prefix + "address")">N/A</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=18" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=20" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=24" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=21" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium">
 
@@ -102,7 +137,7 @@
                                         </label>
                                         <div>
                                             <div class="custom-district1">
-                                                <select id="idst" name="idst" class="vm-opr-select vm-dmt-select form-control" onchange="changemode(this)">
+                                                <select id="idst" name="idst" class="for-select2 vm-opr-select vm-dmt-select form-control" onchange="changemode(this)">
 
                                                     <option value="1">Cash</option>
                                                     <option value="2">Branch / CMS Deposite</option>
@@ -128,7 +163,7 @@
                                         <label>Transfer Type </label>
                                         <div>
                                             <div class="custom-district1">
-                                                <select id="ddlsuprtransfertype" name="ddlsuprtransfertype" class="vm-opr-select vm-dmt-select form-control">
+                                                <select id="ddlsuprtransfertype" name="ddlsuprtransfertype" class="for-select2 vm-opr-select vm-dmt-select form-control">
                                                     <option>Neft</option>
                                                     <option>RTGS</option>
                                                     <option>IMPS</option>
@@ -143,7 +178,7 @@
                                         <label>Select Bank </label>
                                         <div>
                                             <div class="custom-district1">
-                                                @Html.DropDownListFor(m => m.bankid, Model.ddlbankinfo, "--Select One--", new { @id = "bankid", @class = "vm-opr-select vm-dmt-select form-control" })
+                                                @Html.DropDownListFor(m => m.bankid, Model.ddlbankinfo, "--Select One--", new { @id = "bankid", @class = "for-select2 vm-opr-select vm-dmt-select form-control" })
                                                 @*<select id="ddlsuprbankname" name="ddlsuprbankname">
                                         <option value="axis">axis</option>
                                         <option value="Icici">Icici</option>
@@ -167,7 +202,7 @@
                                         <label>Select Wallet</label>
                                         <div>
                                             <div class="custom-district1">
-                                                @Html.DropDownListFor(m => m.walletid, Model.ddlwalletInfo, "--Select One--", new { @id = "ddlsuprwalletname", @class = "vm-opr-select vm-dmt-select form-control" })
+                                                @Html.DropDownListFor(m => m.walletid, Model.ddlwalletInfo, "--Select One--", new { @id = "ddlsuprwalletname", @class = "for-select2 vm-opr-select vm-dmt-select form-control" })
                                                 @*<select id="ddlsuprwalletname" name="ddlsuprwalletname">
                                         <option>axis</option>
                                         <option>Icici</option>
@@ -235,6 +270,8 @@
 
                                         </div>
                                     </div>
+
+                                    @FundTransferUserDetails("md_details", "M/D Details", "md", "fa-user-tie")
 
                                 </div>
                                 @if (hspass == "NOTOK")
@@ -337,7 +374,7 @@
                                         </label>
                                         <div>
                                             <div class="custom-district1">
-                                                <select id="ddlDISTPaymentModel" name="ddlDISTPaymentModel" class="vm-opr-select vm-dmt-select form-control" onchange="changemoded(this)">
+                                                <select id="ddlDISTPaymentModel" name="ddlDISTPaymentModel" class="for-select2 vm-opr-select vm-dmt-select form-control" onchange="changemoded(this)">
                                                     <option value="1">Cash</option>
                                                     <option value="2">Branch / CMS Deposite</option>
                                                     <option value="3">Online Transfer</option>
@@ -362,7 +399,7 @@
                                         <label>Transfer Type </label>
                                         <div>
                                             <div class="custom-district1">
-                                                <select id="DDTransferType" name="DDTransferType" class="vm-opr-select vm-dmt-select form-control">
+                                                <select id="DDTransferType" name="DDTransferType" class="for-select2 vm-opr-select vm-dmt-select form-control">
                                                     <option>Neft</option>
                                                     <option>RTGS</option>
                                                     <option>IMPS</option>
@@ -377,7 +414,7 @@
                                         <label>Select Bank </label>
                                         <div>
                                             <div class="custom-district1">
-                                                @Html.DropDownListFor(m => m.bankid, Model.ddlbankinfo, "--Select One--", new { @id = "DISTRIbankid", @class = "vm-opr-select vm-dmt-select form-control" })
+                                                @Html.DropDownListFor(m => m.bankid, Model.ddlbankinfo, "--Select One--", new { @id = "DISTRIbankid", @class = "for-select2 vm-opr-select vm-dmt-select form-control" })
 
                                             </div>
                                         </div>
@@ -398,7 +435,7 @@
                                         <label>Select Wallet</label>
                                         <div>
                                             <div class="custom-district1">
-                                                @Html.DropDownListFor(m => m.walletid, Model.ddlwalletInfo, "--Select One--", new { @id = "ddlDISTwalletname", @class = "vm-opr-select vm-dmt-select form-control" })
+                                                @Html.DropDownListFor(m => m.walletid, Model.ddlwalletInfo, "--Select One--", new { @id = "ddlDISTwalletname", @class = "for-select2 vm-opr-select vm-dmt-select form-control" })
 
                                             </div>
                                         </div>
@@ -462,6 +499,7 @@
                                         </div>
                                     </div>
 
+                                    @FundTransferUserDetails("dealer_details", "Distributor Details", "dealer", "fa-store")
 
                                 </div>
 
@@ -560,7 +598,7 @@
                                         </label>
                                         <div>
                                             <div class="custom-district1">
-                                                <select id="ddlRETPaymentModel" name="ddlRETPaymentModel" class="vm-opr-select vm-dmt-select form-control" onchange="changemoder(this)">
+                                                <select id="ddlRETPaymentModel" name="ddlRETPaymentModel" class="for-select2 vm-opr-select vm-dmt-select form-control" onchange="changemoder(this)">
                                                     <option value="1">Cash</option>
                                                     <option value="2">Branch / CMS Deposite</option>
                                                     <option value="3">Online Transfer</option>
@@ -586,7 +624,7 @@
                                         <label>Transfer Type </label>
                                         <div>
                                             <div class="custom-district1">
-                                                <select id="RETTransferType" name="RETTransferType" class="vm-opr-select vm-dmt-select form-control">
+                                                <select id="RETTransferType" name="RETTransferType" class="for-select2 vm-opr-select vm-dmt-select form-control">
                                                     <option>Neft</option>
                                                     <option>RTGS</option>
                                                     <option>IMPS</option>
@@ -601,7 +639,7 @@
                                         <label>Select Bank </label>
                                         <div>
                                             <div class="custom-district1">
-                                                @Html.DropDownListFor(m => m.bankid, Model.ddlbankinfo, "--Select One--", new { @id = "RETRIbankid", @class = "vm-opr-select vm-dmt-select form-control" })
+                                                @Html.DropDownListFor(m => m.bankid, Model.ddlbankinfo, "--Select One--", new { @id = "RETRIbankid", @class = "for-select2 vm-opr-select vm-dmt-select form-control" })
                                                 @*<select id="RETRIbankid" name="RETRIbankid">
                                         <option>axis</option>
                                         <option>Icici</option>
@@ -625,7 +663,7 @@
                                         <label>Select Wallet</label>
                                         <div>
                                             <div class="custom-district1">
-                                                @Html.DropDownListFor(m => m.walletid, Model.ddlwalletInfo, "--Select One--", new { @id = "ddlRETwalletname", @class = "vm-opr-select vm-dmt-select form-control" })
+                                                @Html.DropDownListFor(m => m.walletid, Model.ddlwalletInfo, "--Select One--", new { @id = "ddlRETwalletname", @class = "for-select2 vm-opr-select vm-dmt-select form-control" })
 
 
                                                 @*<select id="ddlRETwalletname" name="ddlRETwalletname">
@@ -694,32 +732,35 @@
                                         </div>
                                     </div>
 
-                                    <div id="retailer_details" style="display: none">
-
-                                        <ul class="retailer-detailsshow">
-                                            <li>
-                                                <span>Firm Name</span>
-                                                <strong id="lblretailerfrmname"></strong>
-                                            </li>
-                                            <li>
-                                                <span>Name</span>
-                                                <strong id="lblre4tailername"></strong>
-                                            </li>
-                                            <li>
-                                                <span>Mobile</span>
-                                                <strong id="lblretailermobile"></strong>
-                                            </li>
-                                            <li>
-                                                <span>Email ID</span>
-                                                <strong id="lblretaileremail"></strong>
-                                            </li>
-                                            <li>
-                                                <span>Address</span>
-                                                <strong id="lblretaileraddress"></strong>
-                                            </li>
-                                        </ul>
-
-
+                                    <div id="retailer_details" class="vm-ft-user-details col-md-12 col-sm-12 col-xs-12" style="display: none">
+                                        <div class="vm-ft-user-details__card">
+                                            <div class="vm-ft-user-details__head">
+                                                <span class="vm-ft-user-details__icon"><i class="fas fa-store-alt" aria-hidden="true"></i></span>
+                                                <span class="vm-ft-user-details__title">Retailer Details</span>
+                                            </div>
+                                            <div class="vm-ft-user-details__grid">
+                                                <div class="vm-ft-user-details__item">
+                                                    <span class="vm-ft-user-details__label"><i class="fas fa-building" aria-hidden="true"></i> Firm Name</span>
+                                                    <strong class="vm-ft-user-details__value" id="lblretailerfrmname">N/A</strong>
+                                                </div>
+                                                <div class="vm-ft-user-details__item">
+                                                    <span class="vm-ft-user-details__label"><i class="fas fa-user" aria-hidden="true"></i> Name</span>
+                                                    <strong class="vm-ft-user-details__value" id="lblre4tailername">N/A</strong>
+                                                </div>
+                                                <div class="vm-ft-user-details__item">
+                                                    <span class="vm-ft-user-details__label"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Mobile</span>
+                                                    <strong class="vm-ft-user-details__value" id="lblretailermobile">N/A</strong>
+                                                </div>
+                                                <div class="vm-ft-user-details__item">
+                                                    <span class="vm-ft-user-details__label"><i class="fas fa-envelope" aria-hidden="true"></i> Email ID</span>
+                                                    <strong class="vm-ft-user-details__value" id="lblretaileremail">N/A</strong>
+                                                </div>
+                                                <div class="vm-ft-user-details__item vm-ft-user-details__item--full">
+                                                    <span class="vm-ft-user-details__label"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Address</span>
+                                                    <strong class="vm-ft-user-details__value" id="lblretaileraddress">N/A</strong>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 @if (hspass == "NOTOK")
@@ -817,7 +858,7 @@
                                         </label>
                                         <div>
                                             <div class="custom-district1">
-                                                <select id="ddlAPIPaymentModel" name="ddlAPIPaymentModel" class="vm-opr-select vm-dmt-select form-control" onchange="changemodea(this)">
+                                                <select id="ddlAPIPaymentModel" name="ddlAPIPaymentModel" class="for-select2 vm-opr-select vm-dmt-select form-control" onchange="changemodea(this)">
                                                     <option value="1">Cash</option>
                                                     <option value="2">Branch / CMS Deposite</option>
                                                     <option value="3">Online Transfer</option>
@@ -842,7 +883,7 @@
                                         <label>Transfer Type </label>
                                         <div>
                                             <div class="custom-district1">
-                                                <select id="APITransferType" name="APITransferType" class="vm-opr-select vm-dmt-select form-control">
+                                                <select id="APITransferType" name="APITransferType" class="for-select2 vm-opr-select vm-dmt-select form-control">
                                                     <option>Neft</option>
                                                     <option>RTGS</option>
                                                     <option>IMPS</option>
@@ -857,7 +898,7 @@
                                         <label>Select Bank </label>
                                         <div>
                                             <div class="custom-district1">
-                                                @Html.DropDownListFor(m => m.bankid, Model.ddlbankinfo, "--Select One--", new { @id = "APIRIbankid", @class = "vm-opr-select vm-dmt-select form-control" })
+                                                @Html.DropDownListFor(m => m.bankid, Model.ddlbankinfo, "--Select One--", new { @id = "APIRIbankid", @class = "for-select2 vm-opr-select vm-dmt-select form-control" })
 
                                                 @*<select id="APIRIbankid" name="APIRIbankid">
                                         <option>axis</option>
@@ -882,7 +923,7 @@
                                         <label>Select Wallet</label>
                                         <div>
                                             <div class="custom-district1">
-                                                @Html.DropDownListFor(m => m.walletid, Model.ddlwalletInfo, "--Select One--", new { @id = "ddlAPIwalletname", @class = "vm-opr-select vm-dmt-select form-control" })
+                                                @Html.DropDownListFor(m => m.walletid, Model.ddlwalletInfo, "--Select One--", new { @id = "ddlAPIwalletname", @class = "for-select2 vm-opr-select vm-dmt-select form-control" })
                                                 @*<select id="ddlAPIwalletname" name="ddlAPIwalletname">
                                         <option>axis</option>
                                         <option>Icici</option>
@@ -949,6 +990,7 @@
                                         </div>
                                     </div>
 
+                                    @FundTransferUserDetails("api_details", "API User Details", "api", "fa-code")
 
                                 </div>
                                 @if (hspass == "NOTOK")
@@ -1043,7 +1085,7 @@
                                         </label>
                                         <div>
                                             <div class="custom-district1">
-                                                <select id="ddlWLPaymentModel" name="ddlWLPaymentModel" class="vm-opr-select vm-dmt-select form-control" onchange="changemodew(this)">
+                                                <select id="ddlWLPaymentModel" name="ddlWLPaymentModel" class="for-select2 vm-opr-select vm-dmt-select form-control" onchange="changemodew(this)">
                                                     <option value="1">Cash</option>
                                                     <option value="2">Branch / CMS Deposite</option>
                                                     <option value="3">Online Transfer</option>
@@ -1068,7 +1110,7 @@
                                         <label>Transfer Type </label>
                                         <div>
                                             <div class="custom-district1">
-                                                <select id="WLTransferType" name="WLTransferType" class="vm-opr-select vm-dmt-select form-control">
+                                                <select id="WLTransferType" name="WLTransferType" class="for-select2 vm-opr-select vm-dmt-select form-control">
                                                     <option>Neft</option>
                                                     <option>RTGS</option>
                                                     <option>IMPS</option>
@@ -1083,7 +1125,7 @@
                                         <label>Select Bank </label>
                                         <div>
                                             <div class="custom-district1">
-                                                @Html.DropDownListFor(m => m.bankid, Model.ddlbankinfo, "--Select One--", new { @id = "WLRIbankid", @class = "vm-opr-select vm-dmt-select form-control" })
+                                                @Html.DropDownListFor(m => m.bankid, Model.ddlbankinfo, "--Select One--", new { @id = "WLRIbankid", @class = "for-select2 vm-opr-select vm-dmt-select form-control" })
                                                 @*<select id="WLRIbankid" name="WLRIbankid">
                                         <option>axis</option>
                                         <option>Icici</option>
@@ -1107,7 +1149,7 @@
                                         <label>Select Wallet</label>
                                         <div>
                                             <div class="custom-district1">
-                                                @Html.DropDownListFor(m => m.walletid, Model.ddlwalletInfo, "--Select One--", new { @id = "ddlWLwalletname", @class = "vm-opr-select vm-dmt-select form-control" })
+                                                @Html.DropDownListFor(m => m.walletid, Model.ddlwalletInfo, "--Select One--", new { @id = "ddlWLwalletname", @class = "for-select2 vm-opr-select vm-dmt-select form-control" })
                                                 @*<select id="ddlWLwalletname" name="ddlWLwalletname">
                                         <option>axis</option>
                                         <option>Icici</option>
@@ -1174,6 +1216,7 @@
                                         </div>
                                     </div>
 
+                                    @FundTransferUserDetails("wl_details", "White Label Details", "wl", "fa-globe")
 
                                 </div>
                                 @if (hspass == "NOTOK")
@@ -1284,21 +1327,21 @@
                                 </div>
                                 <div class="vm-opr-field vm-dmt-field vm-ft-history-field vm-ft-history-field--user" id="retailerdrop" style="display:none;">
                                     <select id="RLMID1" name="RLMID1" class="for-select2 vm-opr-select vm-dmt-select form-control">
-                                        <option value="1">Select Retailer Name</option>
+                                        <option value="">Please Select a Retailer</option>
                                     </select>
                                 </div>
                                 <div class="vm-opr-field vm-dmt-field vm-ft-history-field vm-ft-history-field--user" id="apidrop" style="display:none;">
                                     <select id="APIUSER1" name="APIUSER1" class="for-select2 vm-opr-select vm-dmt-select form-control">
-                                        <option value="1">Select Api Name</option>
+                                        <option value="">Please Select a API User</option>
                                     </select>
                                 </div>
                                 <div class="vm-opr-field vm-dmt-field vm-ft-history-field vm-ft-history-field--user" id="whitedrop" style="display:none;">
                                     <select id="WLUSER1" name="WLUSER1" class="for-select2 vm-opr-select vm-dmt-select form-control">
-                                        <option value="1">Select Whitelabelid Name</option>
+                                        <option value="">Please Select a WL User</option>
                                     </select>
                                 </div>
                                 <div class="vm-opr-field vm-dmt-field vm-ft-history-field vm-ft-history-field--mode">
-                                    <select id="select-search" class="vm-opr-select vm-dmt-select form-control">
+                                    <select id="select-search" class="for-select2 vm-opr-select vm-dmt-select form-control">
                                         <option value="">Mode</option>
                                         <option value="UPI">UPI</option>
                                         <option value="Purchase Order">Purchase Order</option>
@@ -2338,65 +2381,24 @@
 
 
 
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 
 
 
 <script>
     $('#btnExport').click(function () {
-        var tabID = $('.fullbodydycolorbg1 li.tab-link.active').attr("data-tabname")
-
-
-         if (tabID === 'home') {
-            usernm = $('#SuperstokistID1').val();
-        }
-        else if (tabID === 'menu1') {
-            usernm = $('#ddlDistributor1').val();
-        }
-        else if (tabID === 'menu2') {
-            usernm = $('#RLMID1').val();
-        }
-        else if (tabID === 'menu3') {
-            usernm = $('#APIUSER1').val();
-        }
-        else {
-             usernm = $('#WLUSER1').val();
-        }
-
-        var url = '@Url.Action("GenerateExcellFileFundTransfer", "Home")?tabID=' + tabID + '&frm_date=' + $('#txt_frm_date').val() + '&to_date=' + $('#txt_to_date').val()+'&usernm='+ usernm;
+        var tabID = getActiveFundTransferTabType();
+        var usernm = getFundTransferHistoryUser(tabID);
+        var url = '@Url.Action("GenerateExcellFileFundTransfer", "Home")?tabID=' + tabID + '&frm_date=' + getFundTransferDateValue('txt_frm_date') + '&to_date=' + getFundTransferDateValue('txt_to_date') + '&usernm=' + usernm;
         location.href = url;
-
     })
 
 
 
       $('#btnPDF').click(function () {
-        var tabID = $('.fullbodydycolorbg1 li.tab-link.active').attr("data-tabname")
-
-          if (tabID === 'home') {
-            usernm = $('#SuperstokistID1').val();
-        }
-        else if (tabID === 'menu1') {
-            usernm = $('#ddlDistributor1').val();
-        }
-        else if (tabID === 'menu2') {
-            usernm = $('#RLMID1').val();
-        }
-        else if (tabID === 'menu3') {
-            usernm = $('#APIUSER1').val();
-        }
-        else {
-             usernm = $('#WLUSER1').val();
-        }
-
-          var url = '@Url.Action("FundtransferPdfGenerate", "Home")?tabID=' + tabID + '&frm_date=' + $('#txt_frm_date').val() + '&to_date=' + $('#txt_to_date').val()+'&usernm='+ usernm;;
-        //location.href = url;
-window.open(
-  url,
-  '_blank' // <- This is what makes it open in a new window.
-);
-
+        var tabID = getActiveFundTransferTabType();
+        var usernm = getFundTransferHistoryUser(tabID);
+          var url = '@Url.Action("FundtransferPdfGenerate", "Home")?tabID=' + tabID + '&frm_date=' + getFundTransferDateValue('txt_frm_date') + '&to_date=' + getFundTransferDateValue('txt_to_date') + '&usernm=' + usernm;
+        window.open(url, '_blank');
     })
 
 
@@ -2407,7 +2409,24 @@ window.open(
 
 
     $(document).ready(function () {
-        activateLeftFundTab('home');
+        var hashTab = window.location.hash ? window.location.hash.substring(1) : '';
+        if (hashTab && $('#' + hashTab).length) {
+            $('#tabs a[href="#' + hashTab + '"]').trigger('click');
+        } else {
+            activateLeftFundTab('home');
+            setFundTransferHistoryFilterVisibility('home');
+            refreshFundTransferSelect2();
+            runFundTransferHistorySearch();
+        }
+
+        $(document).on('click', '#btnchangetabbutton', function (e) {
+            e.preventDefault();
+            runFundTransferHistorySearch();
+        });
+
+        $(document).on('change', '#select-search', function () {
+            runFundTransferHistorySearch();
+        });
 
         $(document).on('click', '#tblshowMasterD tr[data-target]', function (e) {
             var target = $(this).attr('data-target');
@@ -2448,64 +2467,199 @@ window.open(
         });
 
         $("#txtsearch").on("input", function () {
-            // Print entered value in a div box
-          var txtsearch=  $('#txtsearch').val()
-             var usernm = "";
-        var tabtype = $("ul.fullbodydycolorbg1 li.tab-link.active").attr('data-tabname')
-        if (tabtype === 'home') {
-            usernm = $('#SuperstokistID1').val();
-        }
-        else if (tabtype === 'menu1') {
-            usernm = $('#ddlDistributor1').val();
-        }
-        else if (tabtype === 'menu2') {
-            usernm = $('#RLMID1').val();
-        }
-        else if (tabtype === 'menu3') {
-            usernm = $('#APIUSER1').val();
-        }
-        else {
-             usernm = $('#WLUSER1').val();
-        }
-
-      $.ajax({
-          url: "@Url.Action("TABCHANGEFORFUNDTRANSFER","Home")",
-          data: { nameoftab: tabtype,usernm:usernm, txt_frm_date: $('#txt_frm_date').val(),txt_to_date: $('#txt_to_date').val(),txtsearch:txtsearch },
-            success: function (data) {
-                $('#tblshowMasterD').html(data)
-
-            }
-
-        })
-
-
-
-
-
-
+            runFundTransferHistorySearch();
         });
     });
 </script>
 
 <script>
+    function destroyFundTransferSelect2($el) {
+        if (!$el || !$el.length) {
+            return;
+        }
+        if ($el.hasClass('select2-hidden-accessible')) {
+            try {
+                $el.select2('destroy');
+            } catch (e) { /* ignore stale instances */ }
+        }
+        $el.next('.select2-container').remove();
+    }
+
     function refreshFundTransferSelect2($scope) {
         if (!window.jQuery || !$.fn.select2) {
             return;
         }
-        var $targets = $scope && $scope.length ? $scope.find('.for-select2') : $('.saas-fund-transfer-page .for-select2');
+
+        var $targets;
+        if ($scope && $scope.length) {
+            $targets = $scope.find('.for-select2');
+        } else {
+            $targets = $('.saas-fund-transfer-page .tab-pane.active .for-select2, .saas-fund-transfer-page .vm-ft-history-toolbar .for-select2');
+        }
+
         $targets.each(function () {
             var $el = $(this);
-            if ($el.hasClass('select2-hidden-accessible')) {
-                $el.select2('destroy');
+            destroyFundTransferSelect2($el);
+
+            if (!$el.is(':visible')) {
+                return;
             }
+
             $el.select2({
                 width: '100%',
-                dropdownAutoWidth: false
+                dropdownAutoWidth: false,
+                dropdownParent: $(document.body),
+                minimumResultsForSearch: 8
             });
         });
     }
 
+    function refreshFundTransferHistorySelect2() {
+        refreshFundTransferSelect2($('.saas-fund-transfer-page .vm-ft-history-toolbar'));
+    }
+
+    function setFundTransferHistoryFilterVisibility(tabID) {
+        var filterMap = {
+            home: '#masterdrop',
+            menu1: '#dealerdrop',
+            menu2: '#retailerdrop',
+            menu3: '#apidrop',
+            menu4: '#whitedrop'
+        };
+        $('#masterdrop, #dealerdrop, #retailerdrop, #apidrop, #whitedrop').hide();
+        $(filterMap[tabID] || filterMap.home).show();
+    }
+
+    function applyFundTransferClientFilters(tabtype) {
+        if (tabtype !== 'menu3' && tabtype !== 'menu4') {
+            return;
+        }
+        var paymode = (getFundTransferSelectValue('select-search') || '').toLowerCase();
+        var txtsearch = $.trim($('#txtsearch').val() || '').toLowerCase();
+        if (!paymode && !txtsearch) {
+            return;
+        }
+        $('#tblshowMasterD tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.find('td[colspan]').length) {
+                return;
+            }
+            var rowText = $tr.text().toLowerCase();
+            var match = true;
+            if (paymode) {
+                match = rowText.indexOf(paymode) >= 0;
+            }
+            if (match && txtsearch) {
+                match = rowText.indexOf(txtsearch) >= 0;
+            }
+            $tr.toggle(match);
+        });
+    }
+
+    function getActiveFundTransferTabType() {
+        var tabtype = $('#tabs li.tab-link.active').attr('data-tabname');
+        if (!tabtype) {
+            tabtype = $('.tabcurrent-seconddesign .tab-pane.active').attr('id');
+        }
+        if (!tabtype && window.location.hash) {
+            tabtype = window.location.hash.substring(1);
+        }
+        return tabtype || 'home';
+    }
+
+    function getFundTransferSelectValue(id) {
+        var $el = $('#' + id);
+        if (!$el.length) {
+            return '';
+        }
+        var val = $el.val();
+        return (val === null || val === undefined) ? '' : val;
+    }
+
+    function getFundTransferHistoryUser(tabtype) {
+        var fieldMap = {
+            home: 'SuperstokistID1',
+            menu1: 'ddlDistributor1',
+            menu2: 'RLMID1',
+            menu3: 'APIUSER1',
+            menu4: 'WLUSER1'
+        };
+        return getFundTransferSelectValue(fieldMap[tabtype] || fieldMap.home);
+    }
+
+    function getFundTransferDateValue(id) {
+        var $el = $('#' + id);
+        if (!$el.length) {
+            return '';
+        }
+        var val = $.trim($el.val() || '');
+        if (val) {
+            return val;
+        }
+        if ($el.data('datepicker')) {
+            var d = $el.datepicker('getDate');
+            if (d) {
+                var month = ('0' + (d.getMonth() + 1)).slice(-2);
+                var day = ('0' + d.getDate()).slice(-2);
+                return d.getFullYear() + '-' + month + '-' + day;
+            }
+        }
+        return '';
+    }
+
+    function runFundTransferHistorySearch() {
+        var tabtype = getActiveFundTransferTabType();
+        var usernm = getFundTransferHistoryUser(tabtype);
+        var paymode = getFundTransferSelectValue('select-search');
+        var txt_frm_date = getFundTransferDateValue('txt_frm_date');
+        var txt_to_date = getFundTransferDateValue('txt_to_date');
+        var txtsearch = $.trim($('#txtsearch').val() || '');
+
+        $.ajax({
+            url: "@Url.Action("TABCHANGEFORFUNDTRANSFER","Home")",
+            type: 'GET',
+            cache: false,
+            data: {
+                nameoftab: tabtype,
+                usernm: usernm,
+                txt_frm_date: txt_frm_date,
+                txt_to_date: txt_to_date,
+                paymode: paymode,
+                txtsearch: txtsearch
+            },
+            success: function (data) {
+                $('#tblshowMasterD').html(data);
+                applyFundTransferClientFilters(tabtype);
+            }
+        });
+    }
+
+    function cahangeTab(name) {
+        setFundTransferHistoryFilterVisibility(name);
+        runFundTransferHistorySearch();
+    }
+
+    function wrapFundTransferModeHandlers() {
+        ['changemode', 'changemoded', 'changemoder', 'changemodea', 'changemodew'].forEach(function (fnName) {
+            var original = window[fnName];
+            if (typeof original !== 'function' || original.__ftWrapped) {
+                return;
+            }
+            var wrapped = function () {
+                var result = original.apply(this, arguments);
+                var $pane = $(this).closest('.tab-pane');
+                window.setTimeout(function () {
+                    refreshFundTransferSelect2($pane.length ? $pane : null);
+                }, 0);
+                return result;
+            };
+            wrapped.__ftWrapped = true;
+            window[fnName] = wrapped;
+        });
+    }
+
     $(function () {
+        wrapFundTransferModeHandlers();
         refreshFundTransferSelect2();
     });
 </script>
@@ -2661,121 +2815,79 @@ window.open(
         $pane.addClass('active in').css({ display: 'block', opacity: 1, visibility: 'visible' });
 
         resetLeftTabForm(tabID);
+        setFundTransferHistoryFilterVisibility(tabID);
     }
 
     $('#tabs a').click(function (e) {
         e.preventDefault();
         var tabID = $(this).attr('href').substr(1);
         activateLeftFundTab(tabID);
-
-                     if (tabID === 'home') {
-                 $('#masterdrop').show();
-                 $('#dealerdrop').hide();
-                 $('#retailerdrop').hide();
-                 $('#apidrop').hide();
-                 $('#whitedrop').hide();
-             }
-
+        setFundTransferHistoryFilterVisibility(tabID);
+        hideAllFundTransferUserDetails();
 
        $.ajax({
         url:"@Url.Action("FillMasterDistributorDropDownList")",
         cache: false,
        type: "POST",
        data: {nameoftab:tabID},
-      //  dataType: "html",
            success: function (result) {
 
              if (tabID === 'menu1') {
-                 $('#masterdrop').hide();
-                 $('#dealerdrop').show();
-                 $('#retailerdrop').hide();
-                 $('#apidrop').hide();
-                 $('#whitedrop').hide();
                    var s = '<option value="">Please Select a Distributor</option>';
                for (var i = 0; i < result.length; i++) {
                    s += '<option value="' + result[i].Value + '">' + result[i].Text + '</option>';
                }
                $("#ddlDistributor").html(s);
                $("#ddlDistributor1").html(s);
-           // $("#" + tabID).html(result);
              }
              if (tabID === 'menu2') {
-                 $('#masterdrop').hide();
-                 $('#dealerdrop').hide();
-                 $('#retailerdrop').show();
-                 $('#apidrop').hide();
-                 $('#whitedrop').hide();
                    var s = '<option value="">Please Select a Retailer</option>';
                for (var i = 0; i < result.length; i++) {
                    s += '<option value="' + result[i].Value + '">' + result[i].Text + '</option>';
                }
                $("#RLMID").html(s);
                $("#RLMID1").html(s);
-           // $("#" + tabID).html(result);
              }
              if (tabID === 'menu3') {
-                             $('#masterdrop').hide();
-                 $('#dealerdrop').hide();
-                 $('#retailerdrop').hide();
-                 $('#apidrop').show();
-                 $('#whitedrop').hide();
                    var s = '<option value="">Please Select a API User</option>';
                for (var i = 0; i < result.length; i++) {
                    s += '<option value="' + result[i].Value + '">' + result[i].Text + '</option>';
                }
                   $("#APIUSER").html(s);
                               $("#APIUSER1").html(s);
-           // $("#" + tabID).html(result);
              }
              if (tabID === 'menu4') {
-                      $('#masterdrop').hide();
-                 $('#dealerdrop').hide();
-                 $('#retailerdrop').hide();
-                 $('#apidrop').hide();
-                 $('#whitedrop').show();
                    var s = '<option value="">Please Select a WL User</option>';
                for (var i = 0; i < result.length; i++) {
                    s += '<option value="' + result[i].Value + '">' + result[i].Text + '</option>';
                }
                   $("#WLUSER").html(s);
                    $("#WLUSER1").html(s);
-           // $("#" + tabID).html(result);
              }
 
-             refreshFundTransferSelect2();
+             refreshFundTransferSelect2($('#' + tabID));
+             refreshFundTransferHistorySelect2();
+
+             var tabUserSelectMap = {
+                 home: '#SuperstokistID',
+                 menu1: '#ddlDistributor',
+                 menu2: '#RLMID',
+                 menu3: '#APIUSER',
+                 menu4: '#WLUSER'
+             };
+             var $tabUserSelect = $(tabUserSelectMap[tabID] || tabUserSelectMap.home);
+             if ($tabUserSelect.length && $.trim($tabUserSelect.val() || '')) {
+                 $tabUserSelect.trigger('change');
+             }
+
+             runFundTransferHistorySearch();
         }
    });
-
-    cahangeTab(tabID);
 });
 
-    function cahangeTab(name) {
-          $.ajax({
-        url:"@Url.Action("TABCHANGEFORFUNDTRANSFER")",
-        cache: false,
-       type: "get",
-       data: {nameoftab:name},
-        dataType: "html",
-       success: function (result) {
-        $('#tblshowMasterD').html(result);
-           // $("#" + tabID).html(result);
-        }
-   });
-    }
-
-
-      function cahangeRightTab(name) {
-          $.ajax({
-        url:"@Url.Action("TABCHANGEFORFUNDTRANSFER")",
-        cache: false,
-       type: "get",
-       data: {nameoftab:name},
-        dataType: "html",
-       success: function (result) {
-        $('#tblshowMasterD').html(result);
-           // $("#" + tabID).html(result);
-        }
-   });
+    function cahangeRightTab(name) {
+        setFundTransferHistoryFilterVisibility(name);
+        runFundTransferHistorySearch();
     }
 </script>
 
@@ -3074,6 +3186,92 @@ window.open(
 
 
 
+    function parseFundTransferSelectLabel(text) {
+        var label = $.trim(text || '');
+        if (!label) {
+            return null;
+        }
+        var lower = label.toLowerCase();
+        if (lower.indexOf('select') >= 0 || lower.indexOf('please') >= 0 || label === '--Select--') {
+            return null;
+        }
+        var dashIdx = label.lastIndexOf(' - ');
+        if (dashIdx > 0) {
+            return {
+                firm: label.substring(0, dashIdx).trim(),
+                mobile: label.substring(dashIdx + 3).trim(),
+                name: label.substring(0, dashIdx).trim()
+            };
+        }
+        return { firm: label, mobile: '', name: label };
+    }
+
+    function hideFundTransferUserDetails(prefix) {
+        $('#' + prefix + '_details').hide();
+    }
+
+    function hideAllFundTransferUserDetails() {
+        $('.vm-ft-user-details').hide();
+    }
+
+    function setUserDetailField(selector, value, hideIfEmpty) {
+        var $el = $(selector);
+        if (!$el.length) {
+            return;
+        }
+        var $item = $el.closest('.vm-ft-user-details__item');
+        var text = $.trim(value || '');
+        if (!text || text === 'N/A') {
+            if (hideIfEmpty) {
+                $item.hide();
+                $el.text('');
+            } else {
+                $item.show();
+                $el.text('N/A');
+            }
+            return;
+        }
+        $item.show();
+        $el.text(text);
+    }
+
+    function fillFundTransferUserDetailsFromSelect(prefix, $select) {
+        var $box = $('#' + prefix + '_details');
+        if (!$select || !$select.length || !$.trim($select.val() || '')) {
+            $box.hide();
+            return;
+        }
+        var parsed = parseFundTransferSelectLabel($select.find('option:selected').text());
+        if (!parsed || !parsed.firm) {
+            $box.hide();
+            return;
+        }
+        $box.show();
+        setUserDetailField('#lbl' + prefix + 'frmname', parsed.firm, false);
+        if ($('#lbl' + prefix + 'name').length) {
+            setUserDetailField('#lbl' + prefix + 'name', parsed.name || parsed.firm, false);
+        }
+        setUserDetailField('#lbl' + prefix + 'mobile', parsed.mobile, true);
+        setUserDetailField('#lbl' + prefix + 'email', '', true);
+        setUserDetailField('#lbl' + prefix + 'address', '', true);
+    }
+
+    function fillRetailerUserDetailsFromApi(data) {
+        var $box = $('#retailer_details');
+        var retailerId = $.trim($('#RLMID').val() || '');
+        if (!retailerId || !data || !data.reinfo) {
+            $box.hide();
+            return;
+        }
+        var r = data.reinfo;
+        $box.show();
+        setUserDetailField('#lblretailerfrmname', r.Frm_Name, false);
+        setUserDetailField('#lblre4tailername', r.RetailerName, false);
+        setUserDetailField('#lblretailermobile', r.Mobile, true);
+        setUserDetailField('#lblretaileremail', r.Email, true);
+        setUserDetailField('#lblretaileraddress', r.Address, true);
+    }
+
     function chkmasterbalance(value) {
 
             $.ajax({
@@ -3102,6 +3300,7 @@ window.open(
 
                     }
                     $('.mdremainbalance').html('C.B. ' + data.rembal)
+                    fillFundTransferUserDetailsFromSelect('md', $('#SuperstokistID'));
                 }
             });
     }
@@ -3134,6 +3333,7 @@ window.open(
 
                     }
                     $('.dlmremainbalance').html('C.B. ' + data.rembal)
+                    fillFundTransferUserDetailsFromSelect('dealer', $('#ddlDistributor'));
                 }
             });
     }
@@ -3151,17 +3351,7 @@ window.open(
                 async: false,
                 success: function (data) {
 
-                    if ($('#RLMID').val() == '') {
-                        $('#retailer_details').hide();
-                    }
-                    else {
-                        $('#retailer_details').show();
-                        $('#lblretailerfrmname').text(data.reinfo.Frm_Name)
-                        $('#lblre4tailername').text(data.reinfo.RetailerName)
-                        $('#lblretailermobile').text(data.reinfo.Mobile)
-                        $('#lblretaileremail').text(data.reinfo.Email)
-                        $('#lblretaileraddress').text(data.reinfo.Address)
-                    }
+                    fillRetailerUserDetailsFromApi(data);
 
                     if (data.currntcr > 0) {
                         $('.old-crr').html('CR. ' + data.currntcr)
@@ -3215,6 +3405,7 @@ window.open(
 
                     }
                     $('.apiremainbalance').html('CB. ' + data.rembal)
+                    fillFundTransferUserDetailsFromSelect('api', $('#APIUSER'));
                 }
             });
     }
@@ -3244,6 +3435,7 @@ window.open(
                         $('.old-crw').html('<b>No Old Credit Balance</b>')
 
                     }
+                    fillFundTransferUserDetailsFromSelect('wl', $('#WLUSER'));
                 }
             });
     }
@@ -3254,48 +3446,60 @@ window.open(
 
 
 <script src="~/Scripts/FundTranferJS/FundTransfer.js"></script>
-
-
-
-
-
 <script>
+    if (typeof wrapFundTransferModeHandlers === 'function') {
+        wrapFundTransferModeHandlers();
+    }
 
-
-    $('#btnchangetabbutton').click(function (e) {
-        var usernm = "";
-        var tabtype = $("ul.fullbodydycolorbg1 li.tab-link.active").attr('data-tabname')
-        if (tabtype === 'home') {
-            usernm = $('#SuperstokistID1').val();
+    window.changemaster = function (value) {
+        var mas = $(value).val();
+        if (mas === '' || mas == null) {
+            $('.old-cr').hide();
+            hideFundTransferUserDetails('md');
+        } else {
+            $('.old-cr').show();
         }
-        else if (tabtype === 'menu1') {
-            usernm = $('#ddlDistributor1').val();
+    };
+
+    window.changemasterd = function (value) {
+        var mas = $(value).val();
+        if (mas === '' || mas == null) {
+            $('.old-crd').hide();
+            hideFundTransferUserDetails('dealer');
+        } else {
+            $('.old-crd').show();
         }
-        else if (tabtype === 'menu2') {
-            usernm = $('#RLMID1').val();
+    };
+
+    window.changemasterr = function (value) {
+        var mas = $(value).val();
+        if (mas === '' || mas == null) {
+            $('.old-crr').hide();
+            hideFundTransferUserDetails('retailer');
+        } else {
+            $('.old-crr').show();
         }
-        else if (tabtype === 'menu3') {
-            usernm = $('#APIUSER1').val();
+    };
+
+    window.changemastera = function (value) {
+        var mas = $(value).val();
+        if (mas === '' || mas == null) {
+            $('.old-cra').hide();
+            hideFundTransferUserDetails('api');
+        } else {
+            $('.old-cra').show();
         }
-        else {
-             usernm = $('#WLUSER1').val();
+    };
+
+    window.changemasterw = function (value) {
+        var mas = $(value).val();
+        if (mas === '' || mas == null) {
+            $('.old-crw').hide();
+            hideFundTransferUserDetails('wl');
+        } else {
+            $('.old-crw').show();
         }
-
-      $.ajax({
-          url: "@Url.Action("TABCHANGEFORFUNDTRANSFER","Home")",
-          data: { nameoftab: tabtype, usernm: usernm, txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val(), paymode: $('#select-search').val() },
-            success: function (data) {
-                $('#tblshowMasterD').html(data)
-
-            }
-
-        })
-
-
-    });
-
-
-
+    };
 </script>
 <script>
     var validNumber = new RegExp(/^\d*\.?\d*$/);
@@ -3407,28 +3611,6 @@ window.open(
 
 
 </script>
-
-<script>
-
-    $("#select-search").on("change", function () {
-
-        var rex = new RegExp($('#select-search').val());
-        if (rex == "/all/") { clearFilter() } else {
-            debugger
-            $('#tblshowMasterD tr').hide();
-            $('#tblshowMasterD tr').filter(function () {
-                return rex.test($(this).text());
-            }).show();
-        }
-    })
-
-    function clearFilter() {
-        $('.filterText').val('all');
-        $('#tblshowMasterD tr').show();
-    }
-
-</script>
-
 
 
 

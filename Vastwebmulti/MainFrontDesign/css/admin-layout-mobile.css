@@ -3,6 +3,13 @@
 body.saas-admin-ui {
     --admin-sidebar-width: 190px;
     --admin-header-height: 73px;
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+html.saas-admin-ui {
+    overflow-x: hidden;
+    max-width: 100%;
 }
 
 /* ========== Sidebar shell (desktop + mobile) ========== */
@@ -201,6 +208,7 @@ body.saas-admin-ui section.content {
     width: auto !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
+    overflow-x: hidden;
     transition: margin-left 0.24s ease;
 }
 
@@ -239,12 +247,79 @@ body.saas-admin-ui .admin-mobile-topmenu-head {
 }
 
 /* Global loader */
+body.saas-admin-ui .page-loader-wrapper {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+body.saas-admin-ui .saas-page-loader {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 20060 !important;
+    display: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(248, 250, 252, 0.96) !important;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+body.saas-admin-ui .saas-page-loader.is-active {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+body.saas-admin-ui .saas-page-loader-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 26px 32px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.14);
+    min-width: 180px;
+}
+
+body.saas-admin-ui .saas-page-loader-ring {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 3px solid #dbeafe;
+    border-top-color: #2563eb;
+    animation: saasPageLoaderSpin 0.75s linear infinite;
+}
+
+body.saas-admin-ui .saas-page-loader-text {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: 0.01em;
+}
+
+@keyframes saasPageLoaderSpin {
+    to { transform: rotate(360deg); }
+}
+
 body.saas-admin-ui .admin-global-loader,
+body.saas-admin-ui #admin-global-loader,
 body.saas-admin-ui #loader.admin-global-loader {
     display: none !important;
     position: fixed !important;
-    inset: 0 !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
     z-index: 20050 !important;
+    flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
     background: rgba(15, 23, 42, 0.5) !important;
@@ -252,16 +327,19 @@ body.saas-admin-ui #loader.admin-global-loader {
     margin: 0 !important;
     padding: 0 !important;
     transform: none !important;
-    width: auto !important;
-    height: auto !important;
-    right: auto !important;
-    top: auto !important;
+    box-sizing: border-box !important;
+    pointer-events: auto !important;
 }
 
 body.saas-admin-ui .admin-global-loader.is-active,
+body.saas-admin-ui #admin-global-loader.is-active,
 body.saas-admin-ui #loader.admin-global-loader.is-active,
 body.saas-admin-ui .admin-global-loader[style*="display: flex"],
-body.saas-admin-ui #loader[style*="display: flex"] {
+body.saas-admin-ui #admin-global-loader[style*="display: flex"],
+body.saas-admin-ui #loader[style*="display: flex"],
+body.saas-admin-ui .admin-global-loader[style*="display: block"],
+body.saas-admin-ui #admin-global-loader[style*="display: block"],
+body.saas-admin-ui #loader[style*="display: block"] {
     display: flex !important;
 }
 
@@ -269,12 +347,16 @@ body.saas-admin-ui .admin-global-loader-box {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 12px;
     padding: 22px 28px;
     background: #fff;
     border-radius: 14px;
     box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
     min-width: 140px;
+    margin: 0 auto !important;
+    position: relative !important;
+    flex-shrink: 0;
 }
 
 body.saas-admin-ui .admin-global-loader-box i {
@@ -725,9 +807,9 @@ body.saas-admin-ui .admin-header-row {
         grid-template-columns: 1fr !important;
     }
 
-    body.saas-admin-ui .saas-dash-modern ul.tabs2,
-    body.saas-admin-ui .saas-dash-modern ul.tabs3,
-    body.saas-admin-ui .saas-dash-modern .saas-dash-txn-tabs {
+    body.saas-admin-ui .saas-dash-modern:not(.saas-dealer-dashboard) ul.tabs2,
+    body.saas-admin-ui .saas-dash-modern:not(.saas-dealer-dashboard) ul.tabs3,
+    body.saas-admin-ui .saas-dash-modern:not(.saas-dealer-dashboard) .saas-dash-txn-tabs {
         flex-direction: column;
         width: calc(100% - 16px) !important;
     }

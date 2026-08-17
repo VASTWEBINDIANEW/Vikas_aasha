@@ -383,7 +383,36 @@
         font-size: 0.72rem;
     }
 
-    /* Modals */
+    /* Detail modals — keep centered card on mobile (override global drawer rules) */
+    body.saas-admin-ui #m-d-fund-transfer.vm-ft-detail-modal.in,
+    body.saas-admin-ui #m-d-fund-transfer.vm-ft-detail-modal.show,
+    body.saas-admin-ui #distributor-fund-transfer.vm-ft-detail-modal.in,
+    body.saas-admin-ui #distributor-fund-transfer.vm-ft-detail-modal.show,
+    body.saas-admin-ui #retailer-fund-transfer.vm-ft-detail-modal.in,
+    body.saas-admin-ui #retailer-fund-transfer.vm-ft-detail-modal.show,
+    body.saas-admin-ui #api-fund-transfer.vm-ft-detail-modal.in,
+    body.saas-admin-ui #api-fund-transfer.vm-ft-detail-modal.show,
+    body.saas-admin-ui #White-label-fund-transfer.vm-ft-detail-modal.in,
+    body.saas-admin-ui #White-label-fund-transfer.vm-ft-detail-modal.show,
+    body.saas-admin-ui #total-fund-transfer.vm-ft-detail-modal.in,
+    body.saas-admin-ui #total-fund-transfer.vm-ft-detail-modal.show {
+        padding: 64px 10px 16px !important;
+    }
+
+    body.saas-admin-ui #m-d-fund-transfer.vm-ft-detail-modal.in .modal-dialog,
+    body.saas-admin-ui #distributor-fund-transfer.vm-ft-detail-modal.in .modal-dialog,
+    body.saas-admin-ui #retailer-fund-transfer.vm-ft-detail-modal.in .modal-dialog,
+    body.saas-admin-ui #api-fund-transfer.vm-ft-detail-modal.in .modal-dialog,
+    body.saas-admin-ui #White-label-fund-transfer.vm-ft-detail-modal.in .modal-dialog,
+    body.saas-admin-ui #total-fund-transfer.vm-ft-detail-modal.in .modal-dialog {
+        width: calc(100% - 12px) !important;
+        max-width: calc(100% - 12px) !important;
+        margin: 0 auto !important;
+        float: none !important;
+        height: auto !important;
+        max-height: calc(100dvh - 80px) !important;
+    }
+
     body.saas-admin-ui .modal.fund-tr-history.vm-ft-history-modal .modal-body .first-form .row > [class*="col-"] {
         flex: 0 0 100%;
         max-width: 100%;
@@ -397,8 +426,13 @@
     }
 
     body.saas-admin-ui .vm-ft-detail-modal__dialog {
-        max-width: calc(100% - 16px) !important;
-        margin: 0.75rem auto !important;
+        max-width: calc(100% - 12px) !important;
+        margin: 0 auto !important;
+    }
+
+    body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal .modal-content.vm-ft-detail-modal__content {
+        max-height: calc(100dvh - 80px) !important;
+        border-radius: 14px !important;
     }
 
     body.saas-admin-ui .saas-fund-transfer-page .datepicker.dropdown-menu {

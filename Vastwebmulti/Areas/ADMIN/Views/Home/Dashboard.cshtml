@@ -51,6 +51,106 @@
     body.saas-admin-ui .saas-dash-modern .tab-content2 {
         background: #fff;
     }
+    body.saas-admin-ui .saas-admin-dashboard .saas-dt-toolbar {
+        display: none !important;
+    }
+    /* Transaction log table — header row + compact footer */
+    body.saas-admin-ui .saas-admin-dashboard table.saas-dash-txn-table,
+    body.saas-admin-ui .saas-admin-dashboard table.dataTable.saas-dash-txn-table {
+        table-layout: auto !important;
+        border-collapse: collapse !important;
+        border-spacing: 0 !important;
+    }
+    body.saas-admin-ui .saas-admin-dashboard table.saas-dash-txn-table thead th,
+    body.saas-admin-ui .saas-admin-dashboard table.dataTable.saas-dash-txn-table thead th {
+        background: #0f172a !important;
+        background-image: none !important;
+        color: #f8fafc !important;
+        border: none !important;
+        border-bottom: 2px solid #1e293b !important;
+        white-space: nowrap !important;
+    }
+    body.saas-admin-ui .saas-admin-dashboard .saas-dash-panel-txn .tab-content3.current3 {
+        min-height: 0 !important;
+    }
+    body.saas-admin-ui .saas-admin-dashboard .saas-dash-table-scroll {
+        min-height: 0 !important;
+        max-height: none !important;
+        flex: 0 1 auto !important;
+    }
+    body.saas-admin-ui .saas-admin-dashboard .saas-dash-txn-card .dataTables_wrapper {
+        flex: 0 1 auto !important;
+    }
+    body.saas-admin-ui .saas-admin-dashboard .dataTables_paginate .paginate_button.previous,
+    body.saas-admin-ui .saas-admin-dashboard .dataTables_paginate .paginate_button.next {
+        display: none !important;
+    }
+    body.saas-admin-ui .saas-admin-dashboard .saas-dt-footer {
+        padding: 10px 16px !important;
+    }
+
+    /* Mobile/tablet — same table as desktop + horizontal scroll */
+    @@media (max-width: 900px) {
+        body.saas-admin-ui .saas-admin-dashboard table.saas-dash-txn-table thead {
+            display: table-header-group !important;
+        }
+
+        body.saas-admin-ui .saas-admin-dashboard table.saas-dash-txn-table tbody tr {
+            display: table-row !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+        }
+
+        body.saas-admin-ui .saas-admin-dashboard table.saas-dash-txn-table tbody td {
+            display: table-cell !important;
+            padding: 10px 12px !important;
+            border-bottom: 1px solid #eef2f7 !important;
+            white-space: nowrap !important;
+            text-align: left !important;
+            background: #fff !important;
+            vertical-align: middle !important;
+        }
+
+        body.saas-admin-ui .saas-admin-dashboard table.saas-dash-txn-table tbody td::before {
+            display: none !important;
+            content: none !important;
+        }
+
+        body.saas-admin-ui .saas-admin-dashboard table.saas-dash-txn-table tbody td.col-amount,
+        body.saas-admin-ui .saas-admin-dashboard table.saas-dash-txn-table tbody td.col-balance {
+            text-align: right !important;
+        }
+
+        body.saas-admin-ui .saas-admin-dashboard table.saas-dash-txn-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 3;
+        }
+
+        body.saas-admin-ui .saas-admin-dashboard table.saas-dash-txn-table {
+            min-width: 880px !important;
+        }
+
+        body.saas-admin-ui .saas-admin-dashboard .saas-dash-table-scroll {
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        body.saas-admin-ui .saas-admin-dashboard .saas-dash-txn-card .dataTables_wrapper {
+            overflow-x: auto !important;
+            max-width: 100% !important;
+        }
+
+        body.saas-admin-ui .saas-admin-dashboard .saas-dash-panel-txn .tab-content3.current3 {
+            overflow-x: hidden !important;
+        }
+    }
 
 </style>
 
@@ -275,16 +375,14 @@
                 ordering: true,
                 order: [[4, 'desc']],
                 autoWidth: false,
-                searching: true,
+                searching: false,
                 info: true,
                 paging: true,
-                dom: '<"saas-dt-toolbar"f>rt<"saas-dt-footer"ip>',
+                dom: 'rt<"saas-dt-footer"ip>',
                 language: {
-                    search: '',
-                    searchPlaceholder: 'Search firm, type, description...',
                     emptyTable: 'No transactions found',
                     zeroRecords: 'No matching transactions',
-                    info: 'Showing _START_�_END_ of _TOTAL_',
+                    info: 'Showing _START_ to _END_ of _TOTAL_',
                     paginate: { previous: 'Prev', next: 'Next' }
                 },
                 columnDefs: [
