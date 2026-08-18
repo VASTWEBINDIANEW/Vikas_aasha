@@ -71,38 +71,38 @@
 
                 </tr>
                 <tr>
-                    <td>(%)</td>
-                    <td>(&#8377;)</td>
-                    <td>Max(&#8377;)</td>
-                    <td>Active</td>
-                    <td>(%)</td>
-                    <td>(&#8377;)</td>
-                    <td>Max(&#8377;)</td>
-                    <td>Active</td>
-                    <td>(%)</td>
-                    <td>(&#8377;)</td>
-                    <td>Max(&#8377;)</td>
-                    <td>Active</td>
-                    <td>(%)</td>
-                    <td>(&#8377;)</td>
-                    <td>Max(&#8377;)</td>
-                    <td>Active</td>
-                    <td>(%)</td>
-                    <td>(&#8377;)</td>
-                    <td>Max(&#8377;)</td>
-                    <td>Active</td>
-                    <td>(%)</td>
-                    <td>(&#8377;)</td>
-                    <td>Max(&#8377;)</td>
-                    <td>Active</td>
-                    <td>(%)</td>
-                    <td>(&#8377;)</td>
-                    <td>Max(&#8377;)</td>
-                    <td>Active</td>
-                    <td>(%)</td>
-                    <td>(&#8377;)</td>
-                    <td>Max(&#8377;)</td>
-                    <td>Active</td>
+                    <th>(%)</th>
+                    <th>(&#8377;)</th>
+                    <th>Max(&#8377;)</th>
+                    <th>Active</th>
+                    <th>(%)</th>
+                    <th>(&#8377;)</th>
+                    <th>Max(&#8377;)</th>
+                    <th>Active</th>
+                    <th>(%)</th>
+                    <th>(&#8377;)</th>
+                    <th>Max(&#8377;)</th>
+                    <th>Active</th>
+                    <th>(%)</th>
+                    <th>(&#8377;)</th>
+                    <th>Max(&#8377;)</th>
+                    <th>Active</th>
+                    <th>(%)</th>
+                    <th>(&#8377;)</th>
+                    <th>Max(&#8377;)</th>
+                    <th>Active</th>
+                    <th>(%)</th>
+                    <th>(&#8377;)</th>
+                    <th>Max(&#8377;)</th>
+                    <th>Active</th>
+                    <th>(%)</th>
+                    <th>(&#8377;)</th>
+                    <th>Max(&#8377;)</th>
+                    <th>Active</th>
+                    <th>(%)</th>
+                    <th>(&#8377;)</th>
+                    <th>Max(&#8377;)</th>
+                    <th>Active</th>
                 </tr>
             </thead>
             <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
@@ -528,38 +528,38 @@
                                 @email
                             </td>
               
-                            <td style="color:@color1">@Model.Retaileruser[i].per_500_999</td>
-                            <td style="color:@color11">@Model.Retaileruser[i].rs_500_999</td>
-                            <td style="color:@color1">@Model.Retaileruser[i].maxrs_500_999</td>
-                            <td>@active1</td>
-                            <td style="color:@color2;">@Model.Retaileruser[i].per_1000_1499</td>
-                            <td style="color:@color21;">@Model.Retaileruser[i].rs_1000_1499</td>
-                            <td style="color:@color2;">@Model.Retaileruser[i].maxrs_1000_1499</td>
-                            <td>@active2</td>
-                            <td style="color:@color3">@Model.Retaileruser[i].per_1500_1999</td>
-                            <td style="color:@color31">@Model.Retaileruser[i].rs_1500_1999</td>
-                            <td style="color:@color3">@Model.Retaileruser[i].maxrs_1500_1999</td>
-                            <td>@active3</td>
-                            <td style="color:@color4">@Model.Retaileruser[i].per_2000_2499</td>
-                            <td style="color:@color41">@Model.Retaileruser[i].rs_2000_2499</td>
-                            <td style="color:@color4">@Model.Retaileruser[i].maxrs_2000_2499</td>
-                            <td>@active4</td>
-                            <td style="color:@color5">@Model.Retaileruser[i].per_2500_2999</td>
-                            <td style="color:@color51">@Model.Retaileruser[i].rs_2500_2999</td>
-                            <td style="color:@color5">@Model.Retaileruser[i].maxrs_2500_2999</td>
-                            <td>@active5</td>
-                            <td style="color:@color6">@Model.Retaileruser[i].per_3000_3499</td>
-                            <td style="color:@color61">@Model.Retaileruser[i].rs_3000_3499</td>
-                            <td style="color:@color6">@Model.Retaileruser[i].maxrs_3000_3499</td>
-                            <td>@active6</td>
-                            <td style="color:@color7">@Model.Retaileruser[i].per_3500_5000</td>
-                            <td style="color:@color71">@Model.Retaileruser[i].rs_3500_5000</td>
-                            <td style="color:@color7">@Model.Retaileruser[i].maxrs_3500_5000</td>
-                            <td>@active7</td>
-                            <td style="color:@color8">@Model.Retaileruser[i].per_5001_10000</td>
-                            <td style="color:@color81">@Model.Retaileruser[i].rs_5001_10000</td>
-                            <td style="color:@color8">@Model.Retaileruser[i].maxrs_5001_10000</td>
-                            <td>@active8</td>
+                            <td style="color:@color1">@((Model.Retaileruser[i].per_500_999 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@color11">@((Model.Retaileruser[i].rs_500_999 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@(string.IsNullOrEmpty(color1) ? color11 : color1)">@((Model.Retaileruser[i].maxrs_500_999 ?? 0).ToString("0.00"))</td>
+                            <td class="vm-pg-slab-active-cell">@active1</td>
+                            <td style="color:@color2;">@((Model.Retaileruser[i].per_1000_1499 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@color21;">@((Model.Retaileruser[i].rs_1000_1499 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@(string.IsNullOrEmpty(color2) ? color21 : color2)">@((Model.Retaileruser[i].maxrs_1000_1499 ?? 0).ToString("0.00"))</td>
+                            <td class="vm-pg-slab-active-cell">@active2</td>
+                            <td style="color:@color3">@((Model.Retaileruser[i].per_1500_1999 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@color31">@((Model.Retaileruser[i].rs_1500_1999 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@(string.IsNullOrEmpty(color3) ? color31 : color3)">@((Model.Retaileruser[i].maxrs_1500_1999 ?? 0).ToString("0.00"))</td>
+                            <td class="vm-pg-slab-active-cell">@active3</td>
+                            <td style="color:@color4">@((Model.Retaileruser[i].per_2000_2499 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@color41">@((Model.Retaileruser[i].rs_2000_2499 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@(string.IsNullOrEmpty(color4) ? color41 : color4)">@((Model.Retaileruser[i].maxrs_2000_2499 ?? 0).ToString("0.00"))</td>
+                            <td class="vm-pg-slab-active-cell">@active4</td>
+                            <td style="color:@color5">@((Model.Retaileruser[i].per_2500_2999 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@color51">@((Model.Retaileruser[i].rs_2500_2999 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@(string.IsNullOrEmpty(color5) ? color51 : color5)">@((Model.Retaileruser[i].maxrs_2500_2999 ?? 0).ToString("0.00"))</td>
+                            <td class="vm-pg-slab-active-cell">@active5</td>
+                            <td style="color:@color6">@((Model.Retaileruser[i].per_3000_3499 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@color61">@((Model.Retaileruser[i].rs_3000_3499 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@(string.IsNullOrEmpty(color6) ? color61 : color6)">@((Model.Retaileruser[i].maxrs_3000_3499 ?? 0).ToString("0.00"))</td>
+                            <td class="vm-pg-slab-active-cell">@active6</td>
+                            <td style="color:@color7">@((Model.Retaileruser[i].per_3500_5000 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@color71">@((Model.Retaileruser[i].rs_3500_5000 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@(string.IsNullOrEmpty(color7) ? color71 : color7)">@((Model.Retaileruser[i].maxrs_3500_5000 ?? 0).ToString("0.00"))</td>
+                            <td class="vm-pg-slab-active-cell">@active7</td>
+                            <td style="color:@color8">@((Model.Retaileruser[i].per_5001_10000 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@color81">@((Model.Retaileruser[i].rs_5001_10000 ?? 0).ToString("0.00"))</td>
+                            <td style="color:@(string.IsNullOrEmpty(color8) ? color81 : color8)">@((Model.Retaileruser[i].maxrs_5001_10000 ?? 0).ToString("0.00"))</td>
+                            <td class="vm-pg-slab-active-cell">@active8</td>
                         </tr>
 
                     }

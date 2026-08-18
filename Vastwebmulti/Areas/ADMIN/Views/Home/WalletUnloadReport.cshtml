@@ -11,7 +11,7 @@
 
     var frmDate = (Request["txt_frm_date"] ?? "").Trim();
     var toDate = (Request["txt_to_date"] ?? "").Trim();
-    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Now.AddDays(-30).ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
     if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
 
     var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";

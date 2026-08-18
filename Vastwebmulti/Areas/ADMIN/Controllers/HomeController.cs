@@ -1,4 +1,4 @@
-﻿using A2ZMultiService;
+using A2ZMultiService;
 using System.Web.Mvc;
 using ClosedXML.Excel;
 using com.sun.java.browser.dom;
@@ -16897,6 +16897,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         public ActionResult Complaint(string type, string userid)
         {
+            MarkComplaintChatSeen(userid);
 
             Vastwebmulti.Areas.ADMIN.Models.ChattingModel viewmodel = new Vastwebmulti.Areas.ADMIN.Models.ChattingModel();
             if (type == null)
@@ -16909,8 +16910,38 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 viewmodel.Chatuser = db.chat_user().ToList();
                 viewmodel.Complainreq = db.proc_Complaint_request(userid, "").ToList();
             }
-            //var ch = db.proc_Complaint_request("", "All").ToList();
+
+            if (!string.IsNullOrWhiteSpace(userid) && viewmodel.Chatuser != null)
+            {
+                foreach (var user in viewmodel.Chatuser)
+                {
+                    if (user.Userid == userid)
+                    {
+                        user.count = 0;
+                    }
+                }
+            }
             return View(viewmodel);
+        }
+
+        private void MarkComplaintChatSeen(string userid)
+        {
+            if (string.IsNullOrWhiteSpace(userid))
+            {
+                return;
+            }
+
+            var openChats = db.complaint_request.Where(c => c.userid == userid && c.sts == "Open").ToList();
+            if (openChats.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var row in openChats)
+            {
+                row.sts = row.resdate != null ? "Close" : "Read";
+            }
+            db.SaveChanges();
         }
 
         [HttpPost]
@@ -16954,8 +16985,11 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             {
                 complaint.response = response;
                 complaint.resdate = DateTime.Now;
+                complaint.sts = "Close";
                 db.SaveChanges();
             }
+
+            MarkComplaintChatSeen(useridd);
 
             // Retailer details
             var retailer = db.Users.Where(u => u.UserId == useridd).FirstOrDefault();
@@ -94912,11 +94946,21 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                     model.UpdateWhitelabel = UpdateAllMaster;
 
                 }
-                //Whitelabel API
                 return PartialView(model);
             }
             else
             {
+                if (string.IsNullOrWhiteSpace(dlmid))
+                {
+                    dlmid = ddldealer;
+                }
+                if (string.Equals(role, "Retailer", StringComparison.OrdinalIgnoreCase)
+                    && string.IsNullOrWhiteSpace(ddlUserId)
+                    && !string.IsNullOrWhiteSpace(dlmid))
+                {
+                    ddlUserId = dlmid;
+                }
+
                 if (role == "Master")
                 {
                     if (ddlUserId != "")
@@ -95181,51 +95225,93 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                             foreach (var m in model2.Retaileruser)
                             {
-                                db.Update_AEPS_dlm_rem_userSlab_again_UPI(ddlUserId, m.aadharpay, m.ministatement, m.per_500_999, m.rs_500_999,
-                            m.maxrs_500_999, m.Type_500_999, m.per_1000_1499, m.rs_1000_1499, m.maxrs_1000_1499,
-                            m.Type_1000_1499, m.per_1500_1999, m.rs_1500_1999, m.maxrs_1500_1999, m.Type_1500_1999,
-                            m.per_2000_2499, m.rs_2000_2499, m.maxrs_2000_2499, m.Type_2000_2499, m.per_2500_2999,
-                            m.rs_2500_2999, m.maxrs_2500_2999, m.Type_2500_2999, m.per_3000_3499, m.rs_3000_3499,
-                            m.maxrs_3000_3499, m.Type_3000_3499, m.per_3500_5000, m.rs_3500_5000, m.maxrs_3500_5000,
-                            m.Type_3500_5000, m.per_5001_10000, m.rs_5001_10000, m.maxrs_5001_10000, m.Type_5001_10000);
-                                //   db.Update_AEPS_dlm_rem_userSlab_new(ddlUserId, item.comm, item.maxrs, item.minbal, item.M_statement, item.aadharpay);
-                                if (Button == "Update Existing & New Users")
+                                var dealerRetailerIds = db.Retailer_Details
+                                    .Where(r => r.DealerId == ddlUserId)
+                                    .Select(r => r.RetailerId)
+                                    .ToList();
+                                var dealerRetailerSlabs = db.Aeps_comm_userwise_UPI
+                                    .Where(a => dealerRetailerIds.Contains(a.Userid))
+                                    .ToList();
+                                foreach (var slab in dealerRetailerSlabs)
                                 {
-                                    var entry = db.Aeps_comm_Dlm_rem_UPI.Single(a => a.dealerid == ddlUserId);
-                                    entry.aadharpay = m.aadharpay;
-                                    entry.ministatement = m.ministatement;
-                                    entry.per_500_999 = m.per_500_999;
-                                    entry.rs_500_999 = m.rs_500_999;
-                                    entry.maxrs_500_999 = m.maxrs_500_999;
-                                    entry.Type_500_999 = m.Type_500_999;
-                                    entry.per_1000_1499 = m.per_1000_1499;
-                                    entry.rs_1000_1499 = m.rs_1000_1499;
-                                    entry.maxrs_1000_1499 = m.maxrs_1000_1499;
-                                    entry.Type_1000_1499 = m.Type_1000_1499;
-                                    entry.per_1500_1999 = m.per_1500_1999;
-                                    entry.rs_1500_1999 = m.rs_1500_1999;
-                                    entry.maxrs_1500_1999 = m.maxrs_1500_1999;
-                                    entry.Type_1500_1999 = m.Type_1500_1999;
-                                    entry.per_2000_2499 = m.per_2000_2499;
-                                    entry.rs_2000_2499 = m.rs_2000_2499;
-                                    entry.maxrs_2000_2499 = m.maxrs_2000_2499;
-                                    entry.Type_2000_2499 = m.Type_2000_2499;
-                                    entry.per_2500_2999 = m.per_2500_2999;
-                                    entry.rs_2500_2999 = m.rs_2500_2999;
-                                    entry.maxrs_2500_2999 = m.maxrs_2500_2999;
-                                    entry.Type_2500_2999 = m.Type_2500_2999;
-                                    entry.per_3000_3499 = m.per_3000_3499;
-                                    entry.rs_3000_3499 = m.rs_3000_3499;
-                                    entry.maxrs_3000_3499 = m.maxrs_3000_3499;
-                                    entry.Type_3000_3499 = m.Type_3000_3499;
-                                    entry.per_3500_5000 = m.per_3500_5000;
-                                    entry.rs_3500_5000 = m.rs_3500_5000;
-                                    entry.maxrs_3500_5000 = m.maxrs_3500_5000;
-                                    entry.Type_3500_5000 = m.Type_3500_5000;
-                                    entry.per_5001_10000 = m.per_5001_10000;
-                                    entry.rs_5001_10000 = m.rs_5001_10000;
-                                    entry.maxrs_5001_10000 = m.maxrs_5001_10000;
-                                    entry.Type_5001_10000 = m.Type_5001_10000;
+                                    slab.aadharpay = m.aadharpay;
+                                    slab.ministatement = m.ministatement;
+                                    slab.per_500_999 = m.per_500_999;
+                                    slab.rs_500_999 = m.rs_500_999;
+                                    slab.maxrs_500_999 = m.maxrs_500_999;
+                                    slab.Type_500_999 = m.Type_500_999;
+                                    slab.per_1000_1499 = m.per_1000_1499;
+                                    slab.rs_1000_1499 = m.rs_1000_1499;
+                                    slab.maxrs_1000_1499 = m.maxrs_1000_1499;
+                                    slab.Type_1000_1499 = m.Type_1000_1499;
+                                    slab.per_1500_1999 = m.per_1500_1999;
+                                    slab.rs_1500_1999 = m.rs_1500_1999;
+                                    slab.maxrs_1500_1999 = m.maxrs_1500_1999;
+                                    slab.Type_1500_1999 = m.Type_1500_1999;
+                                    slab.per_2000_2499 = m.per_2000_2499;
+                                    slab.rs_2000_2499 = m.rs_2000_2499;
+                                    slab.maxrs_2000_2499 = m.maxrs_2000_2499;
+                                    slab.Type_2000_2499 = m.Type_2000_2499;
+                                    slab.per_2500_2999 = m.per_2500_2999;
+                                    slab.rs_2500_2999 = m.rs_2500_2999;
+                                    slab.maxrs_2500_2999 = m.maxrs_2500_2999;
+                                    slab.Type_2500_2999 = m.Type_2500_2999;
+                                    slab.per_3000_3499 = m.per_3000_3499;
+                                    slab.rs_3000_3499 = m.rs_3000_3499;
+                                    slab.maxrs_3000_3499 = m.maxrs_3000_3499;
+                                    slab.Type_3000_3499 = m.Type_3000_3499;
+                                    slab.per_3500_5000 = m.per_3500_5000;
+                                    slab.rs_3500_5000 = m.rs_3500_5000;
+                                    slab.maxrs_3500_5000 = m.maxrs_3500_5000;
+                                    slab.Type_3500_5000 = m.Type_3500_5000;
+                                    slab.per_5001_10000 = m.per_5001_10000;
+                                    slab.rs_5001_10000 = m.rs_5001_10000;
+                                    slab.maxrs_5001_10000 = m.maxrs_5001_10000;
+                                    slab.Type_5001_10000 = m.Type_5001_10000;
+                                }
+                                db.SaveChanges();
+
+                                var dlmRemEntry = db.Aeps_comm_Dlm_rem_UPI.FirstOrDefault(a => a.dealerid == ddlUserId);
+                                if (dlmRemEntry == null)
+                                {
+                                    dlmRemEntry = new Vastwebmulti.Models.Aeps_comm_Dlm_rem_UPI { dealerid = ddlUserId };
+                                    db.Aeps_comm_Dlm_rem_UPI.Add(dlmRemEntry);
+                                }
+                                {
+                                    dlmRemEntry.aadharpay = m.aadharpay;
+                                    dlmRemEntry.ministatement = m.ministatement;
+                                    dlmRemEntry.per_500_999 = m.per_500_999;
+                                    dlmRemEntry.rs_500_999 = m.rs_500_999;
+                                    dlmRemEntry.maxrs_500_999 = m.maxrs_500_999;
+                                    dlmRemEntry.Type_500_999 = m.Type_500_999;
+                                    dlmRemEntry.per_1000_1499 = m.per_1000_1499;
+                                    dlmRemEntry.rs_1000_1499 = m.rs_1000_1499;
+                                    dlmRemEntry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                                    dlmRemEntry.Type_1000_1499 = m.Type_1000_1499;
+                                    dlmRemEntry.per_1500_1999 = m.per_1500_1999;
+                                    dlmRemEntry.rs_1500_1999 = m.rs_1500_1999;
+                                    dlmRemEntry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                                    dlmRemEntry.Type_1500_1999 = m.Type_1500_1999;
+                                    dlmRemEntry.per_2000_2499 = m.per_2000_2499;
+                                    dlmRemEntry.rs_2000_2499 = m.rs_2000_2499;
+                                    dlmRemEntry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                                    dlmRemEntry.Type_2000_2499 = m.Type_2000_2499;
+                                    dlmRemEntry.per_2500_2999 = m.per_2500_2999;
+                                    dlmRemEntry.rs_2500_2999 = m.rs_2500_2999;
+                                    dlmRemEntry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                                    dlmRemEntry.Type_2500_2999 = m.Type_2500_2999;
+                                    dlmRemEntry.per_3000_3499 = m.per_3000_3499;
+                                    dlmRemEntry.rs_3000_3499 = m.rs_3000_3499;
+                                    dlmRemEntry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                                    dlmRemEntry.Type_3000_3499 = m.Type_3000_3499;
+                                    dlmRemEntry.per_3500_5000 = m.per_3500_5000;
+                                    dlmRemEntry.rs_3500_5000 = m.rs_3500_5000;
+                                    dlmRemEntry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                                    dlmRemEntry.Type_3500_5000 = m.Type_3500_5000;
+                                    dlmRemEntry.per_5001_10000 = m.per_5001_10000;
+                                    dlmRemEntry.rs_5001_10000 = m.rs_5001_10000;
+                                    dlmRemEntry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                                    dlmRemEntry.Type_5001_10000 = m.Type_5001_10000;
                                     db.SaveChanges();
                                 }
                             }
@@ -109845,7 +109931,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             }
             string txt_frm_date = DateTime.Now.ToString();
             string txt_to_date = DateTime.Now.ToString();
-            string frm_date = Convert.ToDateTime(txt_frm_date).AddDays(-30).Date.ToString("yyyy-MM-dd");
+            string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString("yyyy-MM-dd");
             string to_date = Convert.ToDateTime(txt_to_date).AddDays(1).ToString("yyyy-MM-dd");
             ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null);
             var entries = db.WalletUnloadReportAdmin(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), type, "ALL", "ALL").ToList();
