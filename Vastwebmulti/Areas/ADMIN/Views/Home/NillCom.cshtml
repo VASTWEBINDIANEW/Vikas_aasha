@@ -11,7 +11,7 @@
 <link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-nillcom-modern.css?v=16" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-nillcom-modern.css?v=17" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-nillcom-modals.css?v=3" rel="stylesheet" />
 
 <section class="content NillCom_Page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium">
@@ -468,18 +468,31 @@
                                             <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Gateway</label><label id="lblddlOpusertype" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select id="ddlOpusertype" name="ddlOpusertype" class="form-control" onchange="DdsValidationForm()" style="-webkit-appearance:none;">
-                                                        <option value="">Select User type</option>
-                                                        <option>API</option>
-                                                        <option>Machine</option>
+                                                    <select id="ddlOpusertype" name="ddlOpusertype" class="form-control" onchange="vmByOpOnGatewayChange(); DdsValidationForm();" style="-webkit-appearance:none;">
+                                                        <option value="">Select Gateway</option>
+                                                        <option value="API">API</option>
+                                                        <option value="Machine">Machine</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select API/Port</label><label id="lblddlSwitchoptport" class="form-invalid"></label>
-                                                <div class="">
-                                                    <select id="ddlSwitchoptport" name="ddlSwitchoptport" onchange="DdsValidationForm()" class="for-select2 form-control" style="-webkit-appearance:none;">
+                                                <div id="byOpSwitchMachinePort">
+                                                    <select id="ddlSwitchoptport" name="ddlSwitchoptport" onchange="DdsValidationForm()" class="form-control vm-byop-port-select" style="-webkit-appearance:none; width:100%;">
                                                         <option value="">Select Port</option>
+                                                        @foreach (var item in ViewBag.portno)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div id="byOpSwitchApiPort" style="display:none;">
+                                                    <select id="ddlSwitchoptportApi" onchange="DdsValidationForm()" class="form-control vm-byop-port-select" style="-webkit-appearance:none; width:100%;">
+                                                        <option value="">Select API/Port</option>
+                                                        @foreach (var item in ViewBag.portapi)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
                                                     </select>
                                                 </div>
                                             </div>
@@ -1622,31 +1635,32 @@
             });
 
     }
-    $('#ddlOpusertype').change(function () {
+    function vmByOpGetActivePortSelect() {
+        return $('#ddlOpusertype').val() === 'API' ? $('#ddlSwitchoptportApi') : $('#ddlSwitchoptport');
+    }
 
-        var type = $('#ddlOpusertype').val();
-        var opname = $("#ddlOpusertype").val();
-        $('#ddlSwitchoptport').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
+    function vmByOpOnGatewayChange() {
+        var gateway = $('#ddlOpusertype').val();
+        var $machineWrap = $('#byOpSwitchMachinePort');
+        var $apiWrap = $('#byOpSwitchApiPort');
+        var $machineSel = $('#ddlSwitchoptport');
+        var $apiSel = $('#ddlSwitchoptportApi');
 
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("FilluserBasedOnType","Home")',
-            data: { opname: opname, type: type },
-            success: function (data) {
+        if (gateway === 'API') {
+            $machineWrap.hide();
+            $apiWrap.show();
+            $machineSel.prop('disabled', true).removeAttr('name').val('');
+            $apiSel.prop('disabled', false).attr('name', 'ddlSwitchoptport').val('');
+        } else {
+            $machineWrap.show();
+            $apiWrap.hide();
+            $apiSel.prop('disabled', true).removeAttr('name').val('');
+            $machineSel.prop('disabled', false).attr('name', 'ddlSwitchoptport').val('');
+        }
+    }
 
-                $('#ddlSwitchoptport').empty()
-                $('#ddlSwitchoptport').append('<option selected="selected" value="" disabled="disabled">Please select Port</option>');
-                $.each(data, function (data, item) {
-                    $('#ddlSwitchoptport').append($('<option></option>').text(item.Text).val(item.Value));
-
-                })
-            },
-
-        });
-
-
-
-
+    $(function () {
+        vmByOpOnGatewayChange();
     });
 
 
@@ -1654,7 +1668,8 @@
       $(function () {
 
          $('#ddSwitchOpusertype').change(function () {
-             $('#ddSwitchOpuserlist').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
+             var $userList = $('#ddSwitchOpuserlist');
+             $userList.empty().append('<option selected="selected" value="" disabled="disabled">Loading.....</option>').trigger('change.select2');
 
                $.ajax({
                 type: 'POST',
@@ -1662,13 +1677,17 @@
                    data: { utype: $('#ddSwitchOpusertype').val() },
                 success: function (data) {
 
-                    $('#dUrlSwitchOpuserlist').empty()
-                   $('#ddSwitchOpuserlist').append('<option selected="selected" value="" disabled="disabled">Please select User</option>');
+                    $userList.empty()
+                   .append('<option selected="selected" value="" disabled="disabled">Please select User</option>');
                     $.each(data, function (data, item) {
-            $('#ddSwitchOpuserlist').append($('<option></option>').text(item.Text).val(item.Value));
+            $userList.append($('<option></option>').text(item.Text).val(item.Value));
 
-          })
+          });
+                    $userList.trigger('change.select2');
                 },
+                error: function () {
+                    $userList.empty().append('<option selected="selected" value="" disabled="disabled">Please select User</option>').trigger('change.select2');
+                }
 
             });
 
@@ -1683,7 +1702,8 @@
     $('#ddswitchoptype').change(function () {
 
         var opname = $("#ddswitchoptype").val();
-         $('#BySwitchOperator').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
+        var $operator = $('#BySwitchOperator');
+         $operator.empty().append('<option selected="selected" value="" disabled="disabled">Loading.....</option>').trigger('change.select2');
 
        $.ajax({
                 type: 'POST',
@@ -1691,13 +1711,17 @@
                 data: {opname:opname },
                 success: function (data) {
 
-                    $('#BySwitchOperator').empty()
-                   $('#BySwitchOperator').append('<option selected="selected" value="" disabled="disabled">Please select Operator</option>');
+                    $operator.empty()
+                   .append('<option selected="selected" value="" disabled="disabled">Please select Operator</option>');
                     $.each(data, function (data, item) {
-            $('#BySwitchOperator').append($('<option></option>').text(item.Text).val(item.Value));
+            $operator.append($('<option></option>').text(item.Text).val(item.Value));
 
-          })
+          });
+                    $operator.trigger('change.select2');
                 },
+                error: function () {
+                    $operator.empty().append('<option selected="selected" value="" disabled="disabled">Please select Operator</option>').trigger('change.select2');
+                }
 
             });
 
@@ -2344,7 +2368,7 @@ function () {
         var x3 = $('#ddswitchoptype').val();
         var x4 = $('#BySwitchOperator').val();
         var x5 = $('#ddlOpusertype').val();
-        var x6 = $('#ddlSwitchoptport').val();
+        var x6 = vmByOpGetActivePortSelect().val();
 
         if (x1 == "") {
             $('#lblddSwitchOpusertype').text('*');

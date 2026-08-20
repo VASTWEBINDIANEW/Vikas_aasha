@@ -1052,7 +1052,7 @@ body.saas-admin-ui .saas-prof-page .saas-prof-info-row--full {
 
 body.saas-admin-ui .saas-prof-page .saas-prof-info-row dt {
     margin: 0 0 4px;
-    font-size: 0.68rem;
+    font-size: 0.76rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -1061,7 +1061,7 @@ body.saas-admin-ui .saas-prof-page .saas-prof-info-row dt {
 
 body.saas-admin-ui .saas-prof-page .saas-prof-info-row dd {
     margin: 0;
-    font-size: 0.88rem;
+    font-size: 0.98rem;
     font-weight: 600;
     color: var(--pf-text);
     line-height: 1.45;
@@ -1288,6 +1288,1231 @@ body.saas-admin-ui .saas-prof-page .saas-prof-modal .required::after {
 @media (max-width: 480px) {
     body.saas-admin-ui .saas-prof-page #btndelpancrd {
         margin-right: 0 !important;
+    }
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-prof-page .saas-prof-layout--stack > .saas-prof-layout__stack-main:not(.saas-prof-layout__stack-full) {
+        margin-left: 33.333%;
+        flex: 0 0 66.666%;
+        max-width: 66.666%;
+    }
+}
+
+/* v11 — dealer profile full-width stack + modern buttons */
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-layout--stack-full > .saas-prof-layout__stack-full {
+    margin-left: 0 !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--passcode {
+    border-top: 3px solid #0ea5e9;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-passcode-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+    min-height: 96px;
+    padding: 16px 18px;
+    border: 2.5px solid #94a3b8 !important;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip:hover {
+    transform: translateY(-2px);
+    border-color: #2563eb !important;
+    box-shadow: 0 10px 28px rgba(37, 99, 235, 0.14);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef2ff;
+    color: #4338ca;
+    font-size: 15px;
+    flex-shrink: 0;
+    border: 1.5px solid #c7d2fe;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__desc {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px !important;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #64748b;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__desc--none {
+    color: #dc2626;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__desc--high {
+    color: #15803d;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__desc--medium {
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__desc--low {
+    color: #d97706;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__label {
+    display: block;
+    width: 100%;
+    font-size: 14px !important;
+    font-weight: 700;
+    color: var(--pf-text);
+    line-height: 1.35;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip.is-active {
+    border: 2.5px solid #16a34a !important;
+    background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%);
+    box-shadow: 0 10px 28px rgba(22, 163, 74, 0.2);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip.is-active .vm-passcode-chip__icon {
+    background: #16a34a;
+    color: #fff;
+    border-color: #15803d;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip.is-active .vm-passcode-chip__label {
+    color: #166534;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip.is-active .vm-passcode-chip__desc--none {
+    color: #b91c1c;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip.is-active .vm-passcode-chip__desc--high,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip.is-active .vm-passcode-chip__desc--medium,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip.is-active .vm-passcode-chip__desc--low {
+    color: #166534;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip.is-active .vm-passcode-chip__label::after {
+    content: "  ✓ Active";
+    font-size: 12px;
+    font-weight: 800;
+    color: #16a34a;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px !important;
+    font-weight: 700;
+    line-height: 1;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-btn:hover {
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-btn--upload {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    color: #fff !important;
+    border-color: #1d4ed8 !important;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.28);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-btn--upload:hover {
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.34);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-btn--view {
+    background: #fff !important;
+    color: var(--pf-primary) !important;
+    border-color: #bfdbfe !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-btn--view:hover {
+    background: #eff6ff !important;
+    border-color: #93c5fd !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-btn--delete {
+    background: #fff !important;
+    color: #dc2626 !important;
+    border-color: #fecaca !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-btn--delete:hover {
+    background: #fef2f2 !important;
+    border-color: #fca5a5 !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-actions {
+    gap: 10px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-docs-scroll .saas-prof-docs-thead,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-docs-scroll .saas-prof-doc-row__grid {
+    grid-template-columns: minmax(0, 1fr) 118px auto;
+    gap: 12px 20px;
+    width: 100%;
+    min-width: 0;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-passcode-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip {
+        min-height: 88px;
+        padding: 14px 16px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__head {
+        gap: 12px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__desc {
+        font-size: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__label {
+        font-size: 14px !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-docs-scroll .saas-prof-docs-thead {
+        display: none;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-docs-scroll .saas-prof-doc-row__grid {
+        min-width: 0;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "name name"
+            "tag actions";
+        gap: 10px 12px;
+        padding: 14px 16px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-row__grid .saas-prof-doc-name {
+        grid-area: name;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-row__grid .saas-prof-doc-tag {
+        grid-area: tag;
+        justify-self: start;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-row__grid .saas-prof-doc-actions {
+        grid-area: actions;
+        justify-self: end;
+        width: auto;
+        margin-top: 0;
+        justify-content: flex-end;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-layout__stack-full {
+        min-height: auto;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--documents {
+        min-height: auto;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-docs-rows .saas-prof-doc-row {
+        flex: none;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-docs-scroll {
+        min-height: 0;
+        overflow: visible;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip {
+        min-height: 82px;
+        padding: 12px 14px;
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__head {
+        gap: 10px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__icon {
+        width: 34px;
+        height: 34px;
+        font-size: 14px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__desc {
+        font-size: 11px !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip__label {
+        font-size: 13px !important;
+    }
+}
+
+/* v10 — dealer profile readability, vm scroll, passcode */
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page {
+    font-size: 16px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-acc-breadcrumb {
+    font-size: 14px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-profile-page-desc {
+    font-size: 14px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-overview-kicker {
+    font-size: 13px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-overview-head .saas-prof-card__title {
+    font-size: 17px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-block-title {
+    font-size: 15px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-row {
+    min-height: 80px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-row--full {
+    min-height: 92px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-row dt {
+    font-size: 13px !important;
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-row dd,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-row .vm-prof-field-value {
+    font-size: 15px !important;
+    font-weight: 600;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    min-height: 34px;
+    margin: 0;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: var(--pf-text);
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-row dd.is-empty,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-prof-field-value.is-empty {
+    color: #94a3b8;
+    font-style: italic;
+    font-weight: 500;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-grid {
+    gap: 14px 16px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-overview-row {
+    gap: 18px;
+    align-items: stretch;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-overview-col .saas-prof-card__body {
+    padding: 20px 18px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-overview-col .saas-prof-card__head {
+    padding: 18px 18px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-company__view,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-details__view.save-profile {
+    min-height: 360px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-overview-head .editprofile-second {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-info-scroll {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-launch-date {
+    font-size: clamp(1.2rem, 2.4vw, 1.55rem) !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-launch-hint {
+    font-size: 13px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card__title {
+    font-size: 17px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-identity__name {
+    font-size: 1.35rem !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-identity__role {
+    font-size: 13px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-identity__action-title {
+    font-size: 14px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-pill {
+    font-size: 14px !important;
+    padding: 8px 16px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-layout__stack-full {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-height: calc(100vh - 380px);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--documents {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    border-top: 3px solid #6366f1;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--documents .saas-prof-card__body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-docs-scroll {
+    flex: 1 1 auto;
+    min-height: 360px;
+    max-height: none;
+    overflow: visible;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--pf-border);
+    border-radius: var(--pf-radius-sm);
+    background: var(--pf-card);
+    display: flex;
+    flex-direction: column;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-docs-rows {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-docs-rows .saas-prof-doc-row {
+    flex: 1 1 0;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: stretch;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-docs-rows .saas-prof-doc-row .saas-prof-doc-row__grid {
+    flex: 1 1 auto;
+    align-items: center;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-docs-scroll::-webkit-scrollbar,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-info-scroll::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-docs-scroll::-webkit-scrollbar-thumb,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-info-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-tag--optional {
+    color: #0284c7 !important;
+    background: #e0f2fe !important;
+    border-color: #7dd3fc !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-actions {
+    justify-self: end;
+    display: inline-flex !important;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-name {
+    font-size: 15px !important;
+    justify-self: stretch;
+    text-align: left;
+    padding: 12px 16px;
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    color: var(--pf-text) !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-tag {
+    font-size: 12px !important;
+    justify-self: center;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-docs-thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    font-size: 13px !important;
+    display: grid !important;
+    align-items: center;
+    padding: 14px 20px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-docs-thead span:first-child {
+    text-align: left;
+    justify-self: start;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-docs-thead span:nth-child(2) {
+    text-align: center;
+    justify-self: center;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-docs-thead span:last-child {
+    text-align: right;
+    justify-self: end;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-row .badge,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-actions .badge,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-actions .saas-prof-doc-btn {
+    font-size: 14px !important;
+    vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-documents {
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--passcode .vm-pg-slab-body {
+    padding: 18px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-pg-slab-body {
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .editprofile-second {
+    font-size: 14px !important;
+    padding: 10px 16px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-form-field label {
+    font-size: 13px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .form-control {
+    font-size: 14px !important;
+    min-height: 44px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-btn {
+    font-size: 14px !important;
+    padding: 11px 18px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-profile-page-title {
+    font-size: clamp(1.25rem, 2.2vw, 1.65rem) !important;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-passcode-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-overview-row {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-layout__main--overview {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-grid,
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-grid--account {
+        grid-template-columns: 1fr !important;
+        gap: 12px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-company__view,
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-details__view.save-profile {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page {
+        padding-bottom: 24px !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-profile-container {
+        padding: 0 10px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-profile-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 14px 14px;
+        margin-bottom: 14px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-profile-page-head {
+        text-align: left;
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-profile-page-title {
+        justify-content: flex-start !important;
+        font-size: 1.15rem !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-layout > [class*="col-"] {
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-bottom: 12px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-overview-head {
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-overview-head .editprofile-second {
+        flex: 1 1 100%;
+        width: 100%;
+        margin-left: 0;
+        margin-top: 4px;
+        justify-content: center;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card__head--launch .saas-prof-launch-date {
+        margin-left: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-grid,
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-grid--account {
+        grid-template-columns: 1fr !important;
+        gap: 12px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-row {
+        min-height: 74px;
+        padding: 12px 12px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-row dt {
+        font-size: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-info-row dd,
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-prof-field-value {
+        font-size: 14px !important;
+        min-height: 30px;
+        padding: 7px 10px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-identity__avatar {
+        width: 96px !important;
+        height: 96px !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-layout--stack-full > .saas-prof-layout__stack-full {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-prof-info-scroll {
+        max-height: none;
+        overflow: visible;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-btn {
+        min-width: 110px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-passcode-chip {
+        min-height: 82px;
+    }
+}
+
+@media (max-width: 480px) {
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-row__grid {
+        padding: 12px 14px;
+        gap: 8px 10px;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-name {
+        min-height: 42px;
+        padding: 10px 14px;
+        font-size: 14px !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-btn {
+        min-width: 96px;
+        padding: 9px 14px;
+        font-size: 13px !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 6px;
+    }
+}
+
+/* v14 — dealer doc row grid + upload panel */
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-docs-rows .list-group-item {
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-row {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-bottom: 1px solid var(--pf-border) !important;
+    background: var(--pf-card) !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-row.is-upload-open {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-row .vm-dealer-doc-upload.save-aadhar {
+    grid-column: auto;
+    flex-wrap: unset;
+    align-items: stretch;
+    margin-top: 0;
+    border: none;
+    border-radius: 0;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-row__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 118px auto;
+    align-items: center;
+    gap: 12px 20px;
+    padding: 12px 20px;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-row.is-upload-open .saas-prof-doc-row__grid {
+    border-bottom: 1px solid var(--pf-border);
+    background: #fff;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-doc-upload {
+    display: none;
+    padding: 18px 18px 16px;
+    background: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%);
+    border-top: 3px solid #2563eb;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-doc-row.is-upload-open .vm-dealer-doc-upload {
+    display: block;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-doc-upload__head {
+    margin-bottom: 14px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-doc-upload__head strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--pf-text);
+    margin-bottom: 4px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-doc-upload__head span {
+    display: block;
+    font-size: 13px;
+    color: var(--pf-muted);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-doc-upload__fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-doc-upload__fields--single {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-doc-upload__field label {
+    display: block;
+    margin: 0 0 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--pf-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-file-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    width: 100%;
+    border: 2px solid #cbd5e1;
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-file-input:hover {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-file-input.has-file {
+    border-color: #16a34a;
+    background: #f0fdf4;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-file-input__native {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-file-input__display {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 16px;
+    pointer-events: none;
+    text-align: center;
+    color: var(--pf-muted);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-file-input__display i {
+    color: #2563eb;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-file-input.has-file .vm-dealer-file-input__display {
+    color: #166534;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-file-input.has-file .vm-dealer-file-input__display i {
+    color: #16a34a;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-file-input__text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: min(100%, 280px);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-doc-upload__toolbar {
+    margin-top: 16px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-doc-upload__toolbar .saas-prof-btn--primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    border-color: #1d4ed8 !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-doc-upload__toolbar .saas-prof-btn--muted {
+    background: #fff !important;
+    border: 2px solid #cbd5e1 !important;
+    color: var(--pf-text) !important;
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-doc-upload__fields {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* v15 — dealer profile photo upload panel */
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload {
+    display: none;
+    padding: 18px 16px 16px;
+    background: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%);
+    border-top: 3px solid #2563eb;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--identity.is-profile-upload-open .vm-dealer-profile-upload {
+    display: block;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__head {
+    margin-bottom: 14px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__head strong {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--pf-text);
+    margin-bottom: 4px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__head strong i {
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__head span {
+    display: block;
+    font-size: 13px;
+    color: var(--pf-muted);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__field label {
+    display: block;
+    margin: 0 0 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--pf-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__toolbar {
+    margin-top: 16px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__toolbar .saas-prof-btn--primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    border-color: #1d4ed8 !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__toolbar .saas-prof-btn--muted {
+    background: #fff !important;
+    border: 2px solid #cbd5e1 !important;
+    color: var(--pf-text) !important;
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__toolbar .saas-prof-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* v16 — dealer company/account edit panels */
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-panel {
+    background: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%) !important;
+    border-top: 3px solid #2563eb;
+    padding: 18px 18px 20px !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--account .vm-dealer-edit-panel {
+    border-top-color: #8b5cf6;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-panel__head {
+    margin-bottom: 14px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-panel__head strong {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--pf-text);
+    margin-bottom: 4px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-panel__head strong i {
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--account .vm-dealer-edit-panel__head strong i {
+    color: #8b5cf6;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-panel__head span {
+    display: block;
+    font-size: 13px;
+    color: var(--pf-muted);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 0;
+    border-bottom: none;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-toolbar .saas-prof-btn--primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    border-color: #1d4ed8 !important;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.22);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--account .vm-dealer-edit-toolbar .saas-prof-btn--primary {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+    border-color: #6d28d9 !important;
+    box-shadow: 0 6px 18px rgba(124, 58, 237, 0.22);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-toolbar .saas-prof-btn--muted {
+    background: #fff !important;
+    border: 2px solid #cbd5e1 !important;
+    color: var(--pf-text) !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-form-grid {
+    gap: 14px 16px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field {
+    margin: 0;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field label {
+    display: block;
+    margin: 0 0 8px;
+    font-size: 12px !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-input.form-control,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field .form-control {
+    min-height: 46px;
+    padding: 10px 12px;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    background: #f8fafc;
+    font-size: 14px !important;
+    color: var(--pf-text);
+    box-shadow: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-input.form-control:focus,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field .form-control:focus {
+    border-color: #2563eb;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    outline: none;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--account .vm-dealer-edit-input.form-control:focus,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--account .vm-dealer-edit-field .form-control:focus {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field .select2-container {
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field .select2-container--default .select2-selection--single {
+    min-height: 46px;
+    height: 46px;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 44px;
+    padding-left: 12px;
+    padding-right: 28px;
+    font-size: 14px;
+    color: var(--pf-text);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 44px;
+    right: 8px;
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field .select2-container--default.select2-container--focus .select2-selection--single,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field .select2-container--default.select2-container--open .select2-selection--single {
+    border-color: #2563eb;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--account .vm-dealer-edit-field .select2-container--default.select2-container--focus .select2-selection--single,
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .saas-prof-card--account .vm-dealer-edit-field .select2-container--default.select2-container--open .select2-selection--single {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field input[type="date"].form-control {
+    line-height: 1.4;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field {
+        grid-column: 1 / -1 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-panel {
+        padding: 14px 14px 16px !important;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-toolbar .saas-prof-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-profile-upload__toolbar .saas-prof-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 

@@ -20,7 +20,7 @@
 <link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=24" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=25" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=55" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=65" rel="stylesheet" />
 
 <style>
     body.stop-scrolling { overflow: inherit; overflow-x: hidden; }
@@ -390,7 +390,7 @@
                                         <label for="email_address_2">State  @Html.ValidationMessage("State1", "", new { @class = "text-danger" })</label>
                                         <div class="form-group">
                                             <div class="custom-district">
-                                                @Html.DropDownList("State1", (IEnumerable<SelectListItem>)ViewBag.state, "Select State", new { @class = "form-control", required = "required" })
+                                                @Html.DropDownList("State1", (IEnumerable<SelectListItem>)ViewBag.state, "Select State", new { @class = "form-control vm-rl-no-select2", id = "vmRlCreateState", required = "required", onchange = "vmRlOnCreateStateChange()" })
 
                                             </div>
                                         </div>
@@ -401,10 +401,8 @@
                                         <div class="form-group">
                                             <div class="custom-district">
 
-                                                <select id="District1" name="District1" class="form-control show-tick" required="required">
-                                                    <option>
-                                                        Select District
-                                                    </option>
+                                                <select id="vmRlCreateDistrict" name="District1" class="form-control vm-rl-no-select2 vm-rl-native-district" required="required">
+                                                    <option value="0">Select District</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -547,11 +545,7 @@
                                         </div>
 
                                         <div class="vm-rl-tb-group vm-rl-tb-group--dist">
-                                            <div class="vm-rl-tb-control vm-rl-tb-control--icon vm-rl-tb-control--select">
-                                                <i class="fas fa-user-tie vm-rl-tb-control__icon" aria-hidden="true"></i>
-                                                @Html.DropDownList("RetailerFilterDealerID", Model.Dealerlist, "Select Distributor", new { @class = "form-control vm-rl-tb-select", id = "RetailerFilterDealerID" })
-                                                <i class="fas fa-chevron-down vm-rl-tb-control__chevron" aria-hidden="true"></i>
-                                            </div>
+                                            @Html.DropDownList("RetailerFilterDealerID", Model.Dealerlist, "Select Distributor", new { @class = "form-control vm-rl-toolbar-select vm-rl-no-select2", id = "RetailerFilterDealerID" })
                                         </div>
 
                                         <button type="button" id="btnsearchbtn" name="btnsearchbtn" class="vm-rl-tb-btn vm-rl-tb-btn--primary vm-rl-tb-btn--filter">
@@ -616,25 +610,32 @@
                                         @{
                                             var d = db.State_Desc.ToList();
                                         }
-                                        <div class="vm-rl-field-with-icon vm-rl-field-with-icon--select-inline vm-rl-tb-control vm-rl-tb-control--icon vm-rl-tb-control--select">
-                                            <i class="fas fa-map vm-rl-tb-control__icon" aria-hidden="true"></i>
-                                            <select onchange="srcbydist()" id="serbystsdst" name="serbystsdst" class="form-control vm-rl-tb-select">
-                                                <option value="N">Select State</option>
-                                                @foreach (var itr in d)
-                                                {
-                                                    <option value="@itr.State_id">@itr.State_name</option>
-                                                }
-                                            </select>
-                                            <i class="fas fa-chevron-down vm-rl-tb-control__chevron" aria-hidden="true"></i>
+                                        <div class="vm-rl-area-filter">
+                                            <div class="vm-rl-area-filter__field">
+                                                <label for="serbystsdst" class="vm-rl-area-filter__label">State</label>
+                                                <select onchange="srcbydist()" id="serbystsdst" name="serbystsdst" class="form-control vm-rl-area-filter__select vm-rl-no-select2">
+                                                    <option value="N">Select State</option>
+                                                    @foreach (var itr in d)
+                                                    {
+                                                        <option value="@itr.State_id">@itr.State_name</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="vm-rl-area-filter__field">
+                                                <label for="Districtstates" class="vm-rl-area-filter__label">District</label>
+                                                <select id="Districtstates" name="Districtstates" class="form-control vm-rl-area-filter__select vm-rl-no-select2">
+                                                    <option value="0">Select District</option>
+                                                </select>
+                                            </div>
+                                            <div class="vm-rl-area-filter__actions">
+                                                <button type="button" id="vmRlAreaSearch" class="saas-acc-btn saas-acc-btn--search vm-rl-area-filter__btn">
+                                                    <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                                                </button>
+                                                <button type="button" id="expstatedist" class="saas-acc-btn vm-rl-filter-btn--export vm-rl-area-filter__btn">
+                                                    <i class="fas fa-file-export" aria-hidden="true"></i><span>Export</span>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="vm-rl-field-with-icon vm-rl-field-with-icon--select-inline vm-rl-tb-control vm-rl-tb-control--icon vm-rl-tb-control--select">
-                                            <i class="fas fa-map-pin vm-rl-tb-control__icon" aria-hidden="true"></i>
-                                            <select id="Districtstates" name="Districtstates" class="form-control vm-rl-tb-select">
-                                                <option value="0">Select District</option>
-                                            </select>
-                                            <i class="fas fa-chevron-down vm-rl-tb-control__chevron" aria-hidden="true"></i>
-                                        </div>
-                                        <input type="button" id="expstatedist" value="Export" class="saas-acc-btn vm-rl-filter-btn--export" />
                                         </div>
                                     </div>
                                 </div>
@@ -643,41 +644,61 @@
                         <script>
                         function srcbydist() {
                             var dr = document.getElementById('serbystsdst').value;
-                            if (dr != "N") {
-                                var url = '@Url.Action("serchstates","Home")'
-                                $.ajax({
-                                    url: url,
-                                    data: { Id: dr },
-                                    cache: false,
-                                    type: "POST",
-                                    success: function (data) {
-                                        var markup = "<option value='0'>Select District</option>";
-                                        for (var x = 0; x < data.length; x++) {
-                                            markup += "<option value=" + data[x].Value + ">" + data[x].Text + "</option>";
-                                        }
-                                        $("#Districtstates").html(markup).show();
-                                        if (typeof setSelectedValue === 'function' && typeof objSelect1 !== 'undefined') {
-                                            setSelectedValue(objSelect1, dist);
-                                        }
-                                    },
-                                    error: function (reponse) {
-                                        alert("error : " + reponse);
-                                    }
-                                });
+                            var $district = $("#Districtstates");
+                            if (dr === "N" || dr === "" || dr === "0") {
+                                $district.html("<option value='0'>Select District</option>");
+                                return;
                             }
+                            $district.html("<option value='0'>Please wait...</option>");
+                            var url = '@Url.Action("serchstates", "Home", new { area = "ADMIN" })';
+                            $.ajax({
+                                url: url,
+                                data: { Id: dr },
+                                cache: false,
+                                type: "POST",
+                                dataType: "json",
+                                success: function (data) {
+                                    var markup = "<option value='0'>Select District</option>";
+                                    if (data && data.length) {
+                                        for (var x = 0; x < data.length; x++) {
+                                            markup += "<option value='" + data[x].Value + "'>" + data[x].Text + "</option>";
+                                        }
+                                    }
+                                    $district.html(markup);
+                                },
+                                error: function (xhr) {
+                                    $district.html("<option value='0'>Select District</option>");
+                                    alert("Unable to load districts. " + (xhr.status || ""));
+                                }
+                            });
                         }
                         function searchbysddd() {
                             var dr = document.getElementById('serbystsdst').value;
                             var dr1 = document.getElementById('Districtstates').value;
-                            if (dr != "N") {
-                                var url = '@Url.Action("RetailerSearchBystatedist", "Home")'
-                                $.ajax({
-                                    url: url,
-                                    data: { state: dr, dist: dr1 },
-                                    cache: false,
-                                    type: "POST"
-                                });
+                            if (dr === "N" || dr === "" || dr === "0") {
+                                alert("Please select state");
+                                return;
                             }
+                            var url = '@Url.Action("RetailerSearchBystatedist", "Home", new { area = "ADMIN" })';
+                            $.ajax({
+                                url: url,
+                                data: { state: dr, dist: dr1 },
+                                cache: false,
+                                type: "POST",
+                                success: function (response) {
+                                    if (typeof RetailerMobSearch === "function") {
+                                        RetailerMobSearch(response);
+                                    } else {
+                                        $("#Retailertablelist").html(response);
+                                    }
+                                    if (typeof vmRlCloseFilterPanels === "function") {
+                                        vmRlCloseFilterPanels();
+                                    }
+                                },
+                                error: function (xhr) {
+                                    alert("Search failed. " + (xhr.status || "") + " " + (xhr.statusText || ""));
+                                }
+                            });
                         }
                         </script>
 
@@ -845,7 +866,7 @@
                                 <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
                                     <div class="form-group">
                                         <div class="" style="border:1px solid #dddddd;">
-                                            @Html.DropDownList("State1", (IEnumerable<SelectListItem>)ViewBag.state, "Select State", new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;", required = "required" })
+                                            @Html.DropDownList("State1", (IEnumerable<SelectListItem>)ViewBag.state, "Select State", new { @class = "selectpicker form-control", id = "State1Modal", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;", required = "required" })
 
                                         </div>
                                     </div>
@@ -858,10 +879,8 @@
                                 <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
                                     <div class="form-group">
                                         <div class="" style="border:1px solid #dddddd;">
-                                            <select id="District1" name="District1" class="form-control show-tick" required="">
-                                                <option>
-                                                    Select District
-                                                </option>
+                                            <select id="District1Modal" name="District1" class="form-control show-tick" required="">
+                                                <option value="">Select District</option>
                                             </select>
                                         </div>
                                     </div>
@@ -1274,6 +1293,11 @@
             }
         });
 
+        $('#vmRlAreaSearch').on('click', function (e) {
+            e.preventDefault();
+            searchbysddd();
+        });
+
         $('#vmRlDateClose, #vmRlAreaClose').on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -1414,17 +1438,150 @@ window.open(
     }
 </script>
 <script>
-    var ravi = $.noConflict()
+    var ravi = $.noConflict();
+    window.vmRlDistrictUrl = "@Url.Action("DistrictList", "Home", new { area = "ADMIN" })";
+
+    function vmRlDestroySelect2OnEl(el) {
+        var instances = [];
+        if (typeof ravi !== "undefined") instances.push(ravi(el));
+        if (typeof window.jQuery !== "undefined") instances.push(window.jQuery(el));
+        if (typeof window.$ !== "undefined") instances.push(window.$(el));
+
+        for (var i = 0; i < instances.length; i++) {
+            try {
+                if (instances[i].data && instances[i].data("select2")) {
+                    instances[i].select2("destroy");
+                }
+            } catch (e) { }
+        }
+
+        ravi(el)
+            .removeClass("select2-hidden-accessible")
+            .removeAttr("aria-hidden tabindex")
+            .css({ display: "", visibility: "", position: "", width: "", height: "", opacity: "" })
+            .show();
+
+        ravi(el).next(".select2-container").remove();
+        ravi(el).closest(".custom-district").find(".select2-container").remove();
+    }
+
+    function vmRlEnsureNativeNoSelect2() {
+        ravi(".vm-rl-no-select2").each(function () {
+            vmRlDestroySelect2OnEl(this);
+        });
+    }
+
+    function vmRlRefreshAllSelect2() {
+        vmRlEnsureNativeNoSelect2();
+        ravi("select").not(".vm-rl-no-select2").each(function () {
+            var $el = ravi(this);
+            try {
+                if ($el.data("select2")) {
+                    $el.select2("destroy");
+                }
+            } catch (e) { }
+            $el.select2({ width: "100%" });
+        });
+    }
+
+    function vmRlFillDistrictSelect($district, data) {
+        var markup = "<option value='0'>Select District</option>";
+        if (data && data.length) {
+            for (var x = 0; x < data.length; x++) {
+                markup += "<option value='" + data[x].Value + "'>" + data[x].Text + "</option>";
+            }
+        }
+        vmRlDestroySelect2OnEl($district[0]);
+        $district.html(markup);
+    }
+
+    function vmRlGetDistrictCreate(_stateId) {
+        var $district = ravi("#vmRlCreateDistrict");
+        if (!$district.length) {
+            return;
+        }
+
+        vmRlFillDistrictSelect($district, null);
+        $district.html("<option value='0'>Please wait...</option>");
+
+        ravi.ajax({
+            url: window.vmRlDistrictUrl,
+            data: { Id: _stateId },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                vmRlFillDistrictSelect($district, data);
+            },
+            error: function (xhr) {
+                vmRlFillDistrictSelect($district, null);
+                alert("Unable to load districts. " + (xhr.status || "") + " " + (xhr.statusText || ""));
+            }
+        });
+    }
+
+    function vmRlOnCreateStateChange() {
+        var stateEl = document.getElementById("vmRlCreateState");
+        var stid = stateEl ? stateEl.value : "";
+        if (stid && stid !== "" && stid !== "0") {
+            vmRlGetDistrictCreate(stid);
+        } else {
+            vmRlFillDistrictSelect(ravi("#vmRlCreateDistrict"), null);
+        }
+    }
+
+    function vmRlGetDistrictEdit(_stateId) {
+        var procemessage = "<option value='0'> Please wait...</option>";
+        ravi("#District").html(procemessage).show();
+        ravi.ajax({
+            url: window.vmRlDistrictUrl,
+            data: { Id: _stateId },
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                var markup = "<option value='0'>Select District</option>";
+                if (data && data.length) {
+                    for (var x = 0; x < data.length; x++) {
+                        markup += "<option value='" + data[x].Value + "'>" + data[x].Text + "</option>";
+                    }
+                }
+                ravi("#District").html(markup).show();
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
+
     ravi(document).ready(function () {
+        var formCard = document.getElementById("vmRlFormCard");
+        var panel = document.getElementById("vmRlCreatePanel");
+        if (formCard && panel && !panel.contains(formCard)) {
+            panel.appendChild(formCard);
+        }
 
-        // Initialize select2
-        ravi("select").select2();
+        vmRlEnsureNativeCreateSelects();
+        vmRlRefreshAllSelect2();
 
-        // Read selected option
-
+        ravi("#State").change(function () {
+            var stid = ravi(this).val();
+            if (stid && stid !== "" && stid !== "0") {
+                vmRlGetDistrictEdit(stid);
+            }
+        });
     });
-    $(document).ajaxComplete(function () {
-        ravi("select").select2();
+
+    ravi(document).ajaxComplete(function (event, xhr, settings) {
+        if (settings && settings.url && settings.url.indexOf("DistrictList") >= 0) {
+            vmRlEnsureNativeNoSelect2();
+            return;
+        }
+        if (settings && settings.url && settings.url.indexOf("serchstates") >= 0) {
+            vmRlEnsureNativeNoSelect2();
+            return;
+        }
+        vmRlRefreshAllSelect2();
     });
 </script>
 
@@ -1439,86 +1596,8 @@ window.open(
 
 
 </script>
-<script language="javascript" type="text/javascript">
-
-                   ravi(function () {
-                        ravi('#State1').change(function () {
-                            // alert('Value:' + ' ' + $('#State1').val())
-                            var stid = ravi('#State1').val()
-                            if (stid === "") {
-                                stid = 0;
-                                //alert(stid)
-                            }
-                            else {
-                                //alert(stid)
-                                GetDistrict(stid)
-                            }
-                            function GetDistrict(_stateId) {
-                                var procemessage = "<option value='0'> Please wait...</option>";
-                                ravi("#District1").html(procemessage).show();
-                                var url = '@Url.Action("DistrictList","Home")'
-                                ravi.ajax({
-                                    url: url,
-                                    data: { Id: _stateId },
-                                    cache: false,
-                                    type: "POST",
-                                    success: function (data) {
-                                        var markup = "<option value='0'>Select District</option>";
-                                        for (var x = 0; x < data.length; x++) {
-                                            markup += "<option value=" + data[x].Value + ">" + data[x].Text + "</option>";
-                                            //alert(markup)
-                                        }
-                                        ravi("#District1").html(markup).show();
-                                    },
-                                    error: function (reponse) {
-                                        alert("error : " + reponse);
-                                    }
-                                });
-                            }
-                        });
-                    })
-</script>
 <!--Edit fill dropdown list-->
 <script type="text/javascript">
-
-            ravi(function () {
-                ravi('#State').change(function () {
-                    // alert('Value:' + ' ' + $('#State').val())
-                    var stid = ravi('#State').val()
-                    if (stid === "") {
-                        stid = 0;
-                        //alert(stid)
-                    }
-                    else {
-                        //alert(stid)
-                        GetDistrict(stid)
-                    }
-                    function GetDistrict(_stateId) {
-                        var procemessage = "<option value='0'> Please wait...</option>";
-                        ravi("#District").html(procemessage).show();
-                        var url = '@Url.Action("DistrictList","Home")'
-                        ravi.ajax({
-                            url: url,
-                            data: { Id: _stateId },
-                            cache: false,
-                            type: "POST",
-                            success: function (data) {
-                                var markup = "<option value='0'>Select District</option>";
-                                for (var x = 0; x < data.length; x++) {
-                                    markup += "<option value=" + data[x].Value + ">" + data[x].Text + "</option>";
-                                    //alert(markup)
-                                }
-                                ravi("#District").html(markup).show();
-                            },
-                            error: function (reponse) {
-                                alert("error : " + reponse);
-                            }
-                        });
-                    }
-                });
-            })
-
-
     function ajaxValidate() {
         debugger
      $('#lblerror').hide();
@@ -1653,9 +1732,9 @@ window.open(
                                 $('#Mobile1').val('');
                                 $('#txtpencardno').val('');
 
-                             ravi("#DealerID").select2("val", 0);
-                              ravi("#State1").select2("val", 0);
-                             ravi("#District1").empty();
+                             ravi("#DealerID").val("").trigger("change");
+                             ravi("#vmRlCreateState").val("").trigger("change");
+                             ravi("#vmRlCreateDistrict").html("<option value='0'>Select District</option>");
 
                                 $('#Address1').val('');
                                 $('#Pincode1').val('');
@@ -1676,9 +1755,9 @@ window.open(
         var dlmnm = document.getElementById("retailename1").value;
         var tel = document.getElementById("Mobile1").value;
         var pin = document.getElementById("Pincode1").value;
-        var state1 = document.getElementById("State1").value;
-        var dist1 = document.getElementById("District1").value;
-        if (dlmnm == "" || tel == "" || pin == "" || state1 == "" || dist1 == "Select District" || masterid == "") {
+        var state1 = document.getElementById("vmRlCreateState").value;
+        var dist1 = document.getElementById("vmRlCreateDistrict").value;
+        if (dlmnm == "" || tel == "" || pin == "" || state1 == "" || dist1 == "" || dist1 == "0" || dist1 == "Select District" || masterid == "") {
             if (masterid == "") {
                 $('#DealerId').css('border-color', 'red');
                 return false;
@@ -1691,45 +1770,45 @@ window.open(
             else if (state1 == "") {
                 $('#DealerId').css('border-color', 'green');
                 $('#retailename1').css('border-color', 'green');
-                $('#State1').css('border-color', 'red');
+                $('#vmRlCreateState').css('border-color', 'red');
                 return false;
             }
-            else if (District1 == "Select District") {
+            else if (dist1 == "" || dist1 == "0" || dist1 == "Select District") {
                 $('#DealerId').css('border-color', 'green');
                 $('#retailename1').css('border-color', 'green');
-                $('#State1').css('border-color', 'green');
-                $('#District1').css('border-color', 'red');
+                $('#vmRlCreateState').css('border-color', 'green');
+                $('#vmRlCreateDistrict').css('border-color', 'red');
                 return false;
             }
             else if (tel == "") {
                 $('#DealerId').css('border-color', 'green');
                 $('#retailename1').css('border-color', 'green');
-                $('#State1').css('border-color', 'green');
-                $('#District1').css('border-color', 'green');
+                $('#vmRlCreateState').css('border-color', 'green');
+                $('#vmRlCreateDistrict').css('border-color', 'green');
                 $('#Mobile1').css('border-color', 'red');
                 return false;
             }
             else if (tel.length > 10) {
                 $('#DealerId').css('border-color', 'green');
                 $('#retailename1').css('border-color', 'green');
-                $('#State1').css('border-color', 'green');
-                $('#District1').css('border-color', 'green');
+                $('#vmRlCreateState').css('border-color', 'green');
+                $('#vmRlCreateDistrict').css('border-color', 'green');
                 $('#Mobile1').css('border-color', 'red');
                 return false;
             }
             else if (tel.length < 10) {
                 $('#masterid').css('border-color', 'green');
                 $('#dealername1').css('border-color', 'green');
-                $('#State1').css('border-color', 'green');
-                $('#District1').css('border-color', 'green');
+                $('#vmRlCreateState').css('border-color', 'green');
+                $('#vmRlCreateDistrict').css('border-color', 'green');
                 $('#Mobile1').css('border-color', 'red');
                 return false;
             }
             else if (pin == "") {
                 $('#masterid').css('border-color', 'green');
                 $('#dealername1').css('border-color', 'green');
-                $('#State1').css('border-color', 'green');
-                $('#District1').css('border-color', 'green');
+                $('#vmRlCreateState').css('border-color', 'green');
+                $('#vmRlCreateDistrict').css('border-color', 'green');
                 $('#Mobile1').css('border-color', 'green');
                 $('#Pincode1').css('border-color', 'red');
                 return false;
@@ -1738,8 +1817,8 @@ window.open(
         else {
             $('#masterid').css('border-color', 'green');
             $('#dealername1').css('border-color', 'green');
-            $('#State1').css('border-color', 'green');
-            $('#District1').css('border-color', 'green');
+            $('#vmRlCreateState').css('border-color', 'green');
+            $('#vmRlCreateDistrict').css('border-color', 'green');
             $('#Mobile1').css('border-color', 'green');
             $('#Pincode1').css('border-color', 'green');
             return true;
@@ -2136,8 +2215,13 @@ function () {
             modal.classList.add('is-open');
             modal.setAttribute('aria-hidden', 'false');
             document.body.classList.add('vm-rl-modal-open');
-            // Scroll drawer to top on open
             if (panel) panel.scrollTop = 0;
+            if (typeof vmRlRefreshAllSelect2 === 'function') {
+                vmRlRefreshAllSelect2();
+            }
+            if (typeof vmRlEnsureNativeNoSelect2 === 'function') {
+                vmRlEnsureNativeNoSelect2();
+            }
         }
 
         function closeDrawer() {

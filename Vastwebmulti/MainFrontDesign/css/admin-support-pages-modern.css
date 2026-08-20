@@ -48,13 +48,144 @@ body.saas-admin-ui #retailerBankApproveModal .modal-content {
     overflow: hidden;
 }
 
+body.saas-admin-ui #retailerBankApproveModal,
+body.saas-admin-ui #retailerBankApproveModal.in,
+body.saas-admin-ui #retailerBankApproveModal.show {
+    z-index: 11055 !important;
+}
+
+body.saas-admin-ui #retailerBankApproveModal .modal-dialog {
+    max-width: min(720px, 94vw) !important;
+    width: min(720px, 94vw) !important;
+    margin: 1.75rem auto !important;
+}
+
+body.saas-admin-ui .saas-bank-approve-modal .modal-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 18px 20px !important;
+    border: none !important;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-bank-approve-modal .modal-title {
+    color: #fff !important;
+    font-weight: 800 !important;
+    font-size: 1.05rem !important;
+}
+
+body.saas-admin-ui .saas-bank-approve-modal .modal-header .close {
+    color: #fff !important;
+    opacity: 1 !important;
+}
+
+body.saas-admin-ui .saas-bank-approve-body {
+    padding: 18px 20px 10px !important;
+}
+
+body.saas-admin-ui .saas-bank-approve-preview {
+    margin-bottom: 14px;
+}
+
 body.saas-admin-ui #retailerBankApproveModal .saas-bank-check-preview {
     width: 100%;
-    max-height: 280px;
+    max-height: 220px;
     object-fit: contain;
-    border-radius: 10px;
+    border-radius: 12px;
     border: 1px solid #e2e8f0;
-    margin-bottom: 12px;
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .saas-bank-approve-details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+body.saas-admin-ui .saas-bank-otp-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding-top: 4px;
+    border-top: 1px dashed #e2e8f0;
+}
+
+body.saas-admin-ui .saas-bank-approve-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui .saas-bank-approve-field .form-control {
+    min-height: 42px;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    font-size: 0.95rem !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-bank-approve-field .form-control[readonly] {
+    background: #f8fafc !important;
+    color: #334155;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-bank-otp-input {
+    text-align: center !important;
+    letter-spacing: 0.18em !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .saas-bank-approve-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 14px 20px 18px !important;
+    border-top: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui .saas-bank-approve-footer .saas-set-btn-primary {
+    min-height: 42px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-bank-approve-footer .saas-set-btn-primary:hover {
+    filter: brightness(1.05);
+}
+
+body.saas-admin-ui #retailerBankImageModal.in,
+body.saas-admin-ui #retailerBankImageModal.show {
+    z-index: 11050 !important;
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-bank-approve-details,
+    body.saas-admin-ui .saas-bank-otp-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .saas-bank-approve-footer {
+        flex-direction: column;
+    }
+
+    body.saas-admin-ui .saas-bank-approve-footer .saas-admin-btn,
+    body.saas-admin-ui .saas-bank-approve-footer .saas-set-btn-primary {
+        width: 100%;
+    }
 }
 
 body.saas-admin-ui #retailerBankImageModal .modal-content {

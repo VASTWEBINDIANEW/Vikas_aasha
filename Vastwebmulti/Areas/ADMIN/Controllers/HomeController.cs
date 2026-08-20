@@ -30260,6 +30260,47 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             return PartialView("_Retailerlist", viewmodel);
         }
 
+        [HttpPost]
+        public PartialViewResult RetailerSearchBystatedist(int? state, int? dist)
+        {
+            RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+            ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            var district = from s in db.District_Desc
+                           where s.State_id == 0
+                           select s;
+            var results = (from p in db.Slab_name where p.SlabFor == "Retailer" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
+
+            ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
+            ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+
+            var details = db.Select_Retailer_Details_all_paging(1, 50000, "ADMIN").ToList();
+            if (state != null && state != 0)
+            {
+                details = details.Where(s => s.State == state).ToList();
+                if (dist != null && dist != 0)
+                {
+                    details = details.Where(s => s.District == dist).ToList();
+                }
+            }
+
+            viewmodel.select_retailer_details_paging = details;
+            viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
+            viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
+                                                     join tbl1 in db.Service_BlockUserwise
+                                                     on tbl.idno equals tbl1.Show_Service_name_id
+                                                     select new Service_BlockUserwisecls
+                                                     {
+                                                         idno = tbl.idno,
+                                                         servicename = tbl.servicename,
+                                                         serviceidno = tbl1.Show_Service_name_id,
+                                                         remid = tbl1.remid,
+                                                         servicestatus = tbl1.status,
+                                                         basedupdate_id = tbl1.idno
+                                                     };
+            return PartialView("_Retailerlist", viewmodel);
+        }
+
 
         [HttpPost]
         public ActionResult Add_RetailerCapping(int Capping)
