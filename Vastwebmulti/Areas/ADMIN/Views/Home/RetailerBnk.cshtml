@@ -1,140 +1,279 @@
-@model IEnumerable<Vastwebmulti.Models.ShowBankRequest_Result>
-@using System.Linq
-@using System.Web
-@{
-    ViewBag.Title = "Retailer Bank";
-    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
-    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.ShowBankRequest_Result>();
-    var msg = Convert.ToString(TempData["msgbox"]);
-}
-<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-purchase-report-modern.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-support-pages-modern.css?v=3" rel="stylesheet" />
-
-<section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-support-page saas-bank-page"
-         data-retailer-bank-otp-url="@Url.Action("bankApproveOTP", "Home")">
-    <div class="container-fluid">
-        <div class="saas-acc-toolbar saas-pan-toolbar-unified">
-            <ol class="saas-acc-breadcrumb">
-                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
-                <li><a href="javascript:void(0);">User A/C Q</a></li>
-                <li>Retailer Bank</li>
-            </ol>
-            <div class="saas-acc-toolbar-right">
-                <div class="saas-report-toolbar-actions">
-                    <a href="@Url.Action("Delete_Approve_Bank_list")" class="saas-acc-btn saas-acc-btn--secondary" style="text-decoration:none;">
-                        <i class="fas fa-list" aria-hidden="true"></i> Delete Bank Approve List
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="saas-acc-table-card">
-            <div class="saas-acc-table-card-head">
-                <h3>Pending &amp; approved bank requests</h3>
-                <span class="saas-acc-row-count"><i class="fas fa-university" aria-hidden="true"></i> @rows.Count entries</span>
-            </div>
-            <div id="RetailerBankTableHost" class="saas-acc-table-scroll">
-                @Html.Partial("_RetailerBankList", rows)
-            </div>
-        </div>
-    </div>
-</section>
-
-<div class="modal fade saas-admin-modal saas-bank-image-modal" id="retailerBankImageModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><i class="fas fa-image" aria-hidden="true"></i> Cancel cheque</h4>
-            </div>
-            <div class="modal-body text-center">
-                <img src="" alt="Cheque" id="retailerBankImageFull" />
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade saas-admin-modal saas-settings-otp-modal saas-bank-approve-modal" id="retailerBankApproveModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            @using (Html.BeginForm("RetailerBnkApprove", "Home", FormMethod.Post, new { @class = "saas-bank-approve-form" }))
-            {
-                <div class="modal-header">
-                    <h4 class="modal-title" id="retailerBankApproveTitle"><i class="fas fa-university" aria-hidden="true"></i> Approve bank</h4>
-                    <button type="button" class="close saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="saas-set-otp-msg" id="retailerBankOtpMsg">OTP sent to retailer and admin email.</div>
-                <div class="modal-body saas-bank-approve-body">
-                    <div class="saas-bank-approve-preview">
-                        <img src="" alt="Cheque preview" class="saas-bank-check-preview" id="imgcheck" />
-                    </div>
-                    <input type="hidden" id="hdidno" name="hdidno" value="" />
-                    <input type="hidden" id="hduserid" name="hduserid" value="" />
-                    <div class="saas-bank-approve-details">
-                        <div class="saas-bank-approve-field">
-                            <label>Account holder name</label>
-                            <input type="text" class="form-control" id="txtaccountholdername" name="txtaccountholdername" readonly />
-                        </div>
-                        <div class="saas-bank-approve-field">
-                            <label>IFSC code</label>
-                            <input type="text" class="form-control" id="txtifsccode" name="txtifsccode" readonly />
-                        </div>
-                        <div class="saas-bank-approve-field">
-                            <label>Account number</label>
-                            <input type="text" class="form-control" id="txtaccountnumber" name="txtaccountnumber" readonly />
-                        </div>
-                    </div>
-                    <div class="saas-bank-otp-grid">
-                        <div class="saas-bank-approve-field">
-                            <label for="remotp"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Retailer OTP</label>
-                            <input type="text" class="form-control saas-bank-otp-input" id="remotp" name="remotp" required autocomplete="off" maxlength="6" inputmode="numeric" placeholder="Enter retailer OTP" />
-                        </div>
-                        <div class="saas-bank-approve-field">
-                            <label for="adminotp"><i class="fas fa-user-shield" aria-hidden="true"></i> Admin OTP</label>
-                            <input type="text" class="form-control saas-bank-otp-input" id="adminotp" name="adminotp" required autocomplete="off" maxlength="6" inputmode="numeric" placeholder="Enter admin OTP" />
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer saas-admin-modal-footer saas-bank-approve-footer">
-                    <button type="button" class="saas-admin-btn saas-admin-btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="saas-set-btn-primary"><i class="fas fa-check" aria-hidden="true"></i> Approve &amp; Submit</button>
-                </div>
-            }
-        </div>
-    </div>
-</div>
-
-<script>
-    window.addEventListener("load", function () {
-        var host = document.querySelector(".saas-bank-page");
-        window.retailerBankOtpUrl = host && host.getAttribute("data-retailer-bank-otp-url")
-            ? host.getAttribute("data-retailer-bank-otp-url")
-            : "@Url.Action("bankApproveOTP", "Home")";
-
-        var script = document.createElement("script");
-        script.src = "@Url.Content("~/MainFrontDesign/js/admin-retailer-bank.js")";
-        script.onload = function () {
-            if (typeof window.initRetailerBankPage === "function") {
-                window.initRetailerBankPage();
-            }
-        };
-        document.body.appendChild(script);
-
-        var msg = @Html.Raw(string.IsNullOrEmpty(msg) ? "null" : "\"" + HttpUtility.JavaScriptStringEncode(msg) + "\"");
-        if (msg && typeof swal === "function") {
-            swal("Notice", msg, "info");
-        } else if (msg) {
-            alert(msg);
-        }
-        var successMsg = "@ViewData["successorder"]";
-        var failMsg = "@ViewData["failedorder"]";
-        if (successMsg && typeof swal === "function") { swal("Good job!", successMsg, "success"); }
-        if (failMsg && typeof swal === "function") { swal("Oops!", failMsg, "error"); }
-        var showData = "@ViewData["show"]";
-        if (showData && typeof swal === "function") { swal("Oops...", showData, "error"); }
-    });
-</script>
-
+@model IEnumerable<Vastwebmulti.Models.ShowBankRequest_Result>
+
+@using System.Linq
+
+@using System.Web
+
+@{
+
+    ViewBag.Title = "Retailer Bank";
+
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.ShowBankRequest_Result>();
+
+    var msg = Convert.ToString(TempData["msgbox"]);
+
+}
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-purchase-report-modern.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-support-pages-modern.css?v=3" rel="stylesheet" />
+
+
+
+<section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-support-page saas-bank-page"
+
+         data-retailer-bank-otp-url="@Url.Action("bankApproveOTP", "Home")">
+
+    <div class="container-fluid">
+
+        <div class="saas-acc-toolbar saas-pan-toolbar-unified">
+
+            <ol class="saas-acc-breadcrumb">
+
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+
+                <li><a href="javascript:void(0);">User A/C Q</a></li>
+
+                <li>Retailer Bank</li>
+
+            </ol>
+
+            <div class="saas-acc-toolbar-right">
+
+                <div class="saas-report-toolbar-actions">
+
+                    <a href="@Url.Action("Delete_Approve_Bank_list")" class="saas-acc-btn saas-acc-btn--secondary" style="text-decoration:none;">
+
+                        <i class="fas fa-list" aria-hidden="true"></i> Delete Bank Approve List
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="saas-acc-table-card">
+
+            <div class="saas-acc-table-card-head">
+
+                <h3>Pending &amp; approved bank requests</h3>
+
+                <span class="saas-acc-row-count"><i class="fas fa-university" aria-hidden="true"></i> @rows.Count entries</span>
+
+            </div>
+
+            <div id="RetailerBankTableHost" class="saas-acc-table-scroll">
+
+                @Html.Partial("_RetailerBankList", rows)
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<div class="modal fade saas-admin-modal saas-bank-image-modal" id="retailerBankImageModal" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                <h4 class="modal-title"><i class="fas fa-image" aria-hidden="true"></i> Cancel cheque</h4>
+
+            </div>
+
+            <div class="modal-body text-center">
+
+                <img src="" alt="Cheque" id="retailerBankImageFull" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div class="modal fade saas-admin-modal saas-settings-otp-modal saas-bank-approve-modal" id="retailerBankApproveModal" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            @using (Html.BeginForm("RetailerBnkApprove", "Home", FormMethod.Post, new { @class = "saas-bank-approve-form" }))
+
+            {
+
+                <div class="modal-header">
+
+                    <h4 class="modal-title" id="retailerBankApproveTitle"><i class="fas fa-university" aria-hidden="true"></i> Approve bank</h4>
+
+                    <button type="button" class="close saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                </div>
+
+                <div class="saas-set-otp-msg" id="retailerBankOtpMsg">OTP sent to retailer and admin email.</div>
+
+                <div class="modal-body saas-bank-approve-body">
+
+                    <div class="saas-bank-approve-preview">
+
+                        <img src="" alt="Cheque preview" class="saas-bank-check-preview" id="imgcheck" />
+
+                    </div>
+
+                    <input type="hidden" id="hdidno" name="hdidno" value="" />
+
+                    <input type="hidden" id="hduserid" name="hduserid" value="" />
+
+                    <div class="saas-bank-approve-details">
+
+                        <div class="saas-bank-approve-field">
+
+                            <label>Account holder name</label>
+
+                            <input type="text" class="form-control" id="txtaccountholdername" name="txtaccountholdername" readonly />
+
+                        </div>
+
+                        <div class="saas-bank-approve-field">
+
+                            <label>IFSC code</label>
+
+                            <input type="text" class="form-control" id="txtifsccode" name="txtifsccode" readonly />
+
+                        </div>
+
+                        <div class="saas-bank-approve-field">
+
+                            <label>Account number</label>
+
+                            <input type="text" class="form-control" id="txtaccountnumber" name="txtaccountnumber" readonly />
+
+                        </div>
+
+                    </div>
+
+                    <div class="saas-bank-otp-grid">
+
+                        <div class="saas-bank-approve-field">
+
+                            <label for="remotp"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Retailer OTP</label>
+
+                            <input type="text" class="form-control saas-bank-otp-input" id="remotp" name="remotp" required autocomplete="off" maxlength="6" inputmode="numeric" placeholder="Enter retailer OTP" />
+
+                        </div>
+
+                        <div class="saas-bank-approve-field">
+
+                            <label for="adminotp"><i class="fas fa-user-shield" aria-hidden="true"></i> Admin OTP</label>
+
+                            <input type="text" class="form-control saas-bank-otp-input" id="adminotp" name="adminotp" required autocomplete="off" maxlength="6" inputmode="numeric" placeholder="Enter admin OTP" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer saas-admin-modal-footer saas-bank-approve-footer">
+
+                    <button type="button" class="saas-admin-btn saas-admin-btn-secondary" data-dismiss="modal">Cancel</button>
+
+                    <button type="submit" class="saas-set-btn-primary"><i class="fas fa-check" aria-hidden="true"></i> Approve &amp; Submit</button>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+    window.addEventListener("load", function () {
+
+        var host = document.querySelector(".saas-bank-page");
+
+        window.retailerBankOtpUrl = host && host.getAttribute("data-retailer-bank-otp-url")
+
+            ? host.getAttribute("data-retailer-bank-otp-url")
+
+            : "@Url.Action("bankApproveOTP", "Home")";
+
+
+
+        var script = document.createElement("script");
+
+        script.src = "@Url.Content("~/MainFrontDesign/js/admin-retailer-bank.js")";
+
+        script.onload = function () {
+
+            if (typeof window.initRetailerBankPage === "function") {
+
+                window.initRetailerBankPage();
+
+            }
+
+        };
+
+        document.body.appendChild(script);
+
+
+
+        var msg = @Html.Raw(string.IsNullOrEmpty(msg) ? "null" : "\"" + HttpUtility.JavaScriptStringEncode(msg) + "\"");
+
+        if (msg && typeof swal === "function") {
+
+            swal("Notice", msg, "info");
+
+        } else if (msg) {
+
+            alert(msg);
+
+        }
+
+        var successMsg = "@ViewData["successorder"]";
+
+        var failMsg = "@ViewData["failedorder"]";
+
+        if (successMsg && typeof swal === "function") { swal("Good job!", successMsg, "success"); }
+
+        if (failMsg && typeof swal === "function") { swal("Oops!", failMsg, "error"); }
+
+        var showData = "@ViewData["show"]";
+
+        if (showData && typeof swal === "function") { swal("Oops...", showData, "error"); }
+
+    });
+
+</script>
+
+

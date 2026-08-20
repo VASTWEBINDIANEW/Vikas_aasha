@@ -1,108 +1,215 @@
-@model IEnumerable<Vastwebmulti.Models.ShowBankRequest_Result>
-@using System.Linq
-@using System.Web
-@{
-    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.ShowBankRequest_Result>();
-}
-
-<div class="saas-acc-table-wrap table-responsive">
-    <table class="table saas-acc-table saas-acc-table--bank table-bordered" id="retailerBankTable">
-        <thead>
-            <tr>
-                <th>Cheque</th>
-                <th>User / Firm</th>
-                <th>Account holder</th>
-                <th>Account no.</th>
-                <th>IFSC</th>
-                <th>Bank name</th>
-                <th>Branch</th>
-                <th>Added</th>
-                <th>Approved</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (rows.Count == 0)
-            {
-                <tr><td colspan="10" class="saas-pan-empty-cell">No bank requests found.</td></tr>
-            }
-            else
-            {
-                foreach (var item in rows)
-                {
-                    var pending = (item.Status ?? "").Equals("PENDING", StringComparison.OrdinalIgnoreCase);
-                    var approved = (item.Status ?? "").Equals("APPROVED", StringComparison.OrdinalIgnoreCase);
-                    <tr>
-                        <td data-label="Cheque">
-                            @if (string.IsNullOrEmpty(item.CancelCheckFile))
-                            {
-                                <span class="text-muted">No image</span>
-                            }
-                            else
-                            {
-                                <button type="button" class="btn btn-link p-0" onclick="return retailerBankShowImage('@item.Idno');" title="View cheque">
-                                    <img src="@Url.Content("~/" + item.CancelCheckFile)" class="saas-bank-thumb" id="upload-@item.Idno" alt="Cheque" />
-                                </button>
-                            }
-                        </td>
-                        <td data-label="User">
-                            <div class="saas-bank-user-cell">
-                                @if (pending)
-                                {
-                                    <img src="~/ashok-images/clock.svg" alt="Pending" />
-                                }
-                                else
-                                {
-                                    <img src="~/ashok-images/correct.svg" class="saas-dispute-sts-icon--app" alt="Approved" style="width:19px;border-radius:50%;padding:3px;background:#059669;" />
-                                }
-                                <span><strong>@((item.Firm_Name ?? "").ToUpperInvariant())</strong> <i class="fas fa-phone-alt saas-bank-user-phone" aria-hidden="true"></i> @item.Mobile</span>
-                            </div>
-                        </td>
-                        <td data-label="Holder">@item.AcconutHolderName</td>
-                        <td data-label="Account">@item.BankAccountNo</td>
-                        <td data-label="IFSC">@item.IFSC_CODE</td>
-                        <td data-label="Bank">
-                            @if (!string.IsNullOrWhiteSpace(item.topfilter))
-                            {
-                                @((item.Bank_Name ?? "").ToUpperInvariant())<span> &gt; </span><strong>@item.topfilter</strong>
-                            }
-                            else
-                            {
-                                @((item.Bank_Name ?? "").ToUpperInvariant())
-                            }
-                        </td>
-                        <td data-label="Branch">@item.Bank_Address</td>
-                        <td data-label="Added">@item.Date</td>
-                        <td data-label="Approved">@item.Approved_Date</td>
-                        <td data-label="Action">
-                            @if (pending)
-                            {
-                                <div class="saas-pur-actions">
-                                    <button type="button" class="saas-pur-btn saas-pur-btn--approve saas-bank-approve-btn"
-                                            data-userid="@item.UserId" data-idno="@item.Idno"
-                                            data-firm="@item.Firm_Name" data-holder="@item.AcconutHolderName"
-                                            data-bankno="@item.BankAccountNo" data-ifsc="@item.IFSC_CODE"
-                                            onclick="return retailerBankSendOtp('@HttpUtility.JavaScriptStringEncode(item.UserId ?? "")', @item.Idno, '@HttpUtility.JavaScriptStringEncode(item.Firm_Name ?? "")', '@HttpUtility.JavaScriptStringEncode(item.AcconutHolderName ?? "")', '@HttpUtility.JavaScriptStringEncode(item.BankAccountNo ?? "")', '@HttpUtility.JavaScriptStringEncode(item.IFSC_CODE ?? "")');"
-                                            title="Approve"><i class="fa fa-check"></i></button>
-                                    <button type="button" class="saas-pur-btn saas-pur-btn--reject"
-                                            onclick="return retailerBankConfirmReject('@Url.Action("RetailerBnkReject", new { Idno = item.Idno })');"
-                                            title="Reject"><i class="fa fa-times"></i></button>
-                                </div>
-                            }
-                            else if (approved)
-                            {
-                                <div class="saas-pur-actions">
-                                    <button type="button" class="saas-pur-btn saas-pur-btn--reject saas-bank-delete-reveal" title="Delete"><i class="fa fa-trash"></i></button>
-                                    <button type="button" class="saas-pur-btn saas-pur-btn--approve saas-bank-delete-confirm" style="display:none;"
-                                            onclick="return retailerBankConfirmDelete('@Url.Action("DeleteRetailerBnkt", new { Idno = item.Idno })');"
-                                            title="Confirm delete">Sure?</button>
-                                </div>
-                            }
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-</div>
-
+@model IEnumerable<Vastwebmulti.Models.ShowBankRequest_Result>
+
+@using System.Linq
+
+@using System.Web
+
+@{
+
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.ShowBankRequest_Result>();
+
+}
+
+
+
+<div class="saas-acc-table-wrap table-responsive">
+
+    <table class="table saas-acc-table saas-acc-table--bank table-bordered" id="retailerBankTable">
+
+        <thead>
+
+            <tr>
+
+                <th>Cheque</th>
+
+                <th>User / Firm</th>
+
+                <th>Account holder</th>
+
+                <th>Account no.</th>
+
+                <th>IFSC</th>
+
+                <th>Bank name</th>
+
+                <th>Branch</th>
+
+                <th>Added</th>
+
+                <th>Approved</th>
+
+                <th>Action</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @if (rows.Count == 0)
+
+            {
+
+                <tr><td colspan="10" class="saas-pan-empty-cell">No bank requests found.</td></tr>
+
+            }
+
+            else
+
+            {
+
+                foreach (var item in rows)
+
+                {
+
+                    var pending = (item.Status ?? "").Equals("PENDING", StringComparison.OrdinalIgnoreCase);
+
+                    var approved = (item.Status ?? "").Equals("APPROVED", StringComparison.OrdinalIgnoreCase);
+
+                    <tr>
+
+                        <td data-label="Cheque">
+
+                            @if (string.IsNullOrEmpty(item.CancelCheckFile))
+
+                            {
+
+                                <span class="text-muted">No image</span>
+
+                            }
+
+                            else
+
+                            {
+
+                                <button type="button" class="btn btn-link p-0" onclick="return retailerBankShowImage('@item.Idno');" title="View cheque">
+
+                                    <img src="@Url.Content("~/" + item.CancelCheckFile)" class="saas-bank-thumb" id="upload-@item.Idno" alt="Cheque" />
+
+                                </button>
+
+                            }
+
+                        </td>
+
+                        <td data-label="User">
+
+                            <div class="saas-bank-user-cell">
+
+                                @if (pending)
+
+                                {
+
+                                    <img src="~/ashok-images/clock.svg" alt="Pending" />
+
+                                }
+
+                                else
+
+                                {
+
+                                    <img src="~/ashok-images/correct.svg" class="saas-dispute-sts-icon--app" alt="Approved" style="width:19px;border-radius:50%;padding:3px;background:#059669;" />
+
+                                }
+
+                                <span><strong>@((item.Firm_Name ?? "").ToUpperInvariant())</strong> <i class="fas fa-phone-alt saas-bank-user-phone" aria-hidden="true"></i> @item.Mobile</span>
+
+                            </div>
+
+                        </td>
+
+                        <td data-label="Holder">@item.AcconutHolderName</td>
+
+                        <td data-label="Account">@item.BankAccountNo</td>
+
+                        <td data-label="IFSC">@item.IFSC_CODE</td>
+
+                        <td data-label="Bank">
+
+                            @if (!string.IsNullOrWhiteSpace(item.topfilter))
+
+                            {
+
+                                @((item.Bank_Name ?? "").ToUpperInvariant())<span> &gt; </span><strong>@item.topfilter</strong>
+
+                            }
+
+                            else
+
+                            {
+
+                                @((item.Bank_Name ?? "").ToUpperInvariant())
+
+                            }
+
+                        </td>
+
+                        <td data-label="Branch">@item.Bank_Address</td>
+
+                        <td data-label="Added">@item.Date</td>
+
+                        <td data-label="Approved">@item.Approved_Date</td>
+
+                        <td data-label="Action">
+
+                            @if (pending)
+
+                            {
+
+                                <div class="saas-pur-actions">
+
+                                    <button type="button" class="saas-pur-btn saas-pur-btn--approve saas-bank-approve-btn"
+
+                                            data-userid="@item.UserId" data-idno="@item.Idno"
+
+                                            data-firm="@item.Firm_Name" data-holder="@item.AcconutHolderName"
+
+                                            data-bankno="@item.BankAccountNo" data-ifsc="@item.IFSC_CODE"
+
+                                            onclick="return retailerBankSendOtp('@HttpUtility.JavaScriptStringEncode(item.UserId ?? "")', @item.Idno, '@HttpUtility.JavaScriptStringEncode(item.Firm_Name ?? "")', '@HttpUtility.JavaScriptStringEncode(item.AcconutHolderName ?? "")', '@HttpUtility.JavaScriptStringEncode(item.BankAccountNo ?? "")', '@HttpUtility.JavaScriptStringEncode(item.IFSC_CODE ?? "")');"
+
+                                            title="Approve"><i class="fa fa-check"></i></button>
+
+                                    <button type="button" class="saas-pur-btn saas-pur-btn--reject"
+
+                                            onclick="return retailerBankConfirmReject('@Url.Action("RetailerBnkReject", new { Idno = item.Idno })');"
+
+                                            title="Reject"><i class="fa fa-times"></i></button>
+
+                                </div>
+
+                            }
+
+                            else if (approved)
+
+                            {
+
+                                <div class="saas-pur-actions">
+
+                                    <button type="button" class="saas-pur-btn saas-pur-btn--reject saas-bank-delete-reveal" title="Delete"><i class="fa fa-trash"></i></button>
+
+                                    <button type="button" class="saas-pur-btn saas-pur-btn--approve saas-bank-delete-confirm" style="display:none;"
+
+                                            onclick="return retailerBankConfirmDelete('@Url.Action("DeleteRetailerBnkt", new { Idno = item.Idno })');"
+
+                                            title="Confirm delete">Sure?</button>
+
+                                </div>
+
+                            }
+
+                        </td>
+
+                    </tr>
+
+                }
+
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
