@@ -1,34 +1,23 @@
-@{
-    var updateAction = ViewBag.PurchaseUpdateAction as string ?? "updatepurchage_master";
-    var isAjax = ViewBag.PurchaseModalAjax as bool? ?? false;
-}
-<div class="modal fade saas-admin-modal" id="purchaseApproveModal" role="dialog" aria-labelledby="purchaseApproveModalTitle" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="saas-admin-modal-header accent-slate">
-                <div class="saas-admin-modal-head-main">
-                    <span class="saas-admin-modal-icon"><i class="fas fa-comment-dots" aria-hidden="true"></i></span>
-                    <div class="saas-admin-modal-title-wrap">
-                        <h4 class="modal-title saas-admin-modal-title" id="purchaseApproveModalTitle">Approve / Reject</h4>
-                        <span class="saas-admin-modal-subtitle">Enter transaction password and comment</span>
-                    </div>
-                </div>
-                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
-            </div>
-            @if (isAjax)
-            {
-                using (Ajax.BeginForm(updateAction, "Home", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "Retailerpurchasetable", OnSuccess = "purchaseModalAjaxSuccess" }))
-                {
-                    @Html.Partial("_PurchaseApproveModalBody")
-                }
-            }
-            else
-            {
-                using (Html.BeginForm(updateAction, "Home", FormMethod.Post))
-                {
-                    @Html.Partial("_PurchaseApproveModalBody")
-                }
-            }
-        </div>
-    </div>
-</div>
+@{
+    var updateAction = ViewBag.PurchaseUpdateAction as string ?? "updatepurchage_master";
+}
+<div class="modal fade saas-admin-modal" id="purchaseApproveModal" role="dialog" aria-labelledby="purchaseApproveModalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="saas-admin-modal-header accent-slate">
+                <div class="saas-admin-modal-head-main">
+                    <span class="saas-admin-modal-icon"><i class="fas fa-comment-dots" aria-hidden="true"></i></span>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title" id="purchaseApproveModalTitle">Enter Comment</h4>
+                        <span class="saas-admin-modal-subtitle">Enter transaction password and comment</span>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            @using (Html.BeginForm(updateAction, "Home", FormMethod.Post, new { id = "purchaseApproveForm" }))
+            {
+                @Html.Partial("_PurchaseApproveModalBody")
+            }
+        </div>
+    </div>
+</div>

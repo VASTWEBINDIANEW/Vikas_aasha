@@ -413,12 +413,68 @@
     window.saasProfShowDocUpload = function (panelId) {
         var $panel = $('#' + panelId);
         if ($panel.length) {
+            $('.saas-prof-doc-row').removeClass('is-upload-open');
+            $panel.closest('.saas-prof-doc-row').addClass('is-upload-open');
             $panel.slideDown(200);
         }
     };
 
+    function resetProfFileInput($input) {
+        var $wrap = $input.closest('.saas-prof-file-input');
+        $input.val('');
+        $wrap.removeClass('has-file').find('.saas-prof-file-input__text').text('Browse file');
+    }
+
+    $(document).on('change', '.saas-prof-file-input__native', function () {
+        var fileName = this.files && this.files[0] ? this.files[0].name : 'Browse file';
+        var $wrap = $(this).closest('.saas-prof-file-input');
+        $wrap.find('.saas-prof-file-input__text').text(fileName);
+        $wrap.toggleClass('has-file', this.files && this.files.length > 0);
+    });
+
+    $(document).on('click', '.saas-prof-doc-upload__close', function () {
+        var panelId = $(this).data('close-panel');
+        var showPanelId = $(this).data('show-panel');
+        var $panel = $('#' + panelId);
+        $panel.hide();
+        $panel.closest('.saas-prof-doc-row').removeClass('is-upload-open');
+        $panel.find('.saas-prof-file-input__native').each(function () {
+            resetProfFileInput($(this));
+        });
+        if (showPanelId) {
+            $('#' + showPanelId).show();
+        }
+    });
+
     $(document).ready(function () {
         supportReadonly(true);
+
+        /* Security selects must stay native — full width in flex row */
+        $('.saas-prof-sec-control select.profileseclet').each(function () {
+            var $sel = $(this);
+            $sel.addClass('vm-no-select2');
+            if ($sel.data('select2') && typeof $sel.select2 === 'function') {
+                try {
+                    $sel.select2('destroy');
+                } catch (ignore) { /* stale instance */ }
+            }
+            $sel.next('.select2-container').remove();
+        });
+
+        /* Profile image modal — modern file picker label */
+        $(document).on('change', '#EditprofileimageModal .saas-prof-file-input__native', function () {
+            var fileName = this.files && this.files[0] ? this.files[0].name : 'Browse image';
+            var $wrap = $(this).closest('.saas-prof-file-input');
+            $wrap.find('.saas-prof-file-input__text').text(fileName);
+            $wrap.toggleClass('has-file', this.files && this.files.length > 0);
+        });
+
+        $('#EditprofileimageModal').on('hidden.bs.modal', function () {
+            var $input = $('#profileImageFile');
+            var $wrap = $input.closest('.saas-prof-file-input');
+            $input.val('');
+            $wrap.removeClass('has-file').find('.saas-prof-file-input__text').text('Browse image');
+        });
     });
 
 })(jQuery);

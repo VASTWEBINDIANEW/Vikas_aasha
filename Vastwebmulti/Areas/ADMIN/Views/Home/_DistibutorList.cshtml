@@ -576,10 +576,10 @@
 <script>
     function OnSuccess() {
         vmDlBackToViewForm();
-        ravi("select").select2();
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
     }
     $(document).ajaxComplete(function () {
-        ravi("select").select2();
+        if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); }
     })
 </script>
 

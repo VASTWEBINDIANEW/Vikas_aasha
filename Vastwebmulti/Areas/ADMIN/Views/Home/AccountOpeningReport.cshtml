@@ -54,7 +54,7 @@
 
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
 
-<link href="~/MainFrontDesign/css/admin-cms-report-status.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-cms-report-status.css?v=3" rel="stylesheet" />
 
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
@@ -480,8 +480,6 @@
 
 
 
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
 
 
 <script>
@@ -608,17 +606,16 @@
 
     function initAccountOpeningSelect2() {
 
-        if (!$.fn.select2) {
-
+        if (window.bootAdminSelect2) {
+            window.bootAdminSelect2();
             return;
-
         }
 
         $('#status, #Retailers').select2({
 
             width: '100%',
 
-            minimumResultsForSearch: 8
+            minimumResultsForSearch: 0
 
         });
 

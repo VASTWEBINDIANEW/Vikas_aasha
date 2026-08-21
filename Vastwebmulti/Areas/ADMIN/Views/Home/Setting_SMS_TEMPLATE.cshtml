@@ -694,11 +694,7 @@
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
 <link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
-
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
 <script>
 
     function DeleteTemplate(idno) {
@@ -806,14 +802,14 @@
 
 
 <script>
-    $('.for-select2').select2();
+    /* Select2: bootAdminSelect2 from admin layout */
 </script>
 <script>
 
     $(document).ready(function () {
 
         // Initialize select2
-        $("#select").select2();
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
 
 
     });

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vastwebmulti.Areas.ADMIN.Models.AepsUPIHistoryVM>
+@model IEnumerable<Vastwebmulti.Areas.ADMIN.Models.AepsUPIHistoryVM>
 @{
     ViewBag.Title = "AepsUPIReport";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
@@ -180,8 +180,8 @@
                                             </td>
                                             <td>@(item.Remainpre.HasValue ? item.Remainpre.Value.ToString("N2") : "")</td>
                                             <td>
-                                                <div><strong>₹@item.Amount</strong></div>
-                                                <small class="text-muted">Comm: ₹@item.totalcomm</small>
+                                                <div><strong>?@item.Amount</strong></div>
+                                                <small class="text-muted">Comm: ?@item.totalcomm</small>
                                             </td>
                                             <td>@(item.RemainPost.HasValue ? item.RemainPost.Value.ToString("N2") : "")</td>
                                             <td>@(item.txndate.HasValue ? item.txndate.Value.ToString("dd-MM-yyyy HH:mm:ss") : "")</td>
@@ -211,11 +211,10 @@
     </div>
 </section>
 
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 <script>
     function formatMoney(n) {
         var num = Number(n || 0);
-        return '₹' + num.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        return '?' + num.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function hideAepsUpiTotals() {

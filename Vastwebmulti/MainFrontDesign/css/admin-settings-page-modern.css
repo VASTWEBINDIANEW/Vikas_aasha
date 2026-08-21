@@ -20,18 +20,22 @@ body.saas-admin-ui .saas-admin-settings-page .saas-set-hero--amber {
 
 /* Merge operator form */
 body.saas-admin-ui .saas-set-merge-form {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    gap: 10px;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0 !important;
 }
 
 body.saas-admin-ui .saas-set-merge-form select,
 body.saas-admin-ui .saas-set-merge-form .form-control {
     min-height: 42px !important;
-    min-width: 180px;
-    flex: 1 1 180px;
-    max-width: 280px;
+    width: auto !important;
+    min-width: 160px !important;
+    max-width: 220px !important;
+    flex: 0 1 200px !important;
     padding: 0 12px !important;
     border: 2px solid var(--acc-border, #e2e8f0) !important;
     border-radius: 10px !important;
@@ -40,6 +44,7 @@ body.saas-admin-ui .saas-set-merge-form .form-control {
     font-weight: 500 !important;
     float: none !important;
     height: auto !important;
+    display: block !important;
 }
 
 body.saas-admin-ui .saas-set-merge-form input[type="submit"],
@@ -54,6 +59,29 @@ body.saas-admin-ui .saas-set-btn-primary {
     font-size: 0.85rem !important;
     cursor: pointer;
     float: none !important;
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    width: auto !important;
+}
+
+/* Sell recharge operator mapping — toolbar + one-line form */
+body.saas-admin-ui .saas-sell-recharge-opt-page .saas-acc-toolbar {
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 16px !important;
+}
+
+body.saas-admin-ui .saas-sell-recharge-opt-page .saas-acc-breadcrumb {
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-sell-recharge-opt-page .saas-acc-toolbar-right {
+    flex: 1 1 auto !important;
+    justify-content: flex-end !important;
+    min-width: 0 !important;
+    margin-left: auto !important;
+    width: auto !important;
 }
 
 body.saas-admin-ui .saas-set-filter-bar {
@@ -368,6 +396,40 @@ body.saas-admin-ui .saas-set-hero--blue {
 
 body.saas-admin-ui .saas-set-hero--rose {
     background: linear-gradient(125deg, #9f1239 0%, #e11d48 45%, #fb7185 100%) !important;
+}
+
+@media (max-width: 1199px) {
+    body.saas-admin-ui .saas-sell-recharge-opt-page .saas-acc-toolbar {
+        flex-wrap: wrap !important;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .saas-sell-recharge-opt-page .saas-acc-toolbar-right {
+        width: 100% !important;
+        margin-left: 0 !important;
+        justify-content: stretch !important;
+    }
+
+    body.saas-admin-ui .saas-sell-recharge-opt-page .saas-set-merge-form {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+        width: 100% !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-sell-recharge-opt-page .saas-set-merge-form select,
+    body.saas-admin-ui .saas-sell-recharge-opt-page .saas-set-merge-form .form-control {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        flex: none !important;
+    }
+
+    body.saas-admin-ui .saas-sell-recharge-opt-page .saas-set-merge-form input[type="submit"] {
+        grid-column: 1 / -1 !important;
+        width: 100% !important;
+    }
 }
 
 @media (max-width: 767px) {

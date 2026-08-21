@@ -177,24 +177,19 @@
 <script src="~/AdminDesign/js/demo.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 <link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
 <!--Add State dropdown list-->
 
 
 <script>
-    $('.for-select2').select2();
+    /* Select2: bootAdminSelect2 from admin layout */
 </script>
 
 <script>
     var ravi = $.noConflict()
     ravi(document).ready(function () {
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
 
-        // Initialize select2
-        ravi("select").select2();
-
-        // Read selected option
-
-            $('.input-daterange').datepicker({
+        $('.input-daterange').datepicker({
             format: "yyyy-mm-dd",
             todayHighlight: true,
             autoclose: true,
@@ -209,7 +204,7 @@
 
     });
     $(document).ajaxComplete(function () {
-        ravi("select").select2();
+        if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); }
     });
 </script>
 
@@ -228,15 +223,13 @@
 
         var $frm = $wrap.find('#Frm_Name.for-select2');
         var uid = $wrap.find('#txtdevicenm').val();
-        if ($frm.length && ravi.fn.select2) {
+        if ($frm.length && $.fn.select2) {
             if ($frm.data('select2')) {
                 $frm.select2('destroy');
             }
-            $frm.select2({
-                width: '100%',
-                minimumResultsForSearch: 6,
+            $frm.select2($.extend({}, window.getAdminSelect2Options($frm), {
                 dropdownParent: $wrap.closest('.vm-ft-history-body')
-            });
+            }));
             if (uid) {
                 $frm.val(uid).trigger('change');
             }

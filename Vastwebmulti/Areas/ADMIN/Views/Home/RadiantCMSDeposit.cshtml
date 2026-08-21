@@ -197,7 +197,6 @@
     </div>
 </div>
 
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
 
 <script>
@@ -349,9 +348,12 @@
         $('#btnRadiantCmsExcel').on('click', function () { downloadRadiantCmsDepositExport('excel'); });
         $('#btnRadiantCmsPdf').on('click', function () { downloadRadiantCmsDepositExport('pdf'); });
 
-        $('#allretailer, #Status').select2({
-            width: '100%',
-            minimumResultsForSearch: 6
+        $('#allretailer, #Status').each(function () {
+            var $el = $(this);
+            if ($el.hasClass('select2-hidden-accessible')) {
+                $el.select2('destroy');
+            }
+            $el.select2(window.getAdminSelect2Options($el));
         });
 
         $(document).on('click', '.vm-radiant-slip-btn', function () {

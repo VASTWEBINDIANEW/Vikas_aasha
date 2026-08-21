@@ -36,7 +36,8 @@ body.saas-admin-ui .saas-prof-page .page-title-box-fourde-admin {
 
 body.saas-admin-ui .saas-prof-page .saas-profile-container,
 body.saas-admin-ui .saas-prof-page .saas-prof-page__inner {
-    max-width: 1280px;
+    max-width: none;
+    width: 100%;
     margin: 0 auto;
     padding: 0 16px;
 }
@@ -142,10 +143,17 @@ body.saas-admin-ui .saas-prof-page .saas-prof-section-title {
     color: var(--pf-text);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-wrap: wrap;
     gap: 10px;
     width: 100%;
+}
+
+body.saas-admin-ui .saas-prof-page .saas-prof-card__title i {
+    color: var(--pf-primary);
+    width: 1.1rem;
+    text-align: center;
+    flex-shrink: 0;
 }
 
 body.saas-admin-ui .saas-prof-page .saas-prof-card__body {
@@ -392,8 +400,8 @@ body.saas-admin-ui .saas-prof-page .saas-prof-sec-label--main {
 body.saas-admin-ui .saas-prof-page .saas-prof-sec-grid,
 body.saas-admin-ui .saas-prof-page .userwise-off ul {
     display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
     margin: 0 !important;
     padding: 0 !important;
     list-style: none !important;
@@ -413,54 +421,99 @@ body.saas-admin-ui .saas-prof-page .saas-prof-sec-item {
     height: auto !important;
     min-height: 0 !important;
     border-left: none !important;
-    padding: 12px !important;
+    padding: 14px !important;
     margin: 0 !important;
     background: var(--pf-surface) !important;
     border: 1px solid var(--pf-border) !important;
     border-radius: var(--pf-radius-sm) !important;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 body.saas-admin-ui .saas-prof-page .saas-prof-sec-control,
 body.saas-admin-ui .saas-prof-page .select-redgreen {
     display: flex !important;
-    align-items: center;
-    gap: 8px;
+    align-items: stretch !important;
+    gap: 10px !important;
     width: 100% !important;
     float: none !important;
     position: relative !important;
+    z-index: auto !important;
+    min-width: 0;
 }
 
 body.saas-admin-ui .saas-prof-page .profileseclet,
 body.saas-admin-ui .saas-prof-page select.profileseclet {
-    flex: 1 1 auto !important;
-    width: auto !important;
+    flex: 1 1 0 !important;
+    width: 100% !important;
     min-width: 0 !important;
+    max-width: none !important;
     float: none !important;
-    min-height: 42px !important;
+    min-height: 44px !important;
     height: auto !important;
-    padding: 8px 12px 8px 30px !important;
+    padding: 10px 36px 10px 32px !important;
     border-radius: var(--pf-radius-sm) !important;
     border: 1px solid var(--pf-border) !important;
     font-size: 0.72rem !important;
     font-weight: 700 !important;
     background: #fff !important;
     text-transform: none !important;
+    position: relative !important;
+    z-index: auto !important;
+    box-sizing: border-box !important;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    background-size: 12px !important;
+}
+
+body.saas-admin-ui .saas-prof-page .saas-prof-card,
+body.saas-admin-ui .saas-prof-page .saas-prof-sec-item,
+body.saas-admin-ui .saas-prof-page .saas-prof-security-wrap {
+    position: relative;
+    z-index: auto !important;
 }
 
 body.saas-admin-ui .saas-prof-page .saas-prof-sec-dot,
 body.saas-admin-ui .saas-prof-page .securtyoff-show,
 body.saas-admin-ui .saas-prof-page .securtyon-show {
     position: absolute !important;
-    left: 14px !important;
+    left: 12px !important;
     top: 50% !important;
     transform: translateY(-50%);
     width: 8px !important;
     height: 8px !important;
     border-radius: 50%;
     float: none !important;
-    z-index: 2;
+    z-index: 3;
     margin: 0 !important;
+    pointer-events: none;
+}
+
+body.saas-admin-ui .saas-prof-page .saas-prof-sec-select-wrap {
+    position: relative;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+}
+
+body.saas-admin-ui .saas-prof-page .saas-prof-sec-select-wrap > select.profileseclet,
+body.saas-admin-ui .saas-prof-page .saas-prof-sec-select-wrap > select.form-control,
+body.saas-admin-ui .saas-prof-page .saas-prof-sec-select-wrap > .select2-container {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .saas-prof-page .saas-prof-sec-item--admin .saas-prof-sec-select-wrap {
+    flex: 1 1 100% !important;
 }
 
 body.saas-admin-ui .saas-prof-page .saas-prof-sec-dot--off,
@@ -479,14 +532,15 @@ body.saas-admin-ui .saas-prof-page .saas-prof-sec-hidden-toggle {
 
 body.saas-admin-ui .saas-prof-page .saas-prof-users-btn,
 body.saas-admin-ui .saas-prof-page [class*="for-"][class*="-button"] {
-    flex: 0 0 42px !important;
-    width: 42px !important;
-    height: 42px !important;
+    flex: 0 0 44px !important;
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
     border-radius: var(--pf-radius-sm) !important;
-    background: var(--pf-primary) !important;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
     border: none !important;
     color: #fff !important;
     font-size: 0.9rem !important;
@@ -495,10 +549,14 @@ body.saas-admin-ui .saas-prof-page [class*="for-"][class*="-button"] {
     padding: 0 !important;
     cursor: pointer;
     line-height: 1 !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 body.saas-admin-ui .saas-prof-page .saas-prof-users-btn:hover {
-    filter: brightness(1.08);
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
 }
 
 /* User OTP table ON/OFF buttons */
@@ -580,16 +638,20 @@ body.saas-admin-ui .saas-prof-page .saas-prof-user-panel.is-open {
     display: block !important;
 }
 
-/* ========== Support (v5) ========== */
+/* ========== Support (v6 — light full-width) ========== */
+body.saas-admin-ui .saas-prof-page .saas-prof-card--support {
+    border-top: 3px solid #0ea5e9;
+}
+
 body.saas-admin-ui .saas-prof-page .saas-prof-card--support .saas-prof-support {
-    padding: 16px 18px 18px;
-    background: linear-gradient(125deg, #0f172a 0%, #1e3a5f 42%, #334155 100%);
+    padding: 18px 20px 20px;
+    background: var(--pf-card);
 }
 
 body.saas-admin-ui .saas-prof-page .saas-prof-support__grid {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 14px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 16px 20px;
     align-items: end;
 }
 
@@ -598,37 +660,42 @@ body.saas-admin-ui .saas-prof-page .saas-prof-support__label {
     margin-bottom: 6px;
     font-size: 0.72rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.9);
-    letter-spacing: 0.03em;
+    color: var(--pf-muted) !important;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 body.saas-admin-ui .saas-prof-page .saas-prof-support__input {
     width: 100% !important;
     min-height: 44px;
-    padding: 10px 12px !important;
+    padding: 10px 14px !important;
     border-radius: var(--pf-radius-sm) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
-    background: rgba(255, 255, 255, 0.97) !important;
+    border: 1px solid var(--pf-border) !important;
+    background: var(--pf-surface) !important;
     color: var(--pf-text) !important;
     font-size: 0.88rem !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 body.saas-admin-ui .saas-prof-page .saas-prof-support__input:focus {
-    border-color: #93c5fd !important;
+    border-color: var(--pf-primary) !important;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    background: #fff !important;
 }
 
 body.saas-admin-ui .saas-prof-page .saas-prof-support__input[readonly] {
-    background: rgba(248, 250, 252, 0.92) !important;
+    background: var(--pf-surface) !important;
     cursor: default;
 }
 
 body.saas-admin-ui .saas-prof-page .saas-prof-support__actions {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 8px;
     min-width: 100px;
+    align-self: end;
 }
 
 /* Buttons */
@@ -823,7 +890,20 @@ body.saas-admin-ui .saas-prof-page .table-responsive > table {
     min-width: 100%;
 }
 
-/* Responsive */
+/* Responsive — security grid: 3 col desktop, 2 col tablet, 1 col mobile */
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-prof-page .saas-prof-sec-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    body.saas-admin-ui .saas-prof-page .saas-prof-sec-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
 @media (max-width: 991px) {
     body.saas-admin-ui .saas-prof-page .saas-profile-toolbar {
         flex-direction: column;
@@ -836,10 +916,6 @@ body.saas-admin-ui .saas-prof-page .table-responsive > table {
 
     body.saas-admin-ui .saas-prof-page .saas-profile-page-title {
         justify-content: flex-start;
-    }
-
-    body.saas-admin-ui .saas-prof-page .saas-prof-sec-grid {
-        grid-template-columns: 1fr !important;
     }
 }
 
@@ -871,12 +947,6 @@ body.saas-admin-ui .saas-prof-page .table-responsive > table {
         width: 100%;
         text-align: center;
         justify-content: center;
-    }
-}
-
-@media (min-width: 1200px) {
-    body.saas-admin-ui .saas-prof-page .saas-prof-sec-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
@@ -1297,6 +1367,43 @@ body.saas-admin-ui .saas-prof-page .saas-prof-modal .required::after {
         flex: 0 0 66.666%;
         max-width: 66.666%;
     }
+
+    body.saas-admin-ui .saas-prof-page .saas-prof-layout--stack-full > .saas-prof-layout__stack-full {
+        margin-left: 0 !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+/* v11 — admin profile full-width stack + card polish */
+body.saas-admin-ui .saas-prof-page .saas-prof-card--security {
+    border-top: 3px solid var(--pf-primary);
+}
+
+body.saas-admin-ui .saas-prof-page .saas-prof-card--documents {
+    border-top: 3px solid #8b5cf6;
+}
+
+body.saas-admin-ui .saas-prof-page .saas-prof-card__head--security {
+    background: var(--pf-surface) !important;
+}
+
+body.saas-admin-ui .saas-prof-page .saas-prof-sec-item {
+    padding: 14px 14px 12px !important;
+}
+
+body.saas-admin-ui .saas-prof-page .saas-prof-sec-label i {
+    color: var(--pf-primary);
+    margin-right: 4px;
+}
+
+body.saas-admin-ui .saas-prof-page .saas-prof-layout--stack-full > .saas-prof-layout__stack-full {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
 /* v11 — dealer profile full-width stack + modern buttons */
@@ -2516,4 +2623,705 @@ body.saas-admin-ui .saas-prof-page.vm-dealer-profile-page .vm-dealer-edit-field 
     }
 }
 
+/* v12 — admin profile modern doc buttons + file upload */
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-support-edit {
+    min-width: 108px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    border-color: #1d4ed8 !important;
+    color: #fff !important;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.28);
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-support-edit:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-support__actions .saas-prof-btn--primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    border-color: #1d4ed8 !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22);
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-row {
+    display: block !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-row__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 118px auto;
+    align-items: center;
+    gap: 12px 20px;
+    padding: 14px 20px;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-documents .saas-prof-docs-thead {
+    grid-template-columns: minmax(0, 1fr) 118px auto;
+    gap: 12px 20px;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-actions,
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-actions > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px !important;
+    font-weight: 700;
+    line-height: 1;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-btn:hover {
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-btn--upload {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    color: #fff !important;
+    border-color: #1d4ed8 !important;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.28);
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-btn--upload:hover {
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.34);
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-btn--view {
+    background: #fff !important;
+    color: var(--pf-primary) !important;
+    border-color: #bfdbfe !important;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-btn--view:hover {
+    background: #eff6ff !important;
+    border-color: #93c5fd !important;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-btn--delete {
+    background: #fff !important;
+    color: #dc2626 !important;
+    border-color: #fecaca !important;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-btn--delete:hover {
+    background: #fef2f2 !important;
+    border-color: #fca5a5 !important;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-row.is-upload-open {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-row.is-upload-open .saas-prof-doc-row__grid {
+    border-bottom: 1px solid var(--pf-border);
+    background: #fff;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload {
+    padding: 18px 20px 16px;
+    background: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%);
+    border-top: 3px solid #2563eb;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__head {
+    margin-bottom: 14px;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__head strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--pf-text);
+    margin-bottom: 4px;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__head span {
+    display: block;
+    font-size: 13px;
+    color: var(--pf-muted);
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__fields--single {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__field label {
+    display: block;
+    margin: 0 0 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--pf-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-file-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    width: 100%;
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-file-input:hover {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-file-input.has-file {
+    border-color: #16a34a;
+    border-style: solid;
+    background: #f0fdf4;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-file-input__native {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-file-input__display {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 16px;
+    pointer-events: none;
+    text-align: center;
+    color: var(--pf-muted);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-file-input__display i {
+    color: #2563eb;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-file-input.has-file .saas-prof-file-input__display {
+    color: #166534;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-file-input.has-file .saas-prof-file-input__display i {
+    color: #16a34a;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-file-input__text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: min(100%, 320px);
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__toolbar {
+    margin-top: 16px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__toolbar .saas-prof-btn--primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    border-color: #1d4ed8 !important;
+    color: #fff !important;
+    min-height: 42px;
+    padding: 10px 20px;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__toolbar .saas-prof-btn--muted {
+    background: #fff !important;
+    border: 2px solid #cbd5e1 !important;
+    color: var(--pf-text) !important;
+    min-height: 42px;
+    padding: 10px 20px;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-documents .saas-prof-docs-thead {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-row__grid {
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "name name"
+            "tag actions";
+        gap: 10px 12px;
+        padding: 14px 16px;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-row__grid .saas-prof-doc-name {
+        grid-area: name;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-row__grid .saas-prof-doc-tag {
+        grid-area: tag;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-row__grid .saas-prof-doc-actions {
+        grid-area: actions;
+        justify-self: end;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__fields {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__toolbar,
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-support__actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-upload__toolbar .saas-prof-btn,
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-support__actions .saas-prof-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-doc-btn {
+        min-height: 38px;
+        padding: 9px 14px;
+        font-size: 13px !important;
+    }
+}
+
+/* v13 — admin profile security full-width + mobile/tablet layout */
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-security-wrap {
+    padding: 16px 18px 18px !important;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-sec-label {
+    width: 100%;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-sec-control select.profileseclet:only-child,
+body.saas-admin-ui .saas-admin-profile-page .saas-prof-sec-item--admin .saas-prof-sec-control select.profileseclet {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-admin-profile-page .saas-profile-container {
+        padding: 0 12px;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-layout > [class*="col-"] {
+        padding: 0 8px 14px;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-layout__aside,
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-layout__main,
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-layout__wide {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-overview-row {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-layout--stack-full > .saas-prof-layout__stack-full {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-profile-toolbar {
+        padding: 14px 16px;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-card__body,
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-security-wrap {
+        padding: 14px 14px 16px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-support__grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-admin-profile-page .saas-profile-container {
+        padding: 0 10px;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-info-grid,
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-overview-head {
+        flex-wrap: wrap;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-overview-head .editprofile-second {
+        width: 100%;
+        margin-top: 8px;
+        justify-content: center;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-card__head--launch .saas-prof-launch-date {
+        margin-left: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-sec-item {
+        padding: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-sec-control {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-sec-control select.profileseclet {
+        font-size: 0.65rem !important;
+        padding: 10px 30px 10px 28px !important;
+        min-height: 42px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-users-btn {
+        flex: 0 0 42px !important;
+        width: 42px !important;
+        min-width: 42px !important;
+        height: 42px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-support__grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-support__actions {
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-support__actions .saas-prof-btn {
+        flex: 1 1 auto;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-user-panel {
+        margin: 0 8px 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-sec-control {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-sec-select-wrap {
+        width: 100% !important;
+        flex: 1 1 auto !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-users-btn {
+        flex: 1 1 auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 44px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-profile-page .saas-prof-sec-control select.profileseclet {
+        font-size: 0.72rem !important;
+        width: 100% !important;
+    }
+}
+
 /* v9 */
+
+/* v15 — admin profile image upload modal only */
+body.saas-admin-ui .saas-prof-profile-img-modal {
+    --pf-primary: #2563eb;
+    --pf-text: #0f172a;
+    --pf-card: #ffffff;
+    --pf-border: #e2e8f0;
+    --pf-muted: #64748b;
+    --pf-surface: #f8fafc;
+}
+
+body.saas-admin-ui #EditprofileimageModal .saas-prof-profile-img-modal__footer .saas-prof-profile-img-modal__btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    min-height: 42px !important;
+    min-width: 120px !important;
+    padding: 10px 20px !important;
+    border-radius: 10px !important;
+    font-size: 0.84rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    box-sizing: border-box !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+body.saas-admin-ui #EditprofileimageModal .saas-prof-profile-img-modal__footer .saas-prof-profile-img-modal__btn i {
+    font-size: 0.82rem !important;
+    line-height: 1 !important;
+}
+
+body.saas-admin-ui #EditprofileimageModal .saas-prof-profile-img-modal__footer .saas-prof-profile-img-modal__btn--close {
+    background: #ffffff !important;
+    border: 2px solid #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+body.saas-admin-ui #EditprofileimageModal .saas-prof-profile-img-modal__footer .saas-prof-profile-img-modal__btn--close:hover {
+    background: #f8fafc !important;
+    border-color: #94a3b8 !important;
+    color: #0f172a !important;
+}
+
+body.saas-admin-ui #EditprofileimageModal .saas-prof-profile-img-modal__footer .saas-prof-profile-img-modal__btn--save {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    border: 1px solid #1d4ed8 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28) !important;
+    min-width: 148px !important;
+}
+
+body.saas-admin-ui #EditprofileimageModal .saas-prof-profile-img-modal__footer .saas-prof-profile-img-modal__btn--save:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui #EditprofileimageModal.saas-prof-modal .modal-footer button[type="submit"] {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid #1d4ed8 !important;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-modal__dialog {
+    width: min(100%, 480px);
+    margin: 16px auto;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-modal__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-modal__close {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-modal__close:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-modal__body {
+    padding: 22px 22px 18px !important;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-upload__head {
+    margin-bottom: 16px;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-upload__head strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--pf-text);
+    margin-bottom: 4px;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-upload__head span {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--pf-muted);
+    line-height: 1.45;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-upload__field label {
+    display: block;
+    margin: 0 0 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--pf-muted);
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-file {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    width: 100%;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-file:hover {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-file.has-file {
+    border-color: #16a34a;
+    border-style: solid;
+    background: #f0fdf4;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-file .saas-prof-file-input__native {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-file .saas-prof-file-input__display {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 16px;
+    pointer-events: none;
+    color: var(--pf-muted);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-file .saas-prof-file-input__display i {
+    color: #2563eb;
+    font-size: 1.1rem;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-file.has-file .saas-prof-file-input__display {
+    color: #166534;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-file.has-file .saas-prof-file-input__display i {
+    color: #16a34a;
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-file .saas-prof-file-input__text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: min(100%, 300px);
+}
+
+body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-modal__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    background: #ffffff !important;
+    border-top: 1px solid #e2e8f0 !important;
+    padding: 14px 20px !important;
+    margin: 0;
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-modal__dialog {
+        width: calc(100% - 20px);
+        margin: 10px auto;
+    }
+
+    body.saas-admin-ui .saas-prof-profile-img-modal .saas-prof-profile-img-modal__footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui #EditprofileimageModal .saas-prof-profile-img-modal__footer .saas-prof-profile-img-modal__btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        justify-content: center !important;
+    }
+}

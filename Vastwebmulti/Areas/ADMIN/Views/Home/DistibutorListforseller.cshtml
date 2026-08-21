@@ -103,7 +103,7 @@
     </div>
 </section>
 
-<script src="~/MainFrontDesign/select2/dist/js/select2.min.js"></script>
+
 <script>
     function stschange(userid, status, rowIndex) {
         $.ajax({
@@ -134,12 +134,10 @@
         if ($dealer.data('select2')) {
             $dealer.select2('destroy');
         }
-        $dealer.select2({
-            width: '100%',
-            minimumResultsForSearch: 6,
+        $dealer.select2($.extend({}, window.getAdminSelect2Options($dealer), {
             placeholder: 'All Distributors',
             dropdownParent: $('#rechargeSellerForm')
-        });
+        }));
         syncRechargeSellerSelect2Width();
     }
 

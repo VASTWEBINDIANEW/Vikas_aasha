@@ -74,6 +74,7 @@
     <link href="~/ClanderCss/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="~/ClanderCss/daterangepicker.min.css" rel="stylesheet" />
     <link href="~/select2/dist/css/select2.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-select2-global.css?v=10" rel="stylesheet" />
     <link href="~/MainFrontDesign/Bootstrap5/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/Bootstrap5/vendor/bootstrap/css/bootstrap-utilities.min.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/Bootstrap5/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
@@ -83,7 +84,6 @@
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
-    <script src="~/select2/dist/js/select2.js"></script>
 
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     @if (!HttpContext.Current.Request.IsLocal)
@@ -1189,7 +1189,7 @@
             top: 72px;
             left: 0;
             bottom: 0;
-            z-index: 1040;
+            z-index: 10100;
             display: flex;
             flex-direction: column;
             background: var(--vm-admin-sidebar-bg, #0b1220) !important;
@@ -1456,7 +1456,7 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1050;
+            z-index: 10200;
             background: var(--vm-admin-topbar-bg, #ffffff);
             background-image: var(--vm-admin-topbar-bg, #ffffff);
         }
@@ -1799,7 +1799,7 @@
             border-radius: 16px !important;
             border: 1px solid #e2e8f0 !important;
             box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12) !important;
-            z-index: 1200 !important;
+            z-index: 10210 !important;
         }
 
         body.saas-admin-ui #leftsidebar.admin-sidebar-shell {
@@ -1833,7 +1833,7 @@
             }
         }
     </style>
-    <link href="~/MainFrontDesign/css/admin-layout-mobile.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-layout-mobile.css?v=2" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-modal-fix.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-renewal-modal.css" rel="stylesheet" />
@@ -5520,7 +5520,7 @@ OnSuccess = "ONSUCCESSGETDATA"
     <!-- Jquery Core Js -->
 
     <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-
+    <script src="~/select2/dist/js/select2.js"></script>
 
     <script src="~/MainFrontDesign/js/jquery-ui.min-scroll.js"></script>
     <script src="~/MainFrontDesign/js/facescroll.js"></script>
@@ -6620,6 +6620,12 @@ OnSuccess = "ONSUCCESSGETDATA"
             }, 150);
         })(jQuery);
     </script>
+    <script>
+        window.adminDistrictListUrl = '@Url.Action("DistrictList", "Home", new { area = "ADMIN" })';
+        window.adminAreaDistrictUrl = '@Url.Action("serchstates", "Home", new { area = "ADMIN" })';
+    </script>
+    <script src="~/MainFrontDesign/js/admin-select2-global.js?v=14"></script>
+    @RenderSection("PostSelect2Scripts", required: false)
     <script src="~/MainFrontDesign/js/admin-dynamic-theme.js?v=10"></script>
 </body>
 </html>

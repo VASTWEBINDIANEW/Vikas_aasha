@@ -56,7 +56,7 @@
 <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=24" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=26" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=21" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium">
@@ -2408,6 +2408,16 @@
 <script>
 
 
+    function bootFundTransferPageSelect2() {
+        if (!window.jQuery || !$.fn.select2) {
+            return;
+        }
+        refreshFundTransferSelect2();
+        refreshFundTransferHistorySelect2();
+    }
+
+    window.bootFundTransferPageSelect2 = bootFundTransferPageSelect2;
+
     $(document).ready(function () {
         var hashTab = window.location.hash ? window.location.hash.substring(1) : '';
         if (hashTab && $('#' + hashTab).length) {
@@ -2415,7 +2425,6 @@
         } else {
             activateLeftFundTab('home');
             setFundTransferHistoryFilterVisibility('home');
-            refreshFundTransferSelect2();
             runFundTransferHistorySearch();
         }
 
@@ -2470,6 +2479,12 @@
             runFundTransferHistorySearch();
         });
     });
+
+    $(window).on('load', function () {
+        window.setTimeout(function () {
+            bootFundTransferPageSelect2();
+        }, 100);
+    });
 </script>
 
 <script>
@@ -2485,6 +2500,18 @@
         $el.next('.select2-container').remove();
     }
 
+    function isFundTransferSelectVisible($el) {
+        var $historyWrap = $el.closest('#masterdrop, #dealerdrop, #retailerdrop, #apidrop, #whitedrop');
+        if ($historyWrap.length) {
+            return $historyWrap.is(':visible');
+        }
+        var $tabPane = $el.closest('.tab-pane');
+        if ($tabPane.length) {
+            return $tabPane.hasClass('active') && $tabPane.is(':visible');
+        }
+        return $el.is(':visible');
+    }
+
     function refreshFundTransferSelect2($scope) {
         if (!window.jQuery || !$.fn.select2) {
             return;
@@ -2492,31 +2519,54 @@
 
         var $targets;
         if ($scope && $scope.length) {
-            $targets = $scope.find('.for-select2');
+            $targets = $scope.is('select') ? $scope : $scope.find('select.for-select2, select.form-control');
         } else {
-            $targets = $('.saas-fund-transfer-page .tab-pane.active .for-select2, .saas-fund-transfer-page .vm-ft-history-toolbar .for-select2');
+            $targets = $('.saas-fund-transfer-page .tab-pane.active select.for-select2, .saas-fund-transfer-page .vm-ft-history-toolbar select.for-select2');
         }
 
         $targets.each(function () {
             var $el = $(this);
+            if (!$el.hasClass('for-select2') && !$el.closest('.vm-ft-history-toolbar, .fund-transfer-form').length) {
+                return;
+            }
             destroyFundTransferSelect2($el);
 
-            if (!$el.is(':visible')) {
+            if (!isFundTransferSelectVisible($el)) {
                 return;
             }
 
-            $el.select2({
+            $el.select2(window.getAdminSelect2Options ? window.getAdminSelect2Options($el) : {
                 width: '100%',
                 dropdownAutoWidth: false,
                 dropdownParent: $(document.body),
-                minimumResultsForSearch: 8
+                minimumResultsForSearch: 0,
+                allowClear: false,
+                language: {
+                    noResults: function () { return 'No match found'; },
+                    searching: function () { return 'Searching...'; },
+                    inputTooShort: function () { return 'Type to search...'; }
+                }
             });
         });
     }
 
+    window.refreshFundTransferSelect2 = refreshFundTransferSelect2;
+
     function refreshFundTransferHistorySelect2() {
-        refreshFundTransferSelect2($('.saas-fund-transfer-page .vm-ft-history-toolbar'));
+        var tabtype = typeof getActiveFundTransferTabType === 'function' ? getActiveFundTransferTabType() : 'home';
+        var filterMap = {
+            home: '#masterdrop',
+            menu1: '#dealerdrop',
+            menu2: '#retailerdrop',
+            menu3: '#apidrop',
+            menu4: '#whitedrop'
+        };
+        var $wrap = $(filterMap[tabtype] || filterMap.home);
+        refreshFundTransferSelect2($wrap);
+        refreshFundTransferSelect2($('#select-search'));
     }
+
+    window.refreshFundTransferHistorySelect2 = refreshFundTransferHistorySelect2;
 
     function setFundTransferHistoryFilterVisibility(tabID) {
         var filterMap = {
@@ -2528,6 +2578,9 @@
         };
         $('#masterdrop, #dealerdrop, #retailerdrop, #apidrop, #whitedrop').hide();
         $(filterMap[tabID] || filterMap.home).show();
+        window.setTimeout(function () {
+            refreshFundTransferHistorySelect2();
+        }, 0);
     }
 
     function applyFundTransferClientFilters(tabtype) {
@@ -2660,7 +2713,6 @@
 
     $(function () {
         wrapFundTransferModeHandlers();
-        refreshFundTransferSelect2();
     });
 </script>
 <script>
@@ -2837,6 +2889,8 @@
                for (var i = 0; i < result.length; i++) {
                    s += '<option value="' + result[i].Value + '">' + result[i].Text + '</option>';
                }
+               destroyFundTransferSelect2($("#ddlDistributor"));
+               destroyFundTransferSelect2($("#ddlDistributor1"));
                $("#ddlDistributor").html(s);
                $("#ddlDistributor1").html(s);
              }
@@ -2845,6 +2899,8 @@
                for (var i = 0; i < result.length; i++) {
                    s += '<option value="' + result[i].Value + '">' + result[i].Text + '</option>';
                }
+               destroyFundTransferSelect2($("#RLMID"));
+               destroyFundTransferSelect2($("#RLMID1"));
                $("#RLMID").html(s);
                $("#RLMID1").html(s);
              }
@@ -2853,6 +2909,8 @@
                for (var i = 0; i < result.length; i++) {
                    s += '<option value="' + result[i].Value + '">' + result[i].Text + '</option>';
                }
+               destroyFundTransferSelect2($("#APIUSER"));
+               destroyFundTransferSelect2($("#APIUSER1"));
                   $("#APIUSER").html(s);
                               $("#APIUSER1").html(s);
              }
@@ -2861,12 +2919,15 @@
                for (var i = 0; i < result.length; i++) {
                    s += '<option value="' + result[i].Value + '">' + result[i].Text + '</option>';
                }
+               destroyFundTransferSelect2($("#WLUSER"));
+               destroyFundTransferSelect2($("#WLUSER1"));
                   $("#WLUSER").html(s);
                    $("#WLUSER1").html(s);
              }
 
-             refreshFundTransferSelect2($('#' + tabID));
-             refreshFundTransferHistorySelect2();
+             window.setTimeout(function () {
+                 bootFundTransferPageSelect2();
+             }, 120);
 
              var tabUserSelectMap = {
                  home: '#SuperstokistID',

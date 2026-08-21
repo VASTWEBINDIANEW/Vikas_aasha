@@ -38,7 +38,7 @@
 
 
 
-<link href="~/MainFrontDesign/css/admin-profile-modern.css?v=9" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-profile-modern.css?v=16" rel="stylesheet" />
 
 
 <section class="content fourdesign-section-admin saas-admin-account-page saas-admin-profile-page saas-prof-page"
@@ -356,8 +356,8 @@
 
         </div>
 
-        <div class="row clearfix saas-prof-layout saas-prof-layout--stack">
-            <div class="col-md-8 col-sm-12 col-md-offset-4 saas-prof-layout__wide saas-prof-layout__stack-main">
+        <div class="row clearfix saas-prof-layout saas-prof-layout--stack saas-prof-layout--stack-full">
+            <div class="col-md-12 col-sm-12 saas-prof-layout__stack-main saas-prof-layout__stack-full">
                 <article class="saas-prof-card saas-prof-card--security">
                     <header class="saas-prof-card__head saas-prof-card__head--security">
                         <h2 class="saas-prof-card__title"><i class="fas fa-shield-alt" aria-hidden="true"></i> Security Settings</h2>
@@ -367,15 +367,17 @@
                                 <li class="saas-prof-sec-item saas-prof-sec-item--admin">
                                     <p class="saas-prof-sec-label"><i class="fa fa-lock" aria-hidden="true"></i> Admin Security</p>
                                     <div class="saas-prof-sec-control">
-                                        <span id="adminoff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
-                                        <span id="adminon" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
-                                        <select id="Sortby" name="Sortby" class="profileseclet form-control">
-                                            <option value="OFF">SECURITY OFF</option>
-                                            <option value="OTP">LOGIN OTP</option>
-                                            <option value="PERDAY">DAY PASSCODE</option>
-                                            <option value="WEAKS">WEAKLY PASSCODE</option>
-                                            <option value="MONTHS">MONTH PASSCODE</option>
-                                        </select>
+                                        <div class="saas-prof-sec-select-wrap">
+                                            <span id="adminoff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                            <span id="adminon" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                            <select id="Sortby" name="Sortby" class="profileseclet form-control vm-no-select2">
+                                                <option value="OFF">SECURITY OFF</option>
+                                                <option value="OTP">LOGIN OTP</option>
+                                                <option value="PERDAY">DAY PASSCODE</option>
+                                                <option value="WEAKS">WEAKLY PASSCODE</option>
+                                                <option value="MONTHS">MONTH PASSCODE</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="onoffswitch onofswicnewaddclass saas-prof-sec-hidden-toggle" id="UserWiseOTPbtn" style="display:none;">
                                         @if (Model.TwoFactorEnabled)
@@ -399,17 +401,17 @@
                                 <li class="saas-prof-sec-item">
                                     <p class="saas-prof-sec-label">Master Security</p>
                                     <div class="saas-prof-sec-control">
-                                        <span id="masteroff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
-                                        <span id="masteron" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
-                                        <select id="Sortbymaster" name="Sortbymaster" class="profileseclet form-control">
-
-                                            <option value="OFF">SECURITY OFF</option>
-                                            <option value="OTP">LOGIN OTP</option>
-                                            <option value="PERDAY">DAY PASSCODE</option>
-                                            <option value="WEAKS">WEAKLY PASSCODE</option>
-                                            <option value="MONTHS">MONTH PASSCODE</option>
-
-                                        </select>
+                                        <div class="saas-prof-sec-select-wrap">
+                                            <span id="masteroff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                            <span id="masteron" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                            <select id="Sortbymaster" name="Sortbymaster" class="profileseclet form-control vm-no-select2">
+                                                <option value="OFF">SECURITY OFF</option>
+                                                <option value="OTP">LOGIN OTP</option>
+                                                <option value="PERDAY">DAY PASSCODE</option>
+                                                <option value="WEAKS">WEAKLY PASSCODE</option>
+                                                <option value="MONTHS">MONTH PASSCODE</option>
+                                            </select>
+                                        </div>
                                         <button type="button" onclick="GetUser('master')" class="saas-prof-users-btn" title="View users"><i class="fas fa-users" aria-hidden="true"></i></button>
                                     </div>
 
@@ -440,16 +442,17 @@
                                 <li class="saas-prof-sec-item">
                                     <p class="saas-prof-sec-label">Distributor Security</p>
                                     <div class="saas-prof-sec-control">
-                                        <span id="dealeroff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
-                                        <span id="dealeron" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
-                                        <select id="Sortbydealer" name="Sortbydealer" class="profileseclet form-control">
-                                            <option value="OFF">SECURITY OFF</option>
-                                            <option value="OTP">LOGIN OTP</option>
-                                            <option value="PERDAY">DAY PASSCODE</option>
-                                            <option value="WEAKS">WEAKLY PASSCODE</option>
-                                            <option value="MONTHS">MONTH PASSCODE</option>
-
-                                        </select>
+                                        <div class="saas-prof-sec-select-wrap">
+                                            <span id="dealeroff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                            <span id="dealeron" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                            <select id="Sortbydealer" name="Sortbydealer" class="profileseclet form-control vm-no-select2">
+                                                <option value="OFF">SECURITY OFF</option>
+                                                <option value="OTP">LOGIN OTP</option>
+                                                <option value="PERDAY">DAY PASSCODE</option>
+                                                <option value="WEAKS">WEAKLY PASSCODE</option>
+                                                <option value="MONTHS">MONTH PASSCODE</option>
+                                            </select>
+                                        </div>
                                         <button type="button" onclick="GetUser('Dealer')" class="saas-prof-users-btn" title="View users"><i class="fas fa-users" aria-hidden="true"></i></button>
                                     </div>
                                     <div class="onoffswitch saas-prof-sec-hidden-toggle dealerotpoffclass">
@@ -473,17 +476,17 @@
                                 <li class="saas-prof-sec-item">
                                     <p class="saas-prof-sec-label">Retailer Security</p>
                                     <div class="saas-prof-sec-control">
-                                        <span id="retaileroff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
-                                        <span id="retaileron" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
-                                        <select id="Sortbyretailer" name="Sortbyretailer" class="profileseclet form-control">
-                                            <option value="OFF">SECURITY OFF</option>
-                                            <option value="OTP">LOGIN OTP</option>
-                                            <option value="PERDAY">DAY PASSCODE</option>
-                                            <option value="WEAKS">WEAKLY PASSCODE</option>
-                                            <option value="MONTHS">MONTH PASSCODE</option>
-
-                                        </select>
-
+                                        <div class="saas-prof-sec-select-wrap">
+                                            <span id="retaileroff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                            <span id="retaileron" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                            <select id="Sortbyretailer" name="Sortbyretailer" class="profileseclet form-control vm-no-select2">
+                                                <option value="OFF">SECURITY OFF</option>
+                                                <option value="OTP">LOGIN OTP</option>
+                                                <option value="PERDAY">DAY PASSCODE</option>
+                                                <option value="WEAKS">WEAKLY PASSCODE</option>
+                                                <option value="MONTHS">MONTH PASSCODE</option>
+                                            </select>
+                                        </div>
                                         <button type="button" onclick="GetUser('Retailer')" class="saas-prof-users-btn" title="View users"><i class="fas fa-users" aria-hidden="true"></i></button>
                                     </div>
                                     <div class="onoffswitch saas-prof-sec-hidden-toggle retaileroffclass">
@@ -508,16 +511,17 @@
                                 <li class="saas-prof-sec-item">
                                     <p class="saas-prof-sec-label">API User Security</p>
                                     <div class="saas-prof-sec-control">
-                                        <span id="apioff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
-                                        <span id="apion" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
-                                        <select id="SortbyAPI" name="SortbyAPI" class="profileseclet form-control">
-                                            <option value="OFF">SECURITY OFF</option>
-                                            <option value="OTP">LOGIN OTP</option>
-                                            <option value="PERDAY">DAY PASSCODE</option>
-                                            <option value="WEAKS">WEAKLY PASSCODE</option>
-                                            <option value="MONTHS">MONTH PASSCODE</option>
-
-                                        </select>
+                                        <div class="saas-prof-sec-select-wrap">
+                                            <span id="apioff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                            <span id="apion" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                            <select id="SortbyAPI" name="SortbyAPI" class="profileseclet form-control vm-no-select2">
+                                                <option value="OFF">SECURITY OFF</option>
+                                                <option value="OTP">LOGIN OTP</option>
+                                                <option value="PERDAY">DAY PASSCODE</option>
+                                                <option value="WEAKS">WEAKLY PASSCODE</option>
+                                                <option value="MONTHS">MONTH PASSCODE</option>
+                                            </select>
+                                        </div>
                                         <button type="button" onclick="GetUser('API')" class="saas-prof-users-btn" title="View users"><i class="fas fa-users" aria-hidden="true"></i></button>
                                     </div>
                                     <div class="onoffswitch saas-prof-sec-hidden-toggle apioofclass">
@@ -542,15 +546,17 @@
                                 <li class="saas-prof-sec-item">
                                     <p class="saas-prof-sec-label">W/L User Security</p>
                                     <div class="saas-prof-sec-control">
-                                        <span id="whitelabeloff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
-                                        <span id="whitelabelon" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
-                                        <select id="SortbyWhitelabel" name="SortbyWhitelabel" class="profileseclet form-control">
-                                            <option value="OFF">SECURITY OFF</option>
-                                            <option value="OTP">LOGIN OTP</option>
-                                            <option value="PERDAY">DAY PASSCODE</option>
-                                            <option value="WEAKS">WEAKLY PASSCODE</option>
-                                            <option value="MONTHS">MONTH PASSCODE</option>
-                                        </select>
+                                        <div class="saas-prof-sec-select-wrap">
+                                            <span id="whitelabeloff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                            <span id="whitelabelon" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                            <select id="SortbyWhitelabel" name="SortbyWhitelabel" class="profileseclet form-control vm-no-select2">
+                                                <option value="OFF">SECURITY OFF</option>
+                                                <option value="OTP">LOGIN OTP</option>
+                                                <option value="PERDAY">DAY PASSCODE</option>
+                                                <option value="WEAKS">WEAKLY PASSCODE</option>
+                                                <option value="MONTHS">MONTH PASSCODE</option>
+                                            </select>
+                                        </div>
                                         <button type="button" onclick="GetUser('Whitelabel')" class="saas-prof-users-btn" title="View users"><i class="fas fa-users" aria-hidden="true"></i></button>
                                     </div>
                                     <div class="onoffswitch saas-prof-sec-hidden-toggle wwhiteoofclass">
@@ -837,20 +843,20 @@
                         <input type="hidden" id="IDd" value="@ViewBag.admin.ID" />
                         <div class="saas-prof-support__grid">
                             <div class="saas-prof-support__field">
-                                <label class="saas-prof-support__label" for="SupportEmail" style="color:#fff !important;">Customer Support Email Id</label>
+                                <label class="saas-prof-support__label" for="SupportEmail">Customer Support Email Id</label>
                                 <input type="email" id="SupportEmail" class="saas-prof-support__input" readonly="readonly"
                                        value="@(ViewBag.admin.email1 ?? "")" placeholder="Enter support email" maxlength="80" />
                             </div>
                             <div class="saas-prof-support__field">
-                                <label class="saas-prof-support__label" for="SupportMobile"  style="color:#fff !important;">Customer Care No</label>
+                                <label class="saas-prof-support__label" for="SupportMobile">Customer Care No</label>
                                 <input type="text" id="SupportMobile" class="saas-prof-support__input" readonly="readonly"
                                        value="@(ViewBag.admin.mobile1 ?? "")" placeholder="Enter 10-digit mobile" maxlength="10"
                                        onkeypress="return isNumber(event)" />
                             </div>
                             <div class="saas-prof-support__actions">
-                                <button type="button" id="btnSupportEdit" class="saas-prof-btn saas-prof-btn--outline">Edit</button>
-                                <button type="button" id="btnSupportSave" class="saas-prof-btn saas-prof-btn--primary" style="display:none;">Save</button>
-                                <button type="button" id="btnSupportCancel" class="saas-prof-btn saas-prof-btn--muted" style="display:none;">Cancel</button>
+                                <button type="button" id="btnSupportEdit" class="saas-prof-btn saas-prof-btn--primary saas-prof-support-edit"><i class="fas fa-pen" aria-hidden="true"></i> Edit</button>
+                                <button type="button" id="btnSupportSave" class="saas-prof-btn saas-prof-btn--primary" style="display:none;"><i class="fas fa-check" aria-hidden="true"></i> Save</button>
+                                <button type="button" id="btnSupportCancel" class="saas-prof-btn saas-prof-btn--muted" style="display:none;"><i class="fas fa-times" aria-hidden="true"></i> Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -867,176 +873,206 @@
                             <span>Actions</span>
                         </div>
                         <ul class="list-group last-list-second saas-prof-docs-rows">
-                            <li class="list-group-item saas-prof-doc-row">
-                                <span class="saas-prof-doc-name">Aadhaar Card</span>
-                                <span class="saas-prof-doc-tag">Mandatory</span>
-                                <div class="save-aadhar" id="EditAadhaardocModal" style="display:none;">
-                                    @*@using (Html.BeginForm("UploadAadharcarddoc", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
-                                        {*@
-                                    <input type="file" id="filess" name="filess" />
-                                    <button type="button" id="btnsuploadfile" name="btnsuploadfile">Save</button>
-
-                                    @*}*@
-
+                            <li class="list-group-item saas-prof-doc-row" data-doc-row="aadhaar">
+                                <div class="saas-prof-doc-row__grid">
+                                    <span class="saas-prof-doc-name">Aadhaar Card</span>
+                                    <span class="saas-prof-doc-tag">Mandatory</span>
+                                    <span class="saas-prof-doc-actions">
+                                        @if (ViewBag.admin.Aadhaarpath == null)
+                                        {
+                                            <span id="aadharspnadivshow" style="display:none;">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--delete" id="btndelservice" onclick="deleteDoc(@ViewBag.admin.ID,'Aadhaar')"><i class="fas fa-trash-alt" aria-hidden="true"></i> Delete</button>
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--view" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Aadhaar" })"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                            </span>
+                                            <span id="aadharspnadivnotshow">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--upload" onclick="uploadaadhaarDoc(@ViewBag.admin.ID)"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Upload</button>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span id="aadharspnadivshow">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--delete" id="btndelpancrd" onclick="deleteDoc(@ViewBag.admin.ID,'Aadhaar')"><i class="fas fa-trash-alt" aria-hidden="true"></i> Delete</button>
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--view" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Aadhaar" })"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                            </span>
+                                            <span id="aadharspnadivnotshow" style="display:none;">
+                                                <button type="button" id="btnupld" class="saas-prof-doc-btn saas-prof-doc-btn--upload" onclick="uploadaadhaarDoc(@ViewBag.admin.ID)"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Upload</button>
+                                            </span>
+                                        }
+                                    </span>
                                 </div>
-
-                                <span id="upddelbtn"></span>
-                                @*<span class="badge" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px;font-weight:400;"><a href="@Url.Content("~/" + ViewBag.admin.Aadhaarpath)" style="cursor:pointer;text-decoration:none;color:#555;" target="_blank">View Link</a></span>*@
-                                @if (ViewBag.admin.Aadhaarpath == null)
-                                {
-                                    <span id="aadharspnadivshow" style="display:none;">
-                                        <span class="badge" id="btndelservice" style="border-radius:0px;background:#f0f0f0; margin-right:34px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="deleteDoc(@ViewBag.admin.ID,'Aadhaar')">Delete</span>
-                                        @*<span class="badge" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard()" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px;font-weight:400;">View</span>*@
-                                        <span class="badge" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" style="margin-right:0px;background-color:#f0f0f0;color:#000;padding: 6px 15px;border:1px solid #bbb;border-radius:0px;font-weight:400;" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Aadhaar" })">View</span>
-
-                                    </span>
-                                    <span id="aadharspnadivnotshow">
-                                        <span class="badge " style="border-radius:0px;background:#f0f0f0; margin-right:24px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="uploadaadhaarDoc(@ViewBag.admin.ID)">Upload</span>
-                                    </span>
-                                    @*<span class="badge " id="aadhrupld" style="border-radius:0px; background:#f0f0f0; margin-right:24px;color:#000;border:1px solid #dddddd;font-weight:400;cursor:pointer;" onclick="uploadaadhaarDoc(@ViewBag.admin.ID)">Upload</span>*@
-
-
-                                }
-                                else
-                                {
-
-                                    <span id="aadharspnadivshow">
-                                        <span class="badge" id="btndelpancrd" style="border-radius:0px;background:#f0f0f0; margin-right:34px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="deleteDoc(@ViewBag.admin.ID,'Aadhaar')">Delete</span>
-                                        @*<span class="badge" id="btnviewpancrd" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard()" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px;font-weight:400;">View</span>*@
-                                        <span class="badge" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" style="margin-right:0px;background-color:#f0f0f0;color:#000;padding: 6px 15px;border:1px solid #bbb;border-radius:0px;font-weight:400;" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Aadhaar" })">View</span>
-
-                                    </span>
-                                    <span id="aadharspnadivnotshow" style="display:none;">
-                                        <span id="btnupld" class="badge " style="border-radius:0px;background:#f0f0f0; margin-right:93px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="uploadaadhaarDoc(@ViewBag.admin.ID)">Upload</span>
-                                    </span>
-
-                                    @*<span class="badge " id="aadhrupld" style="border-radius:0px; background:#f0f0f0; margin-right:24px;color:#000;border:1px solid #dddddd;font-weight:400;cursor:pointer;display:none;" onclick="uploadaadhaarDoc(@ViewBag.admin.ID)">Upload</span>
-                                        <span class="badge" id="aadhrView" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard()" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px;font-weight:400;">View</span>
-                                        <span class="badge" id="aadhardel" style="border-radius:0px;background:#f0f0f0; margin-right:24px;color:#000;border:1px solid #dddddd;font-weight:400;cursor:pointer;" onclick="deleteDoc(@ViewBag.admin.ID,'Aadhaar')">Delete</span>*@
-
-                                }
-
-                            </li>
-                            <li class="list-group-item saas-prof-doc-row">
-                                <span class="saas-prof-doc-name">Pancard</span>
-                                <span class="saas-prof-doc-tag">Mandatory</span>
-                                <div class="save-aadhar" id="EditPancarddocModal" style="display:none;">
-                                    @*@using (Html.BeginForm("UploadPancardcarddoc", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
-                                        {*@
-                                    <input type="file" id="filepancrd" name="filepancrd" />
-                                    <button type="button" id="btnpncard" name="btnpncard">Save</button>
-                                    @*}*@
+                                <div class="saas-prof-doc-upload save-aadhar" id="EditAadhaardocModal" style="display:none;">
+                                    <div class="saas-prof-doc-upload__head">
+                                        <strong>Upload Aadhaar Card</strong>
+                                        <span>Select a clear image or PDF of your Aadhaar card</span>
+                                    </div>
+                                    <div class="saas-prof-doc-upload__fields saas-prof-doc-upload__fields--single">
+                                        <div class="saas-prof-doc-upload__field">
+                                            <label for="filess">Aadhaar Document</label>
+                                            <div class="saas-prof-file-input">
+                                                <input type="file" class="saas-prof-file-input__native" id="filess" name="filess" accept="image/*,.pdf" />
+                                                <span class="saas-prof-file-input__display" aria-hidden="true">
+                                                    <i class="fas fa-cloud-upload-alt"></i>
+                                                    <span class="saas-prof-file-input__text">Browse file</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="saas-prof-edit-toolbar saas-prof-doc-upload__toolbar">
+                                        <button type="button" id="btnsuploadfile" name="btnsuploadfile" class="saas-prof-btn saas-prof-btn--primary"><i class="fas fa-check" aria-hidden="true"></i> Save</button>
+                                        <button type="button" class="saas-prof-btn saas-prof-btn--muted saas-prof-doc-upload__close" data-close-panel="EditAadhaardocModal" data-show-panel="aadharspnadivnotshow"><i class="fas fa-times" aria-hidden="true"></i> Cancel</button>
+                                    </div>
                                 </div>
-                                @*<span class="badge" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px; font-weight:400;"><a href="@Url.Content("~/" + ViewBag.admin.pancardpath)" style="cursor:pointer;text-decoration:none;color:#555;" target="_blank">View Link</a></span>*@
-                                @*<span class="badge" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px; font-weight:400;"><a href="@Url.Content("~/" + ViewBag.admin.pancardpath)" style="cursor:pointer;text-decoration:none;color:#555;" target="_blank">View </a></span>*@
-                                @if (ViewBag.admin.pancardpath == null)
-                                {
-                                    <span id="panspnadivshow" style="display:none;">
-                                        <span class="badge" id="btndelpancrd" style="border-radius:0px;background:#f0f0f0; margin-right:34px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="deleteDoc(@ViewBag.admin.ID,'Pancard')">Delete</span>
-                                        @*<span class="badge" id="btnviewpancrd" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard()" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px;font-weight:400;">View</span>*@
-                                        <span class="badge" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" style="margin-right:0px;background-color:#f0f0f0;color:#000;padding: 6px 15px;border:1px solid #bbb;border-radius:0px;font-weight:400;" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Pancard" })">View</span>
-
-                                    </span>
-                                    <span id="panspnadivnotshow">
-                                        <span class="badge " style="border-radius:0px;background:#f0f0f0; margin-right:93px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="uploadpancardDoc(@ViewBag.admin.ID)">Upload</span>
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span id="panspnadivshow" style="float:right;">
-                                        <span class="badge" id="btndelpancrd" style="border-radius:0px;background:#f0f0f0; margin-right:34px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="deleteDoc(@ViewBag.admin.ID,'Pancard')">Delete</span>
-                                        @*<span class="badge" id="btnviewpancrd" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard()" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px;font-weight:400;">View</span>*@
-                                        <span class="badge" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" style="margin-right:0px;background-color:#f0f0f0;color:#000;padding: 6px 15px;border:1px solid #bbb;border-radius:0px;font-weight:400;" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Pancard" })">View</span>
-
-                                    </span>
-                                    <span id="panspnadivnotshow" style="display:none;">
-                                        <span id="btnupld" class="badge " style="border-radius:0px;background:#f0f0f0; margin-right:93px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="uploadpancardDoc(@ViewBag.admin.ID)">Upload</span>
-                                    </span>
-
-                                }
-
                             </li>
-                            <li class="list-group-item saas-prof-doc-row">
-                                <span class="saas-prof-doc-name">Service Agreement</span>
-                                <span class="saas-prof-doc-tag">Mandatory</span>
-                                <div class="save-aadhar" id="EditServicedocModal" style="display:none;">
-                                    @*@using (Html.BeginForm("UploadServiceAggrementdoc", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
-                                        {*@
-                                    <input type="file" id="filesserv" name="filesserv" />
-                                    <button type="button" id="btnuploadservice" name="btnuploadservice">Save</button>
-                                    @*}*@
+                            <li class="list-group-item saas-prof-doc-row" data-doc-row="pancard">
+                                <div class="saas-prof-doc-row__grid">
+                                    <span class="saas-prof-doc-name">Pancard</span>
+                                    <span class="saas-prof-doc-tag">Mandatory</span>
+                                    <span class="saas-prof-doc-actions">
+                                        @if (ViewBag.admin.pancardpath == null)
+                                        {
+                                            <span id="panspnadivshow" style="display:none;">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--delete" id="btndelpancrd" onclick="deleteDoc(@ViewBag.admin.ID,'Pancard')"><i class="fas fa-trash-alt" aria-hidden="true"></i> Delete</button>
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--view" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Pancard" })"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                            </span>
+                                            <span id="panspnadivnotshow">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--upload" onclick="uploadpancardDoc(@ViewBag.admin.ID)"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Upload</button>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span id="panspnadivshow">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--delete" id="btndelpancrd" onclick="deleteDoc(@ViewBag.admin.ID,'Pancard')"><i class="fas fa-trash-alt" aria-hidden="true"></i> Delete</button>
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--view" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Pancard" })"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                            </span>
+                                            <span id="panspnadivnotshow" style="display:none;">
+                                                <button type="button" id="btnupld" class="saas-prof-doc-btn saas-prof-doc-btn--upload" onclick="uploadpancardDoc(@ViewBag.admin.ID)"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Upload</button>
+                                            </span>
+                                        }
+                                    </span>
                                 </div>
-                                @*<span class="badge" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px;font-weight:400;"><a href="@Url.Content("~/" + ViewBag.admin.serciveaggrementpath)" style="cursor:pointer;text-decoration:none;color:#555;" target="_blank">View Link</a></span>*@
-                                @if (ViewBag.admin.serciveaggrementpath == null)
-                                {
-
-                                    <span id="servicespnadivshow" style="display:none;float:right;">
-                                        <span class="badge" id="btndelservice" style="border-radius:0px;background:#f0f0f0; margin-right:34px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="deleteDoc(@ViewBag.admin.ID,'ServiceAgrrement')">Delete</span>
-                                        <span class="badge" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" style="margin-right:0px;background-color:#f0f0f0;color:#000;padding: 6px 15px;border:1px solid #bbb;border-radius:0px;font-weight:400;" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="ServiceAgrrement" })">View</span>
-
-                                    </span>
-                                    <span id="servicespnadivnotshow">
-                                        <span class="badge " style="border-radius:0px;background:#f0f0f0; margin-right:93px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="uploadserviceDoc(@ViewBag.admin.ID)">Upload</span>
-                                    </span>
-
-                                }
-                                else
-                                {
-                                    <span id="servicespnadivshow" style="float:right;">
-                                        <span class="badge" id="btndelservice" style="border-radius:0px;background:#f0f0f0; margin-right:34px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="deleteDoc(@ViewBag.admin.ID,'ServiceAgrrement')">Delete</span>
-                                        @*<span class="badge" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard()" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px;font-weight:400;">View</span>*@
-                                        <span class="badge" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" style="margin-right:0px;background-color:#f0f0f0;color:#000;padding: 6px 15px;border:1px solid #bbb;border-radius:0px;font-weight:400;" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="ServiceAgrrement" })">View</span>
-
-                                    </span>
-                                    <span id="servicespnadivnotshow" style="display:none;">
-                                        <span id="251" class="badge " style="border-radius:0px;background:#f0f0f0; margin-right:93px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="uploadserviceDoc(@ViewBag.admin.ID)">Upload</span>
-                                    </span>
-
-                                    @*<span class="badge" style="border-radius:0px;background:#f0f0f0; margin-right:24px;color:#000;border:1px solid #dddddd;font-weight:400;cursor:pointer;" onclick="deleteDoc(@ViewBag.admin.ID,'ServiceAgrrement')">Delete</span>*@
-                                }
-                            </li>
-
-                            <li class="list-group-item saas-prof-doc-row">
-                                <span class="saas-prof-doc-name">Signature</span>
-                                <span class="saas-prof-doc-tag">Mandatory</span>
-                                <div class="save-aadhar" id="EditsignaturdocModal" style="display:none;">
-                                    @*@using (Html.BeginForm("UploadServiceAggrementdoc", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
-                                        {*@
-                                    <input type="file" id="filesig" name="filesig" />
-                                    <button type="button" id="btnsignature" name="btnsignature">Save</button>
-                                    @*}*@
+                                <div class="saas-prof-doc-upload save-aadhar" id="EditPancarddocModal" style="display:none;">
+                                    <div class="saas-prof-doc-upload__head">
+                                        <strong>Upload Pancard</strong>
+                                        <span>Clear photo or PDF of your PAN card</span>
+                                    </div>
+                                    <div class="saas-prof-doc-upload__fields saas-prof-doc-upload__fields--single">
+                                        <div class="saas-prof-doc-upload__field">
+                                            <label for="filepancrd">Pancard Document</label>
+                                            <div class="saas-prof-file-input">
+                                                <input type="file" class="saas-prof-file-input__native" id="filepancrd" name="filepancrd" accept="image/*,.pdf" />
+                                                <span class="saas-prof-file-input__display" aria-hidden="true">
+                                                    <i class="fas fa-cloud-upload-alt"></i>
+                                                    <span class="saas-prof-file-input__text">Browse file</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="saas-prof-edit-toolbar saas-prof-doc-upload__toolbar">
+                                        <button type="button" id="btnpncard" name="btnpncard" class="saas-prof-btn saas-prof-btn--primary"><i class="fas fa-check" aria-hidden="true"></i> Save</button>
+                                        <button type="button" class="saas-prof-btn saas-prof-btn--muted saas-prof-doc-upload__close" data-close-panel="EditPancarddocModal" data-show-panel="panspnadivnotshow"><i class="fas fa-times" aria-hidden="true"></i> Cancel</button>
+                                    </div>
                                 </div>
-                                @*<span class="badge" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px;font-weight:400;"><a href="@Url.Content("~/" + ViewBag.admin.serciveaggrementpath)" style="cursor:pointer;text-decoration:none;color:#555;" target="_blank">View Link</a></span>*@
-                                @if (ViewBag.admin.signaturepath == null)
-                                {
-
-                                    <span id="sigpnadivshow" style="display:none;float:right;">
-                                        <span class="badge" id="btndelservice" style="border-radius:0px;background:#f0f0f0; margin-right:34px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="deleteDoc(@ViewBag.admin.ID,'Signature')">Delete</span>
-                                        <span class="badge" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" style="margin-right:0px;background-color:#f0f0f0;color:#000;padding: 6px 15px;border:1px solid #bbb;border-radius:0px;font-weight:400;" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Signature" })">View</span>
-
-                                    </span>
-                                    <span id="signaturnotshow" style="float:right;">
-                                        <span class="badge " style="border-radius:0px;background:#f0f0f0;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="uploadsignature(@ViewBag.admin.ID)">Upload</span>
-                                    </span>
-
-                                }
-                                else
-                                {
-                                    <span id="sigpnadivshow" style="float:right;">
-                                        <span class="badge" id="btndelservice" style="border-radius:0px;background:#f0f0f0; margin-right:34px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="deleteDoc(@ViewBag.admin.ID,'Signature')">Delete</span>
-                                        @*<span class="badge" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard()" style="margin-right:0px;background-color:#f0f0f0;color:#999;border:1px solid #bbb;border-radius:0px;font-weight:400;">View</span>*@
-                                        <span class="badge" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" style="margin-right:0px;background-color:#f0f0f0;color:#000;padding: 6px 15px;border:1px solid #bbb;border-radius:0px;font-weight:400;" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Signature" })">View</span>
-
-                                    </span>
-                                    <span id="signaturnotshow" style="display:none;">
-                                        <span id="21451" class="badge " style="border-radius:0px;background:#f0f0f0; margin-right:93px;color:#000;border:1px solid #bbb;font-weight:400;cursor:pointer;" onclick="uploadsignature(@ViewBag.admin.ID)">Upload</span>
-                                    </span>
-
-                                    @*<span class="badge" style="border-radius:0px;background:#f0f0f0; margin-right:24px;color:#000;border:1px solid #dddddd;font-weight:400;cursor:pointer;" onclick="deleteDoc(@ViewBag.admin.ID,'ServiceAgrrement')">Delete</span>*@
-                                }
                             </li>
-
-
+                            <li class="list-group-item saas-prof-doc-row" data-doc-row="service">
+                                <div class="saas-prof-doc-row__grid">
+                                    <span class="saas-prof-doc-name">Service Agreement</span>
+                                    <span class="saas-prof-doc-tag">Mandatory</span>
+                                    <span class="saas-prof-doc-actions">
+                                        @if (ViewBag.admin.serciveaggrementpath == null)
+                                        {
+                                            <span id="servicespnadivshow" style="display:none;">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--delete" id="btndelservice" onclick="deleteDoc(@ViewBag.admin.ID,'ServiceAgrrement')"><i class="fas fa-trash-alt" aria-hidden="true"></i> Delete</button>
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--view" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="ServiceAgrrement" })"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                            </span>
+                                            <span id="servicespnadivnotshow">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--upload" onclick="uploadserviceDoc(@ViewBag.admin.ID)"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Upload</button>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span id="servicespnadivshow">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--delete" id="btndelservice" onclick="deleteDoc(@ViewBag.admin.ID,'ServiceAgrrement')"><i class="fas fa-trash-alt" aria-hidden="true"></i> Delete</button>
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--view" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="ServiceAgrrement" })"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                            </span>
+                                            <span id="servicespnadivnotshow" style="display:none;">
+                                                <button type="button" id="251" class="saas-prof-doc-btn saas-prof-doc-btn--upload" onclick="uploadserviceDoc(@ViewBag.admin.ID)"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Upload</button>
+                                            </span>
+                                        }
+                                    </span>
+                                </div>
+                                <div class="saas-prof-doc-upload save-aadhar" id="EditServicedocModal" style="display:none;">
+                                    <div class="saas-prof-doc-upload__head">
+                                        <strong>Upload Service Agreement</strong>
+                                        <span>Upload signed service agreement document</span>
+                                    </div>
+                                    <div class="saas-prof-doc-upload__fields saas-prof-doc-upload__fields--single">
+                                        <div class="saas-prof-doc-upload__field">
+                                            <label for="filesserv">Service Agreement</label>
+                                            <div class="saas-prof-file-input">
+                                                <input type="file" class="saas-prof-file-input__native" id="filesserv" name="filesserv" accept="image/*,.pdf" />
+                                                <span class="saas-prof-file-input__display" aria-hidden="true">
+                                                    <i class="fas fa-cloud-upload-alt"></i>
+                                                    <span class="saas-prof-file-input__text">Browse file</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="saas-prof-edit-toolbar saas-prof-doc-upload__toolbar">
+                                        <button type="button" id="btnuploadservice" name="btnuploadservice" class="saas-prof-btn saas-prof-btn--primary"><i class="fas fa-check" aria-hidden="true"></i> Save</button>
+                                        <button type="button" class="saas-prof-btn saas-prof-btn--muted saas-prof-doc-upload__close" data-close-panel="EditServicedocModal" data-show-panel="servicespnadivnotshow"><i class="fas fa-times" aria-hidden="true"></i> Cancel</button>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item saas-prof-doc-row" data-doc-row="signature">
+                                <div class="saas-prof-doc-row__grid">
+                                    <span class="saas-prof-doc-name">Signature</span>
+                                    <span class="saas-prof-doc-tag">Mandatory</span>
+                                    <span class="saas-prof-doc-actions">
+                                        @if (ViewBag.admin.signaturepath == null)
+                                        {
+                                            <span id="sigpnadivshow" style="display:none;">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--delete" id="btndelservice" onclick="deleteDoc(@ViewBag.admin.ID,'Signature')"><i class="fas fa-trash-alt" aria-hidden="true"></i> Delete</button>
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--view" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Signature" })"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                            </span>
+                                            <span id="signaturnotshow">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--upload" onclick="uploadsignature(@ViewBag.admin.ID)"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Upload</button>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span id="sigpnadivshow">
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--delete" id="btndelservice" onclick="deleteDoc(@ViewBag.admin.ID,'Signature')"><i class="fas fa-trash-alt" aria-hidden="true"></i> Delete</button>
+                                                <button type="button" class="saas-prof-doc-btn saas-prof-doc-btn--view" id="btnviewservice" data-toggle="modal" data-target="#myModalUploadImg" onclick="getAdharCard(this)" data-href="@Url.Action("ShowingImages","Home",new {id=@ViewBag.admin.ID,imgtype="Signature" })"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                            </span>
+                                            <span id="signaturnotshow" style="display:none;">
+                                                <button type="button" id="21451" class="saas-prof-doc-btn saas-prof-doc-btn--upload" onclick="uploadsignature(@ViewBag.admin.ID)"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> Upload</button>
+                                            </span>
+                                        }
+                                    </span>
+                                </div>
+                                <div class="saas-prof-doc-upload save-aadhar" id="EditsignaturdocModal" style="display:none;">
+                                    <div class="saas-prof-doc-upload__head">
+                                        <strong>Upload Signature</strong>
+                                        <span>Upload a clear image of your signature</span>
+                                    </div>
+                                    <div class="saas-prof-doc-upload__fields saas-prof-doc-upload__fields--single">
+                                        <div class="saas-prof-doc-upload__field">
+                                            <label for="filesig">Signature Document</label>
+                                            <div class="saas-prof-file-input">
+                                                <input type="file" class="saas-prof-file-input__native" id="filesig" name="filesig" accept="image/*,.pdf" />
+                                                <span class="saas-prof-file-input__display" aria-hidden="true">
+                                                    <i class="fas fa-cloud-upload-alt"></i>
+                                                    <span class="saas-prof-file-input__text">Browse file</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="saas-prof-edit-toolbar saas-prof-doc-upload__toolbar">
+                                        <button type="button" id="btnsignature" name="btnsignature" class="saas-prof-btn saas-prof-btn--primary"><i class="fas fa-check" aria-hidden="true"></i> Save</button>
+                                        <button type="button" class="saas-prof-btn saas-prof-btn--muted saas-prof-doc-upload__close" data-close-panel="EditsignaturdocModal" data-show-panel="signaturnotshow"><i class="fas fa-times" aria-hidden="true"></i> Cancel</button>
+                                    </div>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </article>
@@ -1252,46 +1288,39 @@
 </div>
 
 <!--Edit Profile Image Modal Popup-->
-<div class="modal fade saas-prof-modal" id="EditprofileimageModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div class="modal fade saas-prof-modal saas-prof-profile-img-modal" id="EditprofileimageModal" tabindex="-1" role="dialog" aria-labelledby="editProfileImageTitle">
+    <div class="modal-dialog modal-dialog-centered saas-prof-profile-img-modal__dialog" role="document">
         <div class="modal-content saas-prof-modal__content">
             <div class="modal-header saas-prof-modal__header">
-                <h4 class="modal-title saas-prof-modal__title">Update Profile Image</h4>
+                <h4 class="modal-title saas-prof-modal__title" id="editProfileImageTitle"><i class="fas fa-camera" aria-hidden="true"></i> Update Profile Image</h4>
+                <button type="button" class="saas-prof-profile-img-modal__close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
             </div>
-            @using (Html.BeginForm("Uploadprofileimage", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
+            @using (Html.BeginForm("Uploadprofileimage", "Home", FormMethod.Post, new { encType = "multipart/form-data", id = "profileImageUploadForm" }))
             {
-                <div class="modal-body saas-prof-modal__body">
-                    <div class="body">
-
-                        <div class="row clearfix">
-                            <input type="text" id="txtimgid" name="txtimgid" style="display:none;" />
-                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
-                                <label for="email_address_2">Upload Image</label>
-                            </div>
-
-                            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="" >
-                                        <input type="file" class="form-control" id="filess" name="filess" />
-                                    </div>
-                                </div>
+                <div class="modal-body saas-prof-modal__body saas-prof-profile-img-modal__body">
+                    <input type="hidden" id="txtimgid" name="txtimgid" />
+                    <div class="saas-prof-profile-img-upload">
+                        <div class="saas-prof-profile-img-upload__head">
+                            <strong>Choose a new profile photo</strong>
+                            <span>Supported: JPG, PNG, GIF — clear face photo works best</span>
+                        </div>
+                        <div class="saas-prof-profile-img-upload__field">
+                            <label for="profileImageFile">Profile image</label>
+                            <div class="saas-prof-file-input saas-prof-profile-img-file">
+                                <input type="file" class="saas-prof-file-input__native vm-no-select2" id="profileImageFile" name="filess" accept="image/*" required="required" />
+                                <span class="saas-prof-file-input__display" aria-hidden="true">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span class="saas-prof-file-input__text">Browse image</span>
+                                </span>
                             </div>
                         </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-left: -3px; height:34px;" data-dismiss="modal">
-                                <span style="color:black;">Close</span>
-                            </button>
-                            <button type="submit" class="btn fullbodydycolorbg waves-effect" style="margin-top: 4px; margin-right:12px; height:34px;">
-                                <span style="color:#fff;">Save Change</span>
-                            </button>
-
-                        </div>
-
                     </div>
                 </div>
+                <div class="modal-footer saas-prof-profile-img-modal__footer">
+                    <button type="button" class="saas-prof-profile-img-modal__btn saas-prof-profile-img-modal__btn--close" data-dismiss="modal"><i class="fas fa-times" aria-hidden="true"></i> Close</button>
+                    <button type="submit" class="saas-prof-profile-img-modal__btn saas-prof-profile-img-modal__btn--save"><i class="fas fa-check" aria-hidden="true"></i> Save Change</button>
+                </div>
             }
-
         </div>
     </div>
 </div>
@@ -1967,10 +1996,10 @@
           //  var files = fileUpload.files;
             //var fileData = new FormData();
              var formData = new FormData();
-             var totalFiles = document.getElementById("filess").files.length;
+             var totalFiles = document.getElementById("profileImageFile").files.length;
              for (var i = 0; i < totalFiles; i++)
             {
-                var file = document.getElementById("filess").files[i];
+                var file = document.getElementById("profileImageFile").files[i];
 
                 formData.append("FileUpload", file);
             }
@@ -2035,7 +2064,7 @@
                                  $('#servicespnadivshow').show();
                                  $('#servicespnadivnotshow').hide();
 
-                                 $('#EditServicedocModal').hide();
+                                 $('#EditServicedocModal').hide().closest('.saas-prof-doc-row').removeClass('is-upload-open');
 
                                  $('#imgAdharCard').attr('src', '../../' + result)
                                  $('#myModalUploadImg').modal('toggle');
@@ -2086,7 +2115,7 @@
                                  $('#panspnadivshow').show();
                                  $('#panspnadivnotshow').hide();
 
-                                 $('#EditPancarddocModal').hide();
+                                 $('#EditPancarddocModal').hide().closest('.saas-prof-doc-row').removeClass('is-upload-open');
 
                                  $('#imgAdharCard').attr('src', '../../' + result)
                                  $('#myModalUploadImg').modal('toggle');
@@ -2137,7 +2166,7 @@
                                  $('#sigpnadivshow').show();
                                  $('#signaturnotshow').hide();
 
-                                 $('#EditsignaturdocModal').hide();
+                                 $('#EditsignaturdocModal').hide().closest('.saas-prof-doc-row').removeClass('is-upload-open');
 
                                  $('#imgAdharCard').attr('src', '../../' + result)
                                  $('#myModalUploadImg').modal('toggle');
@@ -2200,7 +2229,7 @@
                                  //$('#aadhrupld').hide();
                                    $('#aadharspnadivshow').show();
                                  $('#aadharspnadivnotshow').hide();
-                                 $('#EditAadhaardocModal').hide();
+                                 $('#EditAadhaardocModal').hide().closest('.saas-prof-doc-row').removeClass('is-upload-open');
                                  $('#imgAdharCard').attr('src', '../../' + result)
                                  $('#myModalUploadImg').modal('toggle');
 
@@ -2414,12 +2443,11 @@
 <!--Upload Aadhaar Card Doc Script-->
 <script>
     function uploadaadhaarDoc(ID) {
-
         $("#txtaadharid").val(ID);
+        $('.saas-prof-doc-row').removeClass('is-upload-open');
+        $('#EditAadhaardocModal').closest('.saas-prof-doc-row').addClass('is-upload-open');
         $('#EditAadhaardocModal').show();
-        $('#aadhrupld').hide();
         $('#aadharspnadivnotshow').hide();
-
     }
 </script>
 
@@ -2428,6 +2456,8 @@
 <script>
     function uploadpancardDoc(ID) {
         $("#txtpancardid").val(ID);
+        $('.saas-prof-doc-row').removeClass('is-upload-open');
+        $('#EditPancarddocModal').closest('.saas-prof-doc-row').addClass('is-upload-open');
         $('#EditPancarddocModal').show();
         $('#panspnadivnotshow').hide();
     }
@@ -2437,6 +2467,8 @@
 <script>
     function uploadserviceDoc(ID) {
         $("#txtserviceid").val(ID);
+        $('.saas-prof-doc-row').removeClass('is-upload-open');
+        $('#EditServicedocModal').closest('.saas-prof-doc-row').addClass('is-upload-open');
         $('#EditServicedocModal').show();
         $('#servicespnadivnotshow').hide();
     }
@@ -2447,6 +2479,8 @@
 <script>
     function uploadsignature(ID) {
         $("#txtsignatureid").val(ID);
+        $('.saas-prof-doc-row').removeClass('is-upload-open');
+        $('#EditsignaturdocModal').closest('.saas-prof-doc-row').addClass('is-upload-open');
         $('#EditsignaturdocModal').show();
         $('#signaturnotshow').hide();
     }
@@ -2632,4 +2666,4 @@ function WriteOTPStatus(roleName, stsBtn) {
         });
     </script>*@
 
-<script src="~/MainFrontDesign/js/admin-profile-page.js?v=8"></script>
+<script src="~/MainFrontDesign/js/admin-profile-page.js?v=11"></script>

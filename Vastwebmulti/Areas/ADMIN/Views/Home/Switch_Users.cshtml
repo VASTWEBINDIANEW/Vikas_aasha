@@ -271,9 +271,6 @@
     }
 </style>
 
-<!-- Select2 -->
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
 <script>
@@ -281,9 +278,11 @@
 
     /* -- Select2 init -- */
     ravi(document).ready(function () {
-        ravi("select").select2();
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
     });
-    $(document).ajaxComplete(function () { ravi("select").select2(); });
+    $(document).ajaxComplete(function () {
+        if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); }
+    });
 
     /* -- Tab switching -- */
     function switchSUTab(panelId, ajaxUrl, btn) {

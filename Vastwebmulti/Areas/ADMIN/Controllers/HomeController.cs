@@ -52509,8 +52509,6 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             DateTime frm_date = Convert.ToDateTime(dt).Date;
             DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
             var model = db.select_rem_pur_order("ALL", userids, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
-            //return PartialView("_Retailer_showpurchasePartail", model);
-
             return RedirectToAction("Retailer_showpurchase");
         }
 
@@ -113929,16 +113927,6 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
         [HttpPost]
         public ActionResult Actual_Admin_income(DateTime txt_frm_date, DateTime txt_to_date, string btnExport, string hdttable)
         {
-            //ViewBag.chk = "post";
-            //txt_to_date = txt_to_date.AddDays(1);
-            //string frm_date = Convert.ToDateTime(txt_frm_date).ToShortDateString();
-            //string to_date = Convert.ToDateTime(txt_frm_date).AddDays(1).ToString();
-            //var ch1 = db.money_transfer_report_old("Admin", "ALL", 50000, "ALL", "ALL", Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
-            //ViewData["totals"] = ch1.Where(s => s.status.ToUpper().Contains("SUCCESS")).Sum(s => Convert.ToInt32(s.amount));
-            //ViewData["totalf"] = ch1.Where(s => s.status.ToUpper().Contains("FAILED")).Sum(s => Convert.ToInt32(s.amount));
-            //ViewData["totalp"] = ch1.Where(s => s.status.ToUpper().Contains("PENDING")).Sum(s => Convert.ToInt32(s.amount));
-            //var ch = db.admin_income_report(Convert.ToDateTime(txt_frm_date), Convert.ToDateTime(txt_to_date)).ToList();
-
             ViewBag.chk = "post";
 
             var ch = db.admin_income_report(txt_frm_date, txt_to_date).ToList();

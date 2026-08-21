@@ -14,7 +14,6 @@
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=30" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=18" rel="stylesheet" />
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-radiant-ref-location-page">
@@ -162,7 +161,7 @@
     </div>
 </section>
 
-<div class="modal fade saas-admin-modal vm-dmt-modal vm-radiant-ref-add-modal" id="addLoiModal" tabindex="-1" role="dialog" aria-labelledby="addLoiModalTitle" aria-hidden="true">
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-radiant-ref-add-modal" id="addLoiModal" tabindex="-1" role="dialog" aria-labelledby="addLoiModalTitle" aria-hidden="true" data-admin-select2-custom="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             @using (Html.BeginForm("Add_new_LOI", "Home", new { area = "ADMIN" }, FormMethod.Post, new { id = "addLoiForm", @onsubmit = "return validateLatLongOnSubmit();" }))
@@ -186,14 +185,12 @@
                     <div class="vm-dmt-modal-grid vm-dmt-modal-grid--2 vm-radiant-ref-form-grid">
                         <div class="vm-dmt-modal-field">
                             <label for="state1">State</label>
-                            @Html.DropDownList("state1", ViewBag.state1 as SelectList, "Select State", new { @id = "state1", @class = "form-control vm-dmt-modal-input select2-inside-modal", @required = "required", @onchange = "radiantRefDistrictBind(this)" })
+                            @Html.DropDownList("state1", ViewBag.state1 as SelectList, "Select State", new { @id = "state1", @class = "form-control vm-dmt-modal-input select2-inside-modal", @required = "required" })
                             <span class="vm-radiant-ref-field-error text-danger" id="state1msg"></span>
                         </div>
                         <div class="vm-dmt-modal-field">
                             <label for="district1">District</label>
-                            <select id="district1" class="form-control vm-dmt-modal-input select2-inside-modal" name="district1" required>
-                                <option value="">Select District</option>
-                            </select>
+                            <select id="district1" class="form-control vm-dmt-modal-input select2-inside-modal" name="district1" required></select>
                             <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
                         </div>
                         <div class="vm-dmt-modal-field">
@@ -398,7 +395,6 @@
     </div>
 </div>
 
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
 
 <script>
@@ -418,25 +414,6 @@
             }
             var value = btn.getAttribute('data-' + id) || btn.dataset[id] || '';
             el.textContent = String(value).trim() !== '' ? String(value) : '�';
-        });
-    }
-
-    function radiantRefDistrictBind(el) {
-        var id = $(el).val();
-
-        $('#district1').empty().append('<option value="">Select District</option>');
-
-        if (!id) {
-            $('#district1').trigger('change.select2');
-            return;
-        }
-
-        $.get(window.radiantRefDistrictUrl, { state_id: id }, function (data) {
-            var options = '<option value="">Select District</option>';
-            $.each(data, function (i, v1) {
-                options += '<option value="' + v1.value + '">' + v1.text + '</option>';
-            });
-            $('#district1').html(options).trigger('change.select2');
         });
     }
 
@@ -479,31 +456,155 @@
     function validateLatLongOnSubmit() {
         return validateLatitude() && validateLongitude();
     }
+</script>
 
-    function initRadiantRefModalSelect2(modalId) {
-        var $modal = $(modalId);
-        $modal.find('.select2-inside-modal').each(function () {
-            var $el = $(this);
-            if ($el.hasClass('select2-hidden-accessible')) {
-                $el.select2('destroy');
+@section PostSelect2Scripts {
+<script>
+    (function ($) {
+        if (!$ || !$.fn.select2) {
+            return;
+        }
+
+        var $modal = $('#addLoiModal');
+        if (!$modal.length) {
+            return;
+        }
+
+        $modal.appendTo('body');
+
+        var select2Ready = false;
+        var districtRequest = null;
+
+        var select2ModalOpts = {
+            width: '100%',
+            dropdownParent: $modal,
+            minimumResultsForSearch: 0
+        };
+
+        function destroyRadiantRefSelect2($el) {
+            if (!$el || !$el.length) {
+                return;
             }
-            $el.select2({
-                width: '100%',
-                dropdownParent: $modal,
-                minimumResultsForSearch: 6
+            if ($el.hasClass('select2-hidden-accessible')) {
+                try {
+                    $el.select2('destroy');
+                } catch (e) { /* ignore stale instances */ }
+            }
+            $el.next('.select2-container').remove();
+        }
+
+        var districtBindTimer = null;
+
+        function bindRadiantRefStateChange() {
+            $('#state1')
+                .off('change.radiantRef select2:select.radiantRef')
+                .on('change.radiantRef select2:select.radiantRef', function () {
+                    var el = this;
+                    window.clearTimeout(districtBindTimer);
+                    districtBindTimer = window.setTimeout(function () {
+                        window.radiantRefDistrictBind(el);
+                    }, 0);
+                });
+        }
+
+        function initRadiantRefModalSelect2(force) {
+            if (select2Ready && !force) {
+                return;
+            }
+
+            $modal.find('.select2-inside-modal').each(function () {
+                var $el = $(this);
+                destroyRadiantRefSelect2($el);
+                $el.select2(select2ModalOpts);
             });
-        });
-    }
 
-    $(document).ready(function () {
-        $('#addLoiModal').on('shown.bs.modal', function () {
-            initRadiantRefModalSelect2('#addLoiModal');
+            $('#state1').removeAttr('data-vm-admin-district-bound');
+            bindRadiantRefStateChange();
+            select2Ready = true;
+
+            var stateVal = $('#state1').val();
+            if (stateVal) {
+                window.radiantRefDistrictBind(document.getElementById('state1'));
+            }
+        }
+
+        function refreshRadiantRefDistrictSelect2() {
+            var $district = $('#district1');
+            destroyRadiantRefSelect2($district);
+            $district.select2(select2ModalOpts);
+        }
+
+        window.radiantRefDistrictBind = function (el) {
+            var id = $(el).val();
+            var $district = $('#district1');
+
+            if (districtRequest && districtRequest.readyState !== 4) {
+                districtRequest.abort();
+            }
+
+            destroyRadiantRefSelect2($district);
+            $district.empty().append('<option value="">Please wait...</option>');
+            refreshRadiantRefDistrictSelect2();
+
+            if (!id) {
+                $district.empty().append('<option value="">Select District</option>');
+                refreshRadiantRefDistrictSelect2();
+                return;
+            }
+
+            districtRequest = $.ajax({
+                url: window.radiantRefDistrictUrl,
+                data: { state_id: id },
+                cache: false,
+                type: 'GET',
+                dataType: 'json'
+            }).done(function (data) {
+                var options = '<option value="">Select District</option>';
+
+                $.each(data || [], function (i, v1) {
+                    var val = v1.value != null ? v1.value : v1.Value;
+                    var txt = v1.text != null ? v1.text : v1.Text;
+                    options += '<option value="' + val + '">' + txt + '</option>';
+                });
+
+                destroyRadiantRefSelect2($district);
+                $district.html(options);
+                refreshRadiantRefDistrictSelect2();
+            }).fail(function (xhr, status) {
+                if (status === 'abort') {
+                    return;
+                }
+                destroyRadiantRefSelect2($district);
+                $district.empty().append('<option value="">Select District</option>');
+                refreshRadiantRefDistrictSelect2();
+            });
+        };
+
+        $modal.on('shown.bs.modal', function () {
+            if (!$('#district1 option').length) {
+                $('#district1').append('<option value="">Select District</option>');
+            }
+            initRadiantRefModalSelect2(true);
         });
 
-        $('#addLoiModal').on('hidden.bs.modal', function () {
-            $('#addLoiForm')[0].reset();
-            $('#district1').empty().append('<option value="">Select District</option>');
+        $modal.on('hidden.bs.modal', function () {
+            select2Ready = false;
+
+            if (districtRequest && districtRequest.readyState !== 4) {
+                districtRequest.abort();
+            }
+
+            if ($('#addLoiForm').length) {
+                $('#addLoiForm')[0].reset();
+            }
+
+            $modal.find('.select2-inside-modal').each(function () {
+                destroyRadiantRefSelect2($(this));
+            });
+
+            $('#district1').empty();
             $('#latError, #longError, #state1msg').text('');
         });
-    });
+    })(window.jQuery);
 </script>
+}

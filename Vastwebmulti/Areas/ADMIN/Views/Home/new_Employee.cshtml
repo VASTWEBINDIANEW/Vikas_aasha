@@ -191,16 +191,17 @@
     </div>
 </section>
 
-<!-- Select2 -->
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
+<!-- Select2: global admin layout -->
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
 <script>
     /* -- Select2 -- */
     var ravi = $.noConflict();
-    ravi(document).ready(function () { ravi("select").select2(); });
-    $(document).ajaxComplete(function () { ravi("select").select2(); });
+    ravi(document).ready(function () { if (window.bootAdminSelect2) { window.bootAdminSelect2(); } });
+    $(document).ajaxComplete(function (event, xhr, settings) {
+        if (settings && settings.url && settings.url.indexOf('DistrictList') >= 0) { return; }
+        if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); }
+    });
 
     /* -- Table search -- */
     function neSearchTable() {
@@ -226,26 +227,6 @@
         return true;
     }
 
-    /* -- State ? District cascade -- */
-    ravi(function () {
-        ravi('#State1').change(function () {
-            var stid = ravi('#State1').val();
-            if (!stid) return;
-            ravi("#District1").html("<option value='0'>Please wait�</option>").show();
-            ravi.ajax({
-                url: '@Url.Action("DistrictList","Home")',
-                data: { Id: stid }, cache: false, type: "POST",
-                success: function (data) {
-                    var markup = "<option value='0'>Select District</option>";
-                    for (var x = 0; x < data.length; x++) {
-                        markup += "<option value='" + data[x].Value + "'>" + data[x].Text + "</option>";
-                    }
-                    ravi("#District1").html(markup).show();
-                },
-                error: function () { alert("Failed to load districts."); }
-            });
-        });
-    });
 
     /* -- Status toggle (AJAX) -- */
     function statusIsActive(eid) {

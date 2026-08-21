@@ -204,6 +204,20 @@ body.saas-admin-ui #purchaseApproveModal .modal-content {
     overflow: hidden;
 }
 
+body.saas-admin-ui #purchaseApproveModal.modal {
+    z-index: 100001 !important;
+}
+
+body.saas-admin-ui #purchaseApproveModal.modal.in,
+body.saas-admin-ui #purchaseApproveModal.modal.show {
+    z-index: 100001 !important;
+}
+
+body.saas-admin-ui #purchaseApproveModal ~ .modal-backdrop,
+body.saas-admin-ui .modal-backdrop.purchase-approve-backdrop {
+    z-index: 100000 !important;
+}
+
 /* Toolbar card (single block on mobile) */
 body.saas-admin-ui .saas-purchase-report-page .saas-purchase-toolbar-unified {
     background: var(--acc-surface, #fff);

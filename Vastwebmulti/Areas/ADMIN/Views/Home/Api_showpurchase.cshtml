@@ -10,13 +10,12 @@
     if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
     var dateMode = (ViewBag.chk as string) == "post" ? "set" : "get";
     ViewBag.PurchaseUpdateAction = "updatepurchage_Api";
-    ViewBag.PurchaseModalAjax = false;
 }
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-purchase-report-modern.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-purchase-report-modern.css?v=4" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-purchase-report-page">
     <div class="container-fluid">
@@ -130,8 +129,9 @@
 </section>
 
 @Html.Partial("_PurchaseApproveModal")
-<script src="~/MainFrontDesign/js/admin-report-datepicker.js"></script>
-<script src="~/MainFrontDesign/js/admin-purchase-report.js"></script>
+
+@section PostSelect2Scripts {
+<script src="~/MainFrontDesign/js/admin-purchase-report.js?v=4"></script>
 <script>
     $("#btnExport").on("click", function () {
         location.href = '@Url.Action("ExcelApiReport", "Home")?txt_frm_date=' + encodeURIComponent($("#txt_frm_date").val()) + '&txt_to_date=' + encodeURIComponent($("#txt_to_date").val());
@@ -145,3 +145,4 @@
         var err = '@ViewData["failedorder"]'; if (err) swal("Oops!", err, "error");
     });
 </script>
+}

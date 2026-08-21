@@ -197,18 +197,13 @@
 <script src="~/AdminDesign/js/demo.js"></script>
 <script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
 <script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=2"></script>
 
 <script>
     function rtdInitSelect2() {
-        $('#allretailer, #allDetails').select2({
-            width: '100%',
-            placeholder: function () {
-                return $(this).data('placeholder') || 'Select';
-            }
-        });
+        if (window.refreshAdminSelect2) {
+            window.refreshAdminSelect2($('#allretailer, #allDetails').closest('section'));
+        }
     }
 
     function rtdResetForm() {

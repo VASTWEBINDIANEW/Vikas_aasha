@@ -14,10 +14,18 @@
     if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
 
     var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    DateTime postedToDate;
+    if (dateMode == "post" && DateTime.TryParse(toDate, out postedToDate))
+    {
+        toDate = postedToDate.Date.AddDays(-1).ToString("yyyy-MM-dd");
+    }
 
     decimal totalAmount = reports.Sum(x => x.amount ?? 0m);
     decimal totalPurchase = reports.Sum(x => x.purchase ?? 0m);
     decimal totalIncome = reports.Sum(x => x.income ?? 0m);
+
+    Func<decimal?, string> fmtAmount = v => (v ?? 0m).ToString("N0");
+    Func<decimal?, string> fmtMoney = v => (v ?? 0m).ToString("N2");
 }
 
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
@@ -169,12 +177,12 @@
                                         <tr>
                                             <td class="vm-adb-num">@srNo</td>
                                             <td class="vm-adb-text">@item.trntype</td>
-                                            <td class="vm-adb-num">@item.amount</td>
-                                            <td class="vm-adb-num">@item.purchase</td>
-                                            <td class="vm-adb-num">@item.retailerfinal</td>
-                                            <td class="vm-adb-num">@item.dealerfinal</td>
-                                            <td class="vm-adb-num">@item.mdfinal</td>
-                                            <td class="vm-adb-num">@item.income</td>
+                                            <td class="vm-adb-num">@fmtAmount(item.amount)</td>
+                                            <td class="vm-adb-num">@fmtMoney(item.purchase)</td>
+                                            <td class="vm-adb-num">@fmtMoney(item.retailerfinal)</td>
+                                            <td class="vm-adb-num">@fmtMoney(item.dealerfinal)</td>
+                                            <td class="vm-adb-num">@fmtMoney(item.mdfinal)</td>
+                                            <td class="vm-adb-num">@fmtMoney(item.income)</td>
                                         </tr>
                                         srNo++;
                                     }
@@ -203,6 +211,46 @@
 <script src="~/MainFrontDesign/js/admin-report-excel-export.js?v=2"></script>
 
 <script>
+    function adbFormatYmd(dateObj) {
+        var y = dateObj.getFullYear();
+        var m = ('0' + (dateObj.getMonth() + 1)).slice(-2);
+        var d = ('0' + dateObj.getDate()).slice(-2);
+        return y + '-' + m + '-' + d;
+    }
+
+    function adbAddOneDayYmd(ymd) {
+        if (!ymd) {
+            return ymd;
+        }
+        var parts = ymd.split('-');
+        if (parts.length !== 3) {
+            return ymd;
+        }
+        var dt = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        dt.setDate(dt.getDate() + 1);
+        return adbFormatYmd(dt);
+    }
+
+    function submitActualDayBookForm(formEl) {
+        if (!formEl) {
+            return;
+        }
+
+        var $form = $(formEl);
+        var frmVal = ($('#txt_frm_date').val() || '').trim();
+        var toDisplay = ($('#txt_to_date').val() || '').trim();
+        var toServer = adbAddOneDayYmd(toDisplay);
+
+        $form.find('input[name="txt_frm_date"], input[name="txt_to_date"]').not('#txt_frm_date, #txt_to_date').remove();
+
+        $('#txt_frm_date, #txt_to_date').removeAttr('name');
+
+        $('<input>', { type: 'hidden', name: 'txt_frm_date', value: frmVal }).appendTo($form);
+        $('<input>', { type: 'hidden', name: 'txt_to_date', value: toServer }).appendTo($form);
+
+        formEl.submit();
+    }
+
     function hideActualDayBookTotals() {
         var $panel = $('#actualDayBookTotalsPanel');
         var $btn = $('.vm-adb-totals-btn');
@@ -269,11 +317,24 @@
     $(document).ready(function () {
         initActualDayBookDatepickers();
 
+        $('#actualDayBookForm').on('submit', function (e) {
+            e.preventDefault();
+            submitActualDayBookForm(this);
+        });
+
         $('#actualDayBookForm button[type="submit"]').on('click', function () {
             $('#hdnBtnExport').val('');
         });
 
         $('#btnExportA').on('click', exportActualDayBookExcel);
         $('#btnPDFA').on('click', exportActualDayBookPdf);
+
+        var $form = $('#actualDayBookForm');
+        if ($form.length && ($form.attr('data-date-mode') || '').toLowerCase() === 'get') {
+            var today = adbFormatYmd(new Date());
+            $('#txt_frm_date').val(today);
+            $('#txt_to_date').val(today);
+            submitActualDayBookForm($form[0]);
+        }
     });
 </script>

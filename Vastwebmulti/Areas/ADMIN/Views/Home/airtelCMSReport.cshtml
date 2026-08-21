@@ -32,7 +32,7 @@
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-cms-report-status.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-cms-report-status.css?v=3" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 <style>
@@ -284,8 +284,6 @@
     </div>
 </section>
 
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
 <script>
     function hideAirtelCmsTotals() {
         var $panel = $('#airtelCmsTotalsPanel');
@@ -348,12 +346,14 @@
     }
 
     function initAirtelCmsSelect2() {
-        if (!$.fn.select2) {
+        if (window.bootAdminSelect2) {
+            window.bootAdminSelect2();
             return;
         }
+
         $('#status, #Retailers').select2({
             width: '100%',
-            minimumResultsForSearch: 8
+            minimumResultsForSearch: 0
         });
     }
 

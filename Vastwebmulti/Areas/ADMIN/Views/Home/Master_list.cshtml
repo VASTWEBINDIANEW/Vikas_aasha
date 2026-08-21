@@ -680,9 +680,6 @@
 <script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
 <script src="~/AdminDesign/js/demo.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
-
 <script>
     $('#btnExport').click(function () {
 
@@ -750,16 +747,15 @@ window.open(
 
 <script>
     var ravi = $.noConflict()
+    var vmMlDistrictUrl = '@Url.Action("DistrictList","Home")';
     ravi(document).ready(function () {
-
-        // Initialize select2
-        ravi("select").select2();
-
-        // Read selected option
-
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
     });
-    $(document).ajaxComplete(function () {
-        ravi("select").select2();
+    $(document).ajaxComplete(function (event, xhr, settings) {
+        if (settings && settings.url && settings.url.indexOf('DistrictList') >= 0) {
+            return;
+        }
+        if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); }
     });
 </script>
 
@@ -779,20 +775,14 @@ window.open(
 </script>
 <!--Add fill dropdown list-->
 <script language="javascript" type="text/javascript">
-                    $(function () {
-                        ravi('#State').change(function () {
-                            // alert('Value:' + ' ' + $('#State1').val())
-                            var stid = $('#State').val()
-
-                            GetDistrict(stid)
-                            GetDistrict1(stid)
-                        });
-                    })
-
                     function GetDistrict(_stateId) {
+                        if (window.loadAdminDistrictSelect) {
+                            window.loadAdminDistrictSelect('#District', _stateId, vmMlDistrictUrl, { placeholder: 'Select District' });
+                            return;
+                        }
                         var procemessage = "<option value='0'> Please wait...</option>";
                         $("#District").html(procemessage).show();
-                        var url = '@Url.Action("DistrictList","Home")'
+                        var url = vmMlDistrictUrl;
                         $.ajax({
                             url: url,
                             data: { Id: _stateId },
@@ -814,9 +804,13 @@ window.open(
                     }
 
     function GetDistrict1(_stateId) {
+        if (window.loadAdminDistrictSelect) {
+            window.loadAdminDistrictSelect('#District1', _stateId, vmMlDistrictUrl, { placeholder: 'Select district' });
+            return;
+        }
         var procemessage = "<option value='0'> Please wait...</option>";
         $("#District1").html(procemessage).show();
-        var url = '@Url.Action("DistrictList","Home")'
+        var url = vmMlDistrictUrl;
         $.ajax({
             url: url,
             data: { Id: _stateId },
@@ -825,7 +819,6 @@ window.open(
             success: function (data) {
                 ravi("#District1").html("");
                 for (var x = 0; x < data.length; x++) {
-                    //alert(markup)
                     ravi("#District1").append($('<option></option>').val(data[x].Value).html(data[x].Text));
                 }
 
@@ -837,42 +830,6 @@ window.open(
     }
 
 
-</script>
-<script language="javascript" type="text/javascript">
-                    $(function () {
-                        ravi('#State1').change(function () {
-                            // alert('Value:' + ' ' + $('#State1').val())
-                            var stid = $('#State1').val()
-                            if (stid === "") {
-                                stid = 0;
-                                //alert(stid)
-                            }
-                            else {
-                                //alert(stid)
-                                GetDistrict(stid)
-                            }
-                            function GetDistrict(_stateId) {
-                                var procemessage = "<option value='0'> Please wait...</option>";
-                                $("#District1").html(procemessage).show();
-                                var url = '@Url.Action("DistrictList","Home")'
-                                $.ajax({
-                                    url: url,
-                                    data: { Id: _stateId },
-                                    cache: false,
-                                    type: "POST",
-                                    success: function (data) {
-                                       ravi("#District1").html("");
-                                         for (var x = 0; x < data.length; x++) {
-                                            ravi("#District1").append($('<option></option>').val(data[x].Value).html(data[x].Text));
-                                          }
-                                    },
-                                    error: function (reponse) {
-                                        alert("error1 : " + reponse);
-                                    }
-                                });
-                            }
-                        });
-                    })
 </script>
 <!--Edit master detail-->
 <script type="text/javascript">

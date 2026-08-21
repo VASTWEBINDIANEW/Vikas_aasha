@@ -121,7 +121,6 @@
     }
 </style>
 
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.js"></script>
 <script>
     function loadEmployeePermissions(val, empName) {
         if (!val) return;
@@ -147,18 +146,16 @@
     }
 
     $(document).ready(function () {
-        if ($.fn.select2) {
-            $('#EmployeenameID').select2({ width: '100%', minimumResultsForSearch: 4 });
-            $('#EmployeenameID').on('select2:select', function (e) {
-                loadEmployeePermissions(e.params.data.id, e.params.data.text);
-            });
-            /* select2:unselect / clearing placeholder */
-            $('#EmployeenameID').on('select2:unselect', function () {
-                $('#EmployeeIDforpart').val('');
-                $('#emp-perm-name-badge').hide();
-            });
-        }
-        /* native change � fires when select2 is NOT loaded */
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
+        $('#EmployeenameID').on('select2:select', function (e) {
+            loadEmployeePermissions(e.params.data.id, e.params.data.text);
+        });
+        /* select2:unselect / clearing placeholder */
+        $('#EmployeenameID').on('select2:unselect', function () {
+            $('#EmployeeIDforpart').val('');
+            $('#emp-perm-name-badge').hide();
+        });
+        /* native change — fires when select2 is NOT loaded */
         $('#EmployeenameID').on('change', function () {
             if ($.fn.select2) return;
             var val = $(this).val();

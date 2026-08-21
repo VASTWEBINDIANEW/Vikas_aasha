@@ -509,7 +509,7 @@
 </script>
 <script>
     function OnSuccess() { $(".modal-backdrop").hide(); }
-    $(document).ajaxComplete(function () { ravi("select").select2(); })
+    $(document).ajaxComplete(function () { if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); } })
 </script>
 <script language="javascript" type="text/javascript">
     function Editstatechange() {

@@ -109,12 +109,9 @@
     </div>
 </section>
 
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 <script>
     $(function () {
-        if ($.fn.select2) {
-            $('.for-select2').select2({ width: '100%', minimumResultsForSearch: 5 });
-        }
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
     });
 
     $('#btnsearch').on('click', function () {

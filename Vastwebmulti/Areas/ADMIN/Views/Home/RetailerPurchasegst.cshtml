@@ -127,8 +127,6 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
 <script>
     function excel() {
         var table = document.getElementById('retailerPurchaseGstTable');
@@ -168,10 +166,7 @@
     }
 
     $(document).ready(function () {
-        if ($.fn.select2) {
-            $('#Retailerid1').select2({ width: 'resolve', minimumResultsForSearch: 8 });
-            $('#Month, #Year').select2({ width: 'resolve', minimumResultsForSearch: -1 });
-        }
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
 
         var month = '@ViewBag.chkmonth';
         var val = '@ViewBag.chk';

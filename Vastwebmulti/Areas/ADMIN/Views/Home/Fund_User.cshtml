@@ -1335,10 +1335,8 @@
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 <script>
     $('#btnExport').click(function () {
         var tabID = $('.fullbodydycolorbg1 li.current.active').attr("data-tabname")
@@ -1385,7 +1383,7 @@ window.open(
 
 </script>
 <script>
-    $('.for-select2').select2();
+    /* Select2: bootAdminSelect2 from admin layout */
 </script>
 <script>
     var fewSeconds = 10;
@@ -1468,25 +1466,10 @@ window.open(
 <script>
     var ravi = $.noConflict()
     ravi(document).ready(function () {
-
-        // Initialize select2
-        ravi("#MastersID").select2();
-        ravi("#dealerids").select2();
-        ravi("#DDDealerid").select2();
-
-        ravi("#RetailersIDS").select2();
-        ravi("#ddlretailerid").select2();
-        ravi("#retaileridbyid").select2();
-        // Read selected option
-
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
     });
     ravi(document).ajaxComplete(function () {
-        ravi("#MastersID").select2();
-        ravi("#DDDealerid").select2();
-        ravi("#RetailersIDS").select2();
-        ravi("#dealerids").select2();
-        ravi("#ddlretailerid").select2();
-        ravi("#retaileridbyid").select2();
+        if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); }
     });
 
 </script>
@@ -3455,7 +3438,7 @@ $('#btnRetailerInform').click(function () {
             if ($el.hasClass('select2-hidden-accessible')) {
                 $el.select2('destroy');
             }
-            $el.select2({
+            $el.select2(window.getAdminSelect2Options ? window.getAdminSelect2Options($el) : {
                 width: '100%',
                 dropdownAutoWidth: false
             });

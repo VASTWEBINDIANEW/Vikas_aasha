@@ -398,8 +398,8 @@
     }
 </script>
 <script>
-    function OnSuccess() { $(".modal-backdrop").hide(); if (typeof ravi !== 'undefined') ravi("select").select2(); }
-    $(document).off('ajaxComplete.auSelect2').on('ajaxComplete.auSelect2', function () { if (typeof ravi !== 'undefined') ravi("select").select2(); });
+    function OnSuccess() { $(".modal-backdrop").hide(); if (window.bootAdminSelect2) { window.bootAdminSelect2(); } }
+    $(document).off('ajaxComplete.auSelect2').on('ajaxComplete.auSelect2', function () { if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); } });
 </script>
 <script>
     function Editstatechange() { GetDistrict11($('#StateEdit').val()); }

@@ -232,8 +232,6 @@
 </div>
 
 <link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
-
 <script>
     function ToastrMessage() {
         toastr.options = {
@@ -270,31 +268,11 @@
 <script>
     var ravi = $.noConflict();
     ravi(document).ready(function () {
-        ravi("select").select2();
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
     });
     $(document).ajaxComplete(function () {
-        ravi("select").select2();
+        if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); }
     });
-</script>
-<script>
-    $(function () {
-        ravi('#State1').change(function () {
-            var stid = $('#State1').val();
-            if (!stid) stid = 0;
-            else GetDistrict1(stid);
-        });
-    });
-    function GetDistrict1(_stateId) {
-        $("#District1").html("<option value='0'> Please wait...</option>").show();
-        $.ajax({
-            url: '@Url.Action("DistrictList","Home")', data: { Id: _stateId }, cache: false, type: "POST",
-            success: function (data) {
-                var markup = "<option value='0'>Select District</option>";
-                for (var x = 0; x < data.length; x++) markup += "<option value=" + data[x].Value + ">" + data[x].Text + "</option>";
-                $("#District1").html(markup).show();
-            }
-        });
-    }
 </script>
 <script>
     function auClearMsg() { $('#lblerror').hide().text(''); $('#lblerror1').hide().text(''); }

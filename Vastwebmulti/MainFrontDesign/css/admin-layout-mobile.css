@@ -3,6 +3,12 @@
 body.saas-admin-ui {
     --admin-sidebar-width: 190px;
     --admin-header-height: 73px;
+    --vm-z-content: 1;
+    --vm-z-sidebar: 10100;
+    --vm-z-overlay: 10190;
+    --vm-z-mobile-nav: 10195;
+    --vm-z-header: 10200;
+    --vm-z-header-menu: 10210;
     overflow-x: hidden;
     max-width: 100%;
 }
@@ -210,13 +216,36 @@ body.saas-admin-ui section.content {
     box-sizing: border-box !important;
     overflow-x: hidden;
     transition: margin-left 0.24s ease;
+    position: relative;
+    z-index: var(--vm-z-content, 1);
+}
+
+/* Fixed shell — header always above page content & select dropdowns */
+body.saas-admin-ui .admin-top-header,
+body.saas-admin-ui .admin-header-v2,
+body.saas-admin-ui .saas-admin-topbar {
+    z-index: var(--vm-z-header, 10200) !important;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell {
+    z-index: var(--vm-z-sidebar, 10100) !important;
+}
+
+body.saas-admin-ui .admin-top-header .dropdown-menu,
+body.saas-admin-ui .admin-header-dropdown,
+body.saas-admin-ui .admin-header-dropdown.open,
+body.saas-admin-ui .dropdown.open > .admin-header-dropdown,
+body.saas-admin-ui .admin-topbar-flyout,
+body.saas-admin-ui .admin-topbar-renewal .admin-header-renewal-card,
+body.saas-admin-ui #round_buttone .card_web_renewal {
+    z-index: var(--vm-z-header-menu, 10210) !important;
 }
 
 body.saas-admin-ui .overlay {
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 1055;
+    z-index: var(--vm-z-overlay, 10190);
     background: rgba(15, 23, 42, 0.55) !important;
     backdrop-filter: blur(2px);
     opacity: 0;
@@ -499,7 +528,7 @@ body.saas-admin-ui .admin-header-row {
         height: 100dvh !important;
         max-width: min(86vw, 260px) !important;
         width: min(86vw, 260px) !important;
-        z-index: 1060 !important;
+        z-index: var(--vm-z-mobile-nav, 10195) !important;
         transform: translateX(-105%);
         transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
         box-shadow: 16px 0 48px rgba(2, 6, 23, 0.45) !important;
@@ -559,7 +588,7 @@ body.saas-admin-ui .admin-header-row {
         margin: 0 !important;
         padding: 0 !important;
         background: #fff !important;
-        z-index: 1070 !important;
+        z-index: var(--vm-z-mobile-nav, 10195) !important;
         overflow: hidden !important;
         display: none !important;
         flex-direction: column !important;

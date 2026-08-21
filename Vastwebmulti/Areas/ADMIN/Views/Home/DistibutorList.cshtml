@@ -632,8 +632,6 @@
 
 <script src="~/AdminDesign/js/demo.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
 <script>
     $('#btnExport').click(function () {
 
@@ -697,16 +695,18 @@ window.open(
 </script>
 <script>
     var ravi = $.noConflict()
+    var vmDlDistrictUrl = '@Url.Action("DistrictList","Home")';
     ravi(document).ready(function () {
 
         // Initialize select2
-        ravi("select").select2();
-
-        // Read selected option
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
 
     });
-    $(document).ajaxComplete(function () {
-        ravi("select").select2();
+    $(document).ajaxComplete(function (event, xhr, settings) {
+        if (settings && settings.url && settings.url.indexOf('DistrictList') >= 0) {
+            return;
+        }
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
     });
 </script>
 <script>

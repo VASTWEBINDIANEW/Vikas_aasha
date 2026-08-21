@@ -274,45 +274,14 @@
 <script>
     var ravi = $.noConflict()
     ravi(document).ready(function () {
-
-        // Initialize select2
-        ravi("select").select2();
-
-        // Read selected option
-
+        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
+    });
+    $(document).ajaxComplete(function () {
+        if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); }
     });
 </script>
 <script language="javascript" type="text/javascript">
-                    $(function () {
-                        ravi('#State').change(function () {
-                            // alert('Value:' + ' ' + $('#State1').val())
-                            var stid = $('#State').val()
-                                GetDistrict(stid)
-                        });
-                    })
-
-                    function GetDistrict(_stateId) {
-                        var procemessage = "<option value='0'> Please wait...</option>";
-                        $("#District").html(procemessage).show();
-                        var url = '@Url.Action("DistrictList","Home")'
-                        $.ajax({
-                            url: url,
-                            data: { Id: _stateId },
-                            cache: false,
-                            type: "POST",
-                            success: function (data) {
-                                $("#District").html("");
-                                for (var x = 0; x < data.length; x++) {
-                                    //alert(markup)
-                                    $("#District").append($('<option></option>').val(data[x].Value).html(data[x].Text));
-                                }
-
-                            },
-
-                        });
-                    }
-
-
+                    /* State/District: global autoBindAdminStateDistrictPairs in admin layout */
 </script>
 <script>
     /* helper: show error or success message */
