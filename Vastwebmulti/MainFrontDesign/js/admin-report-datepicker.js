@@ -242,6 +242,7 @@
         initReportDateForm("#prepaidCardReportForm");
         initReportDateForm("#rtdHistoryForm");
         initReportDateForm("#apSellerFilterForm");
+        initReportDateForm("#actualDayBookForm");
         initReportDateForm("#payUGatewayForm", "#txt_frm_date1", "#txt_to_date1", true);
         if (typeof window.bootPayUGatewayDates === "function") {
             window.setTimeout(function () {

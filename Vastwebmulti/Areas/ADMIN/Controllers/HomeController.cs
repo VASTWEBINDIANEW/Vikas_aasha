@@ -113917,8 +113917,8 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
         public ActionResult Actual_Admin_income()
         {
-            DateTime frm_date = DateTime.Today;
-            DateTime to_date = DateTime.Today;
+            DateTime frm_date = DateTime.Today.Date;
+            DateTime to_date = DateTime.Today.Date.AddDays(1);
 
             var ch = db.admin_income_report(frm_date, to_date).ToList();
             return View(ch);
@@ -113929,7 +113929,10 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
         {
             ViewBag.chk = "post";
 
-            var ch = db.admin_income_report(txt_frm_date, txt_to_date).ToList();
+            DateTime frm_date = txt_frm_date.Date;
+            DateTime to_date = txt_to_date.Date.AddDays(1);
+
+            var ch = db.admin_income_report(frm_date, to_date).ToList();
             DataTable dtt = new DataTable();
             if (btnExport == "Export")
             {

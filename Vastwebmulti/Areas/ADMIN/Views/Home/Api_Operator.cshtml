@@ -16,7 +16,7 @@
 <link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=28" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-api-operator-modern.css?v=19" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-operator-modern.css?v=24" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
@@ -48,11 +48,11 @@
                                         apinmList = new SelectList(apinmList.Items, apinmList.DataValueField, apinmList.DataTextField, selectedApinm);
                                     }
                                 }
-                                @Html.DropDownList("apinm", apinmList, "Select Api Name", new { id = "filterApinm", @class = "form-control vm-opr-select vm-dmt-select vm-api-operator-select", @required = "required", @title = "Select Api Name" })
+                                @Html.DropDownList("apinm", apinmList, "Select Api Name", new { id = "filterApinm", @class = "form-control for-select2 vm-opr-select vm-dmt-select vm-api-operator-select vm-admin-select-search", data_live_search = "true", @required = "required", @title = "Select Api Name" })
                             </div>
                             <div class="vm-opr-field vm-api-operator-field vm-api-operator-field--operators">
-                                <select id="myCategories" name="myCategories" title="Select Operators" class="form-control vm-opr-select vm-dmt-select vm-api-operator-select">
-                                    <option value="">None selected</option>
+                                <select id="myCategories" name="myCategories" title="Select Operator Category" class="form-control for-select2 vm-opr-select vm-dmt-select vm-api-operator-select vm-admin-select-search" data-live-search="true">
+                                    <option value="">All Categories</option>
                                     @if (ViewBag.OptCategories != null)
                                     {
                                         foreach (var item in ViewBag.OptCategories)
@@ -72,7 +72,7 @@
                                     }
                                 </select>
                             </div>
-                            <button type="submit" id="btnGetSkills" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-api-operator-search-btn btnssl222" title="Search">
+                            <button type="submit" id="btnGetSkills" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-api-operator-search-btn vm-api-operator-search-btn--modern btnssl222" title="Search">
                                 <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
                             </button>
                         </div>
@@ -107,15 +107,15 @@
                                     <th>Edit</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="apiOperatorTableBody">
                                 @foreach (var item in apiRows)
                                 {
                                     <tr>
-                                        <td>@item.apiname</td>
-                                        <td>@item.optnm</td>
-                                        <td>@item.opt_code</td>
-                                        <td>@item.apioptcode</td>
-                                        <td class="vm-api-purchase-cell">
+                                        <td data-label="API Name">@item.apiname</td>
+                                        <td data-label="Operator">@item.optnm</td>
+                                        <td data-label="My Code">@item.opt_code</td>
+                                        <td data-label="Api Code">@item.apioptcode</td>
+                                        <td class="vm-api-purchase-cell" data-label="Purchase">
                                             @if (item.purchasetype == "Rupees")
                                             {
                                                 <span class="vm-api-purchase-val">@item.Purchase</span>
@@ -131,26 +131,22 @@
                                                 @item.Purchase
                                             }
                                         </td>
-                                        <td>
+                                        <td data-label="Status">
                                             @using (Html.BeginForm("Api_Status", "Home", FormMethod.Get, new { @class = "vm-api-status-form" }))
                                             {
                                                 @Html.Hidden("id", item.id)
                                                 @Html.Hidden("apinm", item.api_nm)
-                                                <button type="submit" title="@(item.status == "Y" ? "Turn off" : "Turn on")">
-                                                    @if (item.status == "Y")
-                                                    {
-                                                        <span class="onoffswitch"><span class="costom-on">on</span></span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="onoffswitch"><span class="custom-off">off</span></span>
-                                                    }
+                                                <button type="submit" class="vm-api-status-toggle @(item.status == "Y" ? "is-on" : "is-off")" title="@(item.status == "Y" ? "Turn off" : "Turn on")" aria-pressed="@(item.status == "Y" ? "true" : "false")">
+                                                    <span class="vm-api-status-toggle__track">
+                                                        <span class="vm-api-status-toggle__thumb" aria-hidden="true"></span>
+                                                        <span class="vm-api-status-toggle__label">@(item.status == "Y" ? "ON" : "OFF")</span>
+                                                    </span>
                                                 </button>
                                             }
                                         </td>
-                                        <td>
+                                        <td data-label="Edit">
                                             <button type="button"
-                                                    class="vm-api-operator-edit-btn"
+                                                    class="vm-api-operator-edit-btn vm-api-operator-edit-btn--modern"
                                                     data-api-nm="@item.api_nm"
                                                     data-id="@item.id"
                                                     data-apinm="@item.apiname"
@@ -235,156 +231,228 @@
     </div>
 </div>
 
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js"></script>
-<script>
-    function hasApiSelected() {
-        var val = ($('#filterApinm').val() || '').trim();
-        return val.length > 0 && val !== 'Select Api Name';
-    }
+@section PostSelect2Scripts {
+    <script src="~/Swalalert/sweetalert-dev.js"></script>
+    <script src="~/select2/dist/js/select2.js"></script>
+    <script>
+        (function () {
+            'use strict';
 
-    function initApiOperatorFilters() {
-        var $api = $('#filterApinm');
-        var $cats = $('#myCategories');
+            function getPageJq() {
+                if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2) {
+                    return window.jQuery;
+                }
+                if (window.ravi && window.ravi.fn && window.ravi.fn.select2) {
+                    return window.ravi;
+                }
+                return window.jQuery || window.ravi;
+            }
 
-        if ($api.hasClass('select2-hidden-accessible')) {
-            $api.select2('destroy');
-        }
-        if ($cats.hasClass('select2-hidden-accessible')) {
-            $cats.select2('destroy');
-        }
+            var apiOperatorSearchUrl = '@Url.Action("Api_Operator", "Home", new { area = "ADMIN" })';
 
-        $api.select2({
-            width: '100%',
-            placeholder: 'Select Api Name',
-            allowClear: false,
-            dropdownParent: $(document.body)
-        });
+            function hasApiSelected($) {
+                var val = ($('#filterApinm').val() || '').trim();
+                return val.length > 0 && val !== 'Select Api Name';
+            }
 
-        $cats.select2({
-            width: '100%',
-            placeholder: 'None selected',
-            allowClear: true,
-            dropdownParent: $(document.body)
-        });
-
-        updateOperatorSelectLock(false);
-    }
-
-    function updateOperatorSelectLock(clearSelection) {
-        var $cats = $('#myCategories');
-        var enabled = hasApiSelected();
-
-        $cats.prop('disabled', !enabled);
-
-        if (!enabled && clearSelection) {
-            $cats.val('');
-        }
-
-        $cats.trigger('change.select2');
-    }
-
-    $(document).ready(function () {
-        initApiOperatorFilters();
-
-        $('#filterApinm').on('change select2:select', function () {
-            updateOperatorSelectLock(true);
-        });
-
-        var resizeTimer;
-        $(window).on('resize orientationchange', function () {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(function () {
-                var apiVal = $('#filterApinm').val();
-                var catVal = $('#myCategories').val();
-                $('#filterApinm, #myCategories').each(function () {
-                    var $el = $(this);
-                    if ($el.hasClass('select2-hidden-accessible')) {
+            function destroySelect2($el) {
+                if ($el.hasClass('select2-hidden-accessible')) {
+                    try {
                         $el.select2('destroy');
+                    } catch (e) { /* ignore */ }
+                }
+                $el.next('.select2-container').remove();
+            }
+
+            function initApiOperatorSelect2() {
+                var $ = getPageJq();
+                if (!$ || !$.fn || !$.fn.select2) {
+                    return false;
+                }
+
+                var $api = $('#filterApinm');
+                var $cats = $('#myCategories');
+                if (!$api.length || !$cats.length) {
+                    return false;
+                }
+
+                $api.add($cats).prop('disabled', false);
+
+                destroySelect2($api);
+                destroySelect2($cats);
+
+                var commonOpts = {
+                    width: '100%',
+                    dropdownParent: $(document.body),
+                    minimumResultsForSearch: 0,
+                    language: {
+                        noResults: function () { return 'No match found'; },
+                        searching: function () { return 'Searching...'; }
+                    }
+                };
+
+                $api.select2($.extend({}, commonOpts, {
+                    placeholder: 'Select Api Name',
+                    allowClear: false
+                }));
+
+                $cats.select2($.extend({}, commonOpts, {
+                    placeholder: 'All Categories',
+                    allowClear: true
+                }));
+
+                return true;
+            }
+
+            function bootApiOperatorSelect2() {
+                var ok = initApiOperatorSelect2();
+                if (!ok && typeof window.bootAdminSelect2 === 'function') {
+                    window.bootAdminSelect2();
+                    initApiOperatorSelect2();
+                }
+            }
+
+            function prepareApiOperatorFilterSubmit($) {
+                var $cats = $('#myCategories');
+                var category = ($cats.val() || '').trim();
+
+                $cats.prop('disabled', false);
+
+                if (!category) {
+                    $cats.prop('disabled', true);
+                }
+            }
+
+            function bindApiOperatorSelect2SearchFocus($) {
+                $(document).off('select2:open.vmApiOperator').on('select2:open.vmApiOperator', '#filterApinm, #myCategories', function () {
+                    window.setTimeout(function () {
+                        var $field = $('.select2-container--open .select2-search__field');
+                        if (!$field.length) {
+                            return;
+                        }
+                        $field.attr('placeholder', 'Type to search...').trigger('focus');
+                    }, 0);
+                });
+            }
+
+            function readyApiOperatorPage() {
+                var $ = getPageJq();
+                if (!$) {
+                    return;
+                }
+
+                bootApiOperatorSelect2();
+                bindApiOperatorSelect2SearchFocus($);
+
+                window.setTimeout(bootApiOperatorSelect2, 150);
+                window.setTimeout(bootApiOperatorSelect2, 600);
+                window.setTimeout(bootApiOperatorSelect2, 1400);
+
+                $('#apiOperatorFilterForm').on('submit', function (e) {
+                    if (!hasApiSelected($)) {
+                        e.preventDefault();
+                        if (window.swal) {
+                            swal('Required', 'Please select API name first.', 'warning');
+                        }
+                        return false;
+                    }
+
+                    prepareApiOperatorFilterSubmit($);
+                    return true;
+                });
+
+                var resizeTimer;
+                $(window).on('resize orientationchange', function () {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function () {
+                        var apiVal = $('#filterApinm').val();
+                        var catVal = $('#myCategories').val();
+                        bootApiOperatorSelect2();
+                        if (apiVal) {
+                            $('#filterApinm').val(apiVal).trigger('change.select2');
+                        }
+                        if (catVal) {
+                            $('#myCategories').val(catVal).trigger('change.select2');
+                        }
+                    }, 250);
+                });
+
+                var editdata = '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(Convert.ToString(ViewData["edit"])))';
+                if (editdata && window.swal) {
+                    swal('Good job!', editdata, 'success');
+                }
+
+                $('#apiOperatorSearch').on('keyup', function () {
+                    var q = $(this).val().toLowerCase();
+                    $('#apiOperatorTableBody tr').each(function () {
+                        var text = $(this).text().toLowerCase();
+                        $(this).toggle(text.indexOf(q) > -1);
+                    });
+                });
+            }
+
+            if (getPageJq()) {
+                getPageJq()(document).ready(readyApiOperatorPage);
+            } else {
+                document.addEventListener('DOMContentLoaded', readyApiOperatorPage);
+            }
+
+            function openApiOperatorEdit($btn) {
+                var $ = getPageJq();
+                $('#editApinm').val($btn.data('api-nm') || '');
+                $('#editTxtidno').val($btn.data('id') || '');
+                $('#txtapinm').val($btn.data('apinm') || '');
+                $('#txtoptnm').val($btn.data('optnm') || '');
+                $('#txtapiopt').val($btn.data('apiopt') || '');
+                $('#txtpurcharge').val($btn.data('purchase') || '');
+                $('#purchasetype').val($btn.data('purchasetype') || '');
+            }
+
+            getPageJq()(document).on('click', '.vm-api-operator-edit-btn', function () {
+                openApiOperatorEdit(getPageJq()(this));
+            });
+
+            getPageJq()(document).on('submit', '#apiOperatorEditForm', function (e) {
+                e.preventDefault();
+                var $ = getPageJq();
+                var $form = $(this);
+                $.ajax({
+                    type: 'POST',
+                    url: apiOperatorSearchUrl,
+                    data: $form.serialize(),
+                    success: function () {
+                        $('#apiOperatorEditModal').modal('hide');
+                        window.setTimeout(function () { window.location.reload(); }, 500);
+                    },
+                    error: function () {
+                        if (window.swal) {
+                            swal('Error', 'Unable to save changes. Please try again.', 'error');
+                        }
                     }
                 });
-                initApiOperatorFilters();
-                if (apiVal) {
-                    $('#filterApinm').val(apiVal).trigger('change.select2');
-                }
-                if (catVal) {
-                    $('#myCategories').val(catVal).trigger('change.select2');
-                }
-                updateOperatorSelectLock(false);
-            }, 250);
-        });
-
-        var editdata = '@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(Convert.ToString(ViewData["edit"])))';
-        if (editdata) {
-            swal("Good job!", editdata, "success");
-        }
-
-        $('#apiOperatorSearch').on('keyup', function () {
-            var q = $(this).val().toLowerCase();
-            $('#apiOperatorTable tbody tr').each(function () {
-                var text = $(this).text().toLowerCase();
-                $(this).toggle(text.indexOf(q) > -1);
             });
-        });
 
-        $('.btnssl222').on('click', function () {
-            var $this = $(this);
-            $this.prop('disabled', true);
-            setTimeout(function () { $this.prop('disabled', false); }, 2000);
-        });
-    });
-
-    function openApiOperatorEdit($btn) {
-        $('#editApinm').val($btn.data('api-nm') || '');
-        $('#editTxtidno').val($btn.data('id') || '');
-        $('#txtapinm').val($btn.data('apinm') || '');
-        $('#txtoptnm').val($btn.data('optnm') || '');
-        $('#txtapiopt').val($btn.data('apiopt') || '');
-        $('#txtpurcharge').val($btn.data('purchase') || '');
-        $('#purchasetype').val($btn.data('purchasetype') || '');
-    }
-
-    $(document).on('click', '.vm-api-operator-edit-btn', function () {
-        openApiOperatorEdit($(this));
-    });
-
-    $(document).on('submit', '#apiOperatorEditForm', function (e) {
-        e.preventDefault();
-        var $form = $(this);
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("Api_Operator", "Home")',
-            data: $form.serialize(),
-            success: function () {
-                $('#apiOperatorEditModal').modal('hide');
-                setTimeout(function () { window.location.reload(); }, 500);
-            },
-            error: function () {
-                swal('Error', 'Unable to save changes. Please try again.', 'error');
-            }
-        });
-    });
-
-    $(document).on('submit', '.vm-api-status-form', function (e) {
-        e.preventDefault();
-        var $form = $(this);
-        var $btn = $form.find('button[type="submit"]');
-        $btn.prop('disabled', true);
-        $.ajax({
-            type: 'GET',
-            url: '@Url.Action("Api_Status", "Home")',
-            data: $form.serialize(),
-            success: function () {
-                setTimeout(function () { window.location.reload(); }, 500);
-            },
-            error: function () {
-                $btn.prop('disabled', false);
-                swal('Error', 'Unable to update status. Please try again.', 'error');
-            }
-        });
-    });
-</script>
+            getPageJq()(document).on('submit', '.vm-api-status-form', function (e) {
+                e.preventDefault();
+                var $ = getPageJq();
+                var $form = $(this);
+                var $btn = $form.find('button[type="submit"]');
+                $btn.prop('disabled', true);
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("Api_Status", "Home", new { area = "ADMIN" })',
+                    data: $form.serialize(),
+                    success: function () {
+                        window.setTimeout(function () { window.location.reload(); }, 500);
+                    },
+                    error: function () {
+                        $btn.prop('disabled', false);
+                        if (window.swal) {
+                            swal('Error', 'Unable to update status. Please try again.', 'error');
+                        }
+                    }
+                });
+            });
+        })();
+    </script>
+}

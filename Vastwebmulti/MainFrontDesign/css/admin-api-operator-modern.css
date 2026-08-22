@@ -249,18 +249,18 @@ body.saas-admin-ui .saas-api-operator-page .vm-api-operator-field {
 }
 
 body.saas-admin-ui .saas-api-operator-page .vm-api-operator-field--api {
-    flex: 0 0 220px !important;
-    width: 220px !important;
-    max-width: 220px !important;
-    min-width: 220px !important;
-    visibility: visible !important;
-}
-
-body.saas-admin-ui .saas-api-operator-page .vm-api-operator-field--operators {
     flex: 0 0 260px !important;
     width: 260px !important;
     max-width: 260px !important;
     min-width: 260px !important;
+    visibility: visible !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-operator-field--operators {
+    flex: 0 0 220px !important;
+    width: 220px !important;
+    max-width: 220px !important;
+    min-width: 220px !important;
     visibility: visible !important;
 }
 
@@ -280,8 +280,6 @@ body.saas-admin-ui .saas-api-operator-page .vm-api-operator-field select.vm-dmt-
     font-weight: 600 !important;
     color: #334155 !important;
     box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
-    appearance: auto !important;
-    -webkit-appearance: menulist !important;
 }
 
 body.saas-admin-ui .saas-api-operator-page .vm-api-operator-field select.select2-hidden-accessible {
@@ -356,6 +354,29 @@ body.saas-admin-ui .saas-api-operator-page .select2-dropdown {
     z-index: 10050 !important;
 }
 
+body.saas-admin-ui .saas-api-operator-page .select2-search--dropdown {
+    display: block !important;
+    padding: 8px !important;
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .select2-search--dropdown .select2-search__field {
+    display: block !important;
+    width: 100% !important;
+    min-height: 34px !important;
+    padding: 6px 10px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    font-size: 0.84rem !important;
+    outline: none !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .select2-search--dropdown .select2-search__field:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
 body.saas-admin-ui .saas-api-operator-page .select2-container--open {
     z-index: 10051 !important;
 }
@@ -383,6 +404,163 @@ body.saas-admin-ui .saas-api-operator-page .vm-api-operator-search-btn {
     justify-content: center !important;
     line-height: 1 !important;
     vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-operator-search-btn--modern {
+    gap: 8px !important;
+    min-width: 112px !important;
+    padding: 0 20px !important;
+    border: none !important;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #3b82f6 100%) !important;
+    color: #fff !important;
+    font-size: 0.84rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.02em !important;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28) !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-operator-search-btn--modern i {
+    font-size: 0.82rem !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-operator-search-btn--modern:hover,
+body.saas-admin-ui .saas-api-operator-page .vm-api-operator-search-btn--modern:focus {
+    color: #fff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.34) !important;
+    filter: brightness(1.03) !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-operator-search-btn--modern:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.24) !important;
+}
+
+/* Full-width page + table cover */
+body.saas-admin-ui .saas-api-operator-page,
+body.saas-admin-ui .saas-api-operator-page .container-fluid,
+body.saas-admin-ui .saas-api-operator-page .vm-opr-page-shell {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-opr-main-card,
+body.saas-admin-ui .saas-api-operator-page .vm-opr-table-panel,
+body.saas-admin-ui .saas-api-operator-page .vm-opr-table-wrap,
+body.saas-admin-ui .saas-api-operator-page .vm-opr-table-scroll,
+body.saas-admin-ui .saas-api-operator-page .vm-opr-table-panel .table-responsive {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-opr-main-card {
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-opr-table-panel__head {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 14px 16px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-opr-table-scroll {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    padding: 0 !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    margin: 0 !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th {
+    padding: 13px 12px !important;
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
+    color: #475569 !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td {
+    padding: 12px !important;
+    font-size: 0.82rem !important;
+    color: #334155 !important;
+    border-bottom: 1px solid #eef2f7 !important;
+    vertical-align: middle !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody tr:nth-child(even) {
+    background: #fafbfd !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody tr:hover {
+    background: #eff6ff !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(1),
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(1) {
+    width: 15% !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(2),
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(2) {
+    width: 28% !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(3),
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(3) {
+    width: 10% !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(4),
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(4) {
+    width: 10% !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(5),
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(5) {
+    width: 14% !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(6),
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(6) {
+    width: 11% !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(7),
+body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(7) {
+    width: 12% !important;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-purchase-cell {
+    white-space: nowrap !important;
 }
 
 /* Purchase column */
@@ -451,19 +629,83 @@ body.saas-admin-ui .saas-api-operator-page .vm-api-operator-table-search input {
     outline: none !important;
 }
 
-/* Status toggle */
+/* Status toggle — modern pill switch */
 body.saas-admin-ui .saas-api-operator-page .vm-api-status-form {
     margin: 0;
     padding: 0;
     display: inline-block;
 }
 
-body.saas-admin-ui .saas-api-operator-page .vm-api-status-form button {
+body.saas-admin-ui .saas-api-operator-page .vm-api-status-form button,
+body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle {
     border: none;
     background: transparent;
     padding: 0;
     margin: 0;
     line-height: 1;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle__track {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 58px;
+    height: 28px;
+    padding: 0 10px 0 28px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle__thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
+    transition: transform 0.18s ease, background 0.18s ease;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle__label {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle.is-on .vm-api-status-toggle__track {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    border-color: #16a34a;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.28);
+    justify-content: flex-start;
+    padding: 0 28px 0 10px;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle.is-on .vm-api-status-toggle__thumb {
+    transform: translateX(30px);
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle.is-on .vm-api-status-toggle__label {
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle.is-off .vm-api-status-toggle__track {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle.is-off .vm-api-status-toggle__label {
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle:hover .vm-api-status-toggle__track {
+    transform: translateY(-1px);
 }
 
 body.saas-admin-ui .saas-api-operator-page .onoffswitch {
@@ -525,10 +767,24 @@ body.saas-admin-ui .saas-api-operator-page .vm-api-operator-edit-btn {
     transition: background 0.15s, border-color 0.15s, transform 0.12s;
 }
 
-body.saas-admin-ui .saas-api-operator-page .vm-api-operator-edit-btn:hover {
-    background: #dbeafe;
+body.saas-admin-ui .saas-api-operator-page .vm-api-operator-edit-btn--modern {
+    min-height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid #bfdbfe;
+    background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+    color: #1d4ed8;
+    font-size: 0.78rem;
+    font-weight: 800;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.12);
+}
+
+body.saas-admin-ui .saas-api-operator-page .vm-api-operator-edit-btn:hover,
+body.saas-admin-ui .saas-api-operator-page .vm-api-operator-edit-btn--modern:hover {
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
     border-color: #93c5fd;
     transform: translateY(-1px);
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.16);
 }
 
 body.saas-admin-ui .saas-api-operator-page .vm-opr-data-table td:nth-child(5),
@@ -1479,6 +1735,122 @@ body.saas-admin-ui .saas-api-name-page #apiNameTable tbody td:nth-child(8) {
         display: block !important;
     }
 
+    body.saas-admin-ui .saas-api-operator-page .vm-opr-table-wrap {
+        padding: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-opr-table-scroll {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x pan-y;
+        scrollbar-width: thin;
+        scrollbar-color: #94a3b8 #f1f5f9;
+        padding: 0 0 10px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-opr-table-scroll::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-opr-table-scroll::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 999px;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table {
+        table-layout: auto !important;
+        width: max-content !important;
+        min-width: 980px !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td {
+        width: auto !important;
+        white-space: nowrap !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(1),
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(1) {
+        min-width: 130px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(2),
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(2) {
+        min-width: 160px !important;
+        max-width: 240px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(3),
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(3),
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(4),
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(4) {
+        min-width: 78px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(5),
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(5) {
+        min-width: 108px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(6),
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(6) {
+        min-width: 82px !important;
+        text-align: center !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th:nth-child(7),
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:nth-child(7) {
+        min-width: 88px !important;
+        text-align: center !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle__track {
+        min-width: 54px;
+        height: 26px;
+        padding: 0 8px 0 24px;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle__thumb {
+        width: 18px;
+        height: 18px;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle.is-on .vm-api-status-toggle__thumb {
+        transform: translateX(26px);
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle__label {
+        font-size: 0.58rem;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-api-operator-edit-btn--modern {
+        min-height: 30px;
+        padding: 0 10px;
+        font-size: 0.72rem;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-opr-table-panel__head {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 12px 14px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-api-operator-table-search {
+        flex: 0 1 240px;
+        min-width: 180px;
+    }
+
     body.saas-admin-ui .saas-api-operator-page .vm-api-operator-search-btn,
     body.saas-admin-ui .saas-api-operator-page .vm-opr-toolbar-unified .vm-opr-toolbar-search.vm-api-operator-search-btn {
         flex: 1 1 100% !important;
@@ -1625,30 +1997,141 @@ body.saas-admin-ui .saas-api-name-page #apiNameTable tbody td:nth-child(8) {
         height: 40px !important;
     }
 
+    body.saas-admin-ui .saas-api-operator-page .vm-opr-main-card {
+        border-radius: 12px !important;
+        overflow: hidden !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-opr-table-wrap {
+        padding: 0 10px 12px !important;
+    }
+
     body.saas-admin-ui .saas-api-operator-page .vm-opr-table-scroll {
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
+        overflow: visible !important;
+        padding: 0 !important;
     }
 
+    /* Mobile card layout — no horizontal clip */
     body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table {
-        min-width: 680px !important;
-        font-size: 0.78rem !important;
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        table-layout: auto !important;
+        border-collapse: separate !important;
+        border-spacing: 0 10px !important;
     }
 
-    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table thead {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody tr {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 0 10px !important;
+        padding: 12px 12px 10px !important;
+        background: #fff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody tr:hover {
+        background: #fff !important;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08) !important;
+    }
+
     body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td {
-        padding: 8px 10px !important;
-        white-space: nowrap;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        padding: 7px 0 !important;
+        border: none !important;
+        border-bottom: 1px dashed #eef2f7 !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: initial !important;
+        text-align: right !important;
+        font-size: 0.8rem !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td:last-child {
+        border-bottom: none !important;
+        padding-top: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td::before {
+        content: attr(data-label) !important;
+        flex: 0 0 auto !important;
+        max-width: 42% !important;
+        font-size: 0.68rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.04em !important;
+        text-transform: uppercase !important;
+        color: #64748b !important;
+        text-align: left !important;
+        line-height: 1.35 !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td[data-label="Operator"] {
+        align-items: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td[data-label="Operator"]::before {
+        padding-top: 2px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td[data-label="Status"],
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td[data-label="Edit"] {
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td[data-label="Status"] .vm-api-status-form,
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td[data-label="Edit"] .vm-api-operator-edit-btn {
+        margin-left: auto !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td[data-label="Edit"] {
+        padding-bottom: 2px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page #apiOperatorTable.vm-opr-data-table tbody td[data-label="Edit"] .vm-api-operator-edit-btn--modern {
+        min-height: 34px !important;
+        padding: 0 14px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle__track {
+        min-width: 56px !important;
+        height: 28px !important;
+    }
+
+    body.saas-admin-ui .saas-api-operator-page .vm-api-status-toggle.is-on .vm-api-status-toggle__thumb {
+        transform: translateX(28px) !important;
     }
 
     body.saas-admin-ui .saas-api-operator-page .vm-opr-table-panel__head {
         gap: 8px !important;
+        padding: 12px 10px !important;
     }
 
     body.saas-admin-ui .saas-api-operator-page .vm-api-operator-table-search {
         width: 100% !important;
         min-width: 0 !important;
+    }
+
+    body.saas-admin-ui section.saas-api-operator-page.content {
+        overflow-x: hidden !important;
     }
 }
 
