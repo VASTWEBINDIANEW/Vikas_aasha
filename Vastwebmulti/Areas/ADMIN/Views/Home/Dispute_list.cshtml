@@ -1,391 +1,245 @@
-@model List<Vastwebmulti.Models.all_dispute_list_Result>
-
+@model IEnumerable<Vastwebmulti.Models.all_dispute_list_Result>
 @using System.Linq
+@using System.Globalization
 
 @{
-
     ViewBag.Title = "Dispute List";
-
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 
-    var rows = Model ?? new List<Vastwebmulti.Models.all_dispute_list_Result>();
+    var isPost = (ViewBag.chk as string) == "post";
+    var ddlStatus = isPost ? (Request["ddl_status"] ?? "") : "";
+    var frmDate = isPost ? (Request["txt_frm_date"] ?? "").Trim() : "";
+    var toDate = isPost ? (Request["txt_to_date"] ?? "").Trim() : "";
 
-    var ddlStatus = (ViewBag.ddl_status as string) ?? "";
-
-    var frmDate = (ViewBag.txt_frm_date as string) ?? "";
-
-    var toDate = (ViewBag.txt_to_date as string) ?? "";
-
-    if (string.IsNullOrWhiteSpace(frmDate)) { frmDate = DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd"); }
-
+    if (string.IsNullOrWhiteSpace(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
     if (string.IsNullOrWhiteSpace(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
 
-    var dateMode = (ViewBag.chk as string) == "post" ? "set" : "get";
+    var dateMode = isPost ? "post" : "get";
 
-    var statusItems = new List<SelectListItem>
-
+    Func<string, string> toControllerDate = delegate (string input)
     {
-
-        new SelectListItem { Text = "ALL", Value = "" },
-
-        new SelectListItem { Text = "Pending", Value = "Pending" },
-
-        new SelectListItem { Text = "Approved", Value = "Approved" },
-
-        new SelectListItem { Text = "Rejected", Value = "Rejected" }
-
+        if (string.IsNullOrWhiteSpace(input)) { return ""; }
+        DateTime parsed;
+        if (DateTime.TryParseExact(input.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsed)
+            || DateTime.TryParse(input, out parsed))
+        {
+            return parsed.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+        }
+        return input.Trim();
     };
 
+    // GET par purane project jaisa: child action ko empty dates → aaj ka data
+    var renderFrmDate = isPost ? toControllerDate(frmDate) : "";
+    var renderToDate = isPost ? toControllerDate(toDate) : "";
+
+    var statusItems = new List<SelectListItem>
+    {
+        new SelectListItem { Text = "ALL", Value = "" },
+        new SelectListItem { Text = "Pending", Value = "Pending" },
+        new SelectListItem { Text = "Approved", Value = "Approved" },
+        new SelectListItem { Text = "Rejected", Value = "Rejected" }
+    };
 }
 
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
-
 <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
-
 <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
-
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-
-<link href="~/MainFrontDesign/css/admin-support-pages-modern.css?v=2" rel="stylesheet" />
-
+<link href="~/MainFrontDesign/css/admin-support-pages-modern.css?v=3" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
-
-
 <section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-dispute-report-page saas-dispute-page">
-
     <div class="container-fluid">
-
-        @using (Html.BeginForm("Dispute_list", "Home", FormMethod.Post, new { @class = "saas-dispute-report-form saas-pan-toolbar-form", id = "disputeReportForm", data_date_mode = dateMode, data_frm_date = frmDate, data_to_date = toDate }))
-
+        @using (Html.BeginForm("Dispute_list", "Home", FormMethod.Post, new { @class = "saas-dispute-report-form saas-pan-toolbar-form", id = "disputeReportForm", data_date_mode = dateMode, data_frm_date = frmDate, data_to_date = toDate, data_report_date_form = "true" }))
         {
-
             <div class="saas-acc-toolbar saas-pan-toolbar-unified">
-
                 <ol class="saas-acc-breadcrumb">
-
                     <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
-
                     <li>Dispute List</li>
-
                 </ol>
-
                 <div class="saas-acc-toolbar-right saas-pan-toolbar-dates">
-
                     <div class="saas-acc-report-date-controls saas-pan-date-controls">
-
                         <div class="saas-report-date-fields">
-
                             <div class="saas-acc-dp-field">
-
                                 <label class="saas-acc-dp-label" for="txt_frm_date">From date</label>
-
                                 <span class="saas-acc-dp-icon" title="From date"><i class="fa fa-calendar"></i></span>
-
                                 @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "yyyy-mm-dd" })
-
                             </div>
-
                             <div class="saas-acc-dp-field">
-
                                 <label class="saas-acc-dp-label" for="txt_to_date">To date</label>
-
                                 <span class="saas-acc-dp-icon" title="To date"><i class="fa fa-calendar"></i></span>
-
                                 @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "yyyy-mm-dd" })
-
                             </div>
-
                         </div>
-
                         <div class="saas-dispute-filter-fields">
-
                             <div class="saas-dispute-status-field saas-dispute-filter-field">
-
                                 <label class="saas-acc-dp-label" for="ddl_status">Status</label>
-
                                 <div class="saas-dispute-status-input-wrap">
-
                                     <i class="fas fa-filter saas-dispute-field-icon" aria-hidden="true"></i>
-
                                     @Html.DropDownList("ddl_status", new SelectList(statusItems, "Value", "Text", ddlStatus), new { @class = "form-control saas-dispute-status-select" })
-
                                 </div>
-
                             </div>
-
                             <div class="saas-dispute-search-wrap saas-dispute-filter-field">
-
                                 <label class="saas-acc-dp-label" for="myInput">Quick filter</label>
-
                                 <div class="saas-dispute-search-inner">
-
                                     <i class="fas fa-search saas-dispute-field-icon" aria-hidden="true"></i>
-
                                     <input id="myInput" type="text" class="form-control saas-dispute-search-input" placeholder="Search in table..." autocomplete="off" />
-
                                 </div>
-
                             </div>
-
                         </div>
-
                         <div class="saas-report-toolbar-actions">
-
                             <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn">
-
                                 <i class="fas fa-search" aria-hidden="true"></i> Search
-
                             </button>
-
                             <div class="saas-acc-export-group saas-pan-export-group">
-
                                 <button type="button" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn" id="btnDisputeExport" title="Export Excel">
-
                                     <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
-
                                 </button>
-
                                 <button type="button" class="saas-acc-btn saas-acc-btn--pdf saas-pan-export-btn" id="btnDisputePDF" title="Download PDF">
-
                                     <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
-
                                 </button>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         }
-
-
 
         <div class="saas-acc-table-card">
-
             <div class="saas-acc-table-card-head">
-
                 <h3>Dispute transactions</h3>
-
                 <span class="saas-acc-row-count">
-
-                    <i class="fas fa-gavel" aria-hidden="true"></i> @rows.Count loaded <span class="saas-pan-report-meta"><i class="fas fa-arrows-alt-h" aria-hidden="true"></i> scroll for more</span>
-
+                    <i class="fas fa-gavel" aria-hidden="true"></i> <span id="disputeRowCount">0</span> loaded
+                    <span class="saas-pan-report-meta"><i class="fas fa-arrows-alt-h" aria-hidden="true"></i> scroll for more</span>
                 </span>
-
             </div>
-
             <div class="saas-acc-table-wrap table-responsive">
-
                 <table class="table saas-acc-table saas-acc-table--dispute table-bordered" id="disputeTable">
-
                     <thead>
-
                         <tr>
-
                             <th>User's Information</th>
-
                             <th>Consumer No.</th>
-
                             <th>Amount&nbsp;&#8377;</th>
-
                             <th>Operator</th>
-
                             <th>Port/API</th>
-
                             <th>Dispute Time</th>
-
                             <th>Dispute Description</th>
-
                             <th>Transition ID</th>
-
                             <th>Response</th>
-
                             <th>Rch Time</th>
-
                             <th>Action</th>
-
                         </tr>
-
                     </thead>
-
                     <tbody id="trow">
-
-                        @Html.Partial("_Dispute_list", rows)
-
+                        @{
+                            Html.RenderAction("_Dispute_list", "Home", new { ddl_status = ddlStatus, txt_frm_date = renderFrmDate, txt_to_date = renderToDate });
+                        }
                     </tbody>
-
                 </table>
-
             </div>
-
             <div id="loadingdiv" class="text-center" style="display:none;padding:12px;">
-
                 <img src="~/img/ajax-loader.gif" alt="Loading" />
-
             </div>
-
         </div>
-
     </div>
-
 </section>
 
-
-
-
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 <script src="~/MainFrontDesign/js/admin-report-datepicker.js"></script>
-
 <script>
-
     $(function () {
-
-        function syncDisputeStatusControl() {
-
-            var $ddl = $("#ddl_status");
-
-            if (!$ddl.length) { return; }
-
-            var isMobile = window.matchMedia("(max-width: 991px)").matches;
-
-            if ($.fn.select2 && $ddl.hasClass("select2-hidden-accessible")) {
-
-                $ddl.select2("destroy");
-
-            }
-
-            if (!isMobile && $.fn.select2) {
-
-                $ddl.select2({ width: "118px", minimumResultsForSearch: 10 });
-
-            }
-
+        // Controller MM/dd/yyyy expect karta hai; UI yyyy-MM-dd dikhata hai
+        function toControllerDate(val) {
+            if (!val) { return ""; }
+            val = String(val).trim();
+            var iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(val);
+            if (iso) { return iso[2] + "/" + iso[3] + "/" + iso[1]; }
+            var slash = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(val);
+            if (slash) { return val; }
+            return val;
         }
 
+        function refreshDisputeRowCount() {
+            var n = $("#trow tr.saas-dispute-data-row").length;
+            $("#disputeRowCount").text(n);
+        }
+        refreshDisputeRowCount();
+
+        function syncDisputeStatusControl() {
+            var $ddl = $("#ddl_status");
+            if (!$ddl.length) { return; }
+            var isMobile = window.matchMedia("(max-width: 991px)").matches;
+            if ($.fn.select2 && $ddl.hasClass("select2-hidden-accessible")) {
+                $ddl.select2("destroy");
+            }
+            if (!isMobile && $.fn.select2) {
+                $ddl.select2({ width: "118px", minimumResultsForSearch: 0, placeholder: "Status" });
+            }
+        }
         syncDisputeStatusControl();
 
         var resizeTimer;
-
         $(window).on("resize", function () {
-
             clearTimeout(resizeTimer);
-
             resizeTimer = setTimeout(syncDisputeStatusControl, 150);
-
         });
-
-
 
         var succ = '@ViewData["success"]';
-
         var error = '@ViewData["error"]';
-
         if (succ && typeof swal === "function") { swal("Response!", succ, "success"); }
-
         if (error && typeof swal === "function") { swal("Failed!", error, "error"); }
 
-
-
         $("#myInput").on("keyup", function () {
-
             var value = $(this).val().toLowerCase();
-
             $("#trow tr.saas-dispute-data-row").filter(function () {
-
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-
             });
-
         });
-
-
 
         function disputeExportQuery() {
-
-            return '?txt_frm_date=' + encodeURIComponent($("#txt_frm_date").val()) +
-
-                '&txt_to_date=' + encodeURIComponent($("#txt_to_date").val()) +
-
+            return '?txt_frm_date=' + encodeURIComponent(toControllerDate($("#txt_frm_date").val())) +
+                '&txt_to_date=' + encodeURIComponent(toControllerDate($("#txt_to_date").val())) +
                 '&ddl_status=' + encodeURIComponent($("#ddl_status").val() || "");
-
         }
 
-
-
         $("#btnDisputeExport").on("click", function () {
-
             location.href = '@Url.Action("ExcelRechargereport_Dispute", "Home")' + disputeExportQuery();
-
         });
-
-
 
         $("#btnDisputePDF").on("click", function () {
-
             window.open('@Url.Action("PDFRechargereport_Dispute", "Home")' + disputeExportQuery(), "_blank");
-
         });
 
-
-
         var pageindex = 2;
-
-        var NoMoredata = @(rows.Count < 50 ? "true" : "false");
-
+        var NoMoredata = $("#trow tr.saas-dispute-data-row").length < 20;
         var inProgress = false;
 
         $(window).on("scroll", function () {
-
             if (NoMoredata || inProgress) { return; }
-
-            var ddl_status = $("#ddl_status").val();
-
-            var txt_frm_date = $("#txt_frm_date").val();
-
-            var txt_to_date = $("#txt_to_date").val();
-
             if ($(window).scrollTop() + $(window).height() < $(document).height() - 120) { return; }
+            if ($(window).scrollTop() <= Number($("#disputeTable").height()) / 4) { return; }
 
-            if ($(window).scrollTop() > Number($("#disputeTable").height()) / 4) {
+            inProgress = true;
+            $("#loadingdiv").show();
 
-                inProgress = true;
-
-                $("#loadingdiv").show();
-
-                $.post("@Url.Action("InfiniteScrollDispute", "Home")",
-
-                    { pageindex: pageindex, ddl_status: ddl_status, txt_frm_date: txt_frm_date, txt_to_date: txt_to_date },
-
-                    function (data) {
-
-                        pageindex = pageindex + 1;
-
-                        NoMoredata = data.NoMoredata;
-
-                        if (data.HTMLString) { $("#trow").append(data.HTMLString); }
-
-                        $("#loadingdiv").hide();
-
-                        inProgress = false;
-
-                    }).fail(function () {
-
-                        $("#loadingdiv").hide();
-
-                        inProgress = false;
-
-                    });
-
-            }
-
+            $.post("@Url.Action("InfiniteScrollDispute", "Home")", {
+                pageindex: pageindex,
+                ddl_status: $("#ddl_status").val(),
+                txt_frm_date: toControllerDate($("#txt_frm_date").val()),
+                txt_to_date: toControllerDate($("#txt_to_date").val())
+            }, function (data) {
+                pageindex = pageindex + 1;
+                NoMoredata = data.NoMoredata;
+                if (data.HTMLString) {
+                    $("#trow").append(data.HTMLString);
+                    refreshDisputeRowCount();
+                }
+                $("#loadingdiv").hide();
+                inProgress = false;
+            }).fail(function () {
+                $("#loadingdiv").hide();
+                inProgress = false;
+            });
         });
-
     });
-
 </script>
-

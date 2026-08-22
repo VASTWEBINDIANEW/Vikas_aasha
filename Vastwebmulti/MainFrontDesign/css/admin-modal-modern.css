@@ -1537,10 +1537,13 @@ body.saas-admin-ui .vm-csp-modal .select2-container {
     width: 100% !important;
     max-width: 100% !important;
     display: block !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 2 !important;
 }
 
 body.saas-admin-ui .vm-csp-modal .select2-container--open {
-    z-index: 10060 !important;
+    z-index: 11120 !important;
 }
 
 body.saas-admin-ui .vm-csp-modal .select2-container--default .select2-selection--single {
@@ -1551,6 +1554,8 @@ body.saas-admin-ui .vm-csp-modal .select2-container--default .select2-selection-
     border-radius: 10px !important;
     background: #fff !important;
     box-shadow: none !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
 }
 
 body.saas-admin-ui .vm-csp-modal .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -1577,24 +1582,96 @@ body.saas-admin-ui .vm-csp-modal .select2-container--default.select2-container--
 }
 
 body.saas-admin-ui .vm-csp-modal .select2-dropdown {
-    z-index: 10070 !important;
+    z-index: 11150 !important;
     border: 1px solid #e2e8f0 !important;
     border-radius: 10px !important;
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14) !important;
     overflow: hidden !important;
 }
 
-body.saas-admin-ui .vm-csp-modal .select2-search--dropdown .select2-search__field {
-    min-height: 36px !important;
-    padding: 0 10px !important;
+body.saas-admin-ui .vm-csp-modal.vm-csp-select2-open .modal-dialog,
+body.saas-admin-ui .vm-csp-modal.vm-csp-select2-open .modal-content,
+body.saas-admin-ui .vm-csp-modal.vm-csp-select2-open .saas-admin-modal-body,
+body.saas-admin-ui .vm-csp-modal.vm-csp-select2-open .vm-sm-modal-body {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .vm-csp-modal .vm-csp-modal-select-wrap select.select2-hidden-accessible {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+body.saas-admin-ui .vm-csp-modal .vm-csp-modal-select-wrap .select2-container,
+body.saas-admin-ui .vm-csp-modal .vm-rl-select-search + .select2-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .vm-csp-modal .vm-csp-modal-select-wrap select.for-select2:not(.select2-hidden-accessible) {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .vm-csp-modal .select2-search--dropdown,
+body.saas-admin-ui .select2-dropdown.vm-csp-select2-dropdown .select2-search--dropdown,
+body.saas-admin-ui .select2-dropdown.vm-csp-select2-dropdown .select2-search--dropdown.select2-search--hide,
+body.saas-admin-ui.modal-open .select2-search--dropdown,
+body.saas-admin-ui.modal-open .select2-search--dropdown.select2-search--hide {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 10px !important;
+    background: linear-gradient(180deg, #f8fafc 0%, #fff 100%) !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .vm-csp-modal .select2-search--dropdown .select2-search__field,
+body.saas-admin-ui .select2-dropdown.vm-csp-select2-dropdown .select2-search--dropdown .select2-search__field,
+body.saas-admin-ui.modal-open .select2-search--dropdown .select2-search__field {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    padding: 9px 12px 9px 36px !important;
     border: 1px solid #dbe2ea !important;
-    border-radius: 8px !important;
+    border-radius: 9px !important;
     font-size: 0.84rem !important;
+    font-weight: 500 !important;
+    color: #0f172a !important;
+    outline: none !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.1a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E") no-repeat 12px center !important;
+}
+
+body.saas-admin-ui .vm-csp-modal .select2-search--dropdown .select2-search__field:focus,
+body.saas-admin-ui .select2-dropdown.vm-csp-select2-dropdown .select2-search--dropdown .select2-search__field:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .vm-csp-select2-dropdown .select2-results__options,
+body.saas-admin-ui .vm-csp-modal .select2-results__options {
+    max-height: 320px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
 }
 
 body.saas-admin-ui .vm-csp-modal .select2-results__option {
-    padding: 8px 12px !important;
+    padding: 9px 12px !important;
     font-size: 0.82rem !important;
+    line-height: 1.35 !important;
 }
 
 body.saas-admin-ui .vm-csp-modal .select2-results__option--highlighted {
@@ -1605,6 +1682,41 @@ body.saas-admin-ui .vm-csp-modal .select2-results__option--highlighted {
 body.saas-admin-ui .vm-csp-modal .select2-results__option[aria-selected="true"] {
     background: #dbeafe !important;
     color: #1e40af !important;
+}
+
+/* Select2 dropdown appended to body while CSP modal is open (above modal ~11000) */
+body.saas-admin-ui.modal-open .select2-container--open {
+    z-index: 11120 !important;
+}
+
+body.saas-admin-ui.modal-open .select2-dropdown.vm-csp-select2-dropdown {
+    z-index: 11130 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14) !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui.modal-open .select2-dropdown {
+    z-index: 11130 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14) !important;
+}
+
+body.saas-admin-ui.modal-open .select2-search--dropdown {
+    display: block !important;
+    padding: 10px !important;
+}
+
+body.saas-admin-ui.modal-open .select2-search--dropdown .select2-search__field {
+    display: block !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    padding: 9px 12px 9px 36px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 9px !important;
+    font-size: 0.84rem !important;
 }
 
 body.saas-admin-ui .vm-csp-modal .vm-csp-modal-grid {
