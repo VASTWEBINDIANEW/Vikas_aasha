@@ -70,6 +70,68 @@
         });
     }
 
+    function getModalZIndex($modal) {
+        var modalZ = parseInt($modal.css("z-index"), 10);
+
+        if (isNaN(modalZ) || modalZ < 11000) {
+            modalZ = 11000;
+            if ($modal.hasClass("saas-more-option-modal") || $modal.hasClass("saas-settings-otp-modal")) {
+                modalZ = 11050;
+            } else if ($modal.hasClass("vm-ml-detail-modal")) {
+                modalZ = 10620;
+            } else if ($modal.hasClass("vm-rl-doc-modal")) {
+                modalZ = 10630;
+            }
+        }
+
+        return modalZ;
+    }
+
+    function syncNestedModalStack() {
+        var $open = getOpenModals();
+
+        if (!$open.length) {
+            cleanupModalArtifacts();
+            return;
+        }
+
+        $("body").addClass("modal-open");
+
+        var $backs = $(".modal-backdrop");
+        while ($backs.length > $open.length) {
+            $backs.last().remove();
+            $backs = $(".modal-backdrop");
+        }
+
+        $open.each(function () {
+            openModal($(this));
+        });
+
+        var sorted = $open.toArray().sort(function (a, b) {
+            return getModalZIndex($(a)) - getModalZIndex($(b));
+        });
+
+        $backs = $(".modal-backdrop");
+        for (var i = 0; i < sorted.length; i++) {
+            var $modal = $(sorted[i]);
+            var modalZ = getModalZIndex($modal);
+            var backdropZ = modalZ - 5;
+
+            if (i > 0) {
+                var prevModalZ = getModalZIndex($(sorted[i - 1]));
+                backdropZ = Math.max(prevModalZ + 1, backdropZ);
+            }
+
+            if ($backs.eq(i).length) {
+                $backs.eq(i).addClass("in show").css({
+                    display: "block",
+                    opacity: 0.5,
+                    "z-index": backdropZ
+                });
+            }
+        }
+    }
+
     function initModalInstance($modal) {
         if (!$modal.data("bs.modal")) {
             $modal.modal({
@@ -89,7 +151,7 @@
         _hideModal.apply(this, arguments);
 
         if (isAdminUi()) {
-            window.setTimeout(cleanupModalArtifacts, Modal.BACKDROP_TRANSITION_DURATION + 20);
+            window.setTimeout(syncNestedModalStack, Modal.BACKDROP_TRANSITION_DURATION + 20);
         }
     };
 
@@ -129,17 +191,13 @@
     });
 
     function syncBackdropBelowModal($modal) {
-        var modalZ = parseInt($modal.css("z-index"), 10);
+        var modalZ = getModalZIndex($modal);
 
-        if (isNaN(modalZ) || modalZ < 11000) {
-            modalZ = 11000;
-            if ($modal.hasClass("saas-more-option-modal") || $modal.hasClass("saas-settings-otp-modal")) {
-                modalZ = 11050;
-            }
+        if (parseInt($modal.css("z-index"), 10) !== modalZ) {
             $modal.css("z-index", modalZ);
         }
 
-        $(".modal-backdrop").last().css("z-index", modalZ - 10);
+        window.setTimeout(syncNestedModalStack, 0);
     }
 
     $(document).on("shown.bs.modal", ".modal", function () {
@@ -166,7 +224,7 @@
         }
 
         closeModal($(this));
-        cleanupModalArtifacts();
+        window.setTimeout(syncNestedModalStack, Modal.BACKDROP_TRANSITION_DURATION + 20);
     });
 
     $(document).on("click", "[data-dismiss='modal'], [data-bs-dismiss='modal']", function (e) {

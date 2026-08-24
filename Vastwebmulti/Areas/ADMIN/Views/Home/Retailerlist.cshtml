@@ -20,7 +20,7 @@
 <link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=24" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=25" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=69" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=76" rel="stylesheet" />
 
 <style>
     body.stop-scrolling { overflow: inherit; overflow-x: hidden; }
@@ -297,7 +297,7 @@
                     <div class="vm-rl-tab-panels-wrap" id="vmRlTabPanels">
 
                     <div id="tab-9" class="tab-content current vm-ml-tab-panel input-border-third">
-                        <div class="left-four-tabs width100 vm-ml-create-form fund-transfer-form">
+                        <div class="left-four-tabs width100 vm-ml-create-form fund-transfer-form" data-admin-select2-custom="true">
                         @using (Ajax.BeginForm("Insert_retailer", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RegisterSuccess", OnBegin = "ajaxValidate()", LoadingElementId = "div-loader" }))
                         {
                             @Html.AntiForgeryToken()
@@ -309,7 +309,7 @@
                                         </label>
                                         <div class="form-group">
                                             <div class="custom-district">
-                                                @Html.DropDownListFor(m => m.DealerID, Model.Dealerlist, "Select Distributor", new { @class = "form-control" })
+                                                @Html.DropDownListFor(m => m.DealerID, Model.Dealerlist, "Select Distributor", new { @class = "form-control vm-rl-select-search", id = "DealerID" })
                                                 @*<select class="form-control">
                                                         <option value="" selected>Select Distributor Id</option>
                                                         <option value="1">Test</option>
@@ -753,6 +753,59 @@
         $('#defaultModal222').modal('hide');
     }
 
+    var vmRlDocModalSelector = '#panviewdoc,#aadharviewdoc,#ShopwithSalfieviewdoc,#VideoKYCdocshowviewdoc,#gstviewdoc,#frmagrviewdoc,#otpmodal,#otpmodaldocument';
+
+    function vmRlIsModalVisible($modal) {
+        return $modal.length && ($modal.hasClass('in') || $modal.hasClass('show') || $modal.css('display') === 'block');
+    }
+
+    function vmRlSyncKycModalStack() {
+        var $parent = $('#defaultModal222');
+        var parentOpen = vmRlIsModalVisible($parent);
+        var $openDocs = $(vmRlDocModalSelector).filter(function () {
+            return vmRlIsModalVisible($(this));
+        });
+
+        if (!parentOpen && !$openDocs.length) {
+            $('body').removeClass('modal-open').css({ overflow: '', 'padding-right': '' });
+            $('.modal-backdrop').remove();
+            return;
+        }
+
+        if (parentOpen) {
+            $('body').addClass('modal-open');
+            $parent.addClass('in show').css({
+                display: 'block',
+                opacity: 1,
+                visibility: 'visible'
+            }).attr('aria-hidden', 'false');
+        }
+
+        var $backs = $('.modal-backdrop');
+        var expectedBackdrops = parentOpen ? ($openDocs.length ? Math.min($openDocs.length + 1, 2) : 1) : $openDocs.length;
+
+        while ($backs.length > expectedBackdrops) {
+            $backs.last().remove();
+            $backs = $('.modal-backdrop');
+        }
+
+        if ($backs.length) {
+            $backs.first().addClass('in show').css({
+                display: 'block',
+                opacity: 0.5,
+                'z-index': 10610
+            });
+        }
+
+        if ($openDocs.length && $backs.length > 1) {
+            $backs.last().addClass('in show').css({
+                display: 'block',
+                opacity: 0.5,
+                'z-index': 10625
+            });
+        }
+    }
+
     function vmRlInitModals() {
         vmRlMoveModalsToBody();
         $(document).off('click.vmRl', '#defaultModal222 button.btn[value="Edit"]')
@@ -762,6 +815,10 @@
                 $m.find('.second-form').show();
                 $m.find('.modal-footer button.one, .first-form button.one').hide();
                 $m.find('.modal-footer button.One2, .second-form button.One2').show();
+            });
+        $(vmRlDocModalSelector).off('hidden.bs.modal.vmRlDoc shown.bs.modal.vmRlDoc')
+            .on('hidden.bs.modal.vmRlDoc shown.bs.modal.vmRlDoc', function () {
+                window.setTimeout(vmRlSyncKycModalStack, 60);
             });
         $('#defaultModal222').off('hidden.bs.modal.vmRl').on('hidden.bs.modal.vmRl', function () {
             vmRlResetDetailModal();
@@ -1436,14 +1493,40 @@ window.open(
         $el.closest('.custom-district').find('.select2-container').remove();
     }
 
-    function vmRlInitSelect2OnEl(el) {
-        if (window.setAdminSelect2Html && el) {
-            var $el = window.jQuery(el);
-            if ($el.length) {
-                window.setAdminSelect2Html(el, $el.html(), $el.val());
-                return;
+    function vmRlGetDrawerSelect2Options(el) {
+        var $ = window.jQuery;
+        var $el = $(el);
+        var opts = {
+            width: '100%',
+            minimumResultsForSearch: 0,
+            dropdownAutoWidth: false,
+            dropdownParent: $('#vmRlCreateModal'),
+            allowClear: false,
+            language: {
+                noResults: function () { return 'No match found'; },
+                searching: function () { return 'Searching...'; },
+                inputTooShort: function () { return 'Type to search...'; }
             }
+        };
+
+        if (window.getAdminSelect2Options) {
+            opts = $.extend({}, window.getAdminSelect2Options($el), opts);
+            opts.minimumResultsForSearch = 0;
+            opts.dropdownParent = $('#vmRlCreateModal');
         }
+
+        return opts;
+    }
+
+    function vmRlCleanupOrphanSelect2() {
+        var $ = window.jQuery;
+        if (!$) {
+            return;
+        }
+        $('#vmRlFormColSource .select2-container').remove();
+    }
+
+    function vmRlInitSelect2OnEl(el) {
         var $ = window.jQuery;
         if (!$ || !$.fn || !$.fn.select2 || !el) {
             return;
@@ -1455,19 +1538,31 @@ window.open(
         }
 
         vmRlDestroySelect2OnEl(el);
-        $el.select2(window.getAdminSelect2Options ? window.getAdminSelect2Options($el) : {
-            width: '100%',
-            minimumResultsForSearch: 0,
-            dropdownParent: $(document.body)
-        });
+        $el.select2(vmRlGetDrawerSelect2Options(el));
     }
 
     window.vmRlInitSelect2OnEl = vmRlInitSelect2OnEl;
 
-    function vmRlRefreshAllSelect2() {
-        if (window.refreshAdminSelect2) {
-            window.refreshAdminSelect2(window.jQuery('.retailerList_Page'));
+    function vmRlPrepareCreateDrawerForm() {
+        var formCard = document.getElementById('vmRlFormCard');
+        var panel = document.getElementById('vmRlCreatePanel');
+
+        if (formCard && panel && !panel.contains(formCard)) {
+            ['DealerID', 'vmRlCreateState', 'vmRlCreateDistrict'].forEach(function (id) {
+                vmRlDestroySelect2OnEl(document.getElementById(id));
+            });
+            panel.appendChild(formCard);
         }
+
+        vmRlCleanupOrphanSelect2();
+        vmRlRefreshAllSelect2();
+    }
+
+    function vmRlRefreshAllSelect2() {
+        ['DealerID', 'vmRlCreateState', 'vmRlCreateDistrict'].forEach(function (id) {
+            vmRlInitSelect2OnEl(document.getElementById(id));
+        });
+
         vmRlBindSelectEvents();
     }
 
@@ -1482,6 +1577,12 @@ window.open(
             onError: function (xhr) {
                 alert('Unable to load districts. ' + (xhr.status || '') + ' ' + (xhr.statusText || ''));
             }
+        });
+
+        $(document).off('change.vmRlDrawerDistrict').on('change.vmRlDrawerDistrict', '#vmRlCreateState', function () {
+            window.setTimeout(function () {
+                vmRlInitSelect2OnEl(document.getElementById('vmRlCreateDistrict'));
+            }, 350);
         });
     }
 
@@ -1499,15 +1600,9 @@ window.open(
     }
 
     ravi(document).ready(function () {
-        var formCard = document.getElementById("vmRlFormCard");
-        var panel = document.getElementById("vmRlCreatePanel");
-        if (formCard && panel && !panel.contains(formCard)) {
-            panel.appendChild(formCard);
-        }
-
         window.setTimeout(function () {
-            vmRlRefreshAllSelect2();
-        }, 200);
+            vmRlPrepareCreateDrawerForm();
+        }, 100);
     });
 
     ravi(document).ajaxComplete(function (event, xhr, settings) {
@@ -1516,7 +1611,11 @@ window.open(
         }
         window.setTimeout(function () {
             if (window.refreshAdminSelect2) {
-                window.refreshAdminSelect2(window.jQuery('.retailerList_Page'));
+                window.refreshAdminSelect2(window.jQuery('.vm-rl-toolbar-modern, #vmRlHistoryPanel, #srcbysts'));
+            }
+            var drawer = document.getElementById('vmRlCreateModal');
+            if (drawer && drawer.classList.contains('is-open')) {
+                vmRlRefreshAllSelect2();
             }
         }, 120);
     });
@@ -1675,6 +1774,11 @@ window.open(
                                  window.setAdminSelect2Html(document.getElementById('vmRlCreateDistrict'), "<option value='0'>Select District</option>", '0');
                              } else {
                                  ravi("#vmRlCreateDistrict").html("<option value='0'>Select District</option>");
+                             }
+                             if (typeof vmRlInitSelect2OnEl === 'function') {
+                                 vmRlInitSelect2OnEl(document.getElementById('DealerID'));
+                                 vmRlInitSelect2OnEl(document.getElementById('vmRlCreateState'));
+                                 vmRlInitSelect2OnEl(document.getElementById('vmRlCreateDistrict'));
                              }
 
                                 $('#Address1').val('');
@@ -2146,13 +2250,42 @@ function () {
         var closeBtn = document.getElementById('vmRlCreateClose');
         var openBtn  = document.getElementById('btnOpenCreateRetailer');
         var formCard = document.getElementById('vmRlFormCard');
+        var pageRoot = document.querySelector('.retailerList_Page');
+
+        /* Restore drawer inside page shell so .retailerList_Page CSS applies */
+        if (modal && pageRoot && modal.parentElement !== pageRoot) {
+            pageRoot.insertBefore(modal, pageRoot.firstChild);
+        }
 
         // Move the form card into the drawer panel (DOM move - preserves all bindings)
-        if (formCard && panel) {
+        if (formCard && panel && !panel.contains(formCard)) {
             panel.appendChild(formCard);
         }
 
+        window.setTimeout(function () {
+            if (typeof vmRlPrepareCreateDrawerForm === 'function') {
+                vmRlPrepareCreateDrawerForm();
+            }
+        }, 0);
+
+        function vmRlCloseBackgroundSelect2() {
+            var $ = window.jQuery;
+            if (!$) {
+                return;
+            }
+            $('#RetailerFilterDealerID, .retailerList_Page .vm-rl-toolbar-select, .retailerList_Page .vm-rl-area-filter__select').each(function () {
+                var $el = $(this);
+                if ($el.data('select2')) {
+                    try {
+                        $el.select2('close');
+                    } catch (e) { }
+                }
+            });
+            $('.select2-dropdown').not('.vm-rl-drawer-select2-dropdown').removeClass('vm-rl-drawer-select2-dropdown');
+        }
+
         function openDrawer() {
+            vmRlCloseBackgroundSelect2();
             modal.classList.add('is-open');
             modal.setAttribute('aria-hidden', 'false');
             document.body.classList.add('vm-rl-modal-open');
@@ -2161,10 +2294,11 @@ function () {
                 if (typeof vmRlRefreshAllSelect2 === 'function') {
                     vmRlRefreshAllSelect2();
                 }
-            }, 100);
+            }, 150);
         }
 
         function closeDrawer() {
+            vmRlCloseBackgroundSelect2();
             modal.classList.remove('is-open');
             modal.setAttribute('aria-hidden', 'true');
             document.body.classList.remove('vm-rl-modal-open');
@@ -2180,6 +2314,23 @@ function () {
                 closeDrawer();
             }
         });
+
+        if (window.jQuery) {
+            window.jQuery(document)
+                .off('select2:open.vmRlDrawer select2:close.vmRlDrawer')
+                .on('select2:open.vmRlDrawer', function (e) {
+                    var $el = window.jQuery(e.target);
+                    if (!$el.closest('.vm-rl-create-drawer').length) {
+                        return;
+                    }
+                    window.setTimeout(function () {
+                        window.jQuery('.select2-dropdown').last().addClass('vm-rl-drawer-select2-dropdown');
+                    }, 0);
+                })
+                .on('select2:close.vmRlDrawer', function () {
+                    window.jQuery('.select2-dropdown.vm-rl-drawer-select2-dropdown').removeClass('vm-rl-drawer-select2-dropdown');
+                });
+        }
     })();
 </script>
 

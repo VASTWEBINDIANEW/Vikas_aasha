@@ -1,198 +1,199 @@
-/* ADMIN — Bootstrap 3 modal JS + Bootstrap 5 CSS compatibility (all admin modals) */
-
-body.saas-admin-ui.modal-open {
-    overflow: hidden !important;
-    padding-right: 0 !important;
-}
-
-/* Hidden state — must win over .show leftovers */
-body.saas-admin-ui .modal:not(.in):not(.show) {
-    display: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-}
-
-body.saas-admin-ui .modal.fade:not(.in):not(.show) {
-    opacity: 0 !important;
-}
-
-body.saas-admin-ui .modal-backdrop {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 10990 !important;
-    background-color: #000 !important;
-}
-
-body.saas-admin-ui .modal-backdrop:not(.in):not(.show) {
-    display: none !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-
-body.saas-admin-ui .modal-backdrop.in,
-body.saas-admin-ui .modal-backdrop.show {
-    opacity: 0.5 !important;
-    display: block !important;
-    pointer-events: auto !important;
-}
-
-body.saas-admin-ui .modal {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 11000 !important;
-    width: 100% !important;
-    height: 100% !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    outline: 0 !important;
-}
-
-/* BS3 adds .in — BS5 expects .show */
-body.saas-admin-ui .modal.in,
-body.saas-admin-ui .modal.show {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-}
-
-body.saas-admin-ui .modal.fade.in,
-body.saas-admin-ui .modal.fade.show {
-    opacity: 1 !important;
-}
-
-body.saas-admin-ui .modal.in .modal-dialog,
-body.saas-admin-ui .modal.show .modal-dialog {
-    transform: none !important;
-    pointer-events: auto !important;
-    margin: 1.75rem auto !important;
-}
-
-body.saas-admin-ui .modal .modal-dialog {
-    pointer-events: auto !important;
-}
-
-body.saas-admin-ui .modal .modal-content {
-    pointer-events: auto !important;
-    position: relative !important;
-    z-index: 1 !important;
-}
-
-/* Layout modals — right drawer style */
-body.saas-admin-ui .allusershow-admin-modal.in .modal-dialog,
-body.saas-admin-ui .allusershow-admin-modal.show .modal-dialog,
-body.saas-admin-ui #ALLUSERSSHOW.in .modal-dialog,
-body.saas-admin-ui #ALLUSERSSHOW.show .modal-dialog {
-    margin: 0 !important;
-    float: right !important;
-    max-width: min(622px, 96vw) !important;
-    width: min(622px, 96vw) !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-}
-
-body.saas-admin-ui .fund-tr-history.in .modal-dialog,
-body.saas-admin-ui .fund-tr-history.show .modal-dialog,
-body.saas-admin-ui .fund-tr-history-one.in .modal-dialog,
-body.saas-admin-ui .fund-tr-history-one.show .modal-dialog,
-body.saas-admin-ui #show-notifaction.in .modal-dialog,
-body.saas-admin-ui #show-notifaction.show .modal-dialog,
-body.saas-admin-ui #Api-bal.in .modal-dialog,
-body.saas-admin-ui #Api-bal.show .modal-dialog {
-    margin: 0 !important;
-    float: right !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-    max-width: min(560px, 96vw) !important;
-    width: min(560px, 96vw) !important;
-}
-
-body.saas-admin-ui #dayleft.in .modal-dialog,
-body.saas-admin-ui #dayleft.show .modal-dialog {
-    margin: 0 !important;
-    float: right !important;
-    max-width: min(900px, 96vw) !important;
-    width: min(900px, 96vw) !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-}
-
-/* Web Login Setting — drawer modals */
-body.saas-admin-ui #wlDrawerModal.in,
-body.saas-admin-ui #wlDrawerModal.show,
-body.saas-admin-ui #ALLIPSHOWINGADDD.in,
-body.saas-admin-ui #ALLIPSHOWINGADDD.show {
-    display: flex !important;
-    align-items: stretch !important;
-    justify-content: flex-end !important;
-    padding: 0 !important;
-}
-
-body.saas-admin-ui #wlDrawerModal.in .modal-dialog,
-body.saas-admin-ui #wlDrawerModal.show .modal-dialog,
-body.saas-admin-ui #ALLIPSHOWINGADDD.in .modal-dialog,
-body.saas-admin-ui #ALLIPSHOWINGADDD.show .modal-dialog {
-    margin: 0 !important;
-    float: none !important;
-    flex: 0 0 min(560px, 96vw) !important;
-    max-width: min(560px, 96vw) !important;
-    width: min(560px, 96vw) !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-}
-
-/* Dashboard virtual balance modal */
-body.saas-admin-ui .saas-dash-modal.in .modal-dialog,
-body.saas-admin-ui .saas-dash-modal.show .modal-dialog,
-body.saas-admin-ui .saas-dash-modal#myModal.in .modal-dialog,
-body.saas-admin-ui .saas-dash-modal#myModal.show .modal-dialog {
-    float: none !important;
-    margin: 72px auto 20px !important;
-    width: min(480px, calc(100% - 24px)) !important;
-    max-width: min(480px, calc(100% - 24px)) !important;
-}
-
-body.saas-admin-ui .saas-dash-txn-modal.in,
-body.saas-admin-ui .saas-dash-txn-modal.show {
-    z-index: 11020 !important;
-}
-
-/* Generic wallet / charge modals */
-body.saas-admin-ui .Wallet-To-Bank-Charge-modal.in,
-body.saas-admin-ui .Wallet-To-Bank-Charge-modal.show {
-    z-index: 11000 !important;
-}
-
-@media (max-width: 767px) {
-    body.saas-admin-ui .modal.in .modal-dialog,
-    body.saas-admin-ui .modal.show .modal-dialog {
-        margin: 12px auto !important;
-        width: calc(100% - 20px) !important;
-        max-width: calc(100% - 20px) !important;
-        float: none !important;
-        height: auto !important;
-        max-height: calc(100dvh - 24px) !important;
-    }
-
-    body.saas-admin-ui .allusershow-admin-modal.in .modal-dialog,
-    body.saas-admin-ui .allusershow-admin-modal.show .modal-dialog,
-    body.saas-admin-ui #ALLUSERSSHOW.in .modal-dialog,
-    body.saas-admin-ui #ALLUSERSSHOW.show .modal-dialog,
-    body.saas-admin-ui .fund-tr-history.in .modal-dialog,
-    body.saas-admin-ui .fund-tr-history.show .modal-dialog,
-    body.saas-admin-ui .fund-tr-history-one.in .modal-dialog,
-    body.saas-admin-ui .fund-tr-history-one.show .modal-dialog,
-    body.saas-admin-ui #wlDrawerModal.in .modal-dialog,
-    body.saas-admin-ui #wlDrawerModal.show .modal-dialog,
-    body.saas-admin-ui #ALLIPSHOWINGADDD.in .modal-dialog,
-    body.saas-admin-ui #ALLIPSHOWINGADDD.show .modal-dialog,
-    body.saas-admin-ui #dayleft.in .modal-dialog,
-    body.saas-admin-ui #dayleft.show .modal-dialog {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        float: none !important;
-        height: 100dvh !important;
-    }
-}
+/* ADMIN — Bootstrap 3 modal JS + Bootstrap 5 CSS compatibility (all admin modals) */
+
+body.saas-admin-ui.modal-open {
+    overflow: hidden !important;
+    padding-right: 0 !important;
+}
+
+/* Hidden state — must win over .show leftovers */
+body.saas-admin-ui .modal:not(.in):not(.show) {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+body.saas-admin-ui .modal.fade:not(.in):not(.show) {
+    opacity: 0 !important;
+}
+
+body.saas-admin-ui .modal-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 10990 !important;
+    background-color: #000 !important;
+}
+
+body.saas-admin-ui .modal-backdrop:not(.in):not(.show) {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+body.saas-admin-ui .modal-backdrop.in,
+body.saas-admin-ui .modal-backdrop.show {
+    opacity: 0.5 !important;
+    display: block !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .modal {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 11000 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    outline: 0 !important;
+}
+
+/* BS3 adds .in — BS5 expects .show */
+body.saas-admin-ui .modal.in,
+body.saas-admin-ui .modal.show {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .modal.fade.in,
+body.saas-admin-ui .modal.fade.show {
+    opacity: 1 !important;
+}
+
+body.saas-admin-ui .modal.in .modal-dialog,
+body.saas-admin-ui .modal.show .modal-dialog {
+    transform: none !important;
+    pointer-events: auto !important;
+    margin: 1.75rem auto !important;
+}
+
+body.saas-admin-ui .modal .modal-dialog {
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .modal .modal-content {
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* Layout modals — right drawer style */
+body.saas-admin-ui .allusershow-admin-modal.in .modal-dialog,
+body.saas-admin-ui .allusershow-admin-modal.show .modal-dialog,
+body.saas-admin-ui #ALLUSERSSHOW.in .modal-dialog,
+body.saas-admin-ui #ALLUSERSSHOW.show .modal-dialog {
+    margin: 0 !important;
+    float: right !important;
+    max-width: min(622px, 96vw) !important;
+    width: min(622px, 96vw) !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+}
+
+body.saas-admin-ui .fund-tr-history.in .modal-dialog,
+body.saas-admin-ui .fund-tr-history.show .modal-dialog,
+body.saas-admin-ui .fund-tr-history-one.in .modal-dialog,
+body.saas-admin-ui .fund-tr-history-one.show .modal-dialog,
+body.saas-admin-ui #show-notifaction.in .modal-dialog,
+body.saas-admin-ui #show-notifaction.show .modal-dialog,
+body.saas-admin-ui #Api-bal.in .modal-dialog,
+body.saas-admin-ui #Api-bal.show .modal-dialog {
+    margin: 0 !important;
+    float: right !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-width: min(560px, 96vw) !important;
+    width: min(560px, 96vw) !important;
+}
+
+body.saas-admin-ui #dayleft.in .modal-dialog,
+body.saas-admin-ui #dayleft.show .modal-dialog {
+    margin: 0 !important;
+    float: right !important;
+    max-width: min(900px, 96vw) !important;
+    width: min(900px, 96vw) !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+}
+
+/* Web Login Setting — drawer modals */
+body.saas-admin-ui #wlDrawerModal.in,
+body.saas-admin-ui #wlDrawerModal.show,
+body.saas-admin-ui #ALLIPSHOWINGADDD.in,
+body.saas-admin-ui #ALLIPSHOWINGADDD.show {
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: flex-end !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui #wlDrawerModal.in .modal-dialog,
+body.saas-admin-ui #wlDrawerModal.show .modal-dialog,
+body.saas-admin-ui #ALLIPSHOWINGADDD.in .modal-dialog,
+body.saas-admin-ui #ALLIPSHOWINGADDD.show .modal-dialog {
+    margin: 0 !important;
+    float: none !important;
+    flex: 0 0 min(560px, 96vw) !important;
+    max-width: min(560px, 96vw) !important;
+    width: min(560px, 96vw) !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+}
+
+/* Dashboard virtual balance modal */
+body.saas-admin-ui .saas-dash-modal.in .modal-dialog,
+body.saas-admin-ui .saas-dash-modal.show .modal-dialog,
+body.saas-admin-ui .saas-dash-modal#myModal.in .modal-dialog,
+body.saas-admin-ui .saas-dash-modal#myModal.show .modal-dialog {
+    float: none !important;
+    margin: 72px auto 20px !important;
+    width: min(480px, calc(100% - 24px)) !important;
+    max-width: min(480px, calc(100% - 24px)) !important;
+}
+
+body.saas-admin-ui .saas-dash-txn-modal.in,
+body.saas-admin-ui .saas-dash-txn-modal.show {
+    z-index: 11020 !important;
+}
+
+/* Generic wallet / charge modals */
+body.saas-admin-ui .Wallet-To-Bank-Charge-modal.in,
+body.saas-admin-ui .Wallet-To-Bank-Charge-modal.show {
+    z-index: 11000 !important;
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .modal.in .modal-dialog,
+    body.saas-admin-ui .modal.show .modal-dialog {
+        margin: 12px auto !important;
+        width: calc(100% - 20px) !important;
+        max-width: calc(100% - 20px) !important;
+        float: none !important;
+        height: auto !important;
+        max-height: calc(100dvh - 24px) !important;
+    }
+
+    body.saas-admin-ui .allusershow-admin-modal.in .modal-dialog,
+    body.saas-admin-ui .allusershow-admin-modal.show .modal-dialog,
+    body.saas-admin-ui #ALLUSERSSHOW.in .modal-dialog,
+    body.saas-admin-ui #ALLUSERSSHOW.show .modal-dialog,
+    body.saas-admin-ui .fund-tr-history.in .modal-dialog,
+    body.saas-admin-ui .fund-tr-history.show .modal-dialog,
+    body.saas-admin-ui .fund-tr-history-one.in .modal-dialog,
+    body.saas-admin-ui .fund-tr-history-one.show .modal-dialog,
+    body.saas-admin-ui #wlDrawerModal.in .modal-dialog,
+    body.saas-admin-ui #wlDrawerModal.show .modal-dialog,
+    body.saas-admin-ui #ALLIPSHOWINGADDD.in .modal-dialog,
+    body.saas-admin-ui #ALLIPSHOWINGADDD.show .modal-dialog,
+    body.saas-admin-ui #dayleft.in .modal-dialog,
+    body.saas-admin-ui #dayleft.show .modal-dialog {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        float: none !important;
+        height: 100dvh !important;
+    }
+}
+
