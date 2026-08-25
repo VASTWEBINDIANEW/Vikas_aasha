@@ -1,0 +1,895 @@
+/* Public Login — vm-login design system v=3 */
+
+:root {
+    --vm-login-font: "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui, sans-serif;
+    --vm-login-surface: #ffffff;
+    --vm-login-border: #e2e8f0;
+    --vm-login-text: #0f172a;
+    --vm-login-muted: #64748b;
+    --vm-login-radius: 22px;
+    --vm-login-shadow: 0 32px 80px rgba(15, 23, 42, 0.24);
+}
+
+/* ── Page shell ── */
+.vm-login-page,
+.vm-public-login {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 16px 24px;
+    font-family: var(--vm-login-font);
+    position: relative;
+    background: #eef2ff;
+}
+
+.vm-login-page__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(135deg, var(--main-bg-lcolor, #2563eb) 0%, var(--main-bg-rcolor, #4f46e5) 100%);
+    pointer-events: none;
+}
+
+.vm-login-page--photo .vm-login-page__backdrop {
+    background-image: var(--vm-login-bg-url, none);
+    background-size: var(--vm-login-bg-size, cover);
+    background-repeat: var(--vm-login-bg-repeat, no-repeat);
+    background-position: center;
+}
+
+.vm-login-page--photo .vm-login-page__backdrop::after,
+.vm-login-page--gradient .vm-login-page__backdrop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.18) 0%, rgba(15, 23, 42, 0.32) 100%);
+}
+
+.vm-login-page__wrap,
+.vm-public-login__shell {
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.vm-login-page .container,
+.vm-public-login .container {
+    width: 100%;
+    max-width: 980px;
+    padding: 0;
+}
+
+/* ── Card ── */
+.vm-login-card,
+.vm-login-page .row.gg,
+.vm-public-login .row.gg {
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap;
+    background: var(--vm-login-surface);
+    border-radius: var(--vm-login-radius);
+    box-shadow: var(--vm-login-shadow);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    min-height: 560px;
+}
+
+.vm-login-card__visual,
+.vm-login-page .col-md-6.border-md.gg-item:first-child,
+.vm-public-login .col-md-6.border-md.gg-item:first-child {
+    padding: 0 !important;
+    float: none !important;
+    position: relative;
+    min-height: 560px;
+    background: linear-gradient(160deg, #0f172a 0%, color-mix(in srgb, var(--main-bg-lcolor, #2563eb) 65%, #0f172a) 100%);
+    overflow: hidden;
+}
+
+.vm-login-card__panel,
+.vm-login-page .col-md-6.border-md.gg-item:last-child {
+    padding: 0 !important;
+    float: none !important;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Left visual panel ── */
+.vm-login-visual {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vm-login-visual__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.14) 0%, transparent 42%),
+        linear-gradient(180deg, rgba(15, 23, 42, 0.05) 0%, rgba(15, 23, 42, 0.35) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.vm-login-visual__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vm-login-visual__brand {
+    text-align: center;
+    padding: 32px 28px;
+    max-width: 360px;
+}
+
+.vm-login-visual__logo {
+    width: min(280px, 72%);
+    max-height: 220px;
+    object-fit: contain;
+    margin: 0 auto 18px;
+    display: block;
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.22));
+}
+
+.vm-login-visual__tagline {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.vm-login-visual__slider,
+.vm-login-page .owl-carousel,
+.vm-public-login .owl-carousel {
+    width: 100%;
+    height: 100%;
+    min-height: 560px;
+}
+
+.vm-login-visual__slider .item,
+.vm-login-page .owl-carousel .item,
+.vm-public-login .owl-carousel .item {
+    width: 100%;
+    height: 100%;
+    min-height: 560px;
+}
+
+.vm-login-visual__slider .item img,
+.vm-login-page .owl-carousel .item img,
+.vm-public-login .owl-carousel .item img {
+    width: 100%;
+    height: 100%;
+    min-height: 560px;
+    object-fit: cover;
+    display: block;
+}
+
+.vm-login-page .owl-nav button,
+.vm-public-login .owl-nav button {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-radius: 999px !important;
+    width: 38px;
+    height: 38px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+/* ── Right panel ── */
+.vm-login-panel,
+.vm-login-page .span5,
+.vm-public-login .span5 {
+    float: none !important;
+    width: 100% !important;
+    padding: 28px 32px 24px !important;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+.vm-login-panel__body,
+.vm-login-page .resp-tabs-container,
+.vm-public-login .resp-tabs-container {
+    float: none !important;
+    width: 100% !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* ── Tabs ── */
+.vm-login-tabs,
+.vm-login-page .resp-tabs-list,
+.vm-public-login .resp-tabs-list {
+    display: flex !important;
+    gap: 6px;
+    padding: 5px;
+    margin: 0 0 22px !important;
+    background: #f1f5f9;
+    border-radius: 14px;
+    border: 1px solid var(--vm-login-border);
+    float: none !important;
+    width: 100% !important;
+    height: auto !important;
+}
+
+.vm-login-tabs__btn,
+.vm-login-page .resp-tabs-list button.resp-tab-item,
+.vm-public-login .resp-tabs-list button.resp-tab-item {
+    flex: 1 1 50%;
+    border: none !important;
+    border-radius: 10px !important;
+    background: transparent !important;
+    color: var(--vm-login-muted) !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    padding: 12px 14px !important;
+    height: auto !important;
+    line-height: 1.2 !important;
+    text-transform: none !important;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.vm-login-tabs__btn.resp-tab-active,
+.vm-login-page .resp-tabs-list button.resp-tab-item.resp-tab-active,
+.vm-public-login .resp-tabs-list button.resp-tab-item.resp-tab-active {
+    background: linear-gradient(135deg, var(--main-bg-lcolor, #2563eb), var(--main-bg-rcolor, #4f46e5)) !important;
+    color: #fff !important;
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--main-bg-lcolor, #2563eb) 35%, transparent);
+    border-bottom: none !important;
+}
+
+/* ── Form header ── */
+.vm-login-form__head {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.vm-login-form__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--main-bg-lcolor, #2563eb), var(--main-bg-rcolor, #4f46e5));
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--main-bg-lcolor, #2563eb) 30%, transparent);
+}
+
+.vm-login-form__icon img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
+}
+
+.vm-login-form__title {
+    margin: 0 0 6px;
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--vm-login-text);
+    letter-spacing: -0.02em;
+}
+
+.vm-login-form__subtitle {
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--vm-login-muted);
+    line-height: 1.45;
+}
+
+.vm-login-form,
+.vm-login-page .login-top,
+.vm-public-login .login-top {
+    padding: 0 !important;
+}
+
+.vm-login-field,
+.vm-login-page .for-border-effect,
+.vm-public-login .for-border-effect {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.vm-login-page #signupform .for-border-effect,
+.vm-public-login #signupform .for-border-effect {
+    margin-bottom: 10px;
+}
+
+.vm-login-page .for-border-effect.custom-district::before,
+.vm-public-login .for-border-effect.custom-district::before {
+    display: none;
+}
+
+.vm-login-input,
+.vm-login-page .login-top input[type="text"],
+.vm-login-page .login-top input[type="email"],
+.vm-login-page .login-top input[type="password"],
+.vm-login-page .login-top input[type="number"],
+.vm-login-page .login-top select.form-control,
+.vm-login-page .login-top textarea.form-control,
+.vm-public-login .login-top input[type="text"],
+.vm-public-login .login-top input[type="email"],
+.vm-public-login .login-top input[type="password"],
+.vm-public-login .login-top input[type="number"],
+.vm-public-login .login-top select.form-control,
+.vm-public-login .login-top textarea.form-control {
+    width: 100% !important;
+    height: 46px !important;
+    min-height: 46px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 12px !important;
+    background: #f8fafc !important;
+    padding: 0 15px !important;
+    font-size: 0.9rem !important;
+    color: var(--vm-login-text) !important;
+    box-shadow: none !important;
+    position: static !important;
+    top: auto !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.vm-login-page .login-top textarea.form-control,
+.vm-public-login .login-top textarea.form-control {
+    height: auto !important;
+    min-height: 88px !important;
+    padding: 10px 15px !important;
+}
+
+.vm-login-input:focus,
+.vm-login-page .login-top input:focus,
+.vm-login-page .login-top select:focus,
+.vm-login-page .login-top textarea:focus,
+.vm-public-login .login-top input:focus,
+.vm-public-login .login-top select:focus,
+.vm-public-login .login-top textarea:focus {
+    border-color: var(--main-bg-lcolor, #2563eb) !important;
+    background: #fff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--main-bg-lcolor, #2563eb) 18%, transparent) !important;
+}
+
+.vm-login-page .form-control ~ .focus-border:before,
+.vm-login-page .form-control ~ .focus-border:after,
+.vm-public-login .form-control ~ .focus-border:before,
+.vm-public-login .form-control ~ .focus-border:after {
+    height: 0 !important;
+    display: none !important;
+}
+
+/* Hide legacy floating icon block */
+.vm-login-page .login-iamge,
+.vm-public-login .login-iamge {
+    display: none !important;
+}
+
+.vm-login-form__extras,
+.vm-login-page .login-bottom,
+.vm-public-login .login-bottom {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 16px;
+}
+
+.vm-login-form__extras ul,
+.vm-login-page .login-bottom ul,
+.vm-public-login .login-bottom ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.vm-login-form__extras label,
+.vm-login-page .login-bottom label,
+.vm-public-login .login-bottom label {
+    font-size: 0.84rem;
+    color: var(--vm-login-muted);
+    font-weight: 500;
+    margin: 0;
+    cursor: pointer;
+}
+
+.vm-login-page .login-bottom a,
+.vm-public-login .login-bottom a {
+    color: var(--main-bg-lcolor, #2563eb) !important;
+    font-weight: 600;
+    font-size: 0.84rem;
+    text-decoration: none;
+}
+
+.vm-login-page .login-bottom a:hover,
+.vm-public-login .login-bottom a:hover {
+    text-decoration: underline;
+}
+
+.vm-login-form__submit,
+.vm-login-page .submit,
+.vm-public-login .submit {
+    float: none !important;
+    margin-top: 6px;
+}
+
+.vm-login-btn,
+.vm-login-page input.fullbodydycolorbg,
+.vm-login-page #login,
+.vm-login-page #SignUp,
+.vm-login-page #btnforget,
+.vm-public-login input.fullbodydycolorbg,
+.vm-public-login #login,
+.vm-public-login #SignUp,
+.vm-public-login #btnforget {
+    width: 100% !important;
+    height: 48px !important;
+    border: none !important;
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, var(--main-bg-lcolor, #2563eb), var(--main-bg-rcolor, #4f46e5)) !important;
+    color: #fff !important;
+    font-size: 0.94rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--main-bg-lcolor, #2563eb) 32%, transparent);
+}
+
+.vm-login-btn:hover:not(:disabled),
+.vm-login-page #login:hover,
+.vm-login-page #SignUp:hover:not(:disabled),
+.vm-login-page #btnforget:hover,
+.vm-public-login input.fullbodydycolorbg:hover:not(:disabled),
+.vm-public-login #login:hover,
+.vm-public-login #SignUp:hover:not(:disabled),
+.vm-public-login #btnforget:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.03);
+    box-shadow: 0 14px 28px color-mix(in srgb, var(--main-bg-lcolor, #2563eb) 38%, transparent);
+}
+
+.vm-login-page #SignUp:disabled,
+.vm-public-login #SignUp:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.vm-login-page span#login-error,
+.vm-public-login span#login-error {
+    display: block;
+    font-size: 0.84rem;
+    color: #dc2626;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.vm-login-page__footer,
+.vm-login-page .footer,
+.vm-public-login .footer {
+    margin-top: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.vm-login-page__footer p,
+.vm-login-page .footer p,
+.vm-public-login .footer p {
+    color: rgba(255, 255, 255, 0.94);
+    font-size: 0.8rem;
+    margin: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+}
+
+/* ── Sign up / captcha / OTP ── */
+.vm-login-page .sign-top,
+.vm-public-login .sign-top {
+    padding-bottom: 12px !important;
+}
+
+.vm-login-page .vm-login-captcha-alert,
+.vm-public-login .vm-login-captcha-alert {
+    border-radius: 12px !important;
+    font-size: 0.84rem !important;
+    padding: 10px 12px !important;
+    margin-bottom: 10px !important;
+    border: 1px solid #fecaca;
+}
+
+.vm-login-page .vm-login-captcha-row,
+.vm-public-login .vm-login-captcha-row {
+    margin-top: 8px;
+}
+
+.vm-login-page #captcha-text,
+.vm-public-login #captcha-text {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.vm-login-page .vm-login-captcha-box,
+.vm-public-login .vm-login-captcha-box {
+    padding: 0.4rem 0.55rem !important;
+    max-width: 100%;
+    border-radius: 10px !important;
+}
+
+.vm-login-page .vm-login-captcha-input,
+.vm-public-login .vm-login-captcha-input {
+    letter-spacing: 0.5px;
+    max-width: 160px;
+    height: 38px;
+    border-radius: 10px;
+}
+
+.vm-login-page .vm-login-captcha-verify,
+.vm-public-login .vm-login-captcha-verify {
+    height: 36px;
+    justify-content: center;
+    font-size: 0.84rem;
+    width: 5.2rem;
+    border-radius: 10px;
+}
+
+.vm-login-page .vm-login-field-spinner,
+.vm-public-login .vm-login-field-spinner {
+    font-size: 8px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 20px;
+    width: 20px;
+}
+
+.vm-login-page .vm-login-field-success,
+.vm-public-login .vm-login-field-success {
+    width: 25px;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}
+
+.vm-login-page .vm-login-send-otp-btn,
+.vm-public-login .vm-login-send-otp-btn {
+    cursor: pointer;
+}
+
+.vm-login-page .vm-login-email-otp,
+.vm-public-login .vm-login-email-otp {
+    margin-top: -16px;
+}
+
+.vm-login-page .vm-login-forget-title,
+.vm-public-login .vm-login-forget-title {
+    font-size: 1.45rem;
+    text-align: center;
+    margin-bottom: 6px;
+    margin-top: 0;
+    color: var(--vm-login-text);
+}
+
+.vm-login-page .vm-login-forget-otp-link,
+.vm-public-login .vm-login-forget-otp-link {
+    position: absolute;
+    top: 3px;
+    right: 17px;
+    padding: 2px 5px;
+    color: #16a34a;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.78rem;
+}
+
+.vm-login-page .vm-login-forget-otp-label,
+.vm-public-login .vm-login-forget-otp-label {
+    margin-top: 0.5rem;
+}
+
+.vm-login-page .vm-login-forget-otp-field,
+.vm-public-login .vm-login-forget-otp-field {
+    width: 100%;
+    margin-top: 5px;
+    text-align: end;
+}
+
+.vm-login-page .vm-login-referral-col,
+.vm-public-login .vm-login-referral-col {
+    margin-top: 5px;
+}
+
+.vm-login-page .vm-login-referral-field,
+.vm-public-login .vm-login-referral-field {
+    position: absolute;
+    top: -8px;
+    right: 14px;
+    width: 78%;
+}
+
+.vm-login-page .vm-login-referral-input,
+.vm-public-login .vm-login-referral-input {
+    height: 32px !important;
+    min-height: 32px !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.vm-login-page .hidden,
+.vm-public-login .hidden {
+    display: none;
+}
+
+.vm-login-page .spinner-border,
+.vm-public-login .spinner-border {
+    border: 2px solid #94a3b8;
+    border-top-color: var(--main-bg-lcolor, #2563eb);
+    border-radius: 99px;
+    animation: vm-login-spin 0.8s linear infinite;
+}
+
+@keyframes vm-login-spin {
+    to { transform: rotate(360deg); }
+}
+
+.vm-login-page input[type=number],
+.vm-public-login input[type=number] {
+    height: 34px;
+    width: 38px;
+    font-size: 1rem;
+    text-align: center;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+}
+
+.vm-login-page #otp_continer_inputs_email,
+.vm-login-page #otp_continer_inputs,
+.vm-public-login #otp_continer_inputs_email,
+.vm-public-login #otp_continer_inputs {
+    border: 1px solid #cbd5e1;
+    width: 100%;
+    min-height: 38px;
+    padding: 4px;
+    border-radius: 10px;
+    margin-top: 0 !important;
+    background: #f8fafc;
+}
+
+.vm-login-page small#mobile_err,
+.vm-login-page small#email_err,
+.vm-public-login small#mobile_err,
+.vm-public-login small#email_err {
+    position: absolute;
+    top: 36px;
+    left: 8px;
+    font-size: 11px;
+    color: #dc2626;
+}
+
+.vm-login-page input#btnsendOTP_Email,
+.vm-public-login input#btnsendOTP_Email {
+    position: absolute;
+    top: 6px;
+    right: 3px;
+    background: none !important;
+    border: none;
+    color: var(--main-bg-lcolor, #2563eb);
+    font-weight: 600;
+    font-size: 0.78rem;
+}
+
+.vm-login-page .otp_set2 input,
+.vm-public-login .otp_set2 input {
+    width: 42px !important;
+    height: 34px !important;
+    text-align: center;
+}
+
+.vm-login-page .loadingio-spinner-gear-94vo528ab8,
+.vm-public-login .loadingio-spinner-gear-94vo528ab8 {
+    width: 100%;
+    height: 36px;
+    overflow: hidden;
+    border: 2px solid color-mix(in srgb, var(--main-bg-lcolor, #2563eb) 55%, transparent);
+    text-align: center;
+    position: relative;
+    border-radius: 12px;
+}
+
+.vm-login-page .loader,
+.vm-public-login .loader {
+    color: #64748b;
+    font-family: var(--vm-login-font);
+    height: 24px;
+    overflow-x: hidden;
+    position: absolute;
+    text-align: center;
+    width: 98%;
+    margin: 2px 1%;
+}
+
+.vm-login-page .loader:before,
+.vm-public-login .loader:before {
+    animation: vm-login-loader-slide 3s alternate infinite linear;
+    background-image: linear-gradient(to right, var(--main-bg-lcolor, #2563eb), var(--main-bg-rcolor, #4f46e5));
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+@keyframes vm-login-loader-slide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.vm-login-page .text-danger,
+.vm-public-login .text-danger {
+    color: #dc2626 !important;
+    font-size: 0.78rem;
+}
+
+/* ── Kill legacy Login_body floats/sizing ── */
+.vm-login-page.Login_body,
+.vm-public-login.Login_body {
+    padding-top: 0;
+}
+
+.vm-login-page.Login_body .gg,
+.vm-public-login.Login_body .gg {
+    height: auto;
+    min-height: 560px;
+    padding: 0 !important;
+}
+
+.vm-login-page.Login_body .row.gg .gg-item,
+.vm-public-login.Login_body .row.gg .gg-item {
+    border: none !important;
+    background: transparent;
+}
+
+.vm-login-page.Login_body .tabdiv,
+.vm-login-page.Login_body #fristimage,
+.vm-login-page.Login_body .span5,
+.vm-login-page.Login_body .resp-tabs-container,
+.vm-login-page.Login_body .resp-tabs-list,
+.vm-public-login.Login_body .tabdiv,
+.vm-public-login.Login_body #fristimage,
+.vm-public-login.Login_body .span5,
+.vm-public-login.Login_body .resp-tabs-container,
+.vm-public-login.Login_body .resp-tabs-list {
+    float: none !important;
+    width: 100% !important;
+}
+
+.vm-login-page.Login_body button,
+.vm-public-login.Login_body button {
+    border: 0;
+    height: auto;
+    line-height: normal;
+    font-size: inherit;
+    text-transform: none;
+}
+
+.vm-login-page.Login_body .resp-tabs-list,
+.vm-public-login.Login_body .resp-tabs-list {
+    margin-top: 0 !important;
+    margin-bottom: 22px !important;
+    height: auto !important;
+}
+
+.vm-login-page.Login_body .resp-tab-active,
+.vm-public-login.Login_body .resp-tab-active {
+    border-bottom: none !important;
+    color: #fff !important;
+    outline: none;
+}
+
+.vm-login-page.Login_body .login-top input[type="submit"]:hover,
+.vm-login-page.Login_body .login-top input.fullbodydycolorbg:hover,
+.vm-public-login.Login_body .login-top input[type="submit"]:hover,
+.vm-public-login.Login_body .login-top input.fullbodydycolorbg:hover {
+    background: linear-gradient(135deg, var(--main-bg-lcolor, #2563eb), var(--main-bg-rcolor, #4f46e5)) !important;
+}
+
+.vm-login-page.Login_body select.form-control:not([size]):not([multiple]),
+.vm-public-login.Login_body select.form-control:not([size]):not([multiple]) {
+    height: 46px !important;
+    border-radius: 12px !important;
+    padding: 0 15px !important;
+    font-size: 0.9rem !important;
+}
+
+.vm-login-page.Login_body .form-control:focus,
+.vm-public-login.Login_body .form-control:focus {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--main-bg-lcolor, #2563eb) 18%, transparent) !important;
+    border-color: var(--main-bg-lcolor, #2563eb) !important;
+}
+
+.vm-login-page.Login_body .resp-tabs-container img,
+.vm-public-login.Login_body .resp-tabs-container img {
+    max-width: none;
+    max-height: none;
+}
+
+/* easyResponsiveTabs accordion headers hidden on desktop */
+.vm-login-page .resp-accordion,
+.vm-public-login .resp-accordion {
+    display: none !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 991px) {
+    .vm-login-page,
+    .vm-public-login {
+        padding: 14px 10px 20px;
+        align-items: flex-start;
+    }
+
+    .vm-login-card__visual,
+    .vm-login-page .col-md-6.border-md.gg-item:first-child,
+    .vm-public-login .col-md-6.border-md.gg-item:first-child {
+        min-height: 240px;
+    }
+
+    .vm-login-visual__slider,
+    .vm-login-page .owl-carousel .item,
+    .vm-login-page .owl-carousel .item img,
+    .vm-public-login .owl-carousel .item img {
+        min-height: 240px;
+    }
+
+    .vm-login-panel,
+    .vm-login-page .span5,
+    .vm-public-login .span5 {
+        padding: 22px 18px 18px !important;
+    }
+
+    .vm-login-card,
+    .vm-login-page .row.gg,
+    .vm-public-login .row.gg {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 575px) {
+    .vm-login-tabs__btn,
+    .vm-login-page .resp-tabs-list button.resp-tab-item,
+    .vm-public-login .resp-tabs-list button.resp-tab-item {
+        font-size: 0.82rem !important;
+        padding: 10px 8px !important;
+    }
+
+    .vm-login-form__title {
+        font-size: 1.28rem;
+    }
+
+    .vm-login-page .login-top input[type="text"],
+    .vm-login-page .login-top input[type="email"],
+    .vm-login-page .login-top input[type="password"],
+    .vm-public-login .login-top input[type="text"],
+    .vm-public-login .login-top input[type="email"],
+    .vm-public-login .login-top input[type="password"] {
+        font-size: 0.86rem !important;
+    }
+}

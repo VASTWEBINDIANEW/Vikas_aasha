@@ -18,7 +18,7 @@
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=44" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=29" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-web-login-modern.css?v=28" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-web-login-modern.css?v=33" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-web-login-mobile.css?v=8" rel="stylesheet" />
 
 <section class="content WebLogin_Page web_login_page New_Employee_Page Masterlist-page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-user-page saas-master-list-page saas-fund-transfer-premium saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-prepaid-card-report-page saas-ecommerce-history-page saas-security-report-page saas-giftcard-report-page">
@@ -85,7 +85,8 @@
                             <strong id="wl_kyc_selected_text">Loading...</strong>
                         </span>
                         <span class="wl-kyc-select__caret" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
-                        <select id="ddlSignupKYCType" name="ddlSignupKYCType" class="wl-kyc-select__control"
+                        <select id="ddlSignupKYCType" name="ddlSignupKYCType" class="wl-kyc-select__control vm-no-select2"
+                                data-no-select2="true"
                                 aria-label="KYC Type"
                                 onchange="handle_signup_kyc_change(this);">
                         </select>
@@ -272,7 +273,7 @@
                                         <div class="form-group " style="padding-top:10px !important;">
                                             <label>User's Role</label>
                                             <div class="custom-district1">
-                                                <select required name="UserRole" id="UserRole" class="form-control" onchange="ONCHANGE()" style="-webkit-appearance:none;">
+                                                <select required name="UserRole" id="UserRole" class="form-control for-select2 vm-rl-select-search" data-live-search="true" onchange="ONCHANGE()">
                                                     <option value="">Select User Role</option>
                                                     <option value="Admin">Administration</option>
                                                     <option value="master">Master Distributor</option>
@@ -285,7 +286,7 @@
                                         <div class="form-group">
                                             <label>All User's List</label>
                                             <div class="">
-                                                <select required name="userslist" id="userslist" class="form-control for-select2" style="-webkit-appearance:none;">
+                                                <select required name="userslist" id="userslist" class="form-control for-select2 vm-rl-select-search" data-live-search="true" style="-webkit-appearance:none;" onchange="wlSyncOldEmail();">
                                                     <option value="">Select User</option>
                                                 </select>
                                             </div>
@@ -325,7 +326,7 @@
                                         <div class="form-group" style="padding-top:10px !important;">
                                             <label>User's Role</label>
                                             <div class="custom-district1">
-                                                <select required name="UserRoleonmobile" id="UserRoleonmobile" class="form-control" style="-webkit-appearance:none;">
+                                                <select required name="UserRoleonmobile" id="UserRoleonmobile" class="form-control for-select2 vm-rl-select-search" data-live-search="true" onchange="wlFillMobileUsers();">
                                                     <option value="">Select User Role</option>
                                                     <option value="Admin">Administration</option>
                                                     <option value="master">Master Distributor</option>
@@ -338,14 +339,14 @@
                                         <div class="form-group">
                                             <label>All User's List</label>
                                             <div class="">
-                                                <select name="userslistmob" id="userslistmob" required class="form-control for-select2" style="-webkit-appearance:none;">
+                                                <select name="userslistmob" id="userslistmob" required class="form-control for-select2 vm-rl-select-search" data-live-search="true" style="-webkit-appearance:none;" onchange="wlSyncOldMobile();">
                                                     <option value="">Select User</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label>Old Registered Mobile No</label>
-                                            <input name="txtoldmob" id="txtoldmob" required type="number" placeholder="Old Mobile No" class="form-control" readonly style="-webkit-appearance:none;-moz-appearance:textfield;" />
+                                            <input name="txtoldmob" id="txtoldmob" required type="text" maxlength="15" inputmode="numeric" autocomplete="off" placeholder="Old Mobile No" class="form-control" readonly />
                                         </div>
                                         <div class="form-group tabcurrent-seconddesign">
                                             <label>New Mobile No</label>
@@ -501,7 +502,7 @@
                                     <div class="wl-history-filter-grid">
                                         <div class="wl-hf-row wl-hf-row--selects">
                                             <div class="vm-opr-field vm-dmt-field wl-hf-field">
-                                                <select id="ddlRoleName" name="ddlRoleName" class="vm-opr-select vm-dmt-select form-control for-select2" title="User Role">
+                                                <select id="ddlRoleName" name="ddlRoleName" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User Role">
                                                     <option value="Admin">Admin</option>
                                                     <option value="master">Master Distributor</option>
                                                     <option value="Dealer">Distributor</option>
@@ -510,12 +511,12 @@
                                                 </select>
                                             </div>
                                             <div class="vm-opr-field vm-dmt-field wl-hf-field">
-                                                <select id="ddlfirmname" name="ddlfirmname" class="vm-opr-select vm-dmt-select form-control for-select2" title="User">
+                                                <select id="ddlfirmname" name="ddlfirmname" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User">
                                                     <option value="">Select User</option>
                                                 </select>
                                             </div>
                                             <div class="vm-opr-field vm-dmt-field wl-hf-field">
-                                                <select id="ddlType" name="ddlType" class="vm-opr-select vm-dmt-select form-control for-select2" title="Login From">
+                                                <select id="ddlType" name="ddlType" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="Login From">
                                                     <option value="">Select From</option>
                                                     <option value="Web">Web</option>
                                                     <option value="Apps">Apps</option>
@@ -572,7 +573,7 @@
                                     <div class="wl-history-filter-grid">
                                         <div class="wl-hf-row wl-hf-row--selects">
                                             <div class="vm-opr-field vm-dmt-field wl-hf-field">
-                                                <select id="ddlAppRoleName" name="ddlAppRoleName" class="vm-opr-select vm-dmt-select form-control for-select2" title="User Role">
+                                                <select id="ddlAppRoleName" name="ddlAppRoleName" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User Role">
                                                     <option value="Admin">Admin</option>
                                                     <option value="master">Master Distributor</option>
                                                     <option value="Dealer">Distributor</option>
@@ -581,12 +582,12 @@
                                                 </select>
                                             </div>
                                             <div class="vm-opr-field vm-dmt-field wl-hf-field">
-                                                <select id="ddlAppfirmname" name="ddlAppfirmname" class="vm-opr-select vm-dmt-select form-control for-select2" title="User">
+                                                <select id="ddlAppfirmname" name="ddlAppfirmname" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User">
                                                     <option value="">Select User</option>
                                                 </select>
                                             </div>
                                             <div class="vm-opr-field vm-dmt-field wl-hf-field">
-                                                <select id="ddlType1" name="ddlType1" class="vm-opr-select vm-dmt-select form-control for-select2" title="Login From">
+                                                <select id="ddlType1" name="ddlType1" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="Login From">
                                                     <option value="">Select From</option>
                                                     <option value="Web">Web</option>
                                                     <option value="Apps">Apps</option>
@@ -636,7 +637,7 @@
                                     <div class="wl-history-filter-grid">
                                         <div class="wl-hf-row wl-hf-row--selects">
                                             <div class="vm-opr-field vm-dmt-field wl-hf-field">
-                                                <select id="ddlAttemptRoleName" name="ddlAttemptRoleName" class="vm-opr-select vm-dmt-select form-control for-select2" title="User Role">
+                                                <select id="ddlAttemptRoleName" name="ddlAttemptRoleName" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User Role">
                                                     <option value="">Select User Role</option>
                                                     <option value="master">Master Distributor</option>
                                                     <option value="Dealer">Distributor</option>
@@ -650,7 +651,7 @@
                                                 </select>
                                             </div>
                                             <div class="vm-opr-field vm-dmt-field wl-hf-field">
-                                                <select name="ddlAttemptfirmname" id="ddlAttemptfirmname" class="vm-opr-select vm-dmt-select form-control for-select2" title="User">
+                                                <select name="ddlAttemptfirmname" id="ddlAttemptfirmname" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User">
                                                     <option value="">Select User</option>
                                                 </select>
                                             </div>
@@ -1263,7 +1264,12 @@
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 <script>
-    function wlGet$() { return window.jQuery || window.$; }
+    function wlGet$() {
+        if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2) { return window.jQuery; }
+        if (window.$ && window.$.fn && window.$.fn.select2) { return window.$; }
+        if (window.ravi && window.ravi.fn && window.ravi.fn.select2) { return window.ravi; }
+        return window.jQuery || window.$;
+    }
 
     function wlSyncManageSidebar() {
         var $ = wlGet$();
@@ -1313,6 +1319,9 @@
         }
         if (typeof tabopen === 'function') tabopen(tabopenArg);
         if (isManage) wlSyncManageSidebar();
+        window.setTimeout(function () {
+            if (typeof window.wlBootPageSelects === 'function') { window.wlBootPageSelects(true); }
+        }, 40);
     }
 
     function wlRightTab(panelId, btnId) {
@@ -1328,16 +1337,15 @@
             panel.style.display = 'block';
             panel.classList.add('rc-right-panel--active');
         }
+        window.setTimeout(function () {
+            if (typeof window.wlBootPageSelects === 'function') { window.wlBootPageSelects(true); }
+        }, 40);
     }
 
     function wlInitSelect2() {
-        var $ = wlGet$();
-        if (!$ || !$.fn.select2) return;
-        $('.WebLogin_Page .for-select2, .WebLogin_Page .rc-filter-select.for-select2, .WebLogin_Page .vm-opr-select').each(function () {
-            if (!$(this).hasClass('select2-hidden-accessible')) {
-                $(this).select2({ width: '100%' });
-            }
-        });
+        if (typeof window.wlBootPageSelects === 'function') {
+            window.wlBootPageSelects(false);
+        }
     }
 
     function wlSetDrawerModal(title, iconClass) {
@@ -1763,31 +1771,6 @@
 
 
 
-       $('#ddlAttemptRoleName').change(function () {
-        role = $(this).val();
-          $('#ddlAttemptfirmname').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
-
-      $.ajax({
-                type: 'POST',
-             url: '@Url.Action("FillUsersList","Home")',
-             data: {role:role,type:'value1'},
-             success: function (data) {
-
-                  $('#ddlAttemptfirmname').empty()
-                   $('#ddlAttemptfirmname').append('<option selected="selected" value="">Please select User</option>');
-                 $.each(data, function (data, item) {
-                     $('#ddlAttemptfirmname').append($('<option></option>').text(item.Text).val(item.Value));
-                 })
-
-                },
-
-            });
-
-
-
-
-    })
-
     $('#UserRoleBlocklogin').change(function () {
         role = $(this).val();
           $('#block_login_User').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
@@ -1860,115 +1843,332 @@
             });
     }
 
-    function ONCHANGE() {
-                var role = $('#UserRole').val();
-          $('#userslist').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
-
-         $.ajax({
-                type: 'POST',
-             url: '@Url.Action("FillUsersList","Home")',
-             data: {role:role,type:$("input[name='group1']:checked").val()},
-             success: function (data) {
-
-                  $('#userslist').empty()
-                   $('#userslist').append('<option selected="selected" value="">Please select User</option>');
-                 $.each(data, function (data, item) {
-                     $('#userslist').append($('<option></option>').text(item.Text).val(item.Value));
-                 })
-
-                },
-
+    function wlParseSelectList(data) {
+        var $jq = wlGet$() || window.jQuery || window.$;
+        if (!data) {
+            return [];
+        }
+        if ($jq && $jq.isArray(data)) {
+            return data;
+        }
+        if (Object.prototype.toString.call(data) === '[object Array]') {
+            return data;
+        }
+        if (data.Items && (data.Items.length || data.Items.length === 0)) {
+            return data.Items;
+        }
+        if (data.items && (data.items.length || data.items.length === 0)) {
+            return data.items;
+        }
+        var rows = [];
+        if ($jq) {
+            $jq.each(data, function (_, item) {
+                if (item && (item.Text != null || item.text != null || item.Value != null || item.value != null)) {
+                    rows.push(item);
+                }
             });
-
+        }
+        return rows;
     }
 
-      $('#UserRoleonmobile').change(function () {
+    var wlSelectXhr = {};
+    window.wlSelectInitLock = false;
+    var WL_SELECT_IDS = '#userslist, #userslistmob, #UserRole, #UserRoleonmobile, #ddlRoleName, #ddlfirmname, #ddlType, #ddlAppRoleName, #ddlAppfirmname, #ddlType1, #ddlAttemptRoleName, #ddlAttemptfirmname';
 
-        var role = $(this).val();
-          $('#userslistmob').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
+    function wlSkipSearchSelect(el) {
+        if (!el || !el.tagName || el.tagName.toLowerCase() !== 'select') {
+            return true;
+        }
+        if (el.id === 'ddlSignupKYCType') {
+            return true;
+        }
+        if ((el.className || '').indexOf('wl-kyc-select__control') !== -1) {
+            return true;
+        }
+        if ((el.className || '').indexOf('vm-no-select2') !== -1) {
+            return true;
+        }
+        if (el.getAttribute('data-no-select2') === 'true') {
+            return true;
+        }
+        return false;
+    }
 
-         $.ajax({
-                type: 'POST',
-             url: '@Url.Action("FillUsersList","Home")',
-             data: {role:role,type:$("input[name='group1']:checked").val()},
-             success: function (data) {
+    function wlSelect2Options() {
+        var $ = wlGet$();
+        return {
+            width: '100%',
+            minimumResultsForSearch: 0,
+            allowClear: false,
+            dropdownParent: $(document.body),
+            dropdownCssClass: 'wl-user-select-dropdown',
+            language: {
+                noResults: function () { return 'No match found'; }
+            },
+            matcher: function (params, data) {
+                var term = '';
+                if (params && typeof params === 'object') {
+                    term = $.trim(params.term || '');
+                } else if (typeof params === 'string') {
+                    term = $.trim(params);
+                }
+                if (term === '') {
+                    return data;
+                }
+                var text = (data && data.text != null) ? String(data.text) : String(data || '');
+                var id = (data && data.id != null) ? String(data.id) : '';
+                term = term.toLowerCase();
+                if (text.toLowerCase().indexOf(term) > -1 || id.toLowerCase().indexOf(term) > -1) {
+                    return data;
+                }
+                return null;
+            }
+        };
+    }
 
-                  $('#userslistmob').empty()
-                   $('#userslistmob').append('<option selected="selected" value="">Please select User</option>');
-                 $.each(data, function (data, item) {
-                     $('#userslistmob').append($('<option></option>').text(item.Text).val(item.Value));
-                 })
+    function wlInitSearchSelect($el, force) {
+        var $ = wlGet$();
+        if (!$ || !$.fn || !$.fn.select2) {
+            return;
+        }
+        if (!$el || !$el[0]) {
+            return;
+        }
+        $el = $($el[0]);
+        if (wlSkipSearchSelect($el[0])) {
+            return;
+        }
+        if (!force && $el.hasClass('select2-hidden-accessible')) {
+            return;
+        }
+        if ($el.hasClass('select2-hidden-accessible')) {
+            try { $el.select2('destroy'); } catch (e) { }
+        }
+        $el.next('.select2-container').remove();
+        try {
+            $el.select2(wlSelect2Options());
+        } catch (e) { }
+    }
 
-                },
+    window.wlBootPageSelects = function (force) {
+        var $ = wlGet$();
+        if (!$ || !$.fn || !$.fn.select2) {
+            return false;
+        }
+        window.wlSelectInitLock = true;
+        $('.WebLogin_Page select').each(function () {
+            wlInitSearchSelect($(this), !!force);
+        });
+        window.setTimeout(function () { window.wlSelectInitLock = false; }, 160);
+        return true;
+    };
 
+    window.wlWhenSelect2Ready = function (fn) {
+        var tries = 0;
+        (function tick() {
+            var $ = wlGet$();
+            if ($ && $.fn && $.fn.select2) {
+                fn($);
+                return;
+            }
+            if (tries++ < 80) {
+                window.setTimeout(tick, 50);
+            }
+        })();
+    };
+
+    function wlFillLoginUserSelect($el, data, placeholder) {
+        var $ = wlGet$();
+        if (!$el || !$el.length) {
+            return;
+        }
+        $el = $($el[0]);
+        var html = '<option value="">' + (placeholder || 'Select User') + '</option>';
+        $.each(wlParseSelectList(data), function (_, item) {
+            var value = '';
+            var text = '';
+            if (item) {
+                if (item.Value != null && item.Value !== '') {
+                    value = item.Value;
+                } else if (item.value != null && item.value !== '') {
+                    value = item.value;
+                }
+                text = (item.Text != null && item.Text !== '') ? item.Text : (item.text || '');
+            }
+            html += '<option value="' + String(value).replace(/"/g, '&quot;') + '">' + $('<div/>').text(String(text)).html() + '</option>';
+        });
+        $el.prop('disabled', false);
+        window.wlSelectInitLock = true;
+        if (window.setAdminSelect2Html) {
+            window.setAdminSelect2Html($el[0], html, '');
+        } else {
+            if ($el.hasClass('select2-hidden-accessible')) {
+                try { $el.select2('destroy'); } catch (e) { }
+            }
+            $el.next('.select2-container').remove();
+            $el.html(html);
+            if ($.fn.select2) {
+                $el.select2(window.getAdminSelect2Options ? window.getAdminSelect2Options($el) : { width: '100%', minimumResultsForSearch: 0 });
+            }
+        }
+        window.setTimeout(function () { window.wlSelectInitLock = false; }, 400);
+    }
+
+    function wlLoadUserSelectByRole($roleEl, $userEl, type, cacheKey) {
+        var $ = wlGet$();
+        if (window.wlSelectInitLock) {
+            return;
+        }
+        var role = $roleEl && $roleEl.val ? $roleEl.val() : '';
+        var key = cacheKey || ($userEl.attr('id') || 'userlist');
+        if (wlSelectXhr[key] && wlSelectXhr[key].abort) {
+            wlSelectXhr[key].abort();
+        }
+        if (!role) {
+            wlFillLoginUserSelect($userEl, [], 'Select User');
+            return;
+        }
+        $userEl.prop('disabled', true);
+        wlSelectXhr[key] = $.ajax({
+            type: 'POST',
+            url: '@Url.Action("FillUsersList","Home")',
+            data: { role: role, type: type || 'value1' },
+            success: function (data) {
+                $userEl.prop('disabled', false);
+                wlFillLoginUserSelect($userEl, data, 'Select User');
+            },
+            error: function (xhr, status) {
+                if (status === 'abort') {
+                    return;
+                }
+                $userEl.prop('disabled', false);
+                wlFillLoginUserSelect($userEl, [], 'Select User');
+            }
+        });
+    }
+
+    function wlSyncOldEmail() {
+        var $ = wlGet$();
+        var $el = $('#userslist');
+        var v = $el.val() || '';
+        if ((!v || v === '') && $el.hasClass('select2-hidden-accessible') && $el.select2) {
+            try {
+                var selected = $el.select2('data');
+                if (selected && selected[0] && selected[0].id) {
+                    v = selected[0].id;
+                }
+            } catch (e) { }
+        }
+        if (!v) {
+            v = $el.find('option:selected').attr('value') || '';
+        }
+        $('#txtoldemail').val(v === 'undefined' ? '' : v);
+    }
+
+    function wlSyncOldMobile(ev) {
+        var $ = wlGet$();
+        var $el = $('#userslistmob');
+        var v = '';
+        if (ev && ev.params && ev.params.data && ev.params.data.id != null) {
+            v = ev.params.data.id;
+        }
+        if (v === '' || v == null) {
+            v = $el.val();
+        }
+        if ((v === '' || v == null) && $el.hasClass('select2-hidden-accessible') && $el.select2) {
+            try {
+                var selected = $el.select2('data');
+                if (selected && selected[0] && selected[0].id != null) {
+                    v = selected[0].id;
+                }
+            } catch (e) { }
+        }
+        if (v === '' || v == null) {
+            v = $el.find('option:selected').attr('value');
+        }
+        v = (v == null || v === 'undefined') ? '' : String(v).trim();
+        var input = document.getElementById('txtoldmob');
+        if (input) {
+            input.value = v;
+        } else {
+            $('#txtoldmob').val(v);
+        }
+    }
+
+    window.wlSyncOldEmail = wlSyncOldEmail;
+    window.wlSyncOldMobile = wlSyncOldMobile;
+    window.wlFillMobileUsers = wlFillMobileUsers;
+
+    function ONCHANGE() {
+        var $ = wlGet$();
+        if (window.wlSelectInitLock) {
+            return;
+        }
+        var role = $('#UserRole').val();
+        $('#txtoldemail').val('');
+        wlLoadUserSelectByRole($('#UserRole'), $('#userslist'), 'value1', 'userslist');
+    }
+
+    function wlFillMobileUsers() {
+        var $ = wlGet$();
+        if (window.wlSelectInitLock) {
+            return;
+        }
+        $('#txtoldmob').val('');
+        wlLoadUserSelectByRole($('#UserRoleonmobile'), $('#userslistmob'), 'value2', 'userslistmob');
+    }
+
+    $(document)
+        .off('change.wlOldLogin select2:select.wlOldLogin')
+        .on('change.wlOldLogin select2:select.wlOldLogin', '#userslist', function () {
+            wlSyncOldEmail();
+        })
+        .on('change.wlOldLogin select2:select.wlOldLogin', '#userslistmob', function (e) {
+            wlSyncOldMobile(e);
+        });
+
+    (function () {
+        if (typeof window.wlWhenSelect2Ready === 'function') {
+            window.wlWhenSelect2Ready(function () {
+                window.wlBootPageSelects();
             });
+        }
+    })();
 
-      })
+    $(document).on('select2:open.wlUserSearch', function () {
+        window.setTimeout(function () {
+            var $wrap = $('.select2-container--open .select2-search--dropdown');
+            $wrap.removeClass('select2-search--hide').css('display', 'block');
+            var $search = $wrap.find('.select2-search__field');
+            if (!$search.length) {
+                $search = $('.select2-container--open .select2-search__field');
+            }
+            if ($search.length) {
+                $search.attr('placeholder', 'Search name, mobile, ID...');
+                $search.trigger('focus');
+            }
+        }, 10);
+    });
 
-      $('#ddlRoleName').change(function () {
-          var role = $(this).val();
-          $('#ddlfirmname').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
-
-         $.ajax({
-                type: 'POST',
-             url: '@Url.Action("FillUsersList","Home")',
-             data: {role:role,type:'value1'},
-             success: function (data) {
-
-                  $('#ddlfirmname').empty()
-                   $('#ddlfirmname').append('<option selected="selected" value="">Please select User</option>');
-                 $.each(data, function (data, item) {
-                     $('#ddlfirmname').append($('<option></option>').text(item.Text).val(item.Value));
-                 })
-
-                },
-
-            });
-
-      })
-
-       $('#ddlAppRoleName').change(function () {
-
-        var role = $(this).val();
-          $('#ddlAppfirmname').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
-
-         $.ajax({
-                type: 'POST',
-             url: '@Url.Action("FillUsersList","Home")',
-             data: {role:role,type:'value1'},
-             success: function (data) {
-
-                  $('#ddlAppfirmname').empty()
-                   $('#ddlAppfirmname').append('<option selected="selected" value="">Please select User</option>');
-                 $.each(data, function (data, item) {
-                     $('#ddlAppfirmname').append($('<option></option>').text(item.Text).val(item.Value));
-                 })
-
-                },
-
-            });
-
-      })
+    $(document)
+        .off('change.wlHistUser')
+        .on('change.wlHistUser', '#ddlRoleName', function () {
+            if (window.wlSelectInitLock) { return; }
+            wlLoadUserSelectByRole($('#ddlRoleName'), $('#ddlfirmname'), 'value1', 'ddlfirmname');
+        })
+        .on('change.wlHistUser', '#ddlAppRoleName', function () {
+            if (window.wlSelectInitLock) { return; }
+            wlLoadUserSelectByRole($('#ddlAppRoleName'), $('#ddlAppfirmname'), 'value1', 'ddlAppfirmname');
+        })
+        .on('change.wlHistUser', '#ddlAttemptRoleName', function () {
+            if (window.wlSelectInitLock) { return; }
+            wlLoadUserSelectByRole($('#ddlAttemptRoleName'), $('#ddlAttemptfirmname'), 'value1', 'ddlAttemptfirmname');
+        });
 
 
 
 
-      $('#userslistmob').change(function () {
-
-          var role = $('#userslistmob').val();
-          $('#txtoldmob').val(role)
-
-
-      })
-
-
-      $('#userslist').change(function () {
-
-          var role = $('#userslist').val();
-          $('#txtoldemail').val(role)
-
-
-      })
+      /* userslist / userslistmob auto-fill is bound in wlOldLogin handlers */
 
 
 
@@ -2274,7 +2474,7 @@
     });
 </script>
 <script>
-    $("input[type='radio']").change(function () {
+    $("input[name='group1']").change(function () {
         if ($(this).val() == "value2") {
             $('#for-mobile-no').show();
             $('#UserRole').val('')
@@ -3312,3 +3512,25 @@
         });
     }
 </script>
+
+@section PostSelect2Scripts {
+    <script>
+        (function () {
+            function boot() {
+                var $ = window.jQuery;
+                if (!$ || !$.fn || !$.fn.select2 || !window.refreshAdminSelect2) {
+                    return;
+                }
+                window.wlSelectInitLock = true;
+                window.refreshAdminSelect2($('.WebLogin_Page'));
+                window.setTimeout(function () { window.wlSelectInitLock = false; }, 200);
+            }
+            window.wlBootPageSelects = function () {
+                boot();
+                return true;
+            };
+            boot();
+            window.setTimeout(boot, 250);
+        })();
+    </script>
+}

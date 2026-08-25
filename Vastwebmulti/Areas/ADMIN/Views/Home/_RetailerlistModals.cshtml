@@ -225,7 +225,7 @@
                                             <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('pan')"><i class="fas fa-check-circle"></i> Approve</button>
                                         </div>
                                     </div>
-                                    <div class="vm-rl-doc-card__notfound" id="pandocnotshow">
+                                    <div class="vm-rl-doc-card__notfound vm-rl-doc-hidden" id="pandocnotshow">
                                         <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
                                     </div>
                                 </div>
@@ -245,7 +245,7 @@
                                             <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('aadhar')"><i class="fas fa-check-circle"></i> Approve</button>
                                         </div>
                                     </div>
-                                    <div class="vm-rl-doc-card__notfound" id="aadhardocnotshow">
+                                    <div class="vm-rl-doc-card__notfound vm-rl-doc-hidden" id="aadhardocnotshow">
                                         <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
                                     </div>
                                 </div>
@@ -264,7 +264,7 @@
                                             <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('Salfie')"><i class="fas fa-check-circle"></i> Approve</button>
                                         </div>
                                     </div>
-                                    <div class="vm-rl-doc-card__notfound" id="ShopwithSalfiedocnotshow">
+                                    <div class="vm-rl-doc-card__notfound vm-rl-doc-hidden" id="ShopwithSalfiedocnotshow">
                                         <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
                                     </div>
                                 </div>
@@ -283,7 +283,7 @@
                                             <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('VIDEOKYC')"><i class="fas fa-check-circle"></i> Approve</button>
                                         </div>
                                     </div>
-                                    <div class="vm-rl-doc-card__notfound" id="VideoKYCdocnotshow">
+                                    <div class="vm-rl-doc-card__notfound vm-rl-doc-hidden" id="VideoKYCdocnotshow">
                                         <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
                                     </div>
                                 </div>
@@ -303,7 +303,7 @@
                                             <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('gst')"><i class="fas fa-check-circle"></i> Approve</button>
                                         </div>
                                     </div>
-                                    <div class="vm-rl-doc-card__notfound" id="gstdocnotshow">
+                                    <div class="vm-rl-doc-card__notfound vm-rl-doc-hidden" id="gstdocnotshow">
                                         <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
                                     </div>
                                 </div>
@@ -322,7 +322,7 @@
                                             <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('Aggrement')"><i class="fas fa-check-circle"></i> Approve</button>
                                         </div>
                                     </div>
-                                    <div class="vm-rl-doc-card__notfound" id="frmagrdocnotshow">
+                                    <div class="vm-rl-doc-card__notfound vm-rl-doc-hidden" id="frmagrdocnotshow">
                                         <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
                                     </div>
                                 </div>
@@ -832,23 +832,27 @@
                  //}
 
                   if (response === 'Salfie') {
-                     $("#ShopwithSalfiedocnotshow").show();
-                    $("#ShopwithSalfiedocshow").hide();
+                     vmRlSetDocVisibility('ShopwithSalfiedocshow', 'ShopwithSalfiedocnotshow', false);
+                     $('#ShopwithSalfieviewimageshow').attr('src', '');
                  }
 
                  if (response === 'gst') {
-                     $("#gstdocnotshow").show();
-                    $("#gstdocshow").hide();
+                     vmRlSetDocVisibility('gstdocshow', 'gstdocnotshow', false);
+                     $('#gstimageshow').attr('src', '');
                  } if (response === 'VIDEOKYC') {
-                     $("#VideoKYCdocnotshow").show();
-                     $("#VideoKYCdocshow").hide();
+                     vmRlSetDocVisibility('VideoKYCdocshow', 'VideoKYCdocnotshow', false);
+                     var videoKyc = document.getElementById('VIDEOKYCviewimageshow');
+                     if (videoKyc) {
+                         videoKyc.removeAttribute('src');
+                         if (videoKyc.load) {
+                             videoKyc.load();
+                         }
+                     }
                  }
                  else if (response === 'Aggrement') {
-                    $("#frmagrdocnotshow").show();
-                    $('#frmagrdocshow').hide();
-                     if ($('#pandocnotshow').css('display') == 'block' || $('#aadhardocnotshow').css('display') == 'block') {
-                    $('#frmagrdocshow').hide();
-                     $("#frmagrdocnotshow").show();
+                    vmRlSetDocVisibility('frmagrdocshow', 'frmagrdocnotshow', false);
+                    $('#frmagrimageshow').attr('src', '');
+                     if ($('#pandocnotshow').hasClass('vm-rl-doc-hidden') === false || $('#aadhardocnotshow').hasClass('vm-rl-doc-hidden') === false) {
                     $('#frmagrEdit').val('KYC Due');
                    // $('#frmagrEdit').val('Aggrement Status Pending');
                     //if ($('#frmagrapproved').css('display') == 'none') {
@@ -871,9 +875,10 @@
                 }
                 else {
                      $('#frmagrapproved').hide();
-                        $("#frmagrdocnotshow").show();
+                     vmRlSetDocVisibility('frmagrdocshow', 'frmagrdocnotshow', false);
                     $('#frmagrEdit').val('Aggrement Status Pending');
                     $('#alinks').empty();
+                    $('#frmagrimageshow').attr('src', '');
                 }
 
                 }
@@ -997,9 +1002,27 @@
 
 
 <script>
+    function vmRlSetDocVisibility(showId, hideId, visible) {
+        $('#' + showId).toggleClass('vm-rl-doc-hidden', !visible);
+        $('#' + hideId).toggleClass('vm-rl-doc-hidden', visible);
+    }
+
+    function vmRlClearDocImages() {
+        $('#panimageshow, #aadharimageshow, #aadharimagebackshow, #ShopwithSalfieviewimageshow, #gstimageshow, #frmagrimageshow').attr('src', '');
+        var video = document.getElementById('VIDEOKYCviewimageshow');
+        if (video) {
+            video.removeAttribute('src');
+            if (video.load) {
+                video.load();
+            }
+        }
+    }
+
     function mdActionBtn(RetailerId) {
         if (typeof vmRlMoveModalsToBody === 'function') vmRlMoveModalsToBody();
         if (typeof vmRlResetDetailModal === 'function') vmRlResetDetailModal();
+
+        vmRlClearDocImages();
 
         $('#deletedusernotshowbtn').show();
         $('#loadredmodel').show();
@@ -1109,56 +1132,53 @@
                 }
 
                 if (pancarddoc == null) {
-                    $("#pandocnotshow").show();
-                    $("#pandocshow").hide();
+                    vmRlSetDocVisibility('pandocshow', 'pandocnotshow', false);
+                    $('#panimageshow').attr('src', '');
                 }
                 else {
-                    $("#pandocnotshow").hide();
-                    $("#pandocshow").show();
+                    vmRlSetDocVisibility('pandocshow', 'pandocnotshow', true);
                     $('#panimageshow').attr('src', "../.." + pancarddoc);
                 }
-                if (aadhardoc == null || aadhardocback==null) {
-                    $("#aadhardocnotshow").show();
-                    $("#aadhardocshow").hide();
+                if (aadhardoc == null || aadhardocback == null) {
+                    vmRlSetDocVisibility('aadhardocshow', 'aadhardocnotshow', false);
+                    $('#aadharimageshow, #aadharimagebackshow').attr('src', '');
                 }
                 else {
-                    $("#aadhardocnotshow").hide();
-                    $("#aadhardocshow").show();
+                    vmRlSetDocVisibility('aadhardocshow', 'aadhardocnotshow', true);
                     $('#aadharimageshow').attr('src', "../.." + aadhardoc);
                     $('#aadharimagebackshow').attr('src', "../.." + aadhardocback);
-
                 }
-                if (ShopwithSalfie == null || ShopwithSalfie == null) {
-                    $("#ShopwithSalfiedocnotshow").show();
-                    $("#ShopwithSalfiedocshow").hide();
+                if (ShopwithSalfie == null) {
+                    vmRlSetDocVisibility('ShopwithSalfiedocshow', 'ShopwithSalfiedocnotshow', false);
+                    $('#ShopwithSalfieviewimageshow').attr('src', '');
                 }
                 else {
-                    $("#ShopwithSalfiedocnotshow").hide();
-                    $("#ShopwithSalfiedocshow").show();
+                    vmRlSetDocVisibility('ShopwithSalfiedocshow', 'ShopwithSalfiedocnotshow', true);
                     $('#ShopwithSalfieviewimageshow').attr('src', "../.." + ShopwithSalfie);
-
-
                 }
 
-                if (videokycpath == null || videokycpath == null) {
-                    $("#VideoKYCdocnotshow").show();
-                    $("#VideoKYCdocshow").hide();
+                if (videokycpath == null) {
+                    vmRlSetDocVisibility('VideoKYCdocshow', 'VideoKYCdocnotshow', false);
+                    var videoKyc = document.getElementById('VIDEOKYCviewimageshow');
+                    if (videoKyc) {
+                        videoKyc.removeAttribute('src');
+                        if (videoKyc.load) {
+                            videoKyc.load();
+                        }
+                    }
                 }
                 else {
-                    $("#VideoKYCdocnotshow").hide();
-                    $("#VideoKYCdocshow").show();
+                    vmRlSetDocVisibility('VideoKYCdocshow', 'VideoKYCdocnotshow', true);
                     $('#VIDEOKYCviewimageshow').attr('src', "../.." + videokycpath);
-
                 }
 
 
                 if (gstdoc == null) {
-                    $("#gstdocnotshow").show();
-                    $("#gstdocshow").hide();
+                    vmRlSetDocVisibility('gstdocshow', 'gstdocnotshow', false);
+                    $('#gstimageshow').attr('src', '');
                 }
                 else {
-                    $("#gstdocnotshow").hide();
-                    $("#gstdocshow").show();
+                    vmRlSetDocVisibility('gstdocshow', 'gstdocnotshow', true);
                     $('#gstimageshow').attr('src', "../.." + gstdoc);
                 }
 
@@ -1201,8 +1221,7 @@
                 if (data2.list[0].PSAStatus == "Y" && data2.list[0].AadhaarStatus == "Y" && data2.list[0].ShopwithSalfieStatus == "Y") {
                     if (frmagmnt == null) {
                         $('#frmagrEdit').val('Aggrement Status Pending');
-                        $("#frmagrdocnotshow").show();
-                        $('#frmagrdocshow').hide();
+                        vmRlSetDocVisibility('frmagrdocshow', 'frmagrdocnotshow', false);
                         $('#frmagrapproved').hide();
                           $("#FirmEdit").prop("readonly", true);
                           $("#NameEdit").prop("readonly", true);
@@ -1213,6 +1232,7 @@
                        $("#PinEdit").prop("readonly", true);
                        $("#StateEdit").prop("readonly", true);
                        $("#DistrictEdit").prop("readonly", true);
+                        $('#frmagrimageshow').attr('src', '');
 
                     }
 
@@ -1227,8 +1247,7 @@
                         $("#DistrictEdit").prop("readonly", false);
                          $('#frmagrEdit').val('Aggrement Status Pending');
                         $('#frmagrapproved').show();
-                         $("#frmagrdocnotshow").hide();
-                    $("#frmagrdocshow").show();
+                        vmRlSetDocVisibility('frmagrdocshow', 'frmagrdocnotshow', true);
                         $('#frmagrimageshow').attr('src', "../.." + frmagmnt);
 
 
@@ -1236,7 +1255,7 @@
                     }
                          //
                         if (data2.list[0].IsAgreement === true) {
-                            $("#frmagrdocnotshow").hide();
+                            vmRlSetDocVisibility('frmagrdocshow', 'frmagrdocnotshow', true);
                             $('#frmagrapproved').hide();
 
                             var link = $("<a>");
@@ -1259,9 +1278,10 @@
                 }
                else {
 
-                               $('#frmagrdocshow').hide();
+                               vmRlSetDocVisibility('frmagrdocshow', 'frmagrdocnotshow', false);
                     $('#frmagrapproved').hide();
                     $('#frmagrEdit').val('KYC Due');
+                    $('#frmagrimageshow').attr('src', '');
 
                 }
 
