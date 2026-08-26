@@ -502,7 +502,7 @@
                                     <div class="wl-history-filter-grid">
                                         <div class="wl-hf-row wl-hf-row--selects">
                                             <div class="vm-opr-field vm-dmt-field wl-hf-field">
-                                                <select id="ddlRoleName" name="ddlRoleName" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User Role">
+                                                <select id="ddlRoleName" name="ddlRoleName" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User Role" onchange="wlHistRoleChange('ddlRoleName','ddlfirmname')">
                                                     <option value="Admin">Admin</option>
                                                     <option value="master">Master Distributor</option>
                                                     <option value="Dealer">Distributor</option>
@@ -573,7 +573,7 @@
                                     <div class="wl-history-filter-grid">
                                         <div class="wl-hf-row wl-hf-row--selects">
                                             <div class="vm-opr-field vm-dmt-field wl-hf-field">
-                                                <select id="ddlAppRoleName" name="ddlAppRoleName" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User Role">
+                                                <select id="ddlAppRoleName" name="ddlAppRoleName" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User Role" onchange="wlHistRoleChange('ddlAppRoleName','ddlAppfirmname')">
                                                     <option value="Admin">Admin</option>
                                                     <option value="master">Master Distributor</option>
                                                     <option value="Dealer">Distributor</option>
@@ -637,7 +637,7 @@
                                     <div class="wl-history-filter-grid">
                                         <div class="wl-hf-row wl-hf-row--selects">
                                             <div class="vm-opr-field vm-dmt-field wl-hf-field">
-                                                <select id="ddlAttemptRoleName" name="ddlAttemptRoleName" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User Role">
+                                                <select id="ddlAttemptRoleName" name="ddlAttemptRoleName" class="vm-opr-select vm-dmt-select form-control for-select2 vm-rl-select-search" data-live-search="true" title="User Role" onchange="wlHistRoleChange('ddlAttemptRoleName','ddlAttemptfirmname')">
                                                     <option value="">Select User Role</option>
                                                     <option value="master">Master Distributor</option>
                                                     <option value="Dealer">Distributor</option>
@@ -2150,23 +2150,14 @@
         }, 10);
     });
 
-    $(document)
-        .off('change.wlHistUser')
-        .on('change.wlHistUser', '#ddlRoleName', function () {
-            if (window.wlSelectInitLock) { return; }
-            wlLoadUserSelectByRole($('#ddlRoleName'), $('#ddlfirmname'), 'value1', 'ddlfirmname');
-        })
-        .on('change.wlHistUser', '#ddlAppRoleName', function () {
-            if (window.wlSelectInitLock) { return; }
-            wlLoadUserSelectByRole($('#ddlAppRoleName'), $('#ddlAppfirmname'), 'value1', 'ddlAppfirmname');
-        })
-        .on('change.wlHistUser', '#ddlAttemptRoleName', function () {
-            if (window.wlSelectInitLock) { return; }
-            wlLoadUserSelectByRole($('#ddlAttemptRoleName'), $('#ddlAttemptfirmname'), 'value1', 'ddlAttemptfirmname');
-        });
-
-
-
+    function wlHistRoleChange(roleId, userId) {
+        var $ = wlGet$();
+        if (!$ || window.wlSelectInitLock) {
+            return;
+        }
+        wlLoadUserSelectByRole($('#' + roleId), $('#' + userId), 'value1', userId);
+    }
+    window.wlHistRoleChange = wlHistRoleChange;
 
       /* userslist / userslistmob auto-fill is bound in wlOldLogin handlers */
 
@@ -3516,21 +3507,68 @@
 @section PostSelect2Scripts {
     <script>
         (function () {
+            var $ = window.jQuery;
+            if (!$ || !$.fn || !$.fn.select2) {
+                return;
+            }
+
             function boot() {
-                var $ = window.jQuery;
-                if (!$ || !$.fn || !$.fn.select2 || !window.refreshAdminSelect2) {
+                if (!window.refreshAdminSelect2) {
                     return;
                 }
                 window.wlSelectInitLock = true;
                 window.refreshAdminSelect2($('.WebLogin_Page'));
                 window.setTimeout(function () { window.wlSelectInitLock = false; }, 200);
             }
+
             window.wlBootPageSelects = function () {
                 boot();
                 return true;
             };
+
             boot();
             window.setTimeout(boot, 250);
+
+            $(document)
+                .off('change.wlHistUser select2:select.wlHistUser')
+                .on('change.wlHistUser select2:select.wlHistUser', '#ddlRoleName', function () {
+                    if (typeof window.wlHistRoleChange === 'function') {
+                        window.wlHistRoleChange('ddlRoleName', 'ddlfirmname');
+                    }
+                })
+                .on('change.wlHistUser select2:select.wlHistUser', '#ddlAppRoleName', function () {
+                    if (typeof window.wlHistRoleChange === 'function') {
+                        window.wlHistRoleChange('ddlAppRoleName', 'ddlAppfirmname');
+                    }
+                })
+                .on('change.wlHistUser select2:select.wlHistUser', '#ddlAttemptRoleName', function () {
+                    if (typeof window.wlHistRoleChange === 'function') {
+                        window.wlHistRoleChange('ddlAttemptRoleName', 'ddlAttemptfirmname');
+                    }
+                })
+                .off('select2:open.wlHistUserFill')
+                .on('select2:open.wlHistUserFill', '#ddlfirmname', function () {
+                    if ($(this).find('option').length <= 1 && typeof window.wlHistRoleChange === 'function') {
+                        window.wlHistRoleChange('ddlRoleName', 'ddlfirmname');
+                    }
+                })
+                .on('select2:open.wlHistUserFill', '#ddlAppfirmname', function () {
+                    if ($(this).find('option').length <= 1 && typeof window.wlHistRoleChange === 'function') {
+                        window.wlHistRoleChange('ddlAppRoleName', 'ddlAppfirmname');
+                    }
+                })
+                .on('select2:open.wlHistUserFill', '#ddlAttemptfirmname', function () {
+                    if ($(this).find('option').length <= 1 && typeof window.wlHistRoleChange === 'function') {
+                        window.wlHistRoleChange('ddlAttemptRoleName', 'ddlAttemptfirmname');
+                    }
+                });
+
+            window.setTimeout(function () {
+                window.wlSelectInitLock = false;
+                if (typeof window.wlHistRoleChange === 'function') {
+                    window.wlHistRoleChange('ddlRoleName', 'ddlfirmname');
+                }
+            }, 450);
         })();
     </script>
 }

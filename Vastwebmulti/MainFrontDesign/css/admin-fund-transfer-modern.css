@@ -1669,6 +1669,14 @@ body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-table-wrap {
     -webkit-overflow-scrolling: touch;
 }
 
+body.saas-admin-ui .saas-upload-apk-page #frmWlUserApk,
+body.saas-admin-ui .saas-upload-apk-page #frmWlUserApk input,
+body.saas-admin-ui .saas-upload-apk-page #frmWlUserApk button {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 2;
+}
+
 body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-status-table {
     width: 100% !important;
     min-width: 520px;
@@ -2436,6 +2444,28 @@ body.saas-admin-ui .saas-security-password-page .vm-csp-actions .password-sure {
 
 body.saas-admin-ui .saas-security-password-page .vm-csp-actions .password-sure.is-visible {
     display: inline-flex !important;
+}
+
+/* Reset Security Password only: Change Password must hide so Sure? can show */
+body.saas-admin-ui .saas-security-password-page #restsecurityspass .vm-csp-actions .password-change.is-hidden,
+body.saas-admin-ui .saas-security-password-page #restsecurityspass .vm-csp-btn-primary.is-hidden {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-security-password-page #restsecurityspass .vm-csp-actions .password-sure.is-visible {
+    display: inline-flex !important;
+}
+
+body.saas-admin-ui .saas-security-password-page #restsecurityspass #txtsecuritemail {
+    display: block !important;
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    line-height: 38px !important;
+    padding: 0 12px !important;
+    box-sizing: border-box !important;
+    text-align: left !important;
+    vertical-align: middle !important;
 }
 
 body.saas-admin-ui .saas-security-password-page .vm-csp-actions .password-sure.is-visible:hover {

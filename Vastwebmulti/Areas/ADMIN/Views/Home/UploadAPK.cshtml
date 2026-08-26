@@ -8,7 +8,7 @@
 <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=24" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=27" rel="stylesheet" />
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <link href="~/select2/dist/css/select2.css" rel="stylesheet" />
@@ -110,7 +110,7 @@
                                                 <td>APK Name</td>
                                                 <td>
                                                     <p class="vm-ft-apk-value vm-ft-apk-value--ok">@(ViewBag.apkfilename ?? "File Not Found")</p>
-                                                </t                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             d>
+                                                </td>
                                                 <td>
                                                     @if (@ViewBag.apkfilename != "File Not Found" && !string.IsNullOrEmpty(Convert.ToString(ViewBag.apkfilename)))
                                                     {
@@ -125,7 +125,7 @@
                                                 <td>
                                                     <input type="text" id="txthdlink" name="txthdlink" readonly value="@ViewBag.adminshowurl" class="vm-ft-apk-link-input" />
                                                 </td>
-                                                <td>                                                                                                                                                                        
+                                                <td>
                                                     @if (ViewBag.adminshowurl != "File Not Found" && ViewBag.adminshowurl != null && ViewBag.adminshowurl != "")
                                                     {
                                                         <a href="javascript:void(0);" onclick="myFunction(); return false;" onmouseout="outFunc()" class="fullbodydycolorbg btn-first vm-ft-apk-action-btn vm-ft-copy-link-btn" role="button">
@@ -207,24 +207,27 @@
                                     </div>
                                 </div>
 
+                                @using (Html.BeginForm("Uploadwhitelabelapk", "Home", new { area = "ADMIN" }, FormMethod.Post, new { enctype = "multipart/form-data", id = "frmWlUserApk" }))
+                                {
                                 <div class="col-md-12 col-sm-12 col-xs-12 vm-ft-apk-section" data-apk-search="apk file white label version upload">
                                     <span class="vm-ft-apk-section__title">APK File</span>
-                                    <label>Enter Application Latest Version</label>
+                                    <label for="txtWlApkVersion">Enter Application Latest Version</label>
                                     <div>
-                                        <input type="text" placeholder="Enter Application Latest Version" />
+                                        <input type="text" placeholder="Enter Application Latest Version" id="txtWlApkVersion" name="txtuploadedlink12" />
                                     </div>
-                                    <label>Select APK File</label>
+                                    <label for="WhitelabelUserapk">Select APK File</label>
                                     <div>
-                                        <input type="file" class="form-control vm-ft-apk-file" />
+                                        <input type="file" id="WhitelabelUserapk" name="Whitelabelapk" class="form-control vm-ft-apk-file" accept=".apk,.APK" />
                                     </div>
                                     <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign vm-ft-apk-actions">
                                         <div>
-                                            <button type="button" class="fullbodydycolorbg btn-first">
+                                            <button type="submit" class="fullbodydycolorbg btn-first" onclick="return cspSubmitWlApk();">
                                                 <span style="color:#fff;position:relative;">Upload Apk</span>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
+                                }
 
                             </div>
 
@@ -277,6 +280,28 @@
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
+    function cspSubmitWlApk() {
+        var fileEl = document.getElementById('WhitelabelUserapk');
+        var fileName = fileEl && fileEl.value ? String(fileEl.value).toLowerCase() : '';
+        if (!fileName) {
+            if (typeof swal === 'function') {
+                swal('Oops...', 'Please Select APK File.', 'error');
+            } else {
+                alert('Please Select APK File.');
+            }
+            return false;
+        }
+        if (fileName.indexOf('.apk') === -1) {
+            if (typeof swal === 'function') {
+                swal('Oops...', 'Please Select Correct Apk File.', 'error');
+            } else {
+                alert('Please Select Correct Apk File.');
+            }
+            return false;
+        }
+        return true;
+    }
+
     function myFunction() {
         var copyText = document.getElementById("txthdlink");
         if (!copyText || !copyText.value) {
