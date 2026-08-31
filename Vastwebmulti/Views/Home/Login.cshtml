@@ -62,12 +62,6 @@
     var mobile = admindetail.SingleOrDefault().mobile;
     var background = fullpath;
     var Firm_Name = admindetail.SingleOrDefault().Companyname;
-    //ViewBag.image = image.Count == 0 ? "" : image.SingleOrDefault().ImageUrl;
-
-    //string RDate = admindetail.FirstOrDefault().Date.ToString();
-    //string[] gg = RDate.Split('-');
-    //var RYear = gg[2].Split(' ')[0].ToString();
-    /*************************************************************/
 
     var col = db.changecolors.ToList();
     var color = "";
@@ -79,15 +73,53 @@
     {
         color = "Gray";
     }
-    //var color = col.Count == 0 ? "" : col.SingleOrDefault(p => p.Role == "ADMIN").adminandouterheadercolor;
-
-    // New work
     var entry = db.RetailerCreationCharges.FirstOrDefault();
     bool isAdminFree = entry?.CreatedByAdminIsFree ?? false;
     bool isSignUpFree = entry?.CreatedBySignUpIsFree ?? false;
     var useGradientBg = !string.IsNullOrEmpty(backgroundImage);
     if (string.IsNullOrEmpty(size)) { size = "cover"; }
     if (string.IsNullOrEmpty(repeat)) { repeat = "no-repeat"; }
+
+    var loginAccent = (color ?? "").Trim();
+    var loginAccent2 = loginAccent;
+    var accentKey = loginAccent.Replace("#", "").ToLowerInvariant();
+    if (string.IsNullOrEmpty(accentKey) ||
+        accentKey == "gray" || accentKey == "grey" ||
+        accentKey == "black" || accentKey == "white" ||
+        accentKey == "808080" || accentKey == "666" || accentKey == "666666" ||
+        accentKey == "999" || accentKey == "999999" || accentKey == "ccc" || accentKey == "cccccc")
+    {
+        loginAccent = "#2563eb";
+        loginAccent2 = "#4f46e5";
+    }
+
+    var themeTopbar = "#ffffff";
+    var themeSidebar = "#0b1220";
+    var themeTopbarDark = false;
+    try
+    {
+        var themeRw = new JSONReadWrite();
+        var themeRaw = themeRw.Read("admin-layout-theme.json", "~/JsonData/");
+        if (!string.IsNullOrWhiteSpace(themeRaw))
+        {
+            var topbarMatch = System.Text.RegularExpressions.Regex.Match(themeRaw, "\"topbarBg\"\\s*:\\s*\"([^\"]+)\"");
+            var sidebarMatch = System.Text.RegularExpressions.Regex.Match(themeRaw, "\"sidebarBg\"\\s*:\\s*\"([^\"]+)\"");
+            var topbarDarkMatch = System.Text.RegularExpressions.Regex.Match(themeRaw, "\"topbarDark\"\\s*:\\s*(true|false)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            if (topbarMatch.Success && !string.IsNullOrWhiteSpace(topbarMatch.Groups[1].Value))
+            {
+                themeTopbar = topbarMatch.Groups[1].Value;
+            }
+            if (sidebarMatch.Success && !string.IsNullOrWhiteSpace(sidebarMatch.Groups[1].Value))
+            {
+                themeSidebar = sidebarMatch.Groups[1].Value;
+            }
+            if (topbarDarkMatch.Success)
+            {
+                themeTopbarDark = string.Equals(topbarDarkMatch.Groups[1].Value, "true", StringComparison.OrdinalIgnoreCase);
+            }
+        }
+    }
+    catch { }
 }
 
 <!DOCTYPE html>
@@ -137,14 +169,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <link href="~/MainFrontDesign/css/Custom-style.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link href="~/MainFrontDesign/css/public-login-modern.css?v=3" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/public-login-modern.css?v=33" rel="stylesheet" />
+    <script src="~/MainFrontDesign/js/public-login-modern.js?v=5"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="~/Scripts/owl.carousel.min.js"></script>
-    <script defer src="~/Scripts/owl.carousel.js"></script>
 
     @if (!HttpContext.Current.Request.IsLocal)
     {
@@ -154,23 +186,21 @@
     }
     <style>
         .vm-login-page {
-            --main-bg-lcolor: @color;
-            --main-bg-rcolor: @color;
-            --vm-login-accent: @color;
-            @if (!useGradientBg)
-            {
-                @:--vm-login-bg-url: url('@background');
-                @:--vm-login-bg-size: @size;
-                @:--vm-login-bg-repeat: @repeat;
-            }
+            --main-bg-lcolor: @loginAccent;
+            --main-bg-rcolor: @loginAccent2;
+            --vm-login-accent: @loginAccent;
+            --vm-login-page-bg: @themeSidebar;
+            --vm-login-visual-bg: @themeSidebar;
+            --vm-login-panel-bg: @themeTopbar;
+            --vm-login-surface: @themeTopbar;
         }
     </style>
 </head>
 
-<body class="body Login_body vm-login-page vm-public-login @(useGradientBg ? "vm-login-page--gradient vm-public-login--gradient" : "vm-login-page--photo vm-public-login--photo")">
+<body class="body Login_body vm-login-page vm-public-login vm-login-page--theme @(themeTopbarDark ? "vm-login-panel--dark" : "")">
     <div class="vm-login-page__backdrop" aria-hidden="true"></div>
     <div class="main custome-loginpage vm-login-page__wrap vm-public-login__shell">
-        <div id="horizontalTab" class="vm-login-page__tabs-root">
+        <div id="horizontalTab" class="vm-login-page__tabs-root" data-initial-tab="@(ViewBag.signin_signup == "singup" ? "singup" : "singin")">
             <div class="container-fluid">
                 <div class="container">
                     <div class="row gg vm-login-card">
@@ -178,6 +208,7 @@
                         <div class="col-md-6 border-md gg-item vm-login-card__visual">
 
                             <div class="vm-login-visual">
+                                <div class="vm-login-visual__mesh" aria-hidden="true"></div>
                                 <div class="vm-login-visual__overlay"></div>
                                 <div class="vm-login-visual__content">
                             @if (ViewBag.Loginsilder != null)
@@ -189,11 +220,9 @@
                                         {
                                             if (item.Status == "Y")
                                             {
-
                                                 <div class="item">
                                                     <img src="@Url.Content("~/" + item.ImagePath)" alt="Login slide" />
                                                 </div>
-
                                             }
                                             else
                                             {
@@ -204,17 +233,13 @@
                                         }
                                     </div>
                                 }
-
-                                catch
-                                {
-
-                                }
-
+                                catch { }
                             }
                             else if (ViewBag.Logo != null)
                             {
                                 <div class="vm-login-visual__brand">
                                     <img src="@Url.Content("~/" + ViewBag.Logo)" class="vm-login-visual__logo" alt="@companyname" />
+                                    <p class="vm-login-visual__kicker">Secure digital services</p>
                                     <p class="vm-login-visual__tagline">@companyname</p>
                                 </div>
                             }
@@ -222,41 +247,24 @@
                             {
                                 <div class="vm-login-visual__brand">
                                     <img src="~/Default_Img_Logo/Default_Login_Logo.svg" class="vm-login-visual__logo" alt="@companyname" />
+                                    <p class="vm-login-visual__kicker">Secure digital services</p>
                                     <p class="vm-login-visual__tagline">@companyname</p>
                                 </div>
                             }
+                                </div>
+                                <div class="vm-login-visual__foot" style="z-index: 9999;">
+                                    <span>24/7 support</span>
+                                    <span>Encrypted login</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-6 border-md gg-item vm-login-card__panel">
-                            <div class="span5 vm-login-panel">
+                            <div class="span5 vm-login-panel vm-signin-panel">
 
-                                <div class="resp-tabs-list vm-login-tabs">
-                                    @if (ViewBag.signin_signup == "singin")
-                                    {
-                                        <script>
-                                            $(function () {
-                                                $('#signinform').css('display', 'block');
-                                                $('#signupform').css('display', 'none');
-                                                $('#singin').addClass('resp-tab-active');
-                                                $('#singup').removeClass('resp-tab-active');
-                                            });
-                                        </script>
-                                    }
-                                    else if (ViewBag.signin_signup == "singup")
-                                    {
-                                        <script>
-                                            $(function () {
-                                                $('#signinform').css('display', 'none');
-                                                $('#signupform').css('display', 'block');
-                                                $('#singup').addClass('resp-tab-active');
-                                                $('#singin').removeClass('resp-tab-active');
-                                            });
-                                        </script>
-                                    }
-                                    <button class="resp-tab-item vm-login-tabs__btn" id="singin" value="singin" type="button">Sign In</button>
-                                    <button class="resp-tab-item vm-login-tabs__btn" id="singup" value="singup" type="button">Sign Up</button>
+                                <div class="resp-tabs-list vm-login-tabs" role="tablist">
+                                    <button class="resp-tab-item vm-login-tabs__btn @(ViewBag.signin_signup == "singup" ? "" : "resp-tab-active")" id="singin" value="singin" type="button" role="tab" aria-selected="@(ViewBag.signin_signup == "singup" ? "false" : "true")" onclick="return show('singin');">Sign In</button>
+                                    <button class="resp-tab-item vm-login-tabs__btn @(ViewBag.signin_signup == "singup" ? "resp-tab-active" : "")" id="singup" value="singup" type="button" role="tab" aria-selected="@(ViewBag.signin_signup == "singup" ? "true" : "false")" onclick="return show('singup');">Sign Up</button>
                                 </div>
 
                                 <div class="resp-tabs-container vm-login-panel__body">
@@ -266,21 +274,23 @@
                                         @Html.Hidden("latloc")
                                         @Html.Hidden("longloc")
                                         @Html.Hidden("hdaddress")
-                                        <div class="tab-1 resp-tab-content vm-login-form-wrap" id="signinform">
+                                        <div class="tab-1 resp-tab-content vm-login-form-wrap @(ViewBag.signin_signup == "singup" ? "" : "vm-login-panel-active")" id="signinform">
                                             <div class="vm-login-form__head">
                                                 <div class="vm-login-form__icon" aria-hidden="true">
-                                                    <img src="~/AdminDesign/images/password.svg" alt="" />
+                                                    <i class="fa fa-unlock-alt"></i>
                                                 </div>
                                                 <h1 class="vm-login-form__title">Welcome back</h1>
-                                                <p class="vm-login-form__subtitle">Sign in to your @companyname account</p>
+                                                <p class="vm-login-form__subtitle">Sign in to continue to @(string.IsNullOrWhiteSpace(companyname) ? "your account" : companyname)</p>
                                             </div>
                                             <div class="login-top vm-login-form">
 
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <div class="for-border-effect vm-login-field">
+                                                        <label class="vm-login-label" for="Email">Email / Mobile</label>
+                                                        <div class="for-border-effect vm-login-field vm-login-field--icon">
                                                             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control vm-login-input", @placeholder = "Enter Registered Email Id / Mobile No", @required = "" })
+                                                            <i class="fa fa-envelope-o vm-login-field__glyph" aria-hidden="true"></i>
+                                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control vm-login-input", @placeholder = "Enter Registered Email Id / Mobile No", @required = "", autocomplete = "username" })
 
                                                             <div class="focus-border"><i></i></div>
                                                         </div>
@@ -290,9 +300,12 @@
 
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <div class="for-border-effect vm-login-field">
+                                                        <label class="vm-login-label" for="Password">Password</label>
+                                                        <div class="for-border-effect vm-login-field vm-login-field--icon">
                                                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                                                            @Html.PasswordFor(m => m.Password, new { @class = "form-control vm-login-input", @placeholder = "Enter Password", @required = "" })
+                                                            <i class="fa fa-lock vm-login-field__glyph" aria-hidden="true"></i>
+                                                            @Html.PasswordFor(m => m.Password, new { @class = "form-control vm-login-input", @placeholder = "Enter Password", @required = "", autocomplete = "current-password" })
+                                                            <button type="button" class="vm-login-eye" id="vmLoginTogglePass" aria-label="Show password"><i class="fa fa-eye"></i></button>
                                                             <div class="focus-border"><i></i></div>
                                                         </div>
                                                     </div>
@@ -341,54 +354,41 @@
 
 
 
-                                            <div class="tab-1 resp-tab-content vm-login-form-wrap" id="signupform">
-                                                <div class="vm-login-form__head">
+                                            <div class="tab-1 resp-tab-content vm-login-form-wrap @(ViewBag.signin_signup == "singup" ? "vm-login-panel-active" : "")" id="signupform">
+                                                @* <div class="vm-login-form__head">
+                                                    <div class="vm-login-form__icon" aria-hidden="true">
+                                                        <i class="fa fa-user-plus"></i>
+                                                    </div>
                                                     <h1 class="vm-login-form__title">Create account</h1>
                                                     <p class="vm-login-form__subtitle">Register with @companyname in a few steps</p>
-                                                </div>
+                                                </div> *@
                                                 <div class="login-top sign-top vm-login-form">
 
                                                     <div class="row">
                                                         <div class="col-md-12 vm-login-captcha-wrap">
-                                                            <div class="alert alert-danger text-center p-2 mb-2 vm-login-captcha-alert">
-                                                                <strong>🔑 Please verify the Captcha first.</strong><br />
-
-
-                                                                @*Captcha start  *@
-                                                                <div class="row vm-login-captcha-row">
-                                                                    <div class="col-md-6 mb-3 vm-login-captcha-col">
-                                                                        <div class="d-flex align-items-center justify-content-between bg-light border rounded p-2 vm-login-captcha-box">
-                                                                            <span id="captcha-text" class="fw-bold text-dark">
-                                                                                @ViewBag.CaptchaCode
-                                                                            </span>
-
-                                                                            <button type="button" id="refreshCaptcha" class="btn btn-outline-primary btn-sm d-flex align-items-center vm-login-captcha-refresh">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30">
-                                                                                    <path d="M 15 3 C 12.031398 3 9.3028202 4.0834384 7.2070312 5.875 A 1.0001 1.0001 0 1 0 8.5058594 7.3945312 C 10.25407 5.9000929 12.516602 5 15 5 C 20.19656 5 24.450989 8.9379267 24.951172 14 L 22 14 L 26 20 L 30 14 L 26.949219 14 C 26.437925 7.8516588 21.277839 3 15 3 z M 4 10 L 0 16 L 3.0507812 16 C 3.562075 22.148341 8.7221607 27 15 27 C 17.968602 27 20.69718 25.916562 22.792969 24.125 A 1.0001 1.0001 0 1 0 21.494141 22.605469 C 19.74593 24.099907 17.483398 25 15 25 C 9.80344 25 5.5490109 21.062074 5.0488281 16 L 8 16 L 4 10 z">
-                                                                                    </path>
-                                                                                </svg>
-                                                                            </button>
-                                                                        </div>
+                                                            <div class="vm-login-captcha-alert">
+                                                                <div class="vm-login-captcha-title">
+                                                                    🔑 Please verify the Captcha first.
+                                                                </div>
+                                                                <div class="vm-login-captcha-body">
+                                                                    <div class="vm-login-captcha-box">
+                                                                        <span id="captcha-text" class="fw-bold text-dark">
+                                                                            @ViewBag.CaptchaCode
+                                                                        </span>
+                                                                        <button type="button" id="refreshCaptcha" class="vm-login-captcha-refresh" aria-label="Refresh Captcha">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 30 30">
+                                                                                <path d="M 15 3 C 12.031398 3 9.3028202 4.0834384 7.2070312 5.875 A 1.0001 1.0001 0 1 0 8.5058594 7.3945312 C 10.25407 5.9000929 12.516602 5 15 5 C 20.19656 5 24.450989 8.9379267 24.951172 14 L 22 14 L 26 20 L 30 14 L 26.949219 14 C 26.437925 7.8516588 21.277839 3 15 3 z M 4 10 L 0 16 L 3.0507812 16 C 3.562075 22.148341 8.7221607 27 15 27 C 17.968602 27 20.69718 25.916562 22.792969 24.125 A 1.0001 1.0001 0 1 0 21.494141 22.605469 C 19.74593 24.099907 17.483398 25 15 25 C 9.80344 25 5.5490109 21.062074 5.0488281 16 L 8 16 L 4 10 z"></path>
+                                                                            </svg>
+                                                                        </button>
                                                                     </div>
-
-                                                                    <div class="col-md-6 mb-3 vm-login-captcha-col">
-                                                                        <div class="d-flex align-items-center">
-                                                                            <input type="text" class="form-control shadow-sm me-1 vm-login-captcha-input" id="CaptchaInput"
-                                                                                   name="CaptchaInput" placeholder="Enter Captcha"
-                                                                                   required>
-                                                                            <button type="button" id="verifyCaptchaBtn" class="btn btn-success btn-sm d-flex align-items-center vm-login-captcha-verify">
-                                                                                <i class="bi bi-check2-circle me-1"></i> Verify
-                                                                            </button>
-                                                                            <div class="spinner-border text-primary ms-2 d-none vm-login-captcha-spinner" id="captcha_spinner"></div>
-                                                                            <img id="captcha_success_img" src="~/images/check_img_input.jpg"
-                                                                                 class="d-none ms-2 vm-login-captcha-success" alt="Verified" />
-                                                                        </div>
-                                                                        <small id="captcha_msg" class="form-text mt-1"></small>
+                                                                    <div class="vm-login-captcha-action">
+                                                                        <input type="text" class="form-control vm-login-captcha-input" id="CaptchaInput" name="CaptchaInput" placeholder="Enter Captcha" required>
+                                                                        <button type="button" id="verifyCaptchaBtn" class="vm-login-captcha-verify">Verify</button>
+                                                                        <div class="spinner-border text-primary ms-2 d-none vm-login-captcha-spinner" id="captcha_spinner" style="width:20px;height:20px;border-width:2px;"></div>
+                                                                        <img id="captcha_success_img" src="~/images/check_img_input.jpg" class="d-none ms-2 vm-login-captcha-success" alt="Verified" style="width:24px;height:24px;" />
                                                                     </div>
                                                                 </div>
-
-
-
+                                                                <small id="captcha_msg" class="form-text mt-1 text-center w-100"></small>
                                                             </div>
 
                                                             <div class="for-border-effect">
@@ -479,312 +479,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    @*----------ZERO KYC DIV---------------------*@
-                                                <!--<div id="ZeroDiv" style="display:none;margin-top:15px;">
-
-                                                    <div class="alert alert-info">
-                                                        <b>Zero KYC</b>
-                                                        
-                                                    </div>
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
-
-                                                            <input type="text"
-                                                                   id="ZeroAadhar"
-                                                                   name="ZeroAadhar"
-                                                                   class="form-control"
-                                                                   maxlength="12"
-                                                                   placeholder="Enter Aadhaar Number"
-                                                                   onkeypress="return isNumber(event)" />
-
-                                                        </div>
-
-                                                        <div class="col-md-6">
-
-                                                            <input type="text"
-                                                                   id="ZeroPan"
-                                                                   name="ZeroPan"
-                                                                   class="form-control"
-                                                                   maxlength="10"
-                                                                   style="text-transform:uppercase"
-                                                                   placeholder="Enter PAN Number" />
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>-->
-                                                    @* ---------------------DIGITAL KYC DIV------------*@
-
-                                                <!--<div id="DigitalDiv" style="display:none;margin-top:15px;">
-
-                                                    <div class="alert alert-success">
-
-                                                        <b>Digital KYC</b><br />
-
-                                                        Aadhaar & PAN API Verification Required.
-
-                                                    </div>
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-5">
-
-                                                            <input type="text"
-                                                                   id="DigitalAadhar"
-                                                                   class="form-control"
-                                                                   maxlength="12"
-                                                                   placeholder="Enter Aadhaar Number" />
-
-                                                        </div>
-
-                                                        <div class="col-md-1">
-
-                                                            <button type="button"
-                                                                    class="btn btn-success">
-                                                                Verify
-                                                            </button>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <br />
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-5">
-
-                                                            <input type="text"
-                                                                   id="DigitalPan"
-                                                                   class="form-control"
-                                                                   maxlength="10"
-                                                                   placeholder="Enter PAN Number" />
-
-                                                        </div>
-
-                                                        <div class="col-md-1">
-
-                                                            <button type="button"
-                                                                    class="btn btn-success">
-                                                                Verify
-                                                            </button>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>-->
-
-
-
-                                                    @* ---------------------PHYSICAL  KYC DIV------------*@
-                                                <!--<div id="PhysicalDiv" style="display:none;margin-top:15px;">
-
-                                                    <div class="alert alert-warning">
-
-                                                        <b>Physical KYC</b><br />
-
-                                                        Upload Aadhaar & PAN Images.
-
-                                                    </div>
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
-
-                                                            <input type="text"
-                                                                   class="form-control"
-                                                                   placeholder="Enter Aadhaar Number" />
-
-                                                        </div>
-
-                                                        <div class="col-md-6">
-
-                                                            <input type="text"
-                                                                   class="form-control"
-                                                                   placeholder="Enter PAN Number" />
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <br />
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
-
-                                                            Aadhaar Front
-
-                                                            <input type="file" class="form-control" />
-
-                                                        </div>
-
-                                                        <div class="col-md-6">
-
-                                                            Aadhaar Back
-
-                                                            <input type="file" class="form-control" />
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <br />
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
-
-                                                            PAN Front
-
-                                                            <input type="file" class="form-control" />
-
-                                                        </div>
-
-                                                        <div class="col-md-6">
-
-                                                            PAN Back
-
-                                                            <input type="file" class="form-control" />
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>-->
-
-
-                                                    @* ---------------------DIGITAL + PHYSICAL  KYC DIV------------*@
-                                                <!--<div id="DigitalPhysicalDiv" style="display:none; margin-top:15px;">
-
-                                                    <div class="alert alert-success">
-                                                        <b>Digital + Physical KYC</b><br />
-                                                        Aadhaar & PAN Verify + Documents Upload
-                                                    </div>
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
-                                                            <label><b>Aadhaar Number</b></label>
-
-                                                            @Html.TextBox("DP_AadharNo", "", new
-                                                            {
-                                                                @class = "form-control numberonly",
-                                                                maxlength = "12",
-                                                                placeholder = "Enter 12 Digit Aadhaar"
-                                                            })
-
-                                                            <small class="text-danger" id="errDPAadhar"></small>
-                                                        </div>
-
-                                                        <div class="col-md-6">
-
-                                                            <label><b>PAN Number</b></label>
-
-                                                            @Html.TextBox("DP_PanNo", "", new
-                                                            {
-                                                                @class = "form-control text-uppercase",
-                                                                maxlength = "10",
-                                                                placeholder = "ABCDE1234F"
-                                                            })
-
-                                                            <small class="text-danger" id="errDPPan"></small>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <br />
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
-
-                                                            <button type="button"
-                                                                    class="btn btn-success"
-                                                                    id="btnVerifyDigitalPhysical">
-                                                                Verify Aadhaar
-                                                            </button>
-
-                                                        </div>
-
-                                                        <div class="col-md-6">
-
-                                                            <button type="button"
-                                                                    class="btn btn-primary"
-                                                                    id="btnVerifyPanDigitalPhysical">
-                                                                Verify PAN
-                                                            </button>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <hr />
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
-
-                                                            <label><b>Aadhaar Front</b></label>
-
-                                                            <input type="file"
-                                                                   name="DPAadharFront"
-                                                                   class="form-control"
-                                                                   accept="image/*" />
-
-                                                        </div>
-
-                                                        <div class="col-md-6">
-
-                                                            <label><b>Aadhaar Back</b></label>
-
-                                                            <input type="file"
-                                                                   name="DPAadharBack"
-                                                                   class="form-control"
-                                                                   accept="image/*" />
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <br />
-
-                                                    <div class="row">
-
-                                                        <div class="col-md-6">
-
-                                                            <label><b>PAN Front</b></label>
-
-                                                            <input type="file"
-                                                                   name="DPPanFront"
-                                                                   class="form-control"
-                                                                   accept="image/*" />
-
-                                                        </div>
-
-                                                        <div class="col-md-6">
-
-                                                            <label><b>PAN Back</b></label>
-
-                                                            <input type="file"
-                                                                   name="DPPanBack"
-                                                                   class="form-control"
-                                                                   accept="image/*" />
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>-->
-
-
-
-
+                                                    
 
                                                     <div class="row">
                                                         <div class="col-md-12">
@@ -879,13 +574,12 @@
                                     }
                                     else
                                     {
-
-                                        <div class="alert alert-info text-center p-3 rounded">
-
-                                            <strong>ℹ️ Registration is currently free.</strong><br />
-                                            No sign-up form is required at this time.
+                                        <div class="tab-1 resp-tab-content vm-login-form-wrap @(ViewBag.signin_signup == "singup" ? "vm-login-panel-active" : "")" id="signupform">
+                                            <div class="alert alert-info text-center p-3 rounded">
+                                                <strong>ℹ️ Registration is currently free.</strong><br />
+                                                No sign-up form is required at this time.
+                                            </div>
                                         </div>
-
                                     }
 
 
@@ -964,7 +658,7 @@
                                                     <input id="btnforget" type="submit" value="Reset Password" class="vm-login-btn vm-login-btn--primary fullbodydycolorbg" />
                                                 </div>
 
-                                                @*<input class="fullbodydycolorbg" type="submit" value="Forgot" style="margin-top:30px;">*@
+                                                
                                             </div>
                                         }
                                     </div>
@@ -986,28 +680,7 @@
         </div>
 
     </div><!--.main-->
-    @{
-        @*<input type="button" value="sleep" id="btnsleep" data-toggle="modal" data-target="#sleep-modal" style=" width:145px;">
-            <div class="modal fade" id="sleep-modal" data-keyboard="false" data-backdrop="static">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <img src="@Url.Content("~/Deskrop Sleep Mode.png")" id="mImage" />
 
-                        </div>
-                        <div>
-                            <span style="font-size:15px; margin-left:15px;">Mail-id :-<b style="color:red;"> @mailid</b> </span>
-                            <br />
-                            <span style="font-size:15px; margin-left:15px;">Mobile No :-<b style="color:red;"> @mobile</b></span>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>*@
-    }
 
 
 
@@ -1056,12 +729,11 @@
 
 
     @*<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>*@
-    <script src="~/NewLoginDesign/js/jquery-2.1.4.min.js"></script>
+    @*<script src="~/NewLoginDesign/js/jquery-2.1.4.min.js"></script>*@
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     @*<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>*@
     <script src="~/NewLoginDesign/js/easyResponsiveTabs.js"></script>
-    <script src="~/MainFrontDesign/js/public-login-modern.js?v=3"></script>
     <script src="~/Swalalert/sweetalert-dev.js"></script>
     <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
@@ -1231,7 +903,7 @@
 
     @* Tab + forgot-password panel switching handled in public-login-modern.js *@
     <script>
-        $('button').click(function () {
+        $('#viewmore, #viewless').on('click', function () {
             if (this.id == 'viewmore') {
                 $('#allcard').show();
                 $('#silderid').hide();
@@ -1244,72 +916,10 @@
                 $('#viewless').hide();
                 $('#viewmore').show();
             }
-        })
+        });
     </script>
 
-    @*<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyD7qWgtnw-46Yrpkb1FsL_xVhQliZeL_TI&ver=3.exp"></script>*@
-    @*<script type="text/javascript">
-            navigator.geolocation.getCurrentPosition(
-                function (position) { // success cb
-                    console.log(position);
 
-
-                },
-                function () { // fail cb
-                }
-            );
-            //jQuery(document).ready(function ($) {
-
-            //    $("#get-mylocation").click(function (e) {
-            //        e.preventDefault();
-            //        navigator.geolocation.getCurrentPosition(
-            //            function (position) { // success cb
-            //                console.log(position);
-            //            },
-            //            function () { // fail cb
-            //            }
-            //        );
-            //    });
-
-            //});
-            $(document).ready(function () {
-                /* Chrome need SSL! */
-                //var is_chrome = /chrom(e|ium)/.test(navigator.userAgent.toLowerCase());
-                //var is_ssl = 'https:' == document.location.protocol;
-                //if (is_chrome && !is_ssl) {
-                //    return false;
-                //}
-                var allowSubmit = false;
-                /* HTML5 Geolocation */
-                navigator.geolocation.getCurrentPosition(
-                    function (position) { // success cb
-
-                        /* Current Coordinate */
-                        var lat = position.coords.latitude;
-                        var lng = position.coords.longitude;
-                        $('#latloc').val(lat);
-                        $('#longloc').val(lng);
-
-                        var google_map_pos = new google.maps.LatLng(lat, lng);
-
-                        /* Use Geocoder to get address */
-                        var google_maps_geocoder = new google.maps.Geocoder();
-
-                        google_maps_geocoder.geocode(
-                            { 'latLng': google_map_pos },
-                            function (results, status) {
-                                if (status == google.maps.GeocoderStatus.OK && results[0]) {
-                                    console.log(results[0].formatted_address);
-                                    alert(results[0].formatted_address)
-                                }
-                            }
-                        );
-                    },
-                    function () { // fail cb
-                    }
-                );
-            });
-        </script>*@
 
 </body>
 </html>
@@ -1400,49 +1010,7 @@
                 break;
         }
     }
-    //$('#UpdateForm').submit(function (e) {
-    //
-    //    var errormshss = $('#lblerrormsg').text()
-    //    swal({
-    //        title: "Are you sure?",
-    //        text: "You will not be able to recover this imaginary file!",
-    //        icon: "warning",
-    //        buttons: [
-    //           'Yes, I am sure!'
-    //        ],
-    //        dangerMode: true,
-    //    }).then(function (isConfirm) {
-    //        if (isConfirm) {
-    //            swal({
-    //                title: 'Shortlisted!',
-    //                text: 'Candidates are successfully shortlisted!',
-    //                icon: 'success'
-    //            }).then(function () {
-    //                e.preventDefault();
-    //                return false;
-    //            });
-    //        } else {
-    //            swal("Cancelled", "Your imaginary file is safe :)", "error");
-    //        }
-    //    })
-    //    //swal({
-    //    //    title: " Oops!",
-    //    //    text: "xvfcgbghn",
-    //    //    icon: "error",
-    //    //    button: "oh no!",
-    //    //    confirmButtonClass: "btn-danger"
-    //    //});
-    //    if (errormshss == "") {
-    //        errormshss = "Please allow the Location access!";
-    //    }
-    //    if ($('#latloc').val() == "" || $('#longloc').val() == "" || $('#hdaddress').val() == "") {
-    //        $('#login').show();
-    //        $('.loadingio-spinner-gear-94vo528ab8.first-login').hide();
-    //        e.preventDefault();
-    //        //   window.location.reload()
-    //        return false;
-    //    }
-    //})
+  
 
     $('#UpdateForm').submit(function (e) {
         if (location.protocol == 'https:' || location.href.includes("http://localhost/")) {
@@ -1627,13 +1195,16 @@
         if ($.fn.owlCarousel && $(".vm-public-login .owl-carousel").length && !$(".vm-public-login .owl-carousel").hasClass("owl-loaded")) {
             $(".vm-public-login .owl-carousel").owlCarousel({
                 autoplay: true,
-                lazyLoad: true,
+                lazyLoad: false,
                 loop: true,
                 responsiveClass: true,
-                autoHeight: true,
-                autoplayTimeout: 7000,
+                autoHeight: false,
+                autoplayTimeout: 3000,
+                autoplayHoverPause: true,
                 smartSpeed: 800,
-                nav: true,
+                nav: false,
+                dots: true,
+                navText: ["<i class='fa fa-chevron-left'></i>", "<i class='fa fa-chevron-right'></i>"],
                 responsive: {
                     0: { items: 1 },
                     600: { items: 1 },
@@ -1660,11 +1231,7 @@
         var resend_btn_otp = document.getElementById('resend_btn_otp');
         var otp_continer_inputs = document.getElementById('otp_continer_inputs');
         otp_continer_inputs.classList.add('hidden');
-        //sendBtnOtp.addEventListener('click', () => {
-        //    otp_continer_inputs.classList.remove('hidden');
-        //    sendBtnOtp.classList.add('hidden');
-        //    txtmobileno.classList.add('hidden');
-        //})
+        
 
         $('input[name="Mobile"]').keyup(e => {
             $('#mobile_err').text('');
@@ -1880,38 +1447,16 @@
 
 <script>
     window.addEventListener('load', () => {
-        //var sendBtnOtp_email = document.getElementById('btnsendOTP_Email');
         var txtemail = document.getElementById('txtemail');
         var resend_btn_otp_email = document.getElementById('resend_btn_otp_email');
 
         $('#otp_continer_inputs_email').hide();
-        //var otp_continer_inputs_email = document.getElementById('otp_continer_inputs_email');
-        //otp_continer_inputs_email.classList.add('hidden');
-
-        //sendBtnOtp_email.addEventListener('click', () => {
-        //    otp_continer_inputs_email.classList.remove('hidden');
-        //    sendBtnOtp_email.classList.add('hidden');
-        //    txtemail.classList.add('hidden');
-        //})
+       
     })
     function getCodeBoxElement(index) {
         return document.getElementById('codeBox' + index);
     }
-    //function onKeyUpEvent(index, event) {
-    //    const eventCode = event.which || event.keyCode;
-    //    if (getCodeBoxElement(index).value.length === 1) {
-    //        if (index !== 4) {
-    //            getCodeBoxElement(index + 1).focus();
-    //        } else {
-    //            getCodeBoxElement(index).blur();
-    //            // Submit code
-    //            console.log('submit code ');
-    //        }
-    //    }
-    //    if (eventCode === 8 && index !== 1) {
-    //        getCodeBoxElement(index - 1).focus();
-    //    }
-    //}
+    
     function onFocusEvent(index) {
         for (item = 1; item < index; item++) {
             const currentElement = getCodeBoxElement(item);
@@ -1932,23 +1477,7 @@
     $('#btnsendOTP_Email').hide();
     disable_inputs();
 
-    //mobile_ref.addEventListener('keyup', (e) => {
-    //    if (email_ref && email_ref.value && e.target.value.length == 10) {
-    //        block_inputs();
-    //    }
-    //    else {
-    //        disable_inputs();
-    //    }
-    //})
-
-    //email_ref.addEventListener('keyup', (e) => {
-    //    if (mobile_ref && mobile_ref.value.length == 10 && e.target.value) {
-    //        block_inputs();
-    //    }
-    //    else {
-    //        disable_inputs();
-    //    }
-    //})
+    
 
 
 
@@ -1977,30 +1506,6 @@
 
 
 
-     @*function FillDealer() {
-        var district_id = $('#distict').val();
-
-        $.ajax({
-             url: '@Url.Action("FillDealerList", "Home")',
-            type: "GET",
-            dataType: "JSON",
-
-            data: { District: district_id },
-            success: function (show) {
-                $("#Distributorid").html("");
-                var procemessage = "<option value=''>Select your Nearest & Known Distributor Point</option>";
-                $("#Distributorid").html(procemessage).show();
-                $("#divdistributor").css("display", "block");
-                for (var x = 0; x < show.length; x++) {
-
-                    $("#Distributorid").append($('<option></option>').val(show[x].Value).html(show[x].Text));
-                }
-                },
-            error: function (reponse) {
-                alert("error : " + reponse);
-            }
-        });
-    }*@
 
 </script>
 
@@ -2010,9 +1515,7 @@
     $(document).ready(function () {
         $("#CaptchaInput").val("").prop("disabled", false);
         // 🔒 Signup fields initially disable
-        //$("#signupFields input, #signupFields select, #SignUp").prop("disabled", true);
-
-        // 🟢 Captcha Verify Button Click
+      
         $("#verifyCaptchaBtn").click(function () {
             var captchaInput = $("#CaptchaInput");
 
@@ -2050,11 +1553,7 @@
 
                         $("#Mobile").prop("disabled", false);
 
-                        // 🔓 Enable Signup Fields
-                        //$("#signupFields input, #signupFields select, #SignUp").prop("disabled", false);
-
-                        // ❌ Disable Captcha fields once verified
-                        //$("#CaptchaInput, #verifyCaptchaBtn").prop("disabled", true);
+                       
                     } else {
                         $("#captcha_msg").removeClass("text-success")
                             .addClass("text-danger")

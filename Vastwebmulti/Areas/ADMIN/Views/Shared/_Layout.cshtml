@@ -1186,46 +1186,115 @@
         #leftsidebar.admin-sidebar-shell {
             width: var(--admin-sidebar-width, 200px);
             position: fixed;
-            top: 72px;
+            top: var(--admin-header-height, 72px);
             left: 0;
             bottom: 0;
+            height: auto;
             z-index: 10100;
-            display: flex;
-            flex-direction: column;
+            display: flex !important;
+            flex-direction: column !important;
             background: var(--vm-admin-sidebar-bg, #0b1220) !important;
             background-image: var(--vm-admin-sidebar-bg, #0b1220) !important;
-            border-right: 1px solid rgba(148, 163, 184, 0.12);
+            border-right: 1px solid rgba(148, 163, 184, 0.18);
             box-shadow: 12px 0 36px rgba(2, 6, 23, 0.25);
-            overflow: hidden;
+            overflow: hidden !important;
         }
 
-        #leftsidebar.admin-sidebar-shell .admin-sidebar-nav {
-            flex: 1 1 auto;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        #leftsidebar.admin-sidebar-shell .admin-sidebar-list {
-            flex: 1 1 auto;
-            margin: 0;
-            padding: 10px 8px 10px;
-            list-style: none;
-            overflow-y: auto;
-            overflow-x: hidden;
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll {
+            flex: 1 1 0 !important;
+            min-height: 0 !important;
+            width: 100%;
+            box-sizing: border-box;
+            padding-bottom: 20px !important;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
             scrollbar-width: thin;
-            scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+            scrollbar-color: rgba(148, 163, 184, 0.42) transparent;
         }
 
-        #leftsidebar.admin-sidebar-shell .admin-sidebar-list::-webkit-scrollbar {
-            width: 6px;
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
         }
 
-        #leftsidebar.admin-sidebar-shell .admin-sidebar-list::-webkit-scrollbar-thumb {
-            background: rgba(148, 163, 184, 0.35);
-            border-radius: 999px;
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.42);
+            border-radius: 3px;
+        }
+
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.62);
+        }
+
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll > .admin-sidebar-nav,
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll > #custnav {
+            position: static !important;
+            display: block !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 0 24px 0 !important;
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+            box-sizing: border-box;
+        }
+
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-legal {
+            flex: 0 0 auto !important;
+            position: relative !important;
+            z-index: 2 !important;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-mobile-head {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 3 !important;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-nav.menu,
+        #leftsidebar.admin-sidebar-shell #custnav.menu {
+            padding: 0 !important;
+        }
+
+        body.saas-admin-ui #leftsidebar.admin-sidebar-shell #custnav,
+        body.saas-admin-ui #leftsidebar.admin-sidebar-shell .menu.admin-sidebar-nav,
+        body.saas-admin-ui #leftsidebar.admin-sidebar-shell .sidebar .menu {
+            display: block !important;
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+            position: static !important;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-list,
+        #leftsidebar.admin-sidebar-shell .menu .list.admin-sidebar-list,
+        #leftsidebar.admin-sidebar-shell .design-one .list.admin-sidebar-list {
+            display: block !important;
+            height: auto !important;
+            max-height: none !important;
+            margin: 0;
+            padding: 10px 2px 100px 8px !important;
+            list-style: none;
+            overflow: visible !important;
+            box-sizing: border-box;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-scroll-spacer {
+            display: block;
+            height: 72px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            pointer-events: none;
         }
 
         #leftsidebar.admin-sidebar-shell .admin-sidebar-item {
@@ -1388,8 +1457,12 @@
             line-height: 1.35;
         }
 
-        #leftsidebar.admin-sidebar-shell .admin-sidebar-legal {
-            flex-shrink: 0;
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-legal,
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-legal {
+            flex: 0 0 auto !important;
+            position: static !important;
+            top: auto !important;
+            bottom: auto !important;
             padding: 10px 12px 12px;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             background: #000000 !important;
@@ -1833,7 +1906,7 @@
             }
         }
     </style>
-    <link href="~/MainFrontDesign/css/admin-layout-mobile.css?v=2" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-layout-mobile.css?v=16" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-modal-fix.css?v=5" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-modal-modern.css?v=29" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-renewal-modal.css" rel="stylesheet" />
@@ -2021,6 +2094,7 @@
         <!-- Left Sidebar -->
         <aside id="leftsidebar" class="sidebar admin-sidebar-shell" aria-label="Admin navigation">
 
+            <div class="admin-sidebar-scroll" id="admin-sidebar-scroll">
             <div class="menu admin-sidebar-nav saas-admin-sidebar" id="custnav">
                 <div class="admin-sidebar-mobile-head">
                     <div class="admin-sidebar-mobile-brand">
@@ -2048,13 +2122,14 @@
                     <li class="my-class celik0 admin-sidebar-item admin-sidebar-group admin-sidebar-open">
                         <a href="javascript:void(0);" class="llkj" aria-expanded="true">
                             <i class="fas fa-chart-line admin-sidebar-icon" aria-hidden="true"></i>
-                            <span class="on_off">Trans. Reports</span>
+                            <span class="on_off">Important Trans. Reports</span>
                         </a>
                         <ul class="account-menu hhu kkli celik admin-sidebar-sub">
                             <li><a class="pin-ped" href="@Url.Action("Operator_report_new", "Home")"><span class="on_off">Prepaid &amp; Utility</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("Money_transfer_Report", "Home")"><span class="on_off">Financial Services</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("TicketReport", "Air")"><span class="on_off">Travel &amp; Hotels</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("RadiantPrepay", "Home")"><span class="on_off">Radiant Prepay</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("HoldAndLeanAmountReport", "Home")"><span class="on_off">Hold Amount Report</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("RadiantCMSDeposit", "Home")"><span class="on_off">CMS Cash Deposit</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("RadiantReferenceLocation", "Home")"><span class="on_off">Reference Location</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("EcommerceHistory", "Home")"><span class="on_off">Ecommerce</span></a></li>
@@ -2092,18 +2167,20 @@
                         <ul class="account-menu hhu kklii2 celik2 admin-sidebar-sub">
                             <li><a class="pin-ped" href="@Url.Action("UPIAndGatewaySetting", "Home")"><span class="on_off">UPI/Gateway Setting</span></a></li>
                             <li><a class="pin-ped" href="@Url.Action("UPICharges", "Home")"><span class="on_off">UPI Report</span></a></li>
-                            <li><a style="margin-bottom:100px;" class="pin-ped" href="@Url.Action("Pay_U_Gateway", "Home")"><span class="on_off">Payment Gateway Report</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("Pay_U_Gateway", "Home")"><span class="on_off">Payment Gateway Report</span></a></li>
                         </ul>
                     </li>
+                    <li class="admin-sidebar-scroll-spacer" aria-hidden="true"></li>
                 </ul>
+            </div>
+            </div>
 
-                <div class="legal admin-sidebar-legal">
-                    <div class="copyright">
-                        Copyright 2019 - <span>@DateTime.Now.Year</span>
-                    </div>
-                    <div class="copyright">
-                        <a href="javascript:void(0);" class="tmw-total-color-one">@comnyname1</a>
-                    </div>
+            <div class="legal admin-sidebar-legal">
+                <div class="copyright">
+                    Copyright 2019 - <span>@DateTime.Now.Year</span>
+                </div>
+                <div class="copyright">
+                    <a href="javascript:void(0);" class="tmw-total-color-one">@comnyname1</a>
                 </div>
             </div>
             <!-- #Menu -->
@@ -5754,13 +5831,31 @@ OnSuccess = "ONSUCCESSGETDATA"
                         $trigger.attr("aria-expanded", "false");
                     } else {
                         $group.addClass("admin-sidebar-open");
-                        $submenu.slideDown(260);
+                        $submenu.slideDown(260, function () {
+                            if (window.syncAdminSidebarScroll) {
+                                window.syncAdminSidebarScroll();
+                            }
+                        });
                         $trigger.attr("aria-expanded", "true");
+                    }
+                    if (window.syncAdminSidebarScroll) {
+                        window.syncAdminSidebarScroll();
                     }
                 });
             }
 
-            $(initAdminSidebarAccordion);
+            $(function () {
+                initAdminSidebarAccordion();
+                if (window.syncAdminSidebarScroll) {
+                    window.syncAdminSidebarScroll();
+                }
+            });
+
+            $(window).on("resize.adminSidebarScroll", function () {
+                if (window.syncAdminSidebarScroll) {
+                    window.syncAdminSidebarScroll();
+                }
+            });
         })(jQuery);
     </script>
 
@@ -5973,6 +6068,62 @@ OnSuccess = "ONSUCCESSGETDATA"
             var $topMenuBtn = $("#admin-topmenu-open");
             var topMenuMoved = false;
 
+            function destroyLegacySidebarSlimScroll() {
+                if (typeof jQuery === "undefined" || !jQuery.fn.slimscroll) {
+                    return;
+                }
+
+                var $sidebar = jQuery("#leftsidebar.admin-sidebar-shell");
+                if (!$sidebar.length) {
+                    return;
+                }
+
+                $sidebar.find(".admin-sidebar-list, .list").each(function () {
+                    var $list = jQuery(this);
+                    try {
+                        $list.slimscroll({ destroy: true });
+                    } catch (e) { }
+                    $list.css({ height: "auto", overflow: "visible", maxHeight: "none" });
+                });
+
+                $sidebar.find(".slimScrollBar, .slimScrollRail").remove();
+
+                $sidebar.find(".slimScrollDiv").each(function () {
+                    var wrap = this;
+                    var list = wrap.querySelector(".admin-sidebar-list, .list");
+                    if (list && wrap.parentNode) {
+                        wrap.parentNode.insertBefore(list, wrap);
+                        wrap.parentNode.removeChild(wrap);
+                    }
+                });
+            }
+
+            function syncAdminSidebarScroll() {
+                var sidebar = document.getElementById("leftsidebar");
+                if (!sidebar || !sidebar.classList.contains("admin-sidebar-shell")) {
+                    return;
+                }
+
+                destroyLegacySidebarSlimScroll();
+
+                var scrollWrap = document.getElementById("admin-sidebar-scroll");
+                var nav = document.getElementById("custnav");
+                if (!scrollWrap || !nav) {
+                    return;
+                }
+
+                nav.style.removeProperty("height");
+                nav.style.removeProperty("max-height");
+                scrollWrap.style.removeProperty("height");
+                scrollWrap.style.removeProperty("max-height");
+                scrollWrap.style.setProperty("overflow-y", "auto", "important");
+                scrollWrap.style.setProperty("overflow-x", "hidden", "important");
+                scrollWrap.style.setProperty("flex", "1 1 0", "important");
+                scrollWrap.style.setProperty("min-height", "0", "important");
+            }
+
+            window.syncAdminSidebarScroll = syncAdminSidebarScroll;
+
             function isMobileLayout() {
                 return window.matchMedia("(max-width: 1199px)").matches;
             }
@@ -6139,6 +6290,9 @@ OnSuccess = "ONSUCCESSGETDATA"
                     closeAdminTopMenu();
                 }
                 syncTopMenuPanelState();
+                if (window.syncAdminSidebarScroll) {
+                    window.syncAdminSidebarScroll();
+                }
             });
 
             window.syncAdminTopMenuPanel = syncTopMenuPanelState;
@@ -6154,9 +6308,32 @@ OnSuccess = "ONSUCCESSGETDATA"
                     $.AdminBSB.leftSideBar.isOpen = function () {
                         return $body.hasClass("admin-sidebar-open");
                     };
+
+                    if ($.AdminBSB.leftSideBar.setMenuHeight) {
+                        var legacySetMenuHeight = $.AdminBSB.leftSideBar.setMenuHeight;
+                        $.AdminBSB.leftSideBar.setMenuHeight = function (isFirstTime) {
+                            if (document.getElementById("leftsidebar") &&
+                                document.getElementById("leftsidebar").classList.contains("admin-sidebar-shell")) {
+                                if (window.syncAdminSidebarScroll) {
+                                    window.syncAdminSidebarScroll();
+                                }
+                                return;
+                            }
+                            return legacySetMenuHeight.call(this, isFirstTime);
+                        };
+                    }
                 }
 
                 syncTopMenuPanelState();
+                if (window.syncAdminSidebarScroll) {
+                    window.syncAdminSidebarScroll();
+                }
+
+                setTimeout(function () {
+                    if (window.syncAdminSidebarScroll) {
+                        window.syncAdminSidebarScroll();
+                    }
+                }, 120);
             });
         })();
     </script>

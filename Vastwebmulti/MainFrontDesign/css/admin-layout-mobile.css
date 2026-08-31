@@ -94,8 +94,91 @@ html.saas-admin-ui {
     border-color: rgba(239, 68, 68, 0.35);
 }
 
-#leftsidebar.admin-sidebar-shell .admin-sidebar-list {
-    padding: 10px 8px 8px !important;
+#leftsidebar.admin-sidebar-shell {
+    top: var(--admin-header-height, 73px) !important;
+    bottom: 0 !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+#leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    width: 100%;
+    box-sizing: border-box;
+    padding-bottom: 20px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.42) transparent;
+}
+
+#leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar {
+    width: 3px;
+}
+
+#leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.42);
+    border-radius: 3px;
+}
+
+#leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.62);
+}
+
+#leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-track,
+#leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+#leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll > #custnav,
+#leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll > .admin-sidebar-nav {
+    position: static !important;
+    display: block !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .sidebar .menu,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell #custnav {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+#leftsidebar.admin-sidebar-shell > .admin-sidebar-legal {
+    flex: 0 0 auto !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-mobile-head {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 3 !important;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-list,
+#leftsidebar.admin-sidebar-shell .menu .list.admin-sidebar-list {
+    height: auto !important;
+    max-height: none !important;
+    padding: 10px 2px 100px 8px !important;
+    overflow: visible !important;
+    box-sizing: border-box;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-scroll-spacer {
+    display: block;
+    height: 72px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    pointer-events: none;
 }
 
 #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a,
@@ -198,6 +281,15 @@ html.saas-admin-ui {
 #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a.activee,
 #leftsidebar.admin-sidebar-shell .admin-sidebar-group.admin-sidebar-open > .llkj {
     box-shadow: inset 3px 0 0 #38bdf8;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-legal,
+#leftsidebar.admin-sidebar-shell > .admin-sidebar-legal,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-legal {
+    flex: 0 0 auto !important;
+    position: static !important;
+    top: auto !important;
+    bottom: auto !important;
 }
 
     #leftsidebar.admin-sidebar-shell .admin-sidebar-legal {
@@ -524,8 +616,8 @@ body.saas-admin-ui .admin-header-row {
     
     #leftsidebar.admin-sidebar-shell {
         top: 0 !important;
-        height: 100vh !important;
-        height: 100dvh !important;
+        bottom: 0 !important;
+        height: auto !important;
         max-width: min(86vw, 260px) !important;
         width: min(86vw, 260px) !important;
         z-index: var(--vm-z-mobile-nav, 10195) !important;
@@ -536,6 +628,15 @@ body.saas-admin-ui .admin-header-row {
 
     #leftsidebar.admin-sidebar-shell .admin-sidebar-mobile-head {
         display: flex;
+    }
+
+    #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll {
+        flex: 1 1 0 !important;
+        min-height: 0 !important;
+    }
+
+    #leftsidebar.admin-sidebar-shell .admin-sidebar-list {
+        padding-bottom: 32px !important;
     }
 
     #leftsidebar.admin-sidebar-shell.me-left,
@@ -864,4 +965,87 @@ body.saas-admin-ui .admin-header-row {
         left: auto !important;
         position: relative !important;
     }
+}
+
+/* Final sidebar scroll — scroll on wrapper, menu flows naturally */
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell {
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    top: var(--admin-header-height, 73px) !important;
+    bottom: 0 !important;
+    height: auto !important;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    box-sizing: border-box;
+    padding-bottom: 20px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.42) transparent;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar {
+    width: 3px;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.42);
+    border-radius: 3px;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.62);
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-track,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll > #custnav,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll > .admin-sidebar-nav,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .sidebar .menu {
+    position: static !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding-bottom: 24px !important;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-legal {
+    flex: 0 0 auto !important;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-list {
+    padding-bottom: 100px !important;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-scroll-spacer {
+    display: block !important;
+    height: 72px !important;
+}
+
+/* Disable legacy slimScroll height cap inside modern admin sidebar */
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .slimScrollDiv,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell #custnav .slimScrollDiv {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .slimScrollDiv > .admin-sidebar-list,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .slimScrollDiv > .list,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell #custnav .list {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .slimScrollBar,
+body.saas-admin-ui #leftsidebar.admin-sidebar-shell .slimScrollRail {
+    display: none !important;
 }
