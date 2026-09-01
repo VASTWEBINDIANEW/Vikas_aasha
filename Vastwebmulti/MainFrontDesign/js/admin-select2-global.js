@@ -8,7 +8,8 @@
     var SKIP_SELECTOR = '.vm-no-select2, [data-no-select2="true"]';
     var SKIP_AJAX_URL = /DistrictList|serchstates/i;
     var SEARCH_PLACEHOLDER = 'Search name, mobile, ID...';
-    var BOOT_DELAYS = [0, 100, 250, 500, 900, 1400, 2200];
+    var BOOT_DELAYS = [0, 100, 250, 500, 900, 1400, 2200, 3200];
+    var FINAL_BOOT_DELAYS = [0, 150, 400, 900, 1800];
     var select2Wrapped = false;
     var observerStarted = false;
     var bootTimer = null;
@@ -68,7 +69,19 @@
                 $el.select2('destroy');
             } catch (e) { /* ignore stale instances */ }
         }
+        $el.removeClass('select2-hidden-accessible');
+        $el.removeAttr('data-select2-id aria-hidden tabindex');
         $el.next('.select2-container').remove();
+    }
+
+    function isAdminSelect2Healthy($el) {
+        if (!$el || !$el.length) {
+            return false;
+        }
+        var $container = $el.next('.select2-container');
+        return $el.hasClass('select2-hidden-accessible') &&
+            $container.length &&
+            $container.find('.select2-selection').length;
     }
 
     function shouldInitSelect($el) {
@@ -83,14 +96,28 @@
             destroyAdminSelect2($el);
             return false;
         }
-        if ($el.closest('[data-admin-select2-custom="true"]').length) {
+        if ($el.is('[data-admin-select2-custom="true"]') || $el.closest('[data-admin-select2-custom="true"]').length) {
+            return false;
+        }
+        if ($el.prop('disabled')) {
+            return false;
+        }
+        if (!$el.is(':visible')) {
+            return false;
+        }
+        if ($el.closest('.tab-pane:not(.active)').length) {
+            return false;
+        }
+        if ($el.closest('.tab-contentt:not(.current)').length) {
             return false;
         }
         if (isFundTransferPage() && $el.closest('.saas-fund-transfer-page').length) {
             return false;
         }
         if ($el.closest('.saas-operator-report-page').length && $el.hasClass('vm-opr-select')) {
-            return false;
+            if ($('#operatorReportForm').length) {
+                return false;
+            }
         }
         if ($el.closest('.saas-roffer-report-page').length && $el.hasClass('vm-opr-select')) {
             return false;
@@ -351,20 +378,51 @@
                     return;
                 }
 
+                if (isAdminSelect2Healthy($el)) {
+                    return;
+                }
+
                 destroyAdminSelect2($el);
                 $el.select2(window.getAdminSelect2Options($el));
             });
         });
     };
 
+    function getSearchPlaceholderForSelect($el) {
+        var customPh;
+        if (!$el || !$el.length) {
+            return SEARCH_PLACEHOLDER;
+        }
+        customPh = $el.attr('data-search-placeholder') || $el.attr('data-placeholder') || $el.attr('title');
+        if (customPh) {
+            return customPh;
+        }
+        if ($el.hasClass('vm-rl-select-search') || $el.hasClass('vm-dmt-select')) {
+            return SEARCH_PLACEHOLDER;
+        }
+        var idName = (($el.attr('id') || '') + ' ' + ($el.attr('name') || '')).toLowerCase();
+        if (/dealer|distributor|retailer|firm|user|mobile|master|api|whitelabel/.test(idName)) {
+            return SEARCH_PLACEHOLDER;
+        }
+        if (/operator|apinm|status|type|category/.test(idName)) {
+            return 'Search...';
+        }
+        return 'Search...';
+    }
+
+    window.getAdminSelect2SearchPlaceholder = getSearchPlaceholderForSelect;
+    window.isAdminSelect2Healthy = isAdminSelect2Healthy;
+
     function bindSelect2SearchUi() {
-        $(document).off('select2:open.vmAdminSelect2').on('select2:open.vmAdminSelect2', function () {
+        $(document).off('select2:open.vmAdminSelect2').on('select2:open.vmAdminSelect2', function (e) {
+            var $select = $(e.target);
+            var placeholder = getSearchPlaceholderForSelect($select);
             window.setTimeout(function () {
                 var $search = $('.select2-container--open .select2-search__field');
                 if (!$search.length) {
                     return;
                 }
-                $search.attr('placeholder', SEARCH_PLACEHOLDER);
+                $search.attr('placeholder', placeholder);
                 $search.trigger('focus');
             }, 0);
         });
@@ -393,16 +451,22 @@
     window.bootAdminSelect2 = bootAdminSelect2;
     window.initAdminSelectSearch = bootAdminSelect2;
 
-    function scheduleBoots() {
+    function scheduleBoots(delays) {
+        var list = delays || BOOT_DELAYS;
         var i;
-        for (i = 0; i < BOOT_DELAYS.length; i++) {
-            window.setTimeout(bootAdminSelect2, BOOT_DELAYS[i]);
+        for (i = 0; i < list.length; i++) {
+            window.setTimeout(bootAdminSelect2, list[i]);
         }
     }
 
+    window.finalizeAdminSelect2Boot = function () {
+        bootAdminSelect2();
+        scheduleBoots(FINAL_BOOT_DELAYS);
+    };
+
     function queueBoot(delay) {
         window.clearTimeout(bootTimer);
-        bootTimer = window.setTimeout(bootAdminSelect2, delay || 120);
+        bootTimer = window.setTimeout(bootAdminSelect2, delay || 280);
     }
 
     function startDomObserver() {
@@ -463,6 +527,10 @@
 
     $(document).on('shown.bs.modal shown.bs.tab', '.modal, [data-toggle="tab"], [data-bs-toggle="tab"]', function () {
         queueBoot(100);
+    });
+
+    $(document).on('click', 'ul#tabs li, .tab-contentt .tab-link a, .tab-contentt .tab-link', function () {
+        queueBoot(120);
     });
 
 })(window.jQuery);

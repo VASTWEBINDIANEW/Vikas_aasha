@@ -42,38 +42,12 @@
 
 
 
-    function initSelect2() {
+    var PAGE_SELECTOR = '.saas-pancard-report-page';
 
-        if (!$ || !$.fn.select2) {
-
-            return;
-
+    function refreshReportSelects() {
+        if (typeof window.initReportPageSelects === 'function') {
+            window.initReportPageSelects($(PAGE_SELECTOR));
         }
-
-        var $targets = $('.saas-pancard-report-page #allmaster1, .saas-pancard-report-page #alldealer, .saas-pancard-report-page #allretailer, .saas-pancard-report-page #allapiuser, .saas-pancard-report-page #Whitelabel');
-
-        $targets.each(function () {
-
-            var $el = $(this);
-
-            if ($el.data('select2')) {
-
-                $el.select2('destroy');
-
-            }
-
-            $el.select2({
-
-                width: '100%',
-
-                dropdownAutoWidth: false,
-
-                minimumResultsForSearch: 6
-
-            });
-
-        });
-
     }
 
 
@@ -114,9 +88,12 @@
 
         enhanceLoader();
 
-        initSelect2();
-
         bindTableRefresh();
+
+        window.setTimeout(refreshReportSelects, 400);
+        $(window).on('load.vmPancardReport', function () {
+            window.setTimeout(refreshReportSelects, 200);
+        });
 
     }
 

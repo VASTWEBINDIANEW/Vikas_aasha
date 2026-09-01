@@ -4,22 +4,12 @@
 (function (window, document, $) {
     'use strict';
 
-    function initSelect2() {
-        if (!$ || !$.fn.select2) {
-            return;
+    var PAGE_SELECTOR = '.saas-pancard-manual-page';
+
+    function refreshReportSelects() {
+        if (typeof window.initReportPageSelects === 'function') {
+            window.initReportPageSelects($(PAGE_SELECTOR));
         }
-        var $el = $('#allretailer');
-        if (!$el.length) {
-            return;
-        }
-        if ($el.data('select2')) {
-            $el.select2('destroy');
-        }
-        $el.select2({
-            width: '100%',
-            dropdownAutoWidth: false,
-            minimumResultsForSearch: 6
-        });
     }
 
     function initDatepicker() {
@@ -114,11 +104,14 @@
     };
 
     function init() {
-        initSelect2();
         initDatepicker();
         if (window.vmPancardRenumberSr) {
             window.vmPancardRenumberSr();
         }
+        window.setTimeout(refreshReportSelects, 400);
+        $(window).on('load.vmPancardManualReport', function () {
+            window.setTimeout(refreshReportSelects, 200);
+        });
     }
 
     if (document.readyState === 'loading') {

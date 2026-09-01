@@ -1,8 +1,10 @@
 /**
- * ADMIN — M-POS Report page UI v=1
+ * ADMIN — M-POS Report page UI v=2
  */
 (function (window, document, $) {
     'use strict';
+
+    var PAGE_SELECTOR = '.saas-mpos-report-page';
 
     function enhanceLoader() {
         var $loader = $('#loadingdiv');
@@ -20,22 +22,10 @@
         });
     }
 
-    function initSelect2() {
-        if (!$ || !$.fn.select2) {
-            return;
+    function refreshReportSelects() {
+        if (typeof window.initReportPageSelects === 'function') {
+            window.initReportPageSelects($(PAGE_SELECTOR));
         }
-        var $targets = $('.saas-mpos-report-page #allwhitelabel1, .saas-mpos-report-page #allmaster2, .saas-mpos-report-page #alldealer, .saas-mpos-report-page #allretailer');
-        $targets.each(function () {
-            var $el = $(this);
-            if ($el.data('select2')) {
-                $el.select2('destroy');
-            }
-            $el.select2({
-                width: '100%',
-                dropdownAutoWidth: false,
-                minimumResultsForSearch: 6
-            });
-        });
     }
 
     function bindTableRefresh() {
@@ -56,8 +46,11 @@
             return;
         }
         enhanceLoader();
-        initSelect2();
         bindTableRefresh();
+        window.setTimeout(refreshReportSelects, 400);
+        $(window).on('load.vmMposReport', function () {
+            window.setTimeout(refreshReportSelects, 200);
+        });
     }
 
     window.vmMposRenumberSr = renumberSrRows;

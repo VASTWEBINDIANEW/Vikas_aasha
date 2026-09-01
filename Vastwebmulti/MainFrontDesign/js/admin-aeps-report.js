@@ -1,8 +1,10 @@
 /**
- * ADMIN — AEPS Report page UI v=1
+ * ADMIN — AEPS Report page UI v=2
  */
 (function (window, document, $) {
     'use strict';
+
+    var PAGE_SELECTOR = '.saas-aeps-report-page';
 
     function enhanceLoader() {
         var $loader = $('#loadingdiv');
@@ -20,22 +22,10 @@
         });
     }
 
-    function initSelect2() {
-        if (!$ || !$.fn.select2) {
-            return;
+    function refreshReportSelects() {
+        if (typeof window.initReportPageSelects === 'function') {
+            window.initReportPageSelects($(PAGE_SELECTOR));
         }
-        var $targets = $('.saas-aeps-report-page #allwhitelabel1, .saas-aeps-report-page #allmaster1, .saas-aeps-report-page #alldealer, .saas-aeps-report-page #allretailer, .saas-aeps-report-page #allapiuser');
-        $targets.each(function () {
-            var $el = $(this);
-            if ($el.data('select2')) {
-                $el.select2('destroy');
-            }
-            $el.select2({
-                width: '100%',
-                dropdownAutoWidth: false,
-                minimumResultsForSearch: 6
-            });
-        });
     }
 
     function bindTableRefresh() {
@@ -56,8 +46,11 @@
             return;
         }
         enhanceLoader();
-        initSelect2();
         bindTableRefresh();
+        window.setTimeout(refreshReportSelects, 400);
+        $(window).on('load.vmAepsReport', function () {
+            window.setTimeout(refreshReportSelects, 200);
+        });
     }
 
     window.vmAepsRenumberSr = renumberSrRows;

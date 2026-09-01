@@ -1,32 +1,25 @@
 /**
- * ADMIN — AEPS Charge Report page UI v=1
+ * ADMIN — AEPS Charge Report page UI v=2
  */
 (function (window, document, $) {
     'use strict';
 
-    function initSelect2() {
-        if (!$ || !$.fn.select2) {
-            return;
+    var PAGE_SELECTOR = '.saas-aeps-charge-report-page';
+
+    function refreshReportSelects() {
+        if (typeof window.initReportPageSelects === 'function') {
+            window.initReportPageSelects($(PAGE_SELECTOR));
         }
-        var $targets = $('.saas-aeps-charge-report-page #allretailer, .saas-aeps-charge-report-page #Type');
-        $targets.each(function () {
-            var $el = $(this);
-            if ($el.data('select2')) {
-                $el.select2('destroy');
-            }
-            $el.select2({
-                width: '100%',
-                dropdownAutoWidth: false,
-                minimumResultsForSearch: 6
-            });
-        });
     }
 
     function init() {
         if (!$) {
             return;
         }
-        initSelect2();
+        window.setTimeout(refreshReportSelects, 400);
+        $(window).on('load.vmAepsChargeReport', function () {
+            window.setTimeout(refreshReportSelects, 200);
+        });
     }
 
     if (document.readyState === 'loading') {
