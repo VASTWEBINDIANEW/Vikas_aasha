@@ -187,35 +187,39 @@
         <tr class="vm-dmt-row vm-dmt-row--@statusTone" style="background-color:@pendingColor">
 
             <td class="vm-dmt-sr-cell">
-                <span class="vm-dmt-sr-num">@srIndex</span>
                 @if (sts.ToUpper() == "PENDING")
                 {
                     if (item.DmtType == "DMT2" && item.status.ToUpper().Contains("PENDING") && (item.Trans_type == "IMPS" || item.Trans_type == "NEFT"))
                     {
-                        <button type="button" class="vm-dmt-status-btn vm-dmt-status-btn--pending view" onclick="GotoView('@item.idno')" title="View Status" data-toggle="tooltip" data-placement="bottom">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        <button type="button" class="vm-dmt-status-btn vm-dmt-status-btn--pending view" onclick="GotoView('@item.idno')" title="View Status (@srIndex)" data-toggle="tooltip" data-placement="bottom">
+                            <span class="vm-dmt-sr-num">@srIndex</span>
                         </button>
                     }
                     else if (item.DmtType == "DMT1" && item.status.ToUpper().Contains("PENDING") && (item.Trans_type == "IMPS" || item.Trans_type == "NEFT"))
                     {
-                        <button type="button" class="vm-dmt-status-btn vm-dmt-status-btn--pending view" onclick="GotoViewDMT1('@item.idno')" title="View Status" data-toggle="tooltip" data-placement="bottom">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        <button type="button" class="vm-dmt-status-btn vm-dmt-status-btn--pending view" onclick="GotoViewDMT1('@item.idno')" title="View Status (@srIndex)" data-toggle="tooltip" data-placement="bottom">
+                            <span class="vm-dmt-sr-num">@srIndex</span>
                         </button>
                     }
                     else
                     {
-                        <span class="vm-dmt-status vm-dmt-status--pending" title="@sts"><i class="fa @statusFa" aria-hidden="true"></i></span>
+                        <span class="vm-dmt-status vm-dmt-status--pending" title="@sts">
+                            <span class="vm-dmt-sr-num">@srIndex</span>
+                        </span>
                     }
                 }
                 else
                 {
-                    <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@sts"><i class="fa @statusFa" aria-hidden="true"></i></span>
+                    <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@sts">
+                        <span class="vm-dmt-sr-num">@srIndex</span>
+                    </span>
                 }
             </td>
             <td class="vm-dmt-user-cell">
-                <span class="vm-dmt-user-role">@rolename</span>
-                <span class="vm-dmt-user-sep">&rsaquo;</span>
-                <span class="vm-dmt-user-name">@framname</span>
+                <div class="vm-dmt-user-stack">
+                    <span class="vm-dmt-user-role">@rolename</span>
+                    <span class="vm-dmt-user-name">@framname</span>
+                </div>
             </td>
             <td class="vm-dmt-api-cell"><span class="vm-dmt-api-badge">@item.api_name</span></td>
           
@@ -359,6 +363,12 @@
                     var resendBtnId = "rrr" + item.idno;
                     var rowStatus = (item.status ?? "").ToUpper();
                     var isManual = item.uniqueid != null && item.uniqueid.StartsWith("MANUAL");
+                    var dmtTypeVal = string.IsNullOrWhiteSpace(item.DmtType) ? "DMT2" : item.DmtType.Trim();
+                    var transTypeUpper = (item.Trans_type ?? "").ToUpper().Trim();
+                    var canResendPending = rowStatus.Contains("PENDING")
+                        && !isManual
+                        && transTypeUpper != "IMPS_VERIFY"
+                        && !transTypeUpper.Contains("EKYC");
                 }
                 <td class="vm-dmt-utr-cell">
                     @if (rowStatus.Contains("REFUND AGAINST") == false || rowStatus.Contains("RESEND"))
@@ -387,9 +397,9 @@
                             <button type="button" class="fftr vm-dmt-act-btn vm-dmt-act-btn--danger" title="Refund" data-toggle="modal" data-target="#defaultModal1" onclick="refundshow('@item.idno','@item.trans_id','@item.bank_trans_id','@item.recivername','@item.status')">
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </button>
-                            if (item.DmtType == "DMT2" && ((item.Trans_type == "IMPS" && item.DmtType == "DMT2") || (item.Trans_type == "NEFT" && item.DmtType == "DMT2")))
+                            if (canResendPending)
                             {
-                                <button type="button" id="@resendBtnId" class="ff vm-dmt-act-btn vm-dmt-act-btn--info" title="Resend" onclick="resendchk11(@item.idno)">
+                                <button type="button" id="@resendBtnId" class="ff vm-dmt-act-btn vm-dmt-act-btn--info" title="Resend" data-resend-id="@item.idno" data-dmt-type="@dmtTypeVal">
                                     <i class="fa fa-repeat" aria-hidden="true"></i>
                                 </button>
                             }
@@ -421,11 +431,6 @@
                                 <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                             </button>
                         }
-                    </div>
-                    <div class="nrchsuccess vm-dmt-resend-confirm" id="@chkkkk1" style="display:none;">
-                        <button type="button" class="vm-dmt-resend-btn" onclick="resend('@item.idno')">
-                            <i class="fa fa-repeat" aria-hidden="true"></i> Confirm resend
-                        </button>
                     </div>
                 </td>
             </tr>

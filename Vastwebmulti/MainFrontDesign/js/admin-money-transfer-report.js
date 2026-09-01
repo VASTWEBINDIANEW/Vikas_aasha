@@ -1,26 +1,12 @@
 /**
 
- * ADMIN — Money_Transfer_Report page UI v=7
+ * ADMIN — Money_Transfer_Report page UI v=10
 
  */
 
 (function (window, document, $) {
 
     'use strict';
-
-
-
-    function enhanceLoader() {
-
-        var $loader = $('#loadingdiv');
-
-        if ($loader.length && !$loader.find('.vm-dmt-loading-text').length) {
-
-            $loader.append('<div class="vm-dmt-loading-text">Loading transactions…</div>');
-
-        }
-
-    }
 
 
 
@@ -106,6 +92,43 @@
 
 
 
+    function bindResendActions() {
+
+        if (!$) {
+
+            return;
+
+        }
+
+        $(document).off('click.vmDmtResend', '.saas-dmt-report-page .vm-dmt-act-btn--info[data-resend-id]');
+
+        $(document).on('click.vmDmtResend', '.saas-dmt-report-page .vm-dmt-act-btn--info[data-resend-id]', function (event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            var idno = $(this).attr('data-resend-id');
+            var dmtType = $(this).attr('data-dmt-type') || 'DMT2';
+
+            if (!idno) {
+
+                return;
+
+            }
+
+            if (typeof window.confirmMoneyResend === 'function') {
+
+                window.confirmMoneyResend(idno, dmtType);
+
+            }
+
+        });
+
+    }
+
+
+
     function init() {
 
         if (!$) {
@@ -114,11 +137,11 @@
 
         }
 
-        enhanceLoader();
-
         initSelect2();
 
         bindTableRefresh();
+
+        bindResendActions();
 
     }
 

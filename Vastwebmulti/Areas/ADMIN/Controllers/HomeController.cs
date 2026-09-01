@@ -40321,6 +40321,126 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         ///////////////////////////////////////////////////////END////////////////////////////////////
 
         //NillCom Start
+
+
+        //======================================================
+        // MASTER SWITCH - Turns ALL categories ON/OFF together
+        //======================================================
+        [HttpPost]
+        public JsonResult UpdateAllSwitchingStatus(string status) // status = "Y" (ON) or "N" (OFF)
+        {
+            try
+            {
+                bool boolStatus = (status == "Y"); // Extra Comm table ke liye (bool)
+
+                // ---- 1. Nill Port ----
+                var nillList = db.Nill_Com.ToList();
+                foreach (var item in nillList)
+                {
+                    item.sts = status;
+                }
+
+                // ---- 2. By Circle ----
+                var circleList = db.swich_state_operator.ToList();
+                foreach (var item in circleList)
+                {
+                    item.sts = status;
+                }
+
+                // ---- 3. By Amount ----
+                var amountList = db.recharge_switch_special.ToList();
+                foreach (var item in amountList)
+                {
+                    item.sts = status;
+                }
+
+                // ---- 4. By Operator ----
+                var operatorList = db.recharge_switch.ToList();
+                foreach (var item in operatorList)
+                {
+                    item.sts = status;
+                }
+
+                // ---- 5. Extra Comm (bool type) ----
+                var extraCommList = db.Range_wise_extra_commission.ToList();
+                foreach (var item in extraCommList)
+                {
+                    item.statuss = boolStatus;
+                }
+
+                db.SaveChanges(); // sab ek saath save ho jayega
+
+                return Json(new { success = true, message = "All Switching turned " + (status == "Y" ? "ON" : "OFF") });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        //======================================================
+        // CATEGORY-WISE MASTER SWITCH
+        //======================================================
+        [HttpPost]
+        public JsonResult UpdateCategorySwitchStatus(string category, string status) // status = "Y" or "N"
+        {
+            try
+            {
+                bool boolStatus = (status == "Y");
+
+                if (category == "NillPort")
+                {
+                    var list = db.Nill_Com.ToList();
+                    foreach (var item in list)
+                    {
+                        item.sts = status;
+                    }
+                }
+                else if (category == "ByCircle")
+                {
+                    var list = db.swich_state_operator.ToList();
+                    foreach (var item in list)
+                    {
+                        item.sts = status;
+                    }
+                }
+                else if (category == "ByAmount")
+                {
+                    var list = db.recharge_switch_special.ToList();
+                    foreach (var item in list)
+                    {
+                        item.sts = status;
+                    }
+                }
+                else if (category == "ByOperator")
+                {
+                    var list = db.recharge_switch.ToList();
+                    foreach (var item in list)
+                    {
+                        item.sts = status;
+                    }
+                }
+                else if (category == "ExtraComm")
+                {
+                    var list = db.Range_wise_extra_commission.ToList();
+                    foreach (var item in list)
+                    {
+                        item.statuss = boolStatus;
+                    }
+                }
+
+                db.SaveChanges();
+
+                return Json(new { success = true, message = category + " switching turned " + (status == "Y" ? "ON" : "OFF") });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
+
         [HttpGet]
         public ActionResult NillCom()
         {

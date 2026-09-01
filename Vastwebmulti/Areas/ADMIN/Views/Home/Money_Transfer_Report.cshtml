@@ -15,12 +15,17 @@
 <link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=35" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <script src="~/MainFrontDesign/js/admin-financial-report.js?v=5"></script>
-<script src="~/MainFrontDesign/js/admin-money-transfer-report.js?v=7"></script>
+<script src="~/MainFrontDesign/js/admin-money-transfer-report.js?v=10"></script>
 
-<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;" aria-hidden="true">
+    <div class="vm-dmt-loader__panel" role="status" aria-live="polite" aria-label="Processing resend">
+        <div class="vm-dmt-table-loader__spinner" aria-hidden="true"></div>
+        <span class="vm-dmt-loader__text">Processing resend...</span>
+    </div>
+</div>
 <section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page">
     <div class="container-fluid vm-opr-page-shell">
 
@@ -159,7 +164,7 @@
                 <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
                     <div class="vm-opr-table-panel__title">
                         <i class="fas fa-exchange-alt" aria-hidden="true"></i>
-                        <span>Money transfer transacti  ons</span>
+                        <span>Money transfer transactions</span>
                     </div>
                     <div class="vm-dmt-table-panel__right">
                         <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
@@ -197,8 +202,11 @@
                         }
                     </tbody>
                 </table>
-                        <div id="loadingdiv" class="vm-opr-table-loading" style="display:none;">
-                            <img src="~/img/ajax-loader.gif" alt="Loading" />
+                        <div id="loadingdiv" class="vm-opr-table-loading vm-dmt-table-loading" style="display:none;">
+                            <div class="vm-dmt-table-loader" role="status" aria-live="polite" aria-label="Loading transactions">
+                                <div class="vm-dmt-table-loader__spinner" aria-hidden="true"></div>
+                                <span class="vm-dmt-table-loader__text">Loading transactions...</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -495,9 +503,22 @@
 
     var inProgress = false;
 
+    function syncDmtScrollFilters() {
+        ddlusers = $('#ddlusers').val();
+        ddl_status = $('#ddl_status').val();
+        alldealer = $('#alldealer').val();
+        allretailer = $('#allretailer').val();
+        allmaster = $('select[name=allmaster]').val();
+        allapiuser = $('#allapiuser').val();
+        Whitelabel = $('#Whitelabel').val();
+        ddl_Type = $('#ddl_Type').val();
+        txtmob = $('#txtmob').val();
+    }
+
     function fetchReport() {
         if (loading == true) return;
 
+        syncDmtScrollFilters();
         inProgress = true;
         $("#loadingdiv").show();
         $.post("@Url.Action("InfiniteScroll1", "Home")",
@@ -515,8 +536,15 @@
                 if (window.vmDmtRenumberSr) { window.vmDmtRenumberSr(); }
                 $("#loadingdiv").hide();
                 inProgress = false;
+            })
+            .fail(function () {
+                $("#loadingdiv").hide();
+                inProgress = false;
             });
     }
+
+    window.fetchReport = fetchReport;
+    window.syncDmtScrollFilters = syncDmtScrollFilters;
 
 </script>
 
@@ -956,39 +984,102 @@ function Failed() {
 
 <!--Resend-->
 <script>
-    function resendchk11(id) {
-        var btnk = "nrch" + id;
-        var btn1 = "nrchsuccess" + id;
-        $('#' + btnk).css("display", "none");
-        $('#' + btn1).css("display", "block");
+    function confirmMoneyResend(idno, dmtType) {
+        if (!idno) {
+            return;
+        }
+
+        swal({
+            title: "Are you sure?",
+            text: "Do you want to resend this transaction?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#2563eb",
+            confirmButtonText: "Yes, Resend it!",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        }, function (isConfirm) {
+            if (isConfirm) {
+                resend(idno, dmtType);
+            }
+        });
     }
+
+    window.confirmMoneyResend = confirmMoneyResend;
 </script>
 <script>
-    function resend(Idno)
+    var dmtResendInProgress = false;
+
+    function resend(Idno, DmtType)
     {
+        if (dmtResendInProgress) {
+            return;
+        }
 
-      document.getElementById("loadermoney").style.display = "block";
-            $.ajax({
-                url: '@Url.Action("MoneyResend", "Home")',
-                type: 'POST',
-                dataType: "json",
-                data: { idno: Idno, DmtType: "DMT2" },
+        dmtResendInProgress = true;
+        document.getElementById("loadermoney").style.display = "flex";
+        document.getElementById("loadermoney").setAttribute("aria-hidden", "false");
 
-                success: function (data) {
-                   document.getElementById("loadermoney").style.display = "none";
-                   // swal("Good Job!", "Resend SuccessFully ", "success");
-                   window.location.reload();
-                   reloadPageeee();
-                    //moneyReport();
+        $.ajax({
+            url: '@Url.Action("MoneyResend", "Home")',
+            type: 'POST',
+            dataType: "json",
+            cache: false,
+            data: { idno: Idno, DmtType: DmtType || "DMT2" },
+            success: function (data) {
+                document.getElementById("loadermoney").style.display = "none";
+                document.getElementById("loadermoney").setAttribute("aria-hidden", "true");
+
+                var result = data;
+                if (typeof result === "string") {
+                    result = result.replace(/"/g, "").trim();
                 }
-            });
+
+                if (result === "Failed") {
+                    swal("Failed!", "Unable to resend this transaction. Please try again.", "error");
+                    return;
+                }
+
+                if (typeof window.syncDmtScrollFilters === "function") {
+                    window.syncDmtScrollFilters();
+                }
+
+                if (typeof pageindex !== "undefined") {
+                    pageindex = 2;
+                }
+                if (typeof NoMoredata !== "undefined") {
+                    NoMoredata = false;
+                }
+
+                if (typeof window.fetchReport === "function") {
+                    window.fetchReport();
+                }
+
+                swal("Success!", "Transaction resend request sent successfully.", "success");
+            },
+            error: function () {
+                document.getElementById("loadermoney").style.display = "none";
+                document.getElementById("loadermoney").setAttribute("aria-hidden", "true");
+                swal("Failed!", "Unable to resend this transaction. Please try again.", "error");
+            },
+            complete: function () {
+                dmtResendInProgress = false;
+            }
+        });
     }
+
+    window.resend = resend;
 </script>
 <script>
     function reloadPageeee() {
+        if (typeof window.fetchReport === "function") {
+            window.fetchReport();
+            return;
+        }
+
         $('#balance').load(location.href + " #balance");
         $('#all').load(location.href + " #all");
-
     }
 </script>
 

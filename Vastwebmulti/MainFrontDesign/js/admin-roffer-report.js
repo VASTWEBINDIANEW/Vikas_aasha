@@ -11,39 +11,42 @@
 
 
     function initSelect2() {
-
         if (!$ || !$.fn || !$.fn.select2) {
-
             return;
-
         }
-
         $('#allretailer, #OperatorName').each(function () {
-
             var $el = $(this);
-
-            if (!$el.length || $el.data('select2')) {
-
+            if (!$el.length) {
                 return;
-
             }
-
+            if ($el.data('select2')) {
+                $el.select2('destroy');
+            }
             $el.select2({
-
                 width: '100%',
-
                 dropdownParent: $('body'),
-
                 allowClear: false,
-
-                minimumResultsForSearch: 6,
-
-                placeholder: $el.attr('title') || 'Select'
-
+                minimumResultsForSearch: 0,
+                placeholder: $el.attr('title') || 'Select',
+                language: {
+                    noResults: function () { return 'No match found'; },
+                    searching: function () { return 'Searching...'; },
+                    inputTooShort: function () { return 'Type to search...'; }
+                }
             });
-
         });
+    }
 
+    function bindSelectSearchFocus() {
+        $(document).off('select2:open.vmRofferSelectSearch').on('select2:open.vmRofferSelectSearch', '.saas-roffer-report-page select.vm-opr-select', function () {
+            window.setTimeout(function () {
+                var $search = $('.select2-container--open .select2-search__field');
+                if ($search.length) {
+                    $search.attr('placeholder', 'Search...');
+                    $search.trigger('focus');
+                }
+            }, 0);
+        });
     }
 
 
@@ -349,9 +352,8 @@
     function init() {
 
         dedupeEmptyRows();
-
         initSelect2();
-
+        bindSelectSearchFocus();
         initDates();
 
         initInfiniteScroll();

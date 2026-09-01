@@ -15,12 +15,12 @@
 <link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=36" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <script src="~/MainFrontDesign/js/admin-financial-report.js?v=6"></script>
 <script src="~/MainFrontDesign/js/admin-money-transfer-report.js?v=7"></script>
 
-<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page">
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-aeps-upi-report-page">
     <div class="container-fluid vm-opr-page-shell">
 
         @using (Html.BeginForm("AepsUPIReport", "Home", FormMethod.Post, new { id = "aepsUpiReportForm", @class = "vm-rpt-filters-panel__form" }))
@@ -180,8 +180,8 @@
                                             </td>
                                             <td>@(item.Remainpre.HasValue ? item.Remainpre.Value.ToString("N2") : "")</td>
                                             <td>
-                                                <div><strong>?@item.Amount</strong></div>
-                                                <small class="text-muted">Comm: ?@item.totalcomm</small>
+                                                <div><strong>&#8377;@(item.Amount.HasValue ? item.Amount.Value.ToString("N2") : "0.00")</strong></div>
+                                                <small class="text-muted">Comm: &#8377;@(item.totalcomm.HasValue ? item.totalcomm.Value.ToString("N2") : "0.00")</small>
                                             </td>
                                             <td>@(item.RemainPost.HasValue ? item.RemainPost.Value.ToString("N2") : "")</td>
                                             <td>@(item.txndate.HasValue ? item.txndate.Value.ToString("dd-MM-yyyy HH:mm:ss") : "")</td>
@@ -214,7 +214,7 @@
 <script>
     function formatMoney(n) {
         var num = Number(n || 0);
-        return '?' + num.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        return '\u20B9' + num.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function hideAepsUpiTotals() {

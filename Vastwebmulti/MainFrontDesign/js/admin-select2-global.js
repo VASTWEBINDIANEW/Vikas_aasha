@@ -89,6 +89,16 @@
         if (isFundTransferPage() && $el.closest('.saas-fund-transfer-page').length) {
             return false;
         }
+        if ($el.closest('.saas-operator-report-page').length && $el.hasClass('vm-opr-select')) {
+            return false;
+        }
+        if ($el.closest('.saas-roffer-report-page').length && $el.hasClass('vm-opr-select')) {
+            return false;
+        }
+        if ($el.closest('.vm-opr-filter-extra:not(.is-visible)').length) {
+            destroyAdminSelect2($el);
+            return false;
+        }
         return true;
     }
 

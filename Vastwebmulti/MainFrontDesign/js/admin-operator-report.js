@@ -95,22 +95,47 @@
 
     function getSelect2Opts($el) {
         var id = $el.attr('id') || '';
-        var isSearchable = id === 'Operator' || id === 'ddlusers' || id === 'txtcode';
         var isMultiple = $el.prop('multiple');
+        var placeholder = $el.attr('title') || $el.find('option:first').text() || 'Select';
         return {
             width: '100%',
             dropdownParent: $('body'),
             allowClear: false,
             closeOnSelect: !isMultiple,
-            minimumResultsForSearch: isSearchable ? 0 : 8,
-            placeholder: $el.attr('title') || $el.find('option:first').text() || 'Select'
+            minimumResultsForSearch: 0,
+            placeholder: placeholder,
+            language: {
+                noResults: function () { return 'No match found'; },
+                searching: function () { return 'Searching...'; },
+                inputTooShort: function () { return 'Type to search...'; }
+            }
         };
     }
 
+    function bindSelectSearchFocus() {
+        $(document).off('select2:open.vmOprSelectSearch').on('select2:open.vmOprSelectSearch', '.saas-operator-report-page select.vm-opr-select', function () {
+            window.setTimeout(function () {
+                var $search = $('.select2-container--open .select2-search__field');
+                if ($search.length) {
+                    $search.attr('placeholder', 'Search...');
+                    $search.trigger('focus');
+                }
+            }, 0);
+        });
+    }
+
     function destroySelect2($el) {
-        if ($el && $el.length && $el.data('select2')) {
-            $el.select2('destroy');
+        if (!$el || !$el.length) {
+            return;
         }
+        if ($el.data('select2')) {
+            try {
+                $el.select2('destroy');
+            } catch (e) { /* ignore stale instances */ }
+        }
+        $el.removeClass('select2-hidden-accessible');
+        $el.removeAttr('data-select2-id aria-hidden tabindex');
+        $el.next('.select2-container').remove();
     }
 
     function isSelectVisible($el) {
@@ -119,6 +144,19 @@
             return false;
         }
         return $el.is(':visible') || $el.closest('.vm-opr-field--operator, .vm-opr-field--code').is(':visible');
+    }
+
+    function ensureSelect2($el) {
+        if (!$el || !$el.length || !$.fn || !$.fn.select2) {
+            return;
+        }
+        if (!isSelectVisible($el)) {
+            return;
+        }
+        if ($el.data('select2')) {
+            return;
+        }
+        $el.select2(getSelect2Opts($el));
     }
 
     function initOprSelects() {
@@ -131,10 +169,7 @@
                 destroySelect2($el);
                 return;
             }
-            if ($el.data('select2')) {
-                return;
-            }
-            $el.select2(getSelect2Opts($el));
+            ensureSelect2($el);
         });
     }
 
@@ -158,7 +193,12 @@
             return;
         }
         el.selectedIndex = index;
-        refreshSelect2($(el));
+        var $el = $(el);
+        if ($el.data('select2')) {
+            $el.trigger('change.select2');
+        } else {
+            ensureSelect2($el);
+        }
     }
 
     function restoreFilterState() {
@@ -183,11 +223,10 @@
             $('#allretailer').val(userid);
         } else if (usertype === 'API') {
             $('#API').val(userid);
-        } else if (usertype === 'WAdmin') {
+        } else         if (usertype === 'WAdmin') {
             $('#Whitelabel').val(userid);
         }
         initOprSelects();
-        $(SELECT_SELECTOR).trigger('change.select2');
     }
 
     function bindUserTypeChange() {
@@ -209,17 +248,22 @@
     }
 
     function showCodeMode() {
-        $('.vm-opr-field--code').show();
-        $('.vm-opr-field--operator').hide();
+        var $code = $('.vm-opr-field--code');
+        var $operator = $('.vm-opr-field--operator');
+        destroySelect2($('#Operator'));
+        $operator.removeClass('is-visible').hide();
+        $code.addClass('is-visible').css('display', 'flex');
         setSelectIndex('Operator', 0);
-        initOprSelects();
+        ensureSelect2($('#txtcode'));
     }
 
     function showOperatorMode() {
-        $('.vm-opr-field--code').hide();
-        $('.vm-opr-field--operator').show();
+        var $code = $('.vm-opr-field--code');
+        var $operator = $('.vm-opr-field--operator');
         destroySelect2($('#txtcode'));
-        initOprSelects();
+        $code.removeClass('is-visible').hide();
+        $operator.addClass('is-visible').css('display', 'flex');
+        ensureSelect2($('#Operator'));
     }
 
     function updateTxtcodeOptions(html) {
@@ -231,27 +275,29 @@
         refreshSelect2($tc);
     }
 
-    function afterAnswers() {
-        var resetIds = ['allretailer', 'allmaster1', 'alldealer', 'API', 'Whitelabel'];
-        var i;
+    var afterAnswersTimer = null;
+    function afterAnswersNow() {
         $('.vm-opr-filter-extra').each(function () {
             var $wrap = $(this);
             var visible = this.style.display !== 'none';
             $wrap.toggleClass('is-visible', visible);
+            var $sel = $wrap.find('select.vm-opr-select');
             if (visible) {
-                refreshSelect2($wrap.find('select.vm-opr-select'));
+                ensureSelect2($sel);
             } else {
-                destroySelect2($wrap.find('select.vm-opr-select'));
+                destroySelect2($sel);
             }
         });
-        for (i = 0; i < resetIds.length; i++) {
-            var el = document.getElementById(resetIds[i]);
-            if (el && el.selectedIndex === 0) {
-                refreshSelect2($(el));
-            }
+    }
+
+    function afterAnswers() {
+        if (afterAnswersTimer) {
+            clearTimeout(afterAnswersTimer);
         }
-        refreshSelect2($('#ddlusers'));
-        initOprSelects();
+        afterAnswersTimer = window.setTimeout(function () {
+            afterAnswersTimer = null;
+            afterAnswersNow();
+        }, 0);
     }
 
     function applyInitialPortMode() {
@@ -263,14 +309,27 @@
         }
     }
 
+    function bindPortChange() {
+        $('#lapuno11').off('change.vmOprPort').on('change.vmOprPort', function () {
+            var port = $(this).val() || '';
+            if (portUsesCodeList(port)) {
+                showCodeMode();
+            } else {
+                showOperatorMode();
+            }
+        });
+    }
+
     function initSelects() {
         if (!$ || !$.fn || !$.fn.select2) {
             return;
         }
         bindUserTypeChange();
+        bindSelectSearchFocus();
         initOprSelects();
         restoreFilterState();
         applyInitialPortMode();
+        initOprSelects();
     }
 
     function enhanceTotalsPanel() {
@@ -324,6 +383,9 @@
         if ($filterForm.length) {
             for (i = 0; i < FILTER_FIELD_NAMES.length; i++) {
                 data[FILTER_FIELD_NAMES[i]] = readFormField($filterForm, FILTER_FIELD_NAMES[i]);
+            }
+            if (!data.txtdemo) {
+                data.txtdemo = $.trim($('#txtdemo').val() || $('#txtdemo').text() || '');
             }
         }
 
@@ -442,9 +504,10 @@
         normalizePortChips();
         bindPortChipActive();
         bindReportSearch();
+        bindPortChange();
         enhanceMobileTable();
         initSelects();
-        maybeLoadInitialRows();
+        window.setTimeout(maybeLoadInitialRows, 150);
 
         if ($ && typeof MutationObserver !== 'undefined') {
             var tbody = document.querySelector('#' + TABLE_ID + ' tbody');
