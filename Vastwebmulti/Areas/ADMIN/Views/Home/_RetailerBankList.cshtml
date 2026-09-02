@@ -186,13 +186,11 @@
 
                                 <div class="saas-pur-actions">
 
-                                    <button type="button" class="saas-pur-btn saas-pur-btn--reject saas-bank-delete-reveal" title="Delete"><i class="fa fa-trash"></i></button>
+                                    <button type="button" class="saas-pur-btn saas-pur-btn--reject saas-bank-delete-btn"
 
-                                    <button type="button" class="saas-pur-btn saas-pur-btn--approve saas-bank-delete-confirm" style="display:none;"
+                                            onclick="return retailerBankConfirmDelete('@Url.Action("DeleteRetailerBnkt", "Home", new { area = "ADMIN", Idno = item.Idno })');"
 
-                                            onclick="return retailerBankConfirmDelete('@Url.Action("DeleteRetailerBnkt", new { Idno = item.Idno })');"
-
-                                            title="Confirm delete">Sure?</button>
+                                            title="Delete"><i class="fa fa-trash"></i></button>
 
                                 </div>
 

@@ -396,9 +396,21 @@
 
 
 
-    window.retailerBankConfirmDelete = function (url) {
+    window.retailerBankConfirmDelete = function (urlOrEl) {
 
-        if (!url) {
+        var url = "";
+
+        if (typeof urlOrEl === "string") {
+
+            url = urlOrEl;
+
+        } else if (urlOrEl && urlOrEl.getAttribute) {
+
+            url = urlOrEl.getAttribute("data-delete-url") || urlOrEl.getAttribute("href") || "";
+
+        }
+
+        if (!url || url.indexOf("[object") === 0) {
 
             return false;
 
@@ -416,7 +428,7 @@
 
         if (typeof window.swal === "function") {
 
-            window.swal({
+            var ret = window.swal({
 
                 title: "Delete approved bank?",
 
@@ -443,6 +455,20 @@
                 }
 
             });
+
+            if (ret && typeof ret.then === "function") {
+
+                ret.then(function (res) {
+
+                    if (res === true || (res && (res.value || res.isConfirmed))) {
+
+                        go();
+
+                    }
+
+                });
+
+            }
 
         } else if (window.confirm("Delete this approved bank?")) {
 
@@ -548,15 +574,7 @@
 
             .off("click.retailerBank", ".saas-bank-delete-reveal")
 
-            .on("click.retailerBank", ".saas-bank-delete-reveal", function (e) {
-
-                e.preventDefault();
-
-                $(this).hide();
-
-                $(this).siblings(".saas-bank-delete-confirm").show();
-
-            });
+            .off("click.retailerBank", ".saas-bank-delete-btn");
 
 
 

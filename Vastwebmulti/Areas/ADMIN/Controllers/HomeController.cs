@@ -114466,14 +114466,6 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             {
                 var acDts = db.UpdateREMAccounts.Where(a => a.Idno == Idno).SingleOrDefault();
                 var isdeleteallow = true;
-
-                if (acDts.Status== "Approved")
-                {
-                    if (Convert.ToDateTime(acDts.Approved_Date).AddMonths(1) >= DateTime.Now)
-                    {
-                        isdeleteallow = false;
-                    }
-                }
                 if (isdeleteallow)
                 {
                     if (acDts != null)

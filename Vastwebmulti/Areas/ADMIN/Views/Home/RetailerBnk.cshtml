@@ -217,6 +217,39 @@
 
 
 <script>
+    window.retailerBankConfirmDelete = function (el) {
+        var url = "";
+        if (typeof el === "string") {
+            url = el;
+        } else if (el) {
+            url = el.getAttribute("data-delete-url") || el.getAttribute("href") || "";
+        }
+        if (!url || url.indexOf("[object") === 0) {
+            return false;
+        }
+        var go = function () {
+            window.location.href = url;
+        };
+        if (typeof window.swal === "function") {
+            window.swal({
+                title: "Delete this bank?",
+                text: "This approved bank record will be removed.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dc2626",
+                confirmButtonText: "Yes, delete",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: true
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    go();
+                }
+            });
+        } else if (window.confirm("Delete this approved bank?")) {
+            go();
+        }
+        return false;
+    };
 
     window.addEventListener("load", function () {
 
@@ -232,7 +265,7 @@
 
         var script = document.createElement("script");
 
-        script.src = "@Url.Content("~/MainFrontDesign/js/admin-retailer-bank.js")";
+        script.src = "@Url.Content("~/MainFrontDesign/js/admin-retailer-bank.js")?v=delete3";
 
         script.onload = function () {
 
