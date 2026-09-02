@@ -1,5 +1,5 @@
 /**
- * ADMIN — Financial / operator report pages Select2 helper v=3
+ * ADMIN — Financial / operator report pages Select2 helper v=6
  * Searchable dropdowns + dependent filter visibility (Hotel Report pattern).
  */
 (function (window, document, $) {
@@ -12,7 +12,7 @@
     var FILTER_WRAP_IDS = [
         'allmaster', 'allmaster1', 'allmaster2',
         'dlm', 'rem', 'apiid', 'whitelabelid',
-        'allwhitelabel', 'allwhitelabel1', 'Whitelabel',
+        'allwhitelabel', 'allwhitelabel1',
         'ticket-wrap-whitelabel', 'ticket-wrap-master'
     ];
 
@@ -103,82 +103,66 @@
     window.showReportFilterExtra = function (id) {
         var el = document.getElementById(id);
 
-        if (!el) {
+        if (!el || !el.classList.contains('vm-opr-filter-extra')) {
             return;
         }
 
+        el.style.display = 'flex';
         $(el)
             .addClass('is-visible')
-            .removeAttr('hidden')
-            .css({ display: '' });
+            .removeAttr('hidden');
+
+        $(el).find('select').each(function () {
+            this.style.display = '';
+        });
     };
 
     window.hideReportFilterExtra = function (id) {
         var el = document.getElementById(id);
 
-        if (!el) {
+        if (!el || !el.classList.contains('vm-opr-filter-extra')) {
             return;
         }
 
+        el.style.display = 'none';
         $(el)
             .removeClass('is-visible')
-            .attr('hidden', 'hidden')
-            .css({ display: 'none' });
+            .attr('hidden', 'hidden');
     };
-
-    function shouldShowFilterWrap(el) {
-        var $wrap = $(el);
-        var inlineDisplay = el.style.display;
-
-        if (inlineDisplay === 'block' || inlineDisplay === 'flex' || inlineDisplay === '') {
-            if (inlineDisplay === 'none') {
-                return false;
-            }
-            if ($wrap.hasClass('is-visible')) {
-                return true;
-            }
-            if (inlineDisplay === 'block' || inlineDisplay === 'flex') {
-                return true;
-            }
-        }
-
-        if ($wrap.hasClass('is-visible')) {
-            return true;
-        }
-
-        if ($wrap.is(':visible') && inlineDisplay !== 'none') {
-            return true;
-        }
-
-        return false;
-    }
 
     function syncFilterExtraVisibility() {
         var i;
         var el;
+        var inlineDisplay;
+        var isShown;
 
-        for (i = 0; i < FILTER_WRAP_IDS.length; i++) {
-            el = document.getElementById(FILTER_WRAP_IDS[i]);
+        function applyVisibility(id) {
+            el = document.getElementById(id);
             if (!el) {
-                continue;
+                return;
             }
-            if (shouldShowFilterWrap(el)) {
-                window.showReportFilterExtra(FILTER_WRAP_IDS[i]);
-            } else if (el.style.display === 'none' || el.hasAttribute('hidden')) {
-                window.hideReportFilterExtra(FILTER_WRAP_IDS[i]);
+
+            inlineDisplay = el.style.display;
+            isShown = inlineDisplay === 'block' ||
+                inlineDisplay === 'flex' ||
+                $(el).hasClass('is-visible');
+
+            if (isShown && inlineDisplay !== 'none') {
+                window.showReportFilterExtra(id);
+            } else {
+                window.hideReportFilterExtra(id);
             }
         }
 
+        for (i = 0; i < FILTER_WRAP_IDS.length; i++) {
+            applyVisibility(FILTER_WRAP_IDS[i]);
+        }
+
         $('.saas-operator-report-page .vm-opr-filter-extra').each(function () {
-            el = this;
-            if (!el.id) {
+            if (!this.id) {
                 return;
             }
-            if (shouldShowFilterWrap(el)) {
-                window.showReportFilterExtra(el.id);
-            } else if (el.style.display === 'none') {
-                window.hideReportFilterExtra(el.id);
-            }
+            applyVisibility(this.id);
         });
     }
 

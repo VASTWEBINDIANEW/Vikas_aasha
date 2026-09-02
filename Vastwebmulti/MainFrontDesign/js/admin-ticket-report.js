@@ -1,5 +1,5 @@
 /**
- * ADMIN — Flight / Bus / Hotel / IRCTC Ticket Report page UI v=12
+ * ADMIN — Flight / Bus / Hotel / IRCTC Ticket Report page UI v=13
  */
 (function (window, document, $) {
     'use strict';
@@ -74,7 +74,7 @@
     }
 
     function showUserExtra(selector) {
-        $(selector).addClass('is-visible').removeAttr('hidden').css('display', '');
+        $(selector).addClass('is-visible').removeAttr('hidden').css('display', 'flex');
     }
 
     function initTicketTravelNav() {
