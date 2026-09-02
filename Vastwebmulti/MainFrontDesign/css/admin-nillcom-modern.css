@@ -15,6 +15,42 @@
 .NillCom_Page .vm-ft-search-wrap {
     margin-left: auto !important;
     flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+}
+
+.NillCom_Page .btn-master-off,
+.NillCom_Page .nill-switch-actions .btn-master-off {
+    height: 36px !important;
+    min-height: 36px !important;
+    border-radius: 10px !important;
+    border: 0 !important;
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.28) !important;
+    font-weight: 700 !important;
+    padding: 0 14px !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.NillCom_Page .btn-master-off:hover,
+.NillCom_Page .nill-switch-actions .btn-master-off:hover {
+    filter: brightness(0.98);
+    transform: translateY(-1px);
+    color: #fff !important;
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+}
+
+.NillCom_Page .btn-master-off .off-text {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-left: 6px;
+    font-weight: 800;
 }
 
 .NillCom_Page .vm-ft-search-wrap .btn {
@@ -225,7 +261,7 @@
 
 /* Right panel tab contents */
 .NillCom_Page .nill-right-body {
-    padding: 10px 12px 14px !important;
+    padding: 10px 12px 0 !important;
     overflow: hidden !important;
     flex: 1 1 auto !important;
     min-height: 0 !important;
@@ -505,6 +541,27 @@
     text-align: left !important;
 }
 
+.NillCom_Page select.select2-hidden-accessible,
+.NillCom_Page .nill-left-card select.select2-hidden-accessible,
+.NillCom_Page .nillsearch-data select.select2-hidden-accessible {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    left: -9999px !important;
+}
+
+.NillCom_Page .nill-left-card .select2-container,
+.NillCom_Page .nillsearch-data .select2-container {
+    width: 100% !important;
+    display: block !important;
+}
+
 .NillCom_Page .nill-left-card .custom-district1 {
     position: relative !important;
 }
@@ -595,18 +652,34 @@
     float: none !important;
 }
 
-/* Table area scroll */
+/* Inner card must not add extra table gutter */
+.NillCom_Page .nill-right-body > .tab-contentt > .card {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    float: none !important;
+    width: 100% !important;
+}
+
+/* Table area — same width as the filter selects above */
+.NillCom_Page .nill-right-body .card .body.nill-table-wrap,
 .NillCom_Page .nill-table-wrap {
     flex: 1 1 auto !important;
     min-height: 0 !important;
     overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .NillCom_Page .nill-table-wrap .table-responsive {
     height: 100% !important;
     overflow: auto !important;
     border: 1px solid #e2e8f0 !important;
-    border-radius: 10px !important;
+    border-radius: 12px !important;
     background: #fff !important;
     -webkit-overflow-scrolling: touch;
 }

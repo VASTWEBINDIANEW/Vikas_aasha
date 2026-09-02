@@ -11,7 +11,7 @@
 <link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-nillcom-modern.css?v=17" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-nillcom-modern.css?v=22" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-nillcom-modals.css?v=3" rel="stylesheet" />
 
 <section class="content NillCom_Page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium">
@@ -24,8 +24,14 @@
                     <li>Switching</li>
                 </ol>
             </div>
-            <div class="vm-ft-search-wrap" style="flex:0 0 auto;max-width:none;">
-                <button type="button" class="btn fullbodydycolorbg" data-toggle="modal" data-target="#defaultModal" style="height:36px;border-radius:10px;border:0;float:right;">
+            <div class="vm-ft-search-wrap nill-switch-actions" style="flex:0 0 auto;max-width:none;">
+                <button type="button" id="btnAllSwitchOff" class="btn btn-master-off">
+                    All Switching <span class="off-text">OFF</span>
+                </button>
+                <button type="button" id="btnCategorySwitchOff" class="btn btn-master-off" data-category="NillPort">
+                    <span id="categorySwitchLabel">Nill Port</span> <span class="off-text">OFF</span>
+                </button>
+                <button type="button" class="btn fullbodydycolorbg" data-toggle="modal" data-target="#defaultModal" style="height:36px;border-radius:10px;border:0;">
                     <i class="fa fa-plus" aria-hidden="true"></i> Add Nill Com
                 </button>
             </div>
@@ -97,7 +103,7 @@
 
                                                 <label>Select Services </label><label id="lblOperatorids" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select id="Operatorids" name="Operatorids" class="form-control" onchange="NillcomValidationForm();" style="-webkit-appearance:none;">
+                                                    <select id="Operatorids" name="Operatorids" class="form-control" onchange="NillcomValidationForm(); nillLoadLeftOperators();" style="-webkit-appearance:none;">
                                                         <option value="">
                                                             ALL OPERATORS TYPE
                                                         </option>
@@ -163,7 +169,7 @@
                                             <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select User Type</label><label id="lblddlstateusertype" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select name="ddlstateusertype" id="ddlstateusertype" class="form-control" onchange="DdlValidationForm();" style="-webkit-appearance:none;">
+                                                    <select name="ddlstateusertype" id="ddlstateusertype" class="form-control" onchange="DdlValidationForm(); nillLoadUsersFromType('#ddlstateusertype','#ddlstateuserList');" style="-webkit-appearance:none;">
                                                         <option value="">Select User Type</option>
                                                         <option value="API">API User</option>
                                                         <option value="Retailer">Retailer</option>
@@ -283,7 +289,7 @@
                                             <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select User Type</label><label id="lblddlusertype" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select name="ddlusertype" id="ddlusertype" onchange="fnOnBegin();" class="form-control" style="-webkit-appearance:none;">
+                                                    <select name="ddlusertype" id="ddlusertype" onchange="fnOnBegin(); nillLoadUsersFromType('#ddlusertype','#ddluserList');" class="form-control" style="-webkit-appearance:none;">
                                                         <option value="">Select User Type</option>
                                                         <option value="API">API User</option>
                                                         <option value="Retailer">Retailer</option>
@@ -420,7 +426,7 @@
                                             <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select User Type</label><label id="lblddSwitchOpusertype" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select id="ddSwitchOpusertype" name="ddSwitchOpusertype" onchange="DdsValidationForm()" class="form-control" style="-webkit-appearance:none;">
+                                                    <select id="ddSwitchOpusertype" name="ddSwitchOpusertype" onchange="DdsValidationForm(); nillLoadUsersFromType('#ddSwitchOpusertype','#ddSwitchOpuserlist');" class="form-control" style="-webkit-appearance:none;">
                                                         <option value="">Select User Type</option>
                                                         <option value="API">API User</option>
                                                         <option value="Retailer">Retailer</option>
@@ -440,7 +446,7 @@
 
                                                 <label>Select Services</label><label id="lblddswitchoptype" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select id="ddswitchoptype" name="ddswitchoptype" class="form-control" onchange="DdsValidationForm()" style="-webkit-appearance:none;">
+                                                    <select id="ddswitchoptype" name="ddswitchoptype" class="form-control" onchange="DdsValidationForm(); nillLoadOperatorsFromService('#ddswitchoptype','#BySwitchOperator');" style="-webkit-appearance:none;">
                                                         <option value="">ALL OPERATORS TYPE</option>
 
                                                         <option value="PrePaid">PrePaid</option>
@@ -478,7 +484,7 @@
                                             <div class="col-md-12 col-xs-12 form-group-spacing">
                                                 <label>Select API/Port</label><label id="lblddlSwitchoptport" class="form-invalid"></label>
                                                 <div id="byOpSwitchMachinePort">
-                                                    <select id="ddlSwitchoptport" name="ddlSwitchoptport" onchange="DdsValidationForm()" class="form-control vm-byop-port-select" style="-webkit-appearance:none; width:100%;">
+                                                    <select id="ddlSwitchoptport" name="ddlSwitchoptport" onchange="DdsValidationForm()" class="form-control vm-byop-port-select" data-admin-select2-custom="true" style="-webkit-appearance:none; width:100%;">
                                                         <option value="">Select Port</option>
                                                         @foreach (var item in ViewBag.portno)
                                                         {
@@ -487,7 +493,7 @@
                                                     </select>
                                                 </div>
                                                 <div id="byOpSwitchApiPort" style="display:none;">
-                                                    <select id="ddlSwitchoptportApi" onchange="DdsValidationForm()" class="form-control vm-byop-port-select" style="-webkit-appearance:none; width:100%;">
+                                                    <select id="ddlSwitchoptportApi" onchange="DdsValidationForm()" class="form-control vm-byop-port-select" data-admin-select2-custom="true" style="-webkit-appearance:none; width:100%;">
                                                         <option value="">Select API/Port</option>
                                                         @foreach (var item in ViewBag.portapi)
                                                         {
@@ -531,7 +537,7 @@
 
                                                 <label>Select Services </label><label id="lblextracommOperatorids" class="form-invalid"></label>
                                                 <div class="custom-district1">
-                                                    <select id="extracommOperatorids" name="extracommOperatorids" class="form-control" onchange="extracommValidationForm();" style="-webkit-appearance:none;">
+                                                    <select id="extracommOperatorids" name="extracommOperatorids" class="form-control" onchange="extracommValidationForm(); nillLoadExtraOperators();" style="-webkit-appearance:none;">
                                                         <option value="">
                                                             ALL OPERATORS TYPE
                                                         </option>
@@ -670,7 +676,7 @@
 
                                     <div class="roww">
                                         <div class="col-md-5 col-xs-12">
-                                            <select name="ddlStatetypefilter" id="ddlStatetypefilter" required="" class="form-control for-select2" style="width: 100%; text-align: left;">
+                                            <select name="ddlStatetypefilter" id="ddlStatetypefilter" required="" class="form-control for-select2" onchange="nillOnCircleFilterChange();" style="width: 100%; text-align: left;">
                                                 <option value="" disabled="disabled" selected="selected">Select Filter Type</option>
                                                 <option value="API">API User Wise</option>
                                                 <option value="Retailer">Retailers Wise</option>
@@ -708,7 +714,7 @@
 
                                     <div class="roww">
                                         <div class="col-md-5 col-xs-12">
-                                            <select name="ddlusertypefilter" id="ddlusertypefilter" required="" class="form-control for-select2" style="width: 100%; text-align: left;">
+                                            <select name="ddlusertypefilter" id="ddlusertypefilter" required="" class="form-control for-select2" onchange="nillOnAmountFilterChange();" style="width: 100%; text-align: left;">
                                                 <option value="" disabled="disabled" selected="selected">Select Filter Type</option>
                                                 <option value="API">API User Wise</option>
                                                 <option value="Retailer">Retailer Wise</option>
@@ -753,7 +759,7 @@
 
                                     <div class="roww">
                                         <div class="col-md-5 col-xs-12">
-                                            <select name="ddlopusertypeSearch" id="ddlopusertypeSearch" required="" class="form-control for-select2" style="width: 100%; text-align: left;">
+                                            <select name="ddlopusertypeSearch" id="ddlopusertypeSearch" required="" class="form-control for-select2" onchange="nillOnOpFilterChange();" style="width: 100%; text-align: left;">
                                                 <option value="" disabled="disabled" selected="selected">Select Filter Type</option>
                                                 <option value="API">API User Wise</option>
                                                 <option value="Retailer">Retailer Wise</option>
@@ -798,7 +804,7 @@
 
                                     <div class="roww">
                                         <div class="col-md-5 col-xs-12">
-                                            <select id="operatorstypevalue" class="form-control for-select2" required onchange="operatorstype()" style="width: 100%; text-align: left;">
+                                            <select id="extraFilterType" class="form-control for-select2" required onchange="nillLoadOperatorsFromService('#extraFilterType','#extraFilterOperator','Select Operator')" style="width: 100%; text-align: left;">
                                                 <option value="">ALL OPERATORS TYPE</option>
 
                                                 <option value="PrePaid">Prepaid Wise</option>
@@ -808,24 +814,15 @@
                                                 <option value="Broadband">Broadband Wise</option>
                                                 <option value="Water">Water Wise</option>
                                                 <option value="Gas">Gas Wise</option>
-                                                @*@foreach (var item in ViewBag.optypelist)
-                                {
-                                    <text>
-                                        <option value="@item.Value">@item.Text</option>
-                                    </text>
-                                }*@
-
-
                                             </select>
                                         </div>
                                         <div class="col-md-5 col-xs-12">
-                                            <select id="listAllOp" class="form-control for-select2" style="width: 100%; text-align: left;">
-                                                <option>Select Operator</option>
+                                            <select id="extraFilterOperator" class="form-control for-select2" style="width: 100%; text-align: left;">
+                                                <option value="">Select Operator</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2 col-xs-12 buttonsearch-second">
-                                            <button type="button" id="btnSearch" class="btn  waves-effect search-icon"><i class="fa fa-search" style="top:1px;font-size:16px;color:black;" aria-hidden="true"></i>&nbsp;Search</button>
-                                            @*<button type="button" class="btn" id="btnSearch">Search<i><img src="~/bal-images/search.svg" class="responsive-img" /></i></button>*@
+                                            <button type="button" id="btnExtraSearch" class="btn waves-effect search-icon"><i class="fa fa-search" style="top:1px;font-size:16px;color:black;" aria-hidden="true"></i>&nbsp;Search</button>
                                         </div>
                                     </div>
 
@@ -1051,6 +1048,270 @@
 <!--Edit Nill Com-->
 
 <!-- Select2: bootAdminSelect2 from admin layout -->
+<script>
+    function nillRefreshSelect($sel) {
+        var $el = ($sel && $sel.jquery) ? $sel : $($sel);
+        if (!$el.length) {
+            return;
+        }
+        $el.next('.select2-container').remove();
+        $el.removeClass('select2-hidden-accessible');
+        $el.removeAttr('data-select2-id aria-hidden tabindex');
+        if (typeof window.applyAdminSelect2 === "function") {
+            window.applyAdminSelect2($el, { width: "100%", dropdownParent: $(document.body) }, true);
+        } else         if ($.fn && $.fn.select2) {
+            try { $el.select2("destroy"); } catch (e) { }
+            $el.select2({ width: "100%", dropdownParent: $(document.body) });
+        }
+    }
+
+    function nillFastSelect2($sel) {
+        var $el = ($sel && $sel.jquery) ? $sel : $($sel);
+        if (!$el.length || !$.fn || !$.fn.select2) {
+            return;
+        }
+        if ($el.data("nillFastReady") && $el.hasClass("select2-hidden-accessible") && $el.next(".select2-container").length) {
+            $el.next(".select2-container").css("width", "100%");
+            return;
+        }
+
+        var items = $el.data("nillPortItems");
+        if (!items) {
+            items = [];
+            $el.find("option").each(function () {
+                var v = (this.value || "").toString();
+                var t = ($(this).text() || "").toString();
+                if (!v) {
+                    return;
+                }
+                items.push({ id: v, text: t, textL: t.toLowerCase() });
+            });
+            $el.data("nillPortItems", items);
+        }
+
+        var placeholder = ($el.find("option[value='']").first().text() || "Select API/Port").toString();
+        $el.empty().append($("<option></option>").attr("value", "").text(placeholder));
+        $el.attr("data-admin-select2-custom", "true");
+
+        try { $el.select2("destroy"); } catch (e) { }
+        $el.removeClass("select2-hidden-accessible").next(".select2-container").remove();
+
+        $el.select2({
+            width: "100%",
+            dropdownParent: $(document.body),
+            placeholder: placeholder,
+            allowClear: false,
+            minimumInputLength: 0,
+            ajax: {
+                delay: 0,
+                data: function (params) {
+                    return { q: params.term || "", page: params.page || 1 };
+                },
+                transport: function (params, success, failure) {
+                    try {
+                        var q = String((params.data && params.data.q) || "").toLowerCase();
+                        var page = parseInt((params.data && params.data.page) || 1, 10) || 1;
+                        var size = 30;
+                        var src = $el.data("nillPortItems") || [];
+                        var list = src;
+                        if (q) {
+                            list = [];
+                            for (var i = 0; i < src.length; i++) {
+                                if (src[i].textL.indexOf(q) !== -1) {
+                                    list.push(src[i]);
+                                }
+                            }
+                        }
+                        var start = (page - 1) * size;
+                        success({
+                            results: list.slice(start, start + size),
+                            pagination: { more: (start + size) < list.length }
+                        });
+                    } catch (err) {
+                        if (typeof failure === "function") {
+                            failure();
+                        }
+                    }
+                    return { abort: function () { } };
+                },
+                processResults: function (data) {
+                    return data;
+                }
+            }
+        });
+        $el.data("nillFastReady", true);
+        $el.next(".select2-container").css("width", "100%");
+    }
+
+    function nillParseOperatorRows(data) {
+        if (!data) {
+            return [];
+        }
+        if (typeof data === "string") {
+            try { data = JSON.parse(data); } catch (e) { return []; }
+        }
+        if (data.d) {
+            data = data.d;
+        }
+        if (data.Data && !$.isArray(data) && $.isArray(data.Data)) {
+            data = data.Data;
+        }
+        if (!$.isArray(data)) {
+            return [];
+        }
+        var rows = [];
+        $.each(data, function (i, item) {
+            if (item == null || typeof item !== "object") {
+                return;
+            }
+            var val = item.Value != null ? item.Value : item.value;
+            var txt = item.Text != null ? item.Text : item.text;
+            if (val != null && val !== "" && txt != null && txt !== "") {
+                rows.push({ Value: val, Text: txt });
+            }
+        });
+        return rows;
+    }
+
+    function nillFillOperatorOptions($sel, data, placeholder, extraHtml) {
+        var $el = ($sel && $sel.jquery) ? $sel : $($sel);
+        var ph = placeholder || "Select Operator";
+        var rows = nillParseOperatorRows(data);
+        $el.empty().append($("<option></option>").attr("value", "").text(ph));
+        if (extraHtml) {
+            $el.append(extraHtml);
+        }
+        $.each(rows, function (i, item) {
+            $el.append($("<option></option>").attr("value", item.Value).text(item.Text));
+        });
+        nillRefreshSelect($el);
+    }
+
+    function nillLoadOperatorsFromService(serviceSel, operatorSel, placeholder) {
+        var $svc = $(serviceSel);
+        var $op = $(operatorSel);
+        var opname = ($svc.val() || "").toString().trim();
+        var ph = placeholder || "Select Operator";
+        $op.empty().append($("<option></option>").attr("value", "").text("Loading..."));
+        nillRefreshSelect($op);
+        if (!opname) {
+            nillFillOperatorOptions($op, [], ph);
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("FillAllOperator", "Home")",
+            dataType: "json",
+            cache: false,
+            data: { opname: opname },
+            success: function (data) {
+                nillFillOperatorOptions($op, data, ph);
+            },
+            error: function () {
+                nillFillOperatorOptions($op, [], ph);
+            }
+        });
+    }
+
+    window.nillLoadLeftOperators = function () {
+        nillLoadOperatorsFromService("#Operatorids", "#opnamelistbyid", "Select Operator");
+    };
+
+    window.nillLoadExtraOperators = function () {
+        nillLoadOperatorsFromService("#extracommOperatorids", "#extracommopnamelistbyid", "Select Operator");
+    };
+
+    window.nillUsersUrl = "@Url.Action("FilluserBasedonTypes", "Home")";
+    window.nillStatesUrl = "@Url.Action("FillAllStates", "Home")";
+
+    window.nillLoadUsersFromType = function (typeSel, userSel) {
+        var utype = ($(typeSel).val() || "").toString();
+        var $op = $(userSel);
+        if (!utype) {
+            nillFillOperatorOptions($op, [], "Select User");
+            return;
+        }
+        $op.empty().append($("<option></option>").attr("value", "").text("Loading..."));
+        nillRefreshSelect($op);
+        $.ajax({
+            type: "POST",
+            url: window.nillUsersUrl,
+            dataType: "json",
+            cache: false,
+            data: { utype: utype },
+            success: function (data) {
+                nillFillOperatorOptions($op, data, "Select User");
+            },
+            error: function () {
+                nillFillOperatorOptions($op, [], "Select User");
+            }
+        });
+    };
+
+    window.nillOnCircleFilterChange = function () {
+        var filtertype = $("#ddlStatetypefilter").val() || "";
+        var $dest = $("#ddlStateSwitchTypeSearch");
+        if (filtertype === "Statewise") {
+            $dest.empty().append($("<option></option>").attr("value", "").text("Loading..."));
+            nillRefreshSelect($dest);
+            $.ajax({
+                type: "POST",
+                url: window.nillStatesUrl,
+                dataType: "json",
+                cache: false,
+                data: { utype: filtertype },
+                success: function (data) {
+                    $dest.empty().append($("<option></option>").attr("value", "").text("Please select States"));
+                    $.each(data || [], function (i, item) {
+                        var val = item.State_id != null ? item.State_id : (item.Value != null ? item.Value : item.value);
+                        var txt = item.State_name != null ? item.State_name : (item.Text != null ? item.Text : item.text);
+                        if (val != null && txt != null) {
+                            $dest.append($("<option></option>").attr("value", val).text(txt));
+                        }
+                    });
+                    nillRefreshSelect($dest);
+                },
+                error: function () {
+                    nillFillOperatorOptions($dest, [], "Please select States");
+                }
+            });
+        } else if (filtertype === "API" || filtertype === "Retailer") {
+            nillLoadUsersFromType("#ddlStatetypefilter", "#ddlStateSwitchTypeSearch");
+        } else if (filtertype) {
+            nillLoadOperatorsFromService("#ddlStatetypefilter", "#ddlStateSwitchTypeSearch", "Please select Operator");
+        } else {
+            nillFillOperatorOptions($dest, [], "Please Select Switch");
+        }
+    };
+
+    window.nillOnAmountFilterChange = function () {
+        var filtertype = $("#ddlusertypefilter").val() || "";
+        var $dest = $("#ddlSwitchTypeSearch");
+        if (filtertype === "GetWaywise") {
+            nillFillOperatorOptions($dest, [{ Value: "API", Text: "API" }, { Value: "Machine", Text: "Machine" }], "Switch To");
+        } else if (filtertype === "API" || filtertype === "Retailer") {
+            nillLoadUsersFromType("#ddlusertypefilter", "#ddlSwitchTypeSearch");
+        } else if (filtertype) {
+            nillLoadOperatorsFromService("#ddlusertypefilter", "#ddlSwitchTypeSearch", "Please select Operator");
+        } else {
+            nillFillOperatorOptions($dest, [], "Please Select Switch");
+        }
+    };
+
+    window.nillOnOpFilterChange = function () {
+        var filtertype = $("#ddlopusertypeSearch").val() || "";
+        var $dest = $("#ddlopSwitchTypeSearch");
+        if (filtertype === "GetWaywise") {
+            nillFillOperatorOptions($dest, [{ Value: "API", Text: "API" }, { Value: "Machine", Text: "Machine" }], "Switch To");
+        } else if (filtertype === "API" || filtertype === "Retailer") {
+            nillLoadUsersFromType("#ddlopusertypeSearch", "#ddlopSwitchTypeSearch");
+        } else if (filtertype) {
+            nillLoadOperatorsFromService("#ddlopusertypeSearch", "#ddlopSwitchTypeSearch", "Please select Operator");
+        } else {
+            nillFillOperatorOptions($dest, [], "Please Select Switch");
+        }
+    };
+</script>
 
 
 
@@ -1073,27 +1334,43 @@
 
     })
 
+    $('#btnExtraSearch').click(function () {
+        var $btn = $('#btnExtraSearch');
+        $btn.text('Please Wait');
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ShowExtraCommReports", "Home")',
+            data: {
+                extraFilterType: $('#extraFilterType').val(),
+                extraFilterOperator: $('#extraFilterOperator').val()
+            },
+            success: function (data) {
+                $('#Extracommisions').html(data);
+                $btn.html('<i class="fa fa-search" style="top:1px;font-size:16px;color:black;" aria-hidden="true"></i>&nbsp;Search');
+            },
+            error: function () {
+                $btn.html('<i class="fa fa-search" style="top:1px;font-size:16px;color:black;" aria-hidden="true"></i>&nbsp;Search');
+            }
+        });
+    });
+
 
     function operatorstype() {
         var opname = $("#operatorstypevalue").val();
-         $('#listAllOp').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
-
-       $.ajax({
-                type: 'POST',
-                url: '@Url.Action("FillAllOperator","Home")',
-                data: {opname:opname },
-                success: function (data) {
-
-                    $('#listAllOp').empty()
-                   $('#listAllOp').append('<option selected="selected" value="">Select Operator</option>');
-                    $.each(data, function (data, item) {
-            $('#listAllOp').append($('<option></option>').text(item.Text).val(item.Value));
-
-          })
-                },
-
-            });
-
+        var $op = $('#listAllOp');
+        $op.empty().append('<option value="">Loading...</option>');
+        nillRefreshSelect($op);
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("FillAllOperator","Home")',
+            data: { opname: opname },
+            success: function (data) {
+                nillFillOperatorOptions($op, data, "Select Operator");
+            },
+            error: function () {
+                nillFillOperatorOptions($op, [], "Select Operator");
+            }
+        });
     }
 
 
@@ -1218,25 +1495,20 @@
 
       function ByAmountOPT() {
         var opname = $("#ByAMountopttype").val();
-         $('#ByAmountOperator').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
-
-       $.ajax({
-                type: 'POST',
-                url: '@Url.Action("FillAllOperator","Home")',
-                data: {opname:opname },
-                success: function (data) {
-
-                    $('#ByAmountOperator').empty()
-                   $('#ByAmountOperator').append('<option selected="selected" value="" disabled="disabled">Please select Operator</option>');
-                   $('#ByAmountOperator').append('<option selected="selected" value="ALL">ALL</option>');
-                    $.each(data, function (data, item) {
-            $('#ByAmountOperator').append($('<option></option>').text(item.Text).val(item.Value));
-
-          })
-                },
-
-            });
-
+        var $op = $('#ByAmountOperator');
+        $op.empty().append('<option value="">Loading...</option>');
+        nillRefreshSelect($op);
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("FillAllOperator","Home")',
+            data: { opname: opname },
+            success: function (data) {
+                nillFillOperatorOptions($op, data, "Please select Operator", '<option value="ALL">ALL</option>');
+            },
+            error: function () {
+                nillFillOperatorOptions($op, [], "Please select Operator");
+            }
+        });
     }
 
      $(function () {
@@ -1245,10 +1517,12 @@
          if (val == "API") {
              $("#machineport").css("display", "none");
              $("#apiport").css("display", "block");
+             nillRefreshSelect($("#ddlPT"));
          }
          else {
              $("#machineport").css("display", "block");
              $("#apiport").css("display", "none");
+             nillRefreshSelect($("#dlmMP"));
          }
           });
  });
@@ -1645,18 +1919,26 @@
         if (gateway === 'API') {
             $machineWrap.hide();
             $apiWrap.show();
-            $machineSel.prop('disabled', true).removeAttr('name').val('');
-            $apiSel.prop('disabled', false).attr('name', 'ddlSwitchoptport').val('');
+            $machineSel.prop('disabled', true).removeAttr('name');
+            $apiSel.prop('disabled', false).attr('name', 'ddlSwitchoptport');
+            nillFastSelect2($apiSel);
         } else {
             $machineWrap.show();
             $apiWrap.hide();
-            $apiSel.prop('disabled', true).removeAttr('name').val('');
-            $machineSel.prop('disabled', false).attr('name', 'ddlSwitchoptport').val('');
+            $apiSel.prop('disabled', true).removeAttr('name');
+            $machineSel.prop('disabled', false).attr('name', 'ddlSwitchoptport');
+            nillFastSelect2($machineSel);
         }
     }
 
     $(function () {
+        nillFastSelect2($('#ddlSwitchoptport'));
+        nillFastSelect2($('#ddlSwitchoptportApi'));
         vmByOpOnGatewayChange();
+        setTimeout(function () {
+            nillFastSelect2($('#ddlSwitchoptport'));
+            nillFastSelect2($('#ddlSwitchoptportApi'));
+        }, 50);
     });
 
 
@@ -1696,32 +1978,22 @@
 
 
     $('#ddswitchoptype').change(function () {
-
         var opname = $("#ddswitchoptype").val();
         var $operator = $('#BySwitchOperator');
-         $operator.empty().append('<option selected="selected" value="" disabled="disabled">Loading.....</option>').trigger('change.select2');
-
-       $.ajax({
-                type: 'POST',
-                url: '@Url.Action("FillAllOperator","Home")',
-                data: {opname:opname },
-                success: function (data) {
-
-                    $operator.empty()
-                   .append('<option selected="selected" value="" disabled="disabled">Please select Operator</option>');
-                    $.each(data, function (data, item) {
-            $operator.append($('<option></option>').text(item.Text).val(item.Value));
-
-          });
-                    $operator.trigger('change.select2');
-                },
-                error: function () {
-                    $operator.empty().append('<option selected="selected" value="" disabled="disabled">Please select Operator</option>').trigger('change.select2');
-                }
-
-            });
-
-   })
+        $operator.empty().append('<option value="">Loading...</option>');
+        nillRefreshSelect($operator);
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("FillAllOperator","Home")',
+            data: { opname: opname },
+            success: function (data) {
+                nillFillOperatorOptions($operator, data, "Please select Operator");
+            },
+            error: function () {
+                nillFillOperatorOptions($operator, [], "Please select Operator");
+            }
+        });
+    });
 
 
 
@@ -1814,34 +2086,31 @@
 <!--Window load Popuop message-->
 <script>
     $('#Operatorids').change(function () {
-
-        $('#opnamelistbyid').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
-        var opname= $("#Operatorids").val()
+        var opname = $("#Operatorids").val();
+        var $op = $('#opnamelistbyid');
+        $op.empty().append('<option value="">Loading...</option>');
+        nillRefreshSelect($op);
+        if (!opname) {
+            nillFillOperatorOptions($op, [], "Select Operator");
+            return;
+        }
         $.ajax({
-                type: 'POST',
-                url: '@Url.Action("FillAllOperator","Home")',
-                data: {opname:opname },
-                success: function (data) {
-
-                    $('#opnamelistbyid').empty()
-                   $('#opnamelistbyid').append('<option selected="selected" value="">Please select Operator</option>');
-                    $.each(data, function (data, item) {
-            $('#opnamelistbyid').append($('<option></option>').text(item.Text).val(item.Value));
-
-          })
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
+            type: 'POST',
+            url: '@Url.Action("FillAllOperator","Home")',
+            dataType: 'json',
+            cache: false,
+            data: { opname: opname },
+            success: function (data) {
+                nillFillOperatorOptions($op, data, "Select Operator");
+            },
+            error: function (response) {
+                nillFillOperatorOptions($op, [], "Select Operator");
+                if (response && response.responseText) {
                     alert(response.responseText);
                 }
-            });
-
-
-
-
-    })
+            }
+        });
+    });
 
 
 
@@ -2002,34 +2271,29 @@ function () {
 
 <script>
     $('#extracommOperatorids').change(function () {
-
-        $('#extracommopnamelistbyid').append('<option selected="selected" value="" disabled = "disabled">Loading.....</option>')
-        var opname = $("#extracommOperatorids").val()
+        var opname = $("#extracommOperatorids").val();
+        var $op = $('#extracommopnamelistbyid');
+        $op.empty().append('<option value="">Loading...</option>');
+        nillRefreshSelect($op);
+        if (!opname) {
+            nillFillOperatorOptions($op, [], "Select Operator");
+            return;
+        }
         $.ajax({
-                type: 'POST',
-                url: '@Url.Action("FillAllOperator","Home")',
-                data: {opname:opname },
-                success: function (data) {
-                    
-                    $('#extracommopnamelistbyid').empty()
-                    $('#extracommopnamelistbyid').append('<option selected="selected" value="" disabled="disabled">Please select Operator</option>');
-                    $.each(data, function (data, item) {
-                        $('#extracommopnamelistbyid').append($('<option></option>').text(item.Text).val(item.Value));
-
-          })
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
+            type: 'POST',
+            url: '@Url.Action("FillAllOperator","Home")',
+            data: { opname: opname },
+            success: function (data) {
+                nillFillOperatorOptions($op, data, "Select Operator");
+            },
+            error: function (response) {
+                nillFillOperatorOptions($op, [], "Select Operator");
+                if (response && response.responseText) {
                     alert(response.responseText);
                 }
-            });
-
-
-
-
-    })
+            }
+        });
+    });
 
 
 
@@ -2251,9 +2515,103 @@ function () {
         if (target_pane) {
             $(target_pane).addClass('in active');
         }
+        if (typeof updateCategoryButton === "function") {
+            updateCategoryButton(tab_id);
+        }
+        if (tab_id === "tab-5") {
+            nillRefreshSelect($("#extraFilterType"));
+            nillRefreshSelect($("#extraFilterOperator"));
+        }
     })
 
 
+</script>
+<script>
+    var categoryMap = {
+        "tab-1": { category: "NillPort", label: "Nill Port" },
+        "tab-2": { category: "ByCircle", label: "By Circle" },
+        "tab-3": { category: "ByAmount", label: "By Amount" },
+        "tab-4": { category: "ByOperator", label: "By Operator" },
+        "tab-5": { category: "ExtraComm", label: "Extra Comm" }
+    };
+
+    function updateCategoryButton(tabId) {
+        var info = categoryMap[tabId];
+        if (info) {
+            $('#categorySwitchLabel').text(info.label);
+            $('#btnCategorySwitchOff').data('category', info.category);
+            $('#btnCategorySwitchOff').attr('data-category', info.category);
+        }
+    }
+
+    $(document).ready(function () {
+        updateCategoryButton('tab-1');
+    });
+
+    $('#btnAllSwitchOff').click(function () {
+        swal({
+            title: "Are you sure?",
+            text: "You want to turn OFF ALL Switching!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, turn OFF!",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: false
+        },
+        function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UpdateAllSwitchingStatus", "Home")',
+                data: { status: 'N' },
+                success: function (res) {
+                    if (res.success) {
+                        swal("Done!", res.message, "success");
+                        setTimeout(function () { location.reload(); }, 1200);
+                    } else {
+                        swal("Error!", res.message || "Failed.", "error");
+                    }
+                },
+                error: function () {
+                    swal("Error!", "Something went wrong.", "error");
+                }
+            });
+        });
+    });
+
+    $('#btnCategorySwitchOff').click(function () {
+        var category = $(this).data('category') || $(this).attr('data-category');
+        var label = $('#categorySwitchLabel').text();
+
+        swal({
+            title: "Are you sure?",
+            text: "You want to turn OFF " + label + " Switching!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, turn OFF!",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: false
+        },
+        function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UpdateCategorySwitchStatus", "Home")',
+                data: { category: category, status: 'N' },
+                success: function (res) {
+                    if (res.success) {
+                        swal("Done!", res.message, "success");
+                        setTimeout(function () { location.reload(); }, 1200);
+                    } else {
+                        swal("Error!", res.message || "Failed.", "error");
+                    }
+                },
+                error: function () {
+                    swal("Error!", "Something went wrong.", "error");
+                }
+            });
+        });
+    });
 </script>
 
 
@@ -2427,19 +2785,14 @@ function () {
                success: function (data) {
                    
                 $('#ddlPT').empty()
-                   $('#ddlPT').append('<option selected="selected" value="" disabled="disabled">select API</option>');
+                   $('#ddlPT').append('<option value="">select API</option>');
                    var datasss = data.datas;
-                   console.log(datasss);
-
-                   for (var i = 0; i < datasss.length; i++) {
-                       console.log(datasss[i].apiname);
-                       $('#ddlPT').append($('<option></option>').text(datasss[i].apiname).val(datasss[i].apiname));
+                   if (datasss && datasss.length) {
+                       for (var i = 0; i < datasss.length; i++) {
+                           $('#ddlPT').append($('<option></option>').text(datasss[i].apiname).val(datasss[i].apiname));
+                       }
                    }
-
-
-
-                  
-
+                   nillRefreshSelect($('#ddlPT'));
             }
         })
     }

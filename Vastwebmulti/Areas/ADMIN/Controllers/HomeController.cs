@@ -40556,15 +40556,24 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         }
         public JsonResult FillAllOperator(string opname)
         {
-            var type = db.Operator_Code.Where(x => x.Operator_type == opname).ToList();
-            IEnumerable<SelectListItem> selecttypetlist = from g in type
-                                                          select new SelectListItem
-                                                          {
-                                                              Value = g.new_opt_code,
-                                                              Text = g.operator_Name
-                                                          };
-            ViewBag.optypelist = new SelectList(selecttypetlist, "Value", "Text");
-            return Json(ViewBag.optypelist, JsonRequestBehavior.AllowGet);
+            var key = (opname ?? "").Trim();
+            var type = db.Operator_Code.Where(x => x.Operator_type == key).ToList();
+            if (type.Count == 0 && key.Length > 0)
+            {
+                var lower = key.ToLower();
+                type = db.Operator_Code.ToList()
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Operator_type) && x.Operator_type.Trim().ToLower() == lower)
+                    .ToList();
+            }
+            var list = type
+                .OrderBy(x => x.operator_Name)
+                .Select(g => new
+                {
+                    Value = string.IsNullOrWhiteSpace(g.new_opt_code) ? g.Operator_id.ToString() : g.new_opt_code,
+                    Text = g.operator_Name
+                })
+                .ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult NillCom(string Operator, decimal txtminvalue, decimal txtmaxvalue)
@@ -40723,27 +40732,23 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         public JsonResult FilluserBasedonTypes(string utype)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
+            var items = new List<object>();
 
             if (utype == "API")
             {
-
                 foreach (var list in db.api_user_details.ToList())
                 {
-                    items.Add(new SelectListItem { Text = list.farmname + "  " + list.mobile, Value = list.apiid.ToString() });
+                    items.Add(new { Text = list.farmname + "  " + list.mobile, Value = list.apiid.ToString() });
                 }
-                ViewBag.userlists = items;
             }
             else if (utype == "Retailer")
             {
                 foreach (var list in db.Retailer_Details.Where(aa => aa.ISDeleteuser == false).ToList())
                 {
-                    items.Add(new SelectListItem { Text = list.Frm_Name + "  " + list.Mobile, Value = list.RetailerId.ToString() });
+                    items.Add(new { Text = list.Frm_Name + "  " + list.Mobile, Value = list.RetailerId.ToString() });
                 }
-                ViewBag.userlists = items;
             }
-            return Json(ViewBag.userlists, JsonRequestBehavior.AllowGet);
-
+            return Json(items, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -41818,6 +41823,34 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         {
             NillPortalViewmodel vmodel = new NillPortalViewmodel();
             vmodel.rangewisecomm_report = db.range_wise_comm_Report("ALL");
+            return PartialView("_ExtraCommision_report", vmodel);
+        }
+
+        [HttpPost]
+        public ActionResult ShowExtraCommReports(string extraFilterType, string extraFilterOperator)
+        {
+            NillPortalViewmodel vmodel = new NillPortalViewmodel();
+            var all = db.range_wise_comm_Report("ALL").ToList();
+            extraFilterType = (extraFilterType ?? "").Trim();
+            extraFilterOperator = (extraFilterOperator ?? "").Trim();
+            if (extraFilterOperator == "Select Operator")
+            {
+                extraFilterOperator = "";
+            }
+            if (!string.IsNullOrEmpty(extraFilterOperator))
+            {
+                all = all.Where(x => x.opratorcode == extraFilterOperator).ToList();
+            }
+            else if (!string.IsNullOrEmpty(extraFilterType))
+            {
+                var typeKey = extraFilterType.ToLower();
+                var codes = db.Operator_Code.ToList()
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Operator_type) && x.Operator_type.Trim().ToLower() == typeKey)
+                    .Select(x => string.IsNullOrWhiteSpace(x.new_opt_code) ? x.Operator_id.ToString() : x.new_opt_code)
+                    .ToList();
+                all = all.Where(x => codes.Contains(x.opratorcode)).ToList();
+            }
+            vmodel.rangewisecomm_report = all;
             return PartialView("_ExtraCommision_report", vmodel);
         }
 
