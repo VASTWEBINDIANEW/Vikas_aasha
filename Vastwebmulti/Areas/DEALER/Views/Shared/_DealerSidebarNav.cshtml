@@ -1,5 +1,4 @@
 @{
-    var companyName = ViewBag.companyname as string ?? "";
     var hasSellRecharge = ViewBag.HasSellRecharge as bool? ?? false;
     var dealerNickName = ViewBag.DealerNickName as string ?? "Retailer";
 }
@@ -77,7 +76,7 @@
         </a>
     </li>
 
-    <li style="padding-bottom:120px;" class="admin-sidebar-item admin-sidebar-group admin-sidebar-open">
+    <li class="admin-sidebar-item admin-sidebar-group admin-sidebar-open">
         <a href="javascript:void(0);" class="llkj" aria-expanded="true">
             <i class="fas fa-cog admin-sidebar-icon" aria-hidden="true"></i>
             <span class="on_off">Operator</span>
@@ -91,13 +90,5 @@
             <li><a class="pin-ped" href="@Url.Action("DealerLedger", "Home")"><span class="on_off">Ledger Book</span></a></li>
         </ul>
     </li>
+    <li class="admin-sidebar-scroll-spacer" aria-hidden="true"></li>
 </ul>
-
-<div class="legal admin-sidebar-legal">
-    <div class="copyright">
-        Copyright 2019 - <span>@DateTime.Now.Year</span>
-    </div>
-    <div class="copyright">
-        <a href="javascript:void(0);" class="tmw-total-color-one">@companyName</a>
-    </div>
-</div>

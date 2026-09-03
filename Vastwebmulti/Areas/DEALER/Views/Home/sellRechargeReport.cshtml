@@ -1,536 +1,483 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Selling_Recharge_info>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "sellRechargeReport";
+    ViewBag.Title = "Sell Recharge Report";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var selectedStatus = (Request["ddl_status"] ?? "").Trim();
+    var selectedOperator = (Request["Operator"] ?? "").Trim();
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.Selling_Recharge_info>();
+
+    Func<Vastwebmulti.Models.Selling_Recharge_info, bool> isSuccess = x =>
+        !string.IsNullOrEmpty(x.Rstaus) && x.Rstaus.IndexOf("Success", StringComparison.OrdinalIgnoreCase) >= 0;
+    Func<Vastwebmulti.Models.Selling_Recharge_info, bool> isFailed = x =>
+        !string.IsNullOrEmpty(x.Rstaus) && (x.Rstaus.IndexOf("Failed", StringComparison.OrdinalIgnoreCase) >= 0 || x.Rstaus.IndexOf("Refund", StringComparison.OrdinalIgnoreCase) >= 0);
+
+    var totalAmount = reports.Sum(x => x.amount ?? 0m);
+    var totalSuccess = reports.Where(isSuccess).Sum(x => x.amount ?? 0m);
+    var totalFailed = reports.Where(isFailed).Sum(x => x.amount ?? 0m);
+    var totalPending = reports.Where(x => !isSuccess(x) && !isFailed(x)).Sum(x => x.amount ?? 0m);
 }
-<style>
-    select#ddl_status {
-        height: 30px;
-    }
-    select#Operator {
-        height: 30px;
-    }
 
-    .custom-date-icon {
-        position: absolute;
-        left: 0px;
-        z-index: 9;
-        top: 0px !important;
-        background: transparent;
-        height: 32px;
-        width: 32px;
-        border: 1px solid #bbb;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page');</script>
 
-        .custom-date-icon i {
-            top: 8px !important;
-            position: absolute;
-            /* left: 7px; */
-            background-color: #fff;
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        @{
+            var sellFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "dealerSellRechargeReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
-    .toast-top-right1 {
-        top: 78px;
-        left: 81%;
-    }
+        @using (Html.BeginForm("sellRechargeReport", "Home", FormMethod.Post, sellFormAttrs))
+        {
+            <input type="hidden" name="ddl_top" value="All" />
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    .datepicker-orient-bottom {
-        top: 173px !important;
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 147px !important;
-        }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Prepaid &amp; Utilities</li>
+                        <li>Sell Recharge Report</li>
+                    </ol>
 
-    .recharge-report-rtailer th {
-        border-bottom: 0px !important;
-    }
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
 
-    .table-responsive table tr, .table-responsive table, .table-responsive table tr td, .table-responsive table tr th {
-        border-color: #aaa4a4 !important;
-    }
+                        <div class="vm-opr-field vm-dmt-field vm-radiant-field--status">
+                            @Html.DropDownList("ddl_status", new SelectList(new[]
+                            {
+                                new SelectListItem { Text = "All Status", Value = "" },
+                                new SelectListItem { Text = "SUCCESS", Value = "SUCCESS" },
+                                new SelectListItem { Text = "Pending", Value = "PENDING" },
+                                new SelectListItem { Text = "FAILED", Value = "FAILED" }
+                            }, "Value", "Text", selectedStatus), new { id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control for-select2", @title = "Status", data_live_search = "true" })
+                        </div>
+                        <div class="vm-opr-field vm-dmt-field">
+                            @{
+                                var operatorList = ViewBag.Operator as SelectList;
+                            }
+                            @if (operatorList != null && !string.IsNullOrEmpty(operatorList.DataValueField))
+                            {
+                                @Html.DropDownList("Operator", new SelectList(operatorList.Items, operatorList.DataValueField, operatorList.DataTextField, selectedOperator), "ALL OPERATORS", new { id = "Operator", @class = "vm-opr-select vm-dmt-select form-control for-select2", @title = "Operator", data_live_search = "true" })
+                            }
+                            else
+                            {
+                                @Html.DropDownList("Operator", Enumerable.Empty<SelectListItem>(), "ALL OPERATORS", new { id = "Operator", @class = "vm-opr-select vm-dmt-select form-control for-select2", @title = "Operator", data_live_search = "true" })
+                            }
+                        </div>
 
-    .noexel-newclass img {
-        border-radius: 50% !important;
-    }
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
 
-    .datepicker.datepicker-dropdown.dropdown-menu.datepickerrecharge.datepicker-orient-left.datepicker-orient-bottom {
-        margin-top: -21px !important;
-    }
+                    </div>
 
-    @@media screen and (max-width:766px) {
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 151px !important;
-        }
-    }
+                </div>
 
-    @@media screen and (max-width:580px) {
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 194px !important;
-        }
-    }
-    .col-md-2.only-select-css.allretailer-report {
-        border: 1px solid #c9c6c6;
-    }
-    .col-md-3.only-select-css.allretailer-report {
-        border: 1px solid #c9c6c6;
-    }
-</style>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-
-<section class="content classrecharge-report" style="">
-    <div class="container-fluid retailer-page fundtranfer rechargefirstclass fundtranfer-responshive" style="height:100vh;">
-        <!--Four-Design-Page-Header-Start-->
-
-        <div class="page-title-box-fourde">
-            <h3>Prepaid & Utility</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Prepaid & Utility</a></li>
-            </ul>
-        </div>
-
-        <!--Four-Design-Page-Header-End-->
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 responshive-rechargereport">
-                <div class="" style="width: 100%; float: left;">
-                    <div class="col-md-10 report-divsate"style="padding-left: 0;">
-
-                        @using (Ajax.BeginForm("sellRechargeReport", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divEmp11" }))
-                        {
-                            <div class="">
-                                <div class="col-md-2 only-select-css allretailer-report"style="padding:0px;padding-right:5px;">
-                                    <div class="form-group">
-                                        <div class="" style="">
-                                            @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                    {
-                                    new SelectListItem{ Text="ALL Status",Value="",},
-                                    new SelectListItem{Text="SUCCESS",Value="SUCCESS"},
-                                    new SelectListItem{Text="Pending",Value="PENDING"},
-                                    new SelectListItem{Text="FAILED",Value="FAILED"}
-                                    }, new { @class = "form-control", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-3 only-select-css allretailer-report">
-                                    <div class="form-group">
-                                        <div class="" style="">
-                                            @Html.DropDownList("Operator", ViewBag.Operator as SelectList, "ALL OPERATORS", new { id = "Operator", @class = "form-control" })
-                                        </div>
-                                    </div>
-                                </div>
-
-                                @*<div class="col-md-2 rechargefiveclass">
-                    <div class="form-group">
-                        <div class="" style="border: 1px solid #ccc;">
-                            @Html.TextBox("txtmob", "", new { @class = "form-control", @placeholder = "Consumer Number", @style = "height:30px;" })
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="sellRechargeTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Sell recharge totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideSellRechargeTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Amount</span>
+                            <strong class="vm-opr-total-card__value">@totalAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value">@totalSuccess.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value">@totalFailed.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value">@totalPending.ToString("N2")</strong>
                         </div>
                     </div>
-                </div>*@
-                            <div class="col-md-4 recharge-reportdateclass" style="padding:0px;padding-right:5px;">
-                                <div class="form-group">
-                                    <div class="input-daterange input-group">
-                                        <div class="all-report-inputclass all-report-inputclass-left focused">
-                                            <div class="custom-date-icon" style="height: 32px;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;height:32px;", autocomplete = "off" })
-                                            @*<input autocomplete="off" class="form-control" id="txt_frm_date" name="txt_frm_date" required="required" style="border:1px solid #dddddd;height:32px;" type="text" value="">
-                                       *@ </div>
+                </div>
 
-                                        <div class="all-report-inputclass all-report-inputclass-right">
-                                            <div class="custom-date-icon" style="height: 32px;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;height:32px;", autocomplete = "off" })
-                                            @*<input autocomplete="off" class="form-control" id="txt_to_date" name="txt_to_date" required="required" style="border:1px solid #dddddd;height:32px;" type="text" value="">
-                                       *@ </div>
+            </div>
+        }
 
-                                    </div>
-                                </div>
-                            </div>
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-bolt" aria-hidden="true"></i>
+                        <span>Sell recharge report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-inline-total" title="Total amount for current filter">
+                            Total: <strong>&#8377; @totalAmount.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-sell-rch-totals-btn" onclick="toggleSellRechargeTotals()" title="Show totals" aria-expanded="false" aria-controls="sellRechargeTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="sellRechargeReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Consumer</th>
+                                    <th>Operator&nbsp;Name</th>
+                                    <th>Net&nbsp;Amt</th>
+                                    <th>Earn</th>
+                                    <th>Remain&nbsp;Pre</th>
+                                    <th>Remain&nbsp;Pos</th>
+                                    <th>Request&nbsp;Date</th>
+                                    <th>Resp&nbsp;Date</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.Partial("_sellRechargeReport", reports)
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+    </div>
+</section>
 
-                                <!--<div class="col-md-4 recharge-reportdateclass">
-                                    <div class="form-group" style="margin-bottom:0px;margin-top:1px;">
-                                        <div class="input-daterange input-group">
-                                            <div class="datesate datesates focused">
-                                                <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;height:32px;", autocomplete = "off" })
-                                            </div>
-                                            <span class="input-group-addon" style="display:none;">
-                                                <i class="fa fa-exchange" style="padding-top:8px;"></i>
-                                            </span>
-                                            <div class="datesate datesatese">
-                                                <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                            </div>
-                                        </div>-->
-                                        <!-- /.input group -->
-                                    <!--</div>
-                                </div>-->
-                                <div class="col-md-2 rechargefive">
-                                    <div class="form-group">
-                                        <div class="form-line" style="border-bottom:none;margin-top:0px;">
-                                            <center>
-                                                <button value="LIVE" type="submit" class="btn" id="btntype" name="btntype" style="margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                    <span style="top:-1px;color:black;">Search</span>
-                                                </button>
-
-                                            </center>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                        @*<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 rechargepdfexal">
-            <div class="spanpdfbuttob-secondreta" style="float:right;">
-                <span><img src="~/ashok-images/pdf.png" /><input type="button" id="btnPDF" value="PDF" style="margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;color:#555;" /></span>
-                <span>
-                    <img src="~/ashok-images/xls.png" /><input type="button" id="btnExport" value="Export" style="margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;color:#555;" />
-                </span>
-
-                <button onclick="findtotal()" class="btn" id="pdfblock" style=" margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                    <span class="displaypdf" style="top:-1px;color:#555 !important;">TOTAL</span>
-                    <strong class="pdfblocks" style="display:none;float:right;"><span id="successtotal" style="color:#555 !important;"></span><span id="Failedtotal" style="color:#555 !important;"></span><span id="Pendingtotal" style="color:#555 !important;"></span></strong>
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-dmt-detail-modal vm-dth-detail-modal vm-sell-rch-detail-modal" id="sellRechargeDetailModal" tabindex="-1" role="dialog" aria-labelledby="sellRechargeDetailTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-violet">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-bolt" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title" id="sellRechargeDetailTitle">Sell recharge details</h4>
+                        <span class="saas-admin-modal-subtitle" id="sellRchDetSubtitle">Sell recharge information</span>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times" aria-hidden="true"></i>
                 </button>
             </div>
-
-        </div>*@
-
+            <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-dmt-modal-body">
+                <div class="vm-dmt-modal-grid vm-dmt-modal-grid--2 vm-dth-detail-grid">
+                    <div class="vm-dmt-modal-field">
+                        <label>Status</label>
+                        <div class="vm-dmt-modal-readonly vm-dth-detail-status" id="sellRchDetStatus">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Consumer</label>
+                        <div class="vm-dmt-modal-readonly" id="sellRchDetConsumer">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Operator</label>
+                        <div class="vm-dmt-modal-readonly" id="sellRchDetOperator">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Net Amount</label>
+                        <div class="vm-dmt-modal-readonly" id="sellRchDetAmount">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Earn</label>
+                        <div class="vm-dmt-modal-readonly" id="sellRchDetEarn">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Remain Pre</label>
+                        <div class="vm-dmt-modal-readonly" id="sellRchDetPre">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Remain Pos</label>
+                        <div class="vm-dmt-modal-readonly" id="sellRchDetPost">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Txn Id</label>
+                        <div class="vm-dmt-modal-readonly" id="sellRchDetTxn">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Request Date</label>
+                        <div class="vm-dmt-modal-readonly" id="sellRchDetRch">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Resp Date</label>
+                        <div class="vm-dmt-modal-readonly" id="sellRchDetResp">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>From</label>
+                        <div class="vm-dmt-modal-readonly" id="sellRchDetFrom">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>SIM</label>
+                        <div class="vm-dmt-modal-readonly" id="sellRchDetSim">—</div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row clearfix" style="display:none;">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                            <span>SUCCESS : </span>
-
-
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                            <span>FAILED : </span>
-
-
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                            <span>PENDING : </span>
-
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card class-back-tra-fourdesign">
-                    <div class="body change-iconrech-report change-iconrech-responshive" style="padding:12px;padding-left: 0;padding-right: 0;padding-top: 15px;">
-                        <div class="table-responsive recharge-responsive retailer-table-seconddesign tablethirddesign-new" style="position:inherit;margin-top:-10px;">
-                            <table id="tbldata" class="table table-bordered table-striped table-hover dataTable example-second retailer-whitespa-second third-design-table" cellspacing="0" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr class="recharge-report-rtailer">
-
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Status</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Consumer</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Operator&nbsp;Name</th>
-
-
-                                        @*<th style="padding-left:2px; padding-right:2px;text-align:center;">Opt&nbsp;Type</th>*@
-
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Net&nbsp;Amt</th>
-
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Earn</th>
-
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Remain Pre</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Remain Pos</th>
-                                        @*<th style="padding-left:2px; padding-right:2px;text-align:center;">Type</th>*@
-
-                                        @*<th style="padding-left:2px; padding-right:2px;text-align:center;">Operator&nbsp;ID</th>*@
-
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Request&nbsp;Date</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Resp&nbsp;Date</th>
-
-                                    </tr>
-
-                                </thead>
-                                <tbody id="divEmp11">
-                                    @Html.Partial("_sellRechargeReport", Model);
-                                </tbody>
-
-                            </table>
-                            <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                <div class="loadertablecssnew">Loading...</div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                    <i class="fas fa-times" aria-hidden="true"></i> Close
+                </button>
             </div>
         </div>
     </div>
-</section>
-<!--Dispute Reason Model-->
-<!-- Jquery Core Js -->
+</div>
 
-<script src="~/Scripts/jquery-1.10.2.js"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-dth-detail-modal" id="sellRechargeConfirmModal" tabindex="-1" role="dialog" aria-labelledby="sellRechargeConfirmTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-violet">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-question" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title" id="sellRechargeConfirmTitle">Confirm update</h4>
+                        <span class="saas-admin-modal-subtitle" id="sellRchConfirmText">Are you sure?</span>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Cancel</button>
+                <a id="sellRchConfirmLink" class="saas-admin-modal-btn" href="#">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
-    function ToastrMessage() {
-        toastr.options = {
-            "closeButton": false,
-            "debug": false,
-            "positionClass": "toast-top-right1",
-            "newestOnTop": false,
-            "progressBar": true,
-            "preventDuplicates": true,
-            "onclick": null,
-            "showDuration": "200",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "show",
-            "hideMethod": "hide"
-        };
-        //toastr.info('MY MESSAGE!');
-    }
-</script>
+    window.sellRchSelect2Url = '@Url.Content("~/MainFrontDesign/select2/dist/js/select2.full.min.js")';
+    window.sellRchUpdateUrl = '@Url.Action("Rechargesellupd", "Home")';
 
-<script>
-    function confirm(e) {
-        $('#disp-'+e).hide();
-        $('#confirm-'+e).show();
-        $('#close-'+e).show();
+    function toggleSellRechargeTotals() {
+        var $ = window.jQuery;
+        var panel = $('#sellRechargeTotalsPanel');
+        var btn = $('.vm-sell-rch-totals-btn');
+        if (panel.is(':visible')) {
+            hideSellRechargeTotals();
+            return;
+        }
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        btn.attr('aria-expanded', 'true');
     }
-    function cancel(e) {
-          $('#disp-'+e).show();
-        $('#confirm-'+e).hide();
-        $('#close-'+e).hide();
+
+    function hideSellRechargeTotals() {
+        var $ = window.jQuery;
+        $('#sellRechargeTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-sell-rch-totals-btn').attr('aria-expanded', 'false');
     }
-    function disputedata(e) {
-         var txt_frm_date = $('#txt_frm_date').val();
-         var txt_to_date = $('#txt_to_date').val();
-         var ddl_status = $('#ddl_status').val();
-         var Operator = $('#Operator').val();
-        var txtmob = $('#txtmob').val();
-        let descript = prompt('Enter Description');
-        if (descript!= null) {
-             $.post("@Url.Action("dispute","Home")",
-                 { "id": e, "txtregion": descript },
-                 function (data) {
-                     ToastrMessage();
-                     toastr.info(data);
-                     $.post("@Url.Action("InfiniteScroll","Home")",
-             { "pageindex": pageindex, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date,"ddl_status":ddl_status,"Operator":Operator,"txtmob":txtmob },
-                    function (data) {
-                        $("#trow").html(data.HTMLString);
-                    });
-           });
+
+    function sellRchDetailText(btn, name) {
+        var value = (btn && btn.getAttribute('data-' + name)) || '';
+        value = String(value).replace(/\s+/g, ' ').trim();
+        return value || '—';
+    }
+
+    function sellRchSetDetail(id, value) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.textContent = value;
         }
     }
-</script>
 
-<script>
-    $('select').select2();
-</script>
-<script>
-    var txt_frm_date = $('#txt_frm_date').val();
-    var txt_to_date = $('#txt_to_date').val();
-    var ddl_status = $('#ddl_status').val();
-    var Operator = $('#Operator').val();
-    var txtmob = $('#txtmob').val();
-        var pageindex = 2;
-        var NoMoredata = false;
-        var inProgress = false;
-    $(window).scroll(function () {
-            if ($(window).scrollTop() > Number($("#tbldata").height()) / 4 && !NoMoredata && !inProgress) {
-                inProgress = true;
-                $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScroll","Home")",
-             { "pageindex": pageindex, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date,"ddl_status":ddl_status,"Operator":Operator,"txtmob":txtmob },
-                    function (data) {
-                        pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#trow").append(data.HTMLString);
-                        $("#loadingdiv").hide();
-                        inProgress = false;
-                    });
-            }
-        });
-</script>
-<script type="text/javascript">
-    function GotoPDFRecharge(e) {
-                       // alert(e)
-                       var idno = e.toString();
-                       var url = '@Url.Action("RechargePDF", "Home")?Idno=' + idno + '';
-                       //window.location.href = url,;
-                       window.open(url, '_blank');
-                   }
-</script>
-
-<script>
-    function isNumber(evt) {
-        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
-            return false;
-        return true;
+    function sellRchStatusTone(status) {
+        var raw = (status || '').toLowerCase();
+        if (raw.indexOf('fail') >= 0 || raw.indexOf('refund') >= 0) {
+            return 'failed';
+        }
+        if (raw.indexOf('success') >= 0) {
+            return 'success';
+        }
+        return 'pending';
     }
-</script>
-<script type="text/javascript">
-    $(document).ready(function () {
 
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
+    function showSellRchModal(selector) {
+        if (typeof window.showAdminModal === 'function') {
+            window.showAdminModal(selector);
+            return;
+        }
+        var $ = window.jQuery;
+        var $modal = $(selector);
+        if ($modal.parent().length && !$modal.parent().is('body')) {
+            $modal.appendTo(document.body);
+        }
+        if ($ && $.fn && $.fn.modal) {
+            $modal.modal('show');
+        }
+    }
 
+    function openSellRechargeDetail(btn) {
+        var consumer = sellRchDetailText(btn, 'consumer');
+        var status = sellRchDetailText(btn, 'status');
+        var amount = sellRchDetailText(btn, 'amount');
+        sellRchSetDetail('sellRchDetSubtitle', consumer === '—' ? 'Sell recharge information' : consumer);
+        sellRchSetDetail('sellRchDetStatus', status);
+        sellRchSetDetail('sellRchDetConsumer', consumer);
+        sellRchSetDetail('sellRchDetOperator', sellRchDetailText(btn, 'operator'));
+        sellRchSetDetail('sellRchDetAmount', amount === '—' ? '—' : ('₹ ' + amount));
+        sellRchSetDetail('sellRchDetEarn', sellRchDetailText(btn, 'earn'));
+        sellRchSetDetail('sellRchDetPre', sellRchDetailText(btn, 'pre'));
+        sellRchSetDetail('sellRchDetPost', sellRchDetailText(btn, 'post'));
+        sellRchSetDetail('sellRchDetTxn', sellRchDetailText(btn, 'txn'));
+        sellRchSetDetail('sellRchDetRch', sellRchDetailText(btn, 'rch'));
+        sellRchSetDetail('sellRchDetResp', sellRchDetailText(btn, 'resp'));
+        sellRchSetDetail('sellRchDetFrom', sellRchDetailText(btn, 'from'));
+        sellRchSetDetail('sellRchDetSim', sellRchDetailText(btn, 'sim'));
+        var statusEl = document.getElementById('sellRchDetStatus');
+        if (statusEl) {
+            statusEl.className = 'vm-dmt-modal-readonly vm-dth-detail-status vm-dth-detail-status--' + sellRchStatusTone(status);
+        }
+        showSellRchModal('#sellRechargeDetailModal');
+    }
+
+    function openSellRechargeConfirm(btn) {
+        var status = sellRchDetailText(btn, 'status');
+        var idno = sellRchDetailText(btn, 'idno');
+        var txn = (btn && btn.getAttribute('data-txn')) || '';
+        var textEl = document.getElementById('sellRchConfirmText');
+        if (textEl) {
+            textEl.textContent = 'Mark this recharge as ' + status + '?';
+        }
+        var link = document.getElementById('sellRchConfirmLink');
+        if (link) {
+            link.href = window.sellRchUpdateUrl
+                + '?id=' + encodeURIComponent(idno === '—' ? '' : idno)
+                + '&status=' + encodeURIComponent(status)
+                + '&txnid=' + encodeURIComponent(txn);
+        }
+        showSellRchModal('#sellRechargeConfirmModal');
+    }
+
+    function bindSellRechargeModals() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.modal) {
+            window.setTimeout(bindSellRechargeModals, 40);
+            return;
+        }
+        $(document).off('click.sellRchDetail', '.vm-sell-rch-detail-btn').on('click.sellRchDetail', '.vm-sell-rch-detail-btn', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openSellRechargeDetail(this);
         });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+        $(document).off('click.sellRchUpd', '.vm-sell-rch-upd-btn').on('click.sellRchUpd', '.vm-sell-rch-upd-btn', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openSellRechargeConfirm(this);
+        });
+    }
+
+    function sellRchLoadScript(src, done) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = done;
+        s.onerror = done;
+        document.body.appendChild(s);
+    }
+
+    function bootSellRechargeReport() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.datepicker) {
+            window.setTimeout(bootSellRechargeReport, 50);
+            return;
         }
 
-   });
-
-</script>
-
-<!--Dispute Id-->
-<!--<script>
-    function findtotal() {
-         var txt_frm_date = $('#txt_frm_date').val();
-         var txt_to_date = $('#txt_to_date').val();
-         var ddl_status = $('#ddl_status').val();
-         var Operator = $('#Operator').val();
-         var txtmob = $('#txtmob').val();
-             $.post("@Url.Action("FindTotal","Home")",
-             {"txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date,"ddl_status":ddl_status,"Operator":Operator,"txtmob":txtmob},
-                 function (data) {
-                     $('#successtotal').text(data.success);
-                     $('#Failedtotal').text(data.failed);
-                       $('#Pendingtotal').text(data.pending);
+        function afterPlugins() {
+            $('.saas-sell-recharge-report-page .for-select2').each(function () {
+                var $el = $(this);
+                if ($.fn.select2 && !$el.hasClass('select2-hidden-accessible')) {
+                    $el.select2({
+                        width: '100%',
+                        minimumResultsForSearch: 0
                     });
-    }
-</script>-->
-<!--Genertae Invoice-->
-@*<script type="text/javascript">
-        function GenrateInvoice(ultra_request_id, RechargeTo, OptName, amt, OptID, Date) {
-           var url = '@Url.Action("GotoInvoicePDF1", "Home")?Id=' + ultra_request_id + '&RechargeTo=' + RechargeTo + '&OptName=' + OptName + '&amt=' + amt + '&OptID=' + OptID + '&Date=' + Date + '';
-                window.open(url, '_blank');
-         }
-    </script>
-    <script>
-        $("#btnExport").click(function(){
-       var txt_frm_date = $('#txt_frm_date').val();
-             var txt_to_date = $('#txt_to_date').val();
-             var ddl_status = $('#ddl_status').val();
-             var Operator = $('#Operator').val();
-            var txtmob = $('#txtmob').val();
-            var url = '@Url.Action("ExcelRechargereport","Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddl_status=' + ddl_status + '&Operator=' + Operator + '&txtmob=' + txtmob;
-            location.href = url;
-    });
-    </script>
-    <script>
-        $("#btnPDF").click(function () {
-         var txt_frm_date = $('#txt_frm_date').val();
-             var txt_to_date = $('#txt_to_date').val();
-             var ddl_status = $('#ddl_status').val();
-             var Operator = $('#Operator').val();
-            var txtmob = $('#txtmob').val();
-            var url = '@Url.Action("PDFRechargereport","Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddl_status=' + ddl_status + '&Operator=' + Operator + '&txtmob=' + txtmob;
-            window.open(
-    url,
-      '_blank' // <- This is what makes it open in a new window.
-    );
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            var current = location.pathname;
-            $('.report-list-change li a').each(function () {
-                var $this = $(this);
-                if ($this.attr('href').indexOf(current) !== -1) {
-                    $this.addClass('active');
-
-
                 }
-            })
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $("#pdfblock").click(function () {
-                $(".pdfblocks").css("display", "block");
-
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $(".rechargefirst span.select2-selection").click(function () {
-                $(".select2-dropdown").addClass('selectcutomere');
-            });
-        });
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            $(".rechargesecond span.select2-selection").click(function () {
-                $(".select2-dropdown").addClass('selectcutomeress');
-            });
-        });
-    </script>
+            if (typeof window.initAdminReportDateForm === 'function') {
+                window.initAdminReportDateForm('#dealerSellRechargeReportForm');
+            } else {
+                $('#txt_frm_date, #txt_to_date').datepicker({
+                    format: 'yyyy-mm-dd',
+                    todayHighlight: true,
+                    autoclose: true,
+                    orientation: 'bottom auto',
+                    container: 'body'
+                });
+                if ($('#dealerSellRechargeReportForm').attr('data-date-mode') !== 'post') {
+                    $('#txt_frm_date').datepicker('setDate', new Date());
+                    $('#txt_to_date').datepicker('setDate', new Date());
+                }
+            }
 
+            function pinSellRchDatepicker(e) {
+                if (typeof window.repositionAdminDatepickerForMobile === 'function') {
+                    window.repositionAdminDatepickerForMobile(e && e.target ? e.target : this);
+                }
+            }
 
-    <script>
-        $(document).ready(function () {
-            $(".rechargethrees input").click(function () {
-                $(".datepicker").addClass('datepickerrecharge');
-            });
-        });
-    </script>
+            $(document).off('show.sellRchDp shown.sellRchDp').on('show.sellRchDp shown.sellRchDp', '#txt_frm_date, #txt_to_date', pinSellRchDatepicker);
+            $(window).off('resize.sellRchDp orientationchange.sellRchDp').on('resize.sellRchDp orientationchange.sellRchDp', pinSellRchDatepicker);
+        }
 
-    <script>
-        $(document).ready(function () {
-            $(".fundtranfer-responshive .rechargefirst .select2").click(function () {
-                $(".select2-dropdown.select2-dropdown--below.selectcutomere").addClass('parepaidstatus');
+        if ($.fn.select2) {
+            afterPlugins();
+            return;
+        }
+        sellRchLoadScript(window.sellRchSelect2Url, afterPlugins);
+    }
 
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $(".fundtranfer-responshive .col-md-3.rechargesecond .select2").click(function () {
-                $(".select2-dropdown.select2-dropdown--below.selectcutomeress").addClass('parepaidstatussecond');
-
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('.second-design .example-second').DataTable({
-
-
-                paging: false
-            });
-        });
-
-    </script>*@
+    bindSellRechargeModals();
+    if (document.readyState === 'complete') {
+        bootSellRechargeReport();
+    } else {
+        window.addEventListener('load', bootSellRechargeReport);
+    }
+</script>

@@ -1,120 +1,76 @@
 ﻿@model List<Vastwebmulti.Models.proc_FlightReport_Result>
+@using System.Linq
 @{
-
     Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.proc_FlightReport_Result>();
 }
-
-@if (Model != null)
+@if (items.Any())
 {
-    foreach (var item in Model)
+    foreach (var item in items)
     {
-        #region CssSettings
-        var color = "";
-        var fontweight = "";
-        var text = "";
-        var emailid = "";
-        var Retailername = "";
-        var framname = "";
-        var mobile = "";
-        var rolename = "";
-        var icon = "";
-        var rchtype = "";
-        var rchtypeicon = "";
-        var sts = "";
-        var refundcolor = "";
-        var dmtytpe = "";
-
-        sts = ((Vastwebmulti.Areas.RETAILER.Enums.TicketStatus)Convert.ToInt32(item.TicketStatusCode)).ToString();
-
-        if (item.TicketStatusCode == 0 || item.TicketStatusCode == 3 || item.TicketStatusCode == 4 || item.TicketStatusCode == 6 || item.TicketStatusCode == 8 || item.TicketStatusCode == 9)
+        var statusRaw = item.TicketStatus ?? "";
+        var statusTone = "pending";
+        var statusLabel = statusRaw;
+        var statusFa = "fa-clock-o";
+        if (statusRaw.IndexOf("Refund", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "red";
-            fontweight = "700";
+            statusTone = "failed";
+            statusLabel = "Refund";
+            statusFa = "fa-undo";
         }
-        if (item.TicketStatusCode == 5 || item.TicketStatusCode == 1)
+        else if (statusRaw.IndexOf("Failed", StringComparison.OrdinalIgnoreCase) >= 0 || statusRaw.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "green";
-            fontweight = "700";
+            statusTone = "failed";
+            statusLabel = "Failed";
+            statusFa = "fa-times";
         }
-        if (item.TicketStatusCode == 2)
+        else if (statusRaw.IndexOf("Success", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "#ff9600";
-            fontweight = "700";
+            statusTone = "success";
+            statusLabel = "Success";
+            statusFa = "fa-check";
         }
-        #endregion
-        if (item.TicketStatus.Contains("Pending"))
+        else if (statusRaw.IndexOf("Pending", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "#ff9600";
-            sts = "Pending";
-            icon = "../../ashok-images/clock.svg";
+            statusTone = "pending";
+            statusLabel = "Pending";
+            statusFa = "fa-clock-o";
         }
-        if (item.TicketStatus.Contains("Success"))
-        {
-            color = "green";
-            sts = "Success";
-            icon = "../../ashok-images/correct.svg";
-        }
-        if (item.TicketStatus.Contains("FAILED"))
-        {
-            color = "red";
 
-            icon = "../../ashok-images/closes.svg";
-        }
-        if (item.TicketStatus.Contains("Refund"))
-        {
-            color = "#9C27B0";
-            sts = "Refund";
-            icon = "../../ashok-images/closes.svg";
-
-        }
-    <tr style="font-weight:700;">
-        <td>
-            <p style="font-weight:700;">
-
-                <img style="height: 20px;width: 18px;margin:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:@color" src="@icon" />
-                @item.Frm_Name
-            </p>
-        </td>
-        <td><p style="font-size:13px;text-transform:uppercase;"><span style="color:@color;">@sts</span>&nbsp;</p></td>
-
-        <td>
-            <p style="font-size:13px;margin-left:-8px;">&nbsp;@item.LeadPaxFirstName @item.LeadPaxLastName&nbsp;</p>
-        </td>
-        <td style="font-size:13px;margin-left:-7px;">@item.AirlineName</td>
-        <td style="font-size:13px;margin-left:-7px;">@item.BookingId</td>
-        <td style="font-size:13px;margin-left:-7px;">@item.PNR</td>
-        <td style="font-size:13px;margin-left:-7px;">
-
-            @{
-                int adult = 0;
-                int child = 0;
-                int infant = 0;
-                int total_pass = 0;
-
-                adult = Convert.ToInt32(item.totaladultticket);
-                child = Convert.ToInt32(item.Totalchildticket);
-                infant = Convert.ToInt32(item.TotalInfantticket);
-                total_pass = (adult + child + infant);
-
-
-            }
-            @total_pass
-
-        </td>
-        <td style="font-size:13px;margin-left:-7px;">@item.OfferedFare</td>
-        <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.DlmInc, 2)</td>
-        <td><p style="font-size:11px;margin-left:-7px; margin-top:2px;">@String.Format("{0:dd-MMM HH:mm:ss}", item.TicketDate)&nbsp;&nbsp;<span style="color:green;font-weight:700;"></span></p></td>
-
-        @*<td style="font-size:13px;margin-left:-7px;">@Math.Round(item.RemPre, 2)</td>
-        <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.RemInc, 2)</td>
-        <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.RemPost, 2)</td>
-        <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.DlmPre, 2)</td>
-        <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.DlmInc, 2)</td>
-        <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.DlmPost, 2)</td>*@
-
-
-
-
-    </tr>
+        var firm = !string.IsNullOrWhiteSpace(item.Frm_Name) ? item.Frm_Name : (item.RetailerName ?? "—");
+        var pax = ((item.LeadPaxFirstName ?? "") + " " + (item.LeadPaxLastName ?? "")).Trim();
+        if (string.IsNullOrEmpty(pax)) { pax = item.PassengerName ?? "—"; }
+        var adult = item.totaladultticket ?? 0;
+        var child = item.Totalchildticket ?? 0;
+        var infant = item.TotalInfantticket ?? 0;
+        var totalPass = adult + child + infant;
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-status="@statusRaw">
+            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-radiant-status-text">@firm</span>
+            </td>
+            <td>
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">@statusLabel</span>
+            </td>
+            <td>@pax</td>
+            <td>@(item.AirlineName ?? "—")</td>
+            <td>@(item.BookingId ?? "—")</td>
+            <td>@(item.PNR ?? "—")</td>
+            <td>@totalPass</td>
+            <td class="vm-dmt-amt-cell">@(item.OfferedFare.HasValue ? item.OfferedFare.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@item.DlmInc.ToString("N2")</td>
+            <td>@item.TicketDate.ToString("dd-MMM HH:mm:ss")</td>
+        </tr>
     }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="10" class="vm-opr-table-empty">
+            <i class="fas fa-plane" aria-hidden="true"></i>
+            <span>Flight report not found.</span>
+        </td>
+    </tr>
 }

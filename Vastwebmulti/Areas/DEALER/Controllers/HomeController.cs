@@ -10339,46 +10339,147 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
 
         #endregion
         #region DTH BooKing
-        public ActionResult DthBookingReport()
+        private DateTime ParseDthBookingDate(string value, DateTime fallback)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return fallback.Date;
+            }
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime parsed;
+            if (DateTime.TryParseExact(value.Trim(), formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out parsed))
+            {
+                return parsed.Date;
+            }
+            if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out parsed))
+            {
+                return parsed.Date;
+            }
+            return fallback.Date;
+        }
+
+        private List<DTHConnection_Report_New_Result> LoadDthBookingRows(string ddl_status, string txt_frm_date, string txt_to_date, string ddl_top)
         {
             var userid = User.Identity.GetUserId();
-            string txt_frm_date = DateTime.Now.ToString();
-            string txt_to_date = DateTime.Now.ToString();
-            string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString("yyyy-MM-dd");
-            string to_date = Convert.ToDateTime(txt_to_date).AddDays(1).ToString("yyyy-MM-dd");
-            var ch = db.DTHConnection_Report_New("Dealer", userid, "ALL", 50, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
-            ViewData["totals"] = ch.Where(s => s.Status == "Success").Sum(s => Convert.ToInt32(s.Amount));
-            ViewData["Totalf"] = ch.Where(s => s.Status == "Failed").Sum(s => Convert.ToInt32(s.Amount));
+            DateTime frm_date = ParseDthBookingDate(txt_frm_date, DateTime.Today);
+            DateTime to_date = ParseDthBookingDate(txt_to_date, DateTime.Today).AddDays(1);
+            if (string.IsNullOrWhiteSpace(ddl_status) || ddl_status == "Status")
+            {
+                ddl_status = "ALL";
+            }
+            if (string.IsNullOrWhiteSpace(ddl_top) || string.Equals(ddl_top, "All", StringComparison.OrdinalIgnoreCase))
+            {
+                ddl_top = "1000000";
+            }
+            int ddltop;
+            if (!int.TryParse(ddl_top, out ddltop) || ddltop <= 0)
+            {
+                ddltop = 1000000;
+            }
+            return db.DTHConnection_Report_New("Dealer", userid, ddl_status, ddltop, frm_date, to_date).ToList();
+        }
+
+        private void BindDthBookingTotals(IList<DTHConnection_Report_New_Result> rows)
+        {
+            var list = rows ?? new List<DTHConnection_Report_New_Result>();
+            Func<string, decimal> sumStatus = delegate (string key)
+            {
+                return list
+                    .Where(s => !string.IsNullOrEmpty(s.Status) && s.Status.IndexOf(key, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .Sum(s => s.Amount ?? 0);
+            };
+            ViewData["Totals"] = sumStatus("Success");
+            ViewData["Totalf"] = sumStatus("Failed");
+            ViewData["Totalp"] = sumStatus("Pending");
+            ViewBag.total = list.Sum(s => s.Amount ?? 0);
+        }
+
+        public ActionResult DthBookingReport()
+        {
+            string today = DateTime.Today.ToString("yyyy-MM-dd");
+            var ch = LoadDthBookingRows("ALL", today, today, "50");
+            BindDthBookingTotals(ch);
+            ViewBag.ddl_status = "";
             return View(ch);
         }
         [HttpPost]
         public ActionResult DthBookingReport(string ddl_top, string ddl_status, string txt_frm_date, string txt_to_date)
         {
-            var userid = User.Identity.GetUserId();
-            DateTime frm = Convert.ToDateTime(txt_frm_date);
-            DateTime to = Convert.ToDateTime(txt_to_date);
-            txt_frm_date = frm.ToString("dd-MM-yyyy");
-            txt_to_date = to.ToString("dd-MM-yyyy");
-            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
-                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime frm_date = Convert.ToDateTime(dt).Date;
-            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
-
-            if (ddl_top == "All")
-            {
-                ddl_top = "1000000";
-            }
-            if (ddl_status == "Status")
-            {
-                ddl_status = "ALL";
-            }
-            int ddltop = Convert.ToInt32(ddl_top);
-            var ch = db.DTHConnection_Report_New("Dealer", userid, ddl_status, ddltop, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
-            ViewData["totals"] = ch.Where(s => s.Status == "Success").Sum(s => Convert.ToInt32(s.Amount));
-            ViewData["Totalf"] = ch.Where(s => s.Status == "Failed").Sum(s => Convert.ToInt32(s.Amount));
+            ViewBag.chk = "post";
+            ViewBag.ddl_status = ddl_status;
+            var ch = LoadDthBookingRows(ddl_status, txt_frm_date, txt_to_date, ddl_top);
+            BindDthBookingTotals(ch);
             return View(ch);
+        }
+
+        public ActionResult ExcelDthBookingReport(string ddl_top, string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            var ch = LoadDthBookingRows(ddl_status, txt_frm_date, txt_to_date, string.IsNullOrWhiteSpace(ddl_top) ? "All" : ddl_top);
+            DataTable dt2 = new DataTable();
+            dt2.Columns.Add("Customer Id", typeof(string));
+            dt2.Columns.Add("Status", typeof(string));
+            dt2.Columns.Add("Amount", typeof(string));
+            dt2.Columns.Add("Customer Name", typeof(string));
+            dt2.Columns.Add("Customer Email", typeof(string));
+            dt2.Columns.Add("Customer Mobile", typeof(string));
+            dt2.Columns.Add("Address", typeof(string));
+            dt2.Columns.Add("DTH Title", typeof(string));
+            dt2.Columns.Add("DTH Plan", typeof(string));
+            dt2.Columns.Add("Operator Code", typeof(string));
+            dt2.Columns.Add("Operator Name", typeof(string));
+            dt2.Columns.Add("Recharge Time", typeof(string));
+            dt2.Columns.Add("Response Time", typeof(string));
+            dt2.Columns.Add("Dealer Pre", typeof(string));
+            dt2.Columns.Add("Dealer Post", typeof(string));
+            dt2.Columns.Add("Dealer Comm", typeof(string));
+
+            foreach (var item in ch)
+            {
+                var firm = !string.IsNullOrWhiteSpace(item.Frm_Name) ? item.Frm_Name : (item.Email ?? "");
+                dt2.Rows.Add(
+                    firm,
+                    item.Status ?? "",
+                    item.Amount.HasValue ? item.Amount.Value.ToString("N2") : "",
+                    item.CustomerName ?? "",
+                    item.CustomerEmail ?? "",
+                    item.CustomerMobile ?? "",
+                    item.Address ?? "",
+                    item.DTHTitle ?? "",
+                    item.Dthplanname ?? "",
+                    item.optcode ?? "",
+                    item.optname ?? "",
+                    item.Rch_time.HasValue ? item.Rch_time.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "",
+                    item.Resp_time.HasValue ? item.Resp_time.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "",
+                    item.DealerPre.HasValue ? item.DealerPre.Value.ToString("N2") : "",
+                    item.DealerPost.HasValue ? item.DealerPost.Value.ToString("N2") : "",
+                    item.Dlm_Comm.HasValue ? item.Dlm_Comm.Value.ToString("N2") : ""
+                );
+            }
+
+            var grid = new GridView();
+            grid.DataSource = dt2;
+            grid.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=DthBookingReport.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            grid.RenderControl(htw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+            return View("DthBookingReport", ch);
+        }
+
+        public ActionResult PDFDthBookingReport(string ddl_top, string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            var ch = LoadDthBookingRows(ddl_status, txt_frm_date, txt_to_date, string.IsNullOrWhiteSpace(ddl_top) ? "All" : ddl_top);
+            return new ViewAsPdf("PDFDthBookingReport", ch)
+            {
+                FileName = "DthBookingReport.pdf"
+            };
         }
 
         #endregion
@@ -12414,9 +12515,9 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                         rowdata = db.Selling_Recharge_info.Where(s => s.Rch_time > frm_date && s.Rch_time < to_date && s.Dealer_id == userid && s.optcode == Operator).ToList();
                     }
                 }
-                ViewBag.Operator = new SelectList(operator_value, "OptType", "optname");
+                ViewBag.Operator = new SelectList(operator_value, "optname", "optname", Operator);
                 ViewBag.chk = "post";
-                return PartialView("_sellRechargeReport", rowdata);
+                return View(rowdata);
             }
             else
             {

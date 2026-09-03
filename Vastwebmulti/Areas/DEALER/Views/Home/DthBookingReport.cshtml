@@ -1,488 +1,463 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.DTHConnection_Report_New_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "DthBookingReport";
+    ViewBag.Title = "DTH Booking Report";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var selectedStatus = (Request["ddl_status"] ?? ViewBag.ddl_status as string ?? "").Trim();
+    if (selectedStatus == "Status" || selectedStatus == "ALL") { selectedStatus = ""; }
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.DTHConnection_Report_New_Result>();
+
+    var totalAmount = ViewBag.total != null ? Convert.ToDecimal(ViewBag.total) : 0m;
+    var totalSuccess = ViewData["Totals"] != null ? Convert.ToDecimal(ViewData["Totals"]) : 0m;
+    var totalFailed = ViewData["Totalf"] != null ? Convert.ToDecimal(ViewData["Totalf"]) : 0m;
+    var totalPending = ViewData["Totalp"] != null ? Convert.ToDecimal(ViewData["Totalp"]) : 0m;
 }
-<style>
-    .dropdown-menu {
-        margin-top:75px !important;
-    }
 
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-    .content.dthbooking-reportclass .table-responsive {z-index: 9;}
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
 
-    @@media screen and (max-width:992px){
-        .dthbooking-reportclass .col-md-2.dth-select-report {float: left;width: 20%;}
-        .dthbooking-reportclass .col-md-4.dth-date-report {float: left;width: 38%;}
-        .dthbooking-reportclass .col-md-1 {width: 10%;float: left;padding-right: 0;}
-    }
-    @@media screen and (max-width:768px){
-        .table-responsive {border: 0;}
-        .content.dthbooking-reportclass input, .content.dthbooking-reportclass .select2 span, .content.dthbooking-reportclass button span, .content.dthbooking-reportclass a, .content.dthbooking-reportclass button {
-    font-size: 12px !important;}
-        .col-md-5.dth-buttonpdfexl .dt-buttons {padding-right: 0;}
-        .modal-dialog-fullheight .modal-content .modal-body {height: auto;}
-        #m-d-fund-transfer .modal-dialog.modal-dialog-reportclass.modal-dialog-fullheight {width: 100%;float: left;}
-        .dthbooking-reportclass .table-responsive{position:relative !important;z-index:9;}
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
-    }
-    @@media screen and (max-width:520px) {
-        .dthbooking-reportclass .col-md-2.only-select-css.dth-select-report {
-            width: 23%;
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        @{
+            var dthFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "dthBookingReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
+        @using (Html.BeginForm("DthBookingReport", "Home", FormMethod.Post, dthFormAttrs))
+        {
+            <input type="hidden" name="ddl_top" value="All" />
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-        .dthbooking-reportclass .dth-date-report .custom-date-icon {
-            display: none;
-        }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-        .dthbooking-reportclass .dth-date-report input {
-            padding-left: 2px;
-            padding-right: 2px;
-            text-align: center;
-        }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Prepaid &amp; Utilities</li>
+                        <li>DTH Booking Report</li>
+                    </ol>
 
-        .dthbooking-reportclass .dth-date-report {
-            width: 55% !important;
-        }
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
 
-        .dthbooking-reportclass .col-md-1 {
-            width: 20%;
-            float: left;
-        }
-
-        .dthbooking-reportclass .dth-buttonpdfexl .dt-buttons {
-            padding: 0;
-        }
-
-        .dthbooking-reportclass .dth-buttonpdfexl {
-            margin-top: 10px;
-            float: right;
-        }
-    }
-
-    @@media screen and (max-width:580px){
-        .dthbooking-reportclass .col-md-1 button span {font-size: 0 !important;}
-        .dthbooking-reportclass .col-md-1 button span .fa.fa-search {display: inline-block !important;top: 1px !important;color: #555 !important;}
-        .dthbooking-reportclass .col-md-1 {width: 11%;float: left;}
-        .dthbooking-reportclass .col-md-1 button{padding-left:0;padding-right:0;}
-        .dthbooking-reportclass .col-md-2.only-select-css.dth-select-report {width: 30%;}
-    }
-
-</style>
-<section class="content dthbooking-reportclass">
-    <div class="container-fluid full-dealer-secondanimation">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Prepaid & Utilities</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);">Account Active 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);">Prepaid & Utilities</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card card-dth-report">
-
-                    <div class="row">
-                        @using (Html.BeginForm("DthBookingReport", "Home", FormMethod.Post))
-                        {
-                            <div class="col-md-2 only-select-css dth-select-report" style="padding-right: 5px; ">
-                                <div class="form-line" style="width:100%;padding-bottom:10px;">
-                                    @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                        {
-                                new SelectListItem{ Text="Status",Value="Status",},
-                                new SelectListItem{Text="Success",Value="Success"},
-                                new SelectListItem{Text="Failed",Value="Failed"},
-                                 new SelectListItem{Text="Pending",Value="Pending"},
-                                }, new { @class = "selectpicker form-control for-select2", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;height:32px;" })
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 dth-date-report" style="padding:0px;">
-                                <div class="form-group for-web-date" style="margin-bottom:0px;width:100%;">
-                                    <div>
-                                        <div class="input-daterange input-group">
-                                            <div class="all-report-inputclass all-report-inputclass-left">
-                                                <div class="custom-date-icon" style="height: 32px;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;height:32px;", autocomplete = "off" })
-                                            </div>
-                                            @*<span class="input-group-addon">
-                                                <i class="fa fa-exchange"></i>
-                                            </span>*@
-                                            <div class="all-report-inputclass all-report-inputclass-right">
-                                                <div class="custom-date-icon" style="height: 32px;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;height:32px;", autocomplete = "off" })
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <!-- /.input group -->
-                                </div>
-                            </div>
-
-                            <div class="col-md-1" style="padding-left:5px;">
-                                <center>
-                                    <button type="submit" class="btn" style="width:100%;  height:32px;border:1px solid #c7c2c2;background:#f5f5f5;">
-
-                                        <span style="top:-2px;color:black;"><i class="fa fa-search" style="top:0px;font-size:13px;color:#444;left:-4px;"></i>Search</span>
-                                    </button>
-                                </center>
-                            </div>
-                        }
-                        <div class="col-md-5 dth-buttonpdfexl" style="width:auto;float:right;">
-
-
-                            <button class="white-success-button" style="margin-left:4px;background:#eeebeb;">Total</button>
-                            <div class="white-success" style="display:none;width: 192px;right: 15px">
-                                <button type="button" class="btn btn-default waves-effect" style="margin-top:2px;" title="Total  Success"><img src="~/ashok-images/correct.svg" style="width: 19px;background: green;border-radius: 50%;padding: 3px;" />&nbsp;@ViewData["Totals"]</button>
-                                <button type="button" class="btn btn-default waves-effect" style="margin-top:2px;" title="Total  Failed"><img src="~/ashok-images/closes.svg" style="width: 19px;background: red;border-radius: 50%;padding: 3px;" />&nbsp;@ViewData["Totalf"]</button>
-                                <button type="button" class="btn btn-default waves-effect" style="margin-top:2px;" title="Total  Pending"><img src="~/ashok-images/clock.svg" style="width: 20px;" />&nbsp;@ViewData["Totalp"]</button>
-
-                            </div>
-                            <div class="web-white-filter fil" style="float: left;margin-right: 0px;margin-top:0px;">
-                                <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                                <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                            </div>
-                            <div class="web-white-filter" style="float:right;">
-                                <table class="dataTable js-exportable ">
-                                    <thead>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="vm-opr-field vm-dmt-field vm-radiant-field--status">
+                            @Html.DropDownList("ddl_status", new SelectList(new[]
+                            {
+                                new SelectListItem { Text = "All Status", Value = "" },
+                                new SelectListItem { Text = "Pending", Value = "Pending" },
+                                new SelectListItem { Text = "Success", Value = "Success" },
+                                new SelectListItem { Text = "Failed", Value = "Failed" }
+                            }, "Value", "Text", selectedStatus), new { id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control", @title = "Status", data_live_search = "true" })
                         </div>
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
                     </div>
 
                 </div>
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:0px;">
-                <div class="card all-reporttable-css">
 
-                    <div>
-                        <div class="table-responsive tableseconddes-dealer" style="position:inherit;">
-                            <table class="table table-bordered table-striped table-hover " style="width:100%; font-size:12px;">
-                                <thead style="background-color:transparent;">
-                                    <tr>
-                                        <th>Customer&nbsp;Id</th>
-                                        <th>Status</th>
-                                        <th>Amount</th>
-                                        <th>Customer&nbsp;Name</th>
-                                        <th>Customer&nbsp;Email</th>
-                                        <th>Customer&nbsp;Mobile</th>
-                                        <th>Address</th>
-                                        <th>DTH&nbsp;Title</th>
-                                        <th>Dth&nbsp;Plan&nbsp;Name</th>
-                                        @*<th>Operator&nbsp;Code</th>
-                                        <th>Operator&nbsp;Name</th>
-                                        <th>Rch_time</th>
-                                        <th>Resp_time</th>
-                                        <th>Dth&nbsp;Box&nbsp;Type</th>
-                                        <th>Dth&nbsp;Box&nbsp;Type&nbsp;Name</th>*@
-                                        <th>Dealer&nbsp;Pre</th>
-                                        <th>Dealer&nbsp;Post</th>
-                                        <th>Dealer&nbsp;Comm</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (Model != null)
-                                    {
-                                        foreach (var item in Model)
-                                        {
-                                            var color = "";
-                                            var sts = "";
-                                            var fontweight = "";
-                                            if (item.Status.Contains("Success"))
-                                            {
-                                                color = "green";
-                                                fontweight = "700";
-                                                sts = item.Status;
-
-                                            }
-                                            if (item.Status.Contains("Refund"))
-                                            {
-                                                color = "red";
-                                                fontweight = "700";
-                                                sts = item.Status;
-                                            }
-                                            if (item.Status.Contains("Failed"))
-                                            {
-                                                color = "red";
-                                                fontweight = "700";
-                                                sts = item.Status;
-                                            }
-                                            if (item.Status.Contains("Pending"))
-                                            {
-                                                color = "#ff9600";
-                                                fontweight = "700";
-                                                sts = item.Status;
-
-                                            }
-                                            <tr>
-                                                <td>
-                                                    @if (item.Frm_Name != null)
-                                                    {
-                                                        <p>@item.Frm_Name</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p>@item.Email</p>
-                                                    }
-                                                </td>
-                                                <td><p style="font-size:13px;text-transform:uppercase;"><span style="color:@color;">@sts</span>&nbsp;</p></td>
-                                                <td>@item.Amount</td>
-                                                <td>@item.CustomerName</td>
-                                                <td>@item.CustomerEmail</td>
-                                                <td>@item.CustomerMobile</td>
-                                                <td>@item.Address</td>
-                                                <td>@item.DTHTitle</td>
-                                                <td>@item.Dthplanname</td>
-                                                <td>@item.optcode</td>
-                                                <td>@item.optname</td>
-                                                <td>@item.Rch_time</td>
-                                                <td>@item.Resp_time</td>
-                                                <td>@item.DthBoxtype</td>
-                                                <td>@item.DthBoxtypename</td>
-                                                <td>@item.DealerPre</td>
-                                                <td>@item.DealerPost</td>
-                                                <td>@item.Dlm_Comm</td>
-
-                                            </tr>
-                                        }
-                                    }
-                                    <tr class="tdimgmodalclass">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        @*<td>erty</td>
-                                        <td>ertyrt</td>
-                                        <td>dfghrty</td>
-                                        <td>werty</td>
-                                        <td>34556</td>
-                                        <td>456y</td>*@
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><span></span>&nbsp;<img class="img-sateallpagemodal" src="~/ashok-images/rightaeps.svg" data-toggle="modal" data-target="#m-d-fund-transfer" style="width: 11px;margin-top: 3px;float: right;" /></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="dthBookingTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>DTH booking totals</span>
                         </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideDthBookingTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Amount</span>
+                            <strong class="vm-opr-total-card__value" id="dthTotalAmount">@totalAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value" id="dthSuccessAmount">@totalSuccess.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value" id="dthFailedAmount">@totalFailed.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="dthPendingAmount">@totalPending.ToString("N2")</strong>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-satellite-dish" aria-hidden="true"></i>
+                        <span>DTH booking report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-inline-total" title="Total amount for current filter">
+                            Total: <strong>&#8377; @totalAmount.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-dth-totals-btn" onclick="toggleDthBookingTotals()" title="Show totals" aria-expanded="false" aria-controls="dthBookingTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnDthExcel" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnDthPdf" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="dthBookingReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Customer&nbsp;Id</th>
+                                    <th>Status</th>
+                                    <th>Amount&nbsp;&#8377;</th>
+                                    <th>Customer&nbsp;Name</th>
+                                    <th>Customer&nbsp;Email</th>
+                                    <th>Customer&nbsp;Mobile</th>
+                                    <th>Address</th>
+                                    <th>DTH&nbsp;Title</th>
+                                    <th>DTH&nbsp;Plan</th>
+                                    <th>Dealer&nbsp;Pre</th>
+                                    <th>Dealer&nbsp;Post</th>
+                                    <th>Dealer&nbsp;Comm</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.Partial("_DthBookingReportRows", reports)
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
-
-<!-- model for table -->
-<div class="modal fund-tr-history in" id="m-d-fund-transfer" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-reportclass modal-dialog-fullheight" role="document" style="margin:0px;float:right;">
-
-        <div class="modal-content width100 float-left">
-            <div class="modal-header width100 float-left dealer-pop-head">
-
-                <h5>Prepaid &&nbsp;Utilities</h5>
-
-
-                <button type="button" class="btn waves-effect " data-dismiss="modal" style="float:right;border:0px;color:var(--main-bg-lcolor);padding:0px; height:auto;background:transparent;">
-                    <i class="fa fa-times" aria-hidden="true"></i>
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-dmt-detail-modal vm-dth-detail-modal" id="dthBookingDetailModal" tabindex="-1" role="dialog" aria-labelledby="dthBookingDetailTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-violet">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-satellite-dish" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title" id="dthBookingDetailTitle">Booking details</h4>
+                        <span class="saas-admin-modal-subtitle" id="dthDetSubtitle">DTH booking information</span>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times" aria-hidden="true"></i>
                 </button>
-
-
-            </div><!--.modal-header-->
-            <div class="modal-body width100 float-left dealer-pop-body">
-                <div class="float-left width100">
-                    <form class="first-form">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                <div class="form-group">
-                                    <label> Firm Name</label>
-
-                                    <input class="form-control" readonly="readonly" required="required" type="text" value="">
-
-                                </div>
-                            </div>
-
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                <div class="form-group">
-                                    <label>Retailer Name</label>
-
-                                    <input class="form-control" readonly="readonly" required="required" type="text" value="">
-
-                                </div>
-                            </div>
-
-                        </div><!--.row-->
-
-
-
-
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Recharge No</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Amount</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Operator</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Operator Type</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-
-
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Distributor Income</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Retailer Income</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase;" type="text" value="">
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Recharge Type</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Operator ID</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                    </form>
-                </div><!--.modal-body-->
             </div>
-
+            <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-dmt-modal-body">
+                <div class="vm-dmt-modal-grid vm-dmt-modal-grid--2 vm-dth-detail-grid">
+                    <div class="vm-dmt-modal-field vm-dth-detail-span-2">
+                        <label>Firm / Customer Id</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetFirm">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Retailer Name</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetRetailer">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Status</label>
+                        <div class="vm-dmt-modal-readonly vm-dth-detail-status" id="dthDetStatus">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Customer Name</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetCustomer">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Amount</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetAmount">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Email</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetEmail">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Mobile</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetMobile">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-dth-detail-span-2">
+                        <label>Address</label>
+                        <div class="vm-dmt-modal-readonly vm-dth-detail-multiline" id="dthDetAddress">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>DTH Title</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetTitle">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Plan</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetPlan">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Operator Code</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetOptCode">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Operator Name</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetOptName">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Recharge Time</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetRch">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Response Time</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetResp">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Box Type</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetBox">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Box Type Name</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetBoxName">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Dealer Pre</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetPre">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Dealer Post</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetPost">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Dealer Comm</label>
+                        <div class="vm-dmt-modal-readonly" id="dthDetComm">—</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                    <i class="fas fa-times" aria-hidden="true"></i> Close
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
-
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
-    $('.for-select2').select2();
+    window.dthBookingExcelUrl = '@Url.Action("ExcelDthBookingReport", "Home")';
+    window.dthBookingPdfUrl = '@Url.Action("PDFDthBookingReport", "Home")';
+    window.dthSelect2Url = '@Url.Content("~/MainFrontDesign/select2/dist/js/select2.full.min.js")';
 
+    function dthBookingQuery() {
+        var $ = window.jQuery;
+        return 'txt_frm_date=' + encodeURIComponent($('#txt_frm_date').val() || '')
+            + '&txt_to_date=' + encodeURIComponent($('#txt_to_date').val() || '')
+            + '&ddl_status=' + encodeURIComponent($('#ddl_status').val() || '')
+            + '&ddl_top=All';
+    }
 
-</script>
-
-
-<script>
-    $(document).ready(function()
-    {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+    function toggleDthBookingTotals() {
+        var $ = window.jQuery;
+        var panel = $('#dthBookingTotalsPanel');
+        var btn = $('.vm-dth-totals-btn');
+        if (panel.is(':visible')) {
+            hideDthBookingTotals();
+            return;
         }
-        answers();
-    });
-</script>
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        btn.attr('aria-expanded', 'true');
+    }
 
-<script>
-    $('.white-success-button').click(function () {
-        $('.white-success').toggle();
-    });
-</script>
+    function hideDthBookingTotals() {
+        var $ = window.jQuery;
+        $('#dthBookingTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-dth-totals-btn').attr('aria-expanded', 'false');
+    }
 
-<script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('.sidebar-dealer-responshive ul li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('active');
+    function dthLoadScript(src, done) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = done;
+        s.onerror = done;
+        document.body.appendChild(s);
+    }
 
+    function dthDetailText(btn, name) {
+        var value = (btn && btn.getAttribute('data-' + name)) || '';
+        value = String(value).replace(/\s+/g, ' ').trim();
+        return value || '—';
+    }
 
+    function dthSetDetail(id, value) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.textContent = value;
+        }
+    }
+
+    function dthStatusTone(status) {
+        var raw = (status || '').toLowerCase();
+        if (raw.indexOf('fail') >= 0 || raw.indexOf('refund') >= 0) {
+            return 'failed';
+        }
+        if (raw.indexOf('success') >= 0) {
+            return 'success';
+        }
+        return 'pending';
+    }
+
+    function openDthBookingDetail(btn) {
+        var firm = dthDetailText(btn, 'firm');
+        var status = dthDetailText(btn, 'status');
+        var amount = dthDetailText(btn, 'amount');
+        dthSetDetail('dthDetSubtitle', firm === '—' ? 'DTH booking information' : firm);
+        dthSetDetail('dthDetFirm', firm);
+        dthSetDetail('dthDetRetailer', dthDetailText(btn, 'retailer'));
+        dthSetDetail('dthDetStatus', status);
+        dthSetDetail('dthDetCustomer', dthDetailText(btn, 'customer'));
+        dthSetDetail('dthDetAmount', amount === '—' ? '—' : ('₹ ' + amount));
+        dthSetDetail('dthDetEmail', dthDetailText(btn, 'email'));
+        dthSetDetail('dthDetMobile', dthDetailText(btn, 'mobile'));
+        dthSetDetail('dthDetAddress', dthDetailText(btn, 'address'));
+        dthSetDetail('dthDetTitle', dthDetailText(btn, 'title'));
+        dthSetDetail('dthDetPlan', dthDetailText(btn, 'plan'));
+        dthSetDetail('dthDetOptCode', dthDetailText(btn, 'optcode'));
+        dthSetDetail('dthDetOptName', dthDetailText(btn, 'optname'));
+        dthSetDetail('dthDetRch', dthDetailText(btn, 'rch'));
+        dthSetDetail('dthDetResp', dthDetailText(btn, 'resp'));
+        dthSetDetail('dthDetBox', dthDetailText(btn, 'box'));
+        dthSetDetail('dthDetBoxName', dthDetailText(btn, 'boxname'));
+        dthSetDetail('dthDetPre', dthDetailText(btn, 'pre'));
+        dthSetDetail('dthDetPost', dthDetailText(btn, 'post'));
+        dthSetDetail('dthDetComm', dthDetailText(btn, 'comm'));
+
+        var statusEl = document.getElementById('dthDetStatus');
+        if (statusEl) {
+            statusEl.className = 'vm-dmt-modal-readonly vm-dth-detail-status vm-dth-detail-status--' + dthStatusTone(status);
+        }
+
+        if (typeof window.showAdminModal === 'function') {
+            window.showAdminModal('#dthBookingDetailModal');
+            return;
+        }
+        var $ = window.jQuery;
+        var $modal = $('#dthBookingDetailModal');
+        if ($modal.parent().length && !$modal.parent().is('body')) {
+            $modal.appendTo(document.body);
+        }
+        if ($ && $.fn && $.fn.modal) {
+            $modal.modal('show');
+        }
+    }
+
+    function bindDthDetailModal() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.modal) {
+            window.setTimeout(bindDthDetailModal, 40);
+            return;
+        }
+        $(document).off('click.dthDetail', '.vm-dth-detail-btn').on('click.dthDetail', '.vm-dth-detail-btn', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openDthBookingDetail(this);
+        });
+    }
+    bindDthDetailModal();
+
+    function bootDthBookingReport() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.datepicker) {
+            window.setTimeout(bootDthBookingReport, 50);
+            return;
+        }
+
+        function afterPlugins() {
+            if ($.fn.select2 && !$('#ddl_status').hasClass('select2-hidden-accessible')) {
+                $('#ddl_status').select2({
+                    width: '100%',
+                    minimumResultsForSearch: 0
+                });
             }
-        })
-    });
+
+            $('#btnDthExcel').off('click.dthEx').on('click.dthEx', function () {
+                window.location.href = window.dthBookingExcelUrl + '?' + dthBookingQuery();
+            });
+            $('#btnDthPdf').off('click.dthPdf').on('click.dthPdf', function () {
+                window.open(window.dthBookingPdfUrl + '?' + dthBookingQuery(), '_blank');
+            });
+
+            if (typeof window.initAdminReportDateForm === 'function') {
+                window.initAdminReportDateForm('#dthBookingReportForm');
+            } else {
+                $('#txt_frm_date, #txt_to_date').datepicker({
+                    format: 'yyyy-mm-dd',
+                    todayHighlight: true,
+                    autoclose: true,
+                    orientation: 'bottom auto'
+                });
+                if ($('#dthBookingReportForm').attr('data-date-mode') !== 'post') {
+                    $('#txt_frm_date').datepicker('setDate', new Date());
+                    $('#txt_to_date').datepicker('setDate', new Date());
+                }
+            }
+        }
+
+        if ($.fn.select2) {
+            afterPlugins();
+            return;
+        }
+        dthLoadScript(window.dthSelect2Url, afterPlugins);
+    }
+
+    if (document.readyState === 'complete') {
+        bootDthBookingReport();
+    } else {
+        window.addEventListener('load', bootDthBookingReport);
+    }
 </script>

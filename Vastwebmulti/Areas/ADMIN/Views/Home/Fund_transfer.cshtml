@@ -2488,6 +2488,55 @@
 </script>
 
 <script>
+    function fillFundTransferLinkedField(selectEl) {
+        var map = {
+            bankid: 'txtsupraccno',
+            ddlsuprwalletname: 'txtsuprwalletno',
+            DISTRIbankid: 'txtDISTACCOUNTNO',
+            ddlDISTwalletname: 'txtDISTWALLETNO',
+            RETRIbankid: 'txtRETACCOUNTNO',
+            ddlRETwalletname: 'txtRETWALLETNO',
+            APIRIbankid: 'txtAPIACCOUNTNO',
+            ddlAPIwalletname: 'txtAPIWALLETNO',
+            WLRIbankid: 'txtWLACCOUNTNO',
+            ddlWLwalletname: 'txtWLWALLETNO'
+        };
+        if (!selectEl || !selectEl.id || !map[selectEl.id]) {
+            return;
+        }
+        var input = document.getElementById(map[selectEl.id]);
+        if (!input) {
+            return;
+        }
+        var val = (selectEl.value || '').trim();
+        if (!val || val === '0' || val.toLowerCase().indexOf('select') >= 0) {
+            input.value = '';
+            return;
+        }
+        input.value = val;
+        if (window.jQuery) {
+            window.jQuery(input).trigger('input').trigger('change');
+        }
+    }
+
+    window.fillFundTransferLinkedField = fillFundTransferLinkedField;
+
+    function bindFundTransferBankAutoFill() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn) {
+            window.setTimeout(bindFundTransferBankAutoFill, 50);
+            return;
+        }
+        var selector = '#bankid, #ddlsuprwalletname, #DISTRIbankid, #ddlDISTwalletname, #RETRIbankid, #ddlRETwalletname, #APIRIbankid, #ddlAPIwalletname, #WLRIbankid, #ddlWLwalletname';
+        $(document)
+            .off('change.ftBankFill select2:select.ftBankFill', selector)
+            .on('change.ftBankFill select2:select.ftBankFill', selector, function () {
+                fillFundTransferLinkedField(this);
+            });
+    }
+
+    window.bindFundTransferBankAutoFill = bindFundTransferBankAutoFill;
+
     function destroyFundTransferSelect2($el) {
         if (!$el || !$el.length) {
             return;
@@ -2547,6 +2596,7 @@
                     inputTooShort: function () { return 'Type to search...'; }
                 }
             });
+            fillFundTransferLinkedField(this);
         });
     }
 
@@ -2703,6 +2753,9 @@
                 var $pane = $(this).closest('.tab-pane');
                 window.setTimeout(function () {
                     refreshFundTransferSelect2($pane.length ? $pane : null);
+                    if (typeof window.bindFundTransferBankAutoFill === 'function') {
+                        window.bindFundTransferBankAutoFill();
+                    }
                 }, 0);
                 return result;
             };
@@ -2713,6 +2766,9 @@
 
     $(function () {
         wrapFundTransferModeHandlers();
+        if (typeof window.bindFundTransferBankAutoFill === 'function') {
+            window.bindFundTransferBankAutoFill();
+        }
     });
 </script>
 <script>
@@ -3671,6 +3727,30 @@
 
 
 
+</script>
+<script>
+    (function () {
+        function startFundTransferBankAutoFill() {
+            if (typeof window.bindFundTransferBankAutoFill === 'function') {
+                window.bindFundTransferBankAutoFill();
+            }
+        }
+        startFundTransferBankAutoFill();
+        window.addEventListener('load', function () {
+            startFundTransferBankAutoFill();
+            window.setTimeout(startFundTransferBankAutoFill, 200);
+            window.setTimeout(startFundTransferBankAutoFill, 700);
+        });
+        document.addEventListener('change', function (e) {
+            var t = e.target;
+            if (!t || !t.id) {
+                return;
+            }
+            if (typeof window.fillFundTransferLinkedField === 'function') {
+                window.fillFundTransferLinkedField(t);
+            }
+        }, true);
+    })();
 </script>
 
 

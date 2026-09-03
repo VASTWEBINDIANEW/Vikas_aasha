@@ -37,6 +37,53 @@
             var $topMenuBtn = $("#admin-topmenu-open");
             var topMenuMoved = false;
 
+            function destroyLegacySidebarSlimScroll() {
+                if (typeof jQuery === "undefined" || !jQuery.fn.slimscroll) {
+                    return;
+                }
+                var $side = jQuery("#leftsidebar.admin-sidebar-shell");
+                if (!$side.length) {
+                    return;
+                }
+                $side.find(".admin-sidebar-list, .list").each(function () {
+                    var $list = jQuery(this);
+                    try { $list.slimscroll({ destroy: true }); } catch (e) { }
+                    $list.css({ height: "auto", overflow: "visible", maxHeight: "none" });
+                });
+                $side.find(".slimScrollBar, .slimScrollRail").remove();
+                $side.find(".slimScrollDiv").each(function () {
+                    var wrap = this;
+                    var list = wrap.querySelector(".admin-sidebar-list, .list");
+                    if (list && wrap.parentNode) {
+                        wrap.parentNode.insertBefore(list, wrap);
+                        wrap.parentNode.removeChild(wrap);
+                    }
+                });
+            }
+
+            function syncAdminSidebarScroll() {
+                var sidebar = document.getElementById("leftsidebar");
+                if (!sidebar || !sidebar.classList.contains("admin-sidebar-shell")) {
+                    return;
+                }
+                destroyLegacySidebarSlimScroll();
+                var scrollWrap = document.getElementById("admin-sidebar-scroll");
+                var nav = document.getElementById("custnav");
+                if (!scrollWrap || !nav) {
+                    return;
+                }
+                nav.style.removeProperty("height");
+                nav.style.removeProperty("max-height");
+                scrollWrap.style.removeProperty("height");
+                scrollWrap.style.removeProperty("max-height");
+                scrollWrap.style.setProperty("overflow-y", "auto", "important");
+                scrollWrap.style.setProperty("overflow-x", "hidden", "important");
+                scrollWrap.style.setProperty("flex", "1 1 0", "important");
+                scrollWrap.style.setProperty("min-height", "0", "important");
+            }
+
+            window.syncAdminSidebarScroll = syncAdminSidebarScroll;
+
             function isMobileLayout() {
                 return window.matchMedia("(max-width: 1199px)").matches;
             }
@@ -217,6 +264,7 @@
                     closeAdminTopMenu();
                 }
                 syncTopMenuPanelState();
+                syncAdminSidebarScroll();
             });
 
             window.syncAdminTopMenuPanel = syncTopMenuPanelState;
@@ -235,7 +283,9 @@
                 }
 
                 syncTopMenuPanelState();
+                syncAdminSidebarScroll();
             });
+            $(window).on("load", syncAdminSidebarScroll);
         })();
     </script>
     <script src="~/MainFrontDesign/js/saas-admin-modernizer.js"></script>
@@ -432,18 +482,39 @@
 
                     if (isOpen) {
                         $group.removeClass("admin-sidebar-open");
-                        $submenu.slideUp(260);
+                        $submenu.slideUp(260, function () {
+                            if (window.syncAdminSidebarScroll) {
+                                window.syncAdminSidebarScroll();
+                            }
+                        });
                         $trigger.attr("aria-expanded", "false");
                     } else {
                         $group.addClass("admin-sidebar-open");
-                        $submenu.slideDown(260);
+                        $submenu.slideDown(260, function () {
+                            if (window.syncAdminSidebarScroll) {
+                                window.syncAdminSidebarScroll();
+                            }
+                        });
                         $trigger.attr("aria-expanded", "true");
+                    }
+                    if (window.syncAdminSidebarScroll) {
+                        window.syncAdminSidebarScroll();
                     }
                 });
             }
 
             $(initAdminSidebarAccordion);
             $(window).on("load", initAdminSidebarAccordion);
+            $(function () {
+                if (window.syncAdminSidebarScroll) {
+                    window.syncAdminSidebarScroll();
+                }
+            });
+            $(window).on("resize.adminSidebarScroll", function () {
+                if (window.syncAdminSidebarScroll) {
+                    window.syncAdminSidebarScroll();
+                }
+            });
         })(jQuery);
     </script>
 
@@ -495,4 +566,36 @@
         })(jQuery);
     </script>
 
+    <script src="~/select2/dist/js/select2.js"></script>
+    <script src="~/MainFrontDesign/js/admin-select2-global.js?v=18"></script>
+    <script src="~/MainFrontDesign/js/admin-report-select2.js?v=6"></script>
+    <script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
+    <script>
+        (function ($) {
+            'use strict';
+            if (!$ || typeof window.finalizeAdminSelect2Boot !== 'function') {
+                return;
+            }
+            window.finalizeAdminSelect2Boot();
+            $(window).on('load', function () {
+                window.finalizeAdminSelect2Boot();
+            });
+        })(window.jQuery);
+    </script>
+    <script>
+        (function ($) {
+            if (!$) { return; }
+            $(document).on('select2:open.dealerAlwaysSearch', function () {
+                var $wrap = $('.select2-container--open .select2-search--dropdown');
+                $wrap.removeClass('select2-search--hide').css('display', 'block');
+                var $field = $wrap.find('.select2-search__field');
+                if ($field.length) {
+                    if (!$field.attr('placeholder')) {
+                        $field.attr('placeholder', 'Search');
+                    }
+                    window.setTimeout(function () { $field.trigger('focus'); }, 0);
+                }
+            });
+        })(window.jQuery);
+    </script>
     <script src="~/MainFrontDesign/js/admin-dynamic-theme.js?v=11"></script>

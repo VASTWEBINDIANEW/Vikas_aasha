@@ -255,6 +255,7 @@
     <section>
         <!-- Left Sidebar -->
         <aside id="leftsidebar" class="sidebar admin-sidebar-shell" aria-label="Dealer navigation">
+            <div class="admin-sidebar-scroll" id="admin-sidebar-scroll">
             <div class="menu admin-sidebar-nav saas-admin-sidebar" id="custnav">
                 <div class="admin-sidebar-mobile-head">
                     <div class="admin-sidebar-mobile-brand">
@@ -267,11 +268,23 @@
                 </div>
                 @Html.Partial("_DealerSidebarNav")
             </div>
+            </div>
+
+            <div class="legal admin-sidebar-legal">
+                <div class="copyright">
+                    Copyright 2019 - <span>@DateTime.Now.Year</span>
+                </div>
+                <div class="copyright">
+                    <a href="javascript:void(0);" class="tmw-total-color-one">@ViewBag.companyname</a>
+                </div>
+            </div>
         </aside>
 
     </section>
 
     @RenderBody()
+    <link href="~/MainFrontDesign/css/dealer-panel-fonts.css?v=13" rel="stylesheet" />
+    @RenderSection("LateCss", required: false)
 
     <!-- Jquery Core Js -->
     <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>

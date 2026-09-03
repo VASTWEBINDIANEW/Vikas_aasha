@@ -48,46 +48,83 @@
         #leftsidebar.admin-sidebar-shell {
             width: var(--admin-sidebar-width, 200px);
             position: fixed;
-            top: 72px;
+            top: var(--admin-header-height, 72px);
             left: 0;
             bottom: 0;
+            height: auto;
             z-index: 1040;
-            display: flex;
-            flex-direction: column;
+            display: flex !important;
+            flex-direction: column !important;
             background: var(--vm-admin-sidebar-bg, #0b1220) !important;
             background-image: var(--vm-admin-sidebar-bg, #0b1220) !important;
             border-right: 1px solid rgba(148, 163, 184, 0.12);
             box-shadow: 12px 0 36px rgba(2, 6, 23, 0.25);
-            overflow: hidden;
+            overflow: hidden !important;
         }
 
-        #leftsidebar.admin-sidebar-shell .admin-sidebar-nav {
-            flex: 1 1 auto;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-            padding: 0;
-            overflow: hidden;
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll {
+            flex: 1 1 0 !important;
+            min-height: 0 !important;
+            width: 100%;
+            box-sizing: border-box;
+            padding-bottom: 20px !important;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 163, 184, 0.42) transparent;
+        }
+
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.42);
+            border-radius: 3px;
+        }
+
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.62);
+        }
+
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-track,
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll > .admin-sidebar-nav,
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll > #custnav {
+            position: static !important;
+            display: block !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 0 24px 0 !important;
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+            box-sizing: border-box;
         }
 
         #leftsidebar.admin-sidebar-shell .admin-sidebar-list {
-            flex: 1 1 auto;
+            display: block !important;
+            flex: none;
             margin: 0;
-            padding: 10px 8px 10px;
+            padding: 10px 8px 16px;
             list-style: none;
-            overflow-y: auto;
-            overflow-x: hidden;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+            overflow: visible !important;
+            height: auto !important;
+            max-height: none !important;
         }
 
-        #leftsidebar.admin-sidebar-shell .admin-sidebar-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        #leftsidebar.admin-sidebar-shell .admin-sidebar-list::-webkit-scrollbar-thumb {
-            background: rgba(148, 163, 184, 0.35);
-            border-radius: 999px;
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-scroll-spacer {
+            display: block;
+            height: 8px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            pointer-events: none;
         }
 
         #leftsidebar.admin-sidebar-shell .admin-sidebar-item {
@@ -262,8 +299,15 @@
             line-height: 1.35;
         }
 
-        #leftsidebar.admin-sidebar-shell .admin-sidebar-legal {
-            flex-shrink: 0;
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-legal,
+        #leftsidebar.admin-sidebar-shell > .admin-sidebar-legal {
+            flex: 0 0 auto !important;
+            position: relative !important;
+            top: auto !important;
+            bottom: auto !important;
+            z-index: 2 !important;
+            width: 100%;
+            box-sizing: border-box;
             padding: 10px 12px 12px;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             background: #000000 !important;
@@ -707,13 +751,53 @@
             }
         }
     </style>
-    <link href="~/MainFrontDesign/css/admin-layout-mobile.css" rel="stylesheet" />
-    <link href="~/MainFrontDesign/css/admin-modal-fix.css" rel="stylesheet" />
-    <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+    <link href="~/select2/dist/css/select2.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-select2-global.css?v=13" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-datatables-sort-fix.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/Bootstrap5/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-layout-mobile.css?v=16" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-modal-fix.css?v=5" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-modal-modern.css?v=29" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-renewal-modal.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-account-page-modern.css?v=split5" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-report-page-responsive.css?v=2" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
-    <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-dynamic-theme.css?v=11" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/dealer-topbar-modern.css?v=3" rel="stylesheet" />
+    <style>
+        /* Match ADMIN: copyright stays pinned under the scrollable menu */
+        body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-scroll {
+            flex: 1 1 0 !important;
+            min-height: 0 !important;
+            overflow-y: auto !important;
+        }
+
+        body.saas-admin-ui #leftsidebar.admin-sidebar-shell > .admin-sidebar-legal {
+            flex: 0 0 auto !important;
+            position: relative !important;
+            top: auto !important;
+            bottom: auto !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 10px 12px 12px !important;
+            background: #000000 !important;
+            background-image: none !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+            text-align: center;
+            z-index: 2 !important;
+        }
+
+        body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-list {
+            padding-bottom: 16px !important;
+        }
+
+        body.saas-admin-ui #leftsidebar.admin-sidebar-shell .admin-sidebar-scroll-spacer {
+            height: 8px !important;
+        }
+    </style>

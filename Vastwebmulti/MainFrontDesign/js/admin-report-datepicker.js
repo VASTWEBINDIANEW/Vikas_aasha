@@ -20,30 +20,89 @@
         return window.matchMedia("(max-width: 991px)").matches;
     }
 
-    function repositionDatepickerForMobile() {
+    var lastDateInputEl = null;
+
+    function pinDatepickerEl(el, inputEl) {
+        if (!el) {
+            return;
+        }
+        var $ = window.jQuery;
+        var margin = 16;
+        var gap = 8;
+        var vw = window.innerWidth || document.documentElement.clientWidth;
+        var vh = window.innerHeight || document.documentElement.clientHeight;
+        var width = Math.min(320, Math.max(240, vw - margin * 2));
+
+        el.classList.add("vm-admin-report-dp");
+        el.style.setProperty("position", "fixed", "important");
+        el.style.setProperty("width", width + "px", "important");
+        el.style.setProperty("max-width", "calc(100vw - 32px)", "important");
+        el.style.setProperty("box-sizing", "border-box", "important");
+        el.style.setProperty("overflow", "hidden", "important");
+        el.style.setProperty("z-index", "12000", "important");
+        el.style.setProperty("margin", "0", "important");
+        el.style.setProperty("right", "auto", "important");
+        el.style.setProperty("transform", "none", "important");
+
+        var $input = inputEl ? $(inputEl) : $();
+        if (!$input.length) {
+            $input = $(".saas-acc-dp-field.is-active .saas-acc-dp-input").first();
+        }
+        if (!$input.length && lastDateInputEl) {
+            $input = $(lastDateInputEl);
+        }
+        var anchor = null;
+        if ($input.length) {
+            lastDateInputEl = $input[0];
+            anchor = $input.closest(".saas-acc-dp-field")[0] || $input[0];
+        }
+
+        var height = el.offsetHeight || 290;
+        var top = margin;
+        var left = margin;
+        if (anchor) {
+            var rect = anchor.getBoundingClientRect();
+            top = rect.bottom + gap;
+            if (top + height > vh - margin) {
+                top = rect.top - height - gap;
+            }
+            if (top < margin) {
+                top = margin;
+            }
+            left = rect.left;
+            if (left + width > vw - margin) {
+                left = vw - margin - width;
+            }
+            if (left < margin) {
+                left = margin;
+            }
+        }
+
+        el.style.setProperty("top", Math.round(top) + "px", "important");
+        el.style.setProperty("bottom", "auto", "important");
+        el.style.setProperty("left", Math.round(left) + "px", "important");
+    }
+
+    function repositionDatepickerForMobile(inputEl) {
         if (!isMobileViewport() || !window.jQuery) {
             return;
+        }
+        if (inputEl) {
+            lastDateInputEl = inputEl;
         }
         var $ = window.jQuery;
         window.setTimeout(function () {
             var $dp = $("body > .datepicker.dropdown-menu:visible").last();
             if (!$dp.length) {
-                $dp = $(".datepicker.dropdown-menu:visible").last();
+                $dp = $(".datepicker.dropdown-menu:visible, .datepicker:visible").last();
             }
             if (!$dp.length) {
                 return;
             }
-            $dp.css({
-                position: "fixed",
-                top: "auto",
-                bottom: "16px",
-                left: "50%",
-                right: "auto",
-                transform: "translateX(-50%)",
-                margin: "0",
-                width: "min(320px, calc(100vw - 24px))",
-                maxWidth: "calc(100vw - 24px)"
-            });
+            pinDatepickerEl($dp[0], lastDateInputEl);
+            window.setTimeout(function () {
+                pinDatepickerEl($dp[0], lastDateInputEl);
+            }, 50);
         }, 0);
     }
 
@@ -83,9 +142,9 @@
         $input.prop("readonly", true);
         $input.datepicker(pickerOpts);
 
-        $input.on("show", function () {
+        $input.on("show shown", function () {
             setActive($input, true);
-            repositionDatepickerForMobile();
+            repositionDatepickerForMobile($input[0]);
         });
         $input.on("hide", function () {
             setActive($input, false);
@@ -214,12 +273,13 @@
         }
         applyGlobalDatepickerDefaults();
         bindDelegatedReportDateClicks();
-        window.jQuery(document).on("show", "input, .form-control", function () {
+        window.jQuery(document).on("show shown", "input, .form-control", function () {
             if (window.jQuery(this).data("datepicker")) {
-                repositionDatepickerForMobile();
+                repositionDatepickerForMobile(this);
             }
         });
         window.addEventListener("resize", repositionDatepickerForMobile);
+        window.addEventListener("orientationchange", repositionDatepickerForMobile);
         initReportDateForm("#allDetailsForm");
         initReportDateForm("#panReportForm");
         initReportDateForm("#rchFailedReportForm");
@@ -234,6 +294,7 @@
         initReportDateForm("#incomingReportForm");
         initReportDateForm("#rofferReportForm");
         initReportDateForm("#radiantPrepayForm");
+        initReportDateForm("#dthBookingReportForm");
         initReportDateForm("#radiantCmsDepositForm");
         initReportDateForm("#ecommerceHistoryForm");
         initReportDateForm("#securityReportForm");

@@ -485,26 +485,41 @@ body.saas-admin-ui .datepicker table tr td.today {
     }
 
     body.saas-admin-ui .datepicker.dropdown-menu,
-    body.saas-admin-ui body > .datepicker.dropdown-menu {
+    body.saas-admin-ui body > .datepicker.dropdown-menu,
+    body.saas-admin-ui .datepicker.vm-admin-report-dp {
         position: fixed !important;
-        top: auto !important;
-        bottom: 16px !important;
-        left: 50% !important;
-        right: auto !important;
-        transform: translateX(-50%) !important;
         margin: 0 !important;
-        width: min(320px, calc(100vw - 24px)) !important;
-        max-width: calc(100vw - 24px) !important;
+        width: calc(100vw - 32px) !important;
+        max-width: 320px !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        z-index: 12000 !important;
     }
 
-    body.saas-admin-ui .datepicker.dropdown-menu table {
-        width: 100% !important;
+    body.saas-admin-ui .datepicker.dropdown-menu:before,
+    body.saas-admin-ui .datepicker.dropdown-menu:after,
+    body.saas-admin-ui .datepicker.vm-admin-report-dp:before,
+    body.saas-admin-ui .datepicker.vm-admin-report-dp:after {
+        display: none !important;
     }
 
+    body.saas-admin-ui .datepicker.dropdown-menu table,
     body.saas-admin-ui .datepicker.dropdown-menu .datepicker-days table,
-    body.saas-admin-ui .datepicker.dropdown-menu .table-condensed {
+    body.saas-admin-ui .datepicker.dropdown-menu .table-condensed,
+    body.saas-admin-ui .datepicker.vm-admin-report-dp table {
         width: 100% !important;
         max-width: 100% !important;
+        table-layout: fixed !important;
+    }
+
+    body.saas-admin-ui .datepicker.dropdown-menu table tr td,
+    body.saas-admin-ui .datepicker.dropdown-menu table tr th,
+    body.saas-admin-ui .datepicker.vm-admin-report-dp table tr td,
+    body.saas-admin-ui .datepicker.vm-admin-report-dp table tr th {
+        width: 14.28% !important;
+        min-width: 0 !important;
+        padding: 4px 0 !important;
+        box-sizing: border-box !important;
     }
 }
 

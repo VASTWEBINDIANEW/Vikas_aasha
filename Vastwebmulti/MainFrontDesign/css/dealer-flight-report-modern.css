@@ -1,0 +1,235 @@
+/* DEALER Flight Report — Incoming design + extra filters / export / table width */
+
+body.saas-admin-ui .saas-dealer-flight-report-page .page-title-box-fourde-dealer,
+body.saas-admin-ui .saas-dealer-flight-report-page .nill-legacy-header-wrap {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-left {
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-left > .vm-opr-field--port {
+    flex: 0 0 190px;
+    min-width: 170px;
+    max-width: 210px;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-left > .vm-inc-field--msg {
+    flex: 0 0 150px !important;
+    min-width: 130px !important;
+    max-width: 180px !important;
+    width: 150px !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-msg-input {
+    background-image: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row .select2-container .select2-selection__rendered,
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row .select2-container .select2-selection__placeholder,
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row span.select2-selection__rendered,
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row span.select2-selection__placeholder,
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row .form-control,
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row input.form-control,
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row .vm-inc-msg-input,
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row .saas-acc-dp-input,
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row .saas-acc-btn--search,
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row .saas-acc-btn--search span,
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row .vm-opr-toolbar-search,
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-row .vm-opr-toolbar-search span {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-opr-table-panel__head {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-flight-table-head-right {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-flight-inline-total {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #4338ca;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .saas-acc-export-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .saas-acc-btn {
+    height: 36px !important;
+    min-height: 36px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page #example.vm-flight-data-table {
+    width: 100% !important;
+    min-width: 100% !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page #example.vm-flight-data-table thead th,
+body.saas-admin-ui .saas-dealer-flight-report-page #example.vm-flight-data-table tbody td {
+    white-space: nowrap !important;
+    font-size: 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page #example.vm-flight-data-table thead th:first-child,
+body.saas-admin-ui .saas-dealer-flight-report-page #example.vm-flight-data-table tbody td:first-child {
+    min-width: 150px !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page #example.vm-flight-data-table tbody td.vm-opr-table-empty {
+    white-space: normal !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-radiant-status-text {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-radiant-status-cell {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-dmt-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 22px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-dmt-status--success {
+    color: #047857;
+    background: #ecfdf5;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-dmt-status--failed {
+    color: #b91c1c;
+    background: #fef2f2;
+}
+
+body.saas-admin-ui .saas-dealer-flight-report-page .vm-dmt-status--pending {
+    color: #b45309;
+    background: #fffbeb;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-left > .vm-opr-field--port,
+    body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-left > .vm-inc-field--msg {
+        flex: 1 1 calc(50% - 4px) !important;
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-flight-report-page .vm-opr-page-nav,
+    body.saas-admin-ui .saas-dealer-flight-report-page .vm-opr-nav--page {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    body.saas-admin-ui .saas-dealer-flight-report-page .vm-flight-table-head-right {
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-dealer-flight-report-page .saas-acc-export-group {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    body.saas-admin-ui.saas-flight-report-dp-page .datepicker.datepicker-dropdown,
+    body.saas-admin-ui.saas-flight-report-dp-page .datepicker.dropdown-menu,
+    body.saas-admin-ui.saas-flight-report-dp-page .datepicker.datepicker-dropdown.dropdown-menu,
+    body.saas-admin-ui .datepicker.vm-flight-dp {
+        position: fixed !important;
+        margin: 0 !important;
+        width: calc(100vw - 32px) !important;
+        max-width: 320px !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        z-index: 12000 !important;
+    }
+
+    body.saas-admin-ui.saas-flight-report-dp-page .datepicker-dropdown:before,
+    body.saas-admin-ui.saas-flight-report-dp-page .datepicker-dropdown:after,
+    body.saas-admin-ui .datepicker.vm-flight-dp:before,
+    body.saas-admin-ui .datepicker.vm-flight-dp:after {
+        display: none !important;
+    }
+
+    body.saas-admin-ui.saas-flight-report-dp-page .datepicker.dropdown-menu table,
+    body.saas-admin-ui.saas-flight-report-dp-page .datepicker.dropdown-menu .datepicker-days table,
+    body.saas-admin-ui.saas-flight-report-dp-page .datepicker.dropdown-menu .table-condensed,
+    body.saas-admin-ui .datepicker.vm-flight-dp table {
+        width: 100% !important;
+        max-width: 100% !important;
+        table-layout: fixed !important;
+    }
+
+    body.saas-admin-ui.saas-flight-report-dp-page .datepicker table tr td,
+    body.saas-admin-ui.saas-flight-report-dp-page .datepicker table tr th,
+    body.saas-admin-ui .datepicker.vm-flight-dp table tr td,
+    body.saas-admin-ui .datepicker.vm-flight-dp table tr th {
+        width: 14.28% !important;
+        min-width: 0 !important;
+        padding: 4px 0 !important;
+        box-sizing: border-box !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-left > .vm-opr-field--port,
+    body.saas-admin-ui .saas-dealer-flight-report-page .vm-inc-filter-left > .vm-inc-field--msg {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-flight-report-page .vm-opr-table-wrap,
+    body.saas-admin-ui .saas-dealer-flight-report-page .table-responsive.vm-opr-table-scroll {
+        overflow-x: auto !important;
+        max-width: 100% !important;
+    }
+}

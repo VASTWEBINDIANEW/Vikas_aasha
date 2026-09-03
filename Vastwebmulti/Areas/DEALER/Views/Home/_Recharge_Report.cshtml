@@ -1,80 +1,69 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.proc_Recharge_operator_report_newPaging_Result>
+@using System.Linq
 @{
     Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.proc_Recharge_operator_report_newPaging_Result>();
 }
-
-
-
-@if (Model != null)
+@if (items.Any())
 {
-    foreach (var item in Model)
+    foreach (var item in items)
     {
-        var color = "";
-        var fontweight = "";
-        var icon = "";
-        if (item.rstatus.Contains("SUCCESS"))
+        var statusRaw = item.rstatus ?? "";
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+        if (statusRaw.IndexOf("Failed", StringComparison.OrdinalIgnoreCase) >= 0 || statusRaw.IndexOf("Refund", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "green";
-            fontweight = "700";
-            icon = "../../ashok-images/correct.svg";
+            statusTone = "failed";
+            statusFa = "fa-times";
         }
-        if (item.rstatus.Contains("FAILED"))
+        else if (statusRaw.IndexOf("Success", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "red";
-            fontweight = "700";
-            icon = "../../ashok-images/closes.svg";
+            statusTone = "success";
+            statusFa = "fa-check";
         }
-        if (item.rstatus.Contains("Success To Failed"))
-        {
-            color = "red";
-            fontweight = "700";
-        }
-        if (item.rstatus.Contains("Failed To Success"))
-        {
-            color = "#53ad00";
-            fontweight = "700";
-        }
-        if (item.rstatus.Contains("Refund"))
-        {
-            icon = "../../ashok-images/undo.svg";
-            color = "#673AB7";
-            fontweight = "700";
-        }
-        if (item.rstatus.Contains("Request Send"))
-        {
-            icon = "../../ashok-images/clock.svg";
-            color = "#FF9800";
-            fontweight = "700";
-        }
-        <tr>
-      
-            <td class="success-pandingclass">
-                <img style="height: 20px;width: 18px;margin:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:@color" src="@icon" />
 
-
-
-                <span style="color:black;font-weight:@fontweight;">@item.frm_name</span>
+        var firm = !string.IsNullOrWhiteSpace(item.frm_name) ? item.frm_name : (item.retailername ?? "—");
+        var rchTime = item.Rch_time.HasValue ? item.Rch_time.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "—";
+        var respTime = item.resp_time.HasValue ? item.resp_time.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "—";
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-status="@statusRaw">
+            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusRaw">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-radiant-status-text">@firm</span>
             </td>
-
-            <td>@item.mobile</td>
-            <td>@item.amount</td>
-            <td>@item.Operator_name</td>
-            <td>@item.operator_type</td>
-            <td>@item.dealerincome</td>
-            <td>@item.income</td>
-            @*<td>@item.rch_type</td>*@
-            <td>@item.opt_id</td>
-            <td>@item.Rch_time</td>
+            <td>@(item.mobile ?? "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.amount.HasValue ? item.amount.Value.ToString("N2") : "—")</td>
+            <td>@(item.Operator_name ?? "—")</td>
+            <td>@(item.operator_type ?? "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.dealerincome.HasValue ? item.dealerincome.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.income.HasValue ? item.income.Value.ToString("N2") : "—")</td>
+            <td>@(item.opt_id ?? "—")</td>
+            <td>@rchTime</td>
+            <td class="vm-dmt-action-cell">
+                <button type="button"
+                        class="vm-opr-icon-btn vm-dth-detail-btn vm-rch-detail-btn"
+                        title="View details"
+                        data-firm="@firm"
+                        data-status="@statusRaw"
+                        data-mobile="@(item.mobile ?? "")"
+                        data-amount="@(item.amount.HasValue ? item.amount.Value.ToString("N2") : "")"
+                        data-operator="@(item.Operator_name ?? "")"
+                        data-opttype="@(item.operator_type ?? "")"
+                        data-myincome="@(item.dealerincome.HasValue ? item.dealerincome.Value.ToString("N2") : "")"
+                        data-userincome="@(item.income.HasValue ? item.income.Value.ToString("N2") : "")"
+                        data-optid="@(item.opt_id ?? "")"
+                        data-optcode="@(item.optcode ?? "")"
+                        data-rch="@rchTime"
+                        data-resp="@respTime"
+                        data-orderid="@(item.orderid ?? "")"
+                        data-rchtype="@(item.rch_type ?? "")"
+                        data-retailer="@(item.retailername ?? "")"
+                        data-email="@(item.Email ?? "")"
+                        data-circle="@(item.Circle ?? "")">
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                </button>
+            </td>
         </tr>
     }
 }
-
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-            paging: false
-        });
-    });
-
-</script>

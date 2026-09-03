@@ -1,68 +1,69 @@
 ﻿@model List<Vastwebmulti.Models.proc_HotelReport_Result>
+@using System.Linq
 @{
-
     Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.proc_HotelReport_Result>();
 }
-
-@if (Model != null)
+@if (items.Any())
 {
-
-    foreach (var item in Model)
+    foreach (var item in items)
     {
-        var sts = "";
-        var color = "";
-        var icon = "";
-        if (item.TicketStatus.Contains("Pending") || item.TicketStatus.Contains("Proccessed"))
+        var statusRaw = item.TicketStatus ?? "";
+        var statusTone = "pending";
+        var statusLabel = statusRaw;
+        var statusFa = "fa-clock-o";
+        if (statusRaw.IndexOf("Refund", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-
-            sts = "Pending";
-            icon = "../../ashok-images/clock.svg";
+            statusTone = "failed";
+            statusLabel = "Refund";
+            statusFa = "fa-undo";
         }
-        if (item.TicketStatus.Contains("Success"))
+        else if (statusRaw.IndexOf("Failed", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "green";
-            sts = "Success";
-            icon = "../../ashok-images/correct.svg";
+            statusTone = "failed";
+            statusLabel = "Failed";
+            statusFa = "fa-times";
         }
-        if (item.TicketStatus.ToUpper().Contains("FAILED"))
+        else if (statusRaw.IndexOf("Success", StringComparison.OrdinalIgnoreCase) >= 0 || statusRaw.IndexOf("Confirm", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "red";
-            sts = "Failed";
-            icon = "../../ashok-images/closes.svg";
+            statusTone = "success";
+            statusLabel = "Success";
+            statusFa = "fa-check";
         }
-        if (item.TicketStatus.Contains("Refund"))
+        else if (statusRaw.IndexOf("Pending", StringComparison.OrdinalIgnoreCase) >= 0 || statusRaw.IndexOf("Proccessed", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "#9C27B0";
-            sts = "Refund";
-            icon = "../../ashok-images/closes.svg";
+            statusTone = "pending";
+            statusLabel = "Pending";
+            statusFa = "fa-clock-o";
         }
-    <tr>
-        <td>
-            <p style="font-size:15px;font-weight:700;">
-                <img style="height: 20px;width: 18px;margin:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:@color" src="@icon" />
 
-
-                @item.Frm_Name
-            </p>
-        </td>
-
-
-
-        <td>@item.HotelName</td>
-        <td>@item.NoOfRooms</td>
-        <td>@item.totalOfferedFare</td>
-        <td>@item.BookingId</td>
-
-        <td>@item.reminc</td>
-        <td>@item.dlmpre</td>
-        <td>@item.dlminc</td>
-        <td>@item.dlmpost</td>
-
-
-
-
-        <td>@String.Format("{0:ddd, MMM d, yyyy HH:ss:mm}", item.ticketdate) </td>
-    </tr>
-
+        var firm = !string.IsNullOrWhiteSpace(item.Frm_Name) ? item.Frm_Name : (item.RetailerName ?? "—");
+        var bookingDate = item.ticketdate.HasValue ? item.ticketdate.Value.ToString("ddd, MMM d, yyyy HH:mm:ss") : "—";
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-status="@statusRaw">
+            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-radiant-status-text">@firm</span>
+            </td>
+            <td>@(item.HotelName ?? "—")</td>
+            <td>@(item.NoOfRooms.HasValue ? item.NoOfRooms.Value.ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.totalOfferedFare.HasValue ? item.totalOfferedFare.Value.ToString("N2") : "—")</td>
+            <td>@(item.BookingId ?? "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.reminc.HasValue ? item.reminc.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlmpre.HasValue ? item.dlmpre.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlminc.HasValue ? item.dlminc.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlmpost.HasValue ? item.dlmpost.Value.ToString("N2") : "—")</td>
+            <td>@bookingDate</td>
+        </tr>
     }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="10" class="vm-opr-table-empty">
+            <i class="fas fa-hotel" aria-hidden="true"></i>
+            <span>Hotel report not found.</span>
+        </td>
+    </tr>
 }
