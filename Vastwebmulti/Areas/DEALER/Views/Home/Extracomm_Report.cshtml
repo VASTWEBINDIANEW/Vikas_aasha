@@ -1,319 +1,681 @@
-﻿@model List<Vastwebmulti.Models.daywisecomm>
-@using Vastwebmulti.Models
-@using Microsoft.AspNet.Identity;
+﻿@model IEnumerable<Vastwebmulti.Models.daywisecomm>
+@using System.Linq
+@using System.Collections.Generic
 @{
-   
-  
-    VastwebmultiEntities db = new VastwebmultiEntities();
+    ViewBag.Title = "Extra Commission Report";
+    Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.daywisecomm>();
+    var slabs = ViewBag.extraSlabs as IEnumerable<Vastwebmulti.Models.daywisecommsetforuser>
+        ?? Enumerable.Empty<Vastwebmulti.Models.daywisecommsetforuser>();
+    var totalComm = reports.Sum(x => x.dlmcomm ?? 0m);
+    var totalPre = reports.Sum(x => x.dlmpre ?? 0m);
+    var totalPost = reports.Sum(x => x.dlmpost ?? 0m);
 }
-<style>
 
-    /* new css */
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page');</script>
 
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page saas-giftcard-report-page saas-hold-comm-report-page saas-extracomm-report-page">
 
-    /* new css */
+    <div class="container-fluid vm-opr-page-shell">
 
-
-
-    .toast-top-right1 {
-        top: 78px;
-        left: 81%;
-    }
-
-    .datepicker-orient-bottom {
-        top: 173px !important;
-    }
-
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 147px !important;
+        @{
+            var extraFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "dealerExtracommReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
+        @using (Html.BeginForm("Extracomm_Report", "Home", FormMethod.Post, extraFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    .recharge-report-rtailer th {
-        border-bottom: 0px !important;
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Reports</li>
+                        <li>Extra Commission Report</li>
+                    </ol>
+                </div>
+            </div>
 
-    .table-responsive table tr, .table-responsive table, .table-responsive table tr td, .table-responsive table tr th {
-        border-color: #aaa4a4 !important;
-    }
-
-    .noexel-newclass img {
-        border-radius: 50% !important;
-    }
-
-    .datepicker.datepicker-dropdown.dropdown-menu.datepickerrecharge.datepicker-orient-left.datepicker-orient-bottom {
-        margin-top: -21px !important;
-    }
-
-    @@media only screen and (max-width:767px) {
-
-        .col-lg-4.col-md-4.col-sm-4.col-xs-4.rechargepdfexal {
-            display: block;
-        }
-
-        .rechargefirst {
-            width: 50%;
-        }
-
-        .col-md-3.rechargesecond {
-            width: 50%;
-        }
-
-        .col-md-2.rechargefiveclass {
-            width: 50%;
-            padding-top: 5px;
-        }
-
-        .col-md-3.rechargethrees {
-            width: 50%;
-            padding-top: 5px;
-        }
-
-        .col-md-2.rechargefive {
-            width: 50%;
-            padding-top: 5px;
-            padding-right: 4px;
-        }
-
-        .rechargepdfexal {
-            width: 50%;
-            padding-top: 5px;
-            padding-right: 5px;
-        }
-    }
-
-
-    @@media screen and (max-width:766px) {
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 151px !important;
-        }
-    }
-
-    @@media screen and (max-width:580px) {
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 194px !important;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-
-        .rechargefirst {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0;
-            margin-bottom: 5px;
-        }
-
-        .col-md-3.rechargesecond {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0;
-            margin-bottom: 5px;
-        }
-
-        .col-md-2.rechargefiveclass {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0;
-            margin-bottom: 5px;
-        }
-
-        .col-md-3.rechargethrees {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0;
-            margin-bottom: 5px;
-        }
-
-        .col-md-2.rechargefive {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0px;
-            margin-bottom: 5px;
-        }
-
-        .rechargepdfexal {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0px;
-        }
-    }
-</style>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="">
-    <div class="container-fluid retailer-page fundtranfer rechargefirstclass fundtranfer-responshive" style="height:100vh;">
-        <!--Four-Design-Page-Header-Start-->
-        <div class="row clearfix">
-            @{
-                var userid = User.Identity.GetUserId();
-                var chk = db.daywisecommsetforusers.Where(s => s.userid == userid && s.role == "Dealer").ToList();
-            }
-
-            <div class="row clearfix">
-                <div class="col-md-12">
-                    <div class="card class-back-tra-fourdesign">
-                        <div class="body change-iconrech-report change-iconrech-responshive" style="padding:12px;padding-left: 0;padding-right: 0;padding-top: 15px;">
-                            <div class="table-responsive recharge-responsive retailer-table-seconddesign tablethirddesign-new page-header-third" style="position:inherit;">
-                                <table id="tbldata" class="table table-bordered table-striped table-hover dataTable example-second retailer-whitespa-second third-design-table" cellspacing="0" style="width:100%;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr class="recharge-report-rtailer">
-                                            <th style="padding-left:2px; padding-right:2px;text-align:center;">commission 2000 to 5000</th>
-                                            <th style="padding-left:2px; padding-right:2px;text-align:center;">commission 5001 to 10000</th>
-                                            <th style="padding-left:2px; padding-right:2px;text-align:center;">commission 10001 to Above</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody id="trow">
-                                        @foreach (var i in chk)
-                                        {
-                                            <tr>
-                                                <td style="padding-left:2px; padding-right:2px;text-align:center;">@i.Comm_2000_5000 %</td>
-                                                <td style="padding-left:2px; padding-right:2px;text-align:center;">@i.Comm_5001_10000 %</td>
-                                                <td style="padding-left:2px; padding-right:2px;text-align:center;">@i.Comm_10001_max %</td>
-                                            </tr>
-                                        }
-
-                                    </tbody>
-                                </table>
-                                <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                    <div class="loadertablecssnew">Loading...</div>
-                                </div>
-                            </div>
-
+            <div class="vm-opr-main-card vm-extra-slab-card">
+                <div class="vm-opr-table-panel">
+                    <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                        <div class="vm-opr-table-panel__title">
+                            <i class="fas fa-percent" aria-hidden="true"></i>
+                            <span>Commission slabs</span>
+                        </div>
+                    </div>
+                    <div class="vm-opr-table-wrap">
+                        <div class="table-responsive vm-opr-table-scroll">
+                            <table id="extraCommSlabTable" class="table table-bordered vm-opr-data-table" cellspacing="0" cellpadding="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>commission 2000 to 5000</th>
+                                        <th>commission 5001 to 10000</th>
+                                        <th>commission 10001 to Above</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @Html.Partial("_Extracomm_Slabs", slabs)
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-12 col-md-12 gift-card-top all-type-third">
-            <div class="card page-header-third margin-bottom-third cardbackg-third onlymargin-third newcardclass borderclassgift" style="margin-top:2px;">
-                @using (Html.BeginForm("Extracomm_Report", "Home", FormMethod.Post))
-                {
-                    <div class="">
 
-                        <div class="col-md-3 clk responcive-full" style="padding-right: 0px; padding-left: 5px;">
-                            <div class="input-daterange input-group" style="margin-left:0px;width:100%;">
-                                @*<div class="custom-date-icon" style="height: 32px;">
-                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                </div>*@
-                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; height:32px; width: 100%;" })
-                                <span class="input-group-addon" style="padding: 0px !important;min-width: 3px;">
-
-                                </span>
-                                <div class="nrr3">
-                                    @*<div class="custom-date-icon ner2" style="position: relative;">
-                                        <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                    </div>*@
-                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; height:32px; width: 100%;" })
-                                </div>
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell vm-extra-filter-toolbar">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
                             </div>
-                        </div>
-                        <div class="col-md-1 ytr-okpli gift-respo-thired search-resp-third" style="padding:0px;padding-left:5px;">
-                            <div class="">
-                                <div class="">
-                                    <center>
-                                        <button name="btntype" type="submit" class="btn input-back-second" style="  height:32px;border: 1px solid #b1a6a638;background: #fff;margin-top:1px;background: #f9f9f9;width: 100%;" onclick="serch()">
-                                            <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                            <span style="top:-1px;color:black;">Search</span>
-                                        </button>
-                                    </center>
-
-                                </div>
-
-
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
                             </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
-
                     </div>
-                }
+                </div>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="extraCommTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Extra commission totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideExtraCommTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Commission</span>
+                            <strong class="vm-opr-total-card__value">@totalComm.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Remain Pre</span>
+                            <strong class="vm-opr-total-card__value">@totalPre.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Remain Post</span>
+                            <strong class="vm-opr-total-card__value">@totalPost.ToString("N2")</strong>
+                        </div>
+                    </div>
+                </div>
 
             </div>
+        }
 
-
-        </div>
-
-        <!--Four-Design-Page-Header-End-->
-        <div class="row clearfix">
-
-
-            <div class="row clearfix">
-                <div class="col-md-12">
-                    <div class="card class-back-tra-fourdesign">
-                        <div class="body change-iconrech-report change-iconrech-responshive" style="padding:12px;padding-left: 0;padding-right: 0;padding-top: 15px;">
-                            <div class="table-responsive recharge-responsive retailer-table-seconddesign tablethirddesign-new page-header-third" style="position:inherit;">
-                                <table id="tbldata" class="table table-bordered table-striped table-hover dataTable example-second retailer-whitespa-second third-design-table" cellspacing="0" style="width:100%;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr class="recharge-report-rtailer">
-                                            <th style="padding-left:2px; padding-right:2px;text-align:center;">Date</th>
-                                           
-                                            <th style="padding-left:2px; padding-right:2px;text-align:center;">Commission</th>
-                                            <th style="padding-left:2px; padding-right:2px;text-align:center;">Remain pre</th>
-                                            <th style="padding-left:2px; padding-right:2px;text-align:center;">Remain post</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody id="trow">
-                                        @foreach (var i in Model)
-                                        {
-                                            <tr>
-                                                <td style="padding-left:2px; padding-right:2px;text-align:center;">@i.date</td>
-                                            
-                                                <td style="padding-left:2px; padding-right:2px;text-align:center;">@i.dlmcomm</td>
-                                                <td style="padding-left:2px; padding-right:2px;text-align:center;">@i.dlmpre</td>
-                                                <td style="padding-left:2px; padding-right:2px;text-align:center;">@i.dlmpost</td>
-                                            </tr>
-                                        }
-
-                                    </tbody>
-                                </table>
-                                <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                    <div class="loadertablecssnew">Loading...</div>
-                                </div>
-                            </div>
-
+        <div class="vm-opr-main-card vm-extra-report-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        <span>Extra commission report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-inline-total" title="Total commission for current filter">
+                            Total: <strong>&#8377; @totalComm.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-sell-rch-totals-btn vm-ecom-totals-btn vm-gift-totals-btn vm-extra-comm-totals-btn" onclick="toggleExtraCommTotals()" title="Show totals" aria-expanded="false" aria-controls="extraCommTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
                         </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="sellRechargeReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Commission</th>
+                                    <th>Remain&nbsp;pre</th>
+                                    <th>Remain&nbsp;post</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.Partial("_Extracomm_Report", reports)
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
+    </div>
 </section>
-<script type="text/javascript">
-    $(document).ready(function () {
-               $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
+
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
+<script>
+    window.extraExcelUrl = '@Url.Action("Excel_Extracomm_Report", "Home")';
+    window.extraPdfUrl = '@Url.Action("PDF_Extracomm_Report", "Home")';
+
+    function extraQueryData() {
+        var $ = window.jQuery;
+        return {
+            txt_frm_date: $('#txt_frm_date').val() || '',
+            txt_to_date: $('#txt_to_date').val() || ''
+        };
+    }
+
+    function extraQueryString() {
+        var q = extraQueryData();
+        return 'txt_frm_date=' + encodeURIComponent(q.txt_frm_date)
+            + '&txt_to_date=' + encodeURIComponent(q.txt_to_date);
+    }
+
+    function extraEsc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function extraNum(value) {
+        var n = parseFloat(String(value || '').replace(/,/g, '').replace(/[^\d.-]/g, ''));
+        return isNaN(n) ? 0 : n;
+    }
+
+    function extraNow() {
+        var d = new Date();
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var h = d.getHours();
+        var ampm = h >= 12 ? 'PM' : 'AM';
+        var hr = h % 12; if (!hr) { hr = 12; }
+        var min = d.getMinutes();
+        return ('0' + d.getDate()).slice(-2) + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + ('0' + hr).slice(-2) + ':' + ('0' + min).slice(-2) + ' ' + ampm;
+    }
+
+    function extraSlabRows() {
+        var $ = window.jQuery;
+        var rows = [];
+        $('#extraCommSlabTable tbody tr').each(function () {
+            var $cells = $(this).children('td');
+            if ($cells.length < 3) {
+                return;
             }
+            rows.push({
+                s1: $.trim($cells.eq(0).text()).replace(/\s+/g, ' '),
+                s2: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+                s3: $.trim($cells.eq(2).text()).replace(/\s+/g, ' ')
+            });
         });
+        return rows;
+    }
+
+    function extraTableRows() {
+        var $ = window.jQuery;
+        var rows = [];
+        $('#sellRechargeReport tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-opr-table-empty-row')) {
+                return;
+            }
+            var $cells = $tr.children('td');
+            if ($cells.length < 4) {
+                return;
+            }
+            rows.push({
+                date: $.trim($cells.eq(0).text()).replace(/\s+/g, ' '),
+                comm: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+                pre: $.trim($cells.eq(2).text()).replace(/\s+/g, ' '),
+                post: $.trim($cells.eq(3).text()).replace(/\s+/g, ' ')
+            });
+        });
+        return rows;
+    }
+
+    function extraExportMeta(rows) {
+        var q = extraQueryData();
+        var total = 0, pre = 0, post = 0;
+        for (var i = 0; i < rows.length; i++) {
+            total += extraNum(rows[i].comm);
+            pre += extraNum(rows[i].pre);
+            post += extraNum(rows[i].post);
+        }
+        return {
+            generatedOn: extraNow(),
+            frmDate: q.txt_frm_date || '-',
+            toDate: q.txt_to_date || '-',
+            records: rows.length,
+            total: total.toFixed(2),
+            pre: pre.toFixed(2),
+            post: post.toFixed(2)
+        };
+    }
+
+    function extraBuildExcelHtml(rows) {
+        var m = extraExportMeta(rows);
+        var slabs = extraSlabRows();
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8" /><title>Extra Commission Report</title></head><body>';
+        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">';
+        html += '<tr><td colspan="4" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;">Extra Commission Report</td></tr>';
+        html += '<tr><td colspan="4" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;">Dealer reports - extra commission</td></tr>';
+        html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Generated On</td><td style="font-weight:bold;">' + extraEsc(m.generatedOn) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Date Range</td><td style="font-weight:bold;">' + extraEsc(m.frmDate) + ' to ' + extraEsc(m.toDate) + '</td></tr>';
+        html += '<tr><th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">commission 2000 to 5000</th><th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">commission 5001 to 10000</th><th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">commission 10001 to Above</th><th bgcolor="#334155">&nbsp;</th></tr>';
+        if (!slabs.length) {
+            html += '<tr><td>0.0000 %</td><td>0.0000 %</td><td>0.0000 %</td><td>&nbsp;</td></tr>';
+        } else {
+            for (var s = 0; s < slabs.length; s++) {
+                html += '<tr><td>' + extraEsc(slabs[s].s1) + '</td><td>' + extraEsc(slabs[s].s2) + '</td><td>' + extraEsc(slabs[s].s3) + '</td><td>&nbsp;</td></tr>';
+            }
+        }
+        html += '<tr><td colspan="4">&nbsp;</td></tr>';
+        html += '<tr><td bgcolor="#EEF2FF" style="font-weight:bold;">Total Commission</td><td bgcolor="#EEF2FF" style="font-weight:bold;">' + m.total + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Records</td><td style="font-weight:bold;">' + m.records + '</td></tr>';
+        html += '<tr><td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">Remain Pre</td><td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">' + m.pre + '</td>';
+        html += '<td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">Remain Post</td><td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">' + m.post + '</td></tr>';
+        html += '<tr><th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">Date</th><th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">Commission</th><th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">Remain pre</th><th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">Remain post</th></tr>';
+        if (!rows.length) {
+            html += '<tr><td colspan="4" bgcolor="#F8FAFC" style="text-align:center;font-weight:bold;color:#64748B;height:48px;">Extra commission report not found.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                var rowBg = (i % 2 === 1) ? '#F8FAFC' : '#FFFFFF';
+                html += '<tr>';
+                html += '<td bgcolor="' + rowBg + '">' + extraEsc(r.date) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + extraEsc(r.comm) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + extraEsc(r.pre) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + extraEsc(r.post) + '</td>';
+                html += '</tr>';
+            }
+        }
+        html += '</table></body></html>';
+        return html;
+    }
+
+    function extraBuildPdfHtml(rows) {
+        var m = extraExportMeta(rows);
+        var slabs = extraSlabRows();
+        var slabBody = '';
+        if (!slabs.length) {
+            slabBody = '<tr><td>0.0000 %</td><td>0.0000 %</td><td>0.0000 %</td></tr>';
+        } else {
+            for (var s = 0; s < slabs.length; s++) {
+                slabBody += '<tr><td>' + extraEsc(slabs[s].s1) + '</td><td>' + extraEsc(slabs[s].s2) + '</td><td>' + extraEsc(slabs[s].s3) + '</td></tr>';
+            }
+        }
+        var body = '';
+        if (!rows.length) {
+            body = '<tr><td colspan="4" class="empty">Extra commission report not found.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                body += '<tr><td>' + extraEsc(r.date) + '</td><td>' + extraEsc(r.comm) + '</td><td>' + extraEsc(r.pre) + '</td><td>' + extraEsc(r.post) + '</td></tr>';
+            }
+        }
+        return '<!DOCTYPE html><html><head><meta charset="utf-8" /><title>Extra Commission Report</title><style type="text/css">'
+            + '@@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }'
+            + '* { box-sizing: border-box; } body { margin:0; padding:16px; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#0f172a; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }'
+            + 'table { border-collapse:collapse; } .hero { width:100%; border:1px solid #1d4ed8; } .hero-top { padding:14px 18px; background:#2563eb; color:#fff; }'
+            + '.hero-top h1 { margin:0; font-size:20px; } .hero-top p { margin:4px 0 0; font-size:11px; color:#dbeafe; }'
+            + '.meta { width:100%; background:#f8fafc; } .meta td { padding:8px 12px; border-right:1px solid #e2e8f0; }'
+            + '.meta-label { display:block; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748b; margin-bottom:3px; }'
+            + '.meta-value { font-size:12px; font-weight:700; } .cards { width:100%; margin:12px 0; } .cards td { width:33%; padding:0 6px 0 0; }'
+            + '.card { border:1px solid #e2e8f0; padding:10px 12px; } .card-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; margin-bottom:4px; } .card-value { font-size:16px; font-weight:800; }'
+            + '.card-total { background:#eef2ff; } .card-ok { background:#ecfdf5; } .card-wait { background:#fefce8; }'
+            + '.grid { width:100%; border:1px solid #cbd5e1; } .grid th { padding:9px 7px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; color:#fff; background:#334155; }'
+            + '.grid td { padding:8px 7px; font-size:11px; border-top:1px solid #e2e8f0; } .grid tbody tr:nth-child(even) td { background:#f8fafc; }'
+            + '.empty { padding:36px 16px; text-align:center; font-size:14px; font-weight:700; color:#64748b; background:#f8fafc; }'
+            + '.foot { margin-top:10px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:10px; color:#94a3b8; text-align:center; }'
+            + '</style></head><body><div class="sheet"><div class="hero"><div class="hero-top"><h1>Extra Commission Report</h1><p>Dealer reports - extra commission</p></div>'
+            + '<table class="meta" cellpadding="0" cellspacing="0"><tr>'
+            + '<td style="width:40%;"><span class="meta-label">Generated On</span><span class="meta-value">' + extraEsc(m.generatedOn) + '</span></td>'
+            + '<td style="width:40%;"><span class="meta-label">Date Range</span><span class="meta-value">' + extraEsc(m.frmDate) + ' to ' + extraEsc(m.toDate) + '</span></td>'
+            + '<td style="width:20%;"><span class="meta-label">Records</span><span class="meta-value">' + m.records + '</span></td>'
+            + '</tr></table></div>'
+            + '<table class="cards" cellpadding="0" cellspacing="0"><tr>'
+            + '<td><div class="card card-total"><span class="card-label">Total Commission</span><span class="card-value">' + m.total + '</span></div></td>'
+            + '<td><div class="card card-ok"><span class="card-label">Remain Pre</span><span class="card-value">' + m.pre + '</span></div></td>'
+            + '<td><div class="card card-wait"><span class="card-label">Remain Post</span><span class="card-value">' + m.post + '</span></div></td>'
+            + '</tr></table>'
+            + '<table class="grid" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><thead><tr><th>commission 2000 to 5000</th><th>commission 5001 to 10000</th><th>commission 10001 to Above</th></tr></thead><tbody>' + slabBody + '</tbody></table>'
+            + '<table class="grid" cellpadding="0" cellspacing="0"><thead><tr><th>Date</th><th>Commission</th><th>Remain pre</th><th>Remain post</th></tr></thead><tbody>' + body + '</tbody></table>'
+            + '<div class="foot">Generated from Dealer panel - Extra Commission Report</div></div></body></html>';
+    }
+
+    function extraDownloadExcel(html) {
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel' });
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'Extra_Commission_Report.xls');
+            return;
+        }
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'Extra_Commission_Report.xls';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+    }
+
+    function extraOpenPdf(html) {
+        var w = window.open('', '_blank');
+        if (!w) {
+            return;
+        }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+    }
+
+    function toggleExtraCommTotals() {
+        var $ = window.jQuery;
+        var panel = $('#extraCommTotalsPanel');
+        var btn = $('.vm-extra-comm-totals-btn');
+        if (panel.is(':visible')) {
+            hideExtraCommTotals();
+            return;
+        }
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        btn.attr('aria-expanded', 'true');
+    }
+
+    function hideExtraCommTotals() {
+        var $ = window.jQuery;
+        $('#extraCommTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-extra-comm-totals-btn').attr('aria-expanded', 'false');
+    }
+
+    function bootExtraCommReport() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.datepicker) {
+            window.setTimeout(bootExtraCommReport, 50);
+            return;
+        }
+
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#dealerExtracommReportForm');
+        } else {
+            $('#txt_frm_date, #txt_to_date').datepicker({
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                autoclose: true,
+                orientation: 'bottom auto',
+                container: 'body'
+            });
+            if ($('#dealerExtracommReportForm').attr('data-date-mode') !== 'post') {
+                $('#txt_frm_date').datepicker('setDate', new Date());
+                $('#txt_to_date').datepicker('setDate', new Date());
+            }
+        }
+
+        function pinExtraDatepicker(e) {
+            if (typeof window.repositionAdminDatepickerForMobile === 'function') {
+                window.repositionAdminDatepickerForMobile(e && e.target ? e.target : this);
+            }
+        }
+        $(document).off('show.extraDp shown.extraDp').on('show.extraDp shown.extraDp', '#txt_frm_date, #txt_to_date', pinExtraDatepicker);
+        $(window).off('resize.extraDp orientationchange.extraDp').on('resize.extraDp orientationchange.extraDp', pinExtraDatepicker);
+
+        $('#btnExport').off('click.extraEx').on('click.extraEx', function () {
+            extraDownloadExcel(extraBuildExcelHtml(extraTableRows()));
+        });
+        $('#btnPDF').off('click.extraPdf').on('click.extraPdf', function () {
+            extraOpenPdf(extraBuildPdfHtml(extraTableRows()));
+        });
+    }
+
+    if (document.readyState === 'complete') {
+        bootExtraCommReport();
+    } else {
+        window.addEventListener('load', bootExtraCommReport);
+    }
 </script>
 
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters input.form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search span,
+        body.saas-admin-ui section.content.saas-extracomm-report-page #txt_frm_date,
+        body.saas-admin-ui section.content.saas-extracomm-report-page #txt_to_date,
+        body.saas-admin-ui section.content.saas-extracomm-report-page input#txt_frm_date.form-control.saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-extracomm-report-page input#txt_to_date.form-control.saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-hold-comm-report-page .vm-radiant-inline-total,
+        body.saas-admin-ui section.content.saas-hold-comm-report-page .saas-acc-btn--excel,
+        body.saas-admin-ui section.content.saas-hold-comm-report-page .saas-acc-btn--pdf {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
 
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+        body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-slab-card {
+            margin: 8px 0 20px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-filter-toolbar {
+            margin-top: 0 !important;
+            margin-bottom: 18px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-report-card {
+            margin-top: 0 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-slab-card .vm-opr-table-wrap,
+        body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-slab-card .table-responsive.vm-opr-table-scroll {
+            display: block !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: auto !important;
+            padding-bottom: 0 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table,
+        body.saas-admin-ui section.content.saas-extracomm-report-page table#extraCommSlabTable {
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
+            font-size: 12px !important;
+            margin: 0 !important;
+            border-collapse: collapse !important;
+            border-spacing: 0 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table thead th,
+        body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td,
+        body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table thead th:first-child,
+        body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td:first-child,
+        body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td:nth-child(3),
+        body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table thead th:last-child,
+        body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td:last-child {
+            width: 33.333% !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+            vertical-align: middle !important;
+            font-size: 12px !important;
+            padding: 13px 10px !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td {
+            font-weight: 700 !important;
+            color: #0f172a !important;
+        }
+
+        @@media (max-width: 991px) {
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-slab-card {
+                margin: 8px 0 16px !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-filter-toolbar {
+                margin-bottom: 14px !important;
+                overflow: visible !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-filter-toolbar .vm-radiant-inline-filters,
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-filter-toolbar .vm-dmt-filter-search-group {
+                width: 100% !important;
+                flex-wrap: wrap !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-filter-toolbar .vm-dmt-filter-search-group .saas-acc-dp-field,
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-filter-toolbar .vm-dmt-filter-search-group .vm-dmt-field--date {
+                flex: 1 1 calc(50% - 4px) !important;
+                width: auto !important;
+                min-width: 0 !important;
+                max-width: none !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-filter-toolbar .vm-radiant-search-btn {
+                flex: 1 1 100% !important;
+                width: 100% !important;
+                justify-content: center !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-slab-card .vm-opr-table-scroll {
+                overflow-x: hidden !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table,
+            body.saas-admin-ui section.content.saas-extracomm-report-page table#extraCommSlabTable {
+                display: block !important;
+                width: 100% !important;
+                min-width: 100% !important;
+                max-width: 100% !important;
+                table-layout: auto !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table thead {
+                display: none !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody,
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody tr {
+                display: block !important;
+                width: 100% !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td,
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td:first-child,
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td:nth-child(3),
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td:last-child {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+                white-space: normal !important;
+                text-align: left !important;
+                padding: 12px 14px !important;
+                font-size: 13px !important;
+                line-height: 1.35 !important;
+                gap: 12px !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td::before {
+                content: attr(data-label);
+                flex: 1 1 auto;
+                font-size: 11px !important;
+                font-weight: 800 !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.04em !important;
+                color: #475569 !important;
+                text-align: left !important;
+                white-space: normal !important;
+                line-height: 1.3 !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-report-card .vm-dmt-table-panel__head {
+                flex-wrap: wrap !important;
+                gap: 8px !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-report-card .vm-dmt-table-panel__right {
+                width: 100% !important;
+                justify-content: flex-start !important;
+                flex-wrap: wrap !important;
+            }
+        }
+
+        @@media (max-width: 767px) {
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-slab-card {
+                margin: 6px 0 14px !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-filter-toolbar {
+                margin-bottom: 12px !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td,
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td:first-child,
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td:nth-child(3),
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td:last-child {
+                font-size: 13px !important;
+                padding: 12px 12px !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page #extraCommSlabTable.vm-opr-data-table tbody td::before {
+                font-size: 10px !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-report-card .vm-dmt-table-panel__head {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-report-card .vm-dmt-table-panel__right,
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-report-card .vm-dmt-table-actions {
+                width: 100% !important;
+                margin-left: 0 !important;
+                justify-content: flex-start !important;
+            }
+
+            body.saas-admin-ui section.content.saas-extracomm-report-page .vm-extra-report-card .table-responsive.vm-opr-table-scroll {
+                overflow-x: auto !important;
+            }
+        }
+    </style>
+}

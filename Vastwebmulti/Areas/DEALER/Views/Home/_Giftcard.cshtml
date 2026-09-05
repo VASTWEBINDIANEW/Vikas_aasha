@@ -1,0 +1,113 @@
+@model IEnumerable<Vastwebmulti.Models.Gift_card_details_report_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.Gift_card_details_report_Result>();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var statusRaw = item.status ?? "";
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+        var statusLabel = string.IsNullOrWhiteSpace(statusRaw) ? "-" : statusRaw;
+        if (statusRaw.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "failed";
+            statusFa = "fa-times";
+            statusLabel = "Failed";
+        }
+        else if (statusRaw.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "success";
+            statusFa = "fa-check";
+            statusLabel = "Success";
+        }
+        else if (statusRaw.IndexOf("REFUND", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "pending";
+            statusFa = "fa-undo";
+            statusLabel = "Refund";
+        }
+        else if (statusRaw.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "pending";
+            statusFa = "fa-clock-o";
+            statusLabel = "Pending";
+        }
+
+        var senderName = item.sender_name ?? "";
+        var senderEmail = item.sender_email ?? "";
+        var senderText = !string.IsNullOrWhiteSpace(senderName) && !string.IsNullOrWhiteSpace(senderEmail)
+            ? senderName + " => " + senderEmail
+            : (!string.IsNullOrWhiteSpace(senderName) ? senderName : (!string.IsNullOrWhiteSpace(senderEmail) ? senderEmail : "-"));
+        var recName = item.reciver_name ?? "";
+        var recEmail = item.reciver_email ?? "";
+        var receiverText = !string.IsNullOrWhiteSpace(recName) && !string.IsNullOrWhiteSpace(recEmail)
+            ? recName + " => " + recEmail
+            : (!string.IsNullOrWhiteSpace(recName) ? recName : (!string.IsNullOrWhiteSpace(recEmail) ? recEmail : "-"));
+        var reqDate = item.request_time.HasValue ? item.request_time.Value.ToString("dd-MMM-yy HH:mm:ss") : "-";
+        var respDate = item.Response_time.HasValue ? item.Response_time.Value.ToString("dd-MMM-yy HH:mm:ss") : "-";
+        var amt = item.amount.HasValue ? item.amount.Value.ToString("N2") : "";
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-status="@statusRaw">
+            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-radiant-status-text">@statusLabel</span>
+            </td>
+            <td>@senderText</td>
+            <td>@receiverText</td>
+            <td>@reqDate</td>
+            <td class="vm-dmt-amt-cell">@(item.amount.HasValue ? item.amount.Value.ToString("N2") : "-")</td>
+            <td>@(item.operator_Name ?? "-")</td>
+            <td>@(item.Operator_type ?? "-")</td>
+            <td>@(item.operator_id ?? "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.rem_pre_remain.HasValue ? item.rem_pre_remain.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.comm_rem.HasValue ? item.comm_rem.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.rem_post_remain.HasValue ? item.rem_post_remain.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlm_pre_remain.HasValue ? item.dlm_pre_remain.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.comm_dlm.HasValue ? item.comm_dlm.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlm_post_remain.HasValue ? item.dlm_post_remain.Value.ToString("N2") : "-")</td>
+            <td>@respDate</td>
+            <td class="vm-dmt-action-cell vm-sell-rch-actions">
+                <button type="button"
+                        class="vm-opr-icon-btn vm-dth-detail-btn vm-ecom-detail-btn vm-gift-detail-btn"
+                        title="View details"
+                        data-status="@statusLabel"
+                        data-sender="@senderText"
+                        data-receiver="@receiverText"
+                        data-sendermob="@(item.sender_mobile ?? "")"
+                        data-receivermob="@(item.reciver_mobile ?? "")"
+                        data-order="@reqDate"
+                        data-resp="@respDate"
+                        data-amount="@amt"
+                        data-service="@(item.operator_Name ?? "")"
+                        data-type="@(item.Operator_type ?? "")"
+                        data-opid="@(item.operator_id ?? "")"
+                        data-orderid="@(item.orderid ?? "")"
+                        data-userpre="@(item.rem_pre_remain.HasValue ? item.rem_pre_remain.Value.ToString("N2") : "")"
+                        data-userinc="@(item.comm_rem.HasValue ? item.comm_rem.Value.ToString("N2") : "")"
+                        data-userpost="@(item.rem_post_remain.HasValue ? item.rem_post_remain.Value.ToString("N2") : "")"
+                        data-dlmpre="@(item.dlm_pre_remain.HasValue ? item.dlm_pre_remain.Value.ToString("N2") : "")"
+                        data-dlminc="@(item.comm_dlm.HasValue ? item.comm_dlm.Value.ToString("N2") : "")"
+                        data-dlmpost="@(item.dlm_post_remain.HasValue ? item.dlm_post_remain.Value.ToString("N2") : "")"
+                        data-message="@(item.gift_message ?? "")"
+                        data-apireq="@(item.api_request ?? "")"
+                        data-apires="@(item.api_response ?? "")">
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                </button>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="16" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-gift" aria-hidden="true"></i>
+            <span>Gift card report not found.</span>
+        </td>
+    </tr>
+}

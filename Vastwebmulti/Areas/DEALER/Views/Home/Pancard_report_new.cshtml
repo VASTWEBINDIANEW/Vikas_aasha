@@ -1,639 +1,319 @@
-﻿
-@model IEnumerable<Vastwebmulti.Models.pancard_transation>
+﻿@model IEnumerable<Vastwebmulti.Models.pancard_transation>
+@using System.Collections.Generic
+@using System.Linq
 @{
-    ViewBag.Title = "Pancard_report_new";
+    ViewBag.Title = "Pancard Report";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var selectedRetailer = (Request["allretailer"] ?? "").Trim();
+    var selectedStatus = (Request["ddl_status"] ?? "").Trim();
+    if (string.IsNullOrEmpty(selectedStatus)) { selectedStatus = "ALL"; }
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.pancard_transation>();
 }
-<style>
-    .dropdown-menu {
-        margin-top: 75px !important;
-    }
 
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=31" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-incoming-report-modern.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-flight-report-modern.css?v=8" rel="stylesheet" />
+<script>document.body.classList.add('saas-flight-report-dp-page');</script>
 
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-incoming-report-page saas-dealer-flight-report-page saas-dealer-dmt-report-page saas-dealer-pancard-report-page">
+    <div class="container-fluid vm-opr-page-shell">
 
-
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px;
-    }
-
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-
-    .slab-setting-menu li a.activee {
-        background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
-    }
-
-    ::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 5px grey;
-        border-radius: 10px;
-    }
-
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-        background: black;
-        border-radius: 10px;
-    }
-
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: #b30000;
+        @{
+            var panFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "dealerPancardReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
-
-    @@media screen and (max-width:1290px) {
-        .money-transferreportpage .aepspdfexlto-button .web-white-filter.fil {
-            margin: 0 !important;
-            padding-right: 3px;
-        }
-
-            .money-transferreportpage .aepspdfexlto-button .web-white-filter.fil input:last-child {
-                margin-left: 0 !important;
-            }
-    }
-
-    @@media screen and (max-width:992px) {
-        .money-transferreportpage .aeps-reportbutton, .money-transferreportpage .col-md-2 {
-            float: left;
-        }
-
-        .money-transferreportpage .money-transfere-aeps {
-            float: right;
-            width: 70%;
-        }
-
-            .money-transferreportpage .money-transfere-aeps .aeps-selectclass {
-                float: left;
-                width: 23%;
-            }
-
-        .money-transferreportpage .col-md-5.aeps-dateclass {
-            float: left;
-            width: 40%;
-        }
-
-            .money-transferreportpage .col-md-5.aeps-dateclass input {
-                font-size: 12px;
-            }
-
-        .money-transferreportpage .money-transfere-aeps .aeps-selectclass .select2 span {
-            font-size: 12px;
-        }
-
-        .money-transferreportpage .col-md-2 .form-line button span {
-            font-size: 12px;
-        }
-
-        .money-transferreportpage .col-md-2.aepspdfexlto-button {
-            float: right !important;
-            padding: 0;
-            margin-top: 10px;
-            width: auto;
-        }
-
-            .money-transferreportpage .col-md-2.aepspdfexlto-button .row {
-                margin: 0;
-            }
-
-        .money-transferreportpage .money-transfere-aeps .col-md-12 {
-            padding-right: 0;
-        }
-
-            .money-transferreportpage .money-transfere-aeps .col-md-12 .row.clearfix {
-                margin: 0;
-            }
-
-        .money-transferreportpage .col-md-2.dmtsearchclass {
-            float: left;
-            padding-right: 0;
-            width: 14%;
-        }
-
-        .money-transferreportpage .dmtsearchclass button {
-            width: 100% !important;
-            float: left;
-            padding-left: 0;
-            padding-right: 0;
-            text-align: center;
-        }
-
-        .money-transferreportpage .col-md-2.dmtsearchclass button {
-            width: 100% !important;
-            float: left;
-        }
-
-        .money-transferreportpage .col-md-7.money-transfere-aeps .col-md-12 .row {
-            margin: 0;
-        }
-    }
-
-    @@media screen and (max-width:768px) {
-        .money-transferreportpage .money-transfere-aeps {
-            width: 100%;
-            float: left;
-            padding: 0;
-        }
-
-            .money-transferreportpage .money-transfere-aeps .row {
-                margin: 0;
-            }
-
-            .money-transferreportpage .money-transfere-aeps .col-md-12 {
-                padding: 0;
-            }
-
-            .money-transferreportpage .money-transfere-aeps .aeps-selectclass {
-                padding-left: 0;
-            }
-
-        .money-transferreportpage .table-responsive {
-            border: 0;
-        }
-
-        .money-transferreportpage .col-md-2.aepspdfexlto-button {
-            position: absolute;
-            right: 0;
-            top: -10px;
-        }
-
-        .money-transferreportpage .col-md-2.dmtsearchclass {
-            float: left;
-            width: 14%;
-        }
-
-        .money-transferreportpage .table-responsive {
-            padding-bottom: 15px;
-        }
-
-        .money-transferreportpage .table-responsive {
-            position: relative !important;
-            z-index: 9;
-        }
-    }
-
-    @@media only screen and (max-width:766px){
-        .bars.sidebar-toggle-responshiveclass {
-            top: 14px !important;
-        }
-
-    }
-
-    @@media screen and (max-width:520px) {
-
-        .money-transferreportpage .aepspdfexlto-button .web-white-filter.fil {
-            margin: 0 !important;
-            padding-right: 0px;
-        }
-
-        .col-md-4.aeps-reportbutton {
-            padding-right: 0;
-            padding-bottom: 8px;
-        }
-
-        .money-transferreportpage .money-transfere-aeps .aeps-selectclass {
-            float: left;
-            width: 50%;
-            margin-bottom: 8px;
-            padding-right: 0px !important;
-        }
-
-        .money-transferreportpage .col-md-5.aeps-dateclass {
-            float: left;
-            width: 78%;
-        }
-
-        .money-transferreportpage .col-md-2.dmtsearchclass button {
-            width: 100%;
-            float: left;
-        }
-
-        .money-transferreportpage .col-md-2.dmtsearchclass {
-            float: left;
-            width: 22%;
-        }
-
-            .money-transferreportpage .col-md-2.dmtsearchclass button {
-                padding-left: 0;
-                padding-right: 0;
-            }
-
-                .money-transferreportpage .col-md-2.dmtsearchclass button span {
-                    font-size: 12px;
-                    margin: 0;
-                }
-
-                .money-transferreportpage .col-md-2.dmtsearchclass button .fa.fa-search {
-                    font-size: 12px !important;
-                }
-    }
-
-    @@media screen and (max-width:420px) {
-        .money-transferreportpage .col-md-2.aepspdfexlto-button {
-            position: static;
-        }
-
-        .money-transferreportpage .col-md-7.money-transfere-aeps .aeps-selectclass > div, .money-transferreportpage .col-md-7.money-transfere-aeps .form-group > div {
-            padding-bottom: 0 !important;
-        }
-    }
-
-    .new_old a {
-        padding: 6px 12px;
-        border: 1px solid #ccc;
-        float: right;
-    }
-
-
-</style>
-<section class="content money-transferreportpage" style="overflow-x: hidden;">
-    <div class="container-fluid full-dealer-secondanimation" style="padding-top:8px;">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Pan Card</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Pan Card</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card page-header-third">
-                    <div class="col-md-4 aeps-reportbutton">
-                        <div style="margin-left:-14px;">
-                            @Html.Partial("Moneytransferreportpartialview")
-
-                        </div>
+        @using (Html.BeginForm("Pancard_report_new", "Home", FormMethod.Post, panFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-pan-toolbar-unified saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head">
+                    <ol class="saas-acc-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Reports</li>
+                        <li>Pancard Report</li>
+                    </ol>
+                    <div class="vm-opr-page-nav">
+                        <nav class="vm-opr-nav--page" aria-label="Banking reports">
+                            <a class="vm-opr-nav__link" href="@Url.Action("Money_Transfer_Report", "Home")">DMT</a>
+                            <a class="vm-opr-nav__link" href="@Url.Action("AepsReport", "Home")">AEPS</a>
+                            <a class="vm-opr-nav__link" href="@Url.Action("m_possreport", "Home")">M-Poss</a>
+                            <a class="vm-opr-nav__link is-active" href="@Url.Action("Pancard_report_new", "Home")">Pancard</a>
+                            <a class="vm-opr-nav__link" href="@Url.Action("MIcroAtmReport", "Home")">MicroATM</a>
+                            <a class="vm-opr-nav__link" href="@Url.Action("CashDepositReport", "Home")">Cash Deposit</a>
+                        </nav>
                     </div>
+                </div>
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-inc-filter-row vm-rpt-filters-panel__bar">
 
-
-
-                    <div class="col-md-6 money-transfere-aeps">
-                        <div class="row">
-
-                            <div class="col-md-12">
-                                @using (Html.BeginForm("Pancard_report_new", "Home", FormMethod.Post))
-                                {
-                                    <div class="row">
-
-
-                                        <div class="col-md-3 only-select-css aeps-selectclass" id="rem" style="padding-right:5px;">
-                                            <div style="width:100%;">
-                                                @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "Select User", new { id = "allretailer", @class = "selectpicker form-control for-select2", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 only-select-css aeps-selectclass" style="padding-left:0px;padding-right:5px;">
-                                            <div class="form-group">
-                                                <div class="" style="width:100%;">
-                                                    @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                        {
-                                new SelectListItem{ Text="Status",Value="ALL",},
-                                new SelectListItem{Text="SUCCESS",Value="SUCCESS"},
-                                new SelectListItem{Text="PENDING",Value="PENDING"},
-                                new SelectListItem{Text="FAILED",Value="FAILED"}
-                                 }, new { @class = "selectpicker form-control for-select2", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;height:32px;" })
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-md-5 aeps-dateclass" style="padding:0px;">
-                                            <div class="form-group for-web-date" style="margin-bottom:0px;width:100%;">
-                                                <div class="input-daterange input-group">
-                                                    <div class="all-report-inputclass all-report-inputclass-left">
-                                                        <div class="custom-date-icon border-colorchangecss" style="height: 32px;">
-                                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                        </div>
-                                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;padding-left:20px; height:32px;", autocomplete = "off" })
-                                                    </div>
-                                                    @*<span class="input-group-addon">
-                                                        <i class="fa fa-exchange"></i>
-                                                    </span>*@
-                                                    <div class="all-report-inputclass all-report-inputclass-right">
-                                                        <div class="custom-date-icon border-colorchangecss" style="height: 32px;">
-                                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                        </div>
-                                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; padding-left:20px;height:32px;", autocomplete = "off" })
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-2 dmtsearchclass" style="padding-left:5px;">
-                                            <center>
-                                                <button type="submit" class="btn  waves-effect" style="width:100%;background:#eeebeb;height:32px;">
-                                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:#444;"></i>
-                                                    <span style="color:#444;">Search</span>
-                                                </button>
-                                            </center>
-                                        </div>
-                                    </div>
+                        <div class="vm-inc-filter-left">
+                            <div class="vm-opr-field vm-opr-field--port">
+                                @{
+                                    var retailerItems = ViewBag.allretailer as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
                                 }
+                                @Html.DropDownList("allretailer", new SelectList(retailerItems, "Value", "Text", selectedRetailer), "Select User", new { id = "allretailer", @class = "vm-opr-select form-control for-select2", @title = "User" })
                             </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-md-2 aepspdfexlto-button">
-                        <div class="row">
-                            <div class="form-group" style="margin-top:-18px; ">
-                                <div style="padding-top:18px; float:right">
-                                    <div class="web-white-filter fil" style="float: left;margin-right: 5px;">
-                                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 20px;">
-                                        <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 19px;">
-                                    </div>
-                                </div>
-                                <div class="white-success" style="display:none; float: right; margin-top: 20px;">
-                                    <span id="successtotal" class="btn btn-success waves-effect" style="font-size: 13px;padding:9px; color:white;font-weight:600;" title="Total  Success"><i style="font-size:15px;top:1px;" class="fa fa-check-circle-o" aria-hidden="true"></i> </span>
-                                    <span id="Failedtotal" class="btn btn-danger waves-effect" style="font-size: 13px;padding:9px; color:white;font-weight:600;" title="Total  Failed"><i style="font-size:15px;top:1px;" class="fa fa-times-circle-o" aria-hidden="true"></i> </span>
-                                    <span id="Pendingtotal" class="btn btn-warning waves-effect" style="font-size: 13px;padding:9px;color:white; font-weight:600;" title="Total  Pending"><i style="font-size:15px;top:1px;" class="fa fa-question-circle-o" aria-hidden="true"></i> </span>
-
-                                </div>
+                            <div class="vm-opr-field vm-opr-field--port">
+                                @Html.DropDownList("ddl_status", new SelectList(new[]
+                                {
+                                    new SelectListItem { Text = "All Status", Value = "ALL" },
+                                    new SelectListItem { Text = "SUCCESS", Value = "SUCCESS" },
+                                    new SelectListItem { Text = "PENDING", Value = "PENDING" },
+                                    new SelectListItem { Text = "FAILED", Value = "FAILED" }
+                                }, "Value", "Text", selectedStatus), new { id = "ddl_status", @class = "vm-opr-select form-control for-select2", @title = "Status" })
                             </div>
                         </div>
+
+                        <div class="vm-inc-filter-right">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
                     </div>
-
-
                 </div>
             </div>
-        </div>
+        }
 
-        <div class="row clearfix" style="width: 100%; float: left; margin: 11px 0px; ">
-            <div class="page-header-third">
-                <div class="new_old" style="text-align: right;">
-                    @Html.ActionLink("NEW", "Pancard_report_new", "Home", new { @style = "background: var(--main-bg-lcolor);color: #fff;" })
-                    @Html.ActionLink("OLD", "Pancard_report", "Home")
-                </div>
-            </div>
-        </div>
-
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card all-reporttable-css all-reporttable-css-aeps">
-
-                    <div class="page-header-third">
-                        <div class="table-responsive tableseconddes-dealer" style="position:inherit;">
-                            <table id="example" class="table table-bordered table-striped table-hover" cellspacing="0" style="width:100%;font-size:12px;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Live&nbsp;Status</th>
-                                        <th>User</th>
-                                        <th>Amount</th>
-
-                                        <th>User&nbsp;Pre</th>
-                                        <th>TDS</th>
-                                        <th>COMM</th>
-                                        <th>User&nbsp;Post</th>
-                                        <th>User&nbsp;Final</th>
-                                        <th>MY&nbsp;Pre</th>
-                                        <th>MY&nbsp;COMM</th>
-                                        <th>MY&nbsp;TDS</th>
-                                        <th>MY&nbsp;Post</th>
-                                        <th>MY&nbsp;Final</th>
-                                        <th>Time</th>
-                                        
-
-                                    </tr>
-
-                                </thead>
-                                <tbody id="trow" class="alin">
-                                    @foreach (var i in Model)
-                                    {
-                                    <tr>
-                                        @{ 
-                                            var sts = i.status;
-                                        }
-
-                                        @if (i.status.Contains("Refund"))
-                                        {
-                                        sts = "Refund";
-                                        }
-
-
-
-
-
-                                        <td>
-                                            @if (i.status.Contains("PENDING"))
-                                            {
-                                                <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png"> @sts
-
-
-                                            }
-                                            @if (i.status.Contains("Refund"))
-                                            {
-                                                <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown" src="../../ashok-images/backresnd.svg"> @sts
-
-                                            }
-                                            @if (i.status.Contains("Failed"))
-                                            {
-                                                <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red" src="../../ashok-images/closes.svg"> @sts
-
-                                            }
-                                            @if (i.status.Contains("Success"))
-                                            {
-                                                <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green" src="../../ashok-images/correct.svg"> @sts
-
-                                            }
-                                        </td>
-                                       
-                                        <td>@i.name => @i.Email</td>
-                                        <td>@i.Amount</td>
-                                        <td>@i.Rem_pre</td>
-                                        <td>@i.Rem_tds</td>
-                                        <td>@i.Rem_comm</td>
-                                        <td>@i.rem_post</td>
-                                        <td>@i.Rem_final</td>
-                                        <td>@i.dlm_pre</td>
-                                        <td>@i.dlm_comm</td>
-                                        <td>@i.dlm_tds</td>
-                                        <td>@i.dlm_post</td>
-                                        <td>@i.dlm_final</td>
-                                        <td>@i.request_time</td>
-
-
-                                    </tr>
-                                    }
-
-                                </tbody>
-                            </table>
-                            <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                <img src="~/img/ajax-loader.gif" />
-                            </div>
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel" id="showreport">
+                <div class="vm-opr-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-id-card" aria-hidden="true"></i>
+                        <span>Pancard report</span>
+                    </div>
+                    <div class="vm-opr-table-panel__right vm-flight-table-head-right">
+                        <nav class="vm-opr-nav--page" aria-label="Pancard version">
+                            <a class="vm-opr-nav__link is-active" href="@Url.Action("Pancard_report_new", "Home")">NEW</a>
+                            <a class="vm-opr-nav__link" href="@Url.Action("Pancard_report", "Home")">OLD</a>
+                        </nav>
+                        <div class="vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
                         </div>
                     </div>
                 </div>
-
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="example" class="table table-bordered table-striped table-hover vm-opr-data-table vm-inc-data-table vm-flight-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Live&nbsp;Status</th>
+                                    <th>User</th>
+                                    <th>Amount</th>
+                                    <th>User&nbsp;Pre</th>
+                                    <th>TDS</th>
+                                    <th>COMM</th>
+                                    <th>User&nbsp;Post</th>
+                                    <th>User&nbsp;Final</th>
+                                    <th>MY&nbsp;Pre</th>
+                                    <th>MY&nbsp;COMM</th>
+                                    <th>MY&nbsp;TDS</th>
+                                    <th>MY&nbsp;Post</th>
+                                    <th>MY&nbsp;Final</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trow">
+                                @{ Html.RenderPartial("_Pancard_report_new", items); }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- model for table -->
-<!-- Jquery Core Js -->
-<script src="~/Swalalert/datatablejquery.js"></script>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-<script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
-
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
+<script src="~/MainFrontDesign/js/admin-operator-report-nav.js"></script>
 <script>
-    $('.for-select2').select2();
+    window.panExcelUrl = '@Url.Action("ExcelRechargereportPan1", "Home")';
+    window.panPdfUrl = '@Url.Action("PDFreport_PAN1", "Home")';
+    window.panSelect2Url = '@Url.Content("~/MainFrontDesign/select2/dist/js/select2.full.min.js")';
 
-
-</script>
-
-
-<script>
-    function isNumber(evt) {
-        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
-            return false;
-        return true;
+    function panQueryData() {
+        var $ = window.jQuery;
+        return {
+            txt_frm_date: $('#txt_frm_date').val() || '',
+            txt_to_date: $('#txt_to_date').val() || '',
+            ddl_status: $('#ddl_status').val() || 'ALL',
+            allretailer: $('#allretailer').val() || ''
+        };
     }
-</script>
-<!--Calendar Javascript-->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true,
-                orientation: "bottom auto",
 
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-            }
-    });
-
-</script>
-<script>
-    $('.white-success-button').click(function () {
-        $('.white-success').toggle();
-    });
-</script>
-<script>
-    function findtotalpan() {
-        var allretailer = $('#allretailer').val();
-        var ddl_status = $('#ddl_status').val();
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-             $.post("@Url.Action("PancardReport_Total", "Home")",
-                 {"allretailer": allretailer, "ddl_status": ddl_status, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date  },
-                 function (data) {
-                     $('#successtotal').text("₹. " + data.success);
-                     $('#Failedtotal').text("₹. " + data.failed);
-                     $('#Pendingtotal').text("₹. " + data.pending);
-
-                 });
+    function panQueryString() {
+        var q = panQueryData();
+        return 'txt_frm_date=' + encodeURIComponent(q.txt_frm_date)
+            + '&txt_to_date=' + encodeURIComponent(q.txt_to_date)
+            + '&ddl_status=' + encodeURIComponent(q.ddl_status)
+            + '&allretailer=' + encodeURIComponent(q.allretailer);
     }
-</script>
-<script>
-    $("#btnExport").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
 
-        var ddl_status = $('#ddl_status').val();
-        var allretailer = $('#allretailer').val();
+    function panLoadScript(src, done) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = done;
+        s.onerror = done;
+        document.body.appendChild(s);
+    }
 
-        var url = '@Url.Action("ExcelRechargereportPan1", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date  +'&ddl_status=' + ddl_status  + '&allretailer=' + allretailer;
-        location.href = url;
-});
-</script>
-<script>
-    $("#btnPDF").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-
-        var ddl_status = $('#ddl_status').val();
-        var allretailer = $('#allretailer').val();
-
-        var url = '@Url.Action("PDFreport_PAN1", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date  + '&ddl_status=' + ddl_status + '&allretailer=' + allretailer;
-        window.open(url,'_blank');
-    });
-</script>
-<script>
-        var pageindex = 2;
-        var NoMoredata = false;
-        var inProgress = false;
-        $(window).scroll(function () {
-
-
-            var allretailer = $('#allretailer').val();
-
-            var ddl_status = $('#ddl_status').val();
-            var txt_frm_date = $('#txt_frm_date').val();
-            var txt_to_date = $('#txt_to_date').val();
-            if ($(window).scrollTop() > Number($("#example").height()) / 4 && !NoMoredata && !inProgress) {
-                inProgress = true;
-                $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScrollpan", "Home")",
-                    { "pageindex": pageindex,"allretailer": allretailer, "ddl_status": ddl_status, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date },
-                    function (data) {
-                        pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#trow").append(data.HTMLString);
-                        $("#loadingdiv").hide();
-                        inProgress = false;
-                    });
-            }
-        });
-
-
-</script>
-
-
-<script>
-    $(function () {
-        var loc = window.location.href; // returns the full URL
-        if ('/~/DEALER/Home/Pancard_report') {
-            $('.sidebar-dealer-responshive ul.dealer-all-reportpage li:nth-child(4) a').addClass('active');
+    function bootDealerPancardReport() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.datepicker) {
+            window.setTimeout(bootDealerPancardReport, 50);
+            return;
         }
-    });
+
+        function afterPlugins() {
+            document.body.classList.add('saas-flight-report-dp-page');
+            $('.saas-dealer-flight-report-page.saas-dealer-pancard-report-page .for-select2').each(function () {
+                var $el = $(this);
+                if ($.fn.select2 && !$el.hasClass('select2-hidden-accessible')) {
+                    $el.select2({
+                        width: '100%',
+                        dropdownParent: $('body'),
+                        containerCssClass: 'vm-flight-select2',
+                        dropdownCssClass: 'vm-flight-select2-drop',
+                        minimumResultsForSearch: $el.attr('id') === 'ddl_status' ? 8 : 0
+                    });
+                }
+            });
+
+            if (typeof window.initAdminReportDateForm === 'function') {
+                window.initAdminReportDateForm('#dealerPancardReportForm');
+            } else {
+                $('#txt_frm_date, #txt_to_date').datepicker({
+                    format: 'yyyy-mm-dd',
+                    todayHighlight: true,
+                    autoclose: true,
+                    orientation: 'bottom auto',
+                    container: 'body'
+                });
+                if ($('#dealerPancardReportForm').attr('data-date-mode') !== 'post') {
+                    $('#txt_frm_date').datepicker('setDate', new Date());
+                    $('#txt_to_date').datepicker('setDate', new Date());
+                }
+            }
+
+            function pinPanDatepicker(e) {
+                if (typeof window.repositionAdminDatepickerForMobile === 'function') {
+                    window.repositionAdminDatepickerForMobile(e && e.target ? e.target : this);
+                }
+            }
+
+            $(document).off('show.vmPanDp shown.vmPanDp').on('show.vmPanDp shown.vmPanDp', '#txt_frm_date, #txt_to_date', pinPanDatepicker);
+            $(window).off('resize.vmPanDp orientationchange.vmPanDp').on('resize.vmPanDp orientationchange.vmPanDp', pinPanDatepicker);
+
+            $('#btnExport').off('click.panEx').on('click.panEx', function () {
+                window.location.href = window.panExcelUrl + '?' + panQueryString();
+            });
+            $('#btnPDF').off('click.panPdf').on('click.panPdf', function () {
+                window.open(window.panPdfUrl + '?' + panQueryString(), '_blank');
+            });
+        }
+
+        if ($.fn.select2) {
+            afterPlugins();
+            return;
+        }
+        panLoadScript(window.panSelect2Url, afterPlugins);
+    }
+
+    if (document.readyState === 'complete') {
+        bootDealerPancardReport();
+    } else {
+        window.addEventListener('load', bootDealerPancardReport);
+    }
 </script>
+
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-inc-filter-row .form-control,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-inc-filter-row input.form-control,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-inc-filter-row select.form-control,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-inc-filter-row .vm-opr-select,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-inc-filter-row .vm-inc-msg-input,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-inc-filter-row .saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-inc-filter-row .saas-acc-btn--search,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-inc-filter-row .saas-acc-btn--search span,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-inc-filter-row .vm-opr-toolbar-search,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-inc-filter-row .vm-opr-toolbar-search span,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page span.select2-selection__rendered,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page span.select2-selection__placeholder,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page span:not(.saas-acc-dp-icon).select2-selection__rendered,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-flight-select2 .select2-selection__rendered,
+        body.saas-admin-ui section.content.saas-dealer-flight-report-page .vm-flight-select2 .select2-selection__placeholder {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+        body.saas-admin-ui section.content.saas-dealer-dmt-report-page .vm-opr-page-nav,
+        body.saas-admin-ui section.content.saas-dealer-dmt-report-page .vm-opr-nav--page {
+            flex-wrap: wrap;
+        }
+        body.saas-admin-ui.saas-flight-report-dp-page .select2-dropdown,
+        body.saas-admin-ui.saas-flight-report-dp-page .select2-dropdown .select2-results__option,
+        body.saas-admin-ui.saas-flight-report-dp-page .select2-dropdown .select2-search__field,
+        body.saas-admin-ui .select2-dropdown.vm-flight-select2-drop,
+        body.saas-admin-ui .select2-dropdown.vm-flight-select2-drop .select2-results__option,
+        body.saas-admin-ui .select2-dropdown.vm-flight-select2-drop .select2-search__field,
+        body.saas-admin-ui .select2-container--open .select2-dropdown.vm-flight-select2-drop .select2-results__option {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+        @@media (max-width: 991px) {
+            body.saas-admin-ui.saas-flight-report-dp-page .datepicker.dropdown-menu,
+            body.saas-admin-ui .datepicker.vm-flight-dp {
+                position: fixed !important;
+                width: calc(100vw - 32px) !important;
+                max-width: 320px !important;
+                box-sizing: border-box !important;
+                overflow: hidden !important;
+                z-index: 12000 !important;
+            }
+            body.saas-admin-ui.saas-flight-report-dp-page .datepicker table,
+            body.saas-admin-ui .datepicker.vm-flight-dp table {
+                width: 100% !important;
+                max-width: 100% !important;
+                table-layout: fixed !important;
+            }
+            body.saas-admin-ui.saas-flight-report-dp-page .datepicker table tr td,
+            body.saas-admin-ui.saas-flight-report-dp-page .datepicker table tr th,
+            body.saas-admin-ui .datepicker.vm-flight-dp table tr td,
+            body.saas-admin-ui .datepicker.vm-flight-dp table tr th {
+                width: 14.28% !important;
+                min-width: 0 !important;
+                padding: 4px 0 !important;
+            }
+        }
+    </style>
+}

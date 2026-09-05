@@ -1,71 +1,72 @@
-﻿
-@{
-    ViewBag.Title = "_Pancard_report";
-}
-
-@model List<Vastwebmulti.Models.PAN_CARD_IPAY_Token_report_paging_Result>
+﻿@model IEnumerable<Vastwebmulti.Models.PAN_CARD_IPAY_Token_report_paging_Result>
+@using System.Linq
 @{
     Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.PAN_CARD_IPAY_Token_report_paging_Result>();
 }
-
-@if (Model != null)
+@if (items.Any())
 {
-    foreach (var item in Model)
+    foreach (var item in items)
     {
-        var sts = "";
-        var color = "";
-        var icon = "";
-        if (item.Particulars.Contains("Pending"))
+        var statusRaw = item.Particulars ?? "";
+        var statusTone = "pending";
+        var statusLabel = statusRaw;
+        var statusFa = "fa-clock-o";
+        if (statusRaw.IndexOf("Refund", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "#ff9600";
-            sts = "Pending";
-            icon = "../../ashok-images/clock.svg";
+            statusTone = "failed";
+            statusLabel = "Refund";
+            statusFa = "fa-undo";
         }
-        if (item.Particulars.Contains("Success"))
+        else if (statusRaw.IndexOf("Failed", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "green";
-            sts = "Success";
-            icon = "../../ashok-images/correct.svg";
+            statusTone = "failed";
+            statusLabel = "Failed";
+            statusFa = "fa-times";
         }
-        if (item.Particulars.Contains("Failed"))
+        else if (statusRaw.IndexOf("Success", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "red";
+            statusTone = "success";
+            statusLabel = "Success";
+            statusFa = "fa-check";
+        }
+        else if (statusRaw.IndexOf("Pending", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "pending";
+            statusLabel = "Pending";
+            statusFa = "fa-clock-o";
+        }
 
-            icon = "../../ashok-images/closes.svg";
-        }
-        if (item.Particulars.Contains("Refund"))
-        {
-            color = "#9C27B0";
-            sts = "Refund";
-            icon = "../../ashok-images/closes.svg";
-
-        }
-        <tr>
-            <td>
-                <p style="font-weight:700;">
-
-                    <img style="height: 20px;width: 18px;margin:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:@color" src="@icon" />
-                    @item.Frm_Name
-                </p>
+        var firm = !string.IsNullOrWhiteSpace(item.Frm_Name) ? item.Frm_Name : (item.RetailerName ?? "—");
+        var txnDate = item.Date.HasValue ? item.Date.Value.ToString("dd-MMM HH:mm:ss") : "—";
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-status="@statusRaw">
+            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-radiant-status-text">@firm</span>
             </td>
-
-            <td><p style="font-size:12px;">@item.PhysicalCount</p></td>
-            <td><p style="font-size:12px;">@item.DigitalCount</p></td>
-            <td><p style="font-size:12px;">@item.ProcessingFees</p></td>
-            <td><p style="font-size:12px;">@item.CouponStatus</p></td>
-
-            <td><p style="font-size:12px;">@item.UTI_TXN_ID</p></td>
-            <td><p style="font-size:11px;">@item.retailer_remain_pre</p></td>
-            <td><p style="font-size:11px;">@item.RetailerIncome</p></td>
-            <td><p style="font-size:11px;">@item.retailer_remain_post</p></td>
-            <td><p style="font-size:11px;">@item.retailer_dealer_pre</p></td>
-            <td><p style="font-size:11px;">@item.DealerIncome</p></td>
-            <td><p style="font-size:11px;">@item.retailer_dealer_post</p></td>
-     
-
-            <td><p style="font-size:11px;">@item.Date</p></td>
+            <td>@(item.PhysicalCount.HasValue ? item.PhysicalCount.Value.ToString() : "—")</td>
+            <td>@(item.DigitalCount.HasValue ? item.DigitalCount.Value.ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.ProcessingFees.HasValue ? item.ProcessingFees.Value.ToString("N2") : "—")</td>
+            <td>@(item.CouponStatus ?? "—")</td>
+            <td>@(item.UTI_TXN_ID ?? "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.retailer_remain_pre.HasValue ? item.retailer_remain_pre.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.RetailerIncome.HasValue ? item.RetailerIncome.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.retailer_remain_post.HasValue ? item.retailer_remain_post.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.retailer_dealer_pre.HasValue ? item.retailer_dealer_pre.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.DealerIncome.HasValue ? item.DealerIncome.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.retailer_dealer_post.HasValue ? item.retailer_dealer_post.Value.ToString("N2") : "—")</td>
+            <td>@txnDate</td>
         </tr>
-
     }
 }
-
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="13" class="vm-opr-table-empty">
+            <i class="fas fa-id-card" aria-hidden="true"></i>
+            <span>Pancard report not found.</span>
+        </td>
+    </tr>
+}

@@ -1,0 +1,142 @@
+@model IEnumerable<Vastwebmulti.Models.show_ecomm_report_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var items = (Model ?? Enumerable.Empty<Vastwebmulti.Models.show_ecomm_report_Result>()).ToList();
+    var i = 1;
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+        var statusLabel = "Pending";
+        if (item.OrderStatus == 2)
+        {
+            statusTone = "success";
+            statusFa = "fa-check";
+            statusLabel = "Success";
+        }
+        else if (item.OrderStatus == 3)
+        {
+            statusTone = "failed";
+            statusFa = "fa-times";
+            statusLabel = "Rejected";
+        }
+        else if (item.OrderStatus == 1)
+        {
+            statusTone = "pending";
+            statusFa = "fa-clock-o";
+            statusLabel = "Pending";
+        }
+
+        var firm = item.Frm_Name ?? "";
+        var email = item.Email ?? "";
+        var userText = !string.IsNullOrWhiteSpace(firm) && !string.IsNullOrWhiteSpace(email)
+            ? firm + " ⇒ " + email
+            : (!string.IsNullOrWhiteSpace(firm) ? firm : (!string.IsNullOrWhiteSpace(email) ? email : "-"));
+        var orderDate = item.OrderDate.HasValue ? item.OrderDate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+        var approvedDate = item.UpdatedOn.HasValue ? item.UpdatedOn.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+        var amt = item.Amount.HasValue ? item.Amount.Value.ToString("N2") : "";
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-status="@statusLabel">
+            <td>@i</td>
+            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-radiant-status-text">@statusLabel</span>
+            </td>
+            <td>@userText</td>
+            <td>@orderDate</td>
+            <td>@(item.ProductName ?? "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.ListPrice.HasValue ? item.ListPrice.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.StandardPrice.HasValue ? item.StandardPrice.Value.ToString("N2") : "-")</td>
+            <td>@(item.QTY.HasValue ? item.QTY.Value.ToString() : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.Amount.HasValue ? item.Amount.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.RemPre.HasValue ? item.RemPre.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.Remcomm.HasValue ? item.Remcomm.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.RemPost.HasValue ? item.RemPost.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.DlmPre.HasValue ? item.DlmPre.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.DlmComm.HasValue ? item.DlmComm.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.DlmPost.HasValue ? item.DlmPost.Value.ToString("N2") : "-")</td>
+            <td>@approvedDate</td>
+            <td class="vm-dmt-action-cell vm-sell-rch-actions">
+                <button type="button"
+                        class="vm-opr-icon-btn vm-dth-detail-btn vm-ecom-detail-btn"
+                        title="View details"
+                        data-status="@statusLabel"
+                        data-user="@userText"
+                        data-email="@email"
+                        data-role="@(item.RoleName ?? "")"
+                        data-product="@(item.ProductName ?? "")"
+                        data-category="@(item.CatName ?? "")"
+                        data-order="@orderDate"
+                        data-approved="@approvedDate"
+                        data-mrp="@(item.ListPrice.HasValue ? item.ListPrice.Value.ToString("N2") : "")"
+                        data-price="@(item.StandardPrice.HasValue ? item.StandardPrice.Value.ToString("N2") : "")"
+                        data-qty="@(item.QTY.HasValue ? item.QTY.Value.ToString() : "")"
+                        data-amount="@amt"
+                        data-userpre="@(item.RemPre.HasValue ? item.RemPre.Value.ToString("N2") : "")"
+                        data-userinc="@(item.Remcomm.HasValue ? item.Remcomm.Value.ToString("N2") : "")"
+                        data-userpost="@(item.RemPost.HasValue ? item.RemPost.Value.ToString("N2") : "")"
+                        data-dlmpre="@(item.DlmPre.HasValue ? item.DlmPre.Value.ToString("N2") : "")"
+                        data-dlminc="@(item.DlmComm.HasValue ? item.DlmComm.Value.ToString("N2") : "")"
+                        data-dlmpost="@(item.DlmPost.HasValue ? item.DlmPost.Value.ToString("N2") : "")">
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                </button>
+            </td>
+        </tr>
+        i++;
+    }
+}
+
+@* Original page always appended this sample row after Model rows. Keep it so the table is never blank. *@
+<tr class="vm-dmt-row vm-dmt-row--pending">
+    <td>@i</td>
+    <td class="vm-radiant-status-cell vm-ticket-status-cell">
+        <span class="vm-dmt-status vm-dmt-status--pending" title="dfdfds">
+            <i class="fa fa-clock-o" aria-hidden="true"></i>
+        </span>
+        <span class="vm-radiant-status-text">dfdfds</span>
+    </td>
+    <td>dfdf</td>
+    <td>dfdfd</td>
+    <td>dfdd</td>
+    <td class="vm-dmt-amt-cell">efdds</td>
+    <td class="vm-dmt-amt-cell">dcdcd</td>
+    <td>dfed</td>
+    <td class="vm-dmt-amt-cell">10099</td>
+    <td class="vm-dmt-amt-cell">-</td>
+    <td class="vm-dmt-amt-cell">-</td>
+    <td class="vm-dmt-amt-cell">-</td>
+    <td class="vm-dmt-amt-cell">-</td>
+    <td class="vm-dmt-amt-cell">-</td>
+    <td class="vm-dmt-amt-cell">-</td>
+    <td>-</td>
+    <td class="vm-dmt-action-cell vm-sell-rch-actions">
+        <button type="button"
+                class="vm-opr-icon-btn vm-dth-detail-btn vm-ecom-detail-btn"
+                title="View details"
+                data-status="dfdfds"
+                data-user="dfdf"
+                data-email=""
+                data-role=""
+                data-product="dfdd"
+                data-category=""
+                data-order="dfdfd"
+                data-approved=""
+                data-mrp="efdds"
+                data-price="dcdcd"
+                data-qty="dfed"
+                data-amount="10099"
+                data-userpre=""
+                data-userinc=""
+                data-userpost=""
+                data-dlmpre=""
+                data-dlminc=""
+                data-dlmpost="">
+            <i class="fas fa-eye" aria-hidden="true"></i>
+        </button>
+    </td>
+</tr>

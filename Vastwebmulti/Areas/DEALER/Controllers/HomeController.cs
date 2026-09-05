@@ -1896,33 +1896,54 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
 
         public ActionResult Dealerhold_comm_reports()
         {
+            return View(LoadDealerHoldCommRows());
+        }
 
+        private List<dealerCommon_status_master_dlm_Transfer_cls> LoadDealerHoldCommRows()
+        {
             var userid = User.Identity.GetUserId();
             var userssmaster = db.masterhold_commisionTransfer_reports("dealer", userid).ToList();
-            List<dealerCommon_status_master_dlm_Transfer_cls> listview1 = new List<dealerCommon_status_master_dlm_Transfer_cls>();
+            var listview1 = new List<dealerCommon_status_master_dlm_Transfer_cls>();
             foreach (var item in userssmaster)
             {
-
-                dealerCommon_status_master_dlm_Transfer_cls model = new dealerCommon_status_master_dlm_Transfer_cls();
+                var model = new dealerCommon_status_master_dlm_Transfer_cls();
                 model.Frmname = item.FarmName;
                 model.Name = item.Name;
                 model.mobile = item.Mobile;
                 model.Userid = item.usersid;
-                model.totalcomm = item.totalcomm.Value;
+                model.totalcomm = item.totalcomm ?? 0m;
                 model.Role = item.userroles;
-                model.Hold_date = item.Hold_date.Value;
-                model.trasnferdate = item.trasnferdate.Value;
-                model.master_remain = item.master_remain.Value;
-                model.master_remain_pre = item.master_remain_pre.Value;
-                model.admin_prebal = item.admin_prebal.Value;
-                model.admin_postbal = item.admin_postbal.Value;
-                model.master_remain = item.master_remain.Value;
+                model.Hold_date = item.Hold_date ?? default(DateTime);
+                model.trasnferdate = item.trasnferdate ?? default(DateTime);
+                model.master_remain = item.master_remain ?? 0m;
+                model.master_remain_pre = item.master_remain_pre ?? 0m;
+                model.admin_prebal = item.admin_prebal ?? 0m;
+                model.admin_postbal = item.admin_postbal ?? 0m;
                 model.idno = item.idno;
                 listview1.Add(model);
-
             }
+            return listview1;
+        }
 
-            return View(listview1);
+        public ActionResult Excel_Dealerhold_comm_reports()
+        {
+            var rows = LoadDealerHoldCommRows();
+            Response.Clear();
+            Response.Buffer = true;
+            Response.Charset = "utf-8";
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("content-disposition", "attachment; filename=Commission_Hold_Report.xls");
+            return View(rows);
+        }
+
+        public ActionResult PDF_Dealerhold_comm_reports()
+        {
+            var rows = LoadDealerHoldCommRows();
+            return new ViewAsPdf("PDF_Dealerhold_comm_reports", rows)
+            {
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                PageSize = Rotativa.Options.Size.A4
+            };
         }
 
         public ActionResult FundTransferDealer(string tabname = "")
@@ -9423,10 +9444,10 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
             string txt_to_date = DateTime.Now.ToString();
             string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString("yyyy-MM-dd");
             string to_date = Convert.ToDateTime(txt_to_date).AddDays(1).ToString("yyyy-MM-dd");
-            var Liverechargecount = db.Gift_card_details_report(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), userid, "", "Dealer", "", "ALL", 50).ToList();
-            var totalsuccesscount = Liverechargecount.Where(a => a.status.ToUpper() == "SUCCESS").Sum(a => a.amount);
-            var totalfailed = Liverechargecount.Where(a => a.status.ToUpper() == "FAILED").Sum(a => a.amount);
-            var totalpending = Liverechargecount.Where(a => a.status.ToUpper() == "PENDING").Sum(a => a.amount);
+            var Liverechargecount = db.Gift_card_details_report(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), userid, "", "Dealer", "", "ALL", 1000000).ToList();
+            var totalsuccesscount = Liverechargecount.Where(a => !string.IsNullOrEmpty(a.status) && a.status.ToUpper() == "SUCCESS").Sum(a => a.amount);
+            var totalfailed = Liverechargecount.Where(a => !string.IsNullOrEmpty(a.status) && a.status.ToUpper() == "FAILED").Sum(a => a.amount);
+            var totalpending = Liverechargecount.Where(a => !string.IsNullOrEmpty(a.status) && a.status.ToUpper() == "PENDING").Sum(a => a.amount);
             ViewData["Totals"] = totalsuccesscount;
             ViewData["Totalf"] = totalfailed;
             ViewData["Totalp"] = totalpending;
@@ -9475,25 +9496,100 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
             ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl(dealerid), "RetailerId", "RetailerName", null).ToList();
             var operator_value = db.Operator_Code.Where(a => a.Operator_type == "DigitalVoucher").Distinct().ToList();
             ViewBag.Operator = new SelectList(operator_value, "new_opt_code", "operator_Name");
-            DateTime frm = Convert.ToDateTime(txt_frm_date);
-            DateTime to = Convert.ToDateTime(txt_to_date);
-            txt_frm_date = frm.ToString("dd-MM-yyyy");
-            txt_to_date = to.ToString("dd-MM-yyyy");
-            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
-                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime frm_date = Convert.ToDateTime(dt).Date;
-            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
-            var Liverechargecount = db.Gift_card_details_report(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), userid, optname, ddlusers, "", ddl_status, ddltop).ToList();
-            var totalsuccesscount = Liverechargecount.Where(a => a.status.ToUpper() == "SUCCESS").Sum(a => a.amount);
-            var totalfailed = Liverechargecount.Where(a => a.status.ToUpper() == "FAILED").Sum(a => a.amount);
-            var totalpending = Liverechargecount.Where(a => a.status.ToUpper() == "PENDING").Sum(a => a.amount);
+            DateTime frm_date = ParseDealerGiftDate(txt_frm_date);
+            DateTime to_date = ParseDealerGiftDate(txt_to_date).AddDays(1);
+            var Liverechargecount = db.Gift_card_details_report(frm_date, to_date, userid, optname, ddlusers, "", ddl_status, ddltop).ToList();
+            var totalsuccesscount = Liverechargecount.Where(a => !string.IsNullOrEmpty(a.status) && a.status.ToUpper() == "SUCCESS").Sum(a => a.amount);
+            var totalfailed = Liverechargecount.Where(a => !string.IsNullOrEmpty(a.status) && a.status.ToUpper() == "FAILED").Sum(a => a.amount);
+            var totalpending = Liverechargecount.Where(a => !string.IsNullOrEmpty(a.status) && a.status.ToUpper() == "PENDING").Sum(a => a.amount);
             ViewData["Totals"] = totalsuccesscount;
             ViewData["Totalf"] = totalfailed;
             ViewData["Totalp"] = totalpending;
             return View(Liverechargecount);
 
+        }
+
+        private DateTime ParseDealerGiftDate(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return DateTime.Now.Date;
+            }
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy", "dd/MM/yyyy" };
+            DateTime parsed;
+            if (DateTime.TryParseExact(value.Trim(), formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out parsed))
+            {
+                return parsed.Date;
+            }
+            if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out parsed))
+            {
+                return parsed.Date;
+            }
+            if (DateTime.TryParse(value, out parsed))
+            {
+                return parsed.Date;
+            }
+            return DateTime.Now.Date;
+        }
+
+        private List<Vastwebmulti.Models.Gift_card_details_report_Result> LoadDealerGiftcardRows(string txt_frm_date, string txt_to_date, string ddl_status, string Operator, string allretailer)
+        {
+            var dealerid = User.Identity.GetUserId();
+            var userid = "";
+            var optname = "";
+            var ddlusers = "";
+            if (allretailer == "" || allretailer == null)
+            {
+                userid = dealerid;
+                ddlusers = "Dealer";
+            }
+            else
+            {
+                userid = allretailer;
+                ddlusers = "Retailer";
+            }
+            if (Operator == null || Operator == "" || Operator.Contains("Select Operator"))
+            {
+                optname = "";
+            }
+            else
+            {
+                optname = Operator;
+            }
+            if (ddl_status == null || ddl_status == "" || ddl_status == "Status")
+            {
+                ddl_status = "ALL";
+            }
+
+            DateTime frm_date = ParseDealerGiftDate(txt_frm_date);
+            DateTime toExclusive = ParseDealerGiftDate(txt_to_date).AddDays(1);
+
+            ViewBag.frmDate = frm_date.ToString("yyyy-MM-dd");
+            ViewBag.toDate = ParseDealerGiftDate(txt_to_date).ToString("yyyy-MM-dd");
+            ViewBag.statusFilter = ddl_status;
+
+            return db.Gift_card_details_report(frm_date, toExclusive, userid, optname, ddlusers, "", ddl_status, 1000000).ToList();
+        }
+
+        public ActionResult Excel_Giftcard_Report(string txt_frm_date, string txt_to_date, string ddl_status, string Operator, string ddl_top, string allretailer)
+        {
+            var rows = LoadDealerGiftcardRows(txt_frm_date, txt_to_date, ddl_status, Operator, allretailer);
+            Response.Clear();
+            Response.Buffer = true;
+            Response.Charset = "utf-8";
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("content-disposition", "attachment; filename=Giftcard_Report.xls");
+            return View(rows);
+        }
+
+        public ActionResult PDF_Giftcard_Report(string txt_frm_date, string txt_to_date, string ddl_status, string Operator, string ddl_top, string allretailer)
+        {
+            var rows = LoadDealerGiftcardRows(txt_frm_date, txt_to_date, ddl_status, Operator, allretailer);
+            return new ViewAsPdf("PDF_Giftcard_Report", rows)
+            {
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                PageSize = Rotativa.Options.Size.A4
+            };
         }
         #endregion
 
@@ -9567,6 +9663,79 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
             ViewData["Totalp"] = totalpending;
             ViewData["Totalf"] = totalreject;
             return View(vv);
+        }
+
+        private List<Vastwebmulti.Models.show_ecomm_report_Result> LoadDealerEcommerceRows(string txt_frm_date, string txt_to_date, string ddl_status, string category, string allretailer)
+        {
+            if ((txt_frm_date == null || txt_frm_date == "") && (txt_to_date == null || txt_to_date == ""))
+            {
+                txt_frm_date = DateTime.Now.ToString();
+                txt_to_date = DateTime.Now.ToString();
+            }
+
+            var loginid = User.Identity.GetUserId();
+            var userid = "";
+            var ddlusers = "";
+            if (allretailer == "" || allretailer == null)
+            {
+                userid = loginid;
+                ddlusers = "Dealer";
+            }
+            else
+            {
+                userid = allretailer;
+                ddlusers = "Retailer";
+            }
+
+            if (ddl_status == null || ddl_status == "" || ddl_status == "Status")
+            {
+                ddl_status = "ALL";
+            }
+            if (category == null || category.Contains("ALL"))
+            {
+                category = "";
+            }
+
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime frm_date = Convert.ToDateTime(dt).Date;
+            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+
+            ViewBag.frmDate = frm_date.ToString("yyyy-MM-dd");
+            ViewBag.toDate = Convert.ToDateTime(dt1).Date.ToString("yyyy-MM-dd");
+            if (ddl_status == "2") { ViewBag.statusFilter = "SUCCESS"; }
+            else if (ddl_status == "1") { ViewBag.statusFilter = "Pending"; }
+            else if (ddl_status == "3") { ViewBag.statusFilter = "Rejected"; }
+            else { ViewBag.statusFilter = "ALL"; }
+
+            return db.show_ecomm_report(userid, ddlusers, ddl_status, category, 1000000, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+        }
+
+        public ActionResult Excel_Ecommerce_Report(string txt_frm_date, string txt_to_date, string ddl_status, string category, string ddl_top, string allretailer)
+        {
+            var rows = LoadDealerEcommerceRows(txt_frm_date, txt_to_date, ddl_status, category, allretailer);
+            Response.Clear();
+            Response.Buffer = true;
+            Response.Charset = "utf-8";
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("content-disposition", "attachment; filename=Ecommerce_Report.xls");
+            return View(rows);
+        }
+
+        public ActionResult PDF_Ecommerce_Report(string txt_frm_date, string txt_to_date, string ddl_status, string category, string ddl_top, string allretailer)
+        {
+            var rows = LoadDealerEcommerceRows(txt_frm_date, txt_to_date, ddl_status, category, allretailer);
+            return new ViewAsPdf("PDF_Ecommerce_Report", rows)
+            {
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                PageSize = Rotativa.Options.Size.A4
+            };
         }
         #endregion
 
@@ -10486,23 +10655,64 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
 
         public ActionResult Dealer_Microatm_rental_report()
         {
-            var userid = User.Identity.GetUserId();
-            string txt_to_date1 = DateTime.Now.ToString();
-            string frm_date = Convert.ToDateTime(txt_to_date1).AddDays(-1).ToShortDateString();
-            string to_date = Convert.ToDateTime(txt_to_date1).ToShortDateString();
-            var ch = db.microatm_rental_report(null, userid, null, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
-            return View(ch);
+            return View(LoadDealerMicroatmRentalRows(null, null, false));
         }
 
         [HttpPost]
-        public ActionResult Dealer_Microatm_rental_report(DateTime txt_frm_date, DateTime txt_to_date)
+        public ActionResult Dealer_Microatm_rental_report(string txt_frm_date, string txt_to_date)
+        {
+            ViewBag.chk = "post";
+            return View(LoadDealerMicroatmRentalRows(txt_frm_date, txt_to_date, true));
+        }
+
+        private void EnsureDealerNickname()
+        {
+            var nick = db.Usernicknames.Where(aa => aa.Role == "Dealer").Select(aa => aa.NickName).FirstOrDefault();
+            ViewBag.nickname = string.IsNullOrWhiteSpace(nick) ? "Dealer" : nick;
+        }
+
+        private List<microatm_rental_report_Result> LoadDealerMicroatmRentalRows(string txt_frm_date, string txt_to_date, bool filterDates)
         {
             var userid = User.Identity.GetUserId();
-            ViewBag.chk = "post";
-            //txt_to_date = txt_to_date.AddDays(1);
-            var ch = db.microatm_rental_report(null, userid, null, Convert.ToDateTime(txt_frm_date), Convert.ToDateTime(txt_to_date)).ToList();
+            EnsureDealerNickname();
+            DateTime frm_date;
+            DateTime to_date;
+            if (!filterDates)
+            {
+                frm_date = DateTime.Today.AddDays(-1);
+                to_date = DateTime.Today;
+                ViewBag.frmDate = DateTime.Today.ToString("yyyy-MM-dd");
+                ViewBag.toDate = DateTime.Today.ToString("yyyy-MM-dd");
+                return db.microatm_rental_report(null, userid, null, frm_date, to_date).ToList();
+            }
+            frm_date = ParseDealerGiftDate(txt_frm_date);
+            to_date = ParseDealerGiftDate(txt_to_date);
+            ViewBag.frmDate = frm_date.ToString("yyyy-MM-dd");
+            ViewBag.toDate = to_date.ToString("yyyy-MM-dd");
+            return db.microatm_rental_report(null, userid, null, frm_date, to_date).ToList();
+        }
 
-            return View(ch);
+        public ActionResult Excel_Dealer_Microatm_rental_report(string txt_frm_date, string txt_to_date)
+        {
+            var filterDates = !string.IsNullOrWhiteSpace(txt_frm_date) || !string.IsNullOrWhiteSpace(txt_to_date);
+            var rows = LoadDealerMicroatmRentalRows(txt_frm_date, txt_to_date, filterDates);
+            Response.Clear();
+            Response.Buffer = true;
+            Response.Charset = "utf-8";
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("content-disposition", "attachment; filename=Microatm_Rental_Report.xls");
+            return View(rows);
+        }
+
+        public ActionResult PDF_Dealer_Microatm_rental_report(string txt_frm_date, string txt_to_date)
+        {
+            var filterDates = !string.IsNullOrWhiteSpace(txt_frm_date) || !string.IsNullOrWhiteSpace(txt_to_date);
+            var rows = LoadDealerMicroatmRentalRows(txt_frm_date, txt_to_date, filterDates);
+            return new ViewAsPdf("PDF_Dealer_Microatm_rental_report", rows)
+            {
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                PageSize = Rotativa.Options.Size.A4
+            };
         }
         public ActionResult DealerSellgst()
         {
@@ -12526,50 +12736,73 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
         }
         public ActionResult Extracomm_Report()
         {
-            var userid = User.Identity.GetUserId();
-            
-                var chk = db.daywisecommsetforusers.Where(s => s.userid == userid && s.role == "Dealer").ToList();
-                if (chk.Count == 0)
-                {
-                    daywisecommsetforuser d1 = new daywisecommsetforuser();
-                    d1.role = "Dealer";
-                    d1.userid = userid;
-                    d1.Comm_2000_5000 = 0;
-                    d1.Comm_5001_10000 = 0;
-                    d1.Comm_10001_max = 0;
-                    db.daywisecommsetforusers.Add(d1);
-                    db.SaveChanges();
-                }
-                var dfg = db.daywisecomms.Where(s => s.dealerid == userid).OrderByDescending(s => s.date).ToList();
-                return View(dfg);
-         
+            return View(LoadDealerExtraCommRows(null, null, false));
         }
+
         [HttpPost]
         public ActionResult Extracomm_Report(string txt_frm_date, string txt_to_date)
         {
+            ViewBag.chk = "post";
+            return View(LoadDealerExtraCommRows(txt_frm_date, txt_to_date, true));
+        }
+
+        private void EnsureDealerExtraCommSlabs()
+        {
             var userid = User.Identity.GetUserId();
-
-
-            if (txt_frm_date == null && txt_to_date == null)
+            var chk = db.daywisecommsetforusers.Where(s => s.userid == userid && s.role == "Dealer").ToList();
+            if (chk.Count == 0)
             {
-                txt_frm_date = DateTime.Now.ToString();
-                txt_to_date = DateTime.Now.ToString();
-
+                var d1 = new daywisecommsetforuser();
+                d1.role = "Dealer";
+                d1.userid = userid;
+                d1.Comm_2000_5000 = 0;
+                d1.Comm_5001_10000 = 0;
+                d1.Comm_10001_max = 0;
+                db.daywisecommsetforusers.Add(d1);
+                db.SaveChanges();
+                chk = db.daywisecommsetforusers.Where(s => s.userid == userid && s.role == "Dealer").ToList();
             }
-            DateTime frm = Convert.ToDateTime(txt_frm_date);
-            DateTime to = Convert.ToDateTime(txt_to_date);
-            txt_frm_date = frm.ToString("dd-MM-yyyy");
-            txt_to_date = to.ToString("dd-MM-yyyy");
+            ViewBag.extraSlabs = chk;
+        }
 
-            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
-                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime frm_date = Convert.ToDateTime(dt).Date;
-            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+        private List<daywisecomm> LoadDealerExtraCommRows(string txt_frm_date, string txt_to_date, bool filterDates)
+        {
+            var userid = User.Identity.GetUserId();
+            EnsureDealerExtraCommSlabs();
+            if (!filterDates)
+            {
+                ViewBag.frmDate = DateTime.Today.ToString("yyyy-MM-dd");
+                ViewBag.toDate = DateTime.Today.ToString("yyyy-MM-dd");
+                return db.daywisecomms.Where(s => s.dealerid == userid).OrderByDescending(s => s.date).ToList();
+            }
+            DateTime frm_date = ParseDealerGiftDate(txt_frm_date);
+            DateTime toExclusive = ParseDealerGiftDate(txt_to_date).AddDays(1);
+            ViewBag.frmDate = frm_date.ToString("yyyy-MM-dd");
+            ViewBag.toDate = ParseDealerGiftDate(txt_to_date).ToString("yyyy-MM-dd");
+            return db.daywisecomms.Where(s => s.dealerid == userid && s.date >= frm_date && s.date < toExclusive).OrderByDescending(s => s.date).ToList();
+        }
 
-            var dfg = db.daywisecomms.Where(s => s.dealerid == userid && s.date > frm_date && s.date < to_date).OrderByDescending(s => s.date).ToList();
-            return View(dfg);
+        public ActionResult Excel_Extracomm_Report(string txt_frm_date, string txt_to_date)
+        {
+            var filterDates = !string.IsNullOrWhiteSpace(txt_frm_date) || !string.IsNullOrWhiteSpace(txt_to_date);
+            var rows = LoadDealerExtraCommRows(txt_frm_date, txt_to_date, filterDates);
+            Response.Clear();
+            Response.Buffer = true;
+            Response.Charset = "utf-8";
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("content-disposition", "attachment; filename=Extra_Commission_Report.xls");
+            return View(rows);
+        }
+
+        public ActionResult PDF_Extracomm_Report(string txt_frm_date, string txt_to_date)
+        {
+            var filterDates = !string.IsNullOrWhiteSpace(txt_frm_date) || !string.IsNullOrWhiteSpace(txt_to_date);
+            var rows = LoadDealerExtraCommRows(txt_frm_date, txt_to_date, filterDates);
+            return new ViewAsPdf("PDF_Extracomm_Report", rows)
+            {
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                PageSize = Rotativa.Options.Size.A4
+            };
         }
         protected override void Dispose(bool disposing)
         {

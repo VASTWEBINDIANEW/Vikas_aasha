@@ -1,0 +1,28 @@
+@model IEnumerable<Vastwebmulti.Models.daywisecommsetforuser>
+@using System.Linq
+@{
+    Layout = null;
+    var items = (Model ?? Enumerable.Empty<Vastwebmulti.Models.daywisecommsetforuser>()).ToList();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var s1 = item.Comm_2000_5000.HasValue ? item.Comm_2000_5000.Value.ToString("0.0000") : "0.0000";
+        var s2 = item.Comm_5001_10000.HasValue ? item.Comm_5001_10000.Value.ToString("0.0000") : "0.0000";
+        var s3 = item.Comm_10001_max.HasValue ? item.Comm_10001_max.Value.ToString("0.0000") : "0.0000";
+        <tr class="vm-dmt-row">
+            <td class="vm-dmt-amt-cell" data-label="commission 2000 to 5000">@s1 %</td>
+            <td class="vm-dmt-amt-cell" data-label="commission 5001 to 10000">@s2 %</td>
+            <td class="vm-dmt-amt-cell" data-label="commission 10001 to Above">@s3 %</td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-dmt-row">
+        <td class="vm-dmt-amt-cell" data-label="commission 2000 to 5000">0.0000 %</td>
+        <td class="vm-dmt-amt-cell" data-label="commission 5001 to 10000">0.0000 %</td>
+        <td class="vm-dmt-amt-cell" data-label="commission 10001 to Above">0.0000 %</td>
+    </tr>
+}

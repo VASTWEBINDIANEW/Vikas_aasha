@@ -1,0 +1,95 @@
+@model IEnumerable<Vastwebmulti.Areas.DEALER.Models.dealerCommon_status_master_dlm_Transfer_cls>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = (Model ?? Enumerable.Empty<Vastwebmulti.Areas.DEALER.Models.dealerCommon_status_master_dlm_Transfer_cls>()).ToList();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var totalComm = rows.Sum(x => x.totalcomm);
+    var totalPre = rows.Sum(x => x.master_remain_pre);
+    var totalPost = rows.Sum(x => x.master_remain);
+    var totalAdminPost = rows.Sum(x => x.admin_postbal);
+}
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
+<head>
+    <meta charset="utf-8" />
+    <title>Commission Hold Report</title>
+    <style>
+        td, th {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 11pt;
+            border: 1px solid #94a3b8;
+            mso-number-format: '\@@';
+        }
+        .num { mso-number-format: '#,##0.00'; }
+    </style>
+</head>
+<body>
+    <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">
+        <tr>
+            <td colspan="10" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;border:1px solid #1d4ed8;">Commission Hold Report</td>
+        </tr>
+        <tr>
+            <td colspan="10" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;border:1px solid #1d4ed8;">Dealer reports - commission hold transfers</td>
+        </tr>
+        <tr>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Generated On</td>
+            <td colspan="2" bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@generatedOn</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Records</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@rows.Count</td>
+            <td colspan="5" bgcolor="#FFFFFF">&nbsp;</td>
+        </tr>
+        <tr>
+            <td bgcolor="#EEF2FF" style="font-weight:bold;font-size:10pt;">Total Commission</td>
+            <td class="num" bgcolor="#EEF2FF" style="font-weight:bold;font-size:11pt;">@totalComm.ToString("N2")</td>
+            <td bgcolor="#ECFDF5" style="font-weight:bold;font-size:10pt;color:#047857;">Pre Balance</td>
+            <td class="num" bgcolor="#ECFDF5" style="font-weight:bold;font-size:11pt;color:#047857;">@totalPre.ToString("N2")</td>
+            <td bgcolor="#FEFCE8" style="font-weight:bold;font-size:10pt;color:#854D0E;">Post Balance</td>
+            <td class="num" bgcolor="#FEFCE8" style="font-weight:bold;font-size:11pt;color:#854D0E;">@totalPost.ToString("N2")</td>
+            <td bgcolor="#FEF2F2" style="font-weight:bold;font-size:10pt;color:#B91C1C;">Admin Post</td>
+            <td class="num" bgcolor="#FEF2F2" style="font-weight:bold;font-size:11pt;color:#B91C1C;">@totalAdminPost.ToString("N2")</td>
+            <td colspan="2" bgcolor="#FFFFFF">&nbsp;</td>
+        </tr>
+        <tr>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Name</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Firm</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Mobile</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Pre Balance</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Total Comm. Received</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Post Balance</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Admin Pre bal</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Admin Post bal</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Hold Comm date</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Hold Comm Transfer date</th>
+        </tr>
+        @if (rows.Any())
+        {
+            var alt = false;
+            foreach (var item in rows)
+            {
+                var rowBg = alt ? "#F8FAFC" : "#FFFFFF";
+                alt = !alt;
+                var holdDate = item.Hold_date.Year > 1900 ? item.Hold_date.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+                var transferDate = item.trasnferdate.Year > 1900 ? item.trasnferdate.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+                <tr>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.Name) ? "-" : item.Name)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.Frmname) ? "-" : item.Frmname)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.mobile) ? "-" : item.mobile)</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@item.master_remain_pre.ToString("N2")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@item.totalcomm.ToString("N2")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@item.master_remain.ToString("N2")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@item.admin_prebal.ToString("N2")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@item.admin_postbal.ToString("N2")</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@holdDate</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@transferDate</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="10" bgcolor="#F8FAFC" style="text-align:center;font-size:12pt;font-weight:bold;color:#64748B;height:48px;">Commission hold report not found.</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

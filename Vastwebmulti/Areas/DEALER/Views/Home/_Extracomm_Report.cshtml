@@ -1,0 +1,28 @@
+@model IEnumerable<Vastwebmulti.Models.daywisecomm>
+@using System.Linq
+@{
+    Layout = null;
+    var items = (Model ?? Enumerable.Empty<Vastwebmulti.Models.daywisecomm>()).ToList();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var dt = item.date.HasValue ? item.date.Value.ToString("dd-MMM-yyyy") : "-";
+        <tr class="vm-dmt-row">
+            <td>@dt</td>
+            <td class="vm-dmt-amt-cell">@(item.dlmcomm.HasValue ? item.dlmcomm.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlmpre.HasValue ? item.dlmpre.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlmpost.HasValue ? item.dlmpost.Value.ToString("N2") : "-")</td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="4" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-coins" aria-hidden="true"></i>
+            <span>Extra commission report not found.</span>
+        </td>
+    </tr>
+}

@@ -1,0 +1,146 @@
+@model IEnumerable<Vastwebmulti.Models.daywisecomm>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.daywisecomm>()).ToList();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var frmDate = (ViewBag.frmDate as string) ?? "-";
+    var toDate = (ViewBag.toDate as string) ?? "-";
+    var totalComm = rows.Sum(x => x.dlmcomm ?? 0m);
+    var totalPre = rows.Sum(x => x.dlmpre ?? 0m);
+    var totalPost = rows.Sum(x => x.dlmpost ?? 0m);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Extra Commission Report</title>
+    <style type="text/css">
+        @@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }
+        * { box-sizing: border-box; }
+        body { margin:0; padding:16px; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#0f172a; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        table { page-break-inside:auto; border-collapse:collapse; }
+        tr { page-break-inside:avoid; page-break-after:auto; }
+        thead { display:table-header-group; }
+        .sheet { width:100%; }
+        .hero { width:100%; border:1px solid #1d4ed8; overflow:hidden; }
+        .hero-top { padding:14px 18px; background:#2563eb; color:#fff; }
+        .hero-top h1 { margin:0; font-size:20px; font-weight:700; }
+        .hero-top p { margin:4px 0 0; font-size:11px; color:#dbeafe; }
+        .meta { width:100%; background:#f8fafc; border-top:1px solid #bfdbfe; }
+        .meta td { padding:8px 12px; border-right:1px solid #e2e8f0; vertical-align:top; }
+        .meta td:last-child { border-right:none; }
+        .meta-label { display:block; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748b; margin-bottom:3px; }
+        .meta-value { font-size:12px; font-weight:700; color:#0f172a; }
+        .cards { width:100%; margin:12px 0; }
+        .cards td { width:33%; padding:0 6px 0 0; }
+        .cards td:last-child { padding-right:0; }
+        .card { border:1px solid #e2e8f0; padding:10px 12px; }
+        .card-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+        .card-value { font-size:16px; font-weight:800; }
+        .card-total { background:#eef2ff; border-color:#c7d2fe; }
+        .card-total .card-label, .card-total .card-value { color:#3730a3; }
+        .card-ok { background:#ecfdf5; border-color:#a7f3d0; }
+        .card-ok .card-label, .card-ok .card-value { color:#047857; }
+        .card-wait { background:#fefce8; border-color:#fde68a; }
+        .card-wait .card-label, .card-wait .card-value { color:#854d0e; }
+        .grid { width:100%; border:1px solid #cbd5e1; }
+        .grid th { padding:9px 7px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; color:#fff; background:#334155; border-right:1px solid #1e293b; white-space:nowrap; }
+        .grid td { padding:8px 7px; font-size:11px; color:#1e293b; border-top:1px solid #e2e8f0; border-right:1px solid #e2e8f0; }
+        .grid tbody tr:nth-child(even) td { background:#f8fafc; }
+        .empty { padding:36px 16px; text-align:center; font-size:14px; font-weight:700; color:#64748b; background:#f8fafc; }
+        .foot { margin-top:10px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:10px; color:#94a3b8; text-align:center; }
+    </style>
+</head>
+<body>
+<div class="sheet">
+    <div class="hero">
+        <div class="hero-top">
+            <h1>Extra Commission Report</h1>
+            <p>Dealer reports - extra commission</p>
+        </div>
+        <table class="meta" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:40%;"><span class="meta-label">Generated On</span><span class="meta-value">@generatedOn</span></td>
+                <td style="width:40%;"><span class="meta-label">Date Range</span><span class="meta-value">@frmDate to @toDate</span></td>
+                <td style="width:20%;"><span class="meta-label">Records</span><span class="meta-value">@rows.Count</span></td>
+            </tr>
+        </table>
+    </div>
+
+    <table class="cards" cellpadding="0" cellspacing="0">
+        <tr>
+            <td><div class="card card-total"><span class="card-label">Total Commission</span><span class="card-value">@totalComm.ToString("N2")</span></div></td>
+            <td><div class="card card-ok"><span class="card-label">Remain Pre</span><span class="card-value">@totalPre.ToString("N2")</span></div></td>
+            <td><div class="card card-wait"><span class="card-label">Remain Post</span><span class="card-value">@totalPost.ToString("N2")</span></div></td>
+        </tr>
+    </table>
+    @{
+        var slabs = ViewBag.extraSlabs as IEnumerable<Vastwebmulti.Models.daywisecommsetforuser>
+            ?? Enumerable.Empty<Vastwebmulti.Models.daywisecommsetforuser>();
+    }
+    <table class="grid" cellpadding="0" cellspacing="0" style="margin-bottom:12px;">
+        <thead>
+            <tr>
+                <th>commission 2000 to 5000</th>
+                <th>commission 5001 to 10000</th>
+                <th>commission 10001 to Above</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (slabs.Any())
+            {
+                foreach (var slab in slabs)
+                {
+                    <tr>
+                        <td>@(slab.Comm_2000_5000.HasValue ? slab.Comm_2000_5000.Value.ToString("0.0000") : "0.0000") %</td>
+                        <td>@(slab.Comm_5001_10000.HasValue ? slab.Comm_5001_10000.Value.ToString("0.0000") : "0.0000") %</td>
+                        <td>@(slab.Comm_10001_max.HasValue ? slab.Comm_10001_max.Value.ToString("0.0000") : "0.0000") %</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>0.0000 %</td>
+                    <td>0.0000 %</td>
+                    <td>0.0000 %</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <table class="grid" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Commission</th>
+                <th>Remain pre</th>
+                <th>Remain post</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (rows.Any())
+            {
+                foreach (var item in rows)
+                {
+                    <tr>
+                        <td>@(item.date.HasValue ? item.date.Value.ToString("dd-MMM-yyyy") : "-")</td>
+                        <td>@(item.dlmcomm.HasValue ? item.dlmcomm.Value.ToString("N2") : "-")</td>
+                        <td>@(item.dlmpre.HasValue ? item.dlmpre.Value.ToString("N2") : "-")</td>
+                        <td>@(item.dlmpost.HasValue ? item.dlmpost.Value.ToString("N2") : "-")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="empty">Extra commission report not found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="foot">Generated from Dealer panel - Extra Commission Report</div>
+</div>
+</body>
+</html>

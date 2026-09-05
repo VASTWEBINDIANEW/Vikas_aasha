@@ -1,0 +1,165 @@
+@model IEnumerable<Vastwebmulti.Models.show_ecomm_report_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.show_ecomm_report_Result>()).ToList();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var frmDate = (ViewBag.frmDate as string) ?? "-";
+    var toDate = (ViewBag.toDate as string) ?? "-";
+    var statusFilter = (ViewBag.statusFilter as string) ?? "ALL";
+    var totalAmount = rows.Sum(x => x.Amount ?? 0m);
+    var totalSuccess = rows.Where(x => x.OrderStatus == 2).Sum(x => x.Amount ?? 0m);
+    var totalFailed = rows.Where(x => x.OrderStatus == 3).Sum(x => x.Amount ?? 0m);
+    var totalPending = rows.Where(x => x.OrderStatus == 1).Sum(x => x.Amount ?? 0m);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Ecommerce Report</title>
+    <style type="text/css">
+        @@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }
+        * { box-sizing: border-box; }
+        body { margin:0; padding:16px; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#0f172a; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        table { page-break-inside:auto; border-collapse:collapse; }
+        tr { page-break-inside:avoid; page-break-after:auto; }
+        thead { display:table-header-group; }
+        .sheet { width:100%; }
+        .hero { width:100%; border:1px solid #1d4ed8; overflow:hidden; }
+        .hero-top { padding:14px 18px; background:#2563eb; color:#fff; }
+        .hero-top h1 { margin:0; font-size:20px; font-weight:700; }
+        .hero-top p { margin:4px 0 0; font-size:11px; color:#dbeafe; }
+        .meta { width:100%; background:#f8fafc; border-top:1px solid #bfdbfe; }
+        .meta td { padding:8px 12px; border-right:1px solid #e2e8f0; vertical-align:top; }
+        .meta td:last-child { border-right:none; }
+        .meta-label { display:block; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748b; margin-bottom:3px; }
+        .meta-value { font-size:12px; font-weight:700; color:#0f172a; }
+        .cards { width:100%; margin:12px 0; }
+        .cards td { width:25%; padding:0 6px 0 0; }
+        .cards td:last-child { padding-right:0; }
+        .card { border:1px solid #e2e8f0; padding:10px 12px; }
+        .card-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+        .card-value { font-size:16px; font-weight:800; }
+        .card-total { background:#eef2ff; border-color:#c7d2fe; }
+        .card-total .card-label, .card-total .card-value { color:#3730a3; }
+        .card-ok { background:#ecfdf5; border-color:#a7f3d0; }
+        .card-ok .card-label, .card-ok .card-value { color:#047857; }
+        .card-fail { background:#fef2f2; border-color:#fecaca; }
+        .card-fail .card-label, .card-fail .card-value { color:#b91c1c; }
+        .card-wait { background:#fefce8; border-color:#fde68a; }
+        .card-wait .card-label, .card-wait .card-value { color:#854d0e; }
+        .grid { width:100%; border:1px solid #cbd5e1; }
+        .grid th { padding:9px 7px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; color:#fff; background:#334155; border-right:1px solid #1e293b; white-space:nowrap; }
+        .grid td { padding:8px 7px; font-size:11px; color:#1e293b; border-top:1px solid #e2e8f0; border-right:1px solid #e2e8f0; }
+        .grid tbody tr:nth-child(even) td { background:#f8fafc; }
+        .badge { display:inline-block; min-width:58px; padding:3px 8px; font-size:10px; font-weight:700; text-align:center; }
+        .badge-ok { background:#ecfdf5; color:#047857; }
+        .badge-fail { background:#fee2e2; color:#b91c1c; }
+        .badge-wait { background:#fef9c3; color:#854d0e; }
+        .empty { padding:36px 16px; text-align:center; font-size:14px; font-weight:700; color:#64748b; background:#f8fafc; }
+        .foot { margin-top:10px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:10px; color:#94a3b8; text-align:center; }
+    </style>
+</head>
+<body>
+<div class="sheet">
+    <div class="hero">
+        <div class="hero-top">
+            <h1>Ecommerce Report</h1>
+            <p>Dealer reports - ecommerce orders</p>
+        </div>
+        <table class="meta" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:25%;"><span class="meta-label">Generated On</span><span class="meta-value">@generatedOn</span></td>
+                <td style="width:30%;"><span class="meta-label">Date Range</span><span class="meta-value">@frmDate to @toDate</span></td>
+                <td style="width:20%;"><span class="meta-label">Status</span><span class="meta-value">@statusFilter</span></td>
+                <td style="width:25%;"><span class="meta-label">Records</span><span class="meta-value">@(rows.Count + 1)</span></td>
+            </tr>
+        </table>
+    </div>
+
+    <table class="cards" cellpadding="0" cellspacing="0">
+        <tr>
+            <td><div class="card card-total"><span class="card-label">Total Amount</span><span class="card-value">@totalAmount.ToString("N2")</span></div></td>
+            <td><div class="card card-ok"><span class="card-label">Success</span><span class="card-value">@totalSuccess.ToString("N2")</span></div></td>
+            <td><div class="card card-fail"><span class="card-label">Rejected</span><span class="card-value">@totalFailed.ToString("N2")</span></div></td>
+            <td><div class="card card-wait"><span class="card-label">Pending</span><span class="card-value">@totalPending.ToString("N2")</span></div></td>
+        </tr>
+    </table>
+
+    <table class="grid" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>User</th>
+                <th>Order Date</th>
+                <th>Product</th>
+                <th>MRP</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Amount</th>
+                <th>User Pre</th>
+                <th>User INC</th>
+                <th>User Post</th>
+                <th>Dealer Pre</th>
+                <th>Dealer INC</th>
+                <th>Dealer Post</th>
+                <th>Approved Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (rows.Any())
+            {
+                foreach (var item in rows)
+                {
+                    var badge = "badge-wait";
+                    var statusLabel = "Pending";
+                    if (item.OrderStatus == 2) { badge = "badge-ok"; statusLabel = "Success"; }
+                    else if (item.OrderStatus == 3) { badge = "badge-fail"; statusLabel = "Rejected"; }
+                    else if (item.OrderStatus == 1) { badge = "badge-wait"; statusLabel = "Pending"; }
+                    var firm = item.Frm_Name ?? "";
+                    var email = item.Email ?? "";
+                    var userText = !string.IsNullOrWhiteSpace(firm) && !string.IsNullOrWhiteSpace(email)
+                        ? firm + " - " + email
+                        : (!string.IsNullOrWhiteSpace(firm) ? firm : (!string.IsNullOrWhiteSpace(email) ? email : "-"));
+                    <tr>
+                        <td><span class="badge @badge">@statusLabel</span></td>
+                        <td>@userText</td>
+                        <td>@(item.OrderDate.HasValue ? item.OrderDate.Value.ToString("dd-MMM-yy HH:mm:ss") : "-")</td>
+                        <td>@(item.ProductName ?? "-")</td>
+                        <td>@(item.ListPrice.HasValue ? item.ListPrice.Value.ToString("N2") : "-")</td>
+                        <td>@(item.StandardPrice.HasValue ? item.StandardPrice.Value.ToString("N2") : "-")</td>
+                        <td>@(item.QTY.HasValue ? item.QTY.Value.ToString() : "-")</td>
+                        <td>@(item.Amount.HasValue ? item.Amount.Value.ToString("N2") : "-")</td>
+                        <td>@(item.RemPre.HasValue ? item.RemPre.Value.ToString("N2") : "-")</td>
+                        <td>@(item.Remcomm.HasValue ? item.Remcomm.Value.ToString("N2") : "-")</td>
+                        <td>@(item.RemPost.HasValue ? item.RemPost.Value.ToString("N2") : "-")</td>
+                        <td>@(item.DlmPre.HasValue ? item.DlmPre.Value.ToString("N2") : "-")</td>
+                        <td>@(item.DlmComm.HasValue ? item.DlmComm.Value.ToString("N2") : "-")</td>
+                        <td>@(item.DlmPost.HasValue ? item.DlmPost.Value.ToString("N2") : "-")</td>
+                        <td>@(item.UpdatedOn.HasValue ? item.UpdatedOn.Value.ToString("dd-MMM-yy HH:mm:ss") : "-")</td>
+                    </tr>
+                }
+            }
+            <tr>
+                <td><span class="badge badge-wait">dfdfds</span></td>
+                <td>dfdf</td>
+                <td>dfdfd</td>
+                <td>dfdd</td>
+                <td>efdds</td>
+                <td>dcdcd</td>
+                <td>dfed</td>
+                <td>10099</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="foot">Generated from Dealer panel - Ecommerce Report</div>
+</div>
+</body>
+</html>

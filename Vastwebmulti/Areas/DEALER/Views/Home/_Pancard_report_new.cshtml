@@ -1,0 +1,74 @@
+@model IEnumerable<Vastwebmulti.Models.pancard_transation>
+@using System.Linq
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.pancard_transation>();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var statusRaw = item.status ?? "";
+        var statusTone = "pending";
+        var statusLabel = statusRaw;
+        var statusFa = "fa-clock-o";
+        if (statusRaw.IndexOf("Refund", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "failed";
+            statusLabel = "Refund";
+            statusFa = "fa-undo";
+        }
+        else if (statusRaw.IndexOf("Failed", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "failed";
+            statusLabel = "Failed";
+            statusFa = "fa-times";
+        }
+        else if (statusRaw.IndexOf("Success", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "success";
+            statusLabel = "Success";
+            statusFa = "fa-check";
+        }
+        else if (statusRaw.IndexOf("Pending", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "pending";
+            statusLabel = "Pending";
+            statusFa = "fa-clock-o";
+        }
+
+        var userName = item.name ?? "—";
+        var userEmail = item.Email ?? "—";
+        var txnDate = item.request_time.HasValue ? item.request_time.Value.ToString("dd-MMM HH:mm:ss") : "—";
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-status="@statusRaw">
+            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-radiant-status-text">@statusLabel</span>
+            </td>
+            <td>@userName => @userEmail</td>
+            <td class="vm-dmt-amt-cell">@(item.Amount.HasValue ? item.Amount.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.Rem_pre.HasValue ? item.Rem_pre.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.Rem_tds.HasValue ? item.Rem_tds.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.Rem_comm.HasValue ? item.Rem_comm.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.rem_post.HasValue ? item.rem_post.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.Rem_final.HasValue ? item.Rem_final.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlm_pre.HasValue ? item.dlm_pre.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlm_comm.HasValue ? item.dlm_comm.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlm_tds.HasValue ? item.dlm_tds.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlm_post.HasValue ? item.dlm_post.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.dlm_final.HasValue ? item.dlm_final.Value.ToString("N2") : "—")</td>
+            <td>@txnDate</td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="14" class="vm-opr-table-empty">
+            <i class="fas fa-id-card" aria-hidden="true"></i>
+            <span>Pancard report not found.</span>
+        </td>
+    </tr>
+}

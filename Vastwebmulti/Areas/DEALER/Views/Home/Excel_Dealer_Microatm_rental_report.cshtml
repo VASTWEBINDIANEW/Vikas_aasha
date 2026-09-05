@@ -1,0 +1,101 @@
+@model IEnumerable<Vastwebmulti.Models.microatm_rental_report_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.microatm_rental_report_Result>()).ToList();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var frmDate = (ViewBag.frmDate as string) ?? "-";
+    var toDate = (ViewBag.toDate as string) ?? "-";
+    var nick = (ViewBag.nickname as string);
+    if (string.IsNullOrWhiteSpace(nick)) { nick = "Dealer"; }
+    var totalComm = rows.Sum(x => x.dlmcomm ?? 0m);
+    var totalTrans = rows.Sum(x => x.nooftrans ?? 0);
+    var totalGst = rows.Sum(x => x.dlmgst ?? 0m);
+    var totalTds = rows.Sum(x => x.dlmtds ?? 0m);
+}
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
+<head>
+    <meta charset="utf-8" />
+    <title>Microatm Rental Report</title>
+    <style>
+        td, th {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 11pt;
+            border: 1px solid #94a3b8;
+            mso-number-format: '\@@';
+        }
+        .num { mso-number-format: '#,##0.00'; }
+    </style>
+</head>
+<body>
+    <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">
+        <tr>
+            <td colspan="11" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;border:1px solid #1d4ed8;">Microatm Rental Report</td>
+        </tr>
+        <tr>
+            <td colspan="11" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;border:1px solid #1d4ed8;">Dealer reports - microatm rental</td>
+        </tr>
+        <tr>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Generated On</td>
+            <td colspan="2" bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@generatedOn</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Date Range</td>
+            <td colspan="3" bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@frmDate to @toDate</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Records</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@rows.Count</td>
+            <td colspan="2" bgcolor="#FFFFFF">&nbsp;</td>
+        </tr>
+        <tr>
+            <td bgcolor="#EEF2FF" style="font-weight:bold;font-size:10pt;">Total Commission</td>
+            <td class="num" bgcolor="#EEF2FF" style="font-weight:bold;font-size:11pt;">@totalComm.ToString("N2")</td>
+            <td bgcolor="#ECFDF5" style="font-weight:bold;font-size:10pt;color:#047857;">Num. of Trans</td>
+            <td bgcolor="#ECFDF5" style="font-weight:bold;font-size:11pt;color:#047857;">@totalTrans</td>
+            <td bgcolor="#FEFCE8" style="font-weight:bold;font-size:10pt;color:#854D0E;">GST</td>
+            <td class="num" bgcolor="#FEFCE8" style="font-weight:bold;font-size:11pt;color:#854D0E;">@totalGst.ToString("N2")</td>
+            <td bgcolor="#FEF2F2" style="font-weight:bold;font-size:10pt;color:#B91C1C;">TDS</td>
+            <td class="num" bgcolor="#FEF2F2" style="font-weight:bold;font-size:11pt;color:#B91C1C;">@totalTds.ToString("N2")</td>
+            <td colspan="3" bgcolor="#FFFFFF">&nbsp;</td>
+        </tr>
+        <tr>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Frm Name</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">DeviceId</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Plan Name</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Num.of Trans</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Trans Date</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Curr Date</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">@nick Pre</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">@nick Commission</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">@nick GST</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">@nick TDS</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">@nick Post</th>
+        </tr>
+        @if (rows.Any())
+        {
+            var alt = false;
+            foreach (var item in rows)
+            {
+                var rowBg = alt ? "#F8FAFC" : "#FFFFFF";
+                alt = !alt;
+                <tr>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.Frm_Name) ? "-" : item.Frm_Name)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.deviceid) ? "-" : item.deviceid)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.planname) ? "-" : item.planname)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(item.nooftrans.HasValue ? item.nooftrans.Value.ToString() : "-")</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(item.transdate.HasValue ? item.transdate.Value.ToString("dd-MMM-yyyy") : "-")</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(item.currdate.HasValue ? item.currdate.Value.ToString("dd-MMM-yyyy") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.dlmpre.HasValue ? item.dlmpre.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.dlmcomm.HasValue ? item.dlmcomm.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.dlmgst.HasValue ? item.dlmgst.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.dlmtds.HasValue ? item.dlmtds.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.dlmpost.HasValue ? item.dlmpost.Value.ToString("N2") : "-")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="11" bgcolor="#F8FAFC" style="text-align:center;font-size:12pt;font-weight:bold;color:#64748B;height:48px;">Microatm rental report not found.</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

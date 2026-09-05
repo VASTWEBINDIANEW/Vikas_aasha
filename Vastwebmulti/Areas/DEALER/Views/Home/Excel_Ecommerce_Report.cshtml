@@ -1,0 +1,146 @@
+@model IEnumerable<Vastwebmulti.Models.show_ecomm_report_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.show_ecomm_report_Result>()).ToList();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var frmDate = (ViewBag.frmDate as string) ?? "-";
+    var toDate = (ViewBag.toDate as string) ?? "-";
+    var statusFilter = (ViewBag.statusFilter as string) ?? "ALL";
+    var totalAmount = rows.Sum(x => x.Amount ?? 0m);
+    var totalSuccess = rows.Where(x => x.OrderStatus == 2).Sum(x => x.Amount ?? 0m);
+    var totalFailed = rows.Where(x => x.OrderStatus == 3).Sum(x => x.Amount ?? 0m);
+    var totalPending = rows.Where(x => x.OrderStatus == 1).Sum(x => x.Amount ?? 0m);
+}
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
+<head>
+    <meta charset="utf-8" />
+    <title>Ecommerce Report</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <x:ExcelWorkbook>
+            <x:ExcelWorksheets>
+                <x:ExcelWorksheet>
+                    <x:Name>Ecommerce Report</x:Name>
+                    <x:WorksheetOptions>
+                        <x:Print><x:ValidPrinterInfo/></x:Print>
+                    </x:WorksheetOptions>
+                </x:ExcelWorksheet>
+            </x:ExcelWorksheets>
+        </x:ExcelWorkbook>
+    </xml>
+    <![endif]-->
+    <style>
+        td, th {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 11pt;
+            border: 1px solid #94a3b8;
+            mso-number-format: '\@@';
+        }
+        .num { mso-number-format: '#,##0.00'; }
+    </style>
+</head>
+<body>
+    <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">
+        <tr>
+            <td colspan="15" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;border:1px solid #1d4ed8;">Ecommerce Report</td>
+        </tr>
+        <tr>
+            <td colspan="15" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;border:1px solid #1d4ed8;">Dealer reports - ecommerce orders</td>
+        </tr>
+        <tr>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Generated On</td>
+            <td colspan="2" bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@generatedOn</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Date Range</td>
+            <td colspan="3" bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@frmDate to @toDate</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Status</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@statusFilter</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Records</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@(rows.Count + 1)</td>
+            <td colspan="4" bgcolor="#FFFFFF">&nbsp;</td>
+        </tr>
+        <tr>
+            <td bgcolor="#EEF2FF" style="font-weight:bold;font-size:10pt;">Total Amount</td>
+            <td class="num" bgcolor="#EEF2FF" style="font-weight:bold;font-size:11pt;">@totalAmount.ToString("N2")</td>
+            <td bgcolor="#ECFDF5" style="font-weight:bold;font-size:10pt;color:#047857;">Success</td>
+            <td class="num" bgcolor="#ECFDF5" style="font-weight:bold;font-size:11pt;color:#047857;">@totalSuccess.ToString("N2")</td>
+            <td bgcolor="#FEF2F2" style="font-weight:bold;font-size:10pt;color:#B91C1C;">Rejected</td>
+            <td class="num" bgcolor="#FEF2F2" style="font-weight:bold;font-size:11pt;color:#B91C1C;">@totalFailed.ToString("N2")</td>
+            <td bgcolor="#FEFCE8" style="font-weight:bold;font-size:10pt;color:#854D0E;">Pending</td>
+            <td class="num" bgcolor="#FEFCE8" style="font-weight:bold;font-size:11pt;color:#854D0E;">@totalPending.ToString("N2")</td>
+            <td colspan="7" bgcolor="#FFFFFF">&nbsp;</td>
+        </tr>
+        <tr>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Status</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">User</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Order Date</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Product</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">MRP</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Price</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Qty</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Amount</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">User Pre</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">User INC</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">User Post</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Dealer Pre</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Dealer INC</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Dealer Post</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Approved Date</th>
+        </tr>
+        @if (rows.Any())
+        {
+            var alt = false;
+            foreach (var item in rows)
+            {
+                var statusLabel = "Pending";
+                var statusBg = "#FEFCE8";
+                var statusFg = "#854D0E";
+                if (item.OrderStatus == 2) { statusLabel = "Success"; statusBg = "#ECFDF5"; statusFg = "#047857"; }
+                else if (item.OrderStatus == 3) { statusLabel = "Rejected"; statusBg = "#FEE2E2"; statusFg = "#B91C1C"; }
+                else if (item.OrderStatus == 1) { statusLabel = "Pending"; statusBg = "#FEFCE8"; statusFg = "#854D0E"; }
+                var firm = item.Frm_Name ?? "";
+                var email = item.Email ?? "";
+                var userText = !string.IsNullOrWhiteSpace(firm) && !string.IsNullOrWhiteSpace(email)
+                    ? firm + " - " + email
+                    : (!string.IsNullOrWhiteSpace(firm) ? firm : (!string.IsNullOrWhiteSpace(email) ? email : "-"));
+                var rowBg = alt ? "#F8FAFC" : "#FFFFFF";
+                alt = !alt;
+                <tr>
+                    <td bgcolor="@statusBg" style="color:@statusFg;font-weight:bold;font-size:11pt;">@statusLabel</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@userText</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(item.OrderDate.HasValue ? item.OrderDate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-")</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(item.ProductName ?? "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.ListPrice.HasValue ? item.ListPrice.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.StandardPrice.HasValue ? item.StandardPrice.Value.ToString("N2") : "-")</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(item.QTY.HasValue ? item.QTY.Value.ToString() : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.Amount.HasValue ? item.Amount.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.RemPre.HasValue ? item.RemPre.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.Remcomm.HasValue ? item.Remcomm.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.RemPost.HasValue ? item.RemPost.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.DlmPre.HasValue ? item.DlmPre.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.DlmComm.HasValue ? item.DlmComm.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.DlmPost.HasValue ? item.DlmPost.Value.ToString("N2") : "-")</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(item.UpdatedOn.HasValue ? item.UpdatedOn.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-")</td>
+                </tr>
+            }
+        }
+        <tr>
+            <td bgcolor="#FEFCE8" style="color:#854D0E;font-weight:bold;font-size:11pt;">dfdfds</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">dfdf</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">dfdfd</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">dfdd</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">efdds</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">dcdcd</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">dfed</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">10099</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">-</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">-</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">-</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">-</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">-</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">-</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;">-</td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,407 +1,212 @@
-﻿@using Vastwebmulti.Models;
-@model IEnumerable<Vastwebmulti.Models.Gift_card_details_report_Result>
+﻿@model IEnumerable<Vastwebmulti.Models.Gift_card_details_report_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "Giftcard";
+    ViewBag.Title = "Gift Card Report";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
 
-    VastwebmultiEntities DB1 = new VastwebmultiEntities();
-    var usernname = DB1.Usernicknames.Where(aa => aa.Role == "Retailer").ToList();
-    if (usernname.Count() > 0)
-    {
-        if (usernname.SingleOrDefault().Role == "Retailer")
-        {
-            var favimage = usernname.SingleOrDefault().NickName;
-            ViewBag.nickname = favimage;
-        }
-    }
- 
-    var usernname1 = DB1.Usernicknames.Where(aa => aa.Role == "Dealer").ToList();
-    if (usernname1.Count() > 0)
-    {
-        if (usernname1.SingleOrDefault().Role == "Dealer")
-        {
-            var favimage1 = usernname1.SingleOrDefault().NickName;
-            ViewBag.dealer = favimage1;
-        }
-    }
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
 
+    var selectedRetailer = (Request["allretailer"] ?? "").Trim();
+    var selectedOperator = (Request["Operator"] ?? "").Trim();
+    var selectedStatus = (Request["ddl_status"] ?? "").Trim();
+    if (string.IsNullOrEmpty(selectedStatus)) { selectedStatus = "ALL"; }
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.Gift_card_details_report_Result>();
+
+    Func<Vastwebmulti.Models.Gift_card_details_report_Result, bool> isSuccess = x =>
+        !string.IsNullOrEmpty(x.status) && x.status.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0;
+    Func<Vastwebmulti.Models.Gift_card_details_report_Result, bool> isFailed = x =>
+        !string.IsNullOrEmpty(x.status) && x.status.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0;
+    Func<Vastwebmulti.Models.Gift_card_details_report_Result, bool> isPending = x =>
+        !string.IsNullOrEmpty(x.status) && x.status.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0;
+
+    var totalAmount = reports.Sum(x => x.amount ?? 0m);
+    var totalSuccess = reports.Where(isSuccess).Sum(x => x.amount ?? 0m);
+    var totalFailed = reports.Where(isFailed).Sum(x => x.amount ?? 0m);
+    var totalPending = reports.Where(isPending).Sum(x => x.amount ?? 0m);
 }
 
-<style>
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page');</script>
 
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
-    .dropdown-menu {
-        margin-top: 75px !important;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page saas-giftcard-report-page">
 
-    .dataTables_wrapper .dt-buttons a.dt-button {
-        padding: 7px 10px 8px 8px;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    .table-condensed tr td.selected.active::before {
-        display: none;
-    }
-
-    @@media screen and (max-width:992px) {
-        .ecommerce-reportpage .selectcss-ecommerce {
-            float: left;
-            width: 18%;
+        @{
+            var giftFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "dealerGiftcardReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
+        @using (Html.BeginForm("Giftcard", "Home", FormMethod.Post, giftFormAttrs))
+        {
+            <input type="hidden" name="ddl_top" value="All" />
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-        .ecommerce-reportpage .col-md-4.eccommerce-date {
-            float: left;
-            width: 35%;
-        }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-        .ecommerce-reportpage .col-md-1 {
-            float: left;
-            padding-right: 0;
-            width: 11%;
-        }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Reports</li>
+                        <li>Gift Card Report</li>
+                    </ol>
 
-            .ecommerce-reportpage .col-md-1 button {
-                width: 100%;
-                padding-left: 0;
-                padding-right: 0;
-            }
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
 
-        .ecommerce-reportpage .selectcss-ecommerce .form-group {
-            margin-bottom: 10px;
-        }
-
-        .ecommerce-reportpage .col-md-3.ecommerce-pdfbutton {
-            float: right;
-            margin-bottom: 10px;
-        }
-
-        .giftcard-reportpage .col-md-5.eccommerce-date {
-            float: left;
-            width: 35%;
-        }
-    }
-
-    @@media screen and (max-width:768px) {
-        .ecommerce-reportpage .table-responsive {
-            border: 0;
-        }
-
-        .col-md-9.eccommerce-reportclass.giftcard-class .col-lg-12.col-md-12.col-sm-12.col-xs-12 {
-            padding-right: 0;
-        }
-
-        .col-md-9.eccommerce-reportclass.giftcard-class {
-            padding-right: 0;
-        }
-
-        .table-responsive.web-white-table {
-            padding-bottom: 15px;
-        }
-
-        .giftcard-reportpage .table-responsive {
-            position: relative !important;
-            z-index: 9;
-        }
-    }
-
-    @@media screen and (max-width:520px) {
-        .ecommerce-reportpage .selectcss-ecommerce {
-            float: left;
-            width: 33.3%;
-        }
-
-        .ecommerce-reportpage .col-md-4.eccommerce-date {
-            float: left;
-            width: 78%;
-        }
-
-        .ecommerce-reportpage .col-md-1 {
-            width: 22%;
-        }
-
-        .ecommerce-reportpage .col-md-3.ecommerce-pdfbutton .dt-buttons {
-            padding: 0;
-        }
-
-        .ecommerce-reportpage .col-md-3.ecommerce-pdfbutton {
-            margin-top: 10px;
-        }
-
-        .giftcard-reportpage .col-md-5.eccommerce-date {
-            float: left;
-            width: 78%;
-        }
-
-            .giftcard-reportpage .col-md-5.eccommerce-date .custom-date-icon {
-                display: none;
-            }
-
-        .giftcard-reportpage .select-statusgift {
-            padding-right: 0 !important;
-        }
-    }
-
-    @@media screen and (max-width:420px) {
-        .ecommerce-reportpage .select2 span, .ecommerce-reportpage input, .ecommerce-reportpage button span, .ecommerce-reportpage a, .ecommerce-reportpage button {
-            font-size: 12px !important;
-        }
-
-            .ecommerce-reportpage button span {
-                margin-left: 0 !important;
-            }
-
-        #m-d-fund-transfer .modal-dialog.modal-dialog-reportclass {
-            width: 100% !important;
-            float: left !important;
-        }
-
-            #m-d-fund-transfer .modal-dialog.modal-dialog-reportclass .modal-body.width100.float-left.dealer-pop-body {
-                height: auto !important;
-            }
-
-        .giftcard-reportpage .giftcard-class .form-group > div {
-            padding-bottom: 0 !important;
-        }
-    }
-
-    @@media screen and (max-width:320px) {
-    }
-</style>
-<section class="content ecommerce-reportpage giftcard-reportpage">
-    <div class="container-fluid full-dealer-secondanimation">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Gift Card Report's</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Gift Card</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card" style="margin-bottom: 10px;">
-                    <div class="">
-                        <div class="col-md-9 eccommerce-reportclass giftcard-class" style="padding-left:0px;">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left:0px;">
-                                <div class="" style="margin-top: 2px;">
-                                    @using (Html.BeginForm("Giftcard", "Home", FormMethod.Post))
-                                    {
-                                        <div class="">
-                                            <div class="col-md-2 only-select-css selectcss-ecommerce" style="display:block;padding:0px;padding-right:5px;" id="rem">
-                                                <div class="form-group">
-                                                    <div class="" style="width:100%;padding-bottom:10px;">
-                                                        @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "Select User", new { id = "allretailer", @class = "selectpicker form-control for-select2", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 only-select-css selectcss-ecommerce" style="padding:0px;">
-                                                <div class="form-group">
-                                                    <div class="" style="width:100%;padding-bottom:10px;">
-                                                        @Html.DropDownList("Operator", ViewBag.Operator as SelectList, "Select Operator", new { id = "Operator", @class = "selectpicker form-control for-select2", data_live_search = "true", @style = "margin-top:0px; padding:0px; text-align:center;height:34px;" })
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-2 only-select-css selectcss-ecommerce select-statusgift" style="padding:0px 5px;">
-                                                <div class="form-group">
-                                                    <div class="" style="width:100%;padding-bottom:10px;">
-                                                        @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                                {
-                                                new SelectListItem{ Text="Status",Value="ALL",},
-                                                new SelectListItem{Text="SUCCESS",Value="SUCCESS"},
-                                                new SelectListItem{Text="Pending",Value="PENDING"},
-                                                new SelectListItem{Text="FAILED",Value="FAILED"}
-                                                }, new { @class = "selectpicker form-control for-select2", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-5 eccommerce-date" style="padding:0px;">
-                                                <div class="form-group for-web-date" style="margin-bottom:0px; ">
-                                                    <div class="input-daterange input-group">
-                                                        <div class="all-report-inputclass all-report-inputclass-left">
-                                                            <div class="custom-date-icon border-colorchangecss" style="height: 32px;">
-                                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                            </div>
-                                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #ccc; height:32px;", autocomplete = "off" })
-                                                        </div>
-                                                        @*<span class="input-group-addon">
-                                                                <i class="fa fa-exchange" style="padding-top:8px;"></i>
-                                                            </span>*@
-                                                        <div class="all-report-inputclass all-report-inputclass-right">
-                                                            <div class="custom-date-icon border-colorchangecss" style="height: 32px;">
-                                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                            </div>
-                                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #ccc; height:32px;", autocomplete = "off" })
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- /.input group -->
-                                                </div>
-                                            </div>
-                                            <div class="col-md-1" style="padding-left:5px;">
-                                                <center>
-                                                    <button type="submit" class="btn  waves-effect" style=" height:32px;background:#eeebeb;">
-                                                        <i class="fa fa-search" style="top:-1px;font-size:13px;color:#444;"></i>
-                                                        <span style="color:#444;">Search</span>
-                                                    </button>
-                                                </center>
-                                            </div>
-
-                                        </div>
-                                    }
-                                </div>
-                            </div>
+                        <div class="vm-opr-field vm-dmt-field">
+                            @{
+                                var retailerItems = ViewBag.allretailer as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+                            }
+                            @Html.DropDownList("allretailer", new SelectList(retailerItems, "Value", "Text", selectedRetailer), "Select User", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control for-select2", @title = "User", data_live_search = "true" })
+                        </div>
+                        <div class="vm-opr-field vm-dmt-field">
+                            @{
+                                var operatorList = ViewBag.Operator as SelectList;
+                            }
+                            @if (operatorList != null && !string.IsNullOrEmpty(operatorList.DataValueField))
+                            {
+                                @Html.DropDownList("Operator", new SelectList(operatorList.Items, operatorList.DataValueField, operatorList.DataTextField, selectedOperator), "Select Operator", new { id = "Operator", @class = "vm-opr-select vm-dmt-select form-control for-select2", @title = "Operator", data_live_search = "true" })
+                            }
+                            else
+                            {
+                                @Html.DropDownList("Operator", Enumerable.Empty<SelectListItem>(), "Select Operator", new { id = "Operator", @class = "vm-opr-select vm-dmt-select form-control for-select2", @title = "Operator", data_live_search = "true" })
+                            }
+                        </div>
+                        <div class="vm-opr-field vm-dmt-field vm-radiant-field--status">
+                            @Html.DropDownList("ddl_status", new SelectList(new[]
+                            {
+                                new SelectListItem { Text = "All Status", Value = "ALL" },
+                                new SelectListItem { Text = "SUCCESS", Value = "SUCCESS" },
+                                new SelectListItem { Text = "Pending", Value = "PENDING" },
+                                new SelectListItem { Text = "FAILED", Value = "FAILED" }
+                            }, "Value", "Text", selectedStatus), new { id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control for-select2", @title = "Status", data_live_search = "true" })
                         </div>
 
-                        <div class="col-md-3 ecommerce-pdfbutton" style="padding-right:0;width:auto;float:right;">
-
-
-                            <button class="white-success-button">Total</button>
-                            <div class="white-success" style="display:none;width: 215px;right:0px">
-                                <button type="button" class="btn btn-default waves-effect" style="margin-top:2px;" title="Total  Success"><img src="~/ashok-images/correct.svg" style="width: 19px;background: green;border-radius: 50%;padding: 3px;margin-left:0;" />&nbsp;@ViewData["Totals"]</button>
-                                <button type="button" class="btn btn-default waves-effect" style="margin-top:2px;" title="Total  Failed"><img src="~/ashok-images/closes.svg" style="width: 19px;background: red;border-radius: 50%;padding: 3px;" />&nbsp;@ViewData["Totalf"]</button>
-                                <button type="button" class="btn btn-default waves-effect" style="margin-top:2px;" title="Total  Pending"><img src="~/ashok-images/clock.svg" style="width: 20px;" />&nbsp;@ViewData["Totalp"]</button>
-
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
                             </div>
-                            <div class="web-white-filter fil" style="float: left;margin-right: 0px;margin-top:0px;">
-                                <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                                <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
                             </div>
-                            <div class="web-white-filter" style="float:right;">
-                                <table class="dataTable js-exportable ">
-                                    <thead>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-
-
-
-
-
-
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
-
-
 
                     </div>
+
                 </div>
-            </div>
 
-
-
-
-        </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card all-reporttable-css" style="margin-top:6px;">
-
-                    <div class="row clearfix">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="">
-                                <div class=" table-responsive web-white-table tableseconddes-dealer" style="position:inherit;">
-                                    <table id="example" class="table table-bordered table-striped table-hover " cellspacing="0" style="width:100%;font-size:12px;">
-                                        <thead style="position:inherit;">
-                                            <tr>
-                                                <th>Status</th>
-                                                <th>Sender&nbsp;Information</th>
-                                                <th>Receiver&nbsp;Information</th>
-                                                <th>Request&nbsp;Date</th>
-                                                <th>Amount</th>
-                                                <th>Service&nbsp;Name</th>
-                                                <th>Type</th>
-                                                <th>Operator&nbsp;Id</th>
-                                                <th><span>@ViewBag.nickname</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                                <th><span>@ViewBag.dealer</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                                <th>Response&nbsp;Time</th>
-                                                <th>Gift&nbsp;Card&nbsp;Message</th>
-                                                <th>API&nbsp;Request</th>
-                                                <th>API&nbsp;Response</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model != null)
-                                            {
-                                                foreach (var item in Model)
-                                                {
-                                                    var color = "";
-                                                    var fontweight = "";
-
-                                                    if (item.status.Contains("success"))
-                                                    {
-                                                        color = "green";
-                                                        fontweight = "700";
-                                                    }
-                                                    if (item.status.Contains("failed"))
-                                                    {
-                                                        color = "red";
-                                                        fontweight = "700";
-                                                    }
-
-                                                    if (item.status.Contains("Pending"))
-                                                    {
-                                                        color = "#FF9800";
-                                                        fontweight = "700";
-                                                    }
-                                                    if (item.status.Contains("Refund "))
-                                                    {
-                                                        color = "#9C27B0";
-                                                        fontweight = "700";
-                                                    }
-
-
-                                                    <tr>
-                                                        <td><p style="font-size:13px;color:@color;font-weight:@fontweight">&nbsp;@item.status</p></td>
-                                                        <td><p style="font-size:11px;"><span>&nbsp;<i class="fa fa-user-circle-o"></i>&nbsp;@item.sender_name</span>&nbsp;⇒&nbsp;@item.sender_email</p></td>
-                                                        <td><p style="font-size:11px;"><span>&nbsp;<i class="fa fa-user-circle-o"></i>&nbsp;@item.reciver_name</span>&nbsp;⇒&nbsp;@item.reciver_email</p></td>
-                                                        <td><p style="font-size:13px;">&nbsp;@String.Format("{0:dd-MMM-yy HH:mm:ss}", item.request_time)</p></td>
-                                                        <td><p style="font-size:13px;">&nbsp;@item.amount</p></td>
-                                                        <td><p style="font-size:13px;">&nbsp;@item.operator_Name</p></td>
-                                                        <td><p style="font-size:13px;">&nbsp;@item.Operator_type</p></td>
-                                                        <td><p style="font-size:13px;">&nbsp;@item.operator_id</p></td>
-                                                        <td><p><span>Retailer</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.rem_pre_remain</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.comm_rem</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.rem_post_remain</span></p></td>
-                                                        <td><p><span>Dealer</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.dlm_pre_remain</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.comm_dlm</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.dlm_post_remain</span></p></td>
-                                                        <td><p style="font-size:13px;">&nbsp;@String.Format("{0:dd-MMM-yy HH:mm:ss}", item.Response_time)</p></td>
-                                                        <td><p style="font-size:13px;">&nbsp;@item.gift_message</p></td>
-                                                        <td><p style="font-size:13px;">&nbsp;@item.api_request</p></td>
-                                                        <td><p style="font-size:13px;">&nbsp;@item.api_response</p></td>
-                                                    </tr>
-                                                }
-                                            }
-
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                            </div>
-
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="giftcardTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Gift card totals</span>
                         </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideGiftcardTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Amount</span>
+                            <strong class="vm-opr-total-card__value">@totalAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value">@totalSuccess.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value">@totalFailed.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value">@totalPending.ToString("N2")</strong>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-gift" aria-hidden="true"></i>
+                        <span>Gift card report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-inline-total" title="Total amount for current filter">
+                            Total: <strong>&#8377; @totalAmount.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-sell-rch-totals-btn vm-ecom-totals-btn vm-gift-totals-btn" onclick="toggleGiftcardTotals()" title="Show totals" aria-expanded="false" aria-controls="giftcardTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="sellRechargeReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Sender&nbsp;Information</th>
+                                    <th>Receiver&nbsp;Information</th>
+                                    <th>Request&nbsp;Date</th>
+                                    <th>Amount</th>
+                                    <th>Service&nbsp;Name</th>
+                                    <th>Type</th>
+                                    <th>Operator&nbsp;Id</th>
+                                    <th>User&nbsp;Pre</th>
+                                    <th>User&nbsp;INC</th>
+                                    <th>User&nbsp;Post</th>
+                                    <th>Dealer&nbsp;Pre</th>
+                                    <th>Dealer&nbsp;INC</th>
+                                    <th>Dealer&nbsp;Post</th>
+                                    <th>Response&nbsp;Time</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.Partial("_Giftcard", reports)
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -410,67 +215,630 @@
     </div>
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-dmt-detail-modal vm-dth-detail-modal vm-sell-rch-detail-modal" id="giftcardDetailModal" tabindex="-1" role="dialog" aria-labelledby="giftcardDetailTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-violet">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-gift" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title" id="giftcardDetailTitle">Gift card details</h4>
+                        <span class="saas-admin-modal-subtitle" id="giftDetSubtitle">Gift card information</span>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-dmt-modal-body">
+                <div class="vm-dmt-modal-grid vm-dmt-modal-grid--2 vm-dth-detail-grid">
+                    <div class="vm-dmt-modal-field">
+                        <label>Status</label>
+                        <div class="vm-dmt-modal-readonly vm-dth-detail-status" id="giftDetStatus">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Amount</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetAmount">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Sender</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetSender">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Receiver</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetReceiver">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Sender Mobile</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetSenderMob">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Receiver Mobile</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetReceiverMob">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Service</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetService">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Type</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetType">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Operator Id</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetOpId">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Order Id</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetOrderId">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Request Date</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetOrder">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Response Time</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetResp">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>User Pre</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetUserPre">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>User INC</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetUserInc">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>User Post</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetUserPost">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Dealer Pre</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetDlmPre">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Dealer INC</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetDlmInc">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Dealer Post</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetDlmPost">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Gift Card Message</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetMessage">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>API Request</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetApiReq">-</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>API Response</label>
+                        <div class="vm-dmt-modal-readonly" id="giftDetApiRes">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                    <i class="fas fa-times" aria-hidden="true"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
-
 <script>
-    $('.for-select2').select2();
+    window.giftSelect2Url = '@Url.Content("~/MainFrontDesign/select2/dist/js/select2.full.min.js")';
+    window.giftExcelUrl = '@Url.Action("Excel_Giftcard_Report", "Home")';
+    window.giftPdfUrl = '@Url.Action("PDF_Giftcard_Report", "Home")';
 
+    function giftQueryData() {
+        var $ = window.jQuery;
+        return {
+            txt_frm_date: $('#txt_frm_date').val() || '',
+            txt_to_date: $('#txt_to_date').val() || '',
+            ddl_status: $('#ddl_status').val() || 'ALL',
+            Operator: $('#Operator').val() || '',
+            allretailer: $('#allretailer').val() || '',
+            ddl_top: 'All'
+        };
+    }
 
-</script>
+    function giftQueryString() {
+        var q = giftQueryData();
+        return 'txt_frm_date=' + encodeURIComponent(q.txt_frm_date)
+            + '&txt_to_date=' + encodeURIComponent(q.txt_to_date)
+            + '&ddl_status=' + encodeURIComponent(q.ddl_status)
+            + '&Operator=' + encodeURIComponent(q.Operator)
+            + '&allretailer=' + encodeURIComponent(q.allretailer)
+            + '&ddl_top=' + encodeURIComponent(q.ddl_top);
+    }
 
+    function giftEsc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
 
-<!--Calendar Javascript-->
-<script>
-    $(document).ready(function () {
+    function giftNum(value) {
+        var n = parseFloat(String(value || '').replace(/,/g, '').replace(/[^\d.-]/g, ''));
+        return isNaN(n) ? 0 : n;
+    }
 
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
+    function giftTableRows() {
+        var $ = window.jQuery;
+        var rows = [];
+        $('#sellRechargeReport tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-opr-table-empty-row')) {
+                return;
+            }
+            var $cells = $tr.children('td');
+            if ($cells.length < 15) {
+                return;
+            }
+            var status = $.trim($cells.eq(0).find('.vm-radiant-status-text').text() || $cells.eq(0).text()).replace(/\s+/g, ' ');
+            rows.push({
+                status: status,
+                sender: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+                receiver: $.trim($cells.eq(2).text()).replace(/\s+/g, ' '),
+                requestDate: $.trim($cells.eq(3).text()).replace(/\s+/g, ' '),
+                amount: $.trim($cells.eq(4).text()).replace(/\s+/g, ' '),
+                service: $.trim($cells.eq(5).text()).replace(/\s+/g, ' '),
+                type: $.trim($cells.eq(6).text()).replace(/\s+/g, ' '),
+                operatorId: $.trim($cells.eq(7).text()).replace(/\s+/g, ' '),
+                userPre: $.trim($cells.eq(8).text()).replace(/\s+/g, ' '),
+                userInc: $.trim($cells.eq(9).text()).replace(/\s+/g, ' '),
+                userPost: $.trim($cells.eq(10).text()).replace(/\s+/g, ' '),
+                dealerPre: $.trim($cells.eq(11).text()).replace(/\s+/g, ' '),
+                dealerInc: $.trim($cells.eq(12).text()).replace(/\s+/g, ' '),
+                dealerPost: $.trim($cells.eq(13).text()).replace(/\s+/g, ' '),
+                responseTime: $.trim($cells.eq(14).text()).replace(/\s+/g, ' ')
+            });
         });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+        return rows;
+    }
+
+    function giftStatusColors(status) {
+        var raw = String(status || '').toLowerCase();
+        if (raw.indexOf('success') >= 0) {
+            return { bg: '#ECFDF5', fg: '#047857', badge: 'badge-ok', label: 'Success' };
+        }
+        if (raw.indexOf('fail') >= 0) {
+            return { bg: '#FEE2E2', fg: '#B91C1C', badge: 'badge-fail', label: 'Failed' };
+        }
+        if (raw.indexOf('refund') >= 0) {
+            return { bg: '#F3E8FF', fg: '#6B21A8', badge: 'badge-wait', label: 'Refund' };
+        }
+        if (raw.indexOf('pending') >= 0) {
+            return { bg: '#FEFCE8', fg: '#854D0E', badge: 'badge-wait', label: 'Pending' };
+        }
+        return { bg: '#FEFCE8', fg: '#854D0E', badge: 'badge-wait', label: status || '-' };
+    }
+
+    function giftExportMeta(rows) {
+        var q = giftQueryData();
+        var total = 0, success = 0, failed = 0, pending = 0;
+        for (var i = 0; i < rows.length; i++) {
+            var amt = giftNum(rows[i].amount);
+            var raw = String(rows[i].status || '').toLowerCase();
+            total += amt;
+            if (raw.indexOf('success') >= 0) { success += amt; }
+            else if (raw.indexOf('fail') >= 0) { failed += amt; }
+            else { pending += amt; }
+        }
+        return {
+            generatedOn: (function () {
+                var d = new Date();
+                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                var h = d.getHours();
+                var ampm = h >= 12 ? 'PM' : 'AM';
+                var hr = h % 12; if (!hr) { hr = 12; }
+                var min = d.getMinutes();
+                return ('0' + d.getDate()).slice(-2) + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + ('0' + hr).slice(-2) + ':' + ('0' + min).slice(-2) + ' ' + ampm;
+            })(),
+            frmDate: q.txt_frm_date || '-',
+            toDate: q.txt_to_date || '-',
+            statusFilter: q.ddl_status || 'ALL',
+            records: rows.length,
+            total: total.toFixed(2),
+            success: success.toFixed(2),
+            failed: failed.toFixed(2),
+            pending: pending.toFixed(2)
+        };
+    }
+
+    function giftBuildExcelHtml(rows) {
+        var m = giftExportMeta(rows);
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8" /><title>Gift Card Report</title></head><body>';
+        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">';
+        html += '<tr><td colspan="15" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;">Gift Card Report</td></tr>';
+        html += '<tr><td colspan="15" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;">Dealer reports - gift card transactions</td></tr>';
+        html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Generated On</td><td colspan="2" style="font-weight:bold;">' + giftEsc(m.generatedOn) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Date Range</td><td colspan="3" style="font-weight:bold;">' + giftEsc(m.frmDate) + ' to ' + giftEsc(m.toDate) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Status</td><td style="font-weight:bold;">' + giftEsc(m.statusFilter) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Records</td><td style="font-weight:bold;">' + m.records + '</td><td colspan="4">&nbsp;</td></tr>';
+        html += '<tr><td bgcolor="#EEF2FF" style="font-weight:bold;">Total Amount</td><td bgcolor="#EEF2FF" style="font-weight:bold;">' + m.total + '</td>';
+        html += '<td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">Success</td><td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">' + m.success + '</td>';
+        html += '<td bgcolor="#FEF2F2" style="font-weight:bold;color:#B91C1C;">Failed</td><td bgcolor="#FEF2F2" style="font-weight:bold;color:#B91C1C;">' + m.failed + '</td>';
+        html += '<td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">Pending</td><td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">' + m.pending + '</td><td colspan="7">&nbsp;</td></tr>';
+        html += '<tr>';
+        var heads = ['Status', 'Sender', 'Receiver', 'Request Date', 'Amount', 'Service', 'Type', 'Operator Id', 'User Pre', 'User INC', 'User Post', 'Dealer Pre', 'Dealer INC', 'Dealer Post', 'Response Time'];
+        for (var h = 0; h < heads.length; h++) {
+            html += '<th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">' + heads[h] + '</th>';
+        }
+        html += '</tr>';
+        if (!rows.length) {
+            html += '<tr><td colspan="15" bgcolor="#F8FAFC" style="text-align:center;font-weight:bold;color:#64748B;height:48px;">Gift card report not found.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                var c = giftStatusColors(r.status);
+                var rowBg = (i % 2 === 1) ? '#F8FAFC' : '#FFFFFF';
+                html += '<tr>';
+                html += '<td bgcolor="' + c.bg + '" style="color:' + c.fg + ';font-weight:bold;">' + giftEsc(c.label) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.sender) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.receiver) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.requestDate) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.amount) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.service) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.type) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.operatorId) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.userPre) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.userInc) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.userPost) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.dealerPre) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.dealerInc) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.dealerPost) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + giftEsc(r.responseTime) + '</td>';
+                html += '</tr>';
+            }
+        }
+        html += '</table></body></html>';
+        return html;
+    }
+
+    function giftBuildPdfHtml(rows) {
+        var m = giftExportMeta(rows);
+        var body = '';
+        if (!rows.length) {
+            body = '<tr><td colspan="15" class="empty">Gift card report not found.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                var c = giftStatusColors(r.status);
+                body += '<tr>';
+                body += '<td><span class="badge ' + c.badge + '">' + giftEsc(c.label) + '</span></td>';
+                body += '<td>' + giftEsc(r.sender) + '</td>';
+                body += '<td>' + giftEsc(r.receiver) + '</td>';
+                body += '<td>' + giftEsc(r.requestDate) + '</td>';
+                body += '<td>' + giftEsc(r.amount) + '</td>';
+                body += '<td>' + giftEsc(r.service) + '</td>';
+                body += '<td>' + giftEsc(r.type) + '</td>';
+                body += '<td>' + giftEsc(r.operatorId) + '</td>';
+                body += '<td>' + giftEsc(r.userPre) + '</td>';
+                body += '<td>' + giftEsc(r.userInc) + '</td>';
+                body += '<td>' + giftEsc(r.userPost) + '</td>';
+                body += '<td>' + giftEsc(r.dealerPre) + '</td>';
+                body += '<td>' + giftEsc(r.dealerInc) + '</td>';
+                body += '<td>' + giftEsc(r.dealerPost) + '</td>';
+                body += '<td>' + giftEsc(r.responseTime) + '</td>';
+                body += '</tr>';
+            }
+        }
+        return '<!DOCTYPE html><html><head><meta charset="utf-8" /><title>Gift Card Report</title><style type="text/css">'
+            + '@@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }'
+            + '* { box-sizing: border-box; } body { margin:0; padding:16px; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#0f172a; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }'
+            + 'table { border-collapse:collapse; } .hero { width:100%; border:1px solid #1d4ed8; } .hero-top { padding:14px 18px; background:#2563eb; color:#fff; }'
+            + '.hero-top h1 { margin:0; font-size:20px; } .hero-top p { margin:4px 0 0; font-size:11px; color:#dbeafe; }'
+            + '.meta { width:100%; background:#f8fafc; } .meta td { padding:8px 12px; border-right:1px solid #e2e8f0; }'
+            + '.meta-label { display:block; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748b; margin-bottom:3px; }'
+            + '.meta-value { font-size:12px; font-weight:700; } .cards { width:100%; margin:12px 0; } .cards td { width:25%; padding:0 6px 0 0; }'
+            + '.card { border:1px solid #e2e8f0; padding:10px 12px; } .card-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; margin-bottom:4px; } .card-value { font-size:16px; font-weight:800; }'
+            + '.card-total { background:#eef2ff; } .card-ok { background:#ecfdf5; } .card-fail { background:#fef2f2; } .card-wait { background:#fefce8; }'
+            + '.grid { width:100%; border:1px solid #cbd5e1; } .grid th { padding:9px 7px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; color:#fff; background:#334155; }'
+            + '.grid td { padding:8px 7px; font-size:11px; border-top:1px solid #e2e8f0; } .grid tbody tr:nth-child(even) td { background:#f8fafc; }'
+            + '.badge { display:inline-block; min-width:58px; padding:3px 8px; font-size:10px; font-weight:700; text-align:center; }'
+            + '.badge-ok { background:#ecfdf5; color:#047857; } .badge-fail { background:#fee2e2; color:#b91c1c; } .badge-wait { background:#fef9c3; color:#854d0e; }'
+            + '.empty { padding:36px 16px; text-align:center; font-size:14px; font-weight:700; color:#64748b; background:#f8fafc; }'
+            + '.foot { margin-top:10px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:10px; color:#94a3b8; text-align:center; }'
+            + '</style></head><body><div class="sheet"><div class="hero"><div class="hero-top"><h1>Gift Card Report</h1><p>Dealer reports - gift card transactions</p></div>'
+            + '<table class="meta" cellpadding="0" cellspacing="0"><tr>'
+            + '<td style="width:25%;"><span class="meta-label">Generated On</span><span class="meta-value">' + giftEsc(m.generatedOn) + '</span></td>'
+            + '<td style="width:30%;"><span class="meta-label">Date Range</span><span class="meta-value">' + giftEsc(m.frmDate) + ' to ' + giftEsc(m.toDate) + '</span></td>'
+            + '<td style="width:20%;"><span class="meta-label">Status</span><span class="meta-value">' + giftEsc(m.statusFilter) + '</span></td>'
+            + '<td style="width:25%;"><span class="meta-label">Records</span><span class="meta-value">' + m.records + '</span></td>'
+            + '</tr></table></div>'
+            + '<table class="cards" cellpadding="0" cellspacing="0"><tr>'
+            + '<td><div class="card card-total"><span class="card-label">Total Amount</span><span class="card-value">' + m.total + '</span></div></td>'
+            + '<td><div class="card card-ok"><span class="card-label">Success</span><span class="card-value">' + m.success + '</span></div></td>'
+            + '<td><div class="card card-fail"><span class="card-label">Failed</span><span class="card-value">' + m.failed + '</span></div></td>'
+            + '<td><div class="card card-wait"><span class="card-label">Pending</span><span class="card-value">' + m.pending + '</span></div></td>'
+            + '</tr></table>'
+            + '<table class="grid" cellpadding="0" cellspacing="0"><thead><tr>'
+            + '<th>Status</th><th>Sender</th><th>Receiver</th><th>Request Date</th><th>Amount</th><th>Service</th><th>Type</th><th>Operator Id</th>'
+            + '<th>User Pre</th><th>User INC</th><th>User Post</th><th>Dealer Pre</th><th>Dealer INC</th><th>Dealer Post</th><th>Response Time</th>'
+            + '</tr></thead><tbody>' + body + '</tbody></table>'
+            + '<div class="foot">Generated from Dealer panel - Gift Card Report</div></div></body></html>';
+    }
+
+    function giftDownloadExcel(html) {
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel' });
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'Giftcard_Report.xls');
+            return;
+        }
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'Giftcard_Report.xls';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+    }
+
+    function giftOpenPdf(html) {
+        var w = window.open('', '_blank');
+        if (!w) {
+            return;
+        }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+    }
+
+    function toggleGiftcardTotals() {
+        var $ = window.jQuery;
+        var panel = $('#giftcardTotalsPanel');
+        var btn = $('.vm-gift-totals-btn');
+        if (panel.is(':visible')) {
+            hideGiftcardTotals();
+            return;
+        }
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        btn.attr('aria-expanded', 'true');
+    }
+
+    function hideGiftcardTotals() {
+        var $ = window.jQuery;
+        $('#giftcardTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-gift-totals-btn').attr('aria-expanded', 'false');
+    }
+
+    function giftDetailText(btn, name) {
+        var value = (btn && btn.getAttribute('data-' + name)) || '';
+        value = String(value).replace(/\s+/g, ' ').trim();
+        return value || '-';
+    }
+
+    function giftSetDetail(id, value) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.textContent = value;
+        }
+    }
+
+    function giftStatusTone(status) {
+        var raw = (status || '').toLowerCase();
+        if (raw.indexOf('fail') >= 0) {
+            return 'failed';
+        }
+        if (raw.indexOf('success') >= 0) {
+            return 'success';
+        }
+        return 'pending';
+    }
+
+    function showGiftModal(selector) {
+        if (typeof window.showAdminModal === 'function') {
+            window.showAdminModal(selector);
+            return;
+        }
+        var $ = window.jQuery;
+        var $modal = $(selector);
+        if ($modal.parent().length && !$modal.parent().is('body')) {
+            $modal.appendTo(document.body);
+        }
+        if ($ && $.fn && $.fn.modal) {
+            $modal.modal('show');
+        }
+    }
+
+    function openGiftcardDetail(btn) {
+        var sender = giftDetailText(btn, 'sender');
+        var status = giftDetailText(btn, 'status');
+        var amount = giftDetailText(btn, 'amount');
+        giftSetDetail('giftDetSubtitle', sender === '-' ? 'Gift card information' : sender);
+        giftSetDetail('giftDetStatus', status);
+        giftSetDetail('giftDetSender', sender);
+        giftSetDetail('giftDetReceiver', giftDetailText(btn, 'receiver'));
+        giftSetDetail('giftDetSenderMob', giftDetailText(btn, 'sendermob'));
+        giftSetDetail('giftDetReceiverMob', giftDetailText(btn, 'receivermob'));
+        giftSetDetail('giftDetService', giftDetailText(btn, 'service'));
+        giftSetDetail('giftDetType', giftDetailText(btn, 'type'));
+        giftSetDetail('giftDetOpId', giftDetailText(btn, 'opid'));
+        giftSetDetail('giftDetOrderId', giftDetailText(btn, 'orderid'));
+        giftSetDetail('giftDetOrder', giftDetailText(btn, 'order'));
+        giftSetDetail('giftDetResp', giftDetailText(btn, 'resp'));
+        giftSetDetail('giftDetAmount', amount === '-' ? '-' : ('Rs ' + amount));
+        giftSetDetail('giftDetUserPre', giftDetailText(btn, 'userpre'));
+        giftSetDetail('giftDetUserInc', giftDetailText(btn, 'userinc'));
+        giftSetDetail('giftDetUserPost', giftDetailText(btn, 'userpost'));
+        giftSetDetail('giftDetDlmPre', giftDetailText(btn, 'dlmpre'));
+        giftSetDetail('giftDetDlmInc', giftDetailText(btn, 'dlminc'));
+        giftSetDetail('giftDetDlmPost', giftDetailText(btn, 'dlmpost'));
+        giftSetDetail('giftDetMessage', giftDetailText(btn, 'message'));
+        giftSetDetail('giftDetApiReq', giftDetailText(btn, 'apireq'));
+        giftSetDetail('giftDetApiRes', giftDetailText(btn, 'apires'));
+        var statusEl = document.getElementById('giftDetStatus');
+        if (statusEl) {
+            statusEl.className = 'vm-dmt-modal-readonly vm-dth-detail-status vm-dth-detail-status--' + giftStatusTone(status);
+        }
+        showGiftModal('#giftcardDetailModal');
+    }
+
+    function bindGiftcardModals() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.modal) {
+            window.setTimeout(bindGiftcardModals, 40);
+            return;
+        }
+        $(document).off('click.giftDetail', '.vm-gift-detail-btn').on('click.giftDetail', '.vm-gift-detail-btn', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openGiftcardDetail(this);
+        });
+    }
+
+    function giftLoadScript(src, done) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = done;
+        s.onerror = done;
+        document.body.appendChild(s);
+    }
+
+    function bootGiftcardReport() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.datepicker) {
+            window.setTimeout(bootGiftcardReport, 50);
+            return;
         }
 
-    });
+        function afterPlugins() {
+            $('.saas-giftcard-report-page .for-select2').each(function () {
+                var $el = $(this);
+                if ($.fn.select2 && !$el.hasClass('select2-hidden-accessible')) {
+                    $el.select2({
+                        width: '100%',
+                        dropdownParent: $('body'),
+                        containerCssClass: 'vm-ecom-select2',
+                        dropdownCssClass: 'vm-ecom-select2-drop',
+                        minimumResultsForSearch: 0
+                    });
+                }
+            });
+
+            if (typeof window.initAdminReportDateForm === 'function') {
+                window.initAdminReportDateForm('#dealerGiftcardReportForm');
+            } else {
+                $('#txt_frm_date, #txt_to_date').datepicker({
+                    format: 'yyyy-mm-dd',
+                    todayHighlight: true,
+                    autoclose: true,
+                    orientation: 'bottom auto',
+                    container: 'body'
+                });
+                if ($('#dealerGiftcardReportForm').attr('data-date-mode') !== 'post') {
+                    $('#txt_frm_date').datepicker('setDate', new Date());
+                    $('#txt_to_date').datepicker('setDate', new Date());
+                }
+            }
+
+            function pinGiftDatepicker(e) {
+                if (typeof window.repositionAdminDatepickerForMobile === 'function') {
+                    window.repositionAdminDatepickerForMobile(e && e.target ? e.target : this);
+                }
+            }
+
+            $(document).off('show.giftDp shown.giftDp').on('show.giftDp shown.giftDp', '#txt_frm_date, #txt_to_date', pinGiftDatepicker);
+            $(window).off('resize.giftDp orientationchange.giftDp').on('resize.giftDp orientationchange.giftDp', pinGiftDatepicker);
+
+            $('#btnExport').off('click.giftEx').on('click.giftEx', function () {
+                var rows = giftTableRows();
+                if (rows.length) {
+                    giftDownloadExcel(giftBuildExcelHtml(rows));
+                    return;
+                }
+                window.location.href = window.giftExcelUrl + '?' + giftQueryString();
+            });
+            $('#btnPDF').off('click.giftPdf').on('click.giftPdf', function () {
+                var rows = giftTableRows();
+                if (rows.length) {
+                    giftOpenPdf(giftBuildPdfHtml(rows));
+                    return;
+                }
+                window.open(window.giftPdfUrl + '?' + giftQueryString(), '_blank');
+            });
+        }
+
+        if ($.fn.select2) {
+            afterPlugins();
+            return;
+        }
+        giftLoadScript(window.giftSelect2Url, afterPlugins);
+    }
+
+    bindGiftcardModals();
+    if (document.readyState === 'complete') {
+        bootGiftcardReport();
+    } else {
+        window.addEventListener('load', bootGiftcardReport);
+    }
 </script>
 
-<script>
-    $('.white-success-button').click(function () {
-        $('.white-success').toggle();
-    });
-</script>
-
-
-
-
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters input.form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters select.form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-opr-select,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-dmt-select,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search span,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-opr-toolbar-search,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-opr-toolbar-search span,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-radiant-search-btn,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-radiant-search-btn span,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .select2-container .select2-selection--single,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .select2-container--default .select2-selection--single .select2-selection__rendered,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .select2-container--default .select2-selection--single .select2-selection__placeholder,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page span.select2-selection__rendered,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page span.select2-selection__placeholder,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page span:not(.saas-acc-dp-icon).select2-selection__rendered,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-ecom-select2 .select2-selection__rendered,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-ecom-select2 .select2-selection__placeholder {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+        body.saas-admin-ui .select2-dropdown.vm-ecom-select2-drop,
+        body.saas-admin-ui .select2-dropdown.vm-ecom-select2-drop .select2-results__option,
+        body.saas-admin-ui .select2-dropdown.vm-ecom-select2-drop .select2-search__field,
+        body.saas-admin-ui .select2-container--open .select2-dropdown.vm-ecom-select2-drop .select2-results__option {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+        body.saas-admin-ui section.content.saas-ecommerce-report-page #txt_frm_date,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page #txt_to_date,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_frm_date,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_to_date,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_frm_date.form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_to_date.form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_frm_date.saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_to_date.saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_frm_date.form-control.saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_to_date.form-control.saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-dth-booking-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-dth-booking-report-page.saas-radiant-prepay-page.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .saas-acc-dp-input.form-control,
+        body.saas-admin-ui section.content.saas-dth-booking-report-page.saas-radiant-prepay-page.saas-ecommerce-report-page .saas-acc-dp-field .form-control.saas-acc-dp-input {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+        @@media (max-width: 991px) {
+            body.saas-admin-ui section.content.saas-ecommerce-report-page #txt_frm_date,
+            body.saas-admin-ui section.content.saas-ecommerce-report-page #txt_to_date,
+            body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_frm_date.form-control.saas-acc-dp-input,
+            body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_to_date.form-control.saas-acc-dp-input,
+            body.saas-admin-ui section.content.saas-dth-booking-report-page.saas-radiant-prepay-page.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .saas-acc-dp-input.form-control {
+                font-size: 14px !important;
+                font-weight: 600 !important;
+            }
+        }
+    </style>
+}

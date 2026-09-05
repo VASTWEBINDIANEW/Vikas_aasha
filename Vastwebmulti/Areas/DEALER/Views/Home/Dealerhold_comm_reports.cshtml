@@ -1,86 +1,393 @@
-﻿@model  List<Vastwebmulti.Areas.DEALER.Models.dealerCommon_status_master_dlm_Transfer_cls>
+﻿@model IEnumerable<Vastwebmulti.Areas.DEALER.Models.dealerCommon_status_master_dlm_Transfer_cls>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "Dealerhold_comm_reports";
+    ViewBag.Title = "Commission Hold Report";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Areas.DEALER.Models.dealerCommon_status_master_dlm_Transfer_cls>();
+    var totalComm = reports.Sum(x => x.totalcomm);
+    var totalPre = reports.Sum(x => x.master_remain_pre);
+    var totalPost = reports.Sum(x => x.master_remain);
+    var totalAdminPost = reports.Sum(x => x.admin_postbal);
 }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page');</script>
 
-<section class="content" style="">
-    <div class="container-fluid">
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
-        <!--Four-Design-Master-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Commission Hold Report</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
-                @*<li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right" aria-hidden="true"></i></a></li>*@
-                <li><a href="javascript:void(0);">Commission Hold Report</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Master-page-Header-Section-End-->
-        <div class="page-header-third pageheader-margin-third second-header-third four-noneclass-admin-only">
-            <div class="bread-same-all-page breadsameall-second">
-                <div class="col-md-6" style="padding: 0px;">
-                    <ul style="float:left;padding:0px;">
-                        <li class="smli">
-                            <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                            </a>
-                        </li>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page saas-giftcard-report-page saas-hold-comm-report-page">
 
-                        <li class="fullbodydycolorbg tmw-total-color-one">
-                            Commission Hold Report
-                        </li>
-                    </ul>
-                </div>
-                </div>
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
+
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Reports</li>
+                    <li>Commission Hold Report</li>
+                </ol>
+
             </div>
-                <div class="col-md-12 fund-transfer-main-admin">
-                    <div class="fund-trasfer-right">
-                        <div class="row clearfix">
-                            <div>
-                                <table class="table table-bordered table-striped table-hover third-design-table" style="background:#f9f9f9;">
-                                    <thead>
-                                        <tr>
 
-                                            <th> Name</th>
-                                            <th> Firm</th>
-                                            <th> Mobile</th>
-                                            <th>Pre Balance</th>
-                                            <th>Total  Comm. Recived</th>
-                                            <th> Post Balance</th>
-                                            <th> Admin  Pre bal</th>
-                                            <th>Admin Post bal</th>
-                                            <th>Hold Comm date</th>
-                                            <th>Hold Comm Transfer date</th>
-
-
-                                        </tr>
-                                    </thead>
-                                    <tbody id="bodyss">
-                                        @foreach (var item in Model)
-                                        {
-                                            <tr class="tr">
-
-                                                <td>@item.Name</td>
-                                                <td>@item.Frmname</td>
-                                                <td> @item.mobile </td>
-                                                <td> @item.master_remain_pre </td>
-                                                <td> @item.totalcomm </td>
-                                                <td> @item.master_remain </td>
-                                                <td> @item.admin_prebal </td>
-                                                <td>@item.admin_postbal</td>
-                                                <td>@item.Hold_date</td>
-                                                <td>@item.trasnferdate</td>
-
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+            <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="holdCommTotalsPanel" style="display:none;" aria-hidden="true">
+                <div class="vm-dmt-totals-head">
+                    <div class="vm-dmt-totals-head__title">
+                        <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                        <span>Commission hold totals</span>
+                    </div>
+                    <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideHoldCommTotals()" title="Hide totals" aria-label="Hide totals">
+                        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                    <div class="vm-opr-total-card vm-opr-total-card--primary">
+                        <span class="vm-opr-total-card__label">Total Commission</span>
+                        <strong class="vm-opr-total-card__value">@totalComm.ToString("N2")</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--success">
+                        <span class="vm-opr-total-card__label">Pre Balance</span>
+                        <strong class="vm-opr-total-card__value">@totalPre.ToString("N2")</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--pending">
+                        <span class="vm-opr-total-card__label">Post Balance</span>
+                        <strong class="vm-opr-total-card__value">@totalPost.ToString("N2")</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--failed">
+                        <span class="vm-opr-total-card__label">Admin Post</span>
+                        <strong class="vm-opr-total-card__value">@totalAdminPost.ToString("N2")</strong>
                     </div>
                 </div>
             </div>
+
+        </div>
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-lock" aria-hidden="true"></i>
+                        <span>Commission hold report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-inline-total" title="Total commission for current list">
+                            Total: <strong>&#8377; @totalComm.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-sell-rch-totals-btn vm-ecom-totals-btn vm-gift-totals-btn vm-hold-comm-totals-btn" onclick="toggleHoldCommTotals()" title="Show totals" aria-expanded="false" aria-controls="holdCommTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="sellRechargeReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Firm</th>
+                                    <th>Mobile</th>
+                                    <th>Pre&nbsp;Balance</th>
+                                    <th>Total&nbsp;Comm.&nbsp;Received</th>
+                                    <th>Post&nbsp;Balance</th>
+                                    <th>Admin&nbsp;Pre&nbsp;bal</th>
+                                    <th>Admin&nbsp;Post&nbsp;bal</th>
+                                    <th>Hold&nbsp;Comm&nbsp;date</th>
+                                    <th>Hold&nbsp;Comm&nbsp;Transfer&nbsp;date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.Partial("_Dealerhold_comm_reports", reports)
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </section>
 
+<script>
+    window.holdExcelUrl = '@Url.Action("Excel_Dealerhold_comm_reports", "Home")';
+    window.holdPdfUrl = '@Url.Action("PDF_Dealerhold_comm_reports", "Home")';
+
+    function holdEsc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function holdNum(value) {
+        var n = parseFloat(String(value || '').replace(/,/g, '').replace(/[^\d.-]/g, ''));
+        return isNaN(n) ? 0 : n;
+    }
+
+    function holdNow() {
+        var d = new Date();
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var h = d.getHours();
+        var ampm = h >= 12 ? 'PM' : 'AM';
+        var hr = h % 12; if (!hr) { hr = 12; }
+        var min = d.getMinutes();
+        return ('0' + d.getDate()).slice(-2) + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + ('0' + hr).slice(-2) + ':' + ('0' + min).slice(-2) + ' ' + ampm;
+    }
+
+    function holdTableRows() {
+        var $ = window.jQuery;
+        var rows = [];
+        $('#sellRechargeReport tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-opr-table-empty-row')) {
+                return;
+            }
+            var $cells = $tr.children('td');
+            if ($cells.length < 10) {
+                return;
+            }
+            rows.push({
+                name: $.trim($cells.eq(0).text()).replace(/\s+/g, ' '),
+                firm: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+                mobile: $.trim($cells.eq(2).text()).replace(/\s+/g, ' '),
+                pre: $.trim($cells.eq(3).text()).replace(/\s+/g, ' '),
+                comm: $.trim($cells.eq(4).text()).replace(/\s+/g, ' '),
+                post: $.trim($cells.eq(5).text()).replace(/\s+/g, ' '),
+                adminPre: $.trim($cells.eq(6).text()).replace(/\s+/g, ' '),
+                adminPost: $.trim($cells.eq(7).text()).replace(/\s+/g, ' '),
+                holdDate: $.trim($cells.eq(8).text()).replace(/\s+/g, ' '),
+                transferDate: $.trim($cells.eq(9).text()).replace(/\s+/g, ' ')
+            });
+        });
+        return rows;
+    }
+
+    function holdExportMeta(rows) {
+        var total = 0, pre = 0, post = 0, adminPost = 0;
+        for (var i = 0; i < rows.length; i++) {
+            total += holdNum(rows[i].comm);
+            pre += holdNum(rows[i].pre);
+            post += holdNum(rows[i].post);
+            adminPost += holdNum(rows[i].adminPost);
+        }
+        return {
+            generatedOn: holdNow(),
+            records: rows.length,
+            total: total.toFixed(2),
+            pre: pre.toFixed(2),
+            post: post.toFixed(2),
+            adminPost: adminPost.toFixed(2)
+        };
+    }
+
+    function holdBuildExcelHtml(rows) {
+        var m = holdExportMeta(rows);
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8" /><title>Commission Hold Report</title></head><body>';
+        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">';
+        html += '<tr><td colspan="10" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;">Commission Hold Report</td></tr>';
+        html += '<tr><td colspan="10" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;">Dealer reports - commission hold transfers</td></tr>';
+        html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Generated On</td><td colspan="2" style="font-weight:bold;">' + holdEsc(m.generatedOn) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Records</td><td style="font-weight:bold;">' + m.records + '</td><td colspan="5">&nbsp;</td></tr>';
+        html += '<tr><td bgcolor="#EEF2FF" style="font-weight:bold;">Total Commission</td><td bgcolor="#EEF2FF" style="font-weight:bold;">' + m.total + '</td>';
+        html += '<td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">Pre Balance</td><td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">' + m.pre + '</td>';
+        html += '<td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">Post Balance</td><td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">' + m.post + '</td>';
+        html += '<td bgcolor="#FEF2F2" style="font-weight:bold;color:#B91C1C;">Admin Post</td><td bgcolor="#FEF2F2" style="font-weight:bold;color:#B91C1C;">' + m.adminPost + '</td><td colspan="2">&nbsp;</td></tr>';
+        html += '<tr>';
+        var heads = ['Name', 'Firm', 'Mobile', 'Pre Balance', 'Total Comm. Received', 'Post Balance', 'Admin Pre bal', 'Admin Post bal', 'Hold Comm date', 'Hold Comm Transfer date'];
+        for (var h = 0; h < heads.length; h++) {
+            html += '<th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">' + heads[h] + '</th>';
+        }
+        html += '</tr>';
+        if (!rows.length) {
+            html += '<tr><td colspan="10" bgcolor="#F8FAFC" style="text-align:center;font-weight:bold;color:#64748B;height:48px;">Commission hold report not found.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                var rowBg = (i % 2 === 1) ? '#F8FAFC' : '#FFFFFF';
+                html += '<tr>';
+                html += '<td bgcolor="' + rowBg + '">' + holdEsc(r.name) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + holdEsc(r.firm) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + holdEsc(r.mobile) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + holdEsc(r.pre) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + holdEsc(r.comm) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + holdEsc(r.post) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + holdEsc(r.adminPre) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + holdEsc(r.adminPost) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + holdEsc(r.holdDate) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + holdEsc(r.transferDate) + '</td>';
+                html += '</tr>';
+            }
+        }
+        html += '</table></body></html>';
+        return html;
+    }
+
+    function holdBuildPdfHtml(rows) {
+        var m = holdExportMeta(rows);
+        var body = '';
+        if (!rows.length) {
+            body = '<tr><td colspan="10" class="empty">Commission hold report not found.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                body += '<tr>';
+                body += '<td>' + holdEsc(r.name) + '</td>';
+                body += '<td>' + holdEsc(r.firm) + '</td>';
+                body += '<td>' + holdEsc(r.mobile) + '</td>';
+                body += '<td>' + holdEsc(r.pre) + '</td>';
+                body += '<td>' + holdEsc(r.comm) + '</td>';
+                body += '<td>' + holdEsc(r.post) + '</td>';
+                body += '<td>' + holdEsc(r.adminPre) + '</td>';
+                body += '<td>' + holdEsc(r.adminPost) + '</td>';
+                body += '<td>' + holdEsc(r.holdDate) + '</td>';
+                body += '<td>' + holdEsc(r.transferDate) + '</td>';
+                body += '</tr>';
+            }
+        }
+        return '<!DOCTYPE html><html><head><meta charset="utf-8" /><title>Commission Hold Report</title><style type="text/css">'
+            + '@@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }'
+            + '* { box-sizing: border-box; } body { margin:0; padding:16px; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#0f172a; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }'
+            + 'table { border-collapse:collapse; } .hero { width:100%; border:1px solid #1d4ed8; } .hero-top { padding:14px 18px; background:#2563eb; color:#fff; }'
+            + '.hero-top h1 { margin:0; font-size:20px; } .hero-top p { margin:4px 0 0; font-size:11px; color:#dbeafe; }'
+            + '.meta { width:100%; background:#f8fafc; } .meta td { padding:8px 12px; border-right:1px solid #e2e8f0; }'
+            + '.meta-label { display:block; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748b; margin-bottom:3px; }'
+            + '.meta-value { font-size:12px; font-weight:700; } .cards { width:100%; margin:12px 0; } .cards td { width:25%; padding:0 6px 0 0; }'
+            + '.card { border:1px solid #e2e8f0; padding:10px 12px; } .card-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; margin-bottom:4px; } .card-value { font-size:16px; font-weight:800; }'
+            + '.card-total { background:#eef2ff; } .card-ok { background:#ecfdf5; } .card-fail { background:#fef2f2; } .card-wait { background:#fefce8; }'
+            + '.grid { width:100%; border:1px solid #cbd5e1; } .grid th { padding:9px 7px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; color:#fff; background:#334155; }'
+            + '.grid td { padding:8px 7px; font-size:11px; border-top:1px solid #e2e8f0; } .grid tbody tr:nth-child(even) td { background:#f8fafc; }'
+            + '.empty { padding:36px 16px; text-align:center; font-size:14px; font-weight:700; color:#64748b; background:#f8fafc; }'
+            + '.foot { margin-top:10px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:10px; color:#94a3b8; text-align:center; }'
+            + '</style></head><body><div class="sheet"><div class="hero"><div class="hero-top"><h1>Commission Hold Report</h1><p>Dealer reports - commission hold transfers</p></div>'
+            + '<table class="meta" cellpadding="0" cellspacing="0"><tr>'
+            + '<td style="width:50%;"><span class="meta-label">Generated On</span><span class="meta-value">' + holdEsc(m.generatedOn) + '</span></td>'
+            + '<td style="width:50%;"><span class="meta-label">Records</span><span class="meta-value">' + m.records + '</span></td>'
+            + '</tr></table></div>'
+            + '<table class="cards" cellpadding="0" cellspacing="0"><tr>'
+            + '<td><div class="card card-total"><span class="card-label">Total Commission</span><span class="card-value">' + m.total + '</span></div></td>'
+            + '<td><div class="card card-ok"><span class="card-label">Pre Balance</span><span class="card-value">' + m.pre + '</span></div></td>'
+            + '<td><div class="card card-wait"><span class="card-label">Post Balance</span><span class="card-value">' + m.post + '</span></div></td>'
+            + '<td><div class="card card-fail"><span class="card-label">Admin Post</span><span class="card-value">' + m.adminPost + '</span></div></td>'
+            + '</tr></table>'
+            + '<table class="grid" cellpadding="0" cellspacing="0"><thead><tr>'
+            + '<th>Name</th><th>Firm</th><th>Mobile</th><th>Pre Balance</th><th>Total Comm. Received</th><th>Post Balance</th><th>Admin Pre bal</th><th>Admin Post bal</th><th>Hold Comm date</th><th>Hold Comm Transfer date</th>'
+            + '</tr></thead><tbody>' + body + '</tbody></table>'
+            + '<div class="foot">Generated from Dealer panel - Commission Hold Report</div></div></body></html>';
+    }
+
+    function holdDownloadExcel(html) {
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel' });
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'Commission_Hold_Report.xls');
+            return;
+        }
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'Commission_Hold_Report.xls';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+    }
+
+    function holdOpenPdf(html) {
+        var w = window.open('', '_blank');
+        if (!w) {
+            return;
+        }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+    }
+
+    function toggleHoldCommTotals() {
+        var $ = window.jQuery;
+        var panel = $('#holdCommTotalsPanel');
+        var btn = $('.vm-hold-comm-totals-btn');
+        if (panel.is(':visible')) {
+            hideHoldCommTotals();
+            return;
+        }
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        btn.attr('aria-expanded', 'true');
+    }
+
+    function hideHoldCommTotals() {
+        var $ = window.jQuery;
+        $('#holdCommTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-hold-comm-totals-btn').attr('aria-expanded', 'false');
+    }
+
+    function bootHoldCommReport() {
+        var $ = window.jQuery;
+        if (!$ ) {
+            window.setTimeout(bootHoldCommReport, 50);
+            return;
+        }
+        $('#btnExport').off('click.holdEx').on('click.holdEx', function () {
+            var rows = holdTableRows();
+            if (rows.length) {
+                holdDownloadExcel(holdBuildExcelHtml(rows));
+                return;
+            }
+            window.location.href = window.holdExcelUrl;
+        });
+        $('#btnPDF').off('click.holdPdf').on('click.holdPdf', function () {
+            var rows = holdTableRows();
+            if (rows.length) {
+                holdOpenPdf(holdBuildPdfHtml(rows));
+                return;
+            }
+            window.open(window.holdPdfUrl, '_blank');
+        });
+    }
+
+    if (document.readyState === 'complete') {
+        bootHoldCommReport();
+    } else {
+        window.addEventListener('load', bootHoldCommReport);
+    }
+</script>
+
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters input.form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters select.form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-opr-select,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-dmt-select,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search span,
+        body.saas-admin-ui section.content.saas-hold-comm-report-page .vm-radiant-inline-total,
+        body.saas-admin-ui section.content.saas-hold-comm-report-page .saas-acc-btn--excel,
+        body.saas-admin-ui section.content.saas-hold-comm-report-page .saas-acc-btn--pdf {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+    </style>
+}

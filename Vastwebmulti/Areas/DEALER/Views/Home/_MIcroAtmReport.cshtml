@@ -1,85 +1,81 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.microatm_report_Result>
+@using System.Linq
 @{
     Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.microatm_report_Result>();
 }
-
-
-@if (Model != null)
+@if (items.Any())
 {
-    foreach (var item in Model)
+    foreach (var item in items)
     {
-        //  decimal comm = 0;
+        var statusRaw = item.status ?? "";
+        var statusTone = "pending";
+        var statusLabel = statusRaw;
+        var statusFa = "fa-clock-o";
+        if (statusRaw.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "failed";
+            statusLabel = "Failed";
+            statusFa = "fa-times";
+        }
+        else if (statusRaw.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "success";
+            statusLabel = "Success";
+            statusFa = "fa-check";
+        }
+        else if (statusRaw.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "pending";
+            statusLabel = "Pending";
+            statusFa = "fa-clock-o";
+        }
+
         decimal comm = 0;
-        var img = "";
-        var bcolor = "";
-        var transtype = "";
-        if (item.status.Contains("success"))
+        var txnType = item.transaction_type ?? "";
+        if (statusRaw.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            if (item.transaction_type == "microatm")
+            if (string.Equals(txnType, "microatm", StringComparison.OrdinalIgnoreCase))
             {
-                //comm = (item.amount.Value * item.Retailer_comm.Value) / 100;
-                //comm = comm + item.Retailer_gst.Value - item.Retailer_tds.Value;
-                comm = item.Retailer_comm.Value + item.Retailer_gst.Value + item.Retailer_tds.Value;
-                transtype = "COMM";
-
+                comm = (item.Retailer_comm ?? 0) + (item.Retailer_gst ?? 0) + (item.Retailer_tds ?? 0);
             }
-            else if (item.transaction_type == "purchase")
+            else if (string.Equals(txnType, "purchase", StringComparison.OrdinalIgnoreCase))
             {
-                comm = (item.amount.Value * item.Retailer_comm.Value) / 100;
-
-                transtype = "CH";
+                comm = ((item.amount ?? 0) * (item.Retailer_comm ?? 0)) / 100;
             }
-
-            img = "../../ashok-images/correct.svg";
-            bcolor = "green";
         }
 
-        if (item.status.Contains("Pending"))
-        {
-            img = "../../ashok-images/clkk.png";
-            bcolor = "#ffc107";
-        }
-        if (item.status.Contains("failed"))
-        {
-            img = "../../ashok-images/closes.svg";
-            bcolor = "red";
-        }
-
-
-<tr>
-
-    <td><img class="img-microatm" src="@img" style=" height: 20px;width: 18px;margin:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:@bcolor;float:left;" />@item.status</td>
-    <td>@item.Frm_Name</td>
-
-    <td>@item.amount</td>
-    <td>@item.transtime</td>
-    <td>@item.rrn</td>
-    <td>@item.transaction_type</td>
-    <td>@item.card_payment_type</td>
-    <td>@item.masked_pan</td>
-    <td>@item.network</td>
-    <td>@item.retailer_remain_pre</td>
-    <td>@comm</td>
-    <td>@item.Retailer_gst</td>
-    <td>@item.Retailer_tds</td>
-    <td>@item.retailer_remain_post</td>
-    <td>
-        @if (item.transaction_type.ToUpper() == "REVERSAL" && item.status.ToUpper() == "SUCCESS")
-        {
-        <button id="fff" type="button" class="fftr" style="background-color:transparent; color:black;border:none;margin-top:0px;" data-toggle="modal" title="Refund" data-target="#defaultModal1" onclick="refundshow('@item.rrn')">
-            <i class="fa fa-times" style="top:1px;border: 1px solid #c7c2c2;padding: 3px 4px;font-size: 10px;" aria-hidden="true"></i>
-        </button>
-        }
-    </td>
-    <td>
-        @if (item.status.ToUpper() == "PENDING")
-        {
-        <div class="nrch" id="nrch'+@item.idno+'" style="display:flex;">
-
-        </div>
-        }
-    </td>
-
-</tr>
+        var txnDate = item.transtime.HasValue ? item.transtime.Value.ToString("dd-MMM HH:mm:ss") : "—";
+        var amt = item.amount ?? 0;
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-status="@statusRaw" data-amount="@amt.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-radiant-status-text">@statusLabel</span>
+            </td>
+            <td>@(item.Frm_Name ?? "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.amount.HasValue ? item.amount.Value.ToString("N2") : "—")</td>
+            <td>@txnDate</td>
+            <td>@(item.rrn ?? "—")</td>
+            <td>@(string.IsNullOrWhiteSpace(txnType) ? "—" : txnType)</td>
+            <td>@(item.card_payment_type ?? "—")</td>
+            <td>@(item.masked_pan ?? "—")</td>
+            <td>@(item.network ?? "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.retailer_remain_pre.HasValue ? item.retailer_remain_pre.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@comm.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@(item.Retailer_gst.HasValue ? item.Retailer_gst.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.Retailer_tds.HasValue ? item.Retailer_tds.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.retailer_remain_post.HasValue ? item.retailer_remain_post.Value.ToString("N2") : "—")</td>
+        </tr>
     }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="14" class="vm-opr-table-empty">
+            <i class="fas fa-university" aria-hidden="true"></i>
+            <span>MicroATM report not found.</span>
+        </td>
+    </tr>
 }

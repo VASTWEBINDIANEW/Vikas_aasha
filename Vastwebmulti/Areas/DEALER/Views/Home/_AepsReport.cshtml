@@ -1,159 +1,106 @@
-﻿@model List<Vastwebmulti.Models.Aeps_Report_New_Result>
+﻿@model IEnumerable<Vastwebmulti.Models.Aeps_Report_New_Result>
+@using System.Linq
 @{
     Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.Aeps_Report_New_Result>();
 }
-
-
-@if (Model != null)
+@if (items.Any())
 {
-    foreach (var item in Model)
+    foreach (var item in items)
     {
-
-        var color = "";
-        var fontweight = "";
-        var text = "";
-        var emailid = "";
-        var Retailername = "";
-        var framname = "";
-        var mobile = "";
-        var icon = "";
-        var rchtype = "";
-        var rchtypeicon = "";
-        var sts = "";
-        var refundcolor = "";
-        var rolename = "";
-
-        if (item.ApplicationType == "web")
+        var statusRaw = item.Status ?? "";
+        var statusTone = "pending";
+        var statusLabel = statusRaw;
+        var statusFa = "fa-clock-o";
+        if (statusRaw.IndexOf("REFUND", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            rchtypeicon = "fa fa-globe";
+            statusTone = "failed";
+            statusLabel = "Refund";
+            statusFa = "fa-undo";
         }
-        if (item.ApplicationType == "app")
+        else if (statusRaw.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            rchtypeicon = "fa fa-android";
+            statusTone = "failed";
+            statusLabel = "Failed";
+            statusFa = "fa-times";
         }
-        if (item.Role == "Retailer")
+        else if (statusRaw.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            emailid = item.Email;
-            Retailername = item.RetailerName;
-            mobile = item.Mobile;
-            framname = item.Frm_Name;
-            rolename = "Retailer";
-
-
+            statusTone = "success";
+            statusLabel = "Success";
+            statusFa = "fa-check";
         }
-
-        if (item.Status.Contains("Pending"))
+        else if (statusRaw.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "#ff9e00";
-            fontweight = "700";
-            sts = item.Status;
-            icon = "../../ashok-images/clkk.png";
+            statusTone = "pending";
+            statusLabel = "Pending";
+            statusFa = "fa-clock-o";
         }
-        if (item.Status.Contains("Failed"))
+        else if (statusRaw.IndexOf("BALANCE", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "red";
-            fontweight = "700";
-            sts = item.Status;
-            icon = "../../ashok-images/closes.svg";
-
+            statusTone = "pending";
+            statusLabel = "Balance";
+            statusFa = "fa-inr";
         }
-        if (item.Status.Contains("Success"))
+        else if (statusRaw.IndexOf("SETTLEMENT", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "green";
-            fontweight = "700";
-            sts = item.Status;
-            icon = "../../ashok-images/correct.svg";
+            statusTone = "pending";
+            statusLabel = "Settlement";
+            statusFa = "fa-university";
         }
-        if (item.Status.ToUpper().Contains("REFUND"))
+
+        var firm = !string.IsNullOrWhiteSpace(item.Frm_Name) ? item.Frm_Name : (item.RetailerName ?? "—");
+        var appType = item.ApplicationType ?? "";
+        var fromLabel = "WEB";
+        var fromIcon = "fa-globe";
+        if (string.Equals(appType, "app", StringComparison.OrdinalIgnoreCase))
         {
-            color = "blue";
-            sts = "Refund";
-            icon = "../../ashok-images/undo.svg";
+            fromLabel = "APP";
+            fromIcon = "fa-android";
         }
-        if (item.Status.ToUpper().Contains("SETTLEMENT"))
+
+        var maskedAadhaar = "—";
+        if (!string.IsNullOrEmpty(item.AccountHolderAadhaar) && item.AccountHolderAadhaar.Length >= 4)
         {
-            color = "#9C27B0";
-            sts = "Settlement";
+            var last = item.AccountHolderAadhaar.Substring(item.AccountHolderAadhaar.Length - 4, 4);
+            maskedAadhaar = new string('x', 8) + last;
         }
-        <tr style="font-weight:700;">
-            <td class="success-pandingclass">
 
-                @if (item.Status.ToUpper().Contains("PENDING"))
-                {<img style='height: 20px;width: 18px;margin-right: 5px;max-width: 100%;padding: 0; border-radius:50%;float:left; background-color:#ffc107' src='../../ashok-images/clkk.png' />;
-                <span style="color:black;float:right;">@item.Frm_Name</span>
-            }
-                @if (item.Status.ToUpper().Contains("FAILED"))
-                {<img style='height: 20px; width: 18px; margin-right: 5px; max-width: 100%; padding: 0; border-radius: 50%; float: left; background-color: red' src='../../ashok-images/closes.svg' />;
-                <span style="color: black;  float: right;">@item.Frm_Name</span>
-            }
-                @if (item.Status.ToUpper().Contains("SUCCESS"))
-                {<img style='height: 20px; width: 18px; margin-right: 5px; max-width: 100%; padding: 0; border-radius: 50%; float: left; background-color: green' src='../../ashok-images/correct.svg' />;
-                <span style="color: black;  float: right;">@item.Frm_Name</span>
-            }
-                @if (item.Status.ToUpper().Contains("BALANCE"))
-                {<span class="fullbodydycolorbg" style='height: 18px; margin-right: 5px !important; max-width: 100%; border-radius: 50%; float: left; display: inline-block; padding: 0px 5px !important; font-weight: 800; color: #fff !important; font-size: 14px;'>B</span>;
-                <span style="color: black;  float: right;">@item.Frm_Name</span>
-            }
-                @if (item.Status.ToUpper().Contains("Refund"))
-                {<img style='height: 20px; width: 18px; margin-right: 5px; max-width: 100%; padding: 0; border-radius: 50%; float: left; background-color: #9C27B0' src='../../ashok-images/closes.svg' />;
-                <span style="color: black;  float: right;">@item.Frm_Name</span>
-            }
-            </td>
-            <td class="success-pandingclass">
-                <span style="margin-right: 2px;background: #bbb;text-transform: uppercase;font-size: 9px;padding: 1px 3px;padding-bottom: 0px;color:#000; "> @item.ApplicationType &nbsp;&nbsp;&nbsp;</span>
-                <span style="font-size:12px;">@item.MerchantTxnId</span>
-            </td>
+        decimal userCredit = 0;
+        if (string.Equals(item.Role, "Retailer", StringComparison.OrdinalIgnoreCase))
+        {
+            userCredit = (item.Amount ?? 0) + (item.RemIncome ?? 0);
+        }
 
-            <td>
-                @if (!string.IsNullOrEmpty(@item.AccountHolderAadhaar))
-                {
-                    var aadhar = item.AccountHolderAadhaar;
-                    var len = aadhar.Length;
-                    var last = aadhar.Substring(len-4, 4);
-                    var first = new String('x', 8);
-
-                    <p style="font-size:12px;margin-left:-8px;margin-top:-2px;">&nbsp; @first@last&nbsp;</p>
-                }
-                else
-                {
-                    <p></p>
-                }
+        var reqDate = item.Txn_Date.HasValue ? item.Txn_Date.Value.ToString("dd-MMM HH:mm:ss") : "—";
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-status="@statusRaw">
+            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-radiant-status-text">@firm</span>
             </td>
             <td>
-                <p style="font-size:12px;margin-left:-8px;margin-top:-2px;">&nbsp;@item.BankName&nbsp;</p>
+                <i class="fa @fromIcon" aria-hidden="true" title="@fromLabel"></i>
+                <span>@(item.MerchantTxnId ?? "—")</span>
             </td>
-            <td>
-                <p style="font-size:12px;margin-left:-8px;margin-top:-2px;">&nbsp;@item.Type&nbsp;</p>
-            </td>
-            <td>
-                <p style="font-size:12px;margin-left:-8px;margin-top:-2px;">&nbsp;@item.Amount&nbsp;</p>
-            </td>
-
-            <td>
-                @{
-                    decimal amount = 0;
-                    decimal remincome = 0;
-                    decimal usercredit = 0;
-                    if (item.Role == "Retailer")
-                    {
-                        amount = Convert.ToDecimal(item.Amount);
-                        remincome = Convert.ToDecimal(item.RemIncome);
-                        usercredit = (amount + remincome);
-                    }
-
-                }
-                <p style="font-size:12px;margin-left:-8px;margin-top:-2px;">&nbsp;@usercredit&nbsp;</p>
-            </td>
-            <td>
-                <p style="font-size:12px;margin-left:-8px;margin-top:-2px;">&nbsp;@item.DlmPost&nbsp;</p>
-            </td>
-            <td>
-                <p style="font-size:12px;margin-left:-8px;margin-top:-2px;">&nbsp;@item.BankRRN&nbsp;</p>
-            </td>
-            <td>
-
-                <span style="font-size:11px; color:#504141">@String.Format("{0:dd-MMM HH:mm:ss}", item.Txn_Date)</span>
-            </td>
+            <td>@maskedAadhaar</td>
+            <td>@(item.BankName ?? "—")</td>
+            <td>@(item.Type ?? "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.Amount.HasValue ? item.Amount.Value.ToString("N2") : "—")</td>
+            <td class="vm-dmt-amt-cell">@userCredit.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@(item.DlmPost.HasValue ? item.DlmPost.Value.ToString("N2") : "—")</td>
+            <td>@(item.BankRRN ?? "—")</td>
+            <td>@reqDate</td>
         </tr>
     }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="10" class="vm-opr-table-empty">
+            <i class="fas fa-fingerprint" aria-hidden="true"></i>
+            <span>AEPS report not found.</span>
+        </td>
+    </tr>
 }

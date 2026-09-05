@@ -1,0 +1,116 @@
+@model IEnumerable<Vastwebmulti.Models.daywisecomm>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.daywisecomm>()).ToList();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var frmDate = (ViewBag.frmDate as string) ?? "-";
+    var toDate = (ViewBag.toDate as string) ?? "-";
+    var totalComm = rows.Sum(x => x.dlmcomm ?? 0m);
+    var totalPre = rows.Sum(x => x.dlmpre ?? 0m);
+    var totalPost = rows.Sum(x => x.dlmpost ?? 0m);
+}
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
+<head>
+    <meta charset="utf-8" />
+    <title>Extra Commission Report</title>
+    <style>
+        td, th {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 11pt;
+            border: 1px solid #94a3b8;
+            mso-number-format: '\@@';
+        }
+        .num { mso-number-format: '#,##0.00'; }
+    </style>
+</head>
+<body>
+    <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">
+        <tr>
+            <td colspan="4" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;border:1px solid #1d4ed8;">Extra Commission Report</td>
+        </tr>
+        <tr>
+            <td colspan="4" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;border:1px solid #1d4ed8;">Dealer reports - extra commission</td>
+        </tr>
+        @{
+            var slabs = ViewBag.extraSlabs as IEnumerable<Vastwebmulti.Models.daywisecommsetforuser>
+                ?? Enumerable.Empty<Vastwebmulti.Models.daywisecommsetforuser>();
+        }
+        <tr>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">commission 2000 to 5000</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">commission 5001 to 10000</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">commission 10001 to Above</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">&nbsp;</th>
+        </tr>
+        @if (slabs.Any())
+        {
+            foreach (var slab in slabs)
+            {
+                <tr>
+                    <td>@(slab.Comm_2000_5000.HasValue ? slab.Comm_2000_5000.Value.ToString("0.0000") : "0.0000") %</td>
+                    <td>@(slab.Comm_5001_10000.HasValue ? slab.Comm_5001_10000.Value.ToString("0.0000") : "0.0000") %</td>
+                    <td>@(slab.Comm_10001_max.HasValue ? slab.Comm_10001_max.Value.ToString("0.0000") : "0.0000") %</td>
+                    <td>&nbsp;</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td>0.0000 %</td>
+                <td>0.0000 %</td>
+                <td>0.0000 %</td>
+                <td>&nbsp;</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="4">&nbsp;</td>
+        </tr>
+        <tr>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Generated On</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@generatedOn</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Date Range</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@frmDate to @toDate</td>
+        </tr>
+        <tr>
+            <td bgcolor="#EEF2FF" style="font-weight:bold;font-size:10pt;">Total Commission</td>
+            <td class="num" bgcolor="#EEF2FF" style="font-weight:bold;font-size:11pt;">@totalComm.ToString("N2")</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Records</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@rows.Count</td>
+        </tr>
+        <tr>
+            <td bgcolor="#ECFDF5" style="font-weight:bold;font-size:10pt;color:#047857;">Remain Pre</td>
+            <td class="num" bgcolor="#ECFDF5" style="font-weight:bold;font-size:11pt;color:#047857;">@totalPre.ToString("N2")</td>
+            <td bgcolor="#FEFCE8" style="font-weight:bold;font-size:10pt;color:#854D0E;">Remain Post</td>
+            <td class="num" bgcolor="#FEFCE8" style="font-weight:bold;font-size:11pt;color:#854D0E;">@totalPost.ToString("N2")</td>
+        </tr>
+        <tr>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Date</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Commission</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Remain pre</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Remain post</th>
+        </tr>
+        @if (rows.Any())
+        {
+            var alt = false;
+            foreach (var item in rows)
+            {
+                var rowBg = alt ? "#F8FAFC" : "#FFFFFF";
+                alt = !alt;
+                <tr>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(item.date.HasValue ? item.date.Value.ToString("dd-MMM-yyyy") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.dlmcomm.HasValue ? item.dlmcomm.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.dlmpre.HasValue ? item.dlmpre.Value.ToString("N2") : "-")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@(item.dlmpost.HasValue ? item.dlmpost.Value.ToString("N2") : "-")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" bgcolor="#F8FAFC" style="text-align:center;font-size:12pt;font-weight:bold;color:#64748B;height:48px;">Extra commission report not found.</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

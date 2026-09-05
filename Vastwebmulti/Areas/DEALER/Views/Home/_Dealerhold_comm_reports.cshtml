@@ -1,0 +1,35 @@
+@model IEnumerable<Vastwebmulti.Areas.DEALER.Models.dealerCommon_status_master_dlm_Transfer_cls>
+@using System.Linq
+@{
+    Layout = null;
+    var items = (Model ?? Enumerable.Empty<Vastwebmulti.Areas.DEALER.Models.dealerCommon_status_master_dlm_Transfer_cls>()).ToList();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var holdDate = item.Hold_date.Year > 1900 ? item.Hold_date.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+        var transferDate = item.trasnferdate.Year > 1900 ? item.trasnferdate.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+        <tr class="vm-dmt-row">
+            <td>@(string.IsNullOrWhiteSpace(item.Name) ? "-" : item.Name)</td>
+            <td>@(string.IsNullOrWhiteSpace(item.Frmname) ? "-" : item.Frmname)</td>
+            <td>@(string.IsNullOrWhiteSpace(item.mobile) ? "-" : item.mobile)</td>
+            <td class="vm-dmt-amt-cell">@item.master_remain_pre.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@item.totalcomm.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@item.master_remain.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@item.admin_prebal.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@item.admin_postbal.ToString("N2")</td>
+            <td>@holdDate</td>
+            <td>@transferDate</td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="10" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-lock" aria-hidden="true"></i>
+            <span>Commission hold report not found.</span>
+        </td>
+    </tr>
+}
