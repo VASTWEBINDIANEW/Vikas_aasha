@@ -11,41 +11,42 @@
             </svg>
         </span>
         <div>
-            <h6 class="qrgen-title">Generate Payment QR </h6>
+            <h6 class="qrgen-title">Generate Payment QR</h6>
             <p class="qrgen-subtitle">Create a scannable code for instant collection</p>
         </div>
     </div>
 
     <div class="qrgen-body">
         <!-- Amount input -->
-        <label class="qrgen-label" for="txtAmount">Amount</label>
+        <label class="qrgen-label" for="txtAmount_Chagan">Amount</label>
         <div class="qrgen-input-wrap">
             <span class="qrgen-prefix">₹</span>
-            <input type="number" id="txtAmount" class="qrgen-input" placeholder="0.00" min="1" step="0.01" />
+            <input type="number" id="txtAmount_Chagan" class="qrgen-input" placeholder="0.00" min="1" step="0.01" />
         </div>
 
         <!-- Generate button -->
-        <button type="button" id="btnGenerateQR" class="qrgen-btn">
+        <button type="button" id="btnGenerateQR_Chagan" class="qrgen-btn">
             <span class="qrgen-btn-text">Generate QR Code</span>
             <span class="qrgen-spinner" style="display:none;"></span>
         </button>
 
         <!-- Error / status message -->
-        <div id="msgContainer" class="qrgen-msg" style="display:none;"></div>
+        <div id="msgContainer_Chagan" class="qrgen-msg" style="display:none;"></div>
 
         <!-- QR display -->
-        <div id="qrContainer" class="qrgen-qr-wrap" style="display:none;">
+        <div id="qrContainer_Chagan" class="qrgen-qr-wrap" style="display:none;">
             <div class="qrgen-qr-frame">
-                <img id="qrImage" src="" alt="Payment QR Code" class="qrgen-qr-img" />
+                 <img id="qrImage_Chagan" src="" alt="Payment QR Code" class="qrgen-qr-img" />
+
             </div>
 
             <div class="qrgen-timer">
                 <svg class="qrgen-ring" width="52" height="52" viewBox="0 0 52 52">
                     <circle class="qrgen-ring-bg" cx="26" cy="26" r="23" />
-                    <circle id="qrRingProgress" class="qrgen-ring-progress" cx="26" cy="26" r="23" />
+                    <circle id="qrRingProgress_Chagan" class="qrgen-ring-progress" cx="26" cy="26" r="23" />
                 </svg>
                 <div class="qrgen-timer-text">
-                    <span id="qrTimer">60</span>
+                    <span id="qrTimer_Chagan">60</span>
                 </div>
             </div>
             <p class="qrgen-expiry-label">QR expires automatically</p>
@@ -70,7 +71,7 @@
         align-items: center;
         gap: 12px;
         padding: 18px 20px;
-        background: linear-gradient(135deg, #0B1F3A 0%, #ffff00 100%);
+        background: linear-gradient(135deg, #0B1F3A 0%, #0cab3d 100%);
         color: #fff;
     }
 
@@ -297,6 +298,7 @@
         color: #98a2b3;
         font-weight: 500;
     }
+
     .qrgen-msg-success {
         background: #ecfdf3;
         border: 1px solid #6ce9a6;
@@ -309,104 +311,7 @@
         color: #b42318;
     }
 </style>
-
-@*<script>
-    (function () {
-        var timerInterval = null;
-        var TOTAL_SECONDS = 60;
-        var CIRCUMFERENCE = 144.5; // 2 * PI * 23
-
-        function resetForm() {
-            $("#qrContainer").hide();
-            $("#qrImage").attr("src", "");
-            $("#btnGenerateQR").prop("disabled", false);
-            $("#btnGenerateQR .qrgen-btn-text").text("Generate QR Code");
-            $("#txtAmount").prop("readonly", false);
-            AEPSUPI();
-            clearInterval(timerInterval);
-        }
-
-        function startTimer(seconds) {
-            var remaining = seconds;
-            var $ring = $("#qrRingProgress");
-            var $timerText = $("#qrTimer");
-
-            $timerText.text(remaining);
-            $ring.css("stroke-dashoffset", 0);
-
-            timerInterval = setInterval(function () {
-                remaining--;
-                $timerText.text(remaining);
-
-                var offset = CIRCUMFERENCE * (1 - remaining / TOTAL_SECONDS);
-                $ring.css("stroke-dashoffset", offset);
-
-                if (remaining <= 10) {
-                    $ring.css("stroke", "#DC2626");
-                }
-
-                if (remaining <= 0) {
-                    clearInterval(timerInterval);
-                    resetForm();
-                }
-            }, 1000);
-        }
-
-        $("#btnGenerateQR").on("click", function () {
-            var amount = $("#txtAmount").val();
-            $("#msgContainer").hide().text("");
-
-            if (!amount || parseFloat(amount) <= 0) {
-                $("#msgContainer").text("Please enter a valid amount.").show();
-                return;
-            }
-
-            var $btn = $(this);
-            $btn.prop("disabled", true);
-            $btn.find(".qrgen-btn-text").text("Generating...");
-            $btn.find(".qrgen-spinner").show();
-
-            $.ajax({
-                url: "@Url.Action("GenerateAEPSQRCode", "Home")", // change to your actual endpoint
-                type: "POST",
-                data: { amount: amount },
-                dataType: "json",
-                success: function (res) {
-                    $btn.find(".qrgen-spinner").hide();
-
-                    if (res.sts === true) {
-                        // Lock the form
-                        $("#txtAmount").prop("readonly", true);
-                        $btn.prop("disabled", true);
-                        $btn.find(".qrgen-btn-text").text("Generate QR Code");
-
-                        // Reset ring color/state before showing
-                        $("#qrRingProgress").css("stroke", "#1E5EFF");
-
-                        // Show QR
-                        $("#qrImage").attr("src", "data:image/png;base64," + res.qrCode);
-                        // If your API returns a direct URL instead of base64, use:
-                        // $("#qrImage").attr("src", res.qrCode);
-
-                        $("#qrContainer").show();
-                        AEPSUPI();
-                        startTimer(TOTAL_SECONDS);
-                    } else {
-                        $btn.prop("disabled", false);
-                        $btn.find(".qrgen-btn-text").text("Generate QR Code");
-                        $("#msgContainer").text(res.message || "Failed to generate QR code.").show();
-                    }
-                },
-                error: function () {
-                    $btn.prop("disabled", false);
-                    $btn.find(".qrgen-btn-text").text("Generate QR Code");
-                    $("#msgContainer").text("Something went wrong. Please try again.").show();
-                }
-            });
-        });
-    })();
-</script>*@
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
     (function () {
         var timerInterval = null;
@@ -430,15 +335,15 @@
 
             stopAllTimers();
 
-            $("#qrContainer").hide();
-            $("#qrImage").attr("src", "");
-            $("#btnGenerateQR").prop("disabled", false);
-            $("#btnGenerateQR .qrgen-btn-text").text("Generate QR Code");
-            $("#txtAmount").prop("readonly", false);
+            $("#qrContainer_Chagan").hide();
+            $("#qrImage_Chagan").attr("src", "");
+            $("#btnGenerateQR_Chagan").prop("disabled", false);
+            $("#btnGenerateQR_Chagan .qrgen-btn-text").text("Generate QR Code");
+            $("#txtAmount_Chagan").prop("readonly", false);
             currentTxnId = null;
 
             if (message) {
-                $("#msgContainer")
+                $("#msgContainer_Chagan")
                     .removeClass("qrgen-msg-success qrgen-msg-error")
                     .addClass(type === "success" ? "qrgen-msg-success" : "qrgen-msg-error")
                     .text(message)
@@ -450,8 +355,8 @@
 
         function startTimer(seconds) {
             var remaining = seconds;
-            var $ring = $("#qrRingProgress");
-            var $timerText = $("#qrTimer");
+            var $ring = $("#qrRingProgress_Chagan");
+            var $timerText = $("#qrTimer_Chagan");
 
             $timerText.text(remaining);
             $ring.css("stroke-dashoffset", 0);
@@ -482,11 +387,12 @@
             if (isFinished || !currentTxnId) return;
 
             $.ajax({
-                url: "@Url.Action("CheckAEPSQRStatus", "Home")", // change to your actual status-check endpoint
+                url: "@Url.Action("CheckAEPSQRStatusChagan", "Home")", // change to your actual status-check endpoint
                 type: "POST",
                 data: { txnId: currentTxnId },
                 dataType: "json",
                 success: function (res) {
+                    console.log(res);
                     if (isFinished) return; // already terminated by countdown expiry
 
                     if (res.sts === true) {
@@ -516,17 +422,17 @@
             statusCheckInterval = setInterval(checkQRStatus, STATUS_CHECK_MS);
         }
 
-        $("#btnGenerateQR").on("click", function () {
-            var amount = $("#txtAmount").val();
-            $("#msgContainer").hide().removeClass("qrgen-msg-success qrgen-msg-error").text("");
+        $("#btnGenerateQR_Chagan").on("click", function () {
+            var amount = $("#txtAmount_Chagan").val();
+            $("#msgContainer_Chagan").hide().removeClass("qrgen-msg-success qrgen-msg-error").text("");
             var amt = parseFloat(amount);
             if (!amount || isNaN(amt) || amt < 100 || amt > 5000) {
-                $("#msgContainer").addClass("qrgen-msg-error")
+                $("#msgContainer_Chagan").addClass("qrgen-msg-error")
                     .text("Please enter an amount between ₹100 and ₹5000.")
                     .show();
                 return;
             }
-            
+
 
             var $btn = $(this);
             $btn.prop("disabled", true);
@@ -534,7 +440,7 @@
             $btn.find(".qrgen-spinner").show();
 
             $.ajax({
-                url: "@Url.Action("GenerateAEPSQRCode", "Home")",
+                url: "@Url.Action("GenerateAEPSQRCode_Chagan", "Home")",
                 type: "POST",
                 data: { amount: amount },
                 dataType: "json",
@@ -542,21 +448,20 @@
                     $btn.find(".qrgen-spinner").hide();
                     AEPSUPI();
                     if (res.sts === true) {
-                        // Lock the form
-                        $("#txtAmount").prop("readonly", true);
+                        $("#txtAmount_Chagan").prop("readonly", true);
                         $btn.prop("disabled", true);
                         $btn.find(".qrgen-btn-text").text("Generate QR Code");
 
                         // Reset ring color/state before showing
-                        $("#qrRingProgress").css("stroke", "#1E5EFF");
+                        $("#qrRingProgress_Chagan").css("stroke", "#1E5EFF");
 
                         // Show QR
-                        $("#qrImage").attr("src", "data:image/png;base64," + res.qrCode);
+                        $("#qrImage_Chagan").attr("src", "data:image/png;base64," + res.qrCode);
                         // If your API returns a direct URL instead of base64, use:
                         // $("#qrImage").attr("src", res.qrCode);
 
-                        $("#qrContainer").show();
-                   
+                        $("#qrContainer_Chagan").show();
+
 
                         isFinished = false;
                         startTimer(TOTAL_SECONDS);
@@ -564,13 +469,13 @@
                     } else {
                         $btn.prop("disabled", false);
                         $btn.find(".qrgen-btn-text").text("Generate QR Code");
-                        $("#msgContainer").addClass("qrgen-msg-error").text(res.message || "Failed to generate QR code.").show();
+                        $("#msgContainer_Chagan").addClass("qrgen-msg-error").text(res.message || "Failed to generate QR code.").show();
                     }
                 },
                 error: function () {
                     $btn.prop("disabled", false);
                     $btn.find(".qrgen-btn-text").text("Generate QR Code");
-                    $("#msgContainer").addClass("qrgen-msg-error").text("Something went wrong. Please try again.").show();
+                    $("#msgContainer_Chagan").addClass("qrgen-msg-error").text("Something went wrong. Please try again.").show();
                 }
             });
         });
@@ -590,5 +495,5 @@
             }
         })
     }
-    
+
 </script>

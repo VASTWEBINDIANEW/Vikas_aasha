@@ -24487,5 +24487,43 @@ namespace Vastwebmulti.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateAEPSUPITXn", uniqueidParameter, statusParameter, apiresponseParameter, bankrrnParameter, payerVPAParameter, payerNameParameter, fingpaytxnidParameter, transtimestempParameter);
         }
+    
+        public virtual ObjectResult<proc_InsertWalletToBankAmountTransfer_CMS_Result> proc_InsertWalletToBankAmountTransfer_CMS(string userid, Nullable<decimal> amount, string type, string requestId, string transectionID, string accountNumber, ObjectParameter status, ObjectParameter message)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("Userid", userid) :
+                new ObjectParameter("Userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("Amount", amount) :
+                new ObjectParameter("Amount", typeof(decimal));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var requestIdParameter = requestId != null ?
+                new ObjectParameter("RequestId", requestId) :
+                new ObjectParameter("RequestId", typeof(string));
+    
+            var transectionIDParameter = transectionID != null ?
+                new ObjectParameter("TransectionID", transectionID) :
+                new ObjectParameter("TransectionID", typeof(string));
+    
+            var accountNumberParameter = accountNumber != null ?
+                new ObjectParameter("AccountNumber", accountNumber) :
+                new ObjectParameter("AccountNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_InsertWalletToBankAmountTransfer_CMS_Result>("proc_InsertWalletToBankAmountTransfer_CMS", useridParameter, amountParameter, typeParameter, requestIdParameter, transectionIDParameter, accountNumberParameter, status, message);
+        }
+    
+        public virtual ObjectResult<proc_InsertWalletToBankAmountTransferRefund_CMS_Result> proc_InsertWalletToBankAmountTransferRefund_CMS(Nullable<int> idno, ObjectParameter status, ObjectParameter message)
+        {
+            var idnoParameter = idno.HasValue ?
+                new ObjectParameter("Idno", idno) :
+                new ObjectParameter("Idno", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_InsertWalletToBankAmountTransferRefund_CMS_Result>("proc_InsertWalletToBankAmountTransferRefund_CMS", idnoParameter, status, message);
+        }
     }
 }

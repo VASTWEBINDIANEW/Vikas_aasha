@@ -1162,8 +1162,9 @@ color: blue;margin-bottom: 3px;">Morpho</a>
         }
 
 
-        if (type == "CW" && txtamt > 5000 && otp=="") {
-
+        if (type == "CW" && txtamt > 5000 && otp == "") {
+            var apinm = $('#checkapi').val()
+            var _isAeps2 = $('#tabs .tab-link.active').text() == 'Aeps 2';
                 var txtaadhar = $('#txtaadhar').val();
                 var txtphone = $('#txtphone').val();
             var iin = $('#banklistshow').val();
@@ -1173,7 +1174,8 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                   uid: txtaadhar,
                   iin: iin,
                   amount: txtamt,
-                  devicesrno
+                  devicesrno,
+                  apinm
                 };
                 var jsonData = JSON.stringify(requestData);
 

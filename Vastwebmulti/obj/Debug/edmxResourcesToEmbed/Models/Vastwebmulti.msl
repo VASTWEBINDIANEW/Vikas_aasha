@@ -21518,6 +21518,7 @@
     <EntitySetMapping Name="WalletToBankAmountTransferRequests">
       <EntityTypeMapping TypeName="VastwebmultiModel.WalletToBankAmountTransferRequest">
         <MappingFragment StoreEntitySet="WalletToBankAmountTransferRequests">
+          <ScalarProperty Name="Balusefrom" ColumnName="Balusefrom" />
           <ScalarProperty Name="TransectionID" ColumnName="TransectionID" />
           <ScalarProperty Name="Total_Debit" ColumnName="Total_Debit" />
           <ScalarProperty Name="RequestId" ColumnName="RequestId" />
@@ -29890,5 +29891,21 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="proc_InsertWalletToBankAmountTransfer_CMS" FunctionName="VastwebmultiModel.Store.proc_InsertWalletToBankAmountTransfer_CMS">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VastwebmultiModel.proc_InsertWalletToBankAmountTransfer_CMS_Result">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="proc_InsertWalletToBankAmountTransferRefund_CMS" FunctionName="VastwebmultiModel.Store.proc_InsertWalletToBankAmountTransferRefund_CMS">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VastwebmultiModel.proc_InsertWalletToBankAmountTransferRefund_CMS_Result">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

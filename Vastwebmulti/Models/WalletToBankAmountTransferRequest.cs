@@ -36,5 +36,6 @@ namespace Vastwebmulti.Models
         public string RequestId { get; set; }
         public Nullable<decimal> Total_Debit { get; set; }
         public string TransectionID { get; set; }
+        public string Balusefrom { get; set; }
     }
 }

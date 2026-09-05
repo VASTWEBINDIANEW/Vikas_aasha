@@ -5464,6 +5464,34 @@ namespace Vastwebmulti.Controllers
                             dbsrs.updateAEPSUPITXn(Reqid, "Failed", "", Transid, PayerVPA, PayerName, FingpayTransID, transtime);
                         }
                     }
+                    else if (Type == "CMSTOACCOUNT")
+                    {
+                        decimal amt = Convert.ToDecimal(Status);
+                        var resp = updateinfo(Reqid, amt, Transid);
+                        return Json(resp, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (Type == "REMREMAIN")
+                    {
+                        string mobile = Status;
+                        var sts = false;
+                        decimal? remain = 0;
+                        var reminfo = dbsrs.Retailer_Details.Where(aa => aa.Mobile == mobile).SingleOrDefault();
+                        if (reminfo != null)
+                        {
+                            var cmsremaininfo = dbsrs.CMSRemainBalances.Where(aa => aa.Userid == reminfo.RetailerId).SingleOrDefault();
+                            if (cmsremaininfo != null)
+                            {
+                                remain = cmsremaininfo.RemainBalance;
+                                sts = true;
+                            }
+                        }
+                        var data = new
+                        {
+                            sts,
+                            remain
+                        };
+                        return Json(data, JsonRequestBehavior.AllowGet);
+                    }
                 }
                 catch
                 {
@@ -5471,6 +5499,168 @@ namespace Vastwebmulti.Controllers
             }
             return View();
         }
+        public dynamic updateinfo(string Mobile, decimal Amount, string transid)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+
+                string str = string.Empty;
+                bool IsUpdateRequired = false;
+                var retailerDetails = db.Retailer_Details.Where(a => a.Mobile == Mobile).FirstOrDefault();
+                if (retailerDetails != null)
+                {
+                    string userid = retailerDetails.RetailerId;
+                    if (retailerDetails.Bankaccountno == null || string.IsNullOrWhiteSpace(retailerDetails.Bankaccountno))
+                    {
+                        str = str + "BankAccount No,";
+                        IsUpdateRequired = true;
+                    }
+                    if (retailerDetails.bankname == null || string.IsNullOrWhiteSpace(retailerDetails.bankname))
+                    {
+                        str = str + "BankName,";
+                        IsUpdateRequired = true;
+                    }
+                    if (retailerDetails.Ifsccode == null || string.IsNullOrWhiteSpace(retailerDetails.Ifsccode))
+                    {
+                        str = str + "IFSC Code,";
+                        IsUpdateRequired = true;
+                    }
+                    if (retailerDetails.accountholder == null || string.IsNullOrWhiteSpace(retailerDetails.accountholder))
+                    {
+                        str = str + "Account Holder Name,";
+                        IsUpdateRequired = true;
+                    }
+                    if (IsUpdateRequired)
+                    {
+                        if (str.EndsWith(","))
+                            str = str.Substring(0, str.Length - 1);
+                        str = str + " are required to become WalletUnload  Request.";
+                        var ViewResponse = new { status = "Failed", Message = str };
+                        return ViewResponse;
+                    }
+                    else
+                    {
+                        string accountnumber = retailerDetails.Bankaccountno;
+                        var accountinfo = db.UpdateREMAccounts.Where(aa => aa.UserId == userid && aa.BankAccountNo == accountnumber && aa.Status == "Approved").SingleOrDefault();
+                        if (accountinfo != null)
+                        {
+                            Vastbillpay vb = new Vastbillpay();
+                            string ProjectName = Path.GetDirectoryName(Path.GetDirectoryName(Server.MapPath(@"~/HomeControllers.cs")));
+                            ProjectName = ProjectName.Substring(ProjectName.LastIndexOf("\\") + 1);
+                            var RequestId = DateTime.Now.ToString("dd-MM-yyy hh-mm-ss").Replace("-", "").Replace(" ", "") + ProjectName.Substring(0, 2);
+                            var Email = retailerDetails.Email;
+                            var usersinfo = db.UpdateREMAccounts.Where(x => x.UserId == userid && x.Status == "Approved" && x.BankAccountNo == accountnumber).SingleOrDefault();
+                            var AccountNumber = usersinfo.BankAccountNo;
+                            var BankName = usersinfo.Bank_Name;
+                            var IFSCCode = usersinfo.IFSC_CODE;
+                            var AccountholderName = usersinfo.AcconutHolderName;
+                            var Sts = db.walletunloadsts.FirstOrDefault();
+                            System.Data.Entity.Core.Objects.ObjectParameter status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                            System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+                            var response = db.proc_InsertWalletToBankAmountTransfer_CMS(userid, Amount, "IMPS", RequestId, transid, AccountNumber, status, Message).FirstOrDefault();
+
+                            if (response.Status == "Success")
+                            {
+                                var tokn = string.Empty;
+                                tokn = getAuthToken();
+                                var responsechk1 = vb.WalletUnloadrRquest(tokn, Email, Amount, "", AccountNumber, BankName, IFSCCode, AccountholderName, RequestId, "IMPS");
+                                var responsechk = responsechk1.Content.ToString();
+                                WriteLogCMSPAYOUT(responsechk);
+                                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                var respcode = json.Content.ResponseCode.ToString();
+                                var ADDINFO = json.Content.ADDINFO.ToString();
+                                dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
+                                var status1 = json1.Status.ToString();
+                                var msg = json1.Message.ToString();
+                                if (status1 == "Success")
+                                {
+                                    var ViewResponse = new { status = "Success", Message = "Request proceeded successfully." };
+                                    return ViewResponse;
+                                }
+                                else if (status1 == "Failed")
+                                {
+                                    var pp = db.WalletToBankAmountTransferRequests.Where(a => a.Status == "Pending" && a.RequestId == RequestId).FirstOrDefault();
+                                    if (pp != null)
+                                    {
+                                        System.Data.Entity.Core.Objects.ObjectParameter Message1 = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+                                        var response1 = db.proc_InsertWalletToBankAmountTransferRefund_CMS(pp.Idno, status, Message1).FirstOrDefault();
+                                        if (response1.Status == "Success")
+                                        {
+                                            var ViewResponse = new { status = "Success", Message = msg };
+                                            return ViewResponse;
+                                        }
+                                        else
+                                        {
+                                            var ViewResponse = new { status = "Failed", Message = response.Message };
+
+                                            return ViewResponse;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var ViewResponse = new { status = "Success", Message = msg };
+                                        return ViewResponse;
+                                    }
+                                }
+                                else
+                                {
+                                    var ViewResponse = new { status = "Failed", Message = "something went wrong." };
+                                    return ViewResponse;
+                                }
+                            }
+                            else
+                            {
+                                var ViewResponse = new { status = "Failed", Message = response.Message };
+                                return ViewResponse;
+                            }
+                        }
+                        else
+                        {
+                            var ViewResponse = new { status = "Failed", Message = "Account Number Not Validate" };
+                            return ViewResponse;
+                        }
+                    }
+                }
+                else
+                {
+                    var ViewResponse = new { status = "Failed", Message = "Not a Valid RCE ID" };
+                    return ViewResponse;
+                }
+            }
+        }
+        public static void WriteLogCMSPAYOUT(string strMessage)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                try
+                {
+                    string name = db.Admin_details.SingleOrDefault().WebsiteUrl;
+                    StreamWriter log;
+                    FileStream fileStream = null;
+                    DirectoryInfo logDirInfo = null;
+                    FileInfo logFileInfo;
+                    string logFilePath = "C:\\Logs\\";
+                    logFilePath = logFilePath + "CMSPAYOUT-" + name + " -" + DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
+                    logFileInfo = new FileInfo(logFilePath);
+                    logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+                    if (!logDirInfo.Exists) logDirInfo.Create();
+                    if (!logFileInfo.Exists)
+                    {
+                        fileStream = logFileInfo.Create();
+                    }
+                    else
+                    {
+                        fileStream = new FileStream(logFilePath, FileMode.Append);
+                    }
+                    log = new StreamWriter(fileStream);
+                    log.WriteLine(strMessage);
+                    log.Close();
+                }
+                catch (Exception ex)
+                { }
+            }
+        }
+
         [HttpGet]
         public ActionResult ICICIUPI(string ss)
         {

@@ -691,6 +691,7 @@ function CaptureAvdm() {
             ' iCount="' + Icount + '"' +
             ' pCount="' + Pcount + '"' +
             ' pgCount="' + pgCount + '"' +
+            ' Opts="' + txtotp + '"' +
             ' otp="' + txtotp + '"' +
             ' format="' + Dtype + '"' +
             ' pidVer="' + Pidver + '"' +
@@ -708,10 +709,10 @@ function CaptureAvdm() {
     }
     else if (DeviceKonsi == "Morpho") {
         //Morpho
-        // XML = '<PidOptions ver=\"1.0\">' + '<Opts fCount=\"1\" fType=\"' + Ftype + '\" iCount=\"\" iType=\"\" pCount=\"\" pType=\"\" format=\"0\" pidVer=\"2.0\" timeout=\"10000\" otp=\"\" wadh=\"\" posh=\"\"/>' + '</PidOptions>';
+       // XML = '<PidOptions ver=\"1.0\">' + '<Opts fCount=\"1\" fType=\"' + Ftype + '\" iCount=\"\" iType=\"\" pCount=\"\" pType=\"\" format=\"0\" pidVer=\"2.0\" timeout=\"10000\" otp=\"\" wadh=\"\" posh=\"\"/>' + '</PidOptions>';
         XML = '<PidOptions ver="1.0">' +
             '<Opts fCount="1" fType="' + Ftype +
-            '" iCount="" iType="" pCount="" pType="" format="0" pidVer="2.0" otp="' + txtotp + '" timeout="10000"' +
+            '" iCount="" iType="" pCount="" pType="" format="0" pidVer="2.0" otp="' + txtotp + '" Opts="' + txtotp +'" timeout="10000"' +
             ' wadh="" posh=""/>' +
             '</PidOptions>';
 
@@ -721,7 +722,7 @@ function CaptureAvdm() {
         //XML = '<PidOptions>' + '<Opts fCount=\"1\" fType=\"' + Ftype + '\"  "' + strOtp + '\"  iCount=\"0\" pCount=\"0\" format=\"0\" pidVer=\"2.0\" timeout=\"20000\" otp=\"\" posh=\"UNKNOWN\" env=\"P\" wadh=\"\" /> <Demo></Demo> <CustOpts> <Param name=\"ValidationKey\" value=\"\" /> </CustOpts>' + '</PidOptions>';
         XML = '<PidOptions>' +
             '<Opts fCount="1" fType="' + Ftype + '"' +
-            ' iCount="0" pCount="0" format="0" pidVer="2.0" timeout="20000" otp="' + txtotp + '" posh="UNKNOWN" env="P" wadh="" />' +
+            ' iCount="0" pCount="0" format="0" pidVer="2.0" timeout="20000" otp="' + txtotp + '" Opts="' + txtotp +'" posh="UNKNOWN" env="P" wadh="" />' +
             '<Demo></Demo>' +
             '<CustOpts><Param name="ValidationKey" value="" /></CustOpts>' +
             '</PidOptions>';

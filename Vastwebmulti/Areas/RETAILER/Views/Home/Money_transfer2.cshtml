@@ -316,15 +316,78 @@
             </div>
 
             <div id="tab-3" class="tab-content">
-              
-                @if (ViewBag.reqn == "REQUIREDOTP" || ViewBag.reqn == "REQUIREDSCAN")
+
+                <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabs" style="display: flex; padding: 0px;">
+                    <li id="tab1infoUPI" class="tab-link hovof" data-tab="tab-1" style="width: 50%; border-right: 1px solid #fff; text-align: center; background: #c1c1c1;">
+                        <a style="cursor:pointer;background-color:green !important;" data-toggle="tab" onclick="AEPSinfo('A1UPI');">
+
+                            Green Line AEPS
+                        </a>
+                    </li>
+                    <li id="tab2infoUPI" class="tab-link hovof" style="width:50%; text-align:center;background: #c1c1c1;">
+                        <a style="cursor:pointer;background-color:yellow;color:black !important;" data-toggle="tab" onclick="AEPSinfo('A2UPI');">
+
+                            Yellow Line AEPS
+                        </a>
+                    </li>
+                </ul>
+
+
+                <style>
+                    .tab-link.active {
+                        background: #007bff !important;
+                        color: #fff;
+                    }
+
+                        .tab-link.active a {
+                            color: #fff !important;
+                        }
+                </style>
+                <div class="width100 float-left tab-pane fade in active" style="width: 100%; text-align: center; margin-top: 2%;">
+                    @if (ViewBag.aepsapinm == "NO")
+                    {
+                <label>No API open </label> }
+            else
+            {
+                <input id="checkapi" type="hidden" value="@ViewBag.aepsapinm" /> 
+                if (ViewBag.req == "REQUIREDOTP" || ViewBag.req == "REQUIREDSCAN")
                 {
-                      @Html.Partial("_EKYC_UPI")
-        }
-        else
+                    @Html.Partial("_EKYC") 
+                }
+                else if (ViewBag.req == "REQUIREDEKYC")
+                {
+                    @Html.Partial("_EKYC_NEW") 
+                }
+                else if (ViewBag.req == "APPROVAL-PENDING")
+                {
+                   @Html.Partial("_EKYC_Update") 
+                }
+                else
+                {
+                    if (ViewBag.aepsapinm == "chagans")
+                    {
+                      @Html.Partial("_Aeps_UPI_Chagan")
+                    }
+                    else
+                    {
+                       @Html.Partial("_Aeps_UPI")
+                    }
+                }
+            }
+                </div>
+
+
+
+
+                @*@if (ViewBag.reqn == "REQUIREDOTP" || ViewBag.reqn == "REQUIREDSCAN")
         {
-            @Html.Partial("_Aeps_UPI")
+              @Html.Partial("_EKYC_UPI")
         }
+                else
+                {*@
+                @*@Html.Partial("_Aeps_UPI")*@
+                @*@Html.Partial("_Aeps_UPI_Chagan")
+        }*@
 
             </div>
 
@@ -352,6 +415,22 @@
         </div>
     </div>
 </section>
+
+<div id="cappingDiv">
+    <table id="cappingTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>User ID</th>
+                <th>Capping Date</th>
+                <th>Capping Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- AJAX data will come here -->
+        </tbody>
+    </table>
+</div>
 
 @*<script src="~/Scripts/CheckValidation/valideatelocations.js"></script>*@
 
@@ -798,10 +877,22 @@
         const urlParams = new URLSearchParams(window.location.search);
         const info = urlParams.get('info');
        
-        if (info != null) {
-            $("#tab" + (info === "A1" ? "1info" : "2info") + " a")
-                .prepend('<i class="fa fa-check"></i> ');
-        } else {
+        if (info != null)
+        {
+            if (info == "A1UPI" || info =="A2UPI") {
+                $("#tab" + (info === "A1UPI" ? "1infoUPI" : "2infoUPI") + " a")
+                    .prepend('<i class="fa fa-check"></i> ');
+            }
+            //else if (info == "A2UPI") {
+            //    $("#tab" + (info === "A2UPI" ? "1infoUPI" : "2infoUPI") + " a")
+            //        .prepend('<i class="fa fa-check"></i> ');
+            //}
+            else {
+                $("#tab" + (info === "A1" ? "1info" : "2info") + " a")
+                    .prepend('<i class="fa fa-check"></i> ');
+            }
+        }
+        else {
             $("#tab" + ("1info") + " a")
                 .prepend('<i class="fa fa-check"></i> ');
         }

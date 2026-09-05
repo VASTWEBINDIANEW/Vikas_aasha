@@ -12993,6 +12993,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Uniquetxnid' does not have a
     <Property Name="RequestId" Type="nvarchar" MaxLength="100" />
     <Property Name="Total_Debit" Type="decimal" Precision="18" Scale="4" />
     <Property Name="TransectionID" Type="varchar" MaxLength="100" />
+    <Property Name="Balusefrom" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="walletunloadlimit">
     <Key>
@@ -18475,7 +18476,22 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="Status" Type="nvarchar" Mode="InOut" />
     <Parameter Name="Message" Type="nvarchar" Mode="InOut" />
   </Function>
+  <Function Name="proc_InsertWalletToBankAmountTransfer_CMS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Userid" Type="nvarchar" Mode="In" />
+    <Parameter Name="Amount" Type="decimal" Mode="In" />
+    <Parameter Name="Type" Type="nvarchar" Mode="In" />
+    <Parameter Name="RequestId" Type="nvarchar" Mode="In" />
+    <Parameter Name="TransectionID" Type="varchar" Mode="In" />
+    <Parameter Name="AccountNumber" Type="varchar" Mode="In" />
+    <Parameter Name="Status" Type="nvarchar" Mode="InOut" />
+    <Parameter Name="Message" Type="nvarchar" Mode="InOut" />
+  </Function>
   <Function Name="proc_InsertWalletToBankAmountTransferRefund" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Idno" Type="int" Mode="In" />
+    <Parameter Name="Status" Type="nvarchar" Mode="InOut" />
+    <Parameter Name="Message" Type="nvarchar" Mode="InOut" />
+  </Function>
+  <Function Name="proc_InsertWalletToBankAmountTransferRefund_CMS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Idno" Type="int" Mode="In" />
     <Parameter Name="Status" Type="nvarchar" Mode="InOut" />
     <Parameter Name="Message" Type="nvarchar" Mode="InOut" />

@@ -12998,6 +12998,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Uniquetxnid' does not have a
           <Property Name="RequestId" Type="nvarchar" MaxLength="100" />
           <Property Name="Total_Debit" Type="decimal" Precision="18" Scale="4" />
           <Property Name="TransectionID" Type="varchar" MaxLength="100" />
+          <Property Name="Balusefrom" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="walletunloadlimit">
           <Key>
@@ -18483,7 +18484,22 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <Parameter Name="Status" Type="nvarchar" Mode="InOut" />
           <Parameter Name="Message" Type="nvarchar" Mode="InOut" />
         </Function>
+        <Function Name="proc_InsertWalletToBankAmountTransfer_CMS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Userid" Type="nvarchar" Mode="In" />
+          <Parameter Name="Amount" Type="decimal" Mode="In" />
+          <Parameter Name="Type" Type="nvarchar" Mode="In" />
+          <Parameter Name="RequestId" Type="nvarchar" Mode="In" />
+          <Parameter Name="TransectionID" Type="varchar" Mode="In" />
+          <Parameter Name="AccountNumber" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="Message" Type="nvarchar" Mode="InOut" />
+        </Function>
         <Function Name="proc_InsertWalletToBankAmountTransferRefund" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Idno" Type="int" Mode="In" />
+          <Parameter Name="Status" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="Message" Type="nvarchar" Mode="InOut" />
+        </Function>
+        <Function Name="proc_InsertWalletToBankAmountTransferRefund_CMS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Idno" Type="int" Mode="In" />
           <Parameter Name="Status" Type="nvarchar" Mode="InOut" />
           <Parameter Name="Message" Type="nvarchar" Mode="InOut" />
@@ -31660,6 +31676,21 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
             <Parameter Name="transtimestemp" Mode="In" Type="DateTime" />
           </FunctionImport>
           <EntitySet Name="AepsUPIHistories" EntityType="VastwebmultiModel.AepsUPIHistory" />
+          <FunctionImport Name="proc_InsertWalletToBankAmountTransfer_CMS" ReturnType="Collection(VastwebmultiModel.proc_InsertWalletToBankAmountTransfer_CMS_Result)">
+            <Parameter Name="Userid" Mode="In" Type="String" />
+            <Parameter Name="Amount" Mode="In" Type="Decimal" />
+            <Parameter Name="Type" Mode="In" Type="String" />
+            <Parameter Name="RequestId" Mode="In" Type="String" />
+            <Parameter Name="TransectionID" Mode="In" Type="String" />
+            <Parameter Name="AccountNumber" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="InOut" Type="String" />
+            <Parameter Name="Message" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="proc_InsertWalletToBankAmountTransferRefund_CMS" ReturnType="Collection(VastwebmultiModel.proc_InsertWalletToBankAmountTransferRefund_CMS_Result)">
+            <Parameter Name="Idno" Mode="In" Type="Int32" />
+            <Parameter Name="Status" Mode="InOut" Type="String" />
+            <Parameter Name="Message" Mode="InOut" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -50029,6 +50060,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <Property Name="RequestId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Total_Debit" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="TransectionID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Balusefrom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="customersupports_times">
           <Key>
@@ -58396,6 +58428,14 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <Property Name="posremainpost" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="PayerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="proc_InsertWalletToBankAmountTransfer_CMS_Result">
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Message" Nullable="true" MaxLength="128" />
+        </ComplexType>
+        <ComplexType Name="proc_InsertWalletToBankAmountTransferRefund_CMS_Result">
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Message" Nullable="true" MaxLength="128" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -79953,6 +79993,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <EntitySetMapping Name="WalletToBankAmountTransferRequests">
             <EntityTypeMapping TypeName="VastwebmultiModel.WalletToBankAmountTransferRequest">
               <MappingFragment StoreEntitySet="WalletToBankAmountTransferRequests">
+                <ScalarProperty Name="Balusefrom" ColumnName="Balusefrom" />
                 <ScalarProperty Name="TransectionID" ColumnName="TransectionID" />
                 <ScalarProperty Name="Total_Debit" ColumnName="Total_Debit" />
                 <ScalarProperty Name="RequestId" ColumnName="RequestId" />
@@ -88336,6 +88377,22 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="proc_InsertWalletToBankAmountTransfer_CMS" FunctionName="VastwebmultiModel.Store.proc_InsertWalletToBankAmountTransfer_CMS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VastwebmultiModel.proc_InsertWalletToBankAmountTransfer_CMS_Result">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="proc_InsertWalletToBankAmountTransferRefund_CMS" FunctionName="VastwebmultiModel.Store.proc_InsertWalletToBankAmountTransferRefund_CMS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VastwebmultiModel.proc_InsertWalletToBankAmountTransferRefund_CMS_Result">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

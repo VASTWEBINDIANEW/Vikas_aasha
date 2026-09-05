@@ -34160,6 +34160,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var api1sts = respchknew.Content.ADDINFO.status1;
                 var api2sts = respchknew.Content.ADDINFO.status2;
 
+                var upiapi1 = respchknew.Content.ADDINFO.upinm1;
+                var upiapi2 = respchknew.Content.ADDINFO.upinm2;
+                var upiapi1sts = respchknew.Content.ADDINFO.ustatus1;
+                var upiapi2sts = respchknew.Content.ADDINFO.ustatus2;
+
                 var checkekycn = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
                 if (checkekycn == null)
                 {
@@ -34350,6 +34355,182 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         ViewBag.aepsapinm = "NO";
                     }
                 }
+                if (info == "A1UPI")
+                {
+                    ViewBag.aepsapinm = "A1UPI";
+                    if (upiapi1 == "Nifi" && upiapi1sts == true)
+                    {
+                        ViewBag.aepsapinm = "Nifi";
+                        var check = db.Nifipaymerchantinfoes.Where(aa => aa.Retailerid == userid).SingleOrDefault();
+                        if (check == null)
+                        {
+                            ViewBag.req = "REQUIREDOTP";
+                        }
+                        else
+                        {
+                            if (check.status == "MerchantCreate")
+                            {
+                                ViewBag.req = "REQUIREDOTP";
+                            }
+                            else if (check.status == "OTPVerify")
+                            {
+                                ViewBag.req = "REQUIREDSCAN";
+                            }
+                            else
+                            {
+                                var twofacheck = db.Aeps_2Fa_Status_nifi.Where(aa => aa.userid == userid).SingleOrDefault();
+                                if (twofacheck == null)
+                                {
+                                    Aeps_2Fa_Status_nifi item = new Aeps_2Fa_Status_nifi();
+                                    item.userid = userid;
+                                    item.status = false;
+                                    item.Aepsmerchantid = check.Merchantid;
+                                    item.insertdate = DateTime.Now;
+                                    db.Aeps_2Fa_Status_nifi.Add(item);
+                                    db.SaveChanges();
+                                    ViewBag.req = "2FAREQUIRED";
+                                }
+                                else
+                                {
+                                    var insertdate = Convert.ToDateTime(twofacheck.insertdate).Date;
+                                    var currentdate = DateTime.Now.Date;
+                                    if (insertdate == currentdate)
+                                    {
+                                        if (twofacheck.status == false)
+                                        {
+                                            ViewBag.req = "2FAREQUIRED";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        twofacheck.status = false;
+                                        db.SaveChanges();
+                                        ViewBag.req = "2FAREQUIRED";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (upiapi1 == "chagans" && upiapi1sts == true)
+                    {
+
+                        var Requestinfo = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
+                        string ouletid = Requestinfo.merchantid;
+                        var client = new RestClient(VastbazaarBaseUrl + "api/AEPSChagan/LoginStatus?Merchantid=" + ouletid + "");
+                        var request = new RestRequest(Method.POST);
+                        request.AddHeader("content-type", "application/json");
+                        request.AddHeader("cache-control", "no-cache");
+                        request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                        var response = client.Execute(request);
+                        dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
+
+                        ViewBag.aepsapinm = "chagans";
+                        var check = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
+                        if (check == null)
+                        {
+                            ViewBag.req = "REQUIREDEKYC";
+                        }
+                        else if (check.kycStatus == "PENDING")
+                        {
+                            ViewBag.req = "REQUIREDSCAN";
+                        }
+                        else if (check.kycStatus == "APPROVED")
+                        {
+                            string twofastatus = check.twofastatus;
+                            DateTime? twofatime = check.twofatime;
+
+                            if (string.IsNullOrEmpty(twofastatus)
+                                || twofastatus == "Pending"
+                                || (twofastatus == "Success"
+                                    && twofatime.HasValue
+                                    && twofatime.Value.Date < DateTime.Today))
+                            {
+                                ViewBag.req = "2FAREQUIRED";
+                            }
+                            else
+                            {
+                                ViewBag.req = "DONE";
+                            }
+                        }
+                        else if (check.kycStatus == "APPROVAL-PENDING")
+                        {
+                            ViewBag.req = "APPROVAL-PENDING";
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.aepsapinm = "NO";
+                    }
+                }
+                if (info == "A2UPI")
+                {
+                    ViewBag.aepsapinm = "A2UPI";
+                    if (upiapi2 == "Fingpay" && upiapi2sts == true)
+                    {
+                        ViewBag.aepsapinm = "Fingpay";
+                        //////////////////////Check E KYC///////////////////////////
+                        var isvalid = true;
+                        var checkekyc = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                        if (checkekyc == null)
+                        {
+                            isvalid = false;
+                            ViewBag.req = "REQUIREDOTP";
+                        }
+                        else
+                        {
+                            var sts = checkekyc.isvalid;
+                            if (sts == false)
+                            {
+                                isvalid = false;
+                                ViewBag.req = "REQUIREDSCAN";
+                            }
+                        }
+                        /////////////////// 2 FaVerification////////////////
+                        if (isvalid == true)
+                        {
+                            var twofacheck = db.Aeps_2Fa_Status.Where(aa => aa.userid == userid).SingleOrDefault();
+                            if (twofacheck == null)
+                            {
+                                Aeps_2Fa_Status item = new Aeps_2Fa_Status();
+                                item.userid = userid;
+                                item.Status = false;
+                                item.AepsMerchantId = ChkKYC.AepsMerchandId;
+                                item.InsertDate = DateTime.Now;
+                                db.Aeps_2Fa_Status.Add(item);
+                                db.SaveChanges();
+                                isvalid = false;
+                                ViewBag.req = "2FAREQUIRED";
+                            }
+                            else
+                            {
+                                var insertdate = Convert.ToDateTime(twofacheck.InsertDate).Date;
+                                var currentdate = DateTime.Now.Date;
+                                if (insertdate == currentdate)
+                                {
+                                    if (twofacheck.Status == false)
+                                    {
+                                        isvalid = false;
+                                        ViewBag.req = "2FAREQUIRED";
+                                    }
+                                }
+                                else
+                                {
+                                    twofacheck.Status = false;
+                                    db.SaveChanges();
+                                    isvalid = false;
+                                    ViewBag.req = "2FAREQUIRED";
+                                }
+                            }
+                        }
+
+                        /////////////////// 2 FaVerification////////////////
+                    }
+                    else
+                    {
+                        ViewBag.aepsapinm = "NO";
+                    }
+                }
+
                 if (string.IsNullOrEmpty(info))
                 {
                     if (api1 == "Nifi" && api1sts == true)
@@ -34441,11 +34622,102 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             ViewBag.req = "APPROVAL-PENDING";
                         }
                     }
+                    else if (upiapi1 == "Nifi" && upiapi1sts == true)
+                    {
+                        ViewBag.aepsapinm = "Nifi";
+                        var check = db.Nifipaymerchantinfoes.Where(aa => aa.Retailerid == userid).SingleOrDefault();
+                        if (check == null)
+                        {
+                            ViewBag.req = "REQUIREDOTP";
+                        }
+                        else
+                        {
+                            if (check.status == "MerchantCreate")
+                            {
+                                ViewBag.req = "REQUIREDOTP";
+                            }
+                            else if (check.status == "OTPVerify")
+                            {
+                                ViewBag.req = "REQUIREDSCAN";
+                            }
+                            else
+                            {
+                                var twofacheck = db.Aeps_2Fa_Status_nifi.Where(aa => aa.userid == userid).SingleOrDefault();
+                                if (twofacheck == null)
+                                {
+                                    Aeps_2Fa_Status_nifi item = new Aeps_2Fa_Status_nifi();
+                                    item.userid = userid;
+                                    item.status = false;
+                                    item.Aepsmerchantid = check.Merchantid;
+                                    item.insertdate = DateTime.Now;
+                                    db.Aeps_2Fa_Status_nifi.Add(item);
+                                    db.SaveChanges();
+                                    ViewBag.req = "2FAREQUIRED";
+                                }
+                                else
+                                {
+                                    var insertdate = Convert.ToDateTime(twofacheck.insertdate).Date;
+                                    var currentdate = DateTime.Now.Date;
+                                    if (insertdate == currentdate)
+                                    {
+                                        if (twofacheck.status == false)
+                                        {
+                                            ViewBag.req = "2FAREQUIRED";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        twofacheck.status = false;
+                                        db.SaveChanges();
+                                        ViewBag.req = "2FAREQUIRED";
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    else if (upiapi1 == "chagans" && upiapi1sts == true)
+                    {
+                        ViewBag.aepsapinm = "chagans";
+                        var check = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
+                        if (check == null)
+                        {
+                            ViewBag.req = "REQUIREDEKYC";
+                        }
+                        else if (check.kycStatus == "PENDING")
+                        {
+                            ViewBag.req = "REQUIREDSCAN";
+                        }
+                        else if (check.kycStatus == "APPROVED")
+                        {
+                            string twofastatus = check.twofastatus;
+                            DateTime? twofatime = check.twofatime;
+
+                            if (string.IsNullOrEmpty(twofastatus)
+                                || twofastatus == "Pending"
+                                || (twofastatus == "Success"
+                                    && twofatime.HasValue
+                                    && twofatime.Value.Date < DateTime.Today))
+                            {
+                                ViewBag.req = "2FAREQUIRED";
+                            }
+                            else
+                            {
+                                ViewBag.req = "DONE";
+                            }
+                        }
+                        else if (check.kycStatus == "APPROVAL-PENDING")
+                        {
+                            ViewBag.req = "APPROVAL-PENDING";
+                        }
+                    }
                     else
                     {
                         ViewBag.aepsapinm = "NO";
                     }
                 }
+
+
 
 
                 ///////////////Check DMT Service Fee///////////////////////
@@ -34908,6 +35180,167 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     sts=false,
                     message= msgoutput
+                };
+                return Json(resp, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult GenerateAEPSQRCode_Chagan(decimal amount)
+        {
+            string qrcode = "";
+            var userid = User.Identity.GetUserId();
+            var admininfo = db.Admin_details.SingleOrDefault();
+
+            string url = admininfo.WebsiteUrl;
+
+            if (!url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+                !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                url = "https://" + url;
+            }
+
+            string websiteName = new Uri(url)
+                .Host
+                .Replace("www.", "")
+                .Split('.')[0];
+
+            string first3Chars = websiteName.Length >= 3
+                ? websiteName.Substring(0, 3)
+                : websiteName;
+
+            var reminfo = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+
+            string uniqueId = first3Chars + DateTime.Now.ToString("yyyyMMddHHmmssfff") +
+                  new Random().Next(1000, 9999);
+            string lattitude = string.Empty;
+            string longitude = string.Empty;
+            if (reminfo.UserLocation == null)
+            {
+                insertGeoLocation(reminfo.RetailerId, out lattitude, out longitude);
+            }
+            else
+            {
+                lattitude = reminfo.UserLocation.Lattitude;
+                longitude = reminfo.UserLocation.Longitute;
+            }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                var data = new Update_Aeps_Info()
+                {
+                    UserId = userid,
+                    latitude = lattitude,
+                    longitude = longitude,
+                    UpdateTime = DateTime.Now,
+                    status = true,
+                    RequestFrom = "Web"
+                };
+                db.Update_Aeps_Info.Add(data);
+                db.SaveChanges();
+            }
+
+            var Aepsmerchantchangan = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
+
+            var apireq = new
+            {
+                Reqid = uniqueId,
+                Merchantid = Aepsmerchantchangan.merchantid,
+                Amount = amount.ToString("0.00"),
+                Latitude = lattitude,
+                Longitude = longitude,
+                Mobile = reminfo.Mobile
+            };
+            var jsondata = JsonConvert.SerializeObject(apireq);
+            System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+            var msgoutput = db.AEPSUPITXnInsert(userid, amount, uniqueId, jsondata, reminfo.AepsMerchandId, "WEB", outputchk).SingleOrDefault().msg;
+            if (msgoutput == "OK")
+            {
+                var token = string.Empty;
+                token = getAuthToken();
+
+                var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/UPI/WEBChagan/Transaction");
+                client2.Timeout = -1;
+                var request2 = new RestRequest(Method.POST);
+                request2.AddHeader("Authorization", "Bearer " + token);
+                request2.AddHeader("Content-Type", "application/json");
+                request2.AddParameter("application/json", jsondata, ParameterType.RequestBody);
+                IRestResponse response2 = client2.Execute(request2);
+                if (response2.StatusCode == HttpStatusCode.OK)
+                {
+                    dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                    var sts = resp.Content.ADDINFO.status;
+                    string msg = resp.Content.ADDINFO.message;
+
+                    if (sts == true)
+                    {
+                        string qrstring = resp.Content.ADDINFO.data.intentLink;
+                        using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
+                        using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(
+                  qrstring,
+                  QRCodeGenerator.ECCLevel.M))
+                        using (QRCode qrCode = new QRCode(qrCodeData))
+                        using (Bitmap qrBitmap = qrCode.GetGraphic(
+                  20,              // pixels per module
+                  Color.Black,
+                  Color.White,
+                  true))           // draw quiet zone
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            qrBitmap.Save(ms, ImageFormat.Png);
+
+                            byte[] imageBytes = ms.ToArray();
+
+                            qrcode = Convert.ToBase64String(imageBytes);
+                        }
+
+                        var resp1 = new
+                        {
+                            sts = true,
+                            message = msg,
+                            qrCode = qrcode,
+                            txnId = uniqueId
+                        };
+                        return Json(resp1, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+
+                        db.updateAEPSUPITXn(uniqueId, "Failed", response2.Content, msg, "", "", "", null);
+                        var resp1 = new
+                        {
+                            sts = false,
+                            message = msg
+                        };
+                        return Json(resp1, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    db.updateAEPSUPITXn(uniqueId, "Failed", response2.Content, "UPI SERVER ISSUE", "", "", "", null);
+                    var resp = new
+                    {
+                        sts = false,
+                        message = "UPI SERVER ISSUE"
+                    };
+                    return Json(resp, JsonRequestBehavior.AllowGet);
+                }
+
+                //if(resp.s)
+            }
+            else
+            {
+                var resp = new
+                {
+                    sts = false,
+                    message = msgoutput
                 };
                 return Json(resp, JsonRequestBehavior.AllowGet);
             }
@@ -49354,7 +49787,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             pidData = captureresp.Piddata,
                                                             qScore = captureresp.qScore,
                                                             nmPoints = captureresp.nmPoints,
-                                                            rdsVer = captureresp.rdsVer
+                                                            rdsVer = captureresp.rdsVer,
+                                                            latitude= lattitude,
+                                                            longitude= longitude
                                                         };
                                                         var resquestchkotp = JsonConvert.SerializeObject(requeotp);
                                                         var client = new RestClient();
@@ -49451,7 +49886,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             pidData = captureresp.Piddata,
                                                             qScore = captureresp.qScore,
                                                             nmPoints = captureresp.nmPoints,
-                                                            rdsVer = captureresp.rdsVer
+                                                            rdsVer = captureresp.rdsVer,
+                                                            latitude = lattitude,
+                                                            longitude = longitude
                                                         };
                                                         var resquestchkotp = JsonConvert.SerializeObject(requeotp);
                                                         System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
@@ -49626,7 +50063,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                 pidData = captureresp.Piddata,
                                                                 qScore = captureresp.qScore,
                                                                 nmPoints = captureresp.nmPoints,
-                                                                rdsVer = captureresp.rdsVer
+                                                                rdsVer = captureresp.rdsVer,
+                                                                latitude = lattitude,
+                                                                longitude = longitude,
+                                                                orderId= hidefingpay
                                                             };
                                                             var resquestchkotp = JsonConvert.SerializeObject(requeotp);
                                                             string req = resquestchkotp.ToString();
@@ -50711,7 +51151,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         }
 
         [HttpPost]
-        public ActionResult AEPSSendOtpAbove5k(string uid,int iin,string mobile,decimal amount,string devicesrno)
+        public ActionResult AEPSSendOtpAbove5k(string uid,int iin,string mobile,decimal amount,string devicesrno,string apinm)
         {
             string userid = User.Identity.GetUserId();
             string lattitude = string.Empty;
@@ -50791,77 +51231,130 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var admin_details = db.Admin_details.SingleOrDefault();
             var infoadmin = admin_details.WebsiteUrl.Replace(".", "");
             var agentid = infoadmin + "" + DateTime.Now.ToString("dd-MM-yyy hh-mm-ss").Replace("-", "").Replace(" ", "");
-            AepsModel reqObject = new AepsModel();
-            reqObject.transactionType = "CO";
-            reqObject.serviceType = "CW";
-            reqObject.mobileNumber = mobile;
-            reqObject.latitude = Convert.ToDouble(lattitude);//27.617470;// point.Latitude;
-            reqObject.longitude = Convert.ToDouble(longitude);//75.144400;
-            reqObject.merchantTransactionId = agentid;
-            reqObject.superMerchantId = "229";
-            reqObject.merchantUserName = retailer.AepsMerchandId;
-            reqObject.merchantPin = CreateMD5(retailer.AepsMPIN);
-            reqObject.transactionAmount = (int)amount;
-            reqObject.cardnumberORUID = new CardnumberOruid { adhaarNumber = uid, nationalBankIdentificationNumber = iin };
-            reqObject.timestamp = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);//"dd/MM/yyyy HH:mm:ss"
 
-            dynamic RequestJson = JsonConvert.SerializeObject(reqObject);
-            WriteLogAEPSREQLOG("RequestJson: " + RequestJson);
-            byte[] hash = Main.generateSha256Hash(Encoding.ASCII.GetBytes(RequestJson));
-            byte[] skey = Main.generateSessionKey();
-            string encryptUsingSessionKey = Main.encryptUsingSessionKey(skey, Encoding.ASCII.GetBytes(RequestJson));
-            string encryptUsingPublicKey = Main.encryptUsingPublicKey(skey);
-            if (string.IsNullOrWhiteSpace(encryptUsingSessionKey) || string.IsNullOrWhiteSpace(encryptUsingPublicKey))
+            if (apinm.ToUpper() == "FINGPAY")
             {
-                var viewresponse = new { Status = "Failed", Message = "Failed to initiate request." };
-                return Json(viewresponse, JsonRequestBehavior.AllowGet);
-            }
+                AepsModel reqObject = new AepsModel();
+                reqObject.transactionType = "CO";
+                reqObject.serviceType = "CW";
+                reqObject.mobileNumber = mobile;
+                reqObject.latitude = Convert.ToDouble(lattitude);//27.617470;// point.Latitude;
+                reqObject.longitude = Convert.ToDouble(longitude);//75.144400;
+                reqObject.merchantTransactionId = agentid;
+                reqObject.superMerchantId = "229";
+                reqObject.merchantUserName = retailer.AepsMerchandId;
+                reqObject.merchantPin = CreateMD5(retailer.AepsMPIN);
+                reqObject.transactionAmount = (int)amount;
+                reqObject.cardnumberORUID = new CardnumberOruid { adhaarNumber = uid, nationalBankIdentificationNumber = iin };
+                reqObject.timestamp = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);//"dd/MM/yyyy HH:mm:ss"
 
-            var ouletid = retailer.AepsMerchandId;
-            var client = new RestClient();
-            var request = new RestRequest(Method.POST);
-            client = new RestClient(VastbazaarBaseUrl + "api/AEPS/SendotpAbove5k");
-            string req = RequestJson.ToString();
-
-            request.AddHeader("content-type", "text/plain");
-            request.AddHeader("cache-control", "no-cache");
-            request.AddHeader("authorization", "bearer " + token);//OAUTH token
-            request.AddHeader("trnTimestamp", reqObject.timestamp);
-            request.AddHeader("hash", Convert.ToBase64String(hash));
-            request.AddHeader("deviceIMEI", string.IsNullOrWhiteSpace(devicesrno) ? "352801082418919" : devicesrno);
-            request.AddHeader("eskey", encryptUsingPublicKey);
-            request.AddHeader("agentid", agentid);
-            request.AddHeader("amount", amount.ToString());
-            request.AddHeader("MerchantId", ouletid);
-            request.AddHeader("aadhar", uid);
-            request.AddHeader("mobile", mobile);
-            request.AddHeader("videolink", "");
-            request.AddParameter("text/plain",
-                encryptUsingSessionKey, ParameterType.RequestBody);
-            IRestResponse response = client.Execute(request);
-            if(response.StatusCode==HttpStatusCode.OK)
-            {
-                dynamic resp = JsonConvert.DeserializeObject(response.Content);
-                var sts = resp.Content.ADDINFO.Staus;
-                string msg = resp.Content.ADDINFO.Message;
-                if (sts==true)
+                dynamic RequestJson = JsonConvert.SerializeObject(reqObject);
+                WriteLogAEPSREQLOG("RequestJson: " + RequestJson);
+                byte[] hash = Main.generateSha256Hash(Encoding.ASCII.GetBytes(RequestJson));
+                byte[] skey = Main.generateSessionKey();
+                string encryptUsingSessionKey = Main.encryptUsingSessionKey(skey, Encoding.ASCII.GetBytes(RequestJson));
+                string encryptUsingPublicKey = Main.encryptUsingPublicKey(skey);
+                if (string.IsNullOrWhiteSpace(encryptUsingSessionKey) || string.IsNullOrWhiteSpace(encryptUsingPublicKey))
                 {
-                    string fpTransactionId= resp.Content.ADDINFO.fpTransactionId;
-                    var viewresponse = new { Status = "Success", Message = msg, fpTransactionId };
+                    var viewresponse = new { Status = "Failed", Message = "Failed to initiate request." };
                     return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+
+                var ouletid = retailer.AepsMerchandId;
+                var client = new RestClient();
+                var request = new RestRequest(Method.POST);
+                client = new RestClient(VastbazaarBaseUrl + "api/AEPS/SendotpAbove5k");
+                string req = RequestJson.ToString();
+
+                request.AddHeader("content-type", "text/plain");
+                request.AddHeader("cache-control", "no-cache");
+                request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                request.AddHeader("trnTimestamp", reqObject.timestamp);
+                request.AddHeader("hash", Convert.ToBase64String(hash));
+                request.AddHeader("deviceIMEI", string.IsNullOrWhiteSpace(devicesrno) ? "352801082418919" : devicesrno);
+                request.AddHeader("eskey", encryptUsingPublicKey);
+                request.AddHeader("agentid", agentid);
+                request.AddHeader("amount", amount.ToString());
+                request.AddHeader("MerchantId", ouletid);
+                request.AddHeader("aadhar", uid);
+                request.AddHeader("mobile", mobile);
+                request.AddHeader("videolink", "");
+                request.AddParameter("text/plain",
+                    encryptUsingSessionKey, ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    dynamic resp = JsonConvert.DeserializeObject(response.Content);
+                    var sts = resp.Content.ADDINFO.Staus;
+                    string msg = resp.Content.ADDINFO.Message;
+                    if (sts == true)
+                    {
+                        string fpTransactionId = resp.Content.ADDINFO.fpTransactionId;
+                        var viewresponse = new { Status = "Success", Message = msg, fpTransactionId };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        var viewresponse = new { Status = "Failed", Message = msg };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    }
+
                 }
                 else
                 {
-                    var viewresponse = new { Status = "Failed", Message = msg };
+                    var viewresponse = new { Status = "Failed", Message = "Server Issue." };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var merchantidinfo = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
+                string merchantid = merchantidinfo.merchantid;
+                var requeotp = new
+                {
+                    iin = iin,
+                    adhar = uid,
+                    type= "withdraw",
+                    mobile= mobile,
+                    merchantId= merchantid,
+                    latitude=lattitude,
+                    longitude=longitude,
+                    amount=amount
+                };
+                var resquestchkotp = JsonConvert.SerializeObject(requeotp);
+                var client = new RestClient(VastbazaarBaseUrl + "api/AEPSChagan/SendotpAbove5k");
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("content-type", "application/json");
+                request.AddHeader("cache-control", "no-cache");
+                request.AddHeader("Mobile", retailer.Mobile);
+                request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                request.AddParameter("application/json", resquestchkotp, ParameterType.RequestBody);
+                var response = client.Execute(request);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    dynamic resp = JsonConvert.DeserializeObject(response.Content);
+                    var sts = resp.Content.ADDINFO.Staus;
+                    string msg = resp.Content.ADDINFO.Message;
+                    if (sts == true)
+                    {
+                        string fpTransactionId = resp.Content.ADDINFO.fpTransactionId;
+                        var viewresponse = new { Status = "Success", Message = msg, fpTransactionId };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        var viewresponse = new { Status = "Failed", Message = msg };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Server Issue." };
                     return Json(viewresponse, JsonRequestBehavior.AllowGet);
                 }
 
             }
-            else
-            {
-                var viewresponse = new { Status = "Failed", Message = "Server Issue." };
-                return Json(viewresponse, JsonRequestBehavior.AllowGet);
-            }
+
         }
 
         public ActionResult AEPS_1()
@@ -54655,6 +55148,83 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
         
+        }
+
+        public ActionResult CheckAEPSQRStatusChagan(string txnId)
+        {
+            var stschk = db.AepsUPIHistories.Where(aa => aa.Txnid == txnId && aa.Status.ToUpper() == "PENDING").SingleOrDefault();
+            var sts = false; var Status = "Pending"; string message = "";string bankrrn = "";
+            string payerVpa = "";string payerName = "";
+            string FingpayTransID = stschk.Fingpaytxnid;
+            if (stschk!=null)
+            {
+                var token = getAuthToken();
+                var client = new RestClient("http://api.vastbazaar.com/api/AEPS/UPI/WEBChagan/StatusCheck?Reqid="+ txnId + "");
+                client.Timeout = -1;
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Authorization", "Bearer " + token);
+                IRestResponse response = client.Execute(request);
+                if(response.StatusCode==HttpStatusCode.OK)
+                {
+                    dynamic dresp = JsonConvert.DeserializeObject(response.Content);
+                    string statusinfo = dresp.Content.ADDINFO.status;
+                    bankrrn= dresp.Content.ADDINFO.bankRrn;
+                    message = dresp.Content.ADDINFO.message;
+                    payerVpa= dresp.Content.ADDINFO.payerVpa;
+                    payerName = dresp.Content.ADDINFO.payerName;
+                    if (statusinfo== "Success")
+                    {
+                        sts = true;
+                        Status = "Success";
+                    }
+                    else if(statusinfo== "Failed")
+                    {
+                        bankrrn = message;
+                        sts = true;
+                        Status = "Failed";
+                    }
+                    if(Status== "Success" || Status == "Failed")
+                    {
+                        DateTime transtime = DateTime.Now;
+                        db.updateAEPSUPITXn(txnId, Status, "", bankrrn, payerVpa, payerName, FingpayTransID, transtime);
+                    }
+                }
+            }
+            var data = new
+            {
+                sts = sts,
+                Status = Status,
+                message = message
+            };
+            return Json(data, JsonRequestBehavior.AllowGet);
+
+
+            //if (stschk != null)
+            //{
+            //    var data = new
+            //    {
+            //        sts = false,
+            //        Status = "",
+            //        message = ""
+            //    };
+            //    return Json(data, JsonRequestBehavior.AllowGet);
+            //}
+            //else
+            //{
+            //    string msg = stschk.Bankrrn;
+            //    if (stschk.Status.ToUpper() == "SUCCESS")
+            //    {
+            //        msg = "Payment received successfully";
+            //    }
+            //    var data = new
+            //    {
+            //        sts = true,
+            //        Status = stschk.Status,
+            //        message = msg
+            //    };
+            //    return Json(data, JsonRequestBehavior.AllowGet);
+            //}
+
         }
 
         [HttpGet]

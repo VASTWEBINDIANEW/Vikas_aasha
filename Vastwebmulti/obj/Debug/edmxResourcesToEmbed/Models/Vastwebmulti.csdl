@@ -7801,6 +7801,21 @@
       <Parameter Name="transtimestemp" Mode="In" Type="DateTime" />
     </FunctionImport>
     <EntitySet Name="AepsUPIHistories" EntityType="VastwebmultiModel.AepsUPIHistory" />
+    <FunctionImport Name="proc_InsertWalletToBankAmountTransfer_CMS" ReturnType="Collection(VastwebmultiModel.proc_InsertWalletToBankAmountTransfer_CMS_Result)">
+      <Parameter Name="Userid" Mode="In" Type="String" />
+      <Parameter Name="Amount" Mode="In" Type="Decimal" />
+      <Parameter Name="Type" Mode="In" Type="String" />
+      <Parameter Name="RequestId" Mode="In" Type="String" />
+      <Parameter Name="TransectionID" Mode="In" Type="String" />
+      <Parameter Name="AccountNumber" Mode="In" Type="String" />
+      <Parameter Name="Status" Mode="InOut" Type="String" />
+      <Parameter Name="Message" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="proc_InsertWalletToBankAmountTransferRefund_CMS" ReturnType="Collection(VastwebmultiModel.proc_InsertWalletToBankAmountTransferRefund_CMS_Result)">
+      <Parameter Name="Idno" Mode="In" Type="Int32" />
+      <Parameter Name="Status" Mode="InOut" Type="String" />
+      <Parameter Name="Message" Mode="InOut" Type="String" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -26155,6 +26170,7 @@
     <Property Name="RequestId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="Total_Debit" Type="Decimal" Precision="18" Scale="4" />
     <Property Name="TransectionID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Balusefrom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="customersupports_times">
     <Key>
@@ -34520,4 +34536,12 @@
     <Property Name="posremainpost" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="PayerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
+  <ComplexType Name="proc_InsertWalletToBankAmountTransfer_CMS_Result">
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Message" Nullable="true" MaxLength="128" />
+  </ComplexType>
+  <ComplexType Name="proc_InsertWalletToBankAmountTransferRefund_CMS_Result">
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Message" Nullable="true" MaxLength="128" />
+  </ComplexType>
 </Schema>
