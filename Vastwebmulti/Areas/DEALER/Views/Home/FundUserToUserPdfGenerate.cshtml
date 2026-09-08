@@ -1,0 +1,144 @@
+@model Vastwebmulti.Areas.DEALER.ViewModel.FundRequestViewmodel
+@using System.Linq
+@{
+    Layout = null;
+    var nick = Convert.ToString(ViewBag.nickname);
+    if (string.IsNullOrWhiteSpace(nick)) { nick = "Retailer"; }
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var frmDate = (ViewBag.frmDate as string) ?? "-";
+    var toDate = (ViewBag.toDate as string) ?? "-";
+    var isRequest = Model != null && Model.PurchaseRequestRecived != null;
+    var transfers = Model != null && Model.DealerToRemFundTransfer != null ? Model.DealerToRemFundTransfer.OrderByDescending(a => a.RechargeDate).ToList() : new System.Collections.Generic.List<Vastwebmulti.Models.select_dlm_rem_Result>();
+    var requests = Model != null && Model.PurchaseRequestRecived != null ? Model.PurchaseRequestRecived.ToList() : new System.Collections.Generic.List<Vastwebmulti.Models.select_rem_pur_order_Result>();
+    Func<string, string> dash = v => string.IsNullOrWhiteSpace(v) ? "-" : v;
+    Func<decimal?, string> money = v => v.HasValue ? v.Value.ToString("N2") : "-";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Fund Transfer</title>
+    <style type="text/css">
+        @@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }
+        * { box-sizing: border-box; }
+        body { margin:0; padding:16px; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#0f172a; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        table { page-break-inside:auto; border-collapse:collapse; }
+        tr { page-break-inside:avoid; page-break-after:auto; }
+        thead { display:table-header-group; }
+        .hero { width:100%; border:1px solid #1d4ed8; overflow:hidden; }
+        .hero-top { padding:14px 18px; background:#2563eb; color:#fff; }
+        .hero-top h1 { margin:0; font-size:20px; font-weight:700; }
+        .hero-top p { margin:4px 0 0; font-size:11px; color:#dbeafe; }
+        .meta { width:100%; background:#f8fafc; border-top:1px solid #bfdbfe; }
+        .meta td { padding:8px 12px; border-right:1px solid #e2e8f0; vertical-align:top; }
+        .meta td:last-child { border-right:none; }
+        .meta-label { display:block; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748b; margin-bottom:3px; }
+        .meta-value { font-size:12px; font-weight:700; color:#0f172a; }
+        .grid { width:100%; margin-top:12px; border:1px solid #cbd5e1; }
+        .grid th { padding:9px 7px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; color:#fff; background:#334155; border-right:1px solid #1e293b; white-space:nowrap; }
+        .grid td { padding:8px 7px; font-size:11px; color:#1e293b; border-top:1px solid #e2e8f0; border-right:1px solid #e2e8f0; }
+        .grid tbody tr:nth-child(even) td { background:#f8fafc; }
+        .empty { padding:36px 16px; text-align:center; font-size:14px; font-weight:700; color:#64748b; background:#f8fafc; }
+        .foot { margin-top:10px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:10px; color:#94a3b8; text-align:center; }
+    </style>
+</head>
+<body>
+<div class="sheet">
+    <div class="hero">
+        <div class="hero-top">
+            <h1>@(isRequest ? (nick + " Fund Request") : "Fund Transfer History")</h1>
+            <p>Dealer fund transfer</p>
+        </div>
+        <table class="meta" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:40%;"><span class="meta-label">Generated On</span><span class="meta-value">@generatedOn</span></td>
+                <td style="width:40%;"><span class="meta-label">Date Range</span><span class="meta-value">@frmDate to @toDate</span></td>
+                <td style="width:20%;"><span class="meta-label">Records</span><span class="meta-value">@(isRequest ? requests.Count : transfers.Count)</span></td>
+            </tr>
+        </table>
+    </div>
+
+    @if (isRequest)
+    {
+        <table class="grid" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Order No</th>
+                    <th>Request From</th>
+                    <th>Payment Mode</th>
+                    <th>Discription</th>
+                    <th>Total Amount</th>
+                    <th>Charge</th>
+                    <th>Net Amount</th>
+                    <th>Request Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (requests.Any())
+                {
+                    foreach (var item in requests)
+                    {
+                        <tr>
+                            <td>@dash(item.orderno)</td>
+                            <td>@dash(item.RemEmail)</td>
+                            <td>@dash(item.paymode)</td>
+                            <td>@dash(item.utrno)</td>
+                            <td>@money(item.amount)</td>
+                            <td>@money(item.cashDepositCharge)</td>
+                            <td>@money(item.finalAmount)</td>
+                            <td>@(item.reqdate.HasValue ? item.reqdate.Value.ToString("dd-MMM-yyyy") : "-")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="8" class="empty">Fund request not found.</td></tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <table class="grid" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>@nick Time</th>
+                    <th>Payment Mode</th>
+                    <th>Transection Id</th>
+                    <th>Amount</th>
+                    <th>Charges</th>
+                    <th>Net T/F</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (transfers.Any())
+                {
+                    foreach (var item in transfers)
+                    {
+                        var farm = string.IsNullOrWhiteSpace(item.Frm_Name) ? item.RetailerName : item.Frm_Name;
+                        farm = string.IsNullOrWhiteSpace(farm) ? "-" : (farm + " / " + dash(item.Mobile));
+                        var headtype = string.IsNullOrWhiteSpace(item.Head) || item.Head == "DirectT" ? "Direct" : item.Head;
+                        <tr>
+                            <td>@farm</td>
+                            <td>@dash(headtype) / @dash(item.bal_type)</td>
+                            <td>@dash(item.Transectionid)</td>
+                            <td>@money(item.Balance)</td>
+                            <td>@money(item.commission)</td>
+                            <td>@money(item.TotalBal)</td>
+                            <td>@(item.RechargeDate.HasValue ? item.RechargeDate.Value.ToString("dd-MMM-yyyy HH:mm") : "-")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="7" class="empty">Fund transfer report not found.</td></tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <div class="foot">Dealer fund transfer export</div>
+</div>
+</body>
+</html>

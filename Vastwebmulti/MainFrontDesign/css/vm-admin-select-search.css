@@ -1,0 +1,158 @@
+/**
+ * VM Admin Select Search — dedicated Select2 search styling for admin panel
+ */
+
+:root {
+    --vm-as-search-border: #dbe2ea;
+    --vm-as-search-bg: #f8fafc;
+    --vm-as-search-input-bg: #ffffff;
+    --vm-as-search-text: #0f172a;
+    --vm-as-search-muted: #94a3b8;
+    --vm-as-search-accent: #2563eb;
+    --vm-as-search-radius: 10px;
+}
+
+/* Native select hide after Select2 init */
+body.saas-admin-ui select.vm-admin-select-search.select2-hidden-accessible,
+body.saas-admin-ui select.for-select2.select2-hidden-accessible,
+body.saas-admin-ui select.vm-csp-modal-select.select2-hidden-accessible,
+body.saas-admin-ui select.vm-rl-select-search.select2-hidden-accessible {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Select2 container */
+body.saas-admin-ui .select2-container.vm-admin-select-search-ui,
+body.saas-admin-ui select.vm-admin-select-search + .select2-container,
+body.saas-admin-ui select.for-select2 + .select2-container,
+body.saas-admin-ui select.vm-csp-modal-select + .select2-container {
+    width: 100% !important;
+    display: block !important;
+}
+
+body.saas-admin-ui .select2-container.vm-admin-select-search-ui .select2-selection--single,
+body.saas-admin-ui select.vm-admin-select-search + .select2-container .select2-selection--single {
+    min-height: 40px !important;
+    height: 40px !important;
+    border: 1px solid var(--vm-as-search-border) !important;
+    border-radius: var(--vm-as-search-radius) !important;
+    background: #fff !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .select2-container.vm-admin-select-search-ui .select2-selection__rendered,
+body.saas-admin-ui select.vm-admin-select-search + .select2-container .select2-selection__rendered {
+    line-height: 38px !important;
+    padding-left: 12px !important;
+    padding-right: 32px !important;
+    font-size: 0.84rem !important;
+    color: var(--vm-as-search-text) !important;
+}
+
+/* Dropdown panel */
+body.saas-admin-ui .select2-dropdown.vm-admin-select-search-dropdown {
+    border: 1px solid var(--vm-as-search-border) !important;
+    border-radius: var(--vm-as-search-radius) !important;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14) !important;
+    overflow: visible !important;
+    z-index: 11150 !important;
+}
+
+body.saas-admin-ui.modal-open .select2-dropdown.vm-admin-select-search-dropdown {
+    z-index: 11160 !important;
+}
+
+/* SEARCH BOX — always visible, never hidden */
+body.saas-admin-ui .select2-dropdown.vm-admin-select-search-dropdown .vm-admin-select-search-box,
+body.saas-admin-ui .select2-dropdown.vm-admin-select-search-dropdown .select2-search--dropdown,
+body.saas-admin-ui .select2-dropdown.vm-admin-select-search-dropdown .select2-search.select2-search--dropdown,
+body.saas-admin-ui .select2-dropdown.vm-admin-select-search-dropdown .select2-search--dropdown.select2-search--hide,
+body.saas-admin-ui .vm-admin-select-search-box,
+body.saas-admin-ui .vm-admin-select-search-box--visible {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 54px !important;
+    max-height: none !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+    padding: 10px 10px 8px !important;
+    margin: 0 !important;
+    background: var(--vm-as-search-bg) !important;
+    border-bottom: 1px solid var(--vm-as-search-border) !important;
+}
+
+body.saas-admin-ui .vm-admin-select-search-input,
+body.saas-admin-ui .select2-dropdown.vm-admin-select-search-dropdown .select2-search__field {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    padding: 9px 12px !important;
+    border: 1px solid var(--vm-as-search-border) !important;
+    border-radius: 9px !important;
+    background: var(--vm-as-search-input-bg) !important;
+    font-size: 0.84rem !important;
+    font-weight: 500 !important;
+    color: var(--vm-as-search-text) !important;
+    outline: none !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+    pointer-events: auto !important;
+    cursor: text !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+body.saas-admin-ui .vm-admin-select-search-input::placeholder,
+body.saas-admin-ui .select2-dropdown.vm-admin-select-search-dropdown .select2-search__field::placeholder {
+    color: var(--vm-as-search-muted) !important;
+}
+
+body.saas-admin-ui .vm-admin-select-search-input:focus,
+body.saas-admin-ui .select2-dropdown.vm-admin-select-search-dropdown .select2-search__field:focus {
+    border-color: var(--vm-as-search-accent) !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+/* Results list */
+body.saas-admin-ui .select2-dropdown.vm-admin-select-search-dropdown .select2-results__options {
+    max-height: 280px !important;
+    overflow-y: auto !important;
+}
+
+body.saas-admin-ui .select2-dropdown.vm-admin-select-search-dropdown .select2-results__option {
+    padding: 9px 12px !important;
+    font-size: 0.82rem !important;
+}
+
+body.saas-admin-ui .select2-dropdown.vm-admin-select-search-dropdown .select2-results__option--highlighted {
+    background: #eff6ff !important;
+    color: #1d4ed8 !important;
+}
+
+/* Modal overflow fix when dropdown open */
+body.saas-admin-ui .modal.vm-admin-select-search-open .modal-dialog,
+body.saas-admin-ui .modal.vm-admin-select-search-open .modal-content,
+body.saas-admin-ui .modal.vm-admin-select-search-open .saas-admin-modal-body,
+body.saas-admin-ui .modal.vm-admin-select-search-open .vm-sm-modal-body {
+    overflow: visible !important;
+}
+
+/* Kill Select2 core hide rule inside admin */
+html body.saas-admin-ui .select2-search--dropdown.select2-search--hide {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 54px !important;
+}

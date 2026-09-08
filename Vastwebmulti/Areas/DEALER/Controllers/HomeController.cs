@@ -1984,128 +1984,64 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
 
         public ActionResult ExportExcellFundtransfer(string tabtype = "Reatiler", string txt_frm_date = "", string txt_to_date = "", string ddltype = "")
         {
-
-
-
-            DataTable dtt = new DataTable("Grid");
-
-
-
+            var vmodel = new FundRequestViewmodel();
             string dealerid = User.Identity.GetUserId();
-
-
             DateTime fromdate;
             DateTime Todate;
+            string fileName;
 
-            if (string.IsNullOrEmpty(txt_frm_date) && string.IsNullOrEmpty(txt_frm_date))
+            if (string.IsNullOrEmpty(txt_frm_date) && string.IsNullOrEmpty(txt_to_date))
             {
                 fromdate = DateTime.Now.AddDays(-1);
                 Todate = DateTime.Now.AddDays(1);
             }
             else
             {
-
-                string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
-                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-
+                string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
                 DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
                 DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
                 fromdate = Convert.ToDateTime(dt).Date;
                 Todate = Convert.ToDateTime(dt1).Date.AddDays(1);
-
-
             }
 
             switch (tabtype)
             {
                 case "RetailerToDLMREQ":
-                    var result = db.select_rem_pur_order("ALL", dealerid, fromdate, Todate).ToList();
+                    var purchaseReceived = db.select_rem_pur_order("ALL", dealerid, fromdate, Todate).ToList();
                     if (!string.IsNullOrEmpty(ddltype))
                     {
-                        result = result.Where(x => x.remid == ddltype).ToList();
+                        purchaseReceived = purchaseReceived.Where(x => x.remid == ddltype).ToList();
                     }
-
-                    dtt.Columns.AddRange(new DataColumn[9] { new DataColumn("OrderNo"),
-                                             new DataColumn("Status"),
-                                            new DataColumn("RequestFrom"),
-                                            new DataColumn("PaymentMode"),
-                                            new DataColumn("Discription") ,
-                                            new DataColumn("TotalAmount") ,
-                                            new DataColumn("Charge") ,
-                                            new DataColumn("NetAmount") ,
-                                            new DataColumn("RequestDate") ,
-
-
-
-                    });
-                    foreach (var item in result)
-                    {
-                        dtt.Rows.Add(item.orderno, item.sts, item.RemEmail, item.paymode, item.utrno, item.amount, item.cashDepositCharge, item.finalAmount, item.reqdate);
-                    }
-
-                    // vmodel.PurchaseRequestRecived = result;
+                    vmodel.PurchaseRequestRecived = purchaseReceived;
+                    fileName = "Purchase_Request_Report.xls";
                     break;
 
                 case "Admin":
-
-
-                    // vmodel.SendPurchaserequest = db.select_dlm_pur_order(dealerid, "ALL", fromdate, Todate).ToList();
-
-
+                    vmodel.SendPurchaserequest = db.select_dlm_pur_order(dealerid, "ALL", fromdate, Todate).ToList();
+                    fileName = "Wallet_Request_Report.xls";
                     break;
 
                 default:
-
-                    var result1 = db.select_dlm_rem(dealerid, fromdate, Todate, "ALL", 1, 500).ToList();
+                    var transfers = db.select_dlm_rem(dealerid, fromdate, Todate, "ALL", 1, 500).ToList();
                     if (!string.IsNullOrEmpty(ddltype))
                     {
-                        result1 = result1.Where(x => x.RetailerId == ddltype).ToList();
+                        transfers = transfers.Where(x => x.RetailerId == ddltype).ToList();
                     }
-
-                    dtt.Columns.AddRange(new DataColumn[13] { new DataColumn("Frm_Name"),
-                                            new DataColumn("RechargeDate"),
-                                            new DataColumn("Head"),
-                                            new DataColumn("CollectionBy") ,
-                                            new DataColumn("bal_type") ,
-                                            new DataColumn("Balance") ,
-                                            new DataColumn("commission") ,
-                                            new DataColumn("TotalBal"),
-                                            new DataColumn("oldcrbalance") ,
-                                            new DataColumn("remain_amount") ,
-                                            new DataColumn("remain_pre_amount") ,
-                                            new DataColumn("remain_amount_dealer") ,
-                                            new DataColumn("remain_pre_amount_dealer")
-
-
-                    });
-                    foreach (var item in result1)
-                    {
-                        dtt.Rows.Add(item.Frm_Name == null || item.Frm_Name == "" ? item.RetailerName : item.Frm_Name + "/" + item.Mobile, item.RechargeDate, item.Head, item.CollectionBy, item.bal_type, item.Balance, item.commission, item.TotalBal, item.oldcrbalance, item.remain_amount, item.remain_pre_amount, item.remain_amount_dealer, item.remain_pre_amount_dealer);
-                    }
-
+                    vmodel.DealerToRemFundTransfer = transfers;
+                    fileName = "Fund_Transfer_Report.xls";
                     break;
             }
-            var grid = new GridView();
-            grid.DataSource = dtt;
-            grid.DataBind();
 
-            Response.ClearContent();
+            ViewBag.tabtype = tabtype;
+            ViewBag.frmDate = string.IsNullOrWhiteSpace(txt_frm_date) ? fromdate.ToString("yyyy-MM-dd") : txt_frm_date;
+            ViewBag.toDate = string.IsNullOrWhiteSpace(txt_to_date) ? Todate.AddDays(-1).ToString("yyyy-MM-dd") : txt_to_date;
+
+            Response.Clear();
             Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment; filename=MyExcelFile.xls");
-            Response.ContentType = "application/ms-excel";
-
-            Response.Charset = "";
-            StringWriter sw = new StringWriter();
-            HtmlTextWriter htw = new HtmlTextWriter(sw);
-
-            grid.RenderControl(htw);
-
-            Response.Output.Write(sw.ToString());
-            Response.Flush();
-            Response.End();
-
-            return View("MyView");
-
+            Response.Charset = "utf-8";
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("content-disposition", "attachment; filename=" + fileName);
+            return View("Excel_WalletRequestExport", vmodel);
         }
 
         public ActionResult WalletRequestSend()
@@ -2208,6 +2144,58 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
 
             return PartialView("_FundTransferDealetToRetailerPartial", vmodel);
 
+        }
+
+        public ActionResult FundUserToUserPdfGenerate(string tabID = "Reatiler", string frm_date = "", string to_date = "", string usernm = "")
+        {
+            var vmodel = new FundRequestViewmodel();
+            string dealerid = User.Identity.GetUserId();
+            DateTime fromdate;
+            DateTime Todate;
+            if (string.IsNullOrEmpty(frm_date) && string.IsNullOrEmpty(to_date))
+            {
+                fromdate = DateTime.Now.AddDays(-1);
+                Todate = DateTime.Now.AddDays(1);
+            }
+            else
+            {
+                string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+                DateTime dt = !string.IsNullOrWhiteSpace(frm_date) ? DateTime.ParseExact(frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+                DateTime dt1 = !string.IsNullOrWhiteSpace(to_date) ? DateTime.ParseExact(to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+                fromdate = Convert.ToDateTime(dt).Date;
+                Todate = Convert.ToDateTime(dt1).Date.AddDays(1);
+            }
+
+            var nick = db.Usernicknames.FirstOrDefault(aa => aa.Role == "Retailer");
+            ViewBag.nickname = nick != null && !string.IsNullOrEmpty(nick.NickName) ? nick.NickName : "Retailer";
+            ViewBag.frmDate = string.IsNullOrWhiteSpace(frm_date) ? fromdate.ToString("yyyy-MM-dd") : frm_date;
+            ViewBag.toDate = string.IsNullOrWhiteSpace(to_date) ? DateTime.Now.ToString("yyyy-MM-dd") : to_date;
+            ViewBag.tabID = tabID;
+
+            if (tabID == "RetailerToDLMREQ")
+            {
+                var result = db.select_rem_pur_order("ALL", dealerid, fromdate, Todate).ToList();
+                if (!string.IsNullOrEmpty(usernm))
+                {
+                    result = result.Where(x => x.remid == usernm).ToList();
+                }
+                vmodel.PurchaseRequestRecived = result;
+            }
+            else
+            {
+                var result1 = db.select_dlm_rem(dealerid, fromdate, Todate, "ALL", 1, 3500).ToList();
+                if (!string.IsNullOrEmpty(usernm))
+                {
+                    result1 = result1.Where(x => x.RetailerId == usernm).ToList();
+                }
+                vmodel.DealerToRemFundTransfer = result1;
+            }
+
+            return new ViewAsPdf("FundUserToUserPdfGenerate", vmodel)
+            {
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                PageSize = Rotativa.Options.Size.A4
+            };
         }
 
         public ActionResult RetailerReuest()
@@ -4865,6 +4853,46 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
 
 
             return View(modes);
+        }
+
+        private List<Autofundtransfermodel> LoadDealerAutoFundTransferRows()
+        {
+            var adminuserid = User.Identity.GetUserId();
+            return (from tbl in db.autofundtransferdealer_to_retailer
+                    join tbl1 in db.Retailer_Details on tbl.remid equals tbl1.RetailerId
+                    where tbl.dlmid.Equals(adminuserid) && tbl1.ISDeleteuser == false
+                    select new Autofundtransfermodel
+                    {
+                        idno = tbl.idno,
+                        Name = tbl1.Frm_Name + " " + tbl1.Mobile,
+                        status = tbl.status,
+                        minimiumamount = tbl.minamount,
+                        transferamount = tbl.Transferamount,
+                        totaltransfer = tbl.totaltransfer,
+                        MaxCredit = tbl.MaxCredit,
+                        transferdatetime = tbl.updatedatetime,
+                        types = tbl.types
+                    }).ToList();
+        }
+
+        public ActionResult PDF_AutoFundTransfer_Dealer_To_rem()
+        {
+            var rows = LoadDealerAutoFundTransferRows();
+            var usernname = db.Usernicknames.Where(aa => aa.Role == "Retailer").ToList();
+            if (usernname.Any())
+            {
+                var row = usernname.SingleOrDefault();
+                if (row != null && row.Role == "Retailer" && !string.IsNullOrWhiteSpace(row.NickName))
+                {
+                    ViewBag.nickname = row.NickName;
+                }
+            }
+            return new ViewAsPdf("PDF_AutoFundTransfer_Dealer_To_rem", rows)
+            {
+                FileName = "Auto_Fund_Transfer_Setting.pdf",
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                PageSize = Rotativa.Options.Size.A4
+            };
         }
 
 

@@ -297,6 +297,21 @@ $.AdminBSB.input = {
 */
 $.AdminBSB.select = {
     activate: function () {
+        if ($('body.saas-admin-ui').length) {
+            if (typeof window.bootAdminSelect2AfterAdminShell === 'function') {
+                window.setTimeout(function () {
+                    window.bootAdminSelect2AfterAdminShell();
+                }, 0);
+                window.setTimeout(function () {
+                    window.bootAdminSelect2AfterAdminShell();
+                }, 350);
+            } else if (typeof window.finalizeAdminSelect2Boot === 'function') {
+                window.setTimeout(function () {
+                    window.finalizeAdminSelect2Boot();
+                }, 0);
+            }
+            return;
+        }
         if ($.fn.selectpicker) { $('select:not(.ms)').selectpicker(); }
     }
 }

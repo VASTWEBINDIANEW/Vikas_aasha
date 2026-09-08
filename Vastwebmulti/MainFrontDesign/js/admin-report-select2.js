@@ -84,7 +84,14 @@
             dropdownParent: getDropdownParent($el)
         };
 
-        if (isHealthy($el) && hasSearchableSelect2($el)) {
+        if (typeof window.needsAdminSelect2Refresh === 'function') {
+            if (!window.needsAdminSelect2Refresh($el) && isHealthy($el)) {
+                if (typeof window.forceAdminSelect2SearchAlways === 'function') {
+                    window.forceAdminSelect2SearchAlways($el);
+                }
+                return;
+            }
+        } else if (isHealthy($el) && hasSearchableSelect2($el)) {
             return;
         }
 

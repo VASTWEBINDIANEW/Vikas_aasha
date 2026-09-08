@@ -1,0 +1,217 @@
+@model Vastwebmulti.Areas.DEALER.ViewModel.FundRequestViewmodel
+@using System.Linq
+@{
+    Layout = null;
+    var tabtype = (ViewBag.tabtype as string) ?? "Admin";
+    var frmDate = ViewBag.frmDate as string ?? "-";
+    var toDate = ViewBag.toDate as string ?? "-";
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var title = tabtype == "Admin"
+        ? "Wallet Request Report"
+        : tabtype == "RetailerToDLMREQ"
+            ? "Purchase Request Report"
+            : "Fund Transfer Report";
+    var subtitle = tabtype == "Admin"
+        ? "Dealer wallet / purchase order request history"
+        : tabtype == "RetailerToDLMREQ"
+            ? "Retailer purchase requests received"
+            : "Dealer to retailer fund transfer history";
+
+    var walletRows = (Model.SendPurchaserequest ?? Enumerable.Empty<Vastwebmulti.Models.select_dlm_pur_order_Result>()).OrderByDescending(x => x.reqdate).ToList();
+    var purchaseRows = (Model.PurchaseRequestRecived ?? Enumerable.Empty<Vastwebmulti.Models.select_rem_pur_order_Result>()).OrderByDescending(x => x.reqdate).ToList();
+    var transferRows = (Model.DealerToRemFundTransfer ?? Enumerable.Empty<Vastwebmulti.Models.select_dlm_rem_Result>()).OrderByDescending(x => x.RechargeDate).ToList();
+    var rowCount = walletRows.Count + purchaseRows.Count + transferRows.Count;
+}
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
+<head>
+    <meta charset="utf-8" />
+    <title>@title</title>
+    <style>
+        td, th {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 11pt;
+            border: 1px solid #94a3b8;
+            vertical-align: middle;
+        }
+
+        .num {
+            mso-number-format: '#,##0.00';
+            text-align: right;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;width:100%;">
+        <tr>
+            <td colspan="10" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;border:1px solid #1d4ed8;">@title</td>
+        </tr>
+        <tr>
+            <td colspan="10" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;border:1px solid #1d4ed8;">@subtitle</td>
+        </tr>
+        <tr>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">From Date</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@frmDate</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">To Date</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@toDate</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Generated On</td>
+            <td colspan="2" bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@generatedOn</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Records</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@rowCount</td>
+        </tr>
+
+        @if (walletRows.Any())
+        {
+            var totalAmount = walletRows.Sum(x => x.amount ?? 0m);
+            var totalCharge = walletRows.Sum(x => x.cashDepositCharge ?? 0m);
+            var totalNet = walletRows.Sum(x => x.finalAmount ?? 0m);
+            <tr><td colspan="10" bgcolor="#EEF2FF" style="font-weight:bold;font-size:11pt;color:#1e40af;">Wallet Request Details</td></tr>
+            <tr>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Order No</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Status</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Request To</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Payment Mode</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Description</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Total Amount</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Charge</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Net Amount</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Request Date</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Response Date</th>
+            </tr>
+            var alt = false;
+            foreach (var item in walletRows)
+            {
+                var rowBg = alt ? "#F8FAFC" : "#FFFFFF";
+                alt = !alt;
+                var reqDate = item.reqdate.HasValue ? item.reqdate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+                var respDate = item.respodate.HasValue ? item.respodate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+                <tr>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.orderno) ? "-" : item.orderno)</td>
+                    <td bgcolor="@rowBg" class="center" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.sts) ? "-" : item.sts)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.Role) ? "-" : item.Role)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.paymode) ? "-" : item.paymode.ToUpper())</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.utrno) ? "-" : item.utrno)</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@((item.amount ?? 0m).ToString("N2"))</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@((item.cashDepositCharge ?? 0m).ToString("N2"))</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@((item.finalAmount ?? 0m).ToString("N2"))</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@reqDate</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@respDate</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="5" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">Total</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalAmount.ToString("N2")</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalCharge.ToString("N2")</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalNet.ToString("N2")</td>
+                <td colspan="2" bgcolor="#EFF6FF">&nbsp;</td>
+            </tr>
+        }
+        else if (purchaseRows.Any())
+        {
+            var totalAmount = purchaseRows.Sum(x => x.amount);
+            var totalCharge = purchaseRows.Sum(x => x.cashDepositCharge ?? 0m);
+            var totalNet = purchaseRows.Sum(x => x.finalAmount ?? 0m);
+            <tr><td colspan="10" bgcolor="#EEF2FF" style="font-weight:bold;font-size:11pt;color:#1e40af;">Purchase Request Details</td></tr>
+            <tr>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Order No</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Status</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Request From</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Payment Mode</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Description</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Total Amount</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Charge</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Net Amount</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Request Date</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Response Date</th>
+            </tr>
+            var alt = false;
+            foreach (var item in purchaseRows)
+            {
+                var rowBg = alt ? "#F8FAFC" : "#FFFFFF";
+                alt = !alt;
+                var reqDate = item.reqdate.HasValue ? item.reqdate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+                var respDate = item.responsedate.HasValue ? item.responsedate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+                <tr>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.orderno) ? "-" : item.orderno)</td>
+                    <td bgcolor="@rowBg" class="center" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.sts) ? "-" : item.sts)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.RemEmail) ? "-" : item.RemEmail)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.paymode) ? "-" : item.paymode)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.utrno) ? "-" : item.utrno)</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@item.amount.ToString("N2")</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@((item.cashDepositCharge ?? 0m).ToString("N2"))</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@((item.finalAmount ?? 0m).ToString("N2"))</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@reqDate</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@respDate</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="5" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">Total</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalAmount.ToString("N2")</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalCharge.ToString("N2")</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalNet.ToString("N2")</td>
+                <td colspan="2" bgcolor="#EFF6FF">&nbsp;</td>
+            </tr>
+        }
+        else if (transferRows.Any())
+        {
+            var totalAmount = transferRows.Sum(x => x.Balance ?? 0m);
+            var totalCharge = transferRows.Sum(x => x.commission ?? 0m);
+            var totalNet = transferRows.Sum(x => x.TotalBal ?? 0m);
+            <tr><td colspan="10" bgcolor="#EEF2FF" style="font-weight:bold;font-size:11pt;color:#1e40af;">Fund Transfer Details</td></tr>
+            <tr>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Retailer</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Date</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Head</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Collection By</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Balance Type</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Amount</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Charges</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Net T/F</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Transection Id</th>
+                <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Comment</th>
+            </tr>
+            var alt = false;
+            foreach (var item in transferRows)
+            {
+                var rowBg = alt ? "#F8FAFC" : "#FFFFFF";
+                alt = !alt;
+                var retailer = string.IsNullOrWhiteSpace(item.Frm_Name) ? item.RetailerName : item.Frm_Name;
+                if (!string.IsNullOrWhiteSpace(item.Mobile))
+                {
+                    retailer = retailer + " / " + item.Mobile;
+                }
+                var rechargeDate = item.RechargeDate.HasValue ? item.RechargeDate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+                var head = string.IsNullOrWhiteSpace(item.Head) || item.Head == "DirectT" ? "Direct" : item.Head;
+                <tr>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(retailer) ? "-" : retailer)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@rechargeDate</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@head</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.CollectionBy) ? "-" : item.CollectionBy)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.bal_type) ? "-" : item.bal_type)</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@((item.Balance ?? 0m).ToString("N2"))</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@((item.commission ?? 0m).ToString("N2"))</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@((item.TotalBal ?? 0m).ToString("N2"))</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.Transectionid) ? "-" : item.Transectionid)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.comment) ? "-" : item.comment)</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="5" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">Total</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalAmount.ToString("N2")</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalCharge.ToString("N2")</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalNet.ToString("N2")</td>
+                <td colspan="2" bgcolor="#EFF6FF">&nbsp;</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td colspan="10" bgcolor="#FFF7ED" style="font-size:11pt;font-weight:bold;color:#9a3412;text-align:center;">No records found for the selected date range.</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

@@ -2740,6 +2740,18 @@ body.vm-rl-modal-open section.content.retailerList_Page {
     flex-direction: column;
     padding-top: 0;
 }
+
+.vm-rl-create-drawer .vm-ml-create-form .custom-district,
+.vm-rl-create-drawer .vm-ml-create-form .form-group {
+    overflow: visible !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.vm-rl-create-drawer.is-open .select2-container--open {
+    z-index: 100015 !important;
+    position: relative !important;
+}
 .vm-rl-create-drawer.is-open .vm-rl-create-drawer__panel {
     transform: translateX(0);
 }
@@ -5307,6 +5319,64 @@ body.saas-admin-ui .retailerList_Page #mdList {
     table-layout: auto !important;
 }
 
+body.saas-admin-ui.saas-fund-transfer-page .vm-rl-create-drawer .vm-ml-create-form.fund-transfer-form select:not(.select2-hidden-accessible),
+body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form select.for-select2:not(.select2-hidden-accessible),
+body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form select.vm-rl-select-search:not(.select2-hidden-accessible),
+body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form select.vm-admin-select-search:not(.select2-hidden-accessible) {
+    pointer-events: none !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    clip: rect(0, 0, 0, 0) !important;
+    background-image: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+}
+
+body.saas-admin-ui.saas-fund-transfer-page .vm-rl-create-drawer .vm-ml-create-form .select2-container,
+body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form #DealerID + .select2-container,
+body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form #vmRlCreateState + .select2-container,
+body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form #vmRlCreateDistrict + .select2-container,
+body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form .select2-container {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form select.select2-hidden-accessible,
+body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form #DealerID.select2-hidden-accessible,
+body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form #vmRlCreateState.select2-hidden-accessible,
+body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form #vmRlCreateDistrict.select2-hidden-accessible {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    clip: rect(0, 0, 0, 0) !important;
+}
+
+body.saas-admin-ui .vm-rl-create-drawer .select2-search--dropdown,
+body.saas-admin-ui .vm-rl-drawer-select2-dropdown .select2-search--dropdown,
+body.saas-admin-ui .vm-rl-drawer-select2-dropdown .select2-search--dropdown.select2-search--hide {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 52px !important;
+    padding: 8px !important;
+}
+
+body.saas-admin-ui .vm-rl-create-drawer .select2-search--dropdown .select2-search__field,
+body.saas-admin-ui .vm-rl-drawer-select2-dropdown .select2-search__field {
+    display: block !important;
+    width: 100% !important;
+    min-height: 36px !important;
+    pointer-events: auto !important;
+}
+
 /* Create drawer — select2 same as old Retailerlist page */
 body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form .custom-district::after {
     display: none !important;
@@ -5335,8 +5405,50 @@ body.saas-admin-ui .vm-rl-create-drawer .vm-ml-create-form .select2-container {
     max-width: 100% !important;
 }
 
-body.saas-admin-ui .vm-rl-create-drawer .select2-dropdown {
-    z-index: 100010 !important;
+body.saas-admin-ui .select2-dropdown.vm-rl-drawer-select2-dropdown,
+html body.saas-admin-ui .select2-dropdown.vm-rl-drawer-select2-dropdown,
+body.saas-admin-ui.vm-rl-modal-open .select2-dropdown.vm-rl-drawer-select2-dropdown {
+    z-index: 100050 !important;
+    position: absolute !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .select2-dropdown.vm-rl-drawer-select2-dropdown .select2-search--dropdown,
+body.saas-admin-ui .select2-dropdown.vm-rl-drawer-select2-dropdown .select2-search--dropdown.select2-search--hide,
+html body.saas-admin-ui .select2-dropdown.vm-rl-drawer-select2-dropdown .select2-search--dropdown {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 52px !important;
+    padding: 8px 10px !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .select2-dropdown.vm-rl-drawer-select2-dropdown .select2-search__field,
+html body.saas-admin-ui .select2-dropdown.vm-rl-drawer-select2-dropdown .select2-search__field {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    padding: 8px 12px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    pointer-events: auto !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .vm-rl-create-drawer .select2-dropdown,
+body.saas-admin-ui .vm-rl-create-drawer > .select2-dropdown,
+body.saas-admin-ui #vmRlCreateModal > .select2-dropdown.vm-rl-drawer-select2-dropdown {
+    z-index: 100020 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: absolute !important;
 }
 
 body.saas-admin-ui .vm-rl-create-drawer .select2-search--dropdown .select2-search__field {

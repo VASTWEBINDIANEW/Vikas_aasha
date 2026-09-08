@@ -1,0 +1,124 @@
+@model IEnumerable<Vastwebmulti.Models.Autofundtransfermodel>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.Autofundtransfermodel>()).ToList();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var nick = (ViewBag.nickname as string);
+    if (string.IsNullOrWhiteSpace(nick)) { nick = "Retailer"; }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Auto Credit Transfer Setting</title>
+    <style type="text/css">
+        @@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }
+        * { box-sizing: border-box; }
+        body { margin:0; padding:16px; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#0f172a; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        table { page-break-inside:auto; border-collapse:collapse; }
+        tr { page-break-inside:avoid; page-break-after:auto; }
+        thead { display:table-header-group; }
+        .sheet { width:100%; }
+        .hero { width:100%; border:1px solid #1d4ed8; overflow:hidden; }
+        .hero-top { padding:14px 18px; background:#2563eb; color:#fff; }
+        .hero-top h1 { margin:0; font-size:20px; font-weight:700; }
+        .hero-top p { margin:4px 0 0; font-size:11px; color:#dbeafe; }
+        .meta { width:100%; background:#f8fafc; border-top:1px solid #bfdbfe; }
+        .meta td { padding:8px 12px; border-right:1px solid #e2e8f0; vertical-align:top; }
+        .meta td:last-child { border-right:none; }
+        .meta-label { display:block; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748b; margin-bottom:3px; }
+        .meta-value { font-size:12px; font-weight:700; color:#0f172a; }
+        .grid { width:100%; border:1px solid #cbd5e1; margin-top:12px; }
+        .grid th { padding:9px 7px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; color:#fff; background:#334155; border-right:1px solid #1e293b; white-space:nowrap; }
+        .grid td { padding:8px 7px; font-size:11px; color:#1e293b; border-top:1px solid #e2e8f0; border-right:1px solid #e2e8f0; }
+        .grid tbody tr:nth-child(even) td { background:#f8fafc; }
+        .empty { padding:36px 16px; text-align:center; font-size:14px; font-weight:700; color:#64748b; background:#f8fafc; }
+        .foot { margin-top:10px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:10px; color:#94a3b8; text-align:center; }
+        .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:10px; font-weight:700; }
+        .pill-credit { background:#fff7ed; color:#c2410c; border:1px solid #fdba74; }
+        .pill-cash { background:#ecfdf5; color:#047857; border:1px solid #86efac; }
+        .pill-on { background:#ecfdf5; color:#047857; border:1px solid #86efac; }
+        .pill-off { background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; }
+    </style>
+</head>
+<body>
+<div class="sheet">
+    <div class="hero">
+        <div class="hero-top">
+            <h1>Auto Credit Transfer Setting</h1>
+            <p>Dealer auto fund transfer to @nick</p>
+        </div>
+        <table class="meta" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:50%;"><span class="meta-label">Generated On</span><span class="meta-value">@generatedOn</span></td>
+                <td style="width:50%;"><span class="meta-label">Records</span><span class="meta-value">@rows.Count</span></td>
+            </tr>
+        </table>
+    </div>
+
+    <table class="grid" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Firm Details</th>
+                <th>Min Balance &#8377;</th>
+                <th>Transfer Amt &#8377;</th>
+                <th>Day Count</th>
+                <th>Credit Limit &#8377;</th>
+                <th>Last Trans Date</th>
+                <th>Transfer Type</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (rows.Any())
+            {
+                foreach (var item in rows)
+                {
+                    var isCredit = item.types != null && item.types.ToUpper() == "CREDIT";
+                    var isOn = item.status == "Y";
+                    var lastDate = item.transferdatetime.HasValue
+                        ? item.transferdatetime.Value.ToString("dd-MMM-yyyy hh:mm tt")
+                        : "-";
+                    <tr>
+                        <td>@(string.IsNullOrWhiteSpace(item.Name) ? "-" : item.Name)</td>
+                        <td>@(item.minimiumamount.HasValue ? item.minimiumamount.Value.ToString("N2") : "-")</td>
+                        <td>@(item.transferamount.HasValue ? item.transferamount.Value.ToString("N2") : "-")</td>
+                        <td>@(item.totaltransfer.HasValue ? item.totaltransfer.Value.ToString() : "-")</td>
+                        <td>@(item.MaxCredit.HasValue ? item.MaxCredit.Value.ToString("N2") : "-")</td>
+                        <td>@lastDate</td>
+                        <td>
+                            @if (isCredit)
+                            {
+                                <span class="pill pill-credit">BY CREDIT</span>
+                            }
+                            else
+                            {
+                                <span class="pill pill-cash">BY CASH</span>
+                            }
+                        </td>
+                        <td>
+                            @if (isOn)
+                            {
+                                <span class="pill pill-on">ON</span>
+                            }
+                            else
+                            {
+                                <span class="pill pill-off">OFF</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="empty">No auto fund transfer records found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="foot">Generated from Dealer panel - Auto Credit Transfer Setting</div>
+</div>
+</body>
+</html>

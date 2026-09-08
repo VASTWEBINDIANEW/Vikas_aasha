@@ -477,6 +477,18 @@
         border: 1.5px solid #cbd5e1 !important; background: #fff !important;
         color: #1e293b !important; padding: 4px 10px !important;
     }
+    .rc-filter-bar .select2-container { width: 100% !important; z-index: 20; }
+    .rc-filter-bar .select2-container--default .select2-selection--single {
+        height: 32px !important; border-radius: 8px !important;
+        border: 1.5px solid #cbd5e1 !important; background: #fff !important;
+    }
+    .rc-filter-bar .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 30px !important; font-size: .76rem !important; color: #1e293b !important;
+        padding-left: 10px !important; padding-right: 28px !important;
+    }
+    .rc-filter-bar .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 30px !important;
+    }
 
     /* -- Inner tables (classic covered look) -- */
     .Retailer_Creation_Charge_Page .rc-inner-table {
@@ -689,7 +701,172 @@
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
 <script>
-    var ravi = $.noConflict();
+    var ravi = jQuery;
+
+    function rcIsTokenErrorMessage(response) {
+        return typeof response === 'string' && (
+            response === 'Insufficient balance.' ||
+            response === 'Set Token Value.' ||
+            response === 'Set the Dealer token Value.' ||
+            response === 'Token Can Not Be Negative'
+        );
+    }
+
+    function rcResetDlmTokenModal() {
+        ravi('#tokenCount').val(1);
+        ravi('#showPhysicalCount').text('1');
+        ravi('#btnChildMinus').prop('disabled', true);
+        ravi('#Lblmsg').text('');
+        ravi('#ddlDealer').val('').trigger('change');
+    }
+
+    function rcResetMdTokenModal() {
+        ravi('#tokenCount2').val(1);
+        ravi('#showPhysicalCount2').text('1');
+        ravi('#btnChildMinus2').prop('disabled', true);
+        ravi('#Lblmsg2').text('');
+        ravi('#ddlMaster').val('').trigger('change');
+    }
+
+    function rcRenderDlmTokenRows(rows) {
+        var html = '';
+        if (rows && rows.length) {
+            ravi.each(rows, function (a, b) {
+                var dt = b.CteatedOn
+                    ? converttoDate(new Date(parseInt(String(b.CteatedOn).replace(/\/Date\((\d+)\)\//, '$1'))))
+                    : (b.CteatedOn || '');
+                html += '<tr><td>' + (b.Email || '') + '</td><td>' + b.Tokens + '</td><td>' + b.PerTokenValue +
+                    '</td><td>' + b.TotalDebit + '</td><td>' + b.DealerPost + '</td><td>' + b.pre +
+                    '</td><td>' + b.post + '</td><td>' + dt + '</td></tr>';
+            });
+        } else {
+            html = '<tr><td colspan="8" class="rc-empty-row">No records found</td></tr>';
+        }
+        ravi('#DLM_BuyTokenHistory > tbody').html(html);
+    }
+
+    function rcRenderMdTokenRows(rows) {
+        var html = '';
+        if (rows && rows.length) {
+            ravi.each(rows, function (a, b) {
+                var dt = b.CteatedOn
+                    ? converttoDate(new Date(parseInt(String(b.CteatedOn).replace(/\/Date\((\d+)\)\//, '$1'))))
+                    : (b.CteatedOn || '');
+                html += '<tr><td>' + (b.Email || '') + '</td><td>' + b.Tokens + '</td><td>' + b.PerTokenValue +
+                    '</td><td>' + b.TotalDebit + '</td><td>' + b.MasterPost + '</td><td>' + b.pre +
+                    '</td><td>' + b.post + '</td><td>' + dt + '</td></tr>';
+            });
+        } else {
+            html = '<tr><td colspan="8" class="rc-empty-row">No records found</td></tr>';
+        }
+        ravi('#MD_BuyTokenHistory > tbody').html(html);
+    }
+
+    function rcSubmitDlmToken() {
+        var dealerId = ravi('#ddlDealer').val();
+        var tokenCount = parseInt(ravi('#tokenCount').val(), 10) || 0;
+
+        if (!dealerId) {
+            swal('Oops!', 'Please select a distributor.', 'error');
+            return;
+        }
+        if (tokenCount < 1) {
+            swal('Oops!', 'Token count must be at least 1.', 'error');
+            return;
+        }
+
+        swal({
+            title: 'Verify & Sale Token?',
+            text: 'Sale ' + tokenCount + ' token(s) to selected distributor?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#2563eb',
+            confirmButtonText: 'Yes, Sale Token',
+            cancelButtonText: 'Cancel'
+        }, function (isConfirm) {
+            if (!isConfirm) { return; }
+
+            ravi('#DlmbtnSubmit').prop('disabled', true);
+            ravi.ajax({
+                url: '@Url.Action("addJoiningToken","Home")',
+                type: 'POST',
+                dataType: 'json',
+                data: { ddlDealer: dealerId, tokenCount: tokenCount },
+                cache: false,
+                success: function (response) {
+                    ravi('#DlmbtnSubmit').prop('disabled', false);
+                    if (rcIsTokenErrorMessage(response)) {
+                        ravi('#Lblmsg').css('color', 'red').text(response);
+                        swal('Oops!', response, 'error');
+                        return;
+                    }
+                    if (ravi.isArray(response)) {
+                        swal('Good job!', 'Token credited successfully.', 'success');
+                        setTimeout(function () { location.reload(); }, 800);
+                        return;
+                    }
+                    swal('Oops!', 'Unexpected response from server.', 'error');
+                },
+                error: function () {
+                    ravi('#DlmbtnSubmit').prop('disabled', false);
+                    swal('Oops!', 'Failed to sale token. Please try again.', 'error');
+                }
+            });
+        });
+    }
+
+    function rcSubmitMdToken() {
+        var masterId = ravi('#ddlMaster').val();
+        var tokenCount = parseInt(ravi('#tokenCount2').val(), 10) || 0;
+
+        if (!masterId) {
+            swal('Oops!', 'Please select a master distributor.', 'error');
+            return;
+        }
+        if (tokenCount < 1) {
+            swal('Oops!', 'Token count must be at least 1.', 'error');
+            return;
+        }
+
+        swal({
+            title: 'Verify & Sale Token?',
+            text: 'Sale ' + tokenCount + ' token(s) to selected master?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#2563eb',
+            confirmButtonText: 'Yes, Sale Token',
+            cancelButtonText: 'Cancel'
+        }, function (isConfirm) {
+            if (!isConfirm) { return; }
+
+            ravi('#MdbtnSubmit').prop('disabled', true);
+            ravi.ajax({
+                url: '@Url.Action("addJoiningTokenMaster","Home")',
+                type: 'POST',
+                dataType: 'json',
+                data: { ddlMaster: masterId, tokenCount: tokenCount },
+                cache: false,
+                success: function (response) {
+                    ravi('#MdbtnSubmit').prop('disabled', false);
+                    if (rcIsTokenErrorMessage(response)) {
+                        ravi('#Lblmsg2').css('color', 'red').text(response);
+                        swal('Oops!', response, 'error');
+                        return;
+                    }
+                    if (ravi.isArray(response)) {
+                        swal('Good job!', 'Token credited successfully.', 'success');
+                        setTimeout(function () { location.reload(); }, 800);
+                        return;
+                    }
+                    swal('Oops!', 'Unexpected response from server.', 'error');
+                },
+                error: function () {
+                    ravi('#MdbtnSubmit').prop('disabled', false);
+                    swal('Oops!', 'Failed to sale token. Please try again.', 'error');
+                }
+            });
+        });
+    }
 
     /* -- Select2 init (exclude filters + modal selects) -- */
     function rcInitPageSelect2() {
@@ -711,8 +888,25 @@
         });
     }
 
+    function rcInitMasterFilterSelect2() {
+        var $sel = ravi('#masterId');
+        if (!$sel.length || typeof $sel.select2 !== 'function') { return; }
+        if ($sel.hasClass('select2-hidden-accessible')) {
+            $sel.select2('destroy');
+        }
+        $sel.select2({
+            width: '100%',
+            placeholder: 'All Masters',
+            allowClear: false
+        });
+        $sel.off('change.rcMasterFilter').on('change.rcMasterFilter', function () {
+            if (typeof md_ddlVal === 'function') { md_ddlVal(); }
+        });
+    }
+
     ravi(document).ready(function () {
         rcInitPageSelect2();
+        rcInitMasterFilterSelect2();
         ravi('#defaultModal, #defaultModal2, #myModalnew').appendTo('body');
         ravi('#defaultModal').on('shown.bs.modal', function () { rcInitModalSelect2('#defaultModal'); });
         ravi('#defaultModal2').on('shown.bs.modal', function () { rcInitModalSelect2('#defaultModal2'); });
@@ -724,7 +918,7 @@
             });
         });
     });
-    $(document).ajaxComplete(function () { rcInitPageSelect2(); });
+    ravi(document).ajaxComplete(function () { rcInitPageSelect2(); });
 
     /* -- Left tab switching -- */
     function rcLeftTab(panelId, btnId) {
@@ -757,19 +951,20 @@
         }
         if (panelId === 'rc-rpanel-dlm' && typeof dlm_ddlVal === 'function') { dlm_ddlVal(); }
         if (panelId === 'rc-rpanel-md' && typeof md_ddlVal === 'function') { md_ddlVal(); }
+        if (panelId === 'rc-rpanel-md' && typeof rcInitMasterFilterSelect2 === 'function') { rcInitMasterFilterSelect2(); }
     }
 
     /* -- Remain tokens AJAX -- */
     function md_dlm_remainTkn() {
-        $.ajax({
+        ravi.ajax({
             url: '@Url.Action("_Md_dlm_RemainToken","Home")',
             type: 'GET', cache: false,
             success: function (response) {
-                var $r = $('<div>').html(response);
+                var $r = ravi('<div>').html(response);
                 var mdHtml = $r.find('#rc-remain-md-content').html();
                 var dlmHtml = $r.find('#rc-remain-dlm-content').html();
-                if (mdHtml)  { $('#rc-remain-md').html(mdHtml); }
-                if (dlmHtml) { $('#rc-remain-dlm').html(dlmHtml); }
+                if (mdHtml)  { ravi('#rc-remain-md').html(mdHtml); }
+                if (dlmHtml) { ravi('#rc-remain-dlm').html(dlmHtml); }
             }
         });
     }
@@ -859,49 +1054,29 @@
 
     /* -- Distributor token history -- */
     function dlm_ddlVal() {
-        $.ajax({
+        ravi.ajax({
             url: '@Url.Action("DLM_BuyTokenHistory","Home")',
             type: 'POST',
-            data: { dealerId: $("#dlmId").val() || '' }, cache: false,
+            data: { dealerId: ravi("#dlmId").val() || '' }, cache: false,
+            dataType: 'json',
             success: function (dlmresponse) {
-                var html = "";
-                if (dlmresponse && dlmresponse.length) {
-                    $.each(dlmresponse, function (a, b) {
-                        var dt = b.CteatedOn ? converttoDate(new Date(parseInt(String(b.CteatedOn).replace(/\/Date\((\d+)\)\//, '$1')))) : (b.CteatedOn || '');
-                        html += "<tr><td>" + (b.Email || '') + "</td><td>" + b.Tokens + "</td><td>" + b.PerTokenValue +
-                                "</td><td>" + b.TotalDebit + "</td><td>" + b.DealerPost + "</td><td>" + b.pre +
-                                "</td><td>" + b.post + "</td><td>" + dt + "</td></tr>";
-                    });
-                } else {
-                    html = '<tr><td colspan="8" class="rc-empty-row">No records found</td></tr>';
-                }
-                $('#DLM_BuyTokenHistory > tbody').html(html);
+                rcRenderDlmTokenRows(dlmresponse);
             }
         });
     }
 
     /* -- Master token history -- */
     function md_ddlVal() {
-        $.ajax({
+        ravi.ajax({
             url: '@Url.Action("MD_BuyTokenHistory","Home")',
             type: 'POST',
-            data: { masterId: $("#masterId").val() || '' }, cache: false,
+            data: { masterId: ravi("#masterId").val() || '' }, cache: false,
+            dataType: 'json',
             success: function (mdresponse) {
-                var html = "";
-                if (mdresponse && mdresponse.length) {
-                    $.each(mdresponse, function (a, b) {
-                        var dt = b.CteatedOn ? converttoDate(new Date(parseInt(String(b.CteatedOn).replace(/\/Date\((\d+)\)\//, '$1')))) : '';
-                        html += "<tr><td>" + (b.Email || '') + "</td><td>" + b.Tokens + "</td><td>" + b.PerTokenValue +
-                                "</td><td>" + b.TotalDebit + "</td><td>" + b.MasterPost + "</td><td>" + b.pre +
-                                "</td><td>" + b.post + "</td><td>" + dt + "</td></tr>";
-                    });
-                } else {
-                    html = '<tr><td colspan="8" class="rc-empty-row">No records found</td></tr>';
-                }
-                $('#MD_BuyTokenHistory > tbody').html(html);
+                rcRenderMdTokenRows(mdresponse);
             },
             error: function () {
-                $('#MD_BuyTokenHistory > tbody').html('<tr><td colspan="8" class="rc-empty-row">Failed to load data</td></tr>');
+                ravi('#MD_BuyTokenHistory > tbody').html('<tr><td colspan="8" class="rc-empty-row">Failed to load data</td></tr>');
             }
         });
     }
@@ -918,76 +1093,41 @@
 
     /* -- Token counter (Distributor) -- */
     function onPluseMinus(v) {
-        event.stopPropagation();
-        var n = parseInt($('#tokenCount').val());
+        if (window.event) { window.event.stopPropagation(); }
+        var n = parseInt(ravi('#tokenCount').val(), 10) || 0;
         var newVal = v >= 0 ? n + v : n - 1;
-        $('#tokenCount').val(newVal);
-        $('#showPhysicalCount').html(newVal);
-        $('#btnChildMinus').prop('disabled', newVal <= 0);
+        if (newVal < 0) { newVal = 0; }
+        ravi('#tokenCount').val(newVal);
+        ravi('#showPhysicalCount').html(newVal);
+        ravi('#btnChildMinus').prop('disabled', newVal <= 0);
     }
 
     /* -- Token counter (Master) -- */
     function onPluseMinuss(v) {
-        event.stopPropagation();
-        var n = parseInt($('#tokenCount2').val());
+        if (window.event) { window.event.stopPropagation(); }
+        var n = parseInt(ravi('#tokenCount2').val(), 10) || 0;
         var newVal = v >= 0 ? n + v : n - 1;
-        $('#tokenCount2').val(newVal);
-        $('#showPhysicalCount2').html(newVal);
-        $('#btnChildMinus2').prop('disabled', newVal <= 0);
+        if (newVal < 0) { newVal = 0; }
+        ravi('#tokenCount2').val(newVal);
+        ravi('#showPhysicalCount2').html(newVal);
+        ravi('#btnChildMinus2').prop('disabled', newVal <= 0);
     }
 
-    /* -- Add Token: Distributor -- */
-    $('#DlmbtnSubmit').click(function () {
-        $.ajax({
-            url: '@Url.Action("addJoiningToken","Home")',
-            type: 'POST',
-            data: { ddlDealer: $("#ddlDealer").val(), tokenCount: $("#tokenCount").val() }, cache: false,
-            success: function (response) {
-                if (response == "Insufficient balance." || response == "Set the Dealer token Value." || response == "Token Can Not Be Negative") {
-                    $("#Lblmsg").css("color", 'red').text(response);
-                } else {
-                    $("#Lblmsg").css("color", 'green').text("Credited Successfully.");
-                    setTimeout(function () { $("#Lblmsg").text(''); $("#defaultModal").modal('hide'); dlm_ddlVal(); md_dlm_remainTkn(); }, 1000);
-                }
-            }
-        });
-    });
-
-    /* -- Add Token: Master -- */
-    $('#MdbtnSubmit').click(function () {
-        $.ajax({
-            url: '@Url.Action("addJoiningTokenMaster","Home")',
-            type: 'POST',
-            data: { ddlMaster: $("#ddlMaster").val(), tokenCount: $("#tokenCount2").val() }, cache: false,
-            success: function (response) {
-                if (response == "Insufficient balance." || response == "Set the Dealer token Value." || response == "Token Can Not Be Negative") {
-                    $("#Lblmsg2").css("color", 'red').text(response);
-                } else {
-                    $("#Lblmsg2").css("color", 'green').text("Credited Successfully.");
-                    setTimeout(function () { $("#Lblmsg2").text(''); $("#defaultModal2").modal('hide'); md_ddlVal(); md_dlm_remainTkn(); }, 1000);
-                }
-            }
-        });
-    });
-
     /* -- Retailer capping reload after save -- */
-    $('#retailercapping').click(function () { location.reload(); });
-
-    /* -- Paid service edit by ID -- */
     function Editmode(id) {
-        $.ajax({
+        ravi.ajax({
             url: '@Url.Action("PaidServicesChargeByID","Home")',
             data: { id: id },
-            success: function (data) { $('#paidservicetbl').html(data); }
+            success: function (data) { ravi('#paidservicetbl').html(data); }
         });
     }
 
     /* -- Referral setting -- */
     function refferalsetup(numberee, statuss) {
-        $.ajax({
+        ravi.ajax({
             url: '@Url.Action("Refferal_Setting", "Home")',
             type: 'POST', data: { status123: statuss, limit123: numberee }, cache: false,
-            success: function (dlmresponse) { $('#refferalsetinpartial').html(dlmresponse); }
+            success: function (dlmresponse) { ravi('#refferalsetinpartial').html(dlmresponse); }
         });
     }
 
@@ -1006,7 +1146,19 @@
     function OnFailed() { swal("Oops!", "Failed to update.", "error"); }
 
     /* -- On page load -- */
-    $(document).ready(function () {
+    ravi(document).ready(function () {
+        ravi('#DlmbtnSubmit').off('click.rcToken').on('click.rcToken', function (e) {
+            e.preventDefault();
+            rcSubmitDlmToken();
+        });
+        ravi('#MdbtnSubmit').off('click.rcToken').on('click.rcToken', function (e) {
+            e.preventDefault();
+            rcSubmitMdToken();
+        });
+        ravi('#retailercapping').off('click.rcCapping').on('click.rcCapping', function () { location.reload(); });
+        ravi('#defaultModal').on('hidden.bs.modal', function () { rcResetDlmTokenModal(); });
+        ravi('#defaultModal2').on('hidden.bs.modal', function () { rcResetMdTokenModal(); });
+
         var from = '@ViewBag.fromdate';
         var to   = '@ViewBag.todate';
         if (typeof fundreciveonload === 'function') fundreciveonload(from, to);

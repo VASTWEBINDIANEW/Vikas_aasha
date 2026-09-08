@@ -1499,7 +1499,7 @@ body.saas-admin-ui .vm-csp-modal .vm-sm-modal-field label {
     color: #64748b !important;
 }
 
-body.saas-admin-ui .vm-csp-modal .vm-sm-modal-field .form-control {
+body.saas-admin-ui .vm-csp-modal .vm-sm-modal-field .form-control:not(select.select2-hidden-accessible) {
     width: 100% !important;
     height: 40px !important;
     min-height: 40px !important;
@@ -1526,8 +1526,8 @@ body.saas-admin-ui .vm-csp-modal .vm-csp-modal-select-wrap {
     width: 100% !important;
 }
 
-body.saas-admin-ui .vm-csp-modal .vm-csp-modal-select-wrap select.vm-csp-modal-select,
-body.saas-admin-ui .vm-csp-modal select.vm-csp-modal-select {
+body.saas-admin-ui .vm-csp-modal .vm-csp-modal-select-wrap select.vm-csp-modal-select:not(.select2-hidden-accessible),
+body.saas-admin-ui .vm-csp-modal select.vm-csp-modal-select:not(.select2-hidden-accessible) {
     width: 100% !important;
     max-width: 100% !important;
     display: block !important;
@@ -1586,7 +1586,7 @@ body.saas-admin-ui .vm-csp-modal .select2-dropdown {
     border: 1px solid #e2e8f0 !important;
     border-radius: 10px !important;
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14) !important;
-    overflow: hidden !important;
+    overflow: visible !important;
 }
 
 body.saas-admin-ui .vm-csp-modal.vm-csp-select2-open .modal-dialog,
@@ -1596,16 +1596,25 @@ body.saas-admin-ui .vm-csp-modal.vm-csp-select2-open .vm-sm-modal-body {
     overflow: visible !important;
 }
 
-body.saas-admin-ui .vm-csp-modal .vm-csp-modal-select-wrap select.select2-hidden-accessible {
+body.saas-admin-ui .vm-csp-modal .vm-csp-modal-select-wrap select.select2-hidden-accessible,
+body.saas-admin-ui .vm-csp-modal .vm-sm-modal-field select.form-control.select2-hidden-accessible,
+body.saas-admin-ui .vm-csp-modal select.vm-csp-modal-select.select2-hidden-accessible {
     position: absolute !important;
     width: 1px !important;
     height: 1px !important;
-    margin: -1px !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
     padding: 0 !important;
     border: 0 !important;
     clip: rect(0, 0, 0, 0) !important;
     overflow: hidden !important;
+    opacity: 0 !important;
     pointer-events: none !important;
+    display: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    background: transparent !important;
 }
 
 body.saas-admin-ui .vm-csp-modal .vm-csp-modal-select-wrap .select2-container,
@@ -1614,6 +1623,18 @@ body.saas-admin-ui .vm-csp-modal .vm-rl-select-search + .select2-container {
     max-width: 100% !important;
     display: block !important;
     pointer-events: auto !important;
+    position: relative !important;
+    z-index: 5 !important;
+}
+
+body.saas-admin-ui .vm-csp-modal .vm-csp-modal-select-wrap:has(.select2-container) select.for-select2:not(.select2-hidden-accessible) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
 }
 
 body.saas-admin-ui .vm-csp-modal .vm-csp-modal-select-wrap select.for-select2:not(.select2-hidden-accessible) {
@@ -1695,7 +1716,7 @@ body.saas-admin-ui.modal-open .select2-dropdown.vm-csp-select2-dropdown {
     border: 1px solid #e2e8f0 !important;
     border-radius: 10px !important;
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14) !important;
-    overflow: hidden !important;
+    overflow: visible !important;
 }
 
 body.saas-admin-ui.modal-open .select2-dropdown {

@@ -1,4 +1,4 @@
-    <script src="~/MainFrontDesign/js/admin-modal-fix.js"></script>
+    <script src="~/MainFrontDesign/js/admin-modal-fix.js?v=7"></script>
     <script>
         (function ($) {
             window.hideSaasPageLoader = function () {
@@ -566,36 +566,159 @@
         })(jQuery);
     </script>
 
-    <script src="~/select2/dist/js/select2.js"></script>
-    <script src="~/MainFrontDesign/js/admin-select2-global.js?v=18"></script>
-    <script src="~/MainFrontDesign/js/admin-report-select2.js?v=6"></script>
+    <script src="~/select2/dist/js/select2.full.js"></script>
+    <script>window.vmAdminJq = window.jQuery;</script>
+    <script src="~/MainFrontDesign/js/admin-select2-global.js?v=37"></script>
+    <script src="~/MainFrontDesign/js/admin-report-select2.js?v=7"></script>
     <script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
     <script>
         (function ($) {
             'use strict';
-            if (!$ || typeof window.finalizeAdminSelect2Boot !== 'function') {
+            if (!$) {
                 return;
             }
-            window.finalizeAdminSelect2Boot();
-            $(window).on('load', function () {
+            if (typeof window.reconcileAdminSelect2Wrapper === 'function') {
+                window.reconcileAdminSelect2Wrapper();
+            }
+            if (typeof window.bootAdminSelect2AfterAdminShell === 'function') {
+                window.bootAdminSelect2AfterAdminShell();
+            } else if (typeof window.finalizeAdminSelect2Boot === 'function') {
                 window.finalizeAdminSelect2Boot();
+            }
+            $(window).on('load', function () {
+                if (typeof window.reconcileAdminSelect2Wrapper === 'function') {
+                    window.reconcileAdminSelect2Wrapper();
+                }
+                if (typeof window.bootAdminSelect2AfterAdminShell === 'function') {
+                    window.bootAdminSelect2AfterAdminShell();
+                } else if (typeof window.finalizeAdminSelect2Boot === 'function') {
+                    window.finalizeAdminSelect2Boot();
+                }
             });
         })(window.jQuery);
     </script>
     <script>
         (function ($) {
-            if (!$) { return; }
-            $(document).on('select2:open.dealerAlwaysSearch', function () {
-                var $wrap = $('.select2-container--open .select2-search--dropdown');
-                $wrap.removeClass('select2-search--hide').css('display', 'block');
-                var $field = $wrap.find('.select2-search__field');
-                if ($field.length) {
-                    if (!$field.attr('placeholder')) {
-                        $field.attr('placeholder', 'Search');
-                    }
-                    window.setTimeout(function () { $field.trigger('focus'); }, 0);
+            'use strict';
+            if (!$ || !$.fn.select2) { return; }
+
+            function destroyDealerFtSelect2El($el) {
+                if (!$el || !$el.length) { return; }
+                if ($.fn.selectpicker && ($el.hasClass('selectpicker') || $el.parent('.bootstrap-select').length)) {
+                    try { $el.selectpicker('destroy'); } catch (ignore) { }
                 }
+                if ($el.hasClass('select2-hidden-accessible')) {
+                    try { $el.select2('destroy'); } catch (ignore) { }
+                }
+                $el.next('.select2-container').remove();
+            }
+
+            function getDealerFtSelect2Opts($el) {
+                var opts = window.getAdminSelect2Options ? window.getAdminSelect2Options($el) : {
+                    width: '100%',
+                    dropdownParent: window.getAdminSelect2DropdownParent ? window.getAdminSelect2DropdownParent($el) : $(document.body),
+                    minimumResultsForSearch: 0,
+                    allowClear: false
+                };
+                opts.minimumResultsForSearch = 0;
+                opts.width = '100%';
+                if (window.getAdminSelect2DropdownParent) {
+                    opts.dropdownParent = window.getAdminSelect2DropdownParent($el);
+                }
+                return opts;
+            }
+
+            window.initDealerFundTransferPageSelect2 = function ($scope) {
+                if (!$('section.saas-dealer-fund-transfer-page').length) { return; }
+
+                var $targets;
+                if ($scope && $scope.length) {
+                    $targets = $scope.is('select') ? $scope : $scope.find('select.for-select2, select.vm-opr-select');
+                } else {
+                    $targets = $(
+                        'section.saas-dealer-fund-transfer-page .fund-transfer-form select.for-select2,' +
+                        'section.saas-dealer-fund-transfer-page .tab-pane.active select.for-select2,' +
+                        'section.saas-dealer-fund-transfer-page .vm-ft-history-toolbar select.for-select2'
+                    );
+                }
+
+                $targets.each(function () {
+                    var $el = $(this);
+                    if (!$el.closest('section.saas-dealer-fund-transfer-page').length) { return; }
+                    if (!$el.is(':visible')) { return; }
+
+                    destroyDealerFtSelect2El($el);
+                    $el.attr('data-live-search', 'true');
+                    $el.select2(getDealerFtSelect2Opts($el));
+                });
+
+                if (typeof window.forceDealerFtFontSize === 'function') {
+                    window.forceDealerFtFontSize();
+                }
+            };
+
+            window.initDealerMyUserSelect2 = function () {
+                window.initDealerFundTransferPageSelect2($('#ddlretailerID'));
+            };
+
+            $(document).on('select2:open.dealerFtAllSearch', 'section.saas-dealer-fund-transfer-page select.for-select2', function () {
+                var $el = $(this);
+                var placeholder = ($el.attr('data-search-placeholder') || $el.attr('data_search_placeholder') || '').trim();
+                if (!placeholder && typeof window.getAdminSelect2SearchPlaceholder === 'function') {
+                    placeholder = window.getAdminSelect2SearchPlaceholder($el);
+                }
+                if (!placeholder) {
+                    placeholder = 'Search...';
+                }
+                if (typeof window.ensureAdminSelect2SearchVisible === 'function') {
+                    window.ensureAdminSelect2SearchVisible($el, placeholder);
+                    window.setTimeout(function () {
+                        window.ensureAdminSelect2SearchVisible($el, placeholder);
+                    }, 50);
+                    return;
+                }
+                window.setTimeout(function () {
+                    var $wrap = $('.select2-search--dropdown').last();
+                    $wrap.removeClass('select2-search--hide').css('display', 'block');
+                    var $field = $wrap.find('.select2-search__field');
+                    if ($field.length) {
+                        $field.attr('placeholder', placeholder);
+                        $field.trigger('focus');
+                    }
+                }, 0);
+            });
+
+            function bootDealerFundTransferAllSelect2() {
+                window.initDealerFundTransferPageSelect2();
+            }
+
+            bootDealerFundTransferAllSelect2();
+            $(function () { bootDealerFundTransferAllSelect2(); });
+            $(window).on('load.dealerFundTransferAllSelect2', function () {
+                bootDealerFundTransferAllSelect2();
+                window.setTimeout(bootDealerFundTransferAllSelect2, 150);
+                window.setTimeout(bootDealerFundTransferAllSelect2, 400);
+                window.setTimeout(bootDealerFundTransferAllSelect2, 900);
+                window.setTimeout(bootDealerFundTransferAllSelect2, 1800);
             });
         })(window.jQuery);
     </script>
     <script src="~/MainFrontDesign/js/admin-dynamic-theme.js?v=11"></script>
+    <link href="~/MainFrontDesign/css/vm.css?v=4" rel="stylesheet" />
+    <script src="~/MainFrontDesign/js/vm.js?v=5"></script>
+    <script>
+        (function ($) {
+            'use strict';
+            if (!$) {
+                return;
+            }
+            if (typeof window.bootVmAdminSelectSearch === 'function') {
+                window.bootVmAdminSelectSearch();
+            }
+            $(window).on('load', function () {
+                if (typeof window.bootVmAdminSelectSearch === 'function') {
+                    window.bootVmAdminSelectSearch();
+                }
+            });
+        })(window.vmAdminJq || window.jQuery);
+    </script>

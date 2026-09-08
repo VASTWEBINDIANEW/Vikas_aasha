@@ -13,374 +13,347 @@
             ViewBag.nickname = favimage;
         }
     }
+    var nick = (ViewBag.nickname as string);
+    if (string.IsNullOrWhiteSpace(nick)) { nick = "Master"; }
 }
-<style>
-    .fund-t-dalear input {
-        border: 1px solid #dddddd;
-        height: 32px;
-        padding: 0px 5px;
-        width: 100%;
-        padding-left: 40px;
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-fund-transfer-fonts.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-fund-transfer-mobile.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page', 'saas-dealer-fund-transfer-page', 'saas-dealer-wallet-request-page');</script>
+<style type="text/css">
+    /* Wallet Request — full-width layout (match FundTransferDealer) */
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page {
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+        padding: 6px 10px 12px !important;
+        min-height: calc(100vh - var(--admin-header-height, 58px)) !important;
+        display: flex !important;
+        flex-direction: column !important;
     }
 
-    .fund-t-dalear button {
-        height: 32px;
-        border: 1px solid #c7c2c2;
-        background: #dedddd;
-        padding: 0px 20px
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-page-shell.container-fluid,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-layout-wrap,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-layout.vm-ft-layout--full {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        float: none !important;
+        box-sizing: border-box !important;
     }
 
-    .tab-menur li a.active-ar {
-        color: var(--main-bg-lcolor);
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-layout.vm-ft-layout--full {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        flex: 1 1 auto !important;
+        min-height: calc(100vh - var(--admin-header-height, 58px) - 72px) !important;
     }
 
-    .select2-selection.select2-selection--single {
-        border-radius: 0px !important;
-        height: 32px !important;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-form-col {
+        flex: 0 0 32% !important;
+        max-width: 32% !important;
+        width: 32% !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+        float: none !important;
     }
 
-    .nav-tabs li.active .for-change-fund .fa {
-        float: left;
-        font-size: 44px;
-        transform: rotate(-90deg);
-        margin-left: 5px;
-        color: var(--main-bg-lcolor) !important;
-        margin-top: -2px;
-        line-height: 36px;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-history-col {
+        flex: 1 1 0 !important;
+        max-width: none !important;
+        width: auto !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+        float: none !important;
     }
 
-    .for-change-fund .select2.select2-container.select2-container--default {
-        width: 220px !important;
-        text-align: left;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .fund-trasfer-left.vm-ft-form-card,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .fund-trasfer-right.vm-ft-history-panel {
+        height: 100% !important;
+        min-height: calc(100vh - var(--admin-header-height, 58px) - 88px) !important;
     }
 
-    .for-change-fund select {
-        width: 220px !important;
-        height: 32px;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-history-body.walletrequest-tabledataclass {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
     }
 
-    .for-change-fund {
-        margin: 0px;
-        width: 100%;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-table-wrap,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page #tblshowMasterD {
+        flex: 1 1 auto !important;
+        min-height: 320px !important;
     }
 
-        .for-change-fund select {
-            width: 220px !important;
-            height: 30px;
-        }
-
-        .for-change-fund .select2.select2-container.select2-container--default {
-            width: 220px !important;
-            text-align: left;
-        }
-
-    .fund-fistory {
-        float: left;
-        margin-top: 0px;
-        font-size: 18px;
-        font-weight: 600;
-        text-transform: uppercase;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .width100.float-left.tab-pane,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .tabcurrent-seconddesign {
+        float: none !important;
+        width: 100% !important;
     }
 
-        .fund-fistory sub {
-            position: absolute;
-            bottom: 4px !important;
-            top: 24px;
-            line-height: 8px;
-            left: 11px;
-            font-size: 9px;
-        }
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .fund-transfer-form .col-md-12 {
+        float: none !important;
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 
-    .tab-menur li a::before {
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .tab-menur {
+        margin: 8px 0 12px !important;
+        padding: 0 !important;
+        float: none !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .tab-menur ul {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+        width: 100% !important;
+        float: none !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .tab-menur li {
+        flex: 1 1 calc(50% - 4px) !important;
+        margin: 0 !important;
+        float: none !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .tab-menur .tab-ar {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        min-height: 38px !important;
+        padding: 8px 10px !important;
+        border-radius: 10px !important;
+        border: 1.5px solid #e2e8f0 !important;
+        background: #f8fafc !important;
+        color: #475569 !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .tab-menur .tab-ar.active-ar {
+        border-color: #2563eb !important;
+        background: linear-gradient(135deg, #eff6ff, #dbeafe) !important;
+        color: #1d4ed8 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .tab-menur .tab-ar::before {
         content: '';
-        width: 12px;
-        height: 12px;
-        display: inline-block;
-        border: 2px solid #bbb;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
-        margin: 2px 6px 0px 0px;
+        border: 2px solid #cbd5e1;
+        margin-right: 6px;
+        flex-shrink: 0;
     }
 
-    .tab-menur li a.active-ar::before {
-        border-color: var(--main-bg-lcolor);
-        background: var(--main-bg-lcolor);
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .tab-menur .tab-ar.active-ar::before {
+        border-color: #2563eb;
+        background: #2563eb;
     }
 
-    .tab-menur ul li a.active-ar {
-        background-color: transparent;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-form-card-header__title {
+        font-size: 14px !important;
+        font-weight: 800 !important;
+        line-height: 1.3 !important;
     }
 
-    .datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-bottom {
-        margin-top: 75px !important;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-form-card-header__sub {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        opacity: 0.92 !important;
+        margin-top: 2px !important;
     }
 
-    .table-search-historyshow {
-        width: auto;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .old-crd.vm-wr-old-credit-badge {
+        position: static !important;
+        display: inline-flex !important;
+        align-items: center;
+        gap: 4px;
+        margin: 0 0 10px !important;
+        padding: 7px 14px !important;
+        border-radius: 999px !important;
+        background: #ecfdf5 !important;
+        background-color: #ecfdf5 !important;
+        background-image: none !important;
+        border: 1px solid #6ee7b7 !important;
+        color: #047857 !important;
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        box-shadow: 0 2px 10px rgba(16, 185, 129, 0.16) !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .old-crd.vm-wr-old-credit-badge span,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .old-crd.vm-wr-old-credit-badge b {
+        color: #047857 !important;
+        -webkit-text-fill-color: #047857 !important;
+        font-size: 14px !important;
+        font-weight: 700 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-search-wrap input#myInput {
+        width: 100% !important;
+        height: 34px !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 10px !important;
+        padding: 0 12px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-search-wrap input#myInput::placeholder {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-date-search-group .saas-acc-dp-field .saas-acc-dp-input,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-date-search-group .saas-acc-dp-field .form-control.saas-acc-dp-input,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page #txt_frm_date,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page #txt_to_date {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-date-search-group .saas-acc-dp-input::placeholder {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-submit-btn {
+        color: #fff !important;
         float: right;
-        padding: 0;
+        padding: 8px 20px !important;
+        border: none !important;
+        border-radius: 10px !important;
+        margin-top: 10px;
+        line-height: 22px;
+        font-weight: 700;
     }
 
-        .table-search-historyshow input {
-            border: 1px solid #aaa;
-            height: 30px;
-            padding: 0 6px;
-        }
-
-    .walletrequest-tabledataclass {
-        height: 80vh !important;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page select.for-select2,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .select2-container--default .select2-selection--single,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .select2-container--default .select2-selection__rendered,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .select2-dropdown .select2-results__option,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .select2-dropdown .select2-search__field,
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .saas-acc-dp-input {
+        font-size: 14px !important;
+        font-weight: 600 !important;
     }
 
-    .dealer-four-design .tab-menur li a.active-ar::before {
-        border-color: var(--fullbodybg-four);
-        background: var(--fullbodybg-four);
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .select2-container--default .select2-selection--single {
+        height: 40px !important;
+        line-height: 38px !important;
     }
 
-    .dealer-four-design .wallet-history-report .fund-trasfer-right.fund-user-right ul li:nth-child(2) {
-        width: 41% !important;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .select2-container--default .select2-selection__rendered {
+        line-height: 38px !important;
     }
 
-    .dealer-four-design .for-change-fund .select2.select2-container.select2-container--default {
-        width: 190px !important;
+    body.saas-admin-ui section.content.saas-dealer-wallet-request-page .select2-container--default .select2-selection__arrow {
+        height: 38px !important;
     }
 
-    .fund-transfer-form textarea {
-        outline: none;
-    }
-
-
-    @@media screen and (max-width:1366px) {
-        .walletrequestsendpage .wallet-history-report table.table tr th:first-child {
-            padding-right: 52px !important;
+    @@media (max-width: 1199px) {
+        body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-layout.vm-ft-layout--full {
+            flex-direction: column !important;
+            flex-wrap: wrap !important;
+            min-height: 0 !important;
         }
 
-        .walletrequestsendpage .wallet-history-report table.table tr th:last-child {
-            padding-right: 75px !important;
-        }
-
-        .walletrequestsendpage #masterdrop .select2.select2-container.select2-container--default {
-            width: 100% !important;
-            float: left;
-        }
-
-        .walletrequestsendpage #masterdrop {
-            float: right;
-            padding-right: 3px;
-            width: 64%;
-        }
-    }
-
-    @@media screen and (max-width:1300px) {
-        .walletrequestsendpage #frmdata1 ul li a {
-            font-size: 12px;
-        }
-    }
-
-    @@media screen and (max-width:990px) {
-        .walletrequestsendpage .col-md-5, .walletrequestsendpage .col-md-4, .walletrequestsendpage .col-md-3, .walletrequestsendpage .col-md-2, .walletrequestsendpage .col-md-1 {
-            float: left;
-        }
-    }
-
-    @@media screen and (max-width:768px) {
-        .walletrequestsendpage .fund-trasfer-right .nav-tabs li:first-child {
-            width: 100% !important;
-            float: left;
-        }
-
-        .walletrequestsendpage #masterdrop {
-            width: 30%;
-        }
-
-        .walletrequestsendpage .row.fund-t-dalear.fund-t-dalear-walletresponse {
-            margin: 0;
-        }
-
-        .walletrequestsendpage .col-md-5.walletrequstdateclass {
-            width: 40%;
-        }
-
-            .walletrequestsendpage .col-md-5.walletrequstdateclass ~ .col-md-2 {
-                float: left;
-                width: 20%;
-            }
-
-        .walletrequestsendpage .wallet-history-report ul li:nth-child(2) {
-            float: left;
-            width: 70% !important;
-        }
-
-        #m-d-fund-transfer12 .modal-dialog.modal-dialog-fullheight.walletunload-modalreport {
-            width: 100%;
-            float: left;
-        }
-
-        .walletrequestsendpage .fund-transfer-form {
-            height: auto;
-            margin-bottom: 10px;
-        }
-    }
-
-    @@media screen and (max-width:420px) {
-        .walletrequestsendpage .col-md-5.walletrequstdateclass .custom-date-icon {
-            display: none;
-        }
-
-        .walletrequestsendpage .col-md-5.walletrequstdateclass input {
-            padding-left: 0;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .walletrequestsendpage .wallet-history-report ul li:nth-child(2) {
+        body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-form-col,
+        body.saas-admin-ui section.content.saas-dealer-wallet-request-page .vm-ft-history-col {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
             width: 100% !important;
         }
 
-        .walletrequestsendpage .col-md-5.walletrequstdateclass ~ .col-md-2 {
-            float: left;
-            width: 24%;
-        }
-
-            .walletrequestsendpage .col-md-5.walletrequstdateclass ~ .col-md-2 button {
-                font-size: 12px;
-            }
-
-        .walletrequestsendpage .col-md-5.walletrequstdateclass {
-            width: 36%;
-        }
-
-        .walletrequestsendpage #masterdrop {
-            width: 50%;
-        }
-
-        .walletrequestsendpage .fund-trasfer-right.fund-user-right .nav.nav-tabs {
-            padding-bottom: 10px;
-        }
-
-        .walletrequestsendpage #frmdata1 ul li {
-            width: 100%;
-            float: left !important;
-            text-align: left !important;
-        }
-
-            .walletrequestsendpage #frmdata1 ul li a {
-                text-align: left;
-                float: left;
-                padding-bottom: 0;
-            }
-
-        .walletrequestsendpage .fund-transfer-form#frmdata1 .old-crd.fullbodydycolorbg {
-            position: static !important;
-            text-align: center;
-        }
-
-        .walletrequestsendpage .wallet-history-report ul li:nth-child(3) .web-white-filter.fil {
-            position: relative;
-            left: -3px;
-        }
-    }
-
-    @@media screen and (max-width:320px) {
-        .walletrequestsendpage #masterdrop {
-            width: 65%;
+        body.saas-admin-ui section.content.saas-dealer-wallet-request-page .fund-trasfer-left.vm-ft-form-card,
+        body.saas-admin-ui section.content.saas-dealer-wallet-request-page .fund-trasfer-right.vm-ft-history-panel {
+            min-height: 0 !important;
+            height: auto !important;
         }
     }
 </style>
-<section class="content walletrequestsendpage">
-    <div class="container-fluid" style="height:auto !important;min-height:inherit !important;">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Fund&nbsp;Transfer</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Fund&nbsp;Transfer</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
+<section class="content saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium saas-dealer-fund-transfer-page saas-dealer-wallet-request-page walletrequestsendpage">
 
-        <div class="bread-same-all-page">
-            <div class="col-md-6 dealer-none-fourclass">
-                <ul>
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px; ">
-                        </a>
-                    </li>
+    <div class="container-fluid vm-ft-page-shell">
 
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Fund&nbsp;Transfer
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-6 table-search-historyshow">
-
-                <div class="for-search">
-                    <input id="myInput" name="myInput" type="text" placeholder="Search..." onkeyup="myFunction()" />
-
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <div>
+                    <ol class="vm-ft-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Report's</li>
+                        <li>Fund Transfer</li>
+                        <li>Wallet Request</li>
+                    </ol>
                 </div>
             </div>
+            <div class="vm-ft-search-wrap">
+                <input class="form-control vm-dealer-ft-fs14" type="text" value="" id="myInput" name="myInput" placeholder="Search by name, amount, status..." autocomplete="off" onkeyup="myFunction()" />
+            </div>
         </div>
 
-    </div>
+        <div class="vm-ft-layout-wrap">
+        <div class="vm-ft-layout vm-ft-layout--full">
+            <div class="vm-ft-form-col">
+                <div class="fund-trasfer-left vm-ft-form-card">
+                    <div class="vm-ft-form-card-header">
+                        <div class="vm-ft-form-card-header__icon" aria-hidden="true">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <div>
+                            <span class="vm-ft-form-card-header__title">Wallet Request</span>
+                            <span class="vm-ft-form-card-header__sub">Send fund request to @nick or Admin</span>
+                        </div>
+                    </div>
 
-    <div class="col-md-12">
-
-        <div class="row clearfix">
-            <div class="col-md-4 walletreaquest-send">
-                <div class="fund-trasfer-left fund-user-left">
-                    <ul class="nav nav-tabs fulltabchange tab-fullclassbutton" id="tabs">
-
-                        <li class="tab-link tabChangeType active" data-tabname="Admin" data-href="@Url.Action("MDTODealer","Home",new { tabtype="Admin"})" data-tab="tab-1"><a data-toggle="tab" href="#menu11" aria-expanded="false">Wallet Rerquest &nbsp;&nbsp; &nbsp;</a></li>
-                        @*<li id="activelinkkarahfundtransfer" class="tab-link current tabChangeType " data-tabname="Reatiler" data-href="@Url.Action("MDTODealer","Home",new { tabtype="Reatiler"})" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true">Direct Transfer</a></li>
-
-                            <li id="activelinkkarahfundrequest" class="tab-link tabChangeType  retailerrequest" data-tabname="RetailerToDLMREQ" data-href="@Url.Action("MDTODealer","Home",new { tabtype="RetailerToDLMREQ"})" data-tab="tab-1" data-request="@Url.Action("RetailerReuest","Home")"><a href="#menu1" data-toggle="tab">Retailer Fund Request</a></li>*@
-
+                    <ul class="nav nav-tabs fulltabchange tab-fullclassbutton vm-ft-role-tabs" id="tabs" style="display:none;">
+                        <li class="tab-link tabChangeType active" data-tabname="Admin" data-href="@Url.Action("MDTODealer","Home",new { tabtype="Admin"})" data-tab="tab-1"></li>
                     </ul>
 
-                    <div class="width100 float-left ">
+                    <div class="width100 float-left tabcurrent-seconddesign input-border-third" data-admin-select2-custom="true">
 
-
-                        <div id="menu1" class="width100 float-left remove-activein-add tab-pane fade">
-                            <div class="fund-transfer-form dealer-box-back-four" id="frmdata1">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <label>
-                                        No Of Request <label id="lblnorequest"></label>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div id="menu11" class="width100 float-left tab-pane fade remove-activein active in request-wallet-class">
+                        <div id="menu11" class="width100 float-left tab-pane vm-ft-left-tab-pane fade active in request-wallet-class">
 
                             <input type="hidden" id="hdcurrentcr" value="0" />
                             <input type="hidden" id="hdcashdepositcharge" value="0" />
                             <input type="hidden" id="hdnetamount" value="0" />
 
-                            <div class="fund-transfer-form dealer-box-back-four" id="frmdata1">
+                            <div class="fund-transfer-form vm-dealer-ft-form-fs14 dealer-box-back-four" id="frmdata1">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-
-                                    <div>
-
-                                        <div class="old-crd fullbodydycolorbg" style="border: 0px;position: absolute;top: 36px;   color: rgb(255, 255, 255) !important;   display: block;padding: 2px 20px;"><span style="color:#fff;">My Old Cr</span> = </div>
-                                    </div>
+                                    <div class="old-crd vm-wr-old-credit-badge"><span>My Old Cr</span> = </div>
                                 </div>
                                 <div class="w-100 float-left tab-menur tab-menur-classre">
                                     <ul class="w-100 float-left">
-                                        <li><a href="#" data-oldcr="@Url.Action("D_Creditchk","Home",new {MID="Master" })" data-usertype="Master" class="chkoldcredit tab-ar  active-ar" data-id="tab1">Fund&nbsp;Request&nbsp;&#8658;&nbsp;@ViewBag.nickname</a></li>
-                                        <li><a href="#" data-oldcr="@Url.Action("D_Creditchk","Home",new {MID="Admin" })" class="chkoldcredit tab-ar" data-usertype="Admin" data-id="tab2" style="text-align:right;">Fund&nbsp;Request&nbsp;&#8658;&nbsp;Admin</a></li>
-
+                                        <li><a href="#" data-oldcr="@Url.Action("D_Creditchk","Home",new {MID="Master" })" data-usertype="Master" class="chkoldcredit tab-ar active-ar" data-id="tab1">Fund&nbsp;Request&nbsp;&#8658;&nbsp;@nick</a></li>
+                                        <li><a href="#" data-oldcr="@Url.Action("D_Creditchk","Home",new {MID="Admin" })" class="chkoldcredit tab-ar" data-usertype="Admin" data-id="tab2">Fund&nbsp;Request&nbsp;&#8658;&nbsp;Admin</a></li>
                                     </ul>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <label>
-                                        Payment Mode
-                                    </label>
+                                    <label>Payment Mode</label>
                                     <div>
-
-                                        <div class="custom-district">
-                                            <select id="ddldealerPaymentMode" name="ddldealerPaymentMode" onchange="changemoded(this)">
+                                        <div class="custom-district1">
+                                            <select id="ddldealerPaymentMode" name="ddldealerPaymentMode" class="for-select2 vm-opr-select vm-dmt-select form-control vm-dealer-ft-fs14" data-live-search="true" data-search-placeholder="Search payment mode..." onchange="changemoded(this)">
                                                 <option value="Cash">Cash</option>
                                                 <option value="Branch / CMS Deposite">Branch / CMS Deposite</option>
                                                 <option value="Online Transfer">Online Transfer</option>
@@ -388,37 +361,34 @@
                                                 <option value="Credit">Credit</option>
                                             </select>
                                         </div>
-
                                     </div>
                                 </div>
-                                <div class="col-md-12 col-sm-12 col-xs-12 dcollection-by ">
-                                    <label>Collection By </label>
+                                <div class="col-md-12 col-sm-12 col-xs-12 dcollection-by">
+                                    <label>Collection By</label>
                                     <div>
-                                        <input type="text" id="txtdlmretcollection" name="txtdlmretcollection" placeholder="Enter Collection Person" />
+                                        <input type="text" id="txtdlmretcollection" name="txtdlmretcollection" class="vm-dealer-ft-fs14" placeholder="Enter Collection Person" />
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12 dtransfer-type" style="display:none;">
-                                    <label>Transfer Type </label>
+                                    <label>Transfer Type</label>
                                     <div>
-                                        <div class="custom-district">
-                                            <select id="ddlAdmintransfertype" name="ddlAdmintransfertype">
+                                        <div class="custom-district1">
+                                            <select id="ddlAdmintransfertype" name="ddlAdmintransfertype" class="for-select2 vm-opr-select vm-dmt-select form-control vm-dealer-ft-fs14" data-search-placeholder="Search transfer type...">
                                                 <option>Neft</option>
                                                 <option>RTGS</option>
                                                 <option>IMPS</option>
                                                 <option>Same Bank</option>
                                                 <option>UPI</option>
-
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12 dbank-select" style="display:none;">
-                                    <label>Select Bank </label>
+                                    <label>Select Bank</label>
                                     <div>
-                                        <div class="custom-district">
-                                            <select id="dealerbank" name="dealerbank">
-                                                <option>select</option>
-
+                                        <div class="custom-district1">
+                                            <select id="dealerbank" name="dealerbank" class="for-select2 vm-opr-select vm-dmt-select form-control vm-dealer-ft-fs14" data-live-search="true" data-search-placeholder="Search bank...">
+                                                <option value="">Select Bank</option>
                                             </select>
                                         </div>
                                     </div>
@@ -426,22 +396,21 @@
                                 <div class="col-md-12 col-sm-12 col-xs-12 daccount-no" style="display:none;">
                                     <label>Account No.</label>
                                     <div>
-                                        <input type="text" readonly id="txtdealeraccountno" name="txtdealeraccountno" placeholder="Enter Account No." />
+                                        <input type="text" readonly id="txtdealeraccountno" name="txtdealeraccountno" class="vm-dealer-ft-fs14" placeholder="Enter Account No." />
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12 dutr-no" style="display:none;">
                                     <label>UTR No.</label>
                                     <div>
-                                        <input type="text" id="txtdelmretutr" name="txtdelmretutr" placeholder="Enter UTR No." />
+                                        <input type="text" id="txtdelmretutr" name="txtdelmretutr" class="vm-dealer-ft-fs14" placeholder="Enter UTR No." />
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12 dwallet-select" style="display:none;">
                                     <label>Select Wallet</label>
                                     <div>
-                                        <div class="custom-district">
-                                            <select id="dealerwallets" name="dealerwallets">
-                                                <option>select</option>
-
+                                        <div class="custom-district1">
+                                            <select id="dealerwallets" name="dealerwallets" class="for-select2 vm-opr-select vm-dmt-select form-control vm-dealer-ft-fs14" data-live-search="true" data-search-placeholder="Search wallet...">
+                                                <option value="">Select Wallet</option>
                                             </select>
                                         </div>
                                     </div>
@@ -449,440 +418,302 @@
                                 <div class="col-md-12 col-sm-12 col-xs-12 dwallet-no" style="display:none;">
                                     <label>Wallet No.</label>
                                     <div>
-                                        <input type="text" readonly id="txtdealerwalletno" name="txtdealerwalletno" placeholder="Enter Wallet No." />
+                                        <input type="text" readonly id="txtdealerwalletno" name="txtdealerwalletno" class="vm-dealer-ft-fs14" placeholder="Enter Wallet No." />
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12 dtranstion-no" style="display:none;">
                                     <label>Transtion No.</label>
                                     <div>
-                                        <input type="text" id="txtdlmrettranctionno" name="txtdlmrettranctionno" placeholder="Enter Transtion No." />
+                                        <input type="text" id="txtdlmrettranctionno" name="txtdlmrettranctionno" class="vm-dealer-ft-fs14" placeholder="Enter Transtion No." />
                                     </div>
                                 </div>
-
                                 <div class="col-md-12 col-sm-12 col-xs-12 dsubject-reason" style="display:none;">
                                     <label>Subject (Reason)</label>
                                     <div>
-                                        <input type="text" id="txtdlmretreason" name="txtdlmretreason" placeholder="Enter Credit Detail" />
+                                        <input type="text" id="txtdlmretreason" name="txtdlmretreason" class="vm-dealer-ft-fs14" placeholder="Enter Credit Detail" />
                                     </div>
                                 </div>
-
-                                <div class="col-md-12 col-sm-12 col-xs-12 damount ">
-                                    <label>Enter Amount </label>
+                                <div class="col-md-12 col-sm-12 col-xs-12 damount">
+                                    <label>Enter Amount</label>
                                     <div>
-                                        <input type="text" id="txtdlmretamount" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" name="txtdlmretamount" placeholder="Enter Amount" />
+                                        <input type="text" id="txtdlmretamount" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" name="txtdlmretamount" class="vm-dealer-ft-fs14" placeholder="Enter Amount" />
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12 ddeposite-slip-no" style="display:none;">
-                                    <label>Deposite Slip No. </label>
+                                    <label>Deposite Slip No.</label>
                                     <div>
-                                        <input type="text" id="txtdeposno" name="txtdeposno" placeholder="Enter Deposite No." />
+                                        <input type="text" id="txtdeposno" name="txtdeposno" class="vm-dealer-ft-fs14" placeholder="Enter Deposite No." />
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12 dfund-comment">
                                     <label>Comments</label>
                                     <div>
-                                        <textarea id="dlmretcomment" name="dlmretcomment"></textarea>
+                                        <textarea id="dlmretcomment" name="dlmretcomment" class="vm-dealer-ft-fs14"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div>
                                         <label id="errorsssnd" style="color:red;font-weight:400;"></label>
-                                        <button id="btndistributorInform" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
-                                            Submit
+                                        <button type="button" id="btndistributorInform" class="fullbodydycolorbg btn-first button-third vm-ft-submit-btn">
+                                            <span>Submit</span>
                                         </button>
                                     </div>
                                 </div>
-
-
                             </div>
 
-                            <div id="DIstribotorshowinformation" style="display:none" class="fund-transfer-form show-after-submit">
-
-
+                            <div id="DIstribotorshowinformation" style="display:none" class="fund-transfer-form show-after-submit vm-dealer-ft-form-fs14">
                                 @using (Ajax.BeginForm("PlacePurchaseRequest", "Home",
                                 new AjaxOptions
                                 {
                                     InsertionMode = InsertionMode.Replace,
                                     OnSuccess = "OnSuccess11",
                                     OnFailure = "OnFailure",
-                                    UpdateTargetId = "tblshowMasterD",
-                                    // LoadingElementId = "progress"
+                                    UpdateTargetId = "tblshowMasterD"
                                 }))
                                 {
-
                                     <div class="col-md-12 col-sm-12 col-xs-12">
                                         <div>
                                             <input type="hidden" id="Payto" name="Payto" value="Master" />
-
-                                            <div id="hdddninputvalues">
-
-                                            </div>
-                                            <button id="btnsendpurorder" class="fullbodydycolorbg" type="submit" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;margin-left:10px;">
+                                            <div id="hdddninputvalues"></div>
+                                            <button id="btnsendpurorder" class="fullbodydycolorbg vm-ft-submit-btn" type="submit">
                                                 Submit
                                             </button>
                                         </div>
                                     </div>
                                 }
-
-
                             </div>
                         </div>
 
-
                     </div>
                 </div>
             </div>
 
+            <div class="vm-ft-history-col">
+                <div class="fund-trasfer-right vm-ft-history-panel">
+                    <div id="tab-1" class="vm-ft-history-body walletrequest-tabledataclass">
 
-            <div class="col-md-8 wallet-history-report">
-                <div class="fund-trasfer-right fund-user-right">
-
-                    <div id="tab-1" class="width100 float-left tab-content current walletrequest-tabledataclass dealer-box-back-four" style="padding:0px;">
-
-                        <ul class="nav nav-tabs" style="background:#a4a0a0;">
-                            <li class="tab-link current active" data-tab="tab-1" style="width:40%;border-right:0px;">
-                                <a data-toggle="tab" aria-expanded="true" style="padding:3px 10px;padding-bottom: 1px;">
-                                    <label class="for-change-fund" style="color:#000;font-weight:400;">
-                                        <span class="fund-fistory">History<sub class="tmw-total-color-one fullbodydycolorbg">Fund Transfer</sub></span><i class="fa fa-caret-down" aria-hidden="true"></i>
-                                        <div id="masterdrop" class="only-select-css">
-                                            @Html.DropDownListFor(x => x.ddlretailerID, Model.ddlRetailer, "--Select--", new { @id = "SuperstokistID1", @class = "for-select2", required = "required" })
-                                            @*@Html.DropDownListFor(m => m.ddlretailerID, Model.ddlRetailer, "Please select", new { @onchange = "chkmasterbalance(this),changemaster(this)" })*@
-                                        </div>
-
-                                    </label>
-                                </a>
-                            </li>
-                            <li style="width:45%;border-right:0px;">
-                                <div class="for-un" style="width: 100%;margin-top:3px;margin-left: 8px;">
-                                    <div class="row fund-t-dalear fund-t-dalear-walletresponse">
-
-                                        <div class="col-md-5 walletrequstdateclass" style="padding-left: 0px;">
-                                            <div class="all-report-inputclass" style="width:100%;float:left;">
-                                                <div class="custom-date-icon border-colorchangecss" style="height: 32px;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                </div>
-                                                <input type="datetime" id="txt_frm_date" name="txt_frm_date" style="border:1px solid #ccc;" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-5 walletrequstdateclass" style="padding-left: 0px;">
-                                            <div class="all-report-inputclass" style="width:100%;float:left;">
-                                                <div class="custom-date-icon border-colorchangecss" style="height: 32px;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                </div>
-                                                <input type="datetime" id="txt_to_date" name="txt_to_date" style="border:1px solid #ccc;" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2" style="padding:0px;">
-                                            <button type="button" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding: 0px 6px;float: left;background:#eae9e9;width:100%;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                Search
-                                            </button>
-                                        </div>
-
-
-
-
-
+                        <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium">
+                            <div class="vm-ft-history-toolbar__head">
+                                <i class="fas fa-history" aria-hidden="true"></i>
+                                <div>
+                                    <span class="vm-ft-history-toolbar__title">Request History</span>
+                                    <span class="vm-ft-history-toolbar__sub">View, filter &amp; export wallet requests</span>
+                                </div>
+                            </div>
+                            <div class="vm-ft-history-toolbar__filters vm-ft-history-filters-row">
+                                <div class="vm-opr-field vm-dmt-field vm-ft-history-field vm-ft-history-field--user" id="masterdrop">
+                                    @Html.DropDownListFor(x => x.ddlretailerID, Model.ddlRetailer, "--Select--", new { @id = "SuperstokistID1", @class = "for-select2 vm-opr-select vm-dmt-select form-control vm-dealer-ft-fs14", @data_live_search = "true", @data_search_placeholder = "Search name, mobile, ID..." })
+                                </div>
+                                <div class="vm-dmt-filter-search-group vm-ft-date-search-group">
+                                    <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                        <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                        <input type="text" id="txt_frm_date" name="txt_frm_date" class="form-control saas-acc-dp-input vm-dealer-ft-fs14" autocomplete="off" placeholder="From" title="From date" />
                                     </div>
+                                    <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                        <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                        <input type="text" id="txt_to_date" name="txt_to_date" class="form-control saas-acc-dp-input vm-dealer-ft-fs14" autocomplete="off" placeholder="To" title="To date" />
+                                    </div>
+                                    <button type="button" id="btnchangetabbutton" name="btnDsearch" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-ft-search-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                        <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                                    </button>
                                 </div>
-                            </li>
-                            <li style="width:auto;float:right;margin-top:4px;">
-                                <div class="web-white-filter fil" style="float: left;margin-right: 5px;">
-                                    <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:30px;border:1px solid #b1a6a638;background:#eae9e9;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;" />
-                                    <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:30px;border:1px solid #b1a6a638;background:#eae9e9;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
+                                <div class="vm-ft-export-group">
+                                    <button type="button" id="btnExport" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i></button>
+                                    <button type="button" id="btnPDF" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i></button>
                                 </div>
-                            </li>
-                        </ul>
+                            </div>
+                        </div>
 
-                        <div id="tblshowMasterD" class="table-responsive " style="width:100%;margin-top:15px;">
+                        <div id="tblshowMasterD" class="third-design-dealer vm-ft-table-wrap table-responsive tableseconddes-dealer tableseconddes-admin">
                             @Html.Partial("_FundTransferDealetToRetailerPartial")
-
                         </div>
                         <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
-                            <img src="~/img/ajax-loader.gif" />
+                            <img src="~/img/ajax-loader.gif" alt="Loading" />
                         </div>
                     </div>
-                    <div id="tab-2" class="width100 float-left tab-content ">
-                        <div class="table-responsive " style="width:100%;">
-                            <table class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Distributor Firm</th>
-                                        <th>Retailer Firm</th>
-                                        <th>Head</th>
-
-                                        <th>Total AMT</th>
-                                        <th>Charge</th>
-
-                                        <th>Net T/F</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr data-toggle="modal" data-target="#distributor-fund-transfer">
-
-                                        <td>uiu</td>
-                                        <td>uiu</td>
-                                        <td>uiu</td>
-                                        <td>uiu</td>
-                                        <td>uiu</td>
-                                        <td>uiu</td>
-                                        <td>uiu<img src="~/ashok-images/rightaeps.svg" style="width:11px;margin-top:6px;float:right;"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div id="tab-3" class="width100 float-left tab-content ">
-                        <div class="table-responsive " style="width:100%;">
-                            <table class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>From Retailer Firm</th>
-                                        <th>To Retailer Firm</th>
-                                        <th>Head</th>
-                                        <th>Payment&nbsp;Type</th>
-                                        <th>Total AMT</th>
-                                        <th>Charge</th>
-
-                                        <th>Net T/F</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr data-toggle="modal" data-target="#retailer-fund-transfer">
-                                        <td>uiu</td>
-                                        <td>uiu</td>
-                                        <td>uiu</td>
-                                        <td>uiu</td>
-                                        <td>uiu</td>
-                                        <td>uiu</td>
-                                        <td>uiu</td>
-                                        <td>uiu<img src="~/ashok-images/rightaeps.svg" style="width:11px;margin-top:6px;float:right;"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
-    </div>
-
-    <!---------Purchase request send-->
-    <div class="modal fund-tr-history  in purchase-model" id="m-d-fund-transfer12" tabindex="-1" role="dialog" style="display: none; margin-top:0px;padding-right:0;">
-        <div class="modal-dialog modal-dialog-fullheight walletunload-modalreport" role="document" style="margin:0px;float:right;">
-
-            <div class="modal-content width100 float-left">
-                <div class="modal-header width100 float-left ecomm-pop-head" style="background:#a4a0a0;">
-
-                    <h5 id="mdhis" style="color:#555;">Purchase Order History</h5>
-
-
-                    <button type="button" class="btn waves-effect " data-dismiss="modal" style="float:right;border:0px;color:var(--main-bg-lcolor);padding:0px; height:auto;">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                    </button>
-
-
-                </div><!--.modal-header-->
-                <div class="modal-body width100 float-left ecomm-pop-body">
-                    <div class="float-left width100">
-                        <form class="first-form">
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                    <div class="form-group">
-                                        <label id="mdfrmname">TO</label>
-
-                                        <input class="form-control" readonly="readonly" required="required" id="txtfromshow" type="text">
-
-                                    </div>
-                                </div>
-
-                            </div><!--.row-->
-
-
-
-
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Order No</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtordernohow">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label>Status</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" id="txtstsshow" type="text">
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>paymode</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtpaymodeshow">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label id="lblcollreason">utrno</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtcollreason">
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPreremain">amount</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtamountshow">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label id="mdPostremain">reqdate</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtreqdateshow">
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPrecredit">responsedate</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtresponsedateshow">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 ">
-                                    <div class="form-group">
-                                        <label>cashDepositCharge</label>
-
-                                        <input class="form-control" readonly="readonly" required="required" type="text" id="txtcashDepositChargehow">
-
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-                            <div class="row">
-
-
-                                <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                    <div class="form-group">
-                                        <label>finalAmount</label>
-
-                                        <input class="form-control" readonly="readonly" required="required" type="text" value="" id="txtfinalAmountshow">
-
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-                            <div class="row">
-
-                                <div class="col-md-12 col-sm-12 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label>Comment</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase;border-color:var(--main-bg-lcolor);" type="text" id="txtdetailsshow">
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-
-
-                        </form>
-
-                        <!--=============-->
-
-                    </div><!--.modal-body-->
-
-
-                </div>
-
-            </div>
         </div>
     </div>
-
-
-
-
 </section>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<!--Add State dropdown list-->
-<script src="~/Swalalert/sweetalert-dev.js">
+
+<div class="modal fade fund-tr-history vm-ft-history-modal saas-admin-modal vm-dmt-modal vm-ft-detail-modal purchase-model" id="m-d-fund-transfer12" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog vm-ft-detail-modal__dialog" role="document">
+        <div class="modal-content vm-ft-detail-modal__content">
+            <div class="modal-header saas-admin-modal-header accent-sky vm-ft-detail-modal__header">
+                <div class="saas-admin-modal-head-main vm-ft-detail-modal__head">
+                    <span class="saas-admin-modal-icon vm-ft-detail-modal__icon"><i class="fas fa-shopping-bag" aria-hidden="true"></i></span>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h5 class="saas-admin-modal-title" id="mdhis">Purchase Order History</h5>
+                        <span class="saas-admin-modal-subtitle">Request details</span>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close vm-ft-modal-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body saas-admin-modal-body vm-dmt-modal-body vm-ft-detail-modal__body ecomm-pop-body">
+                <div class="float-left width100">
+                    <form class="first-form vm-ft-modal-form">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label id="mdfrmname">TO</label>
+                                    <input class="form-control" readonly="readonly" required="required" id="txtfromshow" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <div class="form-group">
+                                    <label>Order No</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtordernohow">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" id="txtstsshow" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <div class="form-group">
+                                    <label>paymode</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtpaymodeshow">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
+                                <div class="form-group">
+                                    <label id="lblcollreason">utrno</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtcollreason">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <div class="form-group">
+                                    <label id="mdPreremain">amount</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtamountshow">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
+                                <div class="form-group">
+                                    <label id="mdPostremain">reqdate</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtreqdateshow">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <div class="form-group">
+                                    <label id="mdPrecredit">responsedate</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtresponsedateshow">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>cashDepositCharge</label>
+                                    <input class="form-control" readonly="readonly" required="required" type="text" id="txtcashDepositChargehow">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label>finalAmount</label>
+                                    <input class="form-control" readonly="readonly" required="required" type="text" value="" id="txtfinalAmountshow">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 col-2">
+                                <div class="form-group">
+                                    <label>Comment</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase;border-color:var(--main-bg-lcolor);" type="text" id="txtdetailsshow">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.dealerFundExcelUrl = '@Url.Action("ExportExcellFundtransfer", "Home")';
+    window.dealerFundPdfUrl = '@Url.Action("FundUserToUserPdfGenerate", "Home")';
 </script>
+
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
 
 <script>
-    $('.for-select2').select2();
-
-
-</script>
-
-
-<script>
-
-
-    $('#btnchangetabbutton').click(function (e) {
-
-     var  tabtype=  $("ul.fulltabchange li.tab-link.active").attr('data-tabname')
-      $.ajax({
-          url: "@Url.Action("MDTODealer","Home")",
-          data: { tabtype: tabtype, txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val(),ddltype: $('#SuperstokistID1').val() },
-            success: function (data) {
-                $('#tblshowMasterD').html(data)
-
-            }
-
-        })
-
-
+    $(document).on('click', '#btnExport', function () {
+        var tabID = $("ul.fulltabchange li.tab-link.active").attr('data-tabname') || 'Admin';
+        var url = window.dealerFundExcelUrl + '?tabtype=' + encodeURIComponent(tabID)
+            + '&txt_frm_date=' + encodeURIComponent($('#txt_frm_date').val() || '')
+            + '&txt_to_date=' + encodeURIComponent($('#txt_to_date').val() || '')
+            + '&ddltype=' + encodeURIComponent($('#SuperstokistID1').val() || '');
+        window.open(url, '_blank');
     });
+    $(document).on('click', '#btnPDF', function () {
+        var tabID = $("ul.fulltabchange li.tab-link.active").attr('data-tabname') || 'Admin';
+        var usernm = $('#SuperstokistID1').val();
+        var url = window.dealerFundPdfUrl + '?tabID=' + tabID + '&frm_date=' + $('#txt_frm_date').val() + '&to_date=' + $('#txt_to_date').val() + '&usernm=' + usernm;
+        window.open(url, '_blank');
+    });
+</script>
+
+<!-- WALLET_REQUEST_SEND_SCRIPTS -->
 
 
-
+<script>
+    $(document).on('click', '#btnchangetabbutton', function (e) {
+        var tabtype = $("ul.fulltabchange li.tab-link.active").attr('data-tabname') || 'Admin';
+        $.ajax({
+            url: "@Url.Action("MDTODealer","Home")",
+            data: { tabtype: tabtype, txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val(), ddltype: $('#SuperstokistID1').val() },
+            success: function (data) {
+                $('#tblshowMasterD').html(data);
+            }
+        });
+    });
 </script>
 <script>
-    $(document).ready(function()
-    {
-
-        $('.input-daterange').datepicker({
+    $(document).ready(function () {
+        var dateOpts = {
             format: "yyyy-mm-dd",
             todayHighlight: true,
             autoclose: true,
             orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+            forceParse: false,
+            enableOnReadonly: true,
+            container: 'body'
+        };
+        if ($.fn.datepicker) {
+            $("#txt_frm_date, #txt_to_date").datepicker(dateOpts);
+            $('.input-daterange').datepicker(dateOpts);
+            $('.saas-fund-transfer-page .saas-acc-dp-icon').on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var $input = $(this).closest('.saas-acc-dp-field').find('.saas-acc-dp-input');
+                if ($input.length && $input.data('datepicker')) {
+                    $input.datepicker('show');
+                }
+            });
+            var val = '@ViewBag.chk';
+            if (val != "post") {
+                $("#txt_frm_date").datepicker("setDate", new Date());
+                $("#txt_to_date").datepicker("setDate", new Date());
+            }
         }
-
-    })
+        scheduleWalletReqSelect2Boot();
+        $('.chkoldcredit.active-ar').first().trigger('click');
+    });
 </script>
 
 <script>
@@ -927,47 +758,147 @@
 
     $(document).ready(function () {
         $('.tab-ar').click(function () {
-
             $(".tabr").removeClass('tab-activer');
             $(".tabr[data-id='" + $(this).attr('data-id') + "']").addClass("tab-activer");
             $(".tab-ar").removeClass('active-ar');
-            $(this).parent().find(".tab-ar").addClass('active-ar');
-            var usertype = $(this).attr('data-usertype')
+            $(this).addClass('active-ar');
+            var usertype = $(this).attr('data-usertype');
             if (usertype == 'Admin') {
-                $('#Payto').val('Admin')
-
-            }
-            else if (usertype == 'Master') {
-                $('#Payto').val('Master')
+                $('#Payto').val('Admin');
+            } else if (usertype == 'Master') {
+                $('#Payto').val('Master');
             }
         });
-
-        debugger
-        var url = window.location.href;
-        var rrr = '';
-        rrr= "@TempData["tabActive"]";// url.split('?')[1];
-    debugger
-        if (rrr != "") {
-
-            $('.fund-user-left.fund-trasfer-left .nav-tabs li:first-child').removeClass('active');
-            $('.fund-user-left.fund-trasfer-left .nav-tabs li:last-child').addClass('active');
-            $('.remove-activein').removeClass('active in');
-            $('.remove-activein-add').addClass('active in');
-
-            $('#activelinkkarahfundrequest').click();
-
-
-
-        }
-        else {
-              $('#activelinkkarahfundtransfer').click();
-
-        }
     });
 </script>
 
 <script>
 
+
+    function walletReqDestroySelect2($el) {
+        var $ = window.jQuery;
+        if (!$ || !$el || !$el.length) { return; }
+        if ($.fn.select2 && $el.hasClass('select2-hidden-accessible')) {
+            try { $el.select2('destroy'); } catch (ignore) { }
+        }
+        $el.next('.select2-container').remove();
+    }
+
+    function walletReqGetListItemVal(item, key) {
+        if (!item) { return ''; }
+        if (item[key] != null && item[key] !== '') { return item[key]; }
+        var lower = key.charAt(0).toLowerCase() + key.slice(1);
+        return item[lower] != null ? item[lower] : '';
+    }
+
+    function fillWalletReqLinkedField(selectEl) {
+        if (!selectEl || !selectEl.id) { return; }
+        var map = {
+            dealerbank: 'txtdealeraccountno',
+            dealerwallets: 'txtdealerwalletno'
+        };
+        var inputId = map[selectEl.id];
+        if (!inputId) { return; }
+        var input = document.getElementById(inputId);
+        if (!input) { return; }
+        var val = (selectEl.value || '').trim();
+        if (!val || val === '0' || val.toLowerCase().indexOf('select') >= 0) {
+            input.value = '';
+            return;
+        }
+        input.value = val;
+        if (window.jQuery) {
+            window.jQuery(input).trigger('input').trigger('change');
+        }
+    }
+
+    function walletReqRefreshSelect2(scope) {
+        if (typeof window.initDealerFundTransferPageSelect2 !== 'function') { return; }
+        var $ = window.jQuery;
+        if (!$) { return; }
+        if (scope && scope.length) {
+            if (scope.is('select')) {
+                window.initDealerFundTransferPageSelect2(scope);
+                return;
+            }
+            var $selects = scope.filter('select');
+            if ($selects.length) {
+                $selects.each(function () {
+                    window.initDealerFundTransferPageSelect2($(this));
+                });
+                return;
+            }
+            window.initDealerFundTransferPageSelect2(scope);
+            return;
+        }
+        window.initDealerFundTransferPageSelect2($('.fund-transfer-form'));
+        window.initDealerFundTransferPageSelect2($('#SuperstokistID1'));
+    }
+
+    function walletReqPopulateBankWallet(data) {
+        var $ = window.jQuery;
+        if (!$ || !data) { return; }
+        var $bank = $('#dealerbank');
+        var $wallet = $('#dealerwallets');
+
+        walletReqDestroySelect2($bank);
+        walletReqDestroySelect2($wallet);
+
+        $bank.empty().append($('<option></option>').val('').text('Select Bank'));
+        if (data.listbank && data.listbank.length) {
+            for (var x = 0; x < data.listbank.length; x++) {
+                $bank.append(
+                    $('<option></option>')
+                        .val(walletReqGetListItemVal(data.listbank[x], 'Value'))
+                        .text(walletReqGetListItemVal(data.listbank[x], 'Text'))
+                );
+            }
+        }
+
+        $wallet.empty().append($('<option></option>').val('').text('Select Wallet'));
+        if (data.walletinfo && data.walletinfo.length) {
+            for (var y = 0; y < data.walletinfo.length; y++) {
+                $wallet.append(
+                    $('<option></option>')
+                        .val(walletReqGetListItemVal(data.walletinfo[y], 'Value'))
+                        .text(walletReqGetListItemVal(data.walletinfo[y], 'Text'))
+                );
+            }
+        }
+
+        $('#txtdealeraccountno').val('');
+        $('#txtdealerwalletno').val('');
+
+        window.setTimeout(function () {
+            walletReqRefreshSelect2($bank);
+            walletReqRefreshSelect2($wallet);
+        }, 0);
+    }
+
+    function scheduleWalletReqSelect2Boot() {
+        var delays = [0, 150, 400, 900, 1800];
+        var i;
+        for (i = 0; i < delays.length; i++) {
+            window.setTimeout(function () {
+                walletReqRefreshSelect2();
+            }, delays[i]);
+        }
+    }
+
+    $(document).ready(function () {
+        $(document).off('select2:select.walletReqMode change.walletReqMode', '#ddldealerPaymentMode');
+        $(document).on('select2:select.walletReqMode', '#ddldealerPaymentMode', function () {
+            changemoded(this);
+        });
+        $(document).on('change.walletReqMode', '#ddldealerPaymentMode', function () {
+            changemoded(this);
+        });
+
+        $(document).off('select2:select.walletReqLinked change.walletReqLinked', '#dealerbank, #dealerwallets');
+        $(document).on('select2:select.walletReqLinked change.walletReqLinked', '#dealerbank, #dealerwallets', function () {
+            fillWalletReqLinkedField(this);
+        });
+    });
 
     function changemasterd(value) {
         var mas = $(value).val();
@@ -978,6 +909,7 @@
             $('.old-crd').show();
         }
     }
+
     function changemoded(value) {
         var res = $(value).val();
 
@@ -1053,6 +985,10 @@
             $('.ddeposite-slip-no').hide();
             $('.dfund-comment').show();
         }
+
+        window.setTimeout(function () {
+            walletReqRefreshSelect2($('#dealerwallets, #dealerbank, #ddlAdmintransfertype'));
+        }, 0);
     }
 
 
@@ -1236,17 +1172,7 @@
 
                 }
 
-                $("#dealerbank").html("");
-
-                $("#dealerbank").append($('<option></option>').val('').html('Select Bank'));
-                for (var x = 0; x < data.listbank.length; x++) {
-                    $("#dealerbank").append($('<option></option>').val(data.listbank[x].Value).html(data.listbank[x].Text));
-                }
-                $("#dealerwallets").html("");
-                $("#dealerwallets").append($('<option></option>').val('').html('Select Wallet'));
-                for (var x = 0; x < data.walletinfo.length; x++) {
-                    $("#dealerwallets").append($('<option></option>').val(data.walletinfo[x].Value).html(data.walletinfo[x].Text));
-                }
+                walletReqPopulateBankWallet(data);
             }
 
         })
@@ -1824,22 +1750,6 @@
     $('#mdwallet').change(function () {
 
         $('#txtmddistwalletno').val($('#mdwallet').val())
-
-
-
-    })
-
-    $('#dealerbank').change(function () {
-
-        $('#txtdealeraccountno').val($('#dealerbank').val())
-
-
-
-    })
-
-    $('#dealerwallets').change(function () {
-
-        $('#txtdealerwalletno').val($('#dealerwallets').val())
 
 
 

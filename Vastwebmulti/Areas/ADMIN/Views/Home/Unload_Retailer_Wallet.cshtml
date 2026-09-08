@@ -124,7 +124,6 @@
                                                 </div>
                                             }
 
-                                            <input type="hidden" id="HdIdno" value="0" />
                                         </td>
                                     </tr>
                                 }
@@ -144,135 +143,6 @@
         </div>
     </div>
 </div>
-<!-- Manual Success Modal Start -->
-<div class="modal fade Un-rwls-modal" id="ManualSuccessModal" tabindex="-1" role="dialog" aria-labelledby="ManualSuccessModalLabel" aria-hidden="true" style="width:500px; position:absolute; left:406px;">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title">Approve Request</h4>
-        </div>
-        <div class="modal-body">
-            <input type="text" id="idNo" name="idNo" class="form-control" style="display:none;" />
-            <input type="text" id="txnpass" name="txnpass" class="form-control" required placeholder="Enter Transaction Password" />
-            <input  type="text" id="RRN" name="RRN" class="form-control" required placeholder="Enter Bank RRN" />
-            <textarea id="txtcomment" name="txtcomment" class="form-control" placeholder="Enter Remark (Optional)"></textarea>
-        </div>
-        <div class="modal-footer">
-            <button type="button" onclick="ManualAccept()" id="btn" class="btn btn-primary" value="Submit">Submit</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Start -->
-<div class="modal fade Un-rwls-modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4><span id="ActionHeader"></span></h4>
-                <button type="button" class="close closebtn-second" style="float:right;" data-dismiss="modal" aria-label="Close">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row clearfix">
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <div class="row clearfix">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>Request ID</label>
-                                @*<span class="datas" id="ReqId">N/A</span>*@
-                                <input type="text" class="datas" id="ReqId" readonly style="background: #fff; padding: 4px 5px; margin-bottom: 10px; border: 1px solid #bbb;" />
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>Bank Account</label>
-                                <span class="datas" id="bnkAc">N/A</span>
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>Account Holder Name</label>
-                                <span class="datas" id="AcHldr">N/A</span>
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>IFSC Code</label>
-                                <span class="datas" id="Ifcd">N/A</span>
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>Bank Name</label>
-                                <span class="datas" id="BnkNm">N/A</span>
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>Amount</label>
-                                <span class="datas" id="Amt">N/A</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <div class="row clearfix">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>Charge</label>
-                                <span class="datas" id="chrg">N/A</span>
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>Pre Remain</label>
-                                <span class="datas" id="PreRm">N/A</span>
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>Debit Amount</label>
-                                <span class="datas" id="Dbt">N/A</span>
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>Post Remain</label>
-                                <span class="datas" id="PostRm">N/A</span>
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>Bank RRN</label>
-                                <span class="datas" id="BnkRrn">N/A</span>
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <label>Date & Time</label>
-                                <span class="datas" id="DtTm">N/A</span>
-                            </div>
-                        </div>
-                    </div>
-                </div><!--.row-->
-                <!-- Status Field Start -->
-                @*<fieldset id="Manual_SuccessFailed" style="display:none;">
-                        <legend>Status --> Pending</legend>
-                        <div class="row clearfix">
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-
-                                <div class="threestatus first">
-                                    <button type="button" class="btn checks" id="Manual-Success" title="Manual Success">
-                                        <i class="fa fa-check" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="btn time" onclick="ManualReject()" title="Manual Reject">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <fieldset id="myApproveRequest" style="display:none">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Approve Request</h4>
-                            </div>
-                            <div class="modal-body">
-                                <input type="text" id="idNo" name="idNo" class="form-control" style="display:none;" />
-                                <input type="text" id="RRN" name="RRN" class="form-control" required="" placeholder="Enter Bank RRN" />
-                                <textarea id="txtcomment" name="txtcomment" class="form-control" placeholder="Enter Remark (Optional)"></textarea>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" onclick="ManualAccept()" id="btn" class="btn btn-primary" value="Submit">Submit</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </fieldset>*@
-                <!-- Status Field End -->
-            </div><!--.modal-body-->
-        </div>
-    </div>
-</div>
-<!-- Modal End -->
 <!-- Script For Loder -->
 <script>
     $('.btnssl2233').on('click', function () {
@@ -285,149 +155,89 @@
 </script>
 
 <script>
-    function Actions(Idno) {
-        $('#HdIdno').val(Idno);
-        $.ajax({
-            url: '@Url.Action("WLActionReport","Home")',
-            type: "POST",
-            data: {
-                Idno: Idno,
-                UserType: "Retailer"
-            },
-            dataType: "json",
-            success: function (data) {
-                $("#exampleModal .modal-body #ReqId").html(data[0].RequestId);
-                $("#exampleModal .modal-header #ActionHeader").html(data[0].FirmName);
-                $("#exampleModal .modal-body #bnkAc").html(data[0].BankAccount);
-                $("#exampleModal .modal-body #AcHldr").html(data[0].accountholder);
-                $("#exampleModal .modal-body #Ifcd").html(data[0].IfscCode);
-                $("#exampleModal .modal-body #BnkNm").html(data[0].BankName);
-                $("#exampleModal .modal-body #Amt").html(data[0].Amount);
-                $("#exampleModal .modal-body #chrg").html(data[0].ProcessingCharge);
-                $("#exampleModal .modal-body #PreRm").html(data[0].RemPre);
-                $("#exampleModal .modal-body #Dbt").html(data[0].Total_Debit);
-                $("#exampleModal .modal-body #PostRm").html(data[0].RemPost);
-                $("#exampleModal .modal-body #BnkRrn").html(data[0].BankRRN);
-            /*************************Start JSON Date Convertion*******************/
-                var MyDate_String_Value = data[0].RequestDate;
-                var value = new Date
-                    (
-                        parseInt(MyDate_String_Value.replace(/(^.*\()|([+-].*$)/g, ''))
-                    );
-                //var dat = value.getMonth() +
-                //    1 +
-                //    "/" +
-                //    value.getDate() +
-                //    "/" +
-                //    value.getFullYear();
-                dat = value.toLocaleString();
-
-            /**********************************End JSON Date Convertion**************/
-                $("#exampleModal .modal-body #DtTm").html(dat);
-
-                //if (data[0].Status == "Pending") {
-                //    $('#Manual_SuccessFailed').css('display', 'block');
-                //    $('#myApproveRequest').css('display', 'none');
-                //}
-                //else {
-                //    $('#Manual_SuccessFailed').css('display', 'none');
-                //    $('#myApproveRequest').css('display', 'none');
-                //}
-                $("#exampleModal").modal("show");
-
-            },
-            error: function (error) {
-                console.log(`Error ${error}`);
-            }
-        });
+    function cdcGetUnloadReloadParams() {
+        var isWAdmin = $('#WAdminSRC').hasClass('active') || $('#WAdminSRC').hasClass('current3');
+        if (isWAdmin) {
+            return {
+                ddlusers: 'WAdmin',
+                RetailerId: $('#Whitelabel').val() || '',
+                ddlstatus: $('#ddlstatus_wadmin').val() || '',
+                txt_frm_date: $('#txt_frm_date_wadmin').val() || '',
+                txt_to_date: $('#txt_to_date_wadmin').val() || '',
+                target: '#WAdminSearchList'
+            };
+        }
+        return {
+            ddlusers: 'Retailer',
+            RetailerId: $('#RetailerId').val() || '',
+            ddlstatus: $('#ddlstatus').val() || '',
+            txt_frm_date: $('#txt_frm_date').val() || '',
+            txt_to_date: $('#txt_to_date').val() || '',
+            target: '#RetailerSearchList'
+        };
     }
 
-</script>
-<script>
-    function ManualAccept() {
+    function cdcReloadUnloadTable() {
+        var $ = window.vmAdminJq || window.jQuery;
+        var cfg;
+        if (!$) {
+            return;
+        }
+        if (typeof window.cdcReloadUnloadWalletList === 'function') {
+            window.cdcReloadUnloadWalletList();
+            return;
+        }
+        cfg = cdcGetUnloadReloadParams();
         $.ajax({
-            url: '@Url.Action("AcceptWalletToBank","Home")',
-            type: "POST",
+            url: '@Url.Action("Unload_Retailer_Wallet","Home")',
+            type: 'POST',
             data: {
-                idNo: $('#HdIdno').val(),
-                txnpass: $('#txnpass').val(),
-                RRN: $('#RRN').val(),
-                txtcomment :$('#txtcomment').val()
+                ddlusers: cfg.ddlusers,
+                RetailerId: cfg.RetailerId,
+                ddlstatus: cfg.ddlstatus,
+                txt_frm_date: cfg.txt_frm_date,
+                txt_to_date: cfg.txt_to_date
             },
-            dataType: "json",
-            success: function (data) {
-                var responseJson = JSON.parse(data);
-                if (responseJson.status == "Success") {
-                    $("#exampleModal").modal("hide");
-                    //$('#myApproveRequest').css('display', 'none');
-                    $("#ManualSuccessModal").modal("hide");
-                $.ajax({
-                    url: '@Url.Action("Unload_Retailer_Wallet","Home")',
-                    type: 'POST',
-                    data: { ddlusers: "Retailer",RetailerId: $("#RetailerId").val(),ddlstatus: $("#ddlstatus").val(), txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val() },
-                    success: function (response) {
-
-                    $('#RetailerSearchList').html(response);
-
-                    }
-                  })
+            success: function (response) {
+                $(cfg.target).html(response);
+                if (typeof window.bootVmAdminSelectSearch === 'function') {
+                    window.bootVmAdminSelectSearch($(cfg.target));
+                } else if (typeof window.refreshAdminSelect2 === 'function') {
+                    window.refreshAdminSelect2($(cfg.target));
                 }
-            },
-            error: function (error) {
-                console.log(`Error ${error}`);
-                $("#exampleModal").modal("hide");
-                $("#ManualSuccessModal").modal("hide");
             }
         });
-
-        $('#HdIdno').val('')
-        $('#RRN').val('')
-        $('#txtcomment').val('')
     }
 
-
-    function ManualReject(Idno) {
-        $('#HdIdno').val(Idno);
-        $.ajax({
-            url: '@Url.Action("RefundWalletToBank","Home")',
-            type: "POST",
-            data: {
-                idNo: $('#HdIdno').val()
-            },
-            dataType: "json",
-            success: function (data) {
-                $("#exampleModal").modal("hide");
-                var responseJson = JSON.parse(data);
-                if (responseJson.status == "Success") {
-                $.ajax({
-                    url: '@Url.Action("Unload_Retailer_Wallet","Home")',
-                    type: 'POST',
-                    data: { ddlusers: "Retailer",RetailerId: $("#RetailerId").val(),ddlstatus: $("#ddlstatus").val(), txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val() },
-                    success: function (response) {
-
-                    $('#RetailerSearchList').html(response);
-
-
-                    }
-                  })
+    function FailedToSuccess(idno, status) {
+        if (status !== 'Rejected') {
+            return;
+        }
+        swal({
+            title: 'Mark as success?',
+            text: 'This will change rejected request to success.',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, continue',
+            cancelButtonText: 'Cancel',
+            closeOnConfirm: true
+        }, function (isConfirm) {
+            if (!isConfirm) {
+                return;
+            }
+            $.ajax({
+                url: '@Url.Action("wallet_upload_failed_to_success", "Home")',
+                type: 'POST',
+                data: { idno: idno },
+                success: function () {
+                    swal('Success!', 'Request updated successfully.', 'success');
+                    cdcReloadUnloadTable();
+                },
+                error: function () {
+                    swal('Oops!', 'Unable to update request.', 'error');
                 }
-            },
-            error: function (error) {
-                console.log(`Error ${error}`);
-            }
+            });
         });
-
-        $('#HdIdno').val('')
-    }
-
-    $('#Manual-Success').on('click', function () {
-        $('#myApproveRequest').css('display', 'block');
-    });
-
-
-    function ManualSuccessAction(Idno) {
-        $('#HdIdno').val(Idno);
-        $("#ManualSuccessModal").modal("show");
     }
 </script>
 
@@ -449,30 +259,34 @@
         $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
     });
 
-    function FailedToSuccess(idno, status) {
-
-        if (status == 'Rejected') {
-            $.ajax({
-                url: '@Url.Action("wallet_upload_failed_to_success")' + '?idno=' + idno,
-                method: 'POST',
-                body: { idno },
-                success: () => {
-                    //location.reload()
-                }
-            })
-        }
-    }
-
     function SuccessToFailed(idno, status) {
-        if (status == 'Success') {
-            $.ajax({
-                url: '@Url.Action("wallet_upload_success_to_failed")' + '?idno=' + idno,
-                method: 'POST',
-                body: { idno },
-                success: () => {
-                    //location.reload()
-                }
-            })
+        if (status !== 'Success') {
+            return;
         }
+        swal({
+            title: 'Mark as failed?',
+            text: 'This will change success request to failed.',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, continue',
+            cancelButtonText: 'Cancel',
+            closeOnConfirm: true
+        }, function (isConfirm) {
+            if (!isConfirm) {
+                return;
+            }
+            $.ajax({
+                url: '@Url.Action("wallet_upload_success_to_failed", "Home")',
+                type: 'POST',
+                data: { idno: idno },
+                success: function () {
+                    swal('Updated!', 'Request updated successfully.', 'success');
+                    cdcReloadUnloadTable();
+                },
+                error: function () {
+                    swal('Oops!', 'Unable to update request.', 'error');
+                }
+            });
+        });
     }
 </script>

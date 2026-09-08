@@ -11,7 +11,7 @@
 <link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=25" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-add-purchase-modern.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-add-purchase-modern.css?v=24" rel="stylesheet" />
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <link href="~/select2/dist/css/select2.css" rel="stylesheet" />
 
@@ -434,6 +434,116 @@
     </div><!-- vm-ft-page-shell -->
 </section>
 
+<!-- Unload wallet approve / detail modals (single instance — do not duplicate in partial) -->
+<div class="modal fade saas-admin-modal vm-cdc-unload-modal" id="ManualSuccessModal" tabindex="-1" role="dialog" aria-labelledby="ManualSuccessModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-emerald">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="modal-title saas-admin-modal-title" id="ManualSuccessModalLabel">Approve Request</h4>
+                        <p class="saas-admin-modal-sub">Enter transaction password and bank RRN to approve</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body vm-dmt-modal-body">
+                <div class="vm-dmt-modal-grid vm-dmt-modal-grid--1">
+                    <div class="vm-dmt-modal-field">
+                        <label for="txnpass">Transaction Password <span class="text-danger">*</span></label>
+                        <input type="password" id="txnpass" name="txnpass" class="form-control vm-dmt-modal-input" autocomplete="off" placeholder="Enter transaction password" />
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label for="RRN">Bank RRN <span class="text-danger">*</span></label>
+                        <input type="text" id="RRN" name="RRN" class="form-control vm-dmt-modal-input" placeholder="Enter bank RRN" />
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label for="txtcomment">Remark <span class="text-muted">(optional)</span></label>
+                        <textarea id="txtcomment" name="txtcomment" class="form-control vm-dmt-modal-input vm-cdc-unload-modal__remark" rows="3" placeholder="Enter remark (optional)"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal"><i class="fas fa-times" aria-hidden="true"></i> Close</button>
+                <button type="button" onclick="ManualAccept()" id="btnManualAccept" class="saas-admin-modal-btn saas-admin-modal-btn--primary"><i class="fas fa-check" aria-hidden="true"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade saas-admin-modal vm-cdc-unload-modal vm-cdc-unload-detail-modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-sky">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-university" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="modal-title saas-admin-modal-title" id="exampleModalLabel"><span id="ActionHeader">Wallet unload details</span></h4>
+                        <p class="saas-admin-modal-sub">Bank transfer request information</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body vm-dmt-modal-body vm-dmt-detail-body">
+                <div class="vm-dmt-detail-grid vm-dmt-detail-grid--2">
+                    <div class="vm-dmt-modal-field">
+                        <label for="ReqId">Request ID</label>
+                        <input type="text" class="form-control vm-dmt-modal-input" id="ReqId" readonly="readonly" value="N/A" />
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Bank Account</label>
+                        <span class="vm-cdc-unload-detail-val datas" id="bnkAc">N/A</span>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Account Holder Name</label>
+                        <span class="vm-cdc-unload-detail-val datas" id="AcHldr">N/A</span>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>IFSC Code</label>
+                        <span class="vm-cdc-unload-detail-val datas" id="Ifcd">N/A</span>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Bank Name</label>
+                        <span class="vm-cdc-unload-detail-val datas" id="BnkNm">N/A</span>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Amount</label>
+                        <span class="vm-cdc-unload-detail-val datas" id="Amt">N/A</span>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Charge</label>
+                        <span class="vm-cdc-unload-detail-val datas" id="chrg">N/A</span>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Pre Remain</label>
+                        <span class="vm-cdc-unload-detail-val datas" id="PreRm">N/A</span>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Debit Amount</label>
+                        <span class="vm-cdc-unload-detail-val datas" id="Dbt">N/A</span>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Post Remain</label>
+                        <span class="vm-cdc-unload-detail-val datas" id="PostRm">N/A</span>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Bank RRN</label>
+                        <span class="vm-cdc-unload-detail-val datas" id="BnkRrn">N/A</span>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Date &amp; Time</label>
+                        <span class="vm-cdc-unload-detail-val datas" id="DtTm">N/A</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal"><i class="fas fa-times" aria-hidden="true"></i> Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- ========   Wallet To Bank Charge Add New Modal  =============-->
 <div id="myModal" class="modal fade Wallet-To-Bank-Charge-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -601,6 +711,232 @@
 <script src="~/AdminDesign/js/demo.js"></script>
 
 <script src="~/Swalalert/sweetalert-dev.js"></script>
+<script>
+    (function ($) {
+        'use strict';
+        if (!$) {
+            return;
+        }
+
+        function cdcParseRejectResponse(data) {
+            try {
+                return typeof data === 'string' ? JSON.parse(data) : (data || {});
+            } catch (ignore) {
+                return { status: 'Failed', Message: 'Unexpected response from server.' };
+            }
+        }
+
+        function cdcReloadUnloadWalletList() {
+            var isWAdmin = $('#WAdminSRC').hasClass('active') || $('#WAdminSRC').hasClass('current3');
+            var payload;
+            var target;
+            if (isWAdmin) {
+                payload = {
+                    ddlusers: 'WAdmin',
+                    RetailerId: $('#Whitelabel').val() || '',
+                    ddlstatus: $('#ddlstatus_wadmin').val() || '',
+                    txt_frm_date: $('#txt_frm_date_wadmin').val() || '',
+                    txt_to_date: $('#txt_to_date_wadmin').val() || ''
+                };
+                target = '#WAdminSearchList';
+            } else {
+                payload = {
+                    ddlusers: 'Retailer',
+                    RetailerId: $('#RetailerId').val() || '',
+                    ddlstatus: $('#ddlstatus').val() || '',
+                    txt_frm_date: $('#txt_frm_date').val() || '',
+                    txt_to_date: $('#txt_to_date').val() || ''
+                };
+                target = '#RetailerSearchList';
+            }
+            $.ajax({
+                url: '@Url.Action("Unload_Retailer_Wallet", "Home")',
+                type: 'POST',
+                data: payload,
+                success: function (response) {
+                    $(target).html(response);
+                }
+            });
+        }
+        window.cdcReloadUnloadWalletList = cdcReloadUnloadWalletList;
+
+        function cdcRunReject(Idno) {
+            $.ajax({
+                url: '@Url.Action("RefundWalletToBank", "Home")',
+                type: 'POST',
+                data: { idNo: Idno },
+                dataType: 'json',
+                success: function (data) {
+                    var res = cdcParseRejectResponse(data);
+                    if (res.status === 'Success') {
+                        swal('Rejected!', res.Message || 'Request rejected successfully.', 'success');
+                        cdcReloadUnloadWalletList();
+                    } else {
+                        swal('Oops!', res.Message || 'Unable to reject request.', 'error');
+                    }
+                },
+                error: function () {
+                    swal('Oops!', 'Something went wrong. Please try again.', 'error');
+                }
+            });
+        }
+
+        window.ManualReject = function (Idno) {
+            swal({
+                title: 'Reject request?',
+                text: 'Are you sure you want to reject/refund this request?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: 'Yes, reject',
+                cancelButtonText: 'Cancel',
+                closeOnConfirm: true
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    cdcRunReject(Idno);
+                }
+            });
+        };
+
+        window.cdcUnloadApproveId = 0;
+
+        function cdcClearApproveForm() {
+            $('#txnpass, #RRN, #txtcomment').val('');
+        }
+
+        function cdcEnsureUnloadModals() {
+            var $boot = window.vmAdminJq || window.jQuery;
+            if (!$boot) {
+                return false;
+            }
+            $boot('#ManualSuccessModal, #exampleModal').each(function () {
+                var $modal = $boot(this);
+                if ($modal.length && !$modal.parent().is('body')) {
+                    $modal.appendTo('body');
+                }
+            });
+            return !!($boot.fn && $boot.fn.modal);
+        }
+
+        function cdcBootUnloadModals() {
+            if (!cdcEnsureUnloadModals()) {
+                setTimeout(cdcBootUnloadModals, 120);
+                return;
+            }
+            var $boot = window.vmAdminJq || window.jQuery;
+            $boot('#ManualSuccessModal').off('shown.bs.modal.cdc').on('shown.bs.modal.cdc', function () {
+                $boot('#txnpass').trigger('focus');
+            });
+        }
+        cdcBootUnloadModals();
+
+        window.ManualSuccessAction = function (Idno) {
+            var $boot = window.vmAdminJq || window.jQuery;
+            if (!$boot || !$boot.fn || !$boot.fn.modal) {
+                swal('Oops!', 'Page still loading. Please try again.', 'error');
+                return;
+            }
+            window.cdcUnloadApproveId = Idno;
+            cdcClearApproveForm();
+            cdcEnsureUnloadModals();
+            $boot('#ManualSuccessModal').modal('show');
+        };
+
+        window.ManualAccept = function () {
+            var $boot = window.vmAdminJq || window.jQuery;
+            var txnpass = $boot.trim($boot('#txnpass').val());
+            var rrn = $boot.trim($boot('#RRN').val());
+            var idNo = window.cdcUnloadApproveId;
+
+            if (!idNo) {
+                swal('Oops!', 'Invalid request. Please open approve again.', 'error');
+                return;
+            }
+            if (!txnpass) {
+                swal('Oops!', 'Please enter Transaction Password.', 'error');
+                $boot('#txnpass').focus();
+                return;
+            }
+            if (!rrn) {
+                swal('Oops!', 'Please enter Bank RRN.', 'error');
+                $boot('#RRN').focus();
+                return;
+            }
+
+            $boot('#btnManualAccept').prop('disabled', true);
+
+            $boot.ajax({
+                url: '@Url.Action("AcceptWalletToBank","Home")',
+                type: 'POST',
+                data: {
+                    idNo: idNo,
+                    txnpass: txnpass,
+                    RRN: rrn,
+                    txtcomment: $('#txtcomment').val()
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var responseJson = cdcParseRejectResponse(data);
+                    if (responseJson.status === 'Success') {
+                        $boot('#exampleModal, #ManualSuccessModal').modal('hide');
+                        window.cdcUnloadApproveId = 0;
+                        cdcClearApproveForm();
+                        swal('Success!', responseJson.Message || 'Request approved successfully.', 'success');
+                        cdcReloadUnloadWalletList();
+                    } else {
+                        swal('Oops!', responseJson.Message || 'Unable to approve request.', 'error');
+                    }
+                },
+                error: function () {
+                    swal('Oops!', 'Something went wrong. Please try again.', 'error');
+                },
+                complete: function () {
+                    $boot('#btnManualAccept').prop('disabled', false);
+                }
+            });
+        };
+
+        window.Actions = function (Idno) {
+            var $boot = window.vmAdminJq || window.jQuery;
+            window.cdcUnloadApproveId = Idno;
+            $boot.ajax({
+                url: '@Url.Action("WLActionReport","Home")',
+                type: 'POST',
+                data: {
+                    Idno: Idno,
+                    UserType: 'Retailer'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (!data || !data.length) {
+                        swal('Oops!', 'Unable to load request details.', 'error');
+                        return;
+                    }
+                    cdcEnsureUnloadModals();
+                    $boot('#ActionHeader').text(data[0].FirmName || 'Wallet unload details');
+                    $boot('#ReqId').val(data[0].RequestId || 'N/A');
+                    $boot('#bnkAc').text(data[0].BankAccount || 'N/A');
+                    $boot('#AcHldr').text(data[0].accountholder || 'N/A');
+                    $boot('#Ifcd').text(data[0].IfscCode || 'N/A');
+                    $boot('#BnkNm').text(data[0].BankName || 'N/A');
+                    $boot('#Amt').text(data[0].Amount || 'N/A');
+                    $boot('#chrg').text(data[0].ProcessingCharge || 'N/A');
+                    $boot('#PreRm').text(data[0].RemPre || 'N/A');
+                    $boot('#Dbt').text(data[0].Total_Debit || 'N/A');
+                    $boot('#PostRm').text(data[0].RemPost || 'N/A');
+                    $boot('#BnkRrn').text(data[0].BankRRN || 'N/A');
+                    var MyDate_String_Value = data[0].RequestDate;
+                    var value = new Date(parseInt(MyDate_String_Value.replace(/(^.*\()|([+-].*$)/g, ''), 10));
+                    $boot('#DtTm').text(value.toLocaleString());
+                    $boot('#exampleModal').modal('show');
+                },
+                error: function () {
+                    swal('Oops!', 'Unable to load request details.', 'error');
+                }
+            });
+        };
+    })(window.jQuery);
+</script>
 
 <!-- Custom Js -->
 <script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>

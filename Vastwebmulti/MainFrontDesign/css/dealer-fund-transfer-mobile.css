@@ -1,0 +1,218 @@
+/**
+ * DEALER Fund Transfer — mobile & tablet responsive (DEALER only).
+ * Fixes legacy Dashcustom float/20% tab layout on small screens.
+ * Admin fund transfer is NOT affected.
+ */
+
+/* —— Tablet (≤1199px) —— */
+@media (max-width: 1199px) {
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page {
+        padding: 6px 10px 14px !important;
+        overflow-x: hidden !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-page-shell.container-fluid,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-layout-wrap,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        float: none !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-form-col,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-history-col {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        float: none !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-page-toolbar {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        padding: 8px 10px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-search-wrap {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Role tabs — kill Dashcustom float/20% width */
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left .nav-tabs li,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.tab-link,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.vm-ft-role-tab-li {
+        width: 100% !important;
+        max-width: none !important;
+        float: none !important;
+        margin: 0 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        width: calc(100% - 20px) !important;
+        margin: 10px 10px 0 !important;
+        padding: 0 !important;
+        float: none !important;
+        overflow: visible !important;
+        border: none !important;
+        background: transparent !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li > a.vm-ft-role-tab,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li > a,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left .nav-tabs > li > a {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        min-height: 44px !important;
+        height: auto !important;
+        padding: 10px 8px !important;
+        margin: 0 !important;
+        float: none !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        line-height: 1.25 !important;
+        white-space: normal !important;
+        text-align: center !important;
+        word-break: break-word !important;
+        border-right: 1px solid #e2e8f0 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left .nav-tabs {
+        background: transparent !important;
+        border-bottom: none !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .tabcurrent-seconddesign {
+        width: 100% !important;
+        float: none !important;
+        padding: 0 10px 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-transfer-form {
+        width: 100% !important;
+        float: none !important;
+        height: auto !important;
+        max-height: none !important;
+        padding: 8px 0 12px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-transfer-form .col-md-12 {
+        width: 100% !important;
+        float: none !important;
+        padding: 0 4px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .dlmtoremremainbalance,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .old-cr {
+        display: inline-flex !important;
+        flex-wrap: wrap !important;
+        margin-top: 6px !important;
+        margin-right: 6px !important;
+    }
+}
+
+/* —— Mobile (≤767px) —— */
+@media (max-width: 767px) {
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page {
+        padding: 4px 8px 12px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-page-toolbar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-form-card-header {
+        padding: 10px 12px !important;
+    }
+
+    /* 2 tabs — stack full width on phone */
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-template-columns: none !important;
+        gap: 8px !important;
+        width: calc(100% - 16px) !important;
+        margin: 10px 8px 0 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left .nav-tabs li {
+        width: 100% !important;
+        flex: 0 0 auto !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li > a.vm-ft-role-tab,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li > a {
+        min-height: 46px !important;
+        padding: 12px 10px !important;
+        font-size: 14px !important;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-history-toolbar__filters,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-history-filters-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-history-field,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-dmt-filter-search-group.vm-ft-date-search-group {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-date-search-group .saas-acc-dp-field {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-date-search-group .saas-acc-btn,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-date-search-group .vm-ft-search-btn {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-table-wrap,
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page #tblshowMasterD .vm-ft-table-wrap {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page #tblshowMasterD table {
+        min-width: 880px !important;
+    }
+}
+
+/* —— Small phones (≤480px) —— */
+@media (max-width: 480px) {
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-breadcrumb {
+        font-size: 12px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-form-card-header__title {
+        font-size: 14px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-fund-transfer-page .vm-ft-form-card-header__sub {
+        font-size: 12px !important;
+    }
+}

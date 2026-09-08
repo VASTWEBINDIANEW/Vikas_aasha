@@ -34,6 +34,11 @@ body.saas-admin-ui .select2-dropdown {
     z-index: 10051 !important;
 }
 
+body.saas-admin-ui .select2-dropdown.vm-rl-drawer-select2-dropdown,
+body.saas-admin-ui.vm-rl-modal-open .select2-dropdown.vm-rl-drawer-select2-dropdown {
+    z-index: 100050 !important;
+}
+
 /* Closed field — single clean border (no inset/double-box look) */
 body.saas-admin-ui .select2-container {
     border: none !important;
@@ -128,11 +133,42 @@ body.saas-admin-ui .select2-results {
     padding: 4px !important;
 }
 
+body.saas-admin-ui .select2-dropdown.vm-admin-select2-searchable,
+body.saas-admin-ui .select2-dropdown.vm-csp-select2-dropdown {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .select2-dropdown.vm-admin-select2-searchable .select2-results,
+body.saas-admin-ui .select2-dropdown.vm-csp-select2-dropdown .select2-results {
+    overflow: hidden !important;
+    border-bottom-left-radius: var(--vm-select2-radius-lg) !important;
+    border-bottom-right-radius: var(--vm-select2-radius-lg) !important;
+}
+
 /* Search header */
 body.saas-admin-ui .select2-search--dropdown {
     padding: 10px !important;
     background: linear-gradient(180deg, #f8fafc 0%, #fff 100%) !important;
     border-bottom: 1px solid var(--vm-select2-border-soft) !important;
+    pointer-events: auto !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 52px !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .select2-search--dropdown.select2-search--hide,
+body.saas-admin-ui .select2-dropdown.vm-admin-select2-searchable .select2-search--dropdown.select2-search--hide,
+body.saas-admin-ui .select2-dropdown.vm-csp-select2-dropdown .select2-search--dropdown.select2-search--hide {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 52px !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
 }
 
 body.saas-admin-ui .select2-search--dropdown .select2-search__field {
@@ -147,6 +183,10 @@ body.saas-admin-ui .select2-search--dropdown .select2-search__field {
     box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03) !important;
     background: #fff !important;
     background-image: none !important;
+    pointer-events: auto !important;
+    cursor: text !important;
+    user-select: text !important;
+    -webkit-user-select: text !important;
 }
 
 body.saas-admin-ui .select2-search--dropdown .select2-search__field::-webkit-search-decoration,
@@ -288,6 +328,42 @@ body.saas-admin-ui .saas-acc-report-filters .select2-container--default .select2
     line-height: 1.25 !important;
 }
 
+body.saas-admin-ui.modal-open .select2-dropdown,
+body.saas-admin-ui.modal-open .select2-dropdown.vm-admin-select2-dropdown,
+body.saas-admin-ui.modal-open .select2-dropdown.vm-csp-select2-dropdown {
+    z-index: 11130 !important;
+}
+
+body.saas-admin-ui.modal-open .select2-search--dropdown,
+body.saas-admin-ui.modal-open .select2-search--dropdown.select2-search--hide {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 52px !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui.modal-open .select2-search--dropdown .select2-search__field {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    pointer-events: auto !important;
+    cursor: text !important;
+}
+
+body.saas-admin-ui .modal.vm-admin-select2-open .modal-dialog,
+body.saas-admin-ui .modal.vm-admin-select2-open .modal-content,
+body.saas-admin-ui .modal.vm-admin-select2-open .saas-admin-modal-body,
+body.saas-admin-ui .modal.vm-admin-select2-open .vm-sm-modal-body {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .modal .select2-dropdown,
+body.saas-admin-ui .modal .select2-container--open {
+    z-index: 10062 !important;
+}
+
 /* Modal / drawer selects */
 body.saas-admin-ui .modal .select2-container--open,
 body.saas-admin-ui .saas-admin-modal .select2-container--open {
@@ -306,7 +382,9 @@ body.saas-admin-ui .saas-admin-modal .select2-dropdown {
 /* Hidden native select must never draw a visible box */
 body.saas-admin-ui select.select2-hidden-accessible,
 body.saas-admin-ui select.form-control.select2-hidden-accessible,
-body.saas-admin-ui .form-control.select2-hidden-accessible {
+body.saas-admin-ui .form-control.select2-hidden-accessible,
+body.saas-admin-ui .modal select.form-control.select2-hidden-accessible,
+body.saas-admin-ui .vm-sm-modal-field select.form-control.select2-hidden-accessible {
     border: 0 !important;
     outline: 0 !important;
     box-shadow: none !important;
@@ -316,8 +394,8 @@ body.saas-admin-ui .form-control.select2-hidden-accessible {
     margin: 0 !important;
     min-height: 0 !important;
     max-height: none !important;
-    width: 1px !important;
     height: 1px !important;
+    width: 1px !important;
     opacity: 0 !important;
     pointer-events: none !important;
 }
@@ -404,4 +482,64 @@ body.saas-admin-ui .vm-ml-create-form .select2-container--default .select2-selec
     border: none !important;
     box-shadow: none !important;
     background: transparent !important;
+}
+
+/* Hard guarantee — search box never hidden on any admin/dealer select2 dropdown */
+html body .select2-dropdown .select2-search.select2-search--dropdown,
+html body .select2-dropdown .select2-search--dropdown,
+html body .select2-search--dropdown.select2-search--hide {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 52px !important;
+    max-height: none !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+    padding: 10px !important;
+}
+
+html body .select2-dropdown .select2-search__field {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    pointer-events: auto !important;
+    cursor: text !important;
+    background: #fff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 9px !important;
+    padding: 9px 12px !important;
+}
+
+/* Final override — Select2 core hides search via .select2-search--hide { display:none } */
+html body.saas-admin-ui .select2-dropdown .select2-search.select2-search--dropdown,
+html body.saas-admin-ui .select2-dropdown .select2-search--dropdown,
+html body.saas-admin-ui .select2-container--open .select2-search--dropdown,
+html body.saas-admin-ui .select2-search--dropdown.select2-search--hide,
+html body.saas-admin-ui .select2-dropdown.vm-csp-select2-dropdown .select2-search--dropdown,
+html body.saas-admin-ui.modal-open .select2-dropdown .select2-search--dropdown {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 52px !important;
+    max-height: none !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+    padding: 10px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    background: #f8fafc !important;
+}
+
+html body.saas-admin-ui .select2-dropdown .select2-search__field,
+html body.saas-admin-ui .select2-container--open .select2-search__field {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    pointer-events: auto !important;
+    cursor: text !important;
 }

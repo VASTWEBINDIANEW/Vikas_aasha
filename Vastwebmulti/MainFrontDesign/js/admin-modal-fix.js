@@ -8,6 +8,22 @@
     var Modal = $.fn.modal.Constructor;
     var _hideModal = Modal.prototype.hideModal;
 
+    /* Bootstrap modal focus trap blocks Select2 search when dropdown is on body */
+    if (Modal.prototype.enforceFocus) {
+        Modal.prototype.enforceFocus = function () {
+            $(document)
+                .off('focusin.bs.modal')
+                .on('focusin.bs.modal', $.proxy(function (e) {
+                    if ($(e.target).closest('.select2-container, .select2-dropdown, .select2-search__field').length) {
+                        return;
+                    }
+                    if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
+                        this.$element.trigger('focus');
+                    }
+                }, this));
+        };
+    }
+
     function isAdminUi() {
         return document.body && document.body.classList.contains("saas-admin-ui");
     }
