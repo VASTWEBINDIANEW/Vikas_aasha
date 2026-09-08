@@ -63,6 +63,12 @@
         if ($el.attr('data-live-search') === 'false' || $el.attr('data_live_search') === 'false') {
             return true;
         }
+        if ($el.closest('.saas-operator-report-page').length && $('#operatorReportForm').length) {
+            var $filterWrap = $el.closest('.vm-opr-filter-extra');
+            if ($filterWrap.length && ($filterWrap.is(':hidden') || $filterWrap.css('display') === 'none')) {
+                return true;
+            }
+        }
         return false;
     }
 

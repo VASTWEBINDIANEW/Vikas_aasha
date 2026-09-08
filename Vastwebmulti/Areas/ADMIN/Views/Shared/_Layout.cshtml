@@ -6832,7 +6832,7 @@ OnSuccess = "ONSUCCESSGETDATA"
         })(window.vmAdminJq || window.jQuery);
     </script>
     <script src="~/MainFrontDesign/js/admin-dynamic-theme.js?v=10"></script>
-    <script src="~/MainFrontDesign/js/vm.js?v=6"></script>
+    <script src="~/MainFrontDesign/js/vm.js?v=7"></script>
     <script src="~/MainFrontDesign/js/vm-admin-drawer-select2.js?v=3"></script>
     <script>
         (function () {
@@ -6864,6 +6864,12 @@ OnSuccess = "ONSUCCESSGETDATA"
                     }
                     if ($el.find('option').length < 2) {
                         return;
+                    }
+                    if ($el.closest('.saas-operator-report-page').length && $('#operatorReportForm').length) {
+                        var $filterWrap = $el.closest('.vm-opr-filter-extra');
+                        if ($filterWrap.length && ($filterWrap.is(':hidden') || $filterWrap.css('display') === 'none')) {
+                            return;
+                        }
                     }
                     if ($el.hasClass('select2-hidden-accessible') && $el.next('.select2-container').length) {
                         return;

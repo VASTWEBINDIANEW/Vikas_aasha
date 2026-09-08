@@ -94,16 +94,21 @@
     }
 
     function getSelect2Opts($el) {
-        var id = $el.attr('id') || '';
         var isMultiple = $el.prop('multiple');
-        var placeholder = $el.attr('title') || $el.find('option:first').text() || 'Select';
+        var placeholderText = $el.find('option[value=""]').first().text() ||
+            $el.find('option:first').text() ||
+            $el.attr('title') ||
+            'Select';
         return {
             width: '100%',
             dropdownParent: $('body'),
             allowClear: false,
             closeOnSelect: !isMultiple,
             minimumResultsForSearch: 0,
-            placeholder: placeholder,
+            placeholder: {
+                id: '',
+                text: placeholderText
+            },
             language: {
                 noResults: function () { return 'No match found'; },
                 searching: function () { return 'Searching...'; },
@@ -157,6 +162,12 @@
             return;
         }
         $el.select2(getSelect2Opts($el));
+        if (typeof window.forceAdminSelect2SearchAlways === 'function') {
+            window.forceAdminSelect2SearchAlways($el);
+        }
+        if (typeof window.bindAdminSelect2SearchBehavior === 'function') {
+            window.bindAdminSelect2SearchBehavior($el);
+        }
     }
 
     function initOprSelects() {
@@ -181,6 +192,12 @@
         destroySelect2($el);
         if (isSelectVisible($el)) {
             $el.select2(getSelect2Opts($el));
+            if (typeof window.forceAdminSelect2SearchAlways === 'function') {
+                window.forceAdminSelect2SearchAlways($el);
+            }
+            if (typeof window.bindAdminSelect2SearchBehavior === 'function') {
+                window.bindAdminSelect2SearchBehavior($el);
+            }
             if (val !== null && val !== undefined) {
                 $el.val(val).trigger('change.select2');
             }
@@ -283,7 +300,7 @@
             $wrap.toggleClass('is-visible', visible);
             var $sel = $wrap.find('select.vm-opr-select');
             if (visible) {
-                ensureSelect2($sel);
+                refreshSelect2($sel);
             } else {
                 destroySelect2($sel);
             }
