@@ -16,7 +16,7 @@
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=42" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=27" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-support-pages-modern.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-support-pages-modern.css?v=7" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-support-page saas-bank-page saas-delete-bank-report-page">
 
@@ -71,15 +71,20 @@
                         <table id="deleteApproveBankTable" class="table vm-opr-data-table saas-acc-table saas-acc-table--bank" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Delete&nbsp;Date</th>
-                                    <th>Account&nbsp;Holder</th>
-                                    <th>Account&nbsp;No.</th>
+                                    <th>Delete<br>Date</th>
+                                    <th>
+                                        <span class="vm-del-bank-head">
+                                            <span class="vm-del-bank-head__line">Account</span>
+                                            <span class="vm-del-bank-head__line">Holder</span>
+                                        </span>
+                                    </th>
+                                    <th>Account<br>No.</th>
                                     <th>IFSC</th>
-                                    <th>Bank&nbsp;Name</th>
-                                    <th>Bank&nbsp;Address</th>
+                                    <th>Bank<br>Name</th>
+                                    <th>Bank<br>Address</th>
                                     <th>Email</th>
-                                    <th>Firm&nbsp;Name</th>
-                                    <th>Cancel&nbsp;Cheque</th>
+                                    <th>Firm<br>Name</th>
+                                    <th>Cancel<br>Cheque</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -96,9 +101,12 @@
                                 {
                                     foreach (var item in rows)
                                     {
-                                        var deletedDate = item.deleteddate.HasValue
-                                            ? item.deleteddate.Value.ToString("dd-MM-yyyy hh:mm tt")
+                                        var deletedDateDay = item.deleteddate.HasValue
+                                            ? item.deleteddate.Value.ToString("dd-MM-yyyy")
                                             : "—";
+                                        var deletedDateTime = item.deleteddate.HasValue
+                                            ? item.deleteddate.Value.ToString("hh:mm tt")
+                                            : "";
                                         var holder = string.IsNullOrWhiteSpace(item.AcconutHolderName) ? "—" : item.AcconutHolderName;
                                         var accountNo = string.IsNullOrWhiteSpace(item.BankAccountNo) ? "—" : item.BankAccountNo;
                                         var ifsc = string.IsNullOrWhiteSpace(item.IFSC_CODE) ? "—" : item.IFSC_CODE;
@@ -109,9 +117,15 @@
 
                                         <tr>
                                             <td data-label="Delete Date">
-                                                <span class="vm-opr-date-meta"><i class="fas fa-calendar-alt" aria-hidden="true"></i> @deletedDate</span>
+                                                <span class="vm-del-bank-date">
+                                                    <span class="vm-del-bank-date__day"><i class="fas fa-calendar-alt" aria-hidden="true"></i> @deletedDateDay</span>
+                                                    @if (!string.IsNullOrEmpty(deletedDateTime))
+                                                    {
+                                                        <span class="vm-del-bank-date__time">@deletedDateTime</span>
+                                                    }
+                                                </span>
                                             </td>
-                                            <td data-label="Account Holder">@holder</td>
+                                            <td data-label="Account Holder"><span class="vm-del-bank-holder-cell">@holder</span></td>
                                             <td data-label="Account No.">@accountNo</td>
                                             <td data-label="IFSC">@ifsc</td>
                                             <td data-label="Bank Name">@bankName</td>
@@ -254,29 +268,6 @@
 
     .vm-dur-search-input::placeholder {
         color: #94a3b8;
-    }
-
-    .saas-delete-bank-report-page .vm-opr-table-scroll {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .saas-delete-bank-report-page .vm-opr-data-table {
-        min-width: 980px;
-    }
-
-    .saas-delete-bank-report-page .vm-opr-date-meta {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        white-space: nowrap;
-        font-size: .78rem;
-        color: #475569;
-    }
-
-    .saas-delete-bank-report-page .vm-opr-date-meta i {
-        color: #0891b2;
-        font-size: .72rem;
     }
 
     @@media (max-width: 767px) {

@@ -169,8 +169,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <link href="~/MainFrontDesign/css/Custom-style.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link href="~/MainFrontDesign/css/public-login-modern.css?v=33" rel="stylesheet" />
-    <script src="~/MainFrontDesign/js/public-login-modern.js?v=5"></script>
+    <link href="~/MainFrontDesign/css/public-login-modern.css?v=34" rel="stylesheet" />
+    <script src="~/MainFrontDesign/js/public-login-modern.js?v=6"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
@@ -596,6 +596,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
 
+                                                        <div class="vm-login-forget-email-wrap">
                                                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                                                         @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Enter Email ID/Mobile No", required = "", id = "yes" })
 
@@ -609,40 +610,18 @@
 
                                                                 <a href="#" onclick="otpsend('12')" id="forgetpass" class="hide_otp1 vm-login-forget-otp-link">Send OTP</a>
 
-                                                                <div class="hide_otp">
-                                                                    <div class="row clearfix ">
-                                                                        <div class="col-md-4">
-                                                                            <label class="required vm-login-forget-otp-label">Enter&nbsp;OTP</label>
-                                                                        </div>
-
-                                                                        <div class="col-md-8">
-
-
-                                                                            @*<input type="number" id="OTp" name="OTp" placeholder="Enter OTP" required="required" maxlength="4" style="height: 31px; width: 100%; border: 2px solid #dad9df; outline: none; text-align: center; font-size: 1.5em; border-radius: -1.7em; background-color: #ffffff; outline: none; margin-top: 6px; " />*@
-                                                                            <div class="inputfield vm-login-forget-otp-field">
-
-
-                                                                                <div class="otp_set2">
-
-                                                                                    <input class="tested" name="oTP" type="number" maxlength="1" onkeyup="onKeyUpEvent(1, event)" onfocus="onFocusEvent(1)" required>
-                                                                                    <input class="tested" name="oTP1" type="number" maxlength="1" onkeyup="onKeyUpEvent(2, event)" onfocus="onFocusEvent(2)" required>
-                                                                                    <input class="tested" name="oTP2" type="number" maxlength="1" onkeyup="onKeyUpEvent(3, event)" onfocus="onFocusEvent(3)" required>
-                                                                                    <input class="tested" name="oTP3" type="number" maxlength="1" onkeyup="onKeyUpEvent(4, event)" onfocus="onFocusEvent(4)" required>
-
-
-
-                                                                                </div>
-
-                                                                            </div>
-
-
-
-
-                                                                        </div>
+                                                                <div class="hide_otp vm-login-forget-otp-wrap">
+                                                                    <label class="required vm-login-forget-otp-label" for="forgetOtp1">Enter OTP</label>
+                                                                    <div class="vm-login-forget-otp-box otp_set2" role="group" aria-label="Enter 4 digit OTP">
+                                                                        <input class="vm-login-forget-otp-input tested" id="forgetOtp1" name="oTP" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="OTP digit 1" required>
+                                                                        <input class="vm-login-forget-otp-input tested" id="forgetOtp2" name="oTP1" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="OTP digit 2" required>
+                                                                        <input class="vm-login-forget-otp-input tested" id="forgetOtp3" name="oTP2" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="OTP digit 3" required>
+                                                                        <input class="vm-login-forget-otp-input tested" id="forgetOtp4" name="oTP3" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="OTP digit 4" required>
                                                                     </div>
                                                                 </div>
                                                             }
                                                         }
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -753,38 +732,10 @@
 
 
     <script>
-@* otp sect valu *@
-        var container = document.getElementsByClassName("otp_set2")[0];
-        container.onkeyup = function (e) {
-            var target = e.srcElement || e.target;
-            var maxLength = parseInt(target.attributes["maxlength"].value, 10);
-            var myLength = target.value.length;
-            if (myLength >= maxLength) {
-                var next = target;
-                while (next = next.nextElementSibling) {
-                    if (next == null)
-                        break;
-                    if (next.tagName.toLowerCase() === "input") {
-                        next.focus();
-                        break;
-                    }
-                }
-            }
-            // Move to previous field if empty (user pressed backspace)
-            else if (myLength === 0) {
-                var previous = target;
-                while (previous = previous.previousElementSibling) {
-                    if (previous == null)
-                        break;
-                    if (previous.tagName.toLowerCase() === "input") {
-                        previous.focus();
-                        break;
-                    }
-                }
-            }
+@* otp box auto-focus navigation *@
+        if (typeof window.vmLoginBindOtpBoxes === 'function') {
+            window.vmLoginBindOtpBoxes();
         }
-
-
 
         $("#UpdateForm").submit(function (e) {
 

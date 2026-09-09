@@ -76,50 +76,74 @@ body.saas-admin-ui .saas-incoming-report-page .vm-inc-msg-input::placeholder {
     font-weight: 500;
 }
 
-/* Table — override operator-report 44px first-col (checkbox column) */
+/* Table — override operator-report shared rules (4-col layout) */
 body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table {
-    min-width: 680px !important;
     width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
 }
 
 body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table thead th,
 body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table tbody td {
-    padding: 10px 12px !important;
-    font-size: 0.8rem !important;
+    padding: 8px 6px !important;
+    font-size: 0.78rem !important;
     vertical-align: middle !important;
     text-align: center !important;
-}
-
-body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table thead th:first-child,
-body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table tbody td:first-child {
-    width: auto !important;
-    min-width: 120px !important;
-    max-width: none !important;
-    padding-left: 12px !important;
-    padding-right: 12px !important;
 }
 
 body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table thead th {
     background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
     border-bottom: 2px solid #dbe4f0 !important;
-    white-space: nowrap !important;
-    overflow: visible !important;
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.15 !important;
+    letter-spacing: 0.02em !important;
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+}
+
+body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table thead th:nth-child(1),
+body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table tbody td:nth-child(1) {
+    width: 12% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table thead th:nth-child(2),
+body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table tbody td:nth-child(2) {
+    width: 14% !important;
+    min-width: 0 !important;
+    max-width: none !important;
 }
 
 body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table thead th:nth-child(3),
 body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table tbody td:nth-child(3) {
+    width: 54% !important;
+    min-width: 0 !important;
+    max-width: none !important;
     text-align: left !important;
     white-space: normal !important;
-    min-width: 220px;
-    max-width: 520px;
     word-break: break-word;
-    line-height: 1.45 !important;
+    line-height: 1.4 !important;
+}
+
+body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table thead th:nth-child(4),
+body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table tbody td:nth-child(4) {
+    width: 20% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    font-size: 0.72rem !important;
+    white-space: normal !important;
+    word-break: break-word;
+    line-height: 1.25 !important;
 }
 
 body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table tbody td:nth-child(1),
-body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table tbody td:nth-child(2),
-body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table tbody td:nth-child(4) {
-    white-space: nowrap;
+body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table tbody td:nth-child(2) {
+    white-space: nowrap !important;
 }
 
 body.saas-admin-ui .saas-incoming-report-page .vm-opr-table-empty {
@@ -189,8 +213,16 @@ body.saas-admin-ui .saas-incoming-report-page .vm-inc-loader {
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
     body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table {
-        min-width: 640px !important;
+        width: max-content !important;
+        min-width: 620px !important;
+        table-layout: auto !important;
+    }
+
+    body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table thead th:nth-child(3),
+    body.saas-admin-ui .saas-incoming-report-page #example.vm-inc-data-table tbody td:nth-child(3) {
+        min-width: 200px;
+        max-width: 360px;
     }
 }

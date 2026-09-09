@@ -1030,25 +1030,66 @@
 .vm-login-page .vm-login-forget-otp-link,
 .vm-public-login .vm-login-forget-otp-link {
     position: absolute;
-    top: 3px;
-    right: 17px;
-    padding: 2px 5px;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    padding: 4px 8px;
     color: #16a34a;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.78rem;
+    z-index: 2;
+}
+
+.vm-login-page .vm-login-forget-email-wrap,
+.vm-public-login .vm-login-forget-email-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.vm-login-page .vm-login-forget-email-wrap .form-control,
+.vm-public-login .vm-login-forget-email-wrap .form-control {
+    padding-right: 88px;
+}
+
+.vm-login-page .vm-login-forget-otp-wrap,
+.vm-public-login .vm-login-forget-otp-wrap {
+    margin-top: 14px;
+    width: 100%;
 }
 
 .vm-login-page .vm-login-forget-otp-label,
 .vm-public-login .vm-login-forget-otp-label {
-    margin-top: 0.5rem;
+    display: block;
+    margin: 0 0 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--vm-login-text, #334155);
+    text-align: left;
 }
 
 .vm-login-page .vm-login-forget-otp-field,
 .vm-public-login .vm-login-forget-otp-field {
     width: 100%;
-    margin-top: 5px;
-    text-align: end;
+    margin-top: 0;
+    text-align: left;
+}
+
+.vm-login-page .vm-login-forget-otp-box,
+.vm-public-login .vm-login-forget-otp-box,
+.vm-login-page .otp_set,
+.vm-public-login .otp_set,
+.vm-login-page .otp_set_1,
+.vm-public-login .otp_set_1,
+.vm-login-page .otp_set2,
+.vm-public-login .otp_set2 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
 }
 
 .vm-login-page .vm-login-referral-col,
@@ -1168,18 +1209,65 @@
 .vm-login-page .otp_set_1 input,
 .vm-public-login .otp_set_1 input,
 .vm-login-page .otp_set2 input,
-.vm-public-login .otp_set2 input {
-    width: 42px !important;
-    height: 40px !important;
-    min-height: 40px !important;
-    max-height: 40px !important;
-    text-align: center;
-    border: 1px solid #cbd5e1 !important;
-    border-radius: 8px !important;
-    font-size: 1.1rem !important;
+.vm-public-login .otp_set2 input,
+.vm-login-page .vm-login-forget-otp-input,
+.vm-public-login .vm-login-forget-otp-input {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    flex: 0 0 48px !important;
+    display: block !important;
+    float: none !important;
+    text-align: center !important;
+    border: 2px solid #dbe2ea !important;
+    border-radius: 12px !important;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    line-height: 48px !important;
     background: #ffffff !important;
+    color: #0f172a !important;
     padding: 0 !important;
-    box-sizing: border-box;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+}
+
+.vm-login-page .vm-login-forget-otp-input:focus,
+.vm-public-login .vm-login-forget-otp-input:focus,
+.vm-login-page .otp_set input:focus,
+.vm-public-login .otp_set input:focus,
+.vm-login-page .otp_set_1 input:focus,
+.vm-public-login .otp_set_1 input:focus,
+.vm-login-page .otp_set2 input:focus,
+.vm-public-login .otp_set2 input:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16) !important;
+    outline: none !important;
+}
+
+.vm-login-page .vm-login-forget-otp-input::-webkit-outer-spin-button,
+.vm-public-login .vm-login-forget-otp-input::-webkit-outer-spin-button,
+.vm-login-page .vm-login-forget-otp-input::-webkit-inner-spin-button,
+.vm-public-login .vm-login-forget-otp-input::-webkit-inner-spin-button,
+.vm-login-page .otp_set input::-webkit-outer-spin-button,
+.vm-public-login .otp_set input::-webkit-outer-spin-button,
+.vm-login-page .otp_set input::-webkit-inner-spin-button,
+.vm-public-login .otp_set input::-webkit-inner-spin-button,
+.vm-login-page .otp_set_1 input::-webkit-outer-spin-button,
+.vm-public-login .otp_set_1 input::-webkit-outer-spin-button,
+.vm-login-page .otp_set_1 input::-webkit-inner-spin-button,
+.vm-public-login .otp_set_1 input::-webkit-inner-spin-button,
+.vm-login-page .otp_set2 input::-webkit-outer-spin-button,
+.vm-public-login .otp_set2 input::-webkit-outer-spin-button,
+.vm-login-page .otp_set2 input::-webkit-inner-spin-button,
+.vm-public-login .otp_set2 input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
 }
 
 .vm-login-page .loadingio-spinner-gear-94vo528ab8,

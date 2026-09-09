@@ -4859,3 +4859,268 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__bulk.for-new-
         font-size: 0.74rem;
     }
 }
+
+/* v=54 — compact Operator Name + Consumer/Circle (desktop) */
+@media (min-width: 768px) {
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(4),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(5),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(3),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(4),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(3),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(4) {
+        white-space: normal !important;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        vertical-align: top !important;
+        line-height: 1.35 !important;
+        padding-top: 9px !important;
+        padding-bottom: 9px !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(4),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(3),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(3) {
+        width: 130px;
+        min-width: 110px;
+        max-width: 150px;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(5),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(4),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(4) {
+        width: 115px;
+        min-width: 100px;
+        max-width: 130px;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(3) > span[style*="font-size:10px"]:not(:first-child),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(4) > span[style*="font-size:10px"],
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(3) > span[style*="font-size:10px"]:not(:first-child),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(4) > span[style*="font-size:10px"] {
+        display: block;
+        margin-top: 3px;
+        font-size: 0.68rem !important;
+        color: #64748b;
+        line-height: 1.25;
+    }
+}
+
+/* v=55 — User info: flex p ignores <br>; Refund Against on next line */
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(2) p > br + span,
+body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(2) p > br + span {
+    flex: 0 0 100%;
+    width: 100%;
+    display: block;
+    margin-top: 2px;
+    font-size: 0.68rem !important;
+    font-weight: 600 !important;
+    color: #64748b;
+    line-height: 1.25;
+}
+
+/* v=56 — compact all columns, full-width desktop, scroll mobile/tablet */
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table,
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        table-layout: fixed !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td,
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr::before,
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td {
+        padding: 6px 4px !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(1),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr::before {
+        width: 38px !important;
+        min-width: 38px !important;
+        max-width: 38px !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(2),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:first-child {
+        width: 42px !important;
+        min-width: 42px !important;
+        max-width: 42px !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(3) { width: 13%; }
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(4) { width: 11%; }
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(5) { width: 9%; }
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(6),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(7),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(8),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(9) { width: 6%; }
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(10) { width: 5%; }
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(11),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(12) { width: 5%; }
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(13) { width: 7%; }
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(14),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(15) { width: 7%; }
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(16),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:last-child {
+        width: 40px !important;
+        min-width: 40px !important;
+        max-width: 40px !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(3),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(4),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(5) {
+        white-space: normal !important;
+        line-height: 1.2 !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(2),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(3),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(4),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(2),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(3),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(4) {
+        white-space: normal !important;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        vertical-align: top !important;
+        max-width: none !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(2) p {
+        min-width: 0;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(5),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(6),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(7),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(8),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(9),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(10),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(11),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(5),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(6),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(7),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(8),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(9),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(10),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(11) {
+        text-align: right !important;
+        white-space: nowrap !important;
+        font-size: 0.72rem !important;
+        font-variant-numeric: tabular-nums;
+        padding-left: 2px !important;
+        padding-right: 4px !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(9),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(9) {
+        white-space: normal !important;
+        word-break: break-word;
+        font-size: 0.68rem !important;
+        text-align: center !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(12),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(13),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(14),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(12),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(13),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(14) {
+        font-size: 0.66rem !important;
+        white-space: normal !important;
+        word-break: break-word;
+        line-height: 1.25 !important;
+        vertical-align: top !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .ppo {
+        min-width: 0 !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-table-wrap {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table,
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table {
+        width: max-content !important;
+        min-width: 980px !important;
+        max-width: none !important;
+        table-layout: auto !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td,
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr::before,
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td {
+        padding: 7px 5px !important;
+        font-size: 0.72rem !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(2),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(3),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(4),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(2),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(3),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(4) {
+        white-space: normal !important;
+        word-break: break-word;
+        max-width: 140px;
+        min-width: 100px;
+        vertical-align: top !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(5),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(6),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(7),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(8),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(9),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(10),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(11),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(5),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(6),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(7),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(8),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(9),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(10),
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(11) {
+        white-space: nowrap !important;
+        font-size: 0.7rem !important;
+        text-align: right !important;
+        padding-left: 3px !important;
+        padding-right: 5px !important;
+    }
+}
+
+/* v=57 — table header wrap: no overlap/clash */
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th,
+body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table thead th {
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.15 !important;
+    letter-spacing: 0.02em !important;
+    padding: 7px 3px !important;
+    vertical-align: middle !important;
+    hyphens: auto;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(11),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(12),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(13),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(14),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(15) {
+        font-size: 0.58rem !important;
+        padding: 6px 2px !important;
+    }
+}

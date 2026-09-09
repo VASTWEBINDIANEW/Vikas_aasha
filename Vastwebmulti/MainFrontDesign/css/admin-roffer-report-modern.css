@@ -128,32 +128,71 @@ body.saas-admin-ui .saas-roffer-report-page .vm-roffer-comm-btn {
     color: #475569 !important;
 }
 
-/* Table */
+/* Table — override operator-report shared rules (10-col layout) */
 body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table {
-    min-width: 1100px !important;
     width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
 }
 
 body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th,
 body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td {
-    padding: 10px 10px !important;
-    font-size: 0.78rem !important;
+    padding: 7px 4px !important;
+    font-size: 0.76rem !important;
     vertical-align: middle !important;
     text-align: center !important;
-    white-space: nowrap;
-}
-
-body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:first-child,
-body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td:first-child {
-    width: auto !important;
-    min-width: 140px !important;
-    max-width: none !important;
-    text-align: left !important;
 }
 
 body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th {
     background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
     border-bottom: 2px solid #dbe4f0 !important;
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.15 !important;
+    letter-spacing: 0.02em !important;
+    font-size: 0.62rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+}
+
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(1) { width: 16%; }
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(2) { width: 10%; }
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(3) { width: 8%; }
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(4) { width: 9%; }
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(5) { width: 7%; }
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(6) { width: 7%; }
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(7) { width: 9%; }
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(8) { width: 7%; }
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(9) { width: 9%; }
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(10) { width: 18%; }
+
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td:first-child {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    text-align: left !important;
+    white-space: normal !important;
+    word-break: break-word;
+    line-height: 1.35 !important;
+}
+
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td:nth-child(2),
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td:nth-child(3),
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td:nth-child(6),
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td:nth-child(7),
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td:nth-child(8),
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td:nth-child(9) {
+    white-space: nowrap !important;
+    font-variant-numeric: tabular-nums;
+}
+
+body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td:nth-child(10) {
+    white-space: normal !important;
+    word-break: break-word;
+    font-size: 0.68rem !important;
+    line-height: 1.25 !important;
 }
 
 body.saas-admin-ui .saas-roffer-report-page .vm-opr-table-empty {
@@ -248,8 +287,21 @@ body.saas-admin-ui .vm-roffer-comm-modal .vm-roffer-comm-input {
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
     body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table {
-        min-width: 1000px !important;
+        width: max-content !important;
+        min-width: 920px !important;
+        table-layout: auto !important;
+    }
+
+    body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(1),
+    body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td:first-child {
+        min-width: 130px;
+        max-width: 180px;
+    }
+
+    body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table thead th:nth-child(2),
+    body.saas-admin-ui .saas-roffer-report-page #example.vm-roffer-data-table tbody td:nth-child(2) {
+        min-width: 88px;
     }
 }

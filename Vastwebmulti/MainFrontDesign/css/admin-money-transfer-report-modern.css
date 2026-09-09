@@ -871,6 +871,10 @@ body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table tbody td.vm-dmt-
     text-align: left !important;
     padding: 4px 6px !important;
     vertical-align: middle !important;
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.15 !important;
 }
 
 body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(3),
@@ -2699,4 +2703,94 @@ body.saas-admin-ui .saas-aeps-upi-report-page #tblAepsUPI .status-icon-wrap {
     align-items: center;
     margin-right: 4px;
     vertical-align: middle;
+}
+
+/* v37 — #mmm: undo operator-report shared nth-child widths (User header overlap) */
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table {
+        table-layout: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(1) {
+        width: 48px !important;
+        min-width: 48px !important;
+        max-width: 48px !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(2) {
+        width: 11% !important;
+        min-width: 110px !important;
+        max-width: none !important;
+        white-space: normal !important;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        line-height: 1.15 !important;
+        text-align: left !important;
+        overflow: visible !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(3) {
+        width: auto !important;
+        min-width: 92px !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(4) {
+        width: 12% !important;
+        min-width: 120px !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(5),
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(6) {
+        width: auto !important;
+        min-width: 88px !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(7) {
+        width: auto !important;
+        min-width: 58px !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(8),
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(10) {
+        width: auto !important;
+        min-width: 76px !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(9) {
+        width: auto !important;
+        min-width: 60px !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(11) {
+        width: auto !important;
+        min-width: 72px !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(12) {
+        width: 10% !important;
+        min-width: 118px !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(13) {
+        width: 10% !important;
+        min-width: 120px !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-dmt-report-page #mmm.vm-opr-data-table thead th:nth-child(14) {
+        width: 130px !important;
+        min-width: 130px !important;
+        max-width: 130px !important;
+    }
 }

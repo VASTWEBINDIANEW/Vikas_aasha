@@ -566,31 +566,33 @@
 
     function OnSuccessconfirm(data) {
         $('#Retailertablelist').html(data);
-        $('#otpmodal').modal('hide');
+        if (typeof vmRlHideDocModal === 'function') { vmRlHideDocModal('#otpmodal'); }
         vmRlSkipModalRefresh = true;
-        vmRlCloseDetailModal();
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-        vmRlAfterTableUpdate();
+        if (typeof vmRlCloseDetailModalAndRefresh === 'function') {
+            vmRlCloseDetailModalAndRefresh();
+        } else {
+            vmRlCloseDetailModal();
+        }
         ToastrMessage();
         toastr.success("Account Deleted Successfully");
     }
 
     function OnSuccessconfirmdocument(data) {
         $('#Retailertablelist').html(data);
-        $('#otpmodaldocument').modal('hide');
+        if (typeof vmRlHideDocModal === 'function') { vmRlHideDocModal('#otpmodaldocument'); }
         vmRlSkipModalRefresh = true;
-        vmRlCloseDetailModal();
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-        vmRlAfterTableUpdate();
+        if (typeof vmRlCloseDetailModalAndRefresh === 'function') {
+            vmRlCloseDetailModalAndRefresh();
+        } else {
+            vmRlCloseDetailModal();
+        }
         ToastrMessage();
         toastr.success("Document Deleted Successfully");
     }
 
     function OnFailureotperror(data) {
         console.log(data)
-        $('#otpmodal').modal('show');
+        if (typeof vmRlShowDocModal === 'function') { vmRlShowDocModal('#otpmodal'); } else { $('#otpmodal').modal('show'); }
         //            $('#otpwrong').text("otpmismatch");
         //    ToastrMessage();
         //toastr.warning("OTP Mismatch , Please enter Correct OTP");
@@ -598,8 +600,7 @@
     }
 
     function OnFailureotperrordocument(data) {
-
-        $('#otpmodaldocument').modal('show');
+        if (typeof vmRlShowDocModal === 'function') { vmRlShowDocModal('#otpmodaldocument'); } else { $('#otpmodaldocument').modal('show'); }
 
         $('#otpwrongdocument').text("OTP Mismatch , Please enter Correct OTP");
     }
@@ -629,9 +630,10 @@
                 cache: false,
                 type: "POST",
                 success: function (data3) {
-                    ravi("#DistrictEdit").html("");
+                    var $rl = window.ravi || window.jQuery;
+                    $rl("#DistrictEdit").html("");
                     for (var x = 0; x < data3.length; x++) {
-                        ravi("#DistrictEdit").append($('<option></option>').val(data3[x].Value).html(data3[x].Text));
+                        $rl("#DistrictEdit").append($('<option></option>').val(data3[x].Value).html(data3[x].Text));
                     }
                 },
 
@@ -649,13 +651,13 @@
              cache: false,
             success: function (response) {
                 if (response == "success") {
-                    $('#otpmodal').modal('show');
+                    if (typeof vmRlShowDocModal === 'function') { vmRlShowDocModal('#otpmodal'); } else { $('#otpmodal').modal('show'); }
                     $('#otpwrong').text('');
 
                 }
                 else {
                     $('#error').text(response);
-                      $('#otpmodal').modal('show');
+                    if (typeof vmRlShowDocModal === 'function') { vmRlShowDocModal('#otpmodal'); } else { $('#otpmodal').modal('show'); }
                     $('#otpwrong').text(response);
                 }
             }
@@ -673,14 +675,14 @@
               success: function (response) {
 
                 if (response == "success") {
-                    $('#otpmodaldocument').modal('show');
+                    if (typeof vmRlShowDocModal === 'function') { vmRlShowDocModal('#otpmodaldocument'); } else { $('#otpmodaldocument').modal('show'); }
                     $('#otpwrongdocument').text('');
                     $('#hdval').val(val)
 
                 }
                 else {
                     $('#error').text(response);
-                      $('#otpmodaldocument').modal('show');
+                    if (typeof vmRlShowDocModal === 'function') { vmRlShowDocModal('#otpmodaldocument'); } else { $('#otpmodaldocument').modal('show'); }
                     $('#otpwrongdocument').text(response);
                 }
             }
@@ -993,10 +995,12 @@
 <script>
     function OnSuccess() {
         vmRlSkipModalRefresh = true;
-        vmRlCloseDetailModal();
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-        vmRlAfterTableUpdate();
+        if (typeof vmRlCloseDetailModalAndRefresh === 'function') {
+            vmRlCloseDetailModalAndRefresh();
+        } else if (typeof vmRlCloseDetailModal === 'function') {
+            vmRlCloseDetailModal();
+            vmRlAfterTableUpdate();
+        }
     }
 </script>
 
@@ -1019,7 +1023,6 @@
     }
 
     function mdActionBtn(RetailerId) {
-        if (typeof vmRlMoveModalsToBody === 'function') vmRlMoveModalsToBody();
         if (typeof vmRlResetDetailModal === 'function') vmRlResetDetailModal();
 
         vmRlClearDocImages();
@@ -1027,7 +1030,17 @@
         $('#deletedusernotshowbtn').show();
         $('#loadredmodel').show();
         $('#userinfodiv').css({ visibility: 'hidden', opacity: 0 });
-        $('#defaultModal222').modal('show');
+
+        if (typeof vmRlShowDetailModal === 'function') {
+            vmRlShowDetailModal();
+        } else {
+            vmRlMoveModalsToBody();
+            $('#defaultModal222').addClass('in show vm-rl-detail-open').css({ display: 'block', opacity: 1, visibility: 'visible' }).attr('aria-hidden', 'false');
+            $('body').addClass('modal-open');
+            if (!$('.modal-backdrop').length) {
+                $('<div class="modal-backdrop fade in show vm-rl-modal-backdrop"></div>').appendTo('body');
+            }
+        }
 
         $.ajax({
             url: '@Url.Action("RetailerByIdSearch","Home")',
@@ -1035,6 +1048,11 @@
             data: { RetailerId: RetailerId },
             cache: false,
             success: function (data2) {
+                var $rl = window.ravi || window.jQuery;
+                try {
+                if (!data2 || !data2.list || !data2.list.length) {
+                    throw new Error('Retailer details not found');
+                }
                 var CCNValue = data2.list[0].AadharCard;
                 CCNValue = CCNValue.substring(0, 8).replace(/\d/g, "X") + CCNValue.substring(8);
 
@@ -1286,10 +1304,10 @@
                 }
 
 
-               ravi("#StateEdit").val(data2.list[0].state);
+               $rl("#StateEdit").val(data2.list[0].state);
 
 
-                ravi('#StateEdit').html('');
+                $rl('#StateEdit').html('');
                 var options = '';
                 options += '<option value="">Select</option>';
                 var se;
@@ -1302,16 +1320,34 @@
                     }
 
                 }
-              ravi('#StateEdit').append(options);
+              $rl('#StateEdit').append(options);
                 GetDistrict11(data2.list[0].State);
                 var objSelect11 = document.getElementById("DistrictEdit");
                 binddistmdAction(data2.list[0].State, data2.list[0].District, objSelect11);
                 $("#PinEdit").parent().next(".alert").remove();
-                 $('#loadredmodel').hide();
-                $('#userinfodiv').css({ visibility: 'visible', opacity: 1 }).show();
+                } catch (err) {
+                    console.error('Retailer detail load failed:', err);
+                    $('#error').text('Unable to load full retailer details. Please try again.');
+                } finally {
+                    $('#loadredmodel').hide();
+                    $('#userinfodiv').css({ visibility: 'visible', opacity: 1 }).show();
+                    if (typeof vmRlShowDetailModal === 'function') {
+                        vmRlShowDetailModal();
+                    }
+                }
+          },
+          error: function () {
+              $('#loadredmodel').hide();
+              $('#userinfodiv').css({ visibility: 'visible', opacity: 1 }).show();
+              $('#error').text('Unable to load retailer details. Please try again.');
+              if (typeof vmRlShowDetailModal === 'function') {
+                  vmRlShowDetailModal();
+              }
           }
         });
     }
+
+    window.mdActionBtn = mdActionBtn;
     function converttoDate(str) {
             var date = new Date(str),
                 mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -1373,8 +1409,12 @@
 
                  $('#Retailertablelist').html(data2);
                  vmRlSkipModalRefresh = true;
-        $('#defaultModal222').modal('hide');
-        vmRlAfterTableUpdate();
+        if (typeof vmRlCloseDetailModalAndRefresh === 'function') {
+            vmRlCloseDetailModalAndRefresh();
+        } else {
+            $('#defaultModal222').modal('hide');
+            vmRlAfterTableUpdate();
+        }
           }
         });
     }
@@ -1441,7 +1481,13 @@
             cache: false,
              success: function (response) {
                  $('#Retailertablelist').html(response);
-        $('#defaultModal222').modal('hide');
+                 vmRlSkipModalRefresh = true;
+                 if (typeof vmRlCloseDetailModalAndRefresh === 'function') {
+                     vmRlCloseDetailModalAndRefresh();
+                 } else {
+                     $('#defaultModal222').modal('hide');
+                     vmRlAfterTableUpdate();
+                 }
           }
         });
     }

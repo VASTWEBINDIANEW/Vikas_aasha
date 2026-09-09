@@ -123,9 +123,75 @@
         });
     }
 
+    function bindOtpContainer(container) {
+        if (!container || container.getAttribute("data-vm-otp-bound") === "1") {
+            return;
+        }
+        container.setAttribute("data-vm-otp-bound", "1");
+
+        container.addEventListener("keyup", function (e) {
+            var target = e.target;
+            var maxLength;
+            var myLength;
+            var next;
+            var previous;
+
+            if (!target || target.tagName.toLowerCase() !== "input") {
+                return;
+            }
+
+            maxLength = parseInt(target.getAttribute("maxlength"), 10) || 1;
+            myLength = target.value.length;
+
+            if (myLength >= maxLength) {
+                next = target;
+                while ((next = next.nextElementSibling)) {
+                    if (next.tagName.toLowerCase() === "input") {
+                        next.focus();
+                        break;
+                    }
+                }
+            } else if (myLength === 0 && (e.key === "Backspace" || e.keyCode === 8)) {
+                previous = target;
+                while ((previous = previous.previousElementSibling)) {
+                    if (previous.tagName.toLowerCase() === "input") {
+                        previous.focus();
+                        break;
+                    }
+                }
+            }
+        });
+
+        container.querySelectorAll("input").forEach(function (input) {
+            input.addEventListener("input", function () {
+                this.value = this.value.replace(/\D/g, "").slice(0, 1);
+            });
+            input.addEventListener("focus", function () {
+                var inputs = container.querySelectorAll("input");
+                var i;
+                for (i = 0; i < inputs.length; i++) {
+                    if (inputs[i] === this) {
+                        break;
+                    }
+                    if (!inputs[i].value) {
+                        inputs[i].focus();
+                        break;
+                    }
+                }
+            });
+        });
+    }
+
+    function initOtpBoxes() {
+        document.querySelectorAll(".vm-login-forget-otp-box, .otp_set, .otp_set_1, .otp_set2").forEach(bindOtpContainer);
+    }
+
+    window.vmLoginBindOtpBoxes = initOtpBoxes;
+
     function boot() {
         initTabs();
         initPasswordEye();
+        initOtpBoxes();
     }
 
     if (document.readyState === "loading") {

@@ -18,7 +18,7 @@
 <link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=24" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=25" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=82" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=89" rel="stylesheet" />
 
 <style>
     body.stop-scrolling { overflow: inherit; overflow-x: hidden; }
@@ -115,18 +115,23 @@
     body.saas-admin-ui .retailerList_Page #mmm::-webkit-scrollbar-thumb { background: #3b82f6 !important; border-radius: 5px !important; }
     body.saas-admin-ui .retailerList_Page #mmm::-webkit-scrollbar-thumb:hover { background: #1d4ed8 !important; }
 
-    body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap > table#mdList,
-    body.saas-admin-ui .retailerList_Page #mmm > table#mdList,
-    body.saas-admin-ui .retailerList_Page #mdList.vm-rl-full-table,
-    body.saas-admin-ui .retailerList_Page #mdList.saas-acc-table,
-    body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table,
     body.saas-admin-ui .retailerList_Page #mdList {
         display: table !important;
-        width: max-content !important;
-        min-width: 1600px !important;
-        max-width: none !important;
-        table-layout: auto !important;
         margin: 0 !important;
+    }
+
+    @@media (min-width: 1200px) {
+        body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap > table#mdList,
+        body.saas-admin-ui .retailerList_Page #mmm > table#mdList,
+        body.saas-admin-ui .retailerList_Page #mdList.vm-rl-full-table,
+        body.saas-admin-ui .retailerList_Page #mdList.saas-acc-table,
+        body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table,
+        body.saas-admin-ui .retailerList_Page #mdList {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
+        }
     }
 
     body.saas-admin-ui .retailerList_Page #mdList thead th.vm-rl-th {
@@ -137,12 +142,29 @@
     body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified { width: 100% !important; max-width: 100% !important; }
 
     @@media (max-width: 1199px) {
-        body.saas-admin-ui .retailerList_Page #mdList { min-width: 1280px !important; }
+        body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap > table#mdList,
+        body.saas-admin-ui .retailerList_Page #mmm > table#mdList,
+        body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm table#mdList,
+        body.saas-admin-ui .retailerList_Page #mdList {
+            width: max-content !important;
+            min-width: 1100px !important;
+            max-width: none !important;
+            table-layout: auto !important;
+        }
+
+        body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm,
+        body.saas-admin-ui .retailerList_Page #mmm {
+            overflow-x: auto !important;
+            overflow-y: visible !important;
+            -webkit-overflow-scrolling: touch !important;
+            touch-action: pan-x !important;
+        }
+
         body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified { flex-wrap: wrap !important; }
     }
 
     @@media (max-width: 767px) {
-        body.saas-admin-ui .retailerList_Page #mdList { min-width: 1100px !important; }
+        body.saas-admin-ui .retailerList_Page #mdList { min-width: 1000px !important; }
         body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search,
         body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist,
         body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--demo {
@@ -159,11 +181,14 @@
         overflow-y: visible !important;
         -webkit-overflow-scrolling: touch !important;
     }
-    body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm table#mdList,
-    body.saas-admin-ui .retailerList_Page #mdList {
-        width: max-content !important;
-        min-width: 1600px !important;
-        max-width: none !important;
+    @@media (min-width: 1200px) {
+        body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm table#mdList,
+        body.saas-admin-ui .retailerList_Page #mdList {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
+        }
     }
 </style>
 
@@ -702,6 +727,9 @@
         </div>
 </section>
 
+<script>
+    window.ravi = window.ravi || window.jQuery;
+</script>
 @Html.Partial("_RetailerlistModals")
 
 <script>
@@ -721,10 +749,18 @@
         wrap.style.webkitOverflowScrolling = 'touch';
         wrap.style.width = '100%';
         wrap.style.maxWidth = '100%';
-        table.style.width = 'max-content';
-        table.style.minWidth = '1600px';
-        table.style.maxWidth = 'none';
-        table.style.tableLayout = 'auto';
+        if (window.innerWidth >= 1200) {
+            table.style.width = '100%';
+            table.style.minWidth = '';
+            table.style.maxWidth = '100%';
+            table.style.tableLayout = 'fixed';
+        } else {
+            wrap.style.overflowX = 'auto';
+            table.style.width = 'max-content';
+            table.style.minWidth = window.innerWidth <= 767 ? '1000px' : '1100px';
+            table.style.maxWidth = 'none';
+            table.style.tableLayout = 'auto';
+        }
     }
 
     function vmRlMoveModalsToBody() {
@@ -747,8 +783,18 @@
         $('#userinfodiv').css({ visibility: 'visible', opacity: 1 }).show();
     }
 
+    function vmRlEnsureDetailModal() {
+        vmRlMoveModalsToBody();
+        return $('#defaultModal222');
+    }
+
     function vmRlCloseDetailModal() {
-        $('#defaultModal222').modal('hide');
+        if (typeof vmRlCloseDetailModalAndRefresh === 'function') {
+            vmRlSkipModalRefresh = true;
+            vmRlCloseDetailModalAndRefresh();
+        } else {
+            vmRlHideDetailModal();
+        }
     }
 
     var vmRlDocModalSelector = '#panviewdoc,#aadharviewdoc,#ShopwithSalfieviewdoc,#VideoKYCdocshowviewdoc,#gstviewdoc,#frmagrviewdoc,#otpmodal,#otpmodaldocument';
@@ -757,55 +803,160 @@
         return $modal.length && ($modal.hasClass('in') || $modal.hasClass('show') || $modal.css('display') === 'block');
     }
 
-    function vmRlSyncKycModalStack() {
-        var $parent = $('#defaultModal222');
-        var parentOpen = vmRlIsModalVisible($parent);
-        var $openDocs = $(vmRlDocModalSelector).filter(function () {
-            return vmRlIsModalVisible($(this));
+    function vmRlApplyModalVisible($modal, zIndex) {
+        if (!$modal || !$modal.length) return;
+        $modal.addClass('in show fade vm-rl-modal-open-el').css({
+            display: 'block',
+            opacity: 1,
+            visibility: 'visible',
+            position: 'fixed',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: zIndex || 100050,
+            overflowX: 'hidden',
+            overflowY: 'auto',
+            paddingRight: 0
+        }).attr('aria-hidden', 'false');
+    }
+
+    function vmRlHideModalEl($modal) {
+        if (!$modal || !$modal.length) return;
+        $modal.removeClass('in show vm-rl-modal-open-el vm-rl-detail-open').css({
+            display: 'none',
+            opacity: 0,
+            visibility: 'hidden'
+        }).attr('aria-hidden', 'true');
+    }
+
+    function vmRlEnsureBackdrop(zIndex) {
+        var $back = $('.modal-backdrop.vm-rl-modal-backdrop');
+        if (!$back.length) {
+            $back = $('<div class="modal-backdrop fade vm-rl-modal-backdrop"></div>').appendTo('body');
+        }
+        $back.addClass('in show').css({
+            display: 'block',
+            opacity: 0.5,
+            position: 'fixed',
+            inset: 0,
+            zIndex: zIndex || 100040
         });
+        return $back;
+    }
 
-        if (!parentOpen && !$openDocs.length) {
-            $('body').removeClass('modal-open').css({ overflow: '', 'padding-right': '' });
+    function vmRlClearAllModalUi() {
+        vmRlHideModalEl(vmRlEnsureDetailModal());
+        $(vmRlDocModalSelector).each(function () {
+            vmRlHideModalEl($(this));
+        });
+        $('body').removeClass('modal-open').css({ overflow: '', paddingRight: '' });
+        $('.modal-backdrop').remove();
+    }
+
+    function vmRlShowDetailModal() {
+        var $m = vmRlEnsureDetailModal();
+        if (!$m.length) return null;
+
+        $('body').addClass('modal-open').css('overflow', 'hidden');
+        $m.addClass('vm-rl-detail-open');
+        vmRlApplyModalVisible($m, 100050);
+        vmRlEnsureBackdrop(100040);
+        return $m;
+    }
+
+    function vmRlHideDetailModal() {
+        var $m = vmRlEnsureDetailModal();
+        vmRlHideModalEl($m);
+        var docsOpen = $(vmRlDocModalSelector).filter(function () {
+            return vmRlIsModalVisible($(this));
+        }).length;
+        if (!docsOpen) {
+            $('body').removeClass('modal-open').css({ overflow: '', paddingRight: '' });
             $('.modal-backdrop').remove();
-            return;
-        }
-
-        if (parentOpen) {
-            $('body').addClass('modal-open');
-            $parent.addClass('in show').css({
-                display: 'block',
-                opacity: 1,
-                visibility: 'visible'
-            }).attr('aria-hidden', 'false');
-        }
-
-        var $backs = $('.modal-backdrop');
-        var expectedBackdrops = parentOpen ? ($openDocs.length ? Math.min($openDocs.length + 1, 2) : 1) : $openDocs.length;
-
-        while ($backs.length > expectedBackdrops) {
-            $backs.last().remove();
-            $backs = $('.modal-backdrop');
-        }
-
-        if ($backs.length) {
-            $backs.first().addClass('in show').css({
-                display: 'block',
-                opacity: 0.5,
-                'z-index': 10610
-            });
-        }
-
-        if ($openDocs.length && $backs.length > 1) {
-            $backs.last().addClass('in show').css({
-                display: 'block',
-                opacity: 0.5,
-                'z-index': 10625
-            });
         }
     }
 
+    function vmRlShowDocModal(selector) {
+        var $doc = $(selector);
+        if (!$doc.length) return null;
+        if (!$doc.parent().is('body')) {
+            $doc.appendTo('body');
+        }
+        vmRlApplyModalVisible(vmRlEnsureDetailModal(), 100050);
+        vmRlApplyModalVisible($doc, 100060);
+        $('body').addClass('modal-open').css('overflow', 'hidden');
+        vmRlEnsureBackdrop(100040);
+        return $doc;
+    }
+
+    function vmRlHideDocModal(selector) {
+        vmRlHideModalEl($(selector));
+        if (vmRlEnsureDetailModal().hasClass('vm-rl-detail-open')) {
+            vmRlApplyModalVisible(vmRlEnsureDetailModal(), 100050);
+            vmRlEnsureBackdrop(100040);
+        } else {
+            vmRlClearAllModalUi();
+        }
+    }
+
+    function vmRlCloseDetailModalAndRefresh() {
+        vmRlClearAllModalUi();
+        vmRlResetDetailModal();
+        if (vmRlSkipModalRefresh) {
+            vmRlSkipModalRefresh = false;
+            vmRlAfterTableUpdate();
+            return;
+        }
+        $.ajax({
+            url: '@Url.Action("RetailerlistPart", "Home")',
+            type: 'POST',
+            cache: false,
+            success: function (response) {
+                $('#Retailertablelist').html(response);
+                vmRlAfterTableUpdate();
+            }
+        });
+    }
+
+    function vmRlSyncKycModalStack() {
+        if (vmRlEnsureDetailModal().hasClass('vm-rl-detail-open')) {
+            vmRlApplyModalVisible(vmRlEnsureDetailModal(), 100050);
+            vmRlEnsureBackdrop(100040);
+            $('body').addClass('modal-open');
+        }
+    }
+
+    window.vmRlEnsureDetailModal = vmRlEnsureDetailModal;
+    window.vmRlShowDetailModal = vmRlShowDetailModal;
+    window.vmRlHideDetailModal = vmRlHideDetailModal;
+    window.vmRlShowDocModal = vmRlShowDocModal;
+    window.vmRlHideDocModal = vmRlHideDocModal;
+    window.vmRlCloseDetailModalAndRefresh = vmRlCloseDetailModalAndRefresh;
+    window.vmRlSyncKycModalStack = vmRlSyncKycModalStack;
+
     function vmRlInitModals() {
         vmRlMoveModalsToBody();
+
+        $(document).off('click.vmRlKyc', '#mdList td.vm-rl-kyc-cell')
+            .on('click.vmRlKyc', '#mdList td.vm-rl-kyc-cell', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var retailerId = $(this).attr('data-retailer-id');
+                if (!retailerId) return;
+                if (typeof mdActionBtn === 'function') {
+                    mdActionBtn(retailerId);
+                } else if (typeof vmRlShowDetailModal === 'function') {
+                    vmRlShowDetailModal();
+                }
+            });
+
+        $(document).off('keydown.vmRlKyc', '#mdList td.vm-rl-kyc-cell')
+            .on('keydown.vmRlKyc', '#mdList td.vm-rl-kyc-cell', function (e) {
+                if (e.key !== 'Enter' && e.key !== ' ') return;
+                e.preventDefault();
+                $(this).trigger('click');
+            });
+
         $(document).off('click.vmRl', '#defaultModal222 button.btn[value="Edit"]')
             .on('click.vmRl', '#defaultModal222 button.btn[value="Edit"]', function () {
                 var $m = $('#defaultModal222');
@@ -814,28 +965,55 @@
                 $m.find('.modal-footer button.one, .first-form button.one').hide();
                 $m.find('.modal-footer button.One2, .second-form button.One2').show();
             });
-        $(vmRlDocModalSelector).off('hidden.bs.modal.vmRlDoc shown.bs.modal.vmRlDoc')
-            .on('hidden.bs.modal.vmRlDoc shown.bs.modal.vmRlDoc', function () {
-                window.setTimeout(vmRlSyncKycModalStack, 60);
+
+        $(document).off('click.vmRlDetailClose', '#defaultModal222 .vm-ml-side-close, #defaultModal222 [data-dismiss="modal"]')
+            .on('click.vmRlDetailClose', '#defaultModal222 .vm-ml-side-close, #defaultModal222 [data-dismiss="modal"]', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                vmRlCloseDetailModalAndRefresh();
             });
-        $('#defaultModal222').off('hidden.bs.modal.vmRl').on('hidden.bs.modal.vmRl', function () {
-            vmRlResetDetailModal();
-            $('body').removeClass('modal-open');
-            $('.modal-backdrop').remove();
-            if (vmRlSkipModalRefresh) {
-                vmRlSkipModalRefresh = false;
-                vmRlAfterTableUpdate();
-                return;
-            }
-            $.ajax({
-                url: '@Url.Action("RetailerlistPart", "Home")',
-                type: 'POST',
-                cache: false,
-                success: function (response) {
-                    $('#Retailertablelist').html(response);
-                    vmRlAfterTableUpdate();
+
+        $(document).off('click.vmRlDocClose', vmRlDocModalSelector + ' [data-dismiss="modal"], ' + vmRlDocModalSelector + ' .saas-admin-modal-close')
+            .on('click.vmRlDocClose', vmRlDocModalSelector + ' [data-dismiss="modal"], ' + vmRlDocModalSelector + ' .saas-admin-modal-close', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var $docModal = $(this).closest('.modal');
+                if ($docModal.length) {
+                    vmRlHideDocModal('#' + $docModal.attr('id'));
                 }
             });
+
+        $(document).off('click.vmRlDocOpen', '[data-target="#panviewdoc"],[data-target="#aadharviewdoc"],[data-target="#ShopwithSalfieviewdoc"],[data-target="#VideoKYCdocshowviewdoc"],[data-target="#gstviewdoc"],[data-target="#frmagrviewdoc"], .vm-rl-doc-btn--view[data-target]')
+            .on('click.vmRlDocOpen', '[data-target="#panviewdoc"],[data-target="#aadharviewdoc"],[data-target="#ShopwithSalfieviewdoc"],[data-target="#VideoKYCdocshowviewdoc"],[data-target="#gstviewdoc"],[data-target="#frmagrviewdoc"], .vm-rl-doc-btn--view[data-target]', function (e) {
+                var target = $(this).attr('data-target');
+                if (!target) return;
+                e.preventDefault();
+                e.stopPropagation();
+                vmRlShowDocModal(target);
+            });
+
+        $(document).off('click.vmRlBackdrop', '.modal-backdrop.vm-rl-modal-backdrop')
+            .on('click.vmRlBackdrop', '.modal-backdrop.vm-rl-modal-backdrop', function () {
+                var $openDoc = $(vmRlDocModalSelector).filter(function () { return vmRlIsModalVisible($(this)); }).last();
+                if ($openDoc.length) {
+                    vmRlHideDocModal('#' + $openDoc.attr('id'));
+                    return;
+                }
+                if (vmRlEnsureDetailModal().hasClass('vm-rl-detail-open')) {
+                    vmRlCloseDetailModalAndRefresh();
+                }
+            });
+
+        $(document).off('keydown.vmRlModalEsc').on('keydown.vmRlModalEsc', function (e) {
+            if (e.key !== 'Escape') return;
+            var $openDoc = $(vmRlDocModalSelector).filter(function () { return vmRlIsModalVisible($(this)); }).last();
+            if ($openDoc.length) {
+                vmRlHideDocModal('#' + $openDoc.attr('id'));
+                return;
+            }
+            if (vmRlEnsureDetailModal().hasClass('vm-rl-detail-open')) {
+                vmRlCloseDetailModalAndRefresh();
+            }
         });
     }
 
@@ -2100,19 +2278,69 @@ function () {
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        vmRlHideFormFeedback();
-        $('#vmRlFormCard ul.tabs li.tab-link').on('click', function () {
-            var tab_id = $(this).attr('data-tab');
-            if (!tab_id) return;
-            $('#vmRlFormCard ul.tabs li.tab-link').removeClass('current vm-ft-role-tab-li--active').addClass('vm-ft-role-tab-li--inactive');
-            $('#vmRlFormCard .tab-content.vm-ml-tab-panel').removeClass('current');
-            $(this).addClass('current vm-ft-role-tab-li--active').removeClass('vm-ft-role-tab-li--inactive');
-            $('#' + tab_id).addClass('current');
-            setTimeout(vmRlSyncPanelHeight, 50);
-            setTimeout(vmRlSyncPanelHeight, 200);
+    function vmRlSwitchCreateTab(tabId) {
+        var card = document.getElementById('vmRlFormCard');
+        var wrap = document.getElementById('vmRlTabPanels');
+        var panel;
+        if (!card || !wrap || !tabId) {
+            return;
+        }
+
+        card.querySelectorAll('ul.tabs li.tab-link[data-tab]').forEach(function (li) {
+            var isActive = li.getAttribute('data-tab') === tabId;
+            li.classList.toggle('current', isActive);
+            li.classList.toggle('vm-ft-role-tab-li--active', isActive);
+            li.classList.toggle('vm-ft-role-tab-li--inactive', !isActive);
         });
-    });
+
+        wrap.querySelectorAll('.tab-content.vm-ml-tab-panel').forEach(function (el) {
+            var isActive = el.id === tabId;
+            el.classList.toggle('current', isActive);
+            el.classList.remove('vm-rl-tab-measure');
+        });
+
+        panel = document.getElementById(tabId);
+        if (panel) {
+            panel.classList.add('current');
+        }
+
+        if (typeof vmRlSyncPanelHeight === 'function') {
+            window.setTimeout(vmRlSyncPanelHeight, 50);
+            window.setTimeout(vmRlSyncPanelHeight, 200);
+        }
+    }
+
+    function vmRlBindCreateTabs() {
+        var card = document.getElementById('vmRlFormCard');
+        if (!card || card.getAttribute('data-vm-rl-tabs-bound') === '1') {
+            return;
+        }
+        card.setAttribute('data-vm-rl-tabs-bound', '1');
+
+        card.addEventListener('click', function (e) {
+            var li = e.target && e.target.closest ? e.target.closest('li.tab-link[data-tab]') : null;
+            if (!li || !card.contains(li)) {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            vmRlSwitchCreateTab(li.getAttribute('data-tab'));
+        }, true);
+    }
+
+    window.vmRlSwitchCreateTab = vmRlSwitchCreateTab;
+    window.vmRlBindCreateTabs = vmRlBindCreateTabs;
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+            vmRlBindCreateTabs();
+            vmRlHideFormFeedback();
+        });
+    } else {
+        vmRlBindCreateTabs();
+        vmRlHideFormFeedback();
+    }
 </script>
 
 
@@ -2234,6 +2462,9 @@ function () {
             if (typeof window.vmRlMoveFormToDrawer === 'function') {
                 window.vmRlMoveFormToDrawer();
             }
+            if (typeof window.vmRlBindCreateTabs === 'function') {
+                window.vmRlBindCreateTabs();
+            }
         }, 0);
 
     function vmRlCloseBackgroundSelect2() {
@@ -2267,6 +2498,9 @@ function () {
             modal.classList.add('is-open');
             modal.setAttribute('aria-hidden', 'false');
             document.body.classList.add('vm-rl-modal-open');
+            if (typeof window.vmRlBindCreateTabs === 'function') {
+                window.vmRlBindCreateTabs();
+            }
             if (panel) {
                 panel.scrollTop = 0;
             }

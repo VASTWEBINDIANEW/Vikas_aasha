@@ -1,219 +1,149 @@
 @model IEnumerable<Vastwebmulti.Areas.RETAILER.Models.HoldleanHIstrory>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "HoldAndLeanAmountReport";
+    ViewBag.Title = "Hold & Lean Report";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var rows = Model ?? Enumerable.Empty<Vastwebmulti.Areas.RETAILER.Models.HoldleanHIstrory>();
+    var totalHold = ViewBag.total != null ? Convert.ToDecimal(ViewBag.total) : 0m;
 }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=16" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-hold-lean-report-modern.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<script src="~/MainFrontDesign/js/admin-financial-report.js?v=18"></script>
 
-<section class="content cas-hdeposi-tcharge-page upicharge-thirddesign">
-    <div class="container-fluid" style="height:auto !important;min-height:inherit !important;">
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-hold-lean-report-page">
 
-        <!--Four-Design-Admin-page-Header-Section-End-->
+    <div class="container-fluid vm-opr-page-shell">
 
-        <div class="page-header-third pageheader-margin-third retailerlist-header-resp">
-            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
-                <ul class="padding-top-third">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                        </a>
-                    </li>
+        @{
+            var holdFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "holdLeanReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("HoldAndLeanAmountReport", "Home", FormMethod.Post, holdFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        <a href="@Url.Action("HoldAndLeanAmountReport","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Hold & Lean Report
-                        </a>
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-                    </li>
-                </ul>
-            </div>
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Trans. Reports</li>
+                        <li>Hold &amp; Lean Report</li>
+                    </ol>
 
-        </div>
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
 
-    </div>
-
-    <div class="col-md-12">
-
-        <div class="row clearfix ">
-            <div class="switch-user-tab">
-
-
-                <div class="col-md-12 switch-user-tab-right">
-
-                    <div class="page-header-third">
-                        <div class="col-md-12 rtrt responcive-full" style="padding: 0px;padding-left: 3px;">
-                            <div class="row">
-                                @using (Html.BeginForm("HoldAndLeanAmountReport", "Home", FormMethod.Post))
-                                {
-                                    <div class="col-md-2 clk responcive-full" style="padding-right:0px;">
-                                        <div class="form-line">
-                                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 clk responcive-full" style="padding-right:0px;">
-
-                                        <div class="input-daterange input-group" style="margin-left:0px;width:100%;">
-                                            <div class="custom-date-icon ner">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638;" })
-                                            <span class="input-group-addon" style="padding: 0px !important;min-width: 3px;">
-
-                                            </span>
-                                            <div class="nrr3">
-                                                <div class="custom-date-icon ner2">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638;" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 sre responcive-full" style="padding-left:3px;">
-                                        <button type="submit" class="btn input-back-second" style="background-color:transparent;border-color:transparent;">
-                                            <i class="fa fa-search color-white-second" style=" position: absolute; top: 8px; left: 11px; color: var(--main-bg-lcolor); z-index: 1;" aria-hidden="true"></i>
-                                        </button>
-                                        <!--<center>
-                                        <div class="sponc11">
-
-                                            <i class="fa fa-search color-white-second" style=" position: absolute; top: 8px; left: 11px; color: var(--main-bg-lcolor); z-index: 1;" aria-hidden="true"></i>-->
-                                        @*<input id="btntype_TODAY" name="btntype" type="submit" value="TODAY" class="btn" style="margin-top:0px; height:32px;border:1px solid #c7c2c2;background:#dedddd;" />*@
-                                        <!--<input name="btntype" type="submit" value="" class="btn input-back-second" style="padding-left: 20px; margin-top: 0px; height: 32px; border: none; background: transparent; z-index: 2; position: relative;" />
-                                            </div>
-                                        </center>-->
-                                    </div>
-                                    <div class="col-md-2 sre responcive-full" style="padding-left:3px;">
-                                        <span style="font-size:18px;font-weight:bold;">Total Hold Amount : <a href="@Url.Action("HoldAmountRemain","Home")" class="btn btn-default"> @ViewBag.total</a>   </span>
-                                    </div>
-                                }
-
-                            </div>
+                        <div class="vm-opr-field vm-dmt-field vm-radiant-field--retailer">
+                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control", @title = "Retailer" })
                         </div>
 
-
-
-
-                        <div class="table-responsive " style="width:100%;">
-                            <table class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr style="background:#f9f9f9;">
-                                        <th>Firm Name</th>
-                                        <th>Amount</th>
-                                        <th>Type</th>
-                                        <th>Requestid</th>
-                                        <th>Description</th>
-                                        <th>Remain Pre</th>
-                                        <th>Remain Post</th>
-                                        <th>Hold Remain Pre</th>
-                                        <th>Hold Remain Post</th>
-                                        <th>Date </th>
-                                        <th>Status </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>@item.Firmname</td>
-                                            <td>@item.Amount</td>
-                                            <td>@item.Type</td>
-                                            <td>@item.RequestId</td>
-                                            <td>@item.Description</td>
-                                            <td>@item.RemainPre</td>
-                                            <td>@item.RemainPost</td>
-                                            <td>@item.HoldRemainPre</td>
-                                            <td>@item.HoldRemainPost</td>
-                                            <td>@item.InsertDate</td>
-                                            <td>@item.Status</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
 
                     </div>
 
-
                 </div>
 
             </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-hand-paper" aria-hidden="true"></i>
+                        <span>Hold &amp; lean amount report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-inline-total" title="Total hold amount">
+                            Total Hold:
+                            <a href="@Url.Action("HoldAmountRemain", "Home")" class="vm-hold-lean-total-link">
+                                <strong>&#8377; @totalHold.ToString("N2")</strong>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="holdLeanReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Firm<br>Name</th>
+                                    <th>Amount<br>&#8377;</th>
+                                    <th>Type</th>
+                                    <th>Request<br>ID</th>
+                                    <th>Description</th>
+                                    <th>Remain<br>Pre&nbsp;&#8377;</th>
+                                    <th>Remain<br>Post&nbsp;&#8377;</th>
+                                    <th>Hold<br>Remain<br>Pre&nbsp;&#8377;</th>
+                                    <th>Hold<br>Remain<br>Post&nbsp;&#8377;</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="holdLeanReportRows">
+                                @Html.Partial("_HoldAndLeanRows", rows)
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </section>
 
-
-<!--=======    Modal For Bank Details   ========-->
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-
-<script src="~/Swalalert/sweetalert-dev.js"></script>
-
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-@*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
-
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-<!------------------------------------------partialpage-->
-<!-- Select2: global admin layout -->
-
-<script>
-    $(window).on('load', function () {
-        if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
-    });
-</script>
 <script>
     $(document).ready(function () {
-               $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-            }
+        $('#allretailer').select2({
+            width: '100%',
+            minimumResultsForSearch: 6
         });
-</script>
-<script>
-    $(document).on("click", ".btn-status", function () {
 
-        var button = $(this);
-        var id = button.data("id");
-        var status = button.data("status");
-
-        if (!confirm("Are you sure you want to mark this as " + status + "?")) {
-            return;
+        function initHoldLeanDatepickers() {
+            if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+                window.setTimeout(initHoldLeanDatepickers, 50);
+                return;
+            }
+            if (typeof window.initAdminReportDateForm === 'function') {
+                window.initAdminReportDateForm('#holdLeanReportForm');
+            }
         }
-
-        $.ajax({
-            url: '@Url.Action("UpdatePrepayStatus", "Home")',
-            type: 'POST',
-            data: {
-                id: id,
-                status: status
-            },
-            success: function (response) {
-                if (response.success) {
-                    // update status text in same row
-                    button.closest("tr").find("td:eq(8)").text(status);
-
-                    // disable buttons after update
-                    button.closest("tr").find(".btn-status").prop("disabled", true);
-
-                    alert("Status updated successfully");
-                } else {
-                    alert(response.message);
-                }
-            },
-            error: function () {
-                alert("Something went wrong. Please try again.");
-            }
-        });
+        initHoldLeanDatepickers();
     });
 </script>

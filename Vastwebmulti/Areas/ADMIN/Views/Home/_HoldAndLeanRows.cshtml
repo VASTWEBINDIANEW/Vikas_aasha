@@ -1,0 +1,64 @@
+@model IEnumerable<Vastwebmulti.Areas.RETAILER.Models.HoldleanHIstrory>
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Areas.RETAILER.Models.HoldleanHIstrory>();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var statusLabel = item.Status ?? "";
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+
+        if (!string.IsNullOrEmpty(statusLabel))
+        {
+            var upper = statusLabel.ToUpperInvariant();
+            if (upper.Contains("FAIL") || upper.Contains("REJECT"))
+            {
+                statusTone = "failed";
+                statusFa = "fa-times";
+            }
+            else if (upper.Contains("SUCCESS") || upper.Contains("RELEASE") || upper.Contains("COMPLETE"))
+            {
+                statusTone = "success";
+                statusFa = "fa-check";
+            }
+            else if (upper.Contains("HOLD"))
+            {
+                statusTone = "pending";
+                statusFa = "fa-pause";
+            }
+        }
+
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-status="@statusLabel">
+            <td class="vm-radiant-firm-cell">@item.Firmname</td>
+            <td class="vm-dmt-amt-cell">@(item.Amount.HasValue ? Math.Round(item.Amount.Value, 2).ToString() : "—")</td>
+            <td>@item.Type</td>
+            <td class="vm-radiant-request-cell">@item.RequestId</td>
+            <td class="vm-hold-desc-cell">@item.Description</td>
+            <td class="vm-dmt-amt-cell">@(item.RemainPre.HasValue ? Math.Round(item.RemainPre.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.RemainPost.HasValue ? Math.Round(item.RemainPost.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.HoldRemainPre.HasValue ? Math.Round(item.HoldRemainPre.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.HoldRemainPost.HasValue ? Math.Round(item.HoldRemainPost.Value, 2).ToString() : "—")</td>
+            <td class="vm-ticket-time-cell">
+                @(item.InsertDate.HasValue ? item.InsertDate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "—")
+            </td>
+            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-radiant-status-text">@statusLabel</span>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="11" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-hand-paper" aria-hidden="true"></i>
+            <span>No hold &amp; lean records for selected filters.</span>
+        </td>
+    </tr>
+}

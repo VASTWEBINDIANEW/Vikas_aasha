@@ -1892,7 +1892,7 @@ body.saas-admin-ui .saas-ecommerce-history-page .vm-ecomm-filter-row--one-line >
     padding: 0 !important;
     display: flex !important;
     align-items: center !important;
-    overflow: hidden !important;
+    overflow: visible !important;
 }
 
 body.saas-admin-ui .saas-ecommerce-history-page .vm-ecomm-filter-row--one-line > .vm-opr-field > select,
@@ -1948,9 +1948,23 @@ body.saas-admin-ui .saas-ecommerce-history-page .vm-ecomm-filter-row--one-line >
 body.saas-admin-ui .saas-ecommerce-history-page .vm-ecomm-filter-row--one-line > .vm-opr-filter-extra.is-visible {
     display: flex !important;
     align-items: center !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     visibility: visible !important;
     pointer-events: auto !important;
+}
+
+body.saas-admin-ui .saas-ecommerce-history-page .vm-ecomm-filter-row--one-line > .vm-opr-field:not(.vm-opr-filter-extra),
+body.saas-admin-ui .saas-ecommerce-history-page .vm-ecomm-filter-row--one-line > .vm-dmt-field:not(.vm-opr-filter-extra),
+body.saas-admin-ui .saas-ecommerce-history-page .vm-ecomm-filter-row--one-line > .vm-opr-filter-extra.is-visible {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-ecommerce-history-page .select2-container--open {
+    z-index: 10060 !important;
+}
+
+body.saas-admin-ui .saas-ecommerce-history-page .select2-dropdown {
+    z-index: 10061 !important;
 }
 
 body.saas-admin-ui .saas-ecommerce-history-page .vm-ecomm-filter-row--one-line .vm-dmt-filter-search-group {
@@ -2080,6 +2094,56 @@ body.saas-admin-ui .saas-ecommerce-history-page .vm-ecomm-comm-role {
 body.saas-admin-ui .saas-ecommerce-history-page .vm-ecomm-comm-val {
     color: #475569;
     white-space: nowrap;
+}
+
+/* Commission group headers — User Role / Dealer / Master / etc. */
+body.saas-admin-ui .saas-ecommerce-history-page #ecommerceHistoryReport .vm-ecomm-comm-head {
+    white-space: normal !important;
+    word-break: break-word;
+    min-width: 118px !important;
+    width: auto !important;
+    max-width: none !important;
+    padding: 6px 5px !important;
+    line-height: 1.15 !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-ecommerce-history-page #ecommerceHistoryReport .vm-ecomm-comm-head__title {
+    display: block;
+    font-weight: 800;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #334155;
+    margin-bottom: 3px;
+}
+
+body.saas-admin-ui .saas-ecommerce-history-page #ecommerceHistoryReport .vm-ecomm-comm-head__sub {
+    display: block;
+    font-weight: 600;
+    font-size: 0.56rem;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    color: #64748b;
+    line-height: 1.25;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-ecommerce-history-page #ecommerceHistoryReport.vm-opr-data-table {
+        table-layout: auto !important;
+    }
+
+    body.saas-admin-ui .saas-ecommerce-history-page #ecommerceHistoryReport thead th.vm-ecomm-comm-head,
+    body.saas-admin-ui .saas-ecommerce-history-page #ecommerceHistoryReport thead th:nth-child(10),
+    body.saas-admin-ui .saas-ecommerce-history-page #ecommerceHistoryReport thead th:nth-child(11),
+    body.saas-admin-ui .saas-ecommerce-history-page #ecommerceHistoryReport thead th:nth-child(12),
+    body.saas-admin-ui .saas-ecommerce-history-page #ecommerceHistoryReport thead th:nth-child(13),
+    body.saas-admin-ui .saas-ecommerce-history-page #ecommerceHistoryReport thead th:nth-child(14) {
+        width: auto !important;
+        min-width: 118px !important;
+        max-width: none !important;
+        white-space: normal !important;
+    }
 }
 
 @media (max-width: 991px) {

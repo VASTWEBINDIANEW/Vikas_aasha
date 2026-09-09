@@ -26,7 +26,7 @@
 <link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=37" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
@@ -72,19 +72,19 @@
                         </div>
 
                         <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="allvendor" hidden>
-                            @Html.DropDownList("allvendor", ViewBag.allvendor as SelectList, "All Vendor", new { @id = "allvendorSelect", @class = "vm-opr-select vm-dmt-select form-control allmasters" })
+                            @Html.DropDownList("allvendor", ViewBag.allvendor as SelectList, "All Vendor", new { @id = "allvendorSelect", @class = "vm-opr-select vm-dmt-select form-control allmasters", data_no_select2 = "true" })
                         </div>
 
                         <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="allmaster" hidden>
-                            @Html.DropDownList("allmaster", ViewBag.allmaster as SelectList, "All Master", new { @id = "allmasterSelect", @class = "vm-opr-select vm-dmt-select form-control allmasters" })
+                            @Html.DropDownList("allmaster", ViewBag.allmaster as SelectList, "All Master", new { @id = "allmasterSelect", @class = "vm-opr-select vm-dmt-select form-control allmasters", data_no_select2 = "true" })
                         </div>
 
                         <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="dlm" hidden>
-                            @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, "All Distributor", new { id = "alldealer", @class = "vm-opr-select vm-dmt-select form-control" })
+                            @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, "All Distributor", new { id = "alldealer", @class = "vm-opr-select vm-dmt-select form-control", data_no_select2 = "true" })
                         </div>
 
                         <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="rem" hidden>
-                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control" })
+                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control", data_no_select2 = "true" })
                         </div>
 
                         <div class="vm-opr-field vm-dmt-field">
@@ -194,11 +194,36 @@
                                     <th>Product&nbsp;Price&nbsp;&#8377;</th>
                                     <th>Qty</th>
                                     <th>Total&nbsp;Amount&nbsp;&#8377;</th>
-                                    <th><span>User&nbsp;Role</span><span style="padding-left:4px;">&#8377;</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">&#8377;</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">&#8377;</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                    <th><span>Dealer</span><span style="padding-left:4px;">&#8377;</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">&#8377;</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">&#8377;</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                    <th><span>Master</span><span style="padding-left:4px;">&#8377;</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">&#8377;</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">&#8377;</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                    <th><span>Whitelabel</span><span style="padding-left:4px;">&#8377;</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">&#8377;</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">&#8377;</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                    <th><span>Admin</span><span style="padding-left:4px;">&#8377;</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">&#8377;</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">&#8377;</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
+                                    <th class="vm-ecomm-comm-head">
+                                        <span class="vm-ecomm-comm-head__title">User Role</span>
+                                        <span class="vm-ecomm-comm-head__sub">Pre Amt &#8377;</span>
+                                        <span class="vm-ecomm-comm-head__sub">Net INC &#8377;</span>
+                                        <span class="vm-ecomm-comm-head__sub">Post Amt &#8377;</span>
+                                    </th>
+                                    <th class="vm-ecomm-comm-head">
+                                        <span class="vm-ecomm-comm-head__title">Dealer</span>
+                                        <span class="vm-ecomm-comm-head__sub">Pre Amt &#8377;</span>
+                                        <span class="vm-ecomm-comm-head__sub">Net INC &#8377;</span>
+                                        <span class="vm-ecomm-comm-head__sub">Post Amt &#8377;</span>
+                                    </th>
+                                    <th class="vm-ecomm-comm-head">
+                                        <span class="vm-ecomm-comm-head__title">Master</span>
+                                        <span class="vm-ecomm-comm-head__sub">Pre Amt &#8377;</span>
+                                        <span class="vm-ecomm-comm-head__sub">Net INC &#8377;</span>
+                                        <span class="vm-ecomm-comm-head__sub">Post Amt &#8377;</span>
+                                    </th>
+                                    <th class="vm-ecomm-comm-head">
+                                        <span class="vm-ecomm-comm-head__title">Whitelabel</span>
+                                        <span class="vm-ecomm-comm-head__sub">Pre Amt &#8377;</span>
+                                        <span class="vm-ecomm-comm-head__sub">Net INC &#8377;</span>
+                                        <span class="vm-ecomm-comm-head__sub">Post Amt &#8377;</span>
+                                    </th>
+                                    <th class="vm-ecomm-comm-head">
+                                        <span class="vm-ecomm-comm-head__title">Admin</span>
+                                        <span class="vm-ecomm-comm-head__sub">Pre Amt &#8377;</span>
+                                        <span class="vm-ecomm-comm-head__sub">Net INC &#8377;</span>
+                                        <span class="vm-ecomm-comm-head__sub">Post Amt &#8377;</span>
+                                    </th>
                                     <th>Approved&nbsp;Date</th>
                                 </tr>
                             </thead>
@@ -284,43 +309,89 @@
         printWin.print();
     }
 
-    var ecommExtraWrapSelectors = ['#allvendor', '#allmaster', '#dlm', '#rem'];
-    var ecommExtraSelectSelectors = ['#allvendorSelect', '#allmasterSelect', '#alldealer', '#allretailer'];
+    var ecommExtraWrapIds = ['allvendor', 'allmaster', 'dlm', 'rem'];
 
     function destroyEcommSelect2($el) {
-        if ($el && $el.length && $el.data('select2')) {
-            $el.select2('destroy');
+        if (!$el || !$el.length) {
+            return;
         }
+
+        if ($el.hasClass('select2-hidden-accessible')) {
+            try {
+                $el.select2('destroy');
+            } catch (ignoreDestroy) { }
+        }
+
+        $el.removeClass('select2-hidden-accessible');
+        $el.removeAttr('data-select2-id aria-hidden tabindex');
+        $el.next('.select2-container').remove();
     }
 
-    function applyEcommSelect2($el) {
+    function initEcommSelect2($el) {
         if (!$el || !$el.length || !$.fn.select2) {
             return;
         }
+
         destroyEcommSelect2($el);
-        $el.select2({
+
+        var options = {
             width: '100%',
-            minimumResultsForSearch: 6
+            dropdownParent: $(document.body),
+            minimumResultsForSearch: 0,
+            dropdownCssClass: 'vm-admin-select2-dropdown vm-admin-select2-searchable'
+        };
+
+        if (typeof window.forceAdminSelect2 === 'function') {
+            window.forceAdminSelect2($el, options, true);
+            return;
+        }
+
+        if (typeof window.applyAdminSelect2 === 'function') {
+            window.applyAdminSelect2($el, options, true);
+            return;
+        }
+
+        $el.select2($.extend({}, window.getAdminSelect2Options ? window.getAdminSelect2Options($el) : {}, options));
+    }
+
+    function refreshEcommSelects() {
+        $('.saas-ecommerce-history-page').find('#ddlusers, #Cateid, #ddl_status').each(function () {
+            initEcommSelect2($(this));
+        });
+
+        $('.saas-ecommerce-history-page .vm-opr-filter-extra.is-visible select').each(function () {
+            initEcommSelect2($(this));
         });
     }
 
     function hideEcommFilterExtras() {
-        $(ecommExtraWrapSelectors.join(', ')).each(function () {
-            $(this).removeClass('is-visible').attr('hidden', 'hidden');
-        });
-        $(ecommExtraSelectSelectors.join(', ')).each(function () {
-            destroyEcommSelect2($(this));
+        ecommExtraWrapIds.forEach(function (id) {
+            var $wrap = $('#' + id);
+            var $select = $wrap.find('select');
+
+            destroyEcommSelect2($select);
+            $select.attr('data-no-select2', 'true');
+
+            if (typeof window.hideReportFilterExtra === 'function') {
+                window.hideReportFilterExtra(id);
+            }
         });
     }
 
-    function showEcommFilterExtra(selector) {
-        var $wrap = $(selector);
-        $wrap.addClass('is-visible').removeAttr('hidden');
+    function showEcommFilterExtra(id) {
+        var $wrap = $('#' + id);
         var $select = $wrap.find('select');
-        applyEcommSelect2($select);
-        if ($select.length && $select.data('select2')) {
-            $select.next('.select2-container').css('width', '100%');
+
+        if (typeof window.showReportFilterExtra === 'function') {
+            window.showReportFilterExtra(id);
+        } else {
+            $wrap.addClass('is-visible').removeAttr('hidden').css('display', 'flex');
         }
+
+        $select.removeAttr('data-no-select2');
+        window.setTimeout(function () {
+            initEcommSelect2($select);
+        }, 0);
     }
 
     function ecommHistoryAnswers() {
@@ -328,22 +399,19 @@
         hideEcommFilterExtras();
 
         if (answer === 'Dealer') {
-            showEcommFilterExtra('#dlm');
+            showEcommFilterExtra('dlm');
         } else if (answer === 'Vendor') {
-            showEcommFilterExtra('#allvendor');
+            showEcommFilterExtra('allvendor');
         } else if (answer === 'Master') {
-            showEcommFilterExtra('#allmaster');
+            showEcommFilterExtra('allmaster');
         } else if (answer === 'Retailer') {
-            showEcommFilterExtra('#rem');
+            showEcommFilterExtra('rem');
         }
+
+        refreshEcommSelects();
     }
 
-    function initEcommerceHistorySelect2() {
-        applyEcommSelect2($('#ddlusers'));
-        applyEcommSelect2($('#Cateid'));
-        applyEcommSelect2($('#ddl_status'));
-        $('#ddlusers').off('change.ecommHistory').on('change.ecommHistory', ecommHistoryAnswers);
-    }
+    window.answers = ecommHistoryAnswers;
 
     function initEcommerceHistoryDatepickers() {
         if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
@@ -356,11 +424,12 @@
     }
 
     $(document).ready(function () {
-        initEcommerceHistorySelect2();
         ecommHistoryAnswers();
         initEcommerceHistoryDatepickers();
 
-        $('#ecommerceHistoryForm .select2-container').css('width', '100%');
+        $('#ddlusers')
+            .off('change.ecommHistory select2:select.ecommHistory')
+            .on('change.ecommHistory select2:select.ecommHistory', ecommHistoryAnswers);
 
         $('#btnExportA').on('click', function () {
             exportEcommerceHistoryTable('excel');
@@ -369,4 +438,35 @@
             exportEcommerceHistoryTable('pdf');
         });
     });
+
+    window.bootEcommerceHistorySelect2 = function () {
+        ecommHistoryAnswers();
+        refreshEcommSelects();
+    };
 </script>
+
+@section PostSelect2Scripts {
+    <script>
+        (function () {
+            if (typeof window.bootEcommerceHistorySelect2 === 'function') {
+                window.bootEcommerceHistorySelect2();
+            }
+
+            [120, 450, 900, 1600].forEach(function (delay) {
+                window.setTimeout(function () {
+                    if (typeof window.bootEcommerceHistorySelect2 === 'function') {
+                        window.bootEcommerceHistorySelect2();
+                    }
+                }, delay);
+            });
+
+            $(window).on('load', function () {
+                window.setTimeout(function () {
+                    if (typeof window.bootEcommerceHistorySelect2 === 'function') {
+                        window.bootEcommerceHistorySelect2();
+                    }
+                }, 700);
+            });
+        })();
+    </script>
+}
