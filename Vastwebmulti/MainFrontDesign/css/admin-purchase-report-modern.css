@@ -1,8 +1,30 @@
 /* ADMIN — Wallet-Q purchase reports (Master, Dealer, Retailer, API, Whitelabel) */
 
+/* Tight side margin + full-width content */
+body.saas-admin-ui section.content.saas-purchase-report-page {
+    padding: 10px 8px 18px !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table-card {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui section.content.saas-purchase-report-page {
+        padding: 12px 10px 20px !important;
+    }
+}
+
 body.saas-admin-ui .saas-purchase-report-page .saas-pur-nav-card {
-    margin-bottom: 16px;
-    padding: 14px 16px;
+    margin-bottom: 10px;
+    padding: 8px 10px;
     background: #fff;
     border: 1px solid var(--acc-border, #e2e8f0);
     border-radius: var(--acc-radius, 14px);
@@ -21,9 +43,9 @@ body.saas-admin-ui .saas-pur-nav {
 body.saas-admin-ui .saas-pur-nav a {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    border-radius: 10px;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 8px;
     border: 1px solid #e2e8f0;
     background: #f8fafc;
     color: #475569;
@@ -197,6 +219,108 @@ body.saas-admin-ui .saas-purchase-report-page .saas-pur-order-type--cash {
 
 body.saas-admin-ui .saas-purchase-report-page .saas-pur-order-type--credit {
     color: #b91c1c;
+}
+
+/* Compact purchase table */
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th {
+    padding: 6px 4px !important;
+    font-size: 0.66rem !important;
+    white-space: normal !important;
+    line-height: 1.2 !important;
+    word-break: normal !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td {
+    padding: 6px 4px !important;
+    font-size: 0.74rem !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td.col-details {
+    text-align: left !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(1),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(1) { width: 7%; }
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(2),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(2) { width: 9%; }
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(3),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(3) {
+    width: 11%;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(4),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(4) { width: 9%; }
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(5),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(5) { width: 7%; }
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(6),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(6) { width: 7%; }
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(7),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(7) { width: 6%; }
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(8),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(8) {
+    width: 11%;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(9),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(9) { width: 9%; }
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(10),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(10) {
+    width: 9%;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(11),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(11) { width: 9%; }
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase thead th:nth-child(12),
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase tbody td:nth-child(12) {
+    width: 68px !important;
+    min-width: 68px !important;
+    max-width: 68px !important;
+    padding: 4px 2px !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-badge {
+    padding: 2px 6px;
+    font-size: 0.62rem;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-actions {
+    gap: 4px;
+    justify-content: center;
 }
 
 body.saas-admin-ui #purchaseApproveModal .modal-content {
