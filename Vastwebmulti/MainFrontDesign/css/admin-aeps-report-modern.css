@@ -1,4 +1,4 @@
-/* ADMIN — AEPS Report v=2 (extends DMT report shell v=26) */
+/* ADMIN — AEPS Report v=3 (extends DMT report shell v=26) */
 
 body.saas-admin-ui .saas-aeps-report-page {
     --aeps-accent: #0891b2;
@@ -11,7 +11,7 @@ body.saas-admin-ui .saas-aeps-report-page .vm-opr-table-panel__title i.fa-finger
 /* Table — #Aeps */
 body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table {
     width: 100% !important;
-    min-width: 1850px;
+    min-width: 0;
     font-size: 0.8rem !important;
     margin: 0 !important;
     border-collapse: separate !important;
@@ -155,11 +155,23 @@ body.saas-admin-ui .saas-aeps-report-page #Aeps .vm-dmt-user-name {
     color: #1e293b;
 }
 
+body.saas-admin-ui .saas-aeps-report-page #Aeps .vm-aeps-type-cell {
+    min-width: 96px;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
 body.saas-admin-ui .saas-aeps-report-page #Aeps .vm-aeps-rrn-cell {
-    min-width: 120px;
-    max-width: 180px;
-    word-break: break-word;
+    min-width: 140px !important;
+    max-width: none !important;
+    width: auto !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    text-align: left !important;
     font-size: 0.72rem !important;
+    line-height: 1.35 !important;
+    vertical-align: middle !important;
 }
 
 body.saas-admin-ui .saas-aeps-report-page #Aeps .vm-dmt-action-cell {
@@ -216,6 +228,12 @@ body.saas-admin-ui .saas-aeps-report-page #trow > tr.vm-opr-table-empty-row ~ tr
     display: none !important;
 }
 
+body.saas-admin-ui .saas-aeps-report-page .vm-opr-data-table #trow > tr::before,
+body.saas-admin-ui .saas-aeps-report-page .vm-opr-data-table #trow > tr.vm-opr-table-empty-row::before {
+    display: none !important;
+    content: none !important;
+}
+
 body.saas-admin-ui .saas-aeps-report-page .vm-aeps-detail-modal .vm-dmt-detail-grid--2 {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -245,4 +263,153 @@ body.saas-admin-ui .saas-aeps-report-page .vm-aeps-detail-modal .vm-dmt-modal-in
     font-weight: 600 !important;
     color: #334155 !important;
     min-height: 38px;
+}
+
+/* v=3 — undo operator-report v56 nth-child widths leaking onto #Aeps (18 cols) */
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table {
+        table-layout: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(1),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table tbody td.vm-dmt-sr-cell,
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:first-child {
+        width: 72px !important;
+        min-width: 72px !important;
+        max-width: 72px !important;
+    }
+
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(2),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table tbody td.vm-aeps-type-cell,
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(2) {
+        width: auto !important;
+        min-width: 96px !important;
+        max-width: none !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        overflow: visible !important;
+    }
+
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(3),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table tbody td.vm-dmt-user-cell,
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(3) {
+        width: auto !important;
+        min-width: 130px !important;
+        max-width: none !important;
+        text-align: left !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(4),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(4) {
+        min-width: 100px !important;
+        max-width: none !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(5),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(5),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(6),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(6) {
+        min-width: 88px !important;
+        max-width: none !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(7),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(7),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(8),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(8),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(9),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(9),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(10),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(10) {
+        min-width: 72px !important;
+        max-width: none !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(11),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(11),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(12),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(12),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(13),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(13),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(14),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(14),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(15),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(15) {
+        min-width: 64px !important;
+        max-width: none !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        font-variant-numeric: tabular-nums;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(16),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table tbody td.vm-aeps-rrn-cell,
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(16) {
+        width: auto !important;
+        min-width: 140px !important;
+        max-width: none !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        text-align: left !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(17),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(17) {
+        min-width: 108px !important;
+        max-width: none !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table thead th:nth-child(18),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table tbody td.vm-dmt-action-cell,
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:last-child {
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table {
+        table-layout: auto !important;
+        width: max-content !important;
+        min-width: 1280px !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(2),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(3),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(4),
+    body.saas-admin-ui .saas-aeps-report-page #Aeps.vm-opr-data-table #trow > tr > td:nth-child(16) {
+        max-width: none !important;
+        min-width: 0 !important;
+        vertical-align: middle !important;
+    }
 }

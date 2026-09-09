@@ -1,4 +1,4 @@
-/* ADMIN — M-POS Report v=2 (extends DMT report shell v=26) */
+/* ADMIN — M-POS Report v=3 (extends DMT report shell v=26) */
 
 body.saas-admin-ui .saas-mpos-report-page {
     --mpos-accent: #7c3aed;
@@ -18,7 +18,7 @@ body.saas-admin-ui .saas-mpos-report-page .vm-mpos-totals-grid {
 /* Table — mirror DMT #mmm styles for #mpos */
 body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table {
     width: 100% !important;
-    min-width: 1280px;
+    min-width: 0;
     font-size: 0.8rem !important;
     margin: 0 !important;
     border-collapse: separate !important;
@@ -270,4 +270,74 @@ body.saas-admin-ui .saas-mpos-report-page .vm-mpos-detail-modal .vm-dmt-modal-fi
 
 body.saas-admin-ui .saas-mpos-report-page .vm-opr-table-panel__title i.fa-credit-card {
     color: #7c3aed;
+}
+
+body.saas-admin-ui .saas-mpos-report-page .vm-opr-data-table #trow > tr::before,
+body.saas-admin-ui .saas-mpos-report-page .vm-opr-data-table #trow > tr.vm-opr-table-empty-row::before {
+    display: none !important;
+    content: none !important;
+}
+
+/* v=3 — undo operator-report v56 nth-child widths on #mpos */
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table {
+        table-layout: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table thead th:nth-child(1),
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table tbody td.vm-dmt-sr-cell,
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table #trow > tr > td:first-child {
+        width: 72px !important;
+        min-width: 72px !important;
+        max-width: 72px !important;
+    }
+
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table thead th:nth-child(2),
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table tbody td.vm-dmt-user-cell,
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table #trow > tr > td:nth-child(2) {
+        width: auto !important;
+        min-width: 160px !important;
+        max-width: none !important;
+        text-align: left !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table thead th:nth-child(n+3):nth-child(-n+12),
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table #trow > tr > td:nth-child(n+3):nth-child(-n+12) {
+        min-width: 68px !important;
+        max-width: none !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table thead th:nth-child(11),
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table #trow > tr > td:nth-child(11) {
+        min-width: 108px !important;
+    }
+
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table thead th:last-child,
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table tbody td.vm-dmt-action-cell,
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table #trow > tr > td:last-child {
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table {
+        table-layout: auto !important;
+        width: max-content !important;
+        min-width: 1100px !important;
+        max-width: none !important;
+    }
 }

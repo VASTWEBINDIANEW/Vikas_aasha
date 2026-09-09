@@ -1,4 +1,4 @@
-/* ADMIN — Cash Deposit Report v=1 (extends DMT report shell) */
+/* ADMIN — Cash Deposit Report v=2 (extends DMT report shell) */
 
 
 
@@ -50,7 +50,7 @@ body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table 
 
     width: 100% !important;
 
-    min-width: 1520px;
+    min-width: 0;
 
     font-size: 0.8rem !important;
 
@@ -673,6 +673,81 @@ body.saas-admin-ui .vm-cashdeposit-refund-modal .vm-cashdeposit-refund-meta stro
 }
 
 
+
+/* v=2 — undo operator-report v56 nth-child widths on #cashdeposit */
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table {
+        table-layout: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead th:nth-child(1),
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table tbody td.vm-dmt-sr-cell,
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table #trow > tr > td:first-child {
+        width: 72px !important;
+        min-width: 72px !important;
+        max-width: 72px !important;
+    }
+
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead th:nth-child(2),
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table tbody td.vm-dmt-user-cell,
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table #trow > tr > td:nth-child(2) {
+        width: auto !important;
+        min-width: 200px !important;
+        max-width: none !important;
+        text-align: left !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead th:nth-child(3),
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table #trow > tr > td:nth-child(3),
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead th:nth-child(n+8):nth-child(-n+13),
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table #trow > tr > td:nth-child(n+8):nth-child(-n+13) {
+        min-width: 64px !important;
+        max-width: none !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead th:nth-child(4),
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table #trow > tr > td:nth-child(4) {
+        min-width: 108px !important;
+    }
+
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead th:nth-child(n+5):nth-child(-n+7),
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table #trow > tr > td:nth-child(n+5):nth-child(-n+7) {
+        min-width: 68px !important;
+        max-width: none !important;
+        white-space: normal !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead th:last-child,
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table tbody td.vm-dmt-action-cell,
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table #trow > tr > td:last-child {
+        width: 110px !important;
+        min-width: 110px !important;
+        max-width: 110px !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table {
+        table-layout: auto !important;
+        width: max-content !important;
+        min-width: 1200px !important;
+        max-width: none !important;
+    }
+}
 
 @media (max-width: 992px) {
 

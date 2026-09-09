@@ -1,4 +1,4 @@
-/* ADMIN — Micro ATM Report v=2 (extends DMT report shell v=26) */
+/* ADMIN — Micro ATM Report v=3 (extends DMT report shell v=26) */
 
 body.saas-admin-ui .saas-microatm-report-page {
     --microatm-accent: #7c3aed;
@@ -24,7 +24,7 @@ body.saas-admin-ui .saas-microatm-report-page .vm-dmt-filter-row--microatm .vm-d
 
 body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table {
     width: 100% !important;
-    min-width: 1680px;
+    min-width: 0;
     font-size: 0.8rem !important;
     margin: 0 !important;
     border-collapse: separate !important;
@@ -361,6 +361,82 @@ body.saas-admin-ui .vm-microatm-detail-modal .vm-dmt-modal-grid--2 .vm-dmt-modal
     body.saas-admin-ui .vm-microatm-detail-modal .vm-dmt-modal-grid--2,
     body.saas-admin-ui .vm-microatm-detail-modal .vm-dmt-detail-grid--2 {
         grid-template-columns: 1fr !important;
+    }
+}
+
+/* v=3 — undo operator-report v56 nth-child widths on #microatm */
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table {
+        table-layout: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table thead th:nth-child(1),
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table tbody td.vm-dmt-sr-cell,
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table #trow > tr > td:first-child {
+        width: 72px !important;
+        min-width: 72px !important;
+        max-width: 72px !important;
+    }
+
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table thead th:nth-child(2),
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table tbody td.vm-dmt-user-cell,
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table #trow > tr > td:nth-child(2) {
+        width: auto !important;
+        min-width: 200px !important;
+        max-width: none !important;
+        text-align: left !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table thead th:nth-child(3),
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table #trow > tr > td:nth-child(3),
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table thead th:nth-child(n+10):nth-child(-n+14),
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table #trow > tr > td:nth-child(n+10):nth-child(-n+14) {
+        min-width: 64px !important;
+        max-width: none !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table thead th:nth-child(4),
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table #trow > tr > td:nth-child(4) {
+        min-width: 108px !important;
+    }
+
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table thead th:nth-child(n+5):nth-child(-n+9),
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table #trow > tr > td:nth-child(n+5):nth-child(-n+9) {
+        min-width: 68px !important;
+        max-width: none !important;
+        white-space: normal !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table thead th:last-child,
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table tbody td.vm-dmt-action-cell,
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table #trow > tr > td:last-child {
+        width: 110px !important;
+        min-width: 110px !important;
+        max-width: 110px !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-microatm-report-page #microatm.vm-opr-data-table {
+        table-layout: auto !important;
+        width: max-content !important;
+        min-width: 1280px !important;
+        max-width: none !important;
     }
 }
 

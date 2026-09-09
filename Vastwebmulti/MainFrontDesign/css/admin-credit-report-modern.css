@@ -1,4 +1,4 @@
-/* ADMIN — Credit Report v=2 */
+/* ADMIN — Credit Report v=3 */
 
 
 
@@ -50,9 +50,9 @@ body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table {
 
     width: 100% !important;
 
-    min-width: 1820px;
+    min-width: 0;
 
-    table-layout: fixed;
+    table-layout: auto;
 
     font-size: 0.8rem !important;
 
@@ -361,6 +361,116 @@ body.saas-admin-ui .saas-credit-report-page .vm-opr-table-panel__title i.fa-cred
 }
 
 
+
+/* v=3 — undo operator-report v56 nth-child widths on #creditreport */
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table {
+        table-layout: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table thead th:nth-child(n),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(n),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(n) {
+        max-width: none !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--from,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(1),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(1) {
+        width: 118px !important;
+        min-width: 118px !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--to,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(2),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(2) {
+        width: 108px !important;
+        min-width: 108px !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--frm,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(3),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(3) {
+        width: 130px !important;
+        min-width: 130px !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--person,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(4),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(4) {
+        width: 130px !important;
+        min-width: 130px !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--mobile,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(5),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(5) {
+        width: 118px !important;
+        min-width: 118px !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--district,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(6),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(6) {
+        width: 110px !important;
+        min-width: 110px !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--state,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(7),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(7) {
+        width: 96px !important;
+        min-width: 96px !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--amount,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(8),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(8) {
+        width: 148px !important;
+        min-width: 148px !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--balance,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(9),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(9) {
+        width: 132px !important;
+        min-width: 132px !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--due,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(10),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(10) {
+        width: 108px !important;
+        min-width: 108px !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--live,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(11),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(11) {
+        width: 132px !important;
+        min-width: 132px !important;
+    }
+
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table .vm-credit-th--time,
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tbody td:nth-child(12),
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table tfoot td:nth-child(12) {
+        width: 150px !important;
+        min-width: 150px !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-credit-report-page #creditreport.vm-opr-data-table {
+        table-layout: auto !important;
+        width: max-content !important;
+        min-width: 1500px !important;
+        max-width: none !important;
+    }
+}
 
 @media (max-width: 992px) {
 
