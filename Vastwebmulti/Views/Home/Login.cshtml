@@ -165,7 +165,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <link href="~/MainFrontDesign/css/Custom-style.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link href="~/MainFrontDesign/css/public-login-modern.css?v=36" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/public-login-modern.css?v=43" rel="stylesheet" />
     <script src="~/MainFrontDesign/js/public-login-modern.js?v=6"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -358,7 +358,7 @@
                                                 </div> *@
                                                 <div class="login-top sign-top vm-login-form">
 
-                                                    <div class="row">
+                                                    <div class="row vm-login-captcha-row" id="vm-login-captcha-row">
                                                         <div class="col-md-12 vm-login-captcha-wrap">
                                                             <div class="vm-login-captcha-alert">
                                                                 <div class="vm-login-captcha-title">
@@ -384,98 +384,89 @@
                                                                 </div>
                                                                 <small id="captcha_msg" class="form-text mt-1 text-center w-100"></small>
                                                             </div>
+                                                        </div>
+                                                    </div>
 
-                                                            <div class="for-border-effect">
-                                                                @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
-                                                                @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control phone", onkeypress = "return isNumber(event)", maxlength = "10", @placeholder = "Enter Mobile No", @required = "", @field = "mobile", @id = "Mobile", disabled = "disabled" })
-
-
+                                                    <div class="row vm-login-signup-pair-row">
+                                                        <div class="col-md-6">
+                                                            <div class="vm-login-field-stack">
+                                                                <div class="for-border-effect vm-login-mobile-field">
+                                                                    @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+                                                                    @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control phone", onkeypress = "return isNumber(event)", maxlength = "10", @placeholder = "Enter Mobile No", @required = "", @field = "mobile", @id = "Mobile", disabled = "disabled" })
+                                                                    <div class="focus-border"><i></i></div>
+                                                                </div>
                                                                 <small id="mobile_err"></small>
                                                                 <div class="spinner-border hidden vm-login-field-spinner" id="Mobileno_spinner"></div>
                                                                 <img class="hidden vm-login-field-success" id="success_mobile_img" src="~/images/check_img_input.jpg" alt="Verified" />
-                                                                <div class="otp_m">
-                                                                    <div class="form_otp" id="otp_continer_inputs">
-                                                                        <div class="otp_block">
-                                                                            <p class="opt_pra_1"> OTP sent successfully to <br />entered mobile number</p>
-
+                                                                <div class="vm-login-inline-otp hidden" id="vm-login-mobile-otp-wrap">
+                                                                    <div class="vm-login-otp-panel" id="otp_continer_inputs">
+                                                                        <div class="vm-login-otp-head">
+                                                                            <span class="vm-login-otp-icon" aria-hidden="true">&#10003;</span>
+                                                                            <span class="vm-login-otp-msg">OTP sent to your mobile number</span>
                                                                         </div>
-                                                                        <div class="otp_set">
-                                                                            <input id="codeBox1" type="number" maxlength="1" onkeyup="onKeyUpEvent(1, event)" onfocus="onFocusEvent(1)" />
-                                                                            <input id="codeBox2" type="number" maxlength="1" onkeyup="onKeyUpEvent(2, event)" onfocus="onFocusEvent(2)" />
-                                                                            <input id="codeBox3" type="number" maxlength="1" onkeyup="onKeyUpEvent(3, event)" onfocus="onFocusEvent(3)" />
-                                                                            <input id="codeBox4" type="number" maxlength="1" onkeyup="onKeyUpEvent(4, event)" onfocus="onFocusEvent(4)" />
+                                                                        <div class="vm-login-otp-boxes otp_set">
+                                                                            <input id="codeBox1" class="vm-login-otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" tabindex="1" onkeyup="onKeyUpEvent(1, event)" onfocus="onFocusEvent(1)" />
+                                                                            <input id="codeBox2" class="vm-login-otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" tabindex="2" onkeyup="onKeyUpEvent(2, event)" onfocus="onFocusEvent(2)" />
+                                                                            <input id="codeBox3" class="vm-login-otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" tabindex="3" onkeyup="onKeyUpEvent(3, event)" onfocus="onFocusEvent(3)" />
+                                                                            <input id="codeBox4" class="vm-login-otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" tabindex="4" onkeyup="onKeyUpEvent(4, event)" onfocus="onFocusEvent(4)" />
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="focus-border"><i></i></div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="for-border-effect">
-                                                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                                                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control email", @type = "email", @placeholder = "Enter Email-ID", @required = "", @field = "email" })
+                                                        <div class="col-md-6">
+                                                            <div class="vm-login-field-stack">
+                                                                <div class="for-border-effect vm-login-email-field">
+                                                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control email", @type = "email", @placeholder = "Enter Email-ID", @required = "", @field = "email", @id = "Email" })
+                                                                    <input type="button" name="button" value="Send OTP" id="btnsendOTP_Email" class="vm-login-send-otp-btn">
+                                                                    <div class="focus-border"><i></i></div>
+                                                                </div>
                                                                 <small id="email_err"></small>
-                                                                <input type="button" name="button" value="Send OTP" id="btnsendOTP_Email" class="vm-login-send-otp-btn">
                                                                 <div class="spinner-border hidden vm-login-field-spinner" id="Email_spinner"></div>
                                                                 <img class="hidden vm-login-field-success" id="success_email_img" src="~/images/check_img_input.jpg" alt="Verified" />
-                                                                <div class="form_otp vm-login-email-otp" id="otp_continer_inputs_email">
-                                                                    <div class="otp_block_1">
-                                                                        <p class="opt_pra"> OTP sent successfully to <br />entered Email Id</p>
-                                                                    </div>
-                                                                    <div class="otp_set_1">
-                                                                        <input id="codeBox5" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(5, event)" onfocus="onFocusEvent(5)" />
-                                                                        <input id="codeBox6" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(6, event)" onfocus="onFocusEvent(6)" />
-                                                                        <input id="codeBox7" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(7, event)" onfocus="onFocusEvent(7)" />
-                                                                        <input id="codeBox8" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(8, event)" onfocus="onFocusEvent(8)" />
+                                                                <div class="vm-login-inline-otp hidden" id="vm-login-email-otp-wrap">
+                                                                    <div class="vm-login-otp-panel" id="otp_continer_inputs_email">
+                                                                        <div class="vm-login-otp-head">
+                                                                            <span class="vm-login-otp-icon" aria-hidden="true">&#10003;</span>
+                                                                            <span class="vm-login-otp-msg">OTP sent to your email address</span>
+                                                                        </div>
+                                                                        <div class="vm-login-otp-boxes otp_set_1">
+                                                                            <input id="codeBox5" class="vm-login-otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" tabindex="5" onkeyup="onKeyUpEvent_Email(5, event)" onfocus="onFocusEvent_Email(5)" />
+                                                                            <input id="codeBox6" class="vm-login-otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" tabindex="6" onkeyup="onKeyUpEvent_Email(6, event)" onfocus="onFocusEvent_Email(6)" />
+                                                                            <input id="codeBox7" class="vm-login-otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" tabindex="7" onkeyup="onKeyUpEvent_Email(7, event)" onfocus="onFocusEvent_Email(7)" />
+                                                                            <input id="codeBox8" class="vm-login-otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" tabindex="8" onkeyup="onKeyUpEvent_Email(8, event)" onfocus="onFocusEvent_Email(8)" />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-
-                                                                <div class="focus-border"><i></i></div>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
-                                                        <div class="col-md-12">
+                                                    <div class="row vm-login-signup-pair-row">
+                                                        <div class="col-md-6">
                                                             <div class="for-border-effect">
                                                                 @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
-                                                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control name", @placeholder = "Enter Customer Name", @required = "" })
+                                                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control name", @placeholder = "Enter Customer Name", @required = "", @id = "Name" })
                                                                 <div class="focus-border"><i></i></div>
                                                             </div>
                                                         </div>
-                                                    </div>
-
-
-
-
-                                                    @*    ------------kyc Dropdown-------------------*@
-                                                    <div class="row">
-                                                        <div class="col-md-12">
+                                                        <div class="col-md-6">
                                                             <div class="for-border-effect">
-
                                                                 <select id="KYCType" name="KYCType" class="form-control" required>
-
                                                                     <option value="">Select KYC Type</option>
-                                                                    
                                                                     @foreach (var item in ViewBag.KYCSetting)
                                                                     {
-                                                                        <option value="@item.KYCType">
-                                                                            @item.DisplayName
-                                                                        </option>
+                                                                        <option value="@item.KYCType">@item.DisplayName</option>
                                                                     }
-
                                                                 </select>
-
                                                                 <div class="focus-border"><i></i></div>
-
                                                             </div>
                                                         </div>
                                                     </div>
                                                     
 
-                                                    <div class="row">
+                                                    <div class="row vm-login-signup-pair-row">
                                                         <div class="col-md-12">
                                                             <div class="for-border-effect">
                                                                 @Html.TextBoxFor(m => m.Companyname, new { @class = "form-control phone", maxlength = "40", @placeholder = "Enter Business Name(Optional)" })
@@ -484,7 +475,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
+                                                    <div class="row vm-login-signup-pair-row">
                                                         <div class="col-md-6">
                                                             <div class="for-border-effect">
                                                                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
@@ -501,7 +492,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
+                                                    <div class="row vm-login-signup-pair-row">
                                                         <div class="col-md-6">
                                                             <div class="for-border-effect custom-district">
                                                                 @Html.ValidationMessageFor(m => m.state, "", new { @class = "text-danger" })
@@ -523,8 +514,8 @@
 
 
 
-                                                    <div class="login-bottom">
-                                                        <div class="row">
+                                                    <div class="login-bottom vm-login-signup-bottom">
+                                                        <div class="row vm-login-signup-pair-row">
                                                             <div class="col-md-6">
                                                                 <ul>
                                                                     <li>
@@ -1149,103 +1140,157 @@
     var email_clientId = null;
     var mobile_verify = false;
     var email_verify = false;
-    window.addEventListener('load', () => {
-        var sendBtnOtp = document.getElementById('btnsendOTP');
-        var txtmobileno = document.getElementById('txtmobileno');
-        var resend_btn_otp = document.getElementById('resend_btn_otp');
-        var otp_continer_inputs = document.getElementById('otp_continer_inputs');
-        otp_continer_inputs.classList.add('hidden');
-        
+    function cspIsSignupOtpInput(el) {
+        if (!el) return false;
+        if (el.classList && el.classList.contains('vm-login-otp-digit')) return true;
+        var id = el.getAttribute('id') || '';
+        return /^codeBox\d+$/.test(id);
+    }
 
-        $('input[name="Mobile"]').keyup(e => {
+    function cspEnableOtpInputs(selector) {
+        $(selector).each(function () {
+            this.removeAttribute('disabled');
+            this.disabled = false;
+        });
+    }
+
+    function cspShowMobileOtp(show) {
+        var $wrap = $('#vm-login-mobile-otp-wrap');
+        var $otp = $('#otp_continer_inputs');
+        if (show) {
+            cspEnableOtpInputs('#codeBox1, #codeBox2, #codeBox3, #codeBox4');
+            $wrap.removeClass('hidden').show();
+            $otp.removeClass('hidden').show();
+        } else {
+            $wrap.addClass('hidden').hide();
+            $otp.addClass('hidden').hide();
+        }
+    }
+
+    function cspShowEmailOtp(show) {
+        var $wrap = $('#vm-login-email-otp-wrap');
+        var $otp = $('#otp_continer_inputs_email');
+        if (show) {
+            cspEnableOtpInputs('#codeBox5, #codeBox6, #codeBox7, #codeBox8');
+            $wrap.removeClass('hidden').show();
+            $otp.removeClass('hidden').show();
+        } else {
+            $wrap.addClass('hidden').hide();
+            $otp.addClass('hidden').hide();
+        }
+    }
+
+    function cspShowCaptchaSection(show) {
+        var $row = $('#vm-login-captcha-row');
+        if (!$row.length) return;
+        if (show) {
+            $row.removeClass('hidden vm-login-captcha-row--hidden').stop(true, true).slideDown(180);
+        } else {
+            $row.stop(true, true).slideUp(180, function () {
+                $row.addClass('hidden vm-login-captcha-row--hidden');
+            });
+        }
+    }
+
+    function cspResetMobileOtpBoxes() {
+        $('#codeBox1, #codeBox2, #codeBox3, #codeBox4').val('');
+        cspEnableOtpInputs('#codeBox1, #codeBox2, #codeBox3, #codeBox4');
+    }
+
+    function cspResetEmailOtpBoxes() {
+        $('#codeBox5, #codeBox6, #codeBox7, #codeBox8').val('');
+        cspEnableOtpInputs('#codeBox5, #codeBox6, #codeBox7, #codeBox8');
+    }
+
+    window.addEventListener('load', () => {
+        cspShowMobileOtp(false);
+        cspShowEmailOtp(false);
+
+        $('#Mobile').on('keyup input', function (e) {
             $('#mobile_err').text('');
             if (mobile_loading) return;
-            var mobileno = e.target.value;
+            var mobileno = String($(this).val() || '').replace(/\D/g, '');
 
-            if (mobileno.length == 10) {
+            if (mobileno.length < 10) {
+                cspShowMobileOtp(false);
+                cspResetMobileOtpBoxes();
+                return;
+            }
+
+            if (mobileno.length === 10) {
                 mobile_loading = true;
-
                 $('#Mobileno_spinner').show();
 
-                fetch('@Url.Action("IsMobileEmailExist")?entry=' + mobileno + '&type=mobile')
+                fetch('@Url.Action("IsMobileEmailExist")?entry=' + encodeURIComponent(mobileno) + '&type=mobile')
                     .then(res => res.json())
                     .then(data => {
                         $('#Mobileno_spinner').hide();
                         mobile_loading = false;
 
-                        if (data.status == true) {
-                            $('#otp_continer_inputs').show();
+                        if (data.status === true) {
                             mobile_clientId = data.client_id;
+                            cspResetMobileOtpBoxes();
+                            cspShowMobileOtp(true);
                             $('#codeBox1').focus();
-                            $('input[name="Mobile"]').hide();
-                        }
-                        else if (data.status == false) {
+                        } else {
                             mobile_clientId = null;
-                            var message = data.message;
-                            $('#mobile_err').text(message);
-                            $('#otp_continer_inputs').hide();
+                            $('#mobile_err').text(data.message || 'Unable to send OTP.');
+                            cspShowMobileOtp(false);
                             $('#singup').focus();
                         }
                     })
-                    .catch(err => {
+                    .catch(function () {
                         mobile_loading = false;
                         mobile_clientId = null;
                         $('#Mobileno_spinner').hide();
-                    })
-
+                        $('#mobile_err').text('Unable to send OTP. Please try again.');
+                        cspShowMobileOtp(false);
+                    });
             }
-            else {
-                $('#txtmobileno_spinner').hide();
-            }
+        });
 
-        })
-
-
-        $('#btnsendOTP_Email').click(() => {
+        $('#btnsendOTP_Email').click(function () {
             $('#email_err').text('');
             if (email_loading) return;
-            var emaild = $('input[type="email"]').val();
+            var emaild = $.trim($('#Email').val() || $('input[type="email"]').val() || '');
 
             if (!emaild) {
-                return $('#email_err').text('Please Enter Email');
+                $('#email_err').text('Please Enter Email');
+                return;
             }
+
             $('#btnsendOTP_Email').hide();
-
             email_loading = true;
-
             $('#Email_spinner').show();
 
-            fetch('@Url.Action("IsMobileEmailExist")?entry=' + emaild + '&type=email')
-                    .then(res => res.json())
-                    .then(data => {
-                        $('#Email_spinner').hide();
-                        email_loading = false;
+            fetch('@Url.Action("IsMobileEmailExist")?entry=' + encodeURIComponent(emaild) + '&type=email')
+                .then(res => res.json())
+                .then(data => {
+                    $('#Email_spinner').hide();
+                    email_loading = false;
 
-                        if (data.status == true) {
-                            $('#otp_continer_inputs_email').show();
-                            $('#btnsendOTP_Email').hide();
-                            $('input[type="email"]').hide();
-                            email_clientId = data.client_id;
-                            $('#codeBox5').focus();
-                        }
-                        else if (data.status == false) {
-                            email_clientId = null;
-                            $('#singup').focus();
-                            var message = data.message;
-                            $('#email_err').text(message);
-                            $('#btnsendOTP_Email').show();
-                        }
-                    })
-                    .catch(err => {
-                        email_loading = false;
-                        mobile_clientId = null;
-                        $('#Email_spinner').hide();
-                    })
-
-
-        })
-
-    })
+                    if (data.status === true) {
+                        email_clientId = data.client_id;
+                        cspResetEmailOtpBoxes();
+                        cspShowEmailOtp(true);
+                        $('#btnsendOTP_Email').hide();
+                        $('#codeBox5').focus();
+                    } else {
+                        email_clientId = null;
+                        $('#email_err').text(data.message || 'Unable to send OTP.');
+                        $('#btnsendOTP_Email').show();
+                        $('#singup').focus();
+                    }
+                })
+                .catch(function () {
+                    email_loading = false;
+                    email_clientId = null;
+                    $('#Email_spinner').hide();
+                    $('#email_err').text('Unable to send OTP. Please try again.');
+                    $('#btnsendOTP_Email').show();
+                });
+        });
+    });
     function getCodeBoxElement(index) {
         return document.getElementById('codeBox' + index);
     }
@@ -1268,13 +1313,12 @@
                 // Submit code
                 $('#Mobileno_spinner').show();
                 var otp = $('#codeBox1').val() + $('#codeBox2').val() + $('#codeBox3').val() + $('#codeBox4').val();
-                fetch('@Url.Action("OtpVerify")?type=mobile&clientId=' + mobile_clientId + '&otp=' + otp)
+                fetch('@Url.Action("OtpVerify")?type=mobile&clientId=' + encodeURIComponent(mobile_clientId) + '&otp=' + encodeURIComponent(otp))
                     .then(res => res.json())
                     .then(data => {
                         $('#Mobileno_spinner').hide();
                         if (data.status) {
-                            $('#otp_continer_inputs').hide();
-                            $('input[name="Mobile"]').show();
+                            cspShowMobileOtp(false);
                             document.querySelector('input[name="Mobile"]').setAttribute('disabled', 'disabled');
                             mobile_clientId = null;
                             $('#success_mobile_img').show();
@@ -1325,13 +1369,12 @@
                 // Submit code
                 $('#Email_spinner').show();
                 var otp = $('#codeBox5').val() + $('#codeBox6').val() + $('#codeBox7').val() + $('#codeBox8').val();
-                fetch('@Url.Action("OtpVerify")?type=email&clientId=' + email_clientId + '&otp=' + otp)
+                fetch('@Url.Action("OtpVerify")?type=email&clientId=' + encodeURIComponent(email_clientId) + '&otp=' + encodeURIComponent(otp))
                     .then(res => res.json())
                     .then(data => {
                         $('#Email_spinner').hide();
                         if (data.status) {
-                            $('#otp_continer_inputs_email').hide();
-                            $('input[type="email"]').show();
+                            cspShowEmailOtp(false);
                             document.querySelector('input[type="email"]').setAttribute('disabled', 'disabled');
                             email_clientId = null;
                             $('#success_email_img').show();
@@ -1351,40 +1394,25 @@
                     })
             }
         }
-        if (eventCode === 8 && index !== 1) {
+        if (eventCode === 8 && index !== 5) {
             getCodeBoxElement(index - 1).focus();
         }
     }
 
     function onFocusEvent(index) {
-        for (item = 1; item < index; item++) {
-            const currentElement = getCodeBoxElement(item);
-            if (!currentElement.value) {
+        for (var item = 1; item < index; item++) {
+            var currentElement = getCodeBoxElement(item);
+            if (currentElement && !currentElement.value) {
                 currentElement.focus();
                 break;
             }
         }
     }
-</script>
 
-
-
-<script>
-    window.addEventListener('load', () => {
-        var txtemail = document.getElementById('txtemail');
-        var resend_btn_otp_email = document.getElementById('resend_btn_otp_email');
-
-        $('#otp_continer_inputs_email').hide();
-       
-    })
-    function getCodeBoxElement(index) {
-        return document.getElementById('codeBox' + index);
-    }
-    
-    function onFocusEvent(index) {
-        for (item = 1; item < index; item++) {
-            const currentElement = getCodeBoxElement(item);
-            if (!currentElement.value) {
+    function onFocusEvent_Email(index) {
+        for (var item = 5; item < index; item++) {
+            var currentElement = getCodeBoxElement(item);
+            if (currentElement && !currentElement.value) {
                 currentElement.focus();
                 break;
             }
@@ -1408,10 +1436,13 @@
 
     function disable_inputs() {
         for (i = 0; i < inputs.length; i++) {
-            if (!['Mobile'].includes(inputs[i].getAttribute('id'))) {
-                inputs[i].setAttribute('disabled', true);
-                inputs[i].value = '';
+            var el = inputs[i];
+            var fieldId = el.getAttribute('id') || '';
+            if (['Mobile', 'CaptchaInput'].includes(fieldId) || cspIsSignupOtpInput(el)) {
+                continue;
             }
+            el.setAttribute('disabled', true);
+            el.value = '';
         }
     }
 
@@ -1421,9 +1452,14 @@
             omit_field.push('Email');
         }
         for (i = 0; i < inputs.length; i++) {
-            if (!omit_field.includes(inputs[i].getAttribute('id'))) {
-                inputs[i].removeAttribute('disabled');
-                inputs[i].value = '';
+            var el = inputs[i];
+            var fieldId = el.getAttribute('id') || '';
+            if (cspIsSignupOtpInput(el)) {
+                continue;
+            }
+            if (!omit_field.includes(fieldId)) {
+                el.removeAttribute('disabled');
+                el.value = '';
             }
         }
     }
@@ -1449,6 +1485,7 @@
             }
 
             var input = captchaInput.val().trim();
+            captchaInput.val(input);
             if (input === "") {
                 $("#captcha_msg").text("Please enter captcha first.")
                     .removeClass("text-success")
@@ -1475,9 +1512,13 @@
 
                         $("#captcha_success_img").removeClass("d-none"); // ✅ Tick image show
 
-                        $("#Mobile").prop("disabled", false);
+                        $("#Mobile").prop("disabled", false).focus();
+                        $("#verifyCaptchaBtn").prop("disabled", true);
+                        captchaInput.prop("disabled", true);
 
-                       
+                        setTimeout(function () {
+                            cspShowCaptchaSection(false);
+                        }, 350);
                     } else {
                         $("#captcha_msg").removeClass("text-success")
                             .addClass("text-danger")
@@ -1497,13 +1538,20 @@
 
         // 🔄 Captcha Refresh
         $("#refreshCaptcha").click(function () {
-    
             $.get('@Url.Action("RefreshCaptcha", "Home")', function (data) {
-                $("#captcha-text").text(data.Captcha); // New Captcha show
+                cspShowCaptchaSection(true);
+                $("#captcha-text").text(data.Captcha);
                 $("#CaptchaInput").val("").prop("disabled", false);
                 $("#verifyCaptchaBtn").prop("disabled", false);
-                $("#captcha_msg").text("");
+                $("#captcha_msg").text("").removeClass("text-success text-danger");
                 $("#captcha_success_img").addClass("d-none");
+                $("#Mobile").val("").prop("disabled", true);
+                cspShowMobileOtp(false);
+                cspShowEmailOtp(false);
+                cspResetMobileOtpBoxes();
+                cspResetEmailOtpBoxes();
+                mobile_clientId = null;
+                mobile_verify = false;
             });
         });
 
