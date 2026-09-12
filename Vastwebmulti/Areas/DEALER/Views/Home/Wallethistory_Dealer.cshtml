@@ -1,191 +1,377 @@
-﻿
+﻿@model IEnumerable<Vastwebmulti.Models.fundTransferALLReports_Result>
+@using System.Linq
 @{
-    ViewBag.Title = "Wallethistory_Dealer";
+    ViewBag.Title = "Wallet History";
+    Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var ddtrnsfrom = (ViewBag.ddtrnsfrom as string ?? Request["ddtrnsfrom"] ?? "").Trim();
+
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.fundTransferALLReports_Result>();
+    var totalOrder = reports.Sum(x => x.Balance ?? 0m);
+    var totalCharge = reports.Sum(x => x.charge ?? 0m);
+    var totalNet = reports.Sum(x => x.NetTransfer ?? 0m);
+    var totalRecords = reports.Count();
 }
 
-<style>
-    .dropdown-menu{margin-top:75px !important;}
-    .bread-same-all-page.bread-page-wallethistory {width: auto;float: left;}
-    .wallethistory-dealer {width: 75%;float: right;}
-    .wallethistory-select {width: 20%;float: left;}
-    .wallethistory-select select {border: 1px solid #ddd;height: 32px;color: #555;width: 100%;float: left;}
-    .wallethistory-date {float: left;width: 34%;padding-left: 6px;}
-    .wallethistory-search {float: left;width: 12%;padding-left: 6px;}
-    .wallethistory-search .form-group {margin-bottom: 0;}
-    .wallethistory-search .form-group button {width: 100%;text-align: center;padding-left: 0;padding-right: 0;}
-    .wallethistory-pdfexl {float: right;width: auto;padding-top:1px;}
-    .wallethistory-select select {-webkit-appearance: none;background: url('../../AdminDesign/images/multimedia.svg')no-repeat right;
-        background-position-x: right;background-position: right;background-position-x: 98%;background-size: 10px;}
-    .wallethistory-dealer-table{width:100%;float:left;margin-top:20px;}
-    .wallethistory-dealer-table table{width:100%;float:left;}
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=25" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-wallet-history-modern.css?v=3" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page', 'saas-dealer-wallet-history-page');</script>
 
-    .datepicker .selected.active::before {
-        display:none;
-    }
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
-    @@media screen and (max-width:990px) {
-        .wallethistory-dealer-table .table-responsive {position: relative;z-index: 9;}
-        .wallethistory-dealer {width: 67%;float: right;}
-        .wallethistory-date {float: left;width: 41%;padding-left: 6px;}
-        .wallethistory-date input {font-size: 12px;text-align: right;}
-        .wallethistory-search {width: 16%;}
-        .wallethistory-search button span {font-size: 12px;margin: 0 !important;top: 0 !important;}
-        .wallethistory-search button .fa.fa-search {font-size: 12px !important;}
-        .wallethistory-select select {font-size: 12px;}
-        .wallethistory-pdfexl input {font-size: 12px;}
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page saas-giftcard-report-page saas-matm-rental-report-page saas-dealer-wallet-history-page">
 
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    @@media screen and (max-width:766px) {
-        .wallethistory-dealer-table .table-responsive {border: 0;}
-        .wallethistory-dealer {width: 100%;float: left;}
+        @{
+            var walletFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "dealerWalletHistoryForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("Wallethistory_Dealer", "Home", FormMethod.Post, walletFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    }
-    @@media screen and (max-width:520px) {
-        .wallethistory-date .custom-date-icon {display: none;}
-        .wallethistory-date {float: left;width: 55%;}
-        .wallethistory-search {width: 25%;}
-        .wallethistory-date input {text-align: center;padding: 0 4px !important;}
-        .wallethistory-dealer {position: relative;}
-        .wallethistory-pdfexl {position: absolute;top: -37px;right: 0;}
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-    @@media screen and (max-width:420px) {
-        .wallethistory-pdfexl {display: none;}
-    }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Reports</li>
+                        <li>Wallet Received History</li>
+                    </ol>
 
-</style>
-
-    <section class="content">
-        <div class="container-fluid full-dealer-secondanimation">
-
-            <!--Four-Design-Admin-page-Header-Section-Start-->
-            <div class="page-title-box-fourde-dealer">
-                <h3>Wallet History Dealer</h3>
-                <ul>
-                    <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                    <li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                    <li><a href="javascript:void(0);">Wallet History</a></li>
-                </ul>
-            </div>
-            <!--Four-Design-Admin-page-Header-Section-End-->
-
-            <div class="bread-same-all-page bread-page-wallethistory dealer-none-fourclass" style="padding-bottom:0;">
-                <ul style="width:100%;float:left;padding-left:0;">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                        </a>
-                    </li>
-
-                    <li class="fullbodydycolorbg tmw-total-color-one" style="margin-right:0;">
-                        Wallet&nbsp;Received&nbsp;History
-                    </li>
-                </ul>
-            </div>
-
-            <div class="wallethistory-dealer">
-                <div class="wallethistory-select">
-                    <select>
-                        <option>Admin</option>
-                        <option>Dealer</option>
-                    </select>
-                </div>
-                <div class="wallethistory-date">
-                    <div class="form-group for-web-date" style="margin-bottom:0px;width:100%;">
-                        <div>
-                            <div class="input-daterange input-group">
-                                <div class="all-report-inputclass all-report-inputclass-left">
-                                    <div class="custom-date-icon" style="height: 32px;">
-                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                    </div>
-                                    <input autocomplete="off" class="form-control" id="txt_frm_date" name="txt_frm_date" required="required" style="border:1px solid #dddddd;height:32px;" type="text" value="">
-                                </div>
-
-                                <div class="all-report-inputclass all-report-inputclass-right">
-                                    <div class="custom-date-icon" style="height: 32px;">
-                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                    </div>
-                                    <input autocomplete="off" class="form-control" id="txt_to_date" name="txt_to_date" required="required" style="border:1px solid #dddddd;height:32px;" type="text" value="">
-                                </div>
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
+                        <div class="vm-opr-field vm-dmt-field vm-wh-field--source">
+                            <select id="ddtrnsfrom" name="ddtrnsfrom" class="vm-wh-filter-select" title="Source">
+                                <option value="" @(string.IsNullOrEmpty(ddtrnsfrom) ? "selected" : "")>All Sources</option>
+                                <option value="Admin" @(ddtrnsfrom == "Admin" ? "selected" : "")>Admin</option>
+                                <option value="Dealer" @(ddtrnsfrom == "Dealer" ? "selected" : "")>Dealer</option>
+                            </select>
+                        </div>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
                             </div>
-
-                        </div>
-                        <!-- /.input group -->
-                    </div>
-                </div>
-
-                <div class="wallethistory-search">
-
-                    <div class="form-group">
-                        <div class="form-line" style="border-bottom:none;margin-top:0px;">
-                            <center>
-                                <button value="" type="submit" class="btn" id="" name="btntype" style="  height:32px;border:1px solid #dddddd;background:#eeebeb;">
-                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:#555;"></i>
-                                    <span style="top:-1px;color:#555;text-transform:uppercase;">Search</span>
-                                </button>
-                            </center>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
                     </div>
 
                 </div>
 
-                <div class="wallethistory-pdfexl">
-                    <div class="web-white-filter fil" style="float: left;margin-right:0px;margin-top:-1px;">
-                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;color:#555;">
-                        <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;color:#555;">
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="walletHistoryTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Wallet history totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideWalletHistoryTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Order</span>
+                            <strong class="vm-opr-total-card__value">@totalOrder.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Total Charge</span>
+                            <strong class="vm-opr-total-card__value">@totalCharge.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Total Net Received</span>
+                            <strong class="vm-opr-total-card__value">@totalNet.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Records</span>
+                            <strong class="vm-opr-total-card__value">@totalRecords</strong>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="wallethistory-dealer-table all-reporttable-css">
-                <div class="table-responsive tableseconddes-dealer">
-                    <table border="1">
-                        <thead>
-                            <tr>
-                                <th>Paymat&nbsp;From</th>
-                                <th>Head</th>
-                                <th>Paymat&nbsp;Mod</th>
-                                <th>Description</th>
-                                <th>Order&nbsp;₹</th>
-                                <th>Charge</th>
-                                <th>CR&nbsp;STL</th>
-                                <th>Net&nbsp;Received</th>
-                                <th>Updated&nbsp;Balance</th>
-                                <th>Updated&nbsp;Credit</th>
-                                <th>Comment</th>
-                                <th>Transition&nbsp;Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="12" style="text-align:center;">NO DATA FOUND</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
 
             </div>
-
-        </div>
-    </section>
-
-    <script>
-    $(document).ready(function()
-    {
-
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
         }
 
-    })
-    </script>
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-wallet" aria-hidden="true"></i>
+                        <span>Wallet received history</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-inline-total" title="Total net received for current filter">
+                            Total Net: <strong>&#8377; @totalNet.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-wh-totals-btn" onclick="toggleWalletHistoryTotals()" title="Show totals" aria-expanded="false" aria-controls="walletHistoryTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="walletHistoryReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Paymat&nbsp;From</th>
+                                    <th>Head</th>
+                                    <th>Paymat&nbsp;Mod</th>
+                                    <th>Description</th>
+                                    <th>Order&nbsp;&#8377;</th>
+                                    <th>Charge</th>
+                                    <th>CR&nbsp;STL</th>
+                                    <th>Net&nbsp;Received</th>
+                                    <th>Updated&nbsp;Balance</th>
+                                    <th>Updated&nbsp;Credit</th>
+                                    <th>Comment</th>
+                                    <th>Transaction&nbsp;Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.Partial("_Dealer_Wallethistory", reports)
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
+<script>
+    window.walletHistoryExcelUrl = '@Url.Action("Excel_Wallethistory_Dealer", "Home")';
+    window.walletHistoryPdfUrl = '@Url.Action("PDF_Wallethistory_Dealer", "Home")';
+
+    function walletHistoryQueryData() {
+        var $ = window.jQuery;
+        return {
+            txt_frm_date: $('#txt_frm_date').val() || '',
+            txt_to_date: $('#txt_to_date').val() || '',
+            ddtrnsfrom: $('#ddtrnsfrom').val() || ''
+        };
+    }
+
+    function walletHistoryQueryString() {
+        var q = walletHistoryQueryData();
+        return 'txt_frm_date=' + encodeURIComponent(q.txt_frm_date)
+            + '&txt_to_date=' + encodeURIComponent(q.txt_to_date)
+            + '&ddtrnsfrom=' + encodeURIComponent(q.ddtrnsfrom);
+    }
+
+    function walletHistoryEsc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function walletHistoryTableRows() {
+        var $ = window.jQuery;
+        var rows = [];
+        $('#walletHistoryReport tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-opr-table-empty-row')) {
+                return;
+            }
+            var $cells = $tr.children('td');
+            if ($cells.length < 12) {
+                return;
+            }
+            rows.push({
+                payFrom: $.trim($cells.eq(0).text()).replace(/\s+/g, ' '),
+                head: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+                payMod: $.trim($cells.eq(2).text()).replace(/\s+/g, ' '),
+                desc: $.trim($cells.eq(3).text()).replace(/\s+/g, ' '),
+                orderAmt: $.trim($cells.eq(4).text()).replace(/\s+/g, ' '),
+                charge: $.trim($cells.eq(5).text()).replace(/\s+/g, ' '),
+                crStl: $.trim($cells.eq(6).text()).replace(/\s+/g, ' '),
+                net: $.trim($cells.eq(7).text()).replace(/\s+/g, ' '),
+                updBal: $.trim($cells.eq(8).text()).replace(/\s+/g, ' '),
+                updCr: $.trim($cells.eq(9).text()).replace(/\s+/g, ' '),
+                comment: $.trim($cells.eq(10).text()).replace(/\s+/g, ' '),
+                txnTime: $.trim($cells.eq(11).text()).replace(/\s+/g, ' ')
+            });
+        });
+        return rows;
+    }
+
+    function walletHistoryHeads() {
+        return ['Paymat From', 'Head', 'Paymat Mod', 'Description', 'Order Rs', 'Charge', 'CR STL', 'Net Received', 'Updated Balance', 'Updated Credit', 'Comment', 'Transaction Time'];
+    }
+
+    function walletHistoryBuildExcelHtml(rows) {
+        var q = walletHistoryQueryData();
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8" /><title>Wallet History</title></head><body>';
+        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">';
+        html += '<tr><td colspan="12" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;">Wallet Received History</td></tr>';
+        html += '<tr><td colspan="12" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;">Dealer wallet received history report</td></tr>';
+        html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Date Range</td><td colspan="5">' + walletHistoryEsc(q.txt_frm_date) + ' to ' + walletHistoryEsc(q.txt_to_date) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Source</td><td colspan="5">' + walletHistoryEsc(q.ddtrnsfrom || 'All') + '</td></tr>';
+        html += '<tr>';
+        var heads = walletHistoryHeads();
+        for (var h = 0; h < heads.length; h++) {
+            html += '<th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">' + walletHistoryEsc(heads[h]) + '</th>';
+        }
+        html += '</tr>';
+        if (!rows.length) {
+            html += '<tr><td colspan="12" bgcolor="#F8FAFC" style="text-align:center;font-weight:bold;color:#64748B;">Wallet history not found.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                var rowBg = (i % 2 === 1) ? '#F8FAFC' : '#FFFFFF';
+                html += '<tr>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.payFrom) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.head) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.payMod) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.desc) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.orderAmt) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.charge) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.crStl) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.net) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.updBal) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.updCr) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.comment) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + walletHistoryEsc(r.txnTime) + '</td>';
+                html += '</tr>';
+            }
+        }
+        html += '</table></body></html>';
+        return html;
+    }
+
+    function walletHistoryDownloadExcel(html) {
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel' });
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'Wallet_History_Dealer.xls');
+            return;
+        }
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'Wallet_History_Dealer.xls';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+    }
+
+    function walletHistoryOpenPdf(html) {
+        var w = window.open('', '_blank');
+        if (!w) {
+            return;
+        }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+    }
+
+    function toggleWalletHistoryTotals() {
+        var $ = window.jQuery;
+        var panel = $('#walletHistoryTotalsPanel');
+        var btn = $('.vm-wh-totals-btn');
+        if (panel.is(':visible')) {
+            hideWalletHistoryTotals();
+            return;
+        }
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        btn.attr('aria-expanded', 'true');
+    }
+
+    function hideWalletHistoryTotals() {
+        var $ = window.jQuery;
+        $('#walletHistoryTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-wh-totals-btn').attr('aria-expanded', 'false');
+    }
+
+    function bootWalletHistoryReport() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.datepicker) {
+            window.setTimeout(bootWalletHistoryReport, 50);
+            return;
+        }
+
+        var $sourceSelect = $('#ddtrnsfrom');
+        if ($sourceSelect.length && $.fn.select2 && $sourceSelect.hasClass('select2-hidden-accessible')) {
+            try { $sourceSelect.select2('destroy'); } catch (ignore) { }
+            $sourceSelect.next('.select2-container').remove();
+        }
+
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#dealerWalletHistoryForm');
+        } else {
+            $('#txt_frm_date, #txt_to_date').datepicker({
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                autoclose: true,
+                orientation: 'bottom auto',
+                container: 'body'
+            });
+            if ($('#dealerWalletHistoryForm').attr('data-date-mode') !== 'post') {
+                $('#txt_frm_date').datepicker('setDate', new Date());
+                $('#txt_to_date').datepicker('setDate', new Date());
+            }
+        }
+
+        $('#btnExport').off('click.whEx').on('click.whEx', function () {
+            var rows = walletHistoryTableRows();
+            if (rows.length) {
+                walletHistoryDownloadExcel(walletHistoryBuildExcelHtml(rows));
+                return;
+            }
+            window.location.href = window.walletHistoryExcelUrl + '?' + walletHistoryQueryString();
+        });
+        $('#btnPDF').off('click.whPdf').on('click.whPdf', function () {
+            var rows = walletHistoryTableRows();
+            if (rows.length) {
+                walletHistoryOpenPdf(walletHistoryBuildExcelHtml(rows).replace('office:excel', 'office:office'));
+                return;
+            }
+            window.open(window.walletHistoryPdfUrl + '?' + walletHistoryQueryString(), '_blank');
+        });
+    }
+
+    if (document.readyState === 'complete') {
+        bootWalletHistoryReport();
+    } else {
+        window.addEventListener('load', bootWalletHistoryReport);
+    }
+</script>

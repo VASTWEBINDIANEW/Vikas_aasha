@@ -1,0 +1,65 @@
+@model IEnumerable<Vastwebmulti.Models.fundTransferALLReports_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.fundTransferALLReports_Result>()).ToList();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+}
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
+<head>
+    <meta charset="utf-8" />
+    <title>Wallet History Dealer</title>
+</head>
+<body>
+    <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">
+        <tr>
+            <td colspan="12" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;">Wallet Received History</td>
+        </tr>
+        <tr>
+            <td colspan="12" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;">Generated @generatedOn</td>
+        </tr>
+        <tr>
+            <th bgcolor="#334155" style="color:#FFFFFF;">Paymat From</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">Head</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">Paymat Mod</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">Description</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">Order Rs</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">Charge</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">CR STL</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">Net Received</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">Updated Balance</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">Updated Credit</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">Comment</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;">Transaction Time</th>
+        </tr>
+        @if (!rows.Any())
+        {
+            <tr><td colspan="12" style="text-align:center;">Wallet history not found.</td></tr>
+        }
+        else
+        {
+            foreach (var item in rows)
+            {
+                var oldcrs = item.oldcrbalance ?? 0m;
+                var currentcr = item.cr ?? 0m;
+                var crStl = oldcrs - currentcr;
+                if (crStl <= 0m) { crStl = 0m; }
+                <tr>
+                    <td>@item.Role</td>
+                    <td>@item.Head</td>
+                    <td>@item.bal_type</td>
+                    <td>@item.FirmName</td>
+                    <td>@item.Balance</td>
+                    <td>@item.charge</td>
+                    <td>@crStl</td>
+                    <td>@item.NetTransfer</td>
+                    <td>@item.TotalBal</td>
+                    <td>@item.cr</td>
+                    <td>@item.comment</td>
+                    <td>@item.RechargeDate</td>
+                </tr>
+            }
+        }
+    </table>
+</body>
+</html>

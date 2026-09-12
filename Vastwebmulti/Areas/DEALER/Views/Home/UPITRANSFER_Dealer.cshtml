@@ -1,561 +1,281 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.show_upi_txn_details_Result>
+@using System.Linq
 @{
     ViewBag.Title = "UPITRANSFER_Dealer";
+    Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
 
-    var totalcharges = ViewBag.totalchargesamount ?? 0;
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.show_upi_txn_details_Result>();
+    var totalsuccess = ViewBag.totalsuccess ?? 0m;
+    var totalfailamnt = ViewBag.totalfailedamount ?? 0m;
+    var penamount = ViewBag.totalpendingamount ?? 0m;
+    var totalcharges = ViewBag.totalchargesamount ?? 0m;
+    var minCharge = ViewBag.min ?? 0;
+    var pctCharge = ViewBag.charge ?? 0;
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
 }
 
-<style>
-    .getway-transfer-date .getwaydateclass input {
-        text-align: center;
-        color: #555;
-        padding-left: 31px;
-    }
-
-    .upitransfer {
-        width: 100%;
-        float: left;
-        background: #eae9e9;
-    }
-
-        .upitransfer h2 {
-            color: #fff;
-            margin: 0;
-            width: 100%;
-            float: left;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 600;
-            padding: 10px 0;
-        }
-
-    .upitransfer-dealerqrcode {
-        width: 100%;
-    }
-
-        .upitransfer-dealerqrcode img {
-            width: 100%;
-        }
-
-    .upitransfer-dealerqrcode {
-        background: transparent;
-        text-align: center;
-        margin: 0px auto;
-        display: block;
-        width: 58%;
-        float: none;
-    }
-
-        .upitransfer-dealerqrcode img {
-            padding: 24px;
-            border: 5px solid #000;
-            margin-top: 20px;
-            background: #fff;
-            max-width: 100%;
-            margin-bottom: 20px;
-        }
-
-    .upitransfer-contentclass ol li {
-        list-style: decimal;
-        color: #555;
-        margin-bottom: 4px;
-    }
-
-    .upitransfer-contentclass ol {
-        padding-left: 15px;
-    }
-
-    .upitransfer-contentclass {
-        width: 100%;
-        float: left;
-        padding: 10px 10px;
-    }
-
-        .upitransfer-contentclass table {
-            width: 100%;
-            float: left;
-        }
-
-            .upitransfer-contentclass table tr th, .upitransfer-contentclass table tr td {
-                border-color: #aaa4a4 !important;
-                padding: 5px 5px;
-            }
-
-            .upitransfer-contentclass table tr, .upitransfer-contentclass table {
-                border-color: #aaa4a4 !important;
-            }
-
-    .getway-history-header ul li a {
-        padding: 0;
-    }
-
-        .getway-history-header ul li a span.fund-fistory {
-            font-size: 18px;
-            font-weight: 600;
-            text-transform: uppercase;
-            float: left;
-        }
-
-            .getway-history-header ul li a span.fund-fistory label {
-                display: block;
-                font-size: 9px;
-                margin: 0;
-                margin-top: -5px;
-            }
-
-        .getway-history-header ul li a .fa.fa-caret-down {
-            font-size: 44px;
-            color: var(--main-bg-lcolor);
-            transform: rotate(-90deg);
-        }
-
-    .getway-history-header {
-        background: #a4a0a0;
-        width: 100%;
-        float: left;
-    }
-
-        .getway-history-header ul.nav.nav-tabs {
-            padding-bottom: 0 !important;
-            border: 0;
-            background: transparent;
-        }
-
-        .getway-history-header ul li a, .getway-history-header ul li a label.for-change-fund {
-            width: 100%;
-            float: left;
-            margin: 0;
-        }
-
-    .getway-transfer-date {
-        width: 100%;
-        float: left;
-    }
-
-        .getway-transfer-date .getwaydateclass .custom-date-icon {
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-
-        .getway-transfer-date .getwaydateclass input {
-            text-align: center;
-            color: #555;
-        }
-
-        .getway-transfer-date .getwaydateclass .custom-date-icon {
-            padding: 6px 9px;
-        }
-
-        .getway-transfer-date .getwaysearchclass button {
-            width: 100%;
-            border: 0;
-            background: #fff;
-            height: 30px;
-            position: relative;
-            top: 1px;
-            color: #555;
-        }
-
-    .getway-history-header {
-        padding: 0 10px;
-    }
-
-        .getway-history-header ul li a .fa.fa-caret-down {
-            margin-top: -5px;
-            position: relative;
-            left: 8px;
-        }
-
-
-
-        .getway-history-header ul li:first-child {
-            width: 20%;
-            border-right: 2px solid #fff;
-        }
-
-    .upitransfer-table-data {
-        width: 100%;
-        float: left;
-    }
-
-        .upitransfer-table-data table {
-            width: 100%;
-            float: left;
-        }
-
-    .upitransfer-table-data {
-        padding: 10px;
-    }
-
-    .upitransfer {
-        min-height: 82vh;
-    }
-
-        .upitransfer .getway-history-header {
-            padding-top: 1px;
-        }
-
-    .dropdown-menu {
-        margin-top: 75px !important;
-    }
-
-    .bread-page-upitransfer {
-        float: left;
-        width: 100%;
-        padding-left: 15px;
-    }
-
-    .modal-dialog input {
-        text-align: left;
-        padding: 0 5px !important;
-    }
-
-    .dealer-four-design .col-md-4.upitransfer-firstclass {
-        padding-left: 0;
-    }
-
-    .dealer-four-design .col-md-8.upitransfer-tabledataclass {
-        padding-right: 0;
-    }
-
-
-
-    @@media screen and (max-width:1366px) {
-        .upitransfer {
-            min-height: 91vh;
-            margin-bottom: 20px;
-        }
-
-        .upitransfer-contentclass {
-            padding-top: 0;
-        }
-    }
-
-    @@media screen and (max-width:1300px) {
-        .upitransfer-firstclass {
-            padding-left: 0;
-        }
-
-        .bread-page-upitransfer {
-            padding-left: 0;
-        }
-    }
-
-    @@media screen and (max-width:990px) {
-        .upitransfer-firstclass {
-            float: left;
-            width: 33%;
-            padding-right: 0;
-        }
-
-        .upitransfer-tabledataclass {
-            width: 67%;
-            float: left;
-        }
-
-        .getway-transfer-date .getwaydateclass {
-            float: left;
-            padding-right: 2px;
-        }
-
-        .getway-transfer-date .getwaysearchclass {
-            float: left;
-        }
-
-        .getway-history-header ul li:first-child {
-            width: auto;
-            border: 0;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .upitransfer-firstclass {
-            width: 100%;
-            float: left;
-        }
-
-        .upitransfer-dealerqrcode {
-            width: 25%;
-        }
-
-        .upitransfer {
-            min-height: inherit;
-            padding-bottom: 20px;
-        }
-
-        .upitransfer-tabledataclass {
-            width: 100%;
-            float: left;
-            padding: 0;
-        }
-
-        .upitransfer-table-data .table-responsive {
-            border: 0;
-        }
-
-        .modal-dialog {
-            width: 100% !important;
-            float: left !important;
-            margin: 0px !important;
-        }
-    }
-
-    @@media screen and (max-width:580px) {
-        .upitransfer-dealerqrcode img {
-            padding: 8px;
-        }
-
-        .upitransfer-dealerqrcode {
-            width: 40%;
-        }
-
-        .getway-history-header ul li {
-            width: 100% !important;
-            float: left;
-        }
-
-            .getway-history-header ul li:last-child {
-                margin-bottom: 5px;
-                margin-top: -6px;
-            }
-
-        .getway-transfer-date .getwaydateclass {
-            width: 40%;
-            float: left;
-        }
-
-        .getway-transfer-date .getwaysearchclass {
-            width: 20%;
-            float: left;
-        }
-
-        .getway-history-header ul li:first-child {
-            width: auto !important;
-            float: left;
-        }
-
-        .getway-history-header ul li:nth-child(2) {
-            width: auto !important;
-            padding: 0 !important;
-        }
-    }
-
-    @@media screen and (max-width:420px) {
-        .getway-history-header ul li a .fa.fa-caret-down {
-            transform: none;
-            top: 0;
-            font-size: 50px;
-            margin-top: -12px;
-            left: 13px;
-        }
-
-        .getway-transfer-date .getwaydateclass .custom-date-icon, .getway-transfer-date .getwaysearchclass .fa.fa-search {
-            display: none;
-        }
-
-        .upitransfer-dealerqrcode {
-            width: 70%;
-        }
-    }
-</style>
-
-
-<section class="content">
-    <div class="container-fluid full-dealer-secondanimation">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Add By UPI</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);">Account Active 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);">Add By UPI</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="bread-same-all-page bread-page-upitransfer dealer-none-fourclass" style="padding-bottom:0;">
-            <ul style="width:100%;float:left;padding-left:0;">
-                <li class="smli">
-                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                    </a>
-                </li>
-
-                <li class="fullbodydycolorbg tmw-total-color-one" style="margin-right:0;">
-                    Add&nbsp;Wallet&nbsp;By&nbsp;UPI
-                </li>
-            </ul>
-        </div>
-
-        <div class="col-md-4 upitransfer-firstclass">
-            <div class="upitransfer dealer-box-back-four">
-                <h2 class="fullbodydycolorbg">+&nbsp;Wallet&nbsp;By&nbsp;QR&nbsp;Code&nbsp;(UPI)</h2>
-                <div class="upitransfer-dealerqrcode">
-                    <img src="~/ashok-images/qr-code.png" />
-                </div>
-
-                <div class="upitransfer-contentclass">
-                    <ol>
-                        <li>You can update the amount in your wallet by scanning the QR code.</li>
-                        <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
-                        <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-fund-transfer-fonts.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-fund-transfer-mobile.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-upi-transfer-modern.css?v=2" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page', 'saas-dealer-fund-transfer-page', 'saas-dealer-upi-transfer-page');</script>
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium saas-dealer-fund-transfer-page saas-dealer-upi-transfer-page">
+
+    <div class="container-fluid vm-ft-page-shell">
+
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium vm-gw-page-toolbar">
+            <div class="vm-ft-page-hero">
+                <div>
+                    <ol class="vm-ft-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Fund Transfer</li>
+                        <li>Add By UPI QR</li>
                     </ol>
-                    <table border="1">
-                        <thead>
-                            <tr>
-                                <th colspan="2" style="text-align:center;">Charges</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Minimum&nbsp;Fix&nbsp;Charge&nbsp;(In Rupees)</td>
-                                <td>@ViewBag.min&nbsp;₹</td>
-                            </tr>
-                            <tr>
-                                <td>Charges&nbsp;(In Precentage)</td>
-                                <td>@ViewBag.charge&nbsp;%</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
-
             </div>
-
+            <div class="vm-gw-summary-grid">
+                <div class="vm-gw-summary-tile vm-gw-summary-tile--success">
+                    <div class="vm-gw-summary-tile__icon" aria-hidden="true"><i class="fas fa-check-circle"></i></div>
+                    <div class="vm-gw-summary-tile__body">
+                        <span class="vm-gw-summary-tile__label">Total Success</span>
+                        <strong class="vm-gw-summary-tile__value">@Convert.ToDecimal(totalsuccess).ToString("N2")</strong>
+                    </div>
+                </div>
+                <div class="vm-gw-summary-tile vm-gw-summary-tile--pending">
+                    <div class="vm-gw-summary-tile__icon" aria-hidden="true"><i class="fas fa-clock"></i></div>
+                    <div class="vm-gw-summary-tile__body">
+                        <span class="vm-gw-summary-tile__label">Total Pending</span>
+                        <strong class="vm-gw-summary-tile__value">@Convert.ToDecimal(penamount).ToString("N2")</strong>
+                    </div>
+                </div>
+                <div class="vm-gw-summary-tile vm-gw-summary-tile--failed">
+                    <div class="vm-gw-summary-tile__icon" aria-hidden="true"><i class="fas fa-times-circle"></i></div>
+                    <div class="vm-gw-summary-tile__body">
+                        <span class="vm-gw-summary-tile__label">Total Failed</span>
+                        <strong class="vm-gw-summary-tile__value">@Convert.ToDecimal(totalfailamnt).ToString("N2")</strong>
+                    </div>
+                </div>
+                <div class="vm-gw-summary-tile vm-gw-summary-tile--charges">
+                    <div class="vm-gw-summary-tile__icon" aria-hidden="true"><i class="fas fa-percentage"></i></div>
+                    <div class="vm-gw-summary-tile__body">
+                        <span class="vm-gw-summary-tile__label">Total Charges</span>
+                        <strong class="vm-gw-summary-tile__value">@Convert.ToDecimal(totalcharges).ToString("N2")</strong>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="col-md-8 upitransfer-tabledataclass">
-            <div class="upitransfer dealer-box-back-four">
-                <div class="getway-history-header">
-                    <ul class="nav nav-tabs" style="padding-bottom:5px;">
-                        <li class="tab-link current active" data-tab="tab-1" style="float:left;">
-                            <a data-toggle="tab" aria-expanded="true" style="background:transparent !important;">
-                                <label class="for-change-fund" style="color:#000;font-weight:400;margin-bottom:0;">
-                                    <span class="fund-fistory">History<label class="tmw-total-color-one fullbodydycolorbg">By&nbsp;upi&nbsp;QR&nbsp;Code</label></span>
-                                    <i class="fa fa-caret-down" aria-hidden="true"></i>
-
-                                </label>
-                            </a>
-                        </li>
-                        <li style="width:auto;float:right;margin-top:4px;padding-left: 5px;">
-                            <div class="web-white-filter fil" style="float: left;margin-right: 5px;">
-                                <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:30px;border:1px solid #b1a6a638;background:#eae9e9;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;" />
-                                <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:30px;border:1px solid #b1a6a638;background:#eae9e9;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
+        <div class="vm-ft-layout-wrap">
+            <div class="vm-ft-layout vm-ft-layout--full">
+                <div class="vm-ft-form-col">
+                    <div class="fund-trasfer-left vm-ft-form-card">
+                        <div class="vm-ft-form-card-header">
+                            <div class="vm-ft-form-card-header__icon" aria-hidden="true">
+                                <i class="fas fa-qrcode"></i>
                             </div>
-                        </li>
+                            <div>
+                                <span class="vm-ft-form-card-header__title">Wallet By UPI QR Code</span>
+                                <span class="vm-ft-form-card-header__sub">Scan QR code to add wallet balance via UPI</span>
+                            </div>
+                        </div>
 
-                        <li class="gatewaytransfer-retailer-date gatewaytransfer-pdfexal" style="float: right;margin-top: 4px;padding-right: 5px;">
-                            <div class="row fund-t-dalear" style="margin:0px;">
-                                @using (Html.BeginForm("UPITRANSFER_Dealer", "Home", FormMethod.Post))
-                                {
-                                    <div class="getway-transfer-date input-daterange">
-                                        <div class="col-md-4 date-sateclassee trypurchasecewq-new" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 0px;border-top:0;border-bottom:0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true" style="border-right: 1px solid #ccc; padding: 9px 6px; height: 30px;"></i>
+                        <div class="vm-ft-left-tab-pane vm-dealer-ft-form-fs14">
+                            <div class="vm-upi-qr-wrap">
+                                <img src="~/ashok-images/qr-code.png" alt="UPI QR Code" />
+                            </div>
+
+                            <div class="vm-gw-notes">
+                                <ol>
+                                    <li>You can update the amount in your wallet by scanning the QR code.</li>
+                                    <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
+                                    <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
+                                </ol>
+                            </div>
+
+                            <table class="vm-upi-charges-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Charges</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Minimum Fix Charge (In Rupees)</td>
+                                        <td>@minCharge &#8377;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Charges (In Percentage)</td>
+                                        <td>@pctCharge %</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-ft-history-col">
+                    <div class="fund-trasfer-right vm-ft-history-panel">
+                        <div class="vm-ft-history-body">
+                            <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium">
+                                <div class="vm-ft-history-toolbar__head">
+                                    <i class="fas fa-history" aria-hidden="true"></i>
+                                    <div>
+                                        <span class="vm-ft-history-toolbar__title">UPI History</span>
+                                        <span class="vm-ft-history-toolbar__sub">View, filter &amp; export UPI QR transactions</span>
+                                    </div>
+                                </div>
+                                <div class="vm-ft-history-toolbar__filters vm-ft-history-filters-row">
+                                    <div class="vm-ft-search-wrap vm-ft-search-wrap--history">
+                                        <input class="form-control vm-dealer-ft-fs14" type="text" value="" id="myInput" name="myInput" placeholder="Search UPI history..." autocomplete="off" onkeyup="upiHistorySearch()" />
+                                    </div>
+                                    @using (Html.BeginForm("UPITRANSFER_Dealer", "Home", FormMethod.Post, new { id = "upiHistoryForm", @class = "vm-gw-history-form" }))
+                                    {
+                                        <div class="vm-dmt-filter-search-group vm-ft-date-search-group">
+                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                <input type="text" id="txt_frm_date" name="txt_frm_date" class="form-control saas-acc-dp-input vm-dealer-ft-fs14" required="required" autocomplete="off" placeholder="From" title="From date" value="@frmDate" />
                                             </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = " height: 30px;border:1px solid #fff; margin-top:1px;", autocomplete = "off" })
-                                        </div>
-                                        <div class="col-md-4 date-sateclassee trypurchasecewq-new" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 0px; border-top: 0; border-bottom: 0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true" style="border-right: 1px solid #ccc; padding: 9px 6px; height: 30px; "></i>
+                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                <input type="text" id="txt_to_date" name="txt_to_date" class="form-control saas-acc-dp-input vm-dealer-ft-fs14" required="required" autocomplete="off" placeholder="To" title="To date" value="@toDate" />
                                             </div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = " height: 30px;border:1px solid #fff; margin-top:4px;margin-top:1px !important;", autocomplete = "off" })
-
-                                        </div>
-                                        <div class="col-md-2 getwaysearchclass" style="padding:0px;">
-                                            <button type="submit" id="" name="btnDsearch" class="btnssl22" style="padding: 0px 6px;float: left;border-color:#aaa;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                <i class="fa fa-search" style="font-size:13px;color:#555;"></i> Search
-
+                                            <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-ft-search-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
                                             </button>
                                         </div>
-
-
+                                    }
+                                    <div class="vm-ft-export-group">
+                                        <button type="button" id="btnExport" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i></button>
+                                        <button type="button" id="btnPDF" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i></button>
                                     </div>
-
-                                }
+                                </div>
                             </div>
-                        </li>
 
-                    </ul>
-                </div>
-
-                <div class="all-reporttable-css upitransfer-table-data">
-                    <div class="table-responsive tableseconddes-dealer">
-                        <table border="1">
-                            <thead>
-                                <tr>
-                                    <th>Payer&nbsp;Name</th>
-                                    <th>Amount</th>
-                                    <th>Charges</th>
-                                    <th>Net&nbsp;Received</th>
-                                    <th>Bank&nbsp;RRN</th>
-                                    <th>Transaction&nbsp;Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    var img = "";
-                                    var bgcolor = "";
-                                    if (item.status.ToUpper() == "SUCCESS")
-                                    {
-                                        img = "../../ashok-images/correct.svg";
-                                        bgcolor = "green";
-
-                                    }
-                                    else if (item.status.ToUpper() == "PENDING")
-                                    {
-                                        img = "../../ashok-images/clkk.png";
-                                        bgcolor = "#FF9800";
-                                    }
-                                    else
-                                    {
-                                        img = "../../ashok-images/closes.svg";
-                                        bgcolor = "red";
-                                    }
-                                    <tr>
-                                        <td class="status-failsuccessa"><img src='@img' style="width: 20px; background:@bgcolor;border-radius: 50%; padding:3px;">&nbsp;@item.PayerName</td>
-                                        <td>@item.amt</td>
-                                        <td>@item.charge</td>
-                                        <td>@item.finalpay</td>
-                                        <td>@item.BankRRN</td>
-                                        <td>@item.txndate</td>
-                                    </tr>
-                                }
-                                @*<tr><td colspan="6" style="text-align:center;">NO DATA FOUND</td></tr>*@
-                            </tbody>
-
-                        </table>
+                            <div class="vm-ft-table-wrap table-responsive">
+                                <table id="tblUpiHistory" class="table table-bordered table-striped table-hover fundtransfer-tableclass third-design-table vm-ft-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Payer&nbsp;Name</th>
+                                            <th>Amount</th>
+                                            <th>Charges</th>
+                                            <th>Net&nbsp;Received</th>
+                                            <th>Bank RRN</th>
+                                            <th>Transaction&nbsp;Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblbody">
+                                        @if (reports.Any())
+                                        {
+                                            foreach (var item in reports)
+                                            {
+                                                var sts = item.status ?? "";
+                                                var code = "../../ashok-images/clock.svg";
+                                                var color = "";
+                                                var width = "21px";
+                                                if (sts.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0)
+                                                {
+                                                    code = "../../ashok-images/correct.svg";
+                                                    color = "green";
+                                                    width = "20px";
+                                                }
+                                                else if (sts.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0)
+                                                {
+                                                    code = "../../ashok-images/closes.svg";
+                                                    color = "red";
+                                                    width = "20px";
+                                                }
+                                                <tr class="tr">
+                                                    <td>
+                                                        <span class="vm-gw-mode-cell">
+                                                            <img src="@code" alt="@sts" style="width:@width;background-color:@color;" />
+                                                            <span>@(string.IsNullOrWhiteSpace(item.PayerName) ? "-" : item.PayerName)</span>
+                                                        </span>
+                                                    </td>
+                                                    <td class="vm-dmt-amt-cell">@(item.amt.HasValue ? item.amt.Value.ToString("N2") : "-")</td>
+                                                    <td class="vm-dmt-amt-cell">@(item.charge.HasValue ? item.charge.Value.ToString("N2") : "-")</td>
+                                                    <td class="vm-dmt-amt-cell">@(item.finalpay.HasValue ? item.finalpay.Value.ToString("N2") : "-")</td>
+                                                    <td>@(string.IsNullOrWhiteSpace(item.BankRRN) ? "-" : item.BankRRN)</td>
+                                                    <td>@(item.txndate.HasValue ? item.txndate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-")</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr class="vm-opr-table-empty-row">
+                                                <td colspan="6" class="vm-opr-table-empty vm-dmt-table-empty">
+                                                    <i class="fas fa-qrcode" aria-hidden="true"></i>
+                                                    <span>UPI transaction not found.</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 </section>
 
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
 
 <script>
-    $(document).ready(function()
-    {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
+    window.dealerUpiExcelUrl = '@Url.Action("Execel_UPI_TRANSFER_Dealer", "Home")';
+    window.dealerUpiPdfUrl = '@Url.Action("PDF_UPI_TRANSFER_Dealer", "Home")';
 
+    function upiHistorySearch() {
+        var value = ($('#myInput').val() || '').toLowerCase();
+        $('#tblUpiHistory tbody tr.tr').filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+    }
+
+    $(document).ready(function () {
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#upiHistoryForm');
+        } else if ($.fn.datepicker) {
+            var dateOpts = {
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                autoclose: true,
+                orientation: 'bottom auto',
+                forceParse: false,
+                enableOnReadonly: true,
+                container: 'body'
+            };
+            $('#txt_frm_date, #txt_to_date').datepicker(dateOpts);
+            if ('@dateMode' !== 'post') {
+                $('#txt_frm_date').datepicker('setDate', new Date());
+                $('#txt_to_date').datepicker('setDate', new Date());
+            }
         }
 
-    })
+        $('#btnExport').on('click', function (e) {
+            e.preventDefault();
+            var url = window.dealerUpiExcelUrl
+                + '?txt_frm_date=' + encodeURIComponent($('#txt_frm_date').val() || '')
+                + '&txt_to_date=' + encodeURIComponent($('#txt_to_date').val() || '');
+            window.location.href = url;
+        });
+
+        $('#btnPDF').on('click', function () {
+            var url = window.dealerUpiPdfUrl
+                + '?txt_frm_date=' + encodeURIComponent($('#txt_frm_date').val() || '')
+                + '&txt_to_date=' + encodeURIComponent($('#txt_to_date').val() || '');
+            window.open(url, '_blank');
+        });
+    });
 </script>

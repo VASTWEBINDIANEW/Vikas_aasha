@@ -1,28 +1,28 @@
-﻿@model IEnumerable<Vastwebmulti.Models.gateway_report_Result>
+@model IEnumerable<Vastwebmulti.Models.show_upi_txn_details_Result>
 @using System.Linq
 @{
     Layout = null;
-    var rows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.gateway_report_Result>()).ToList();
+    var rows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.show_upi_txn_details_Result>()).ToList();
     var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
     var frmDate = (ViewBag.frmDate as string) ?? "-";
     var toDate = (ViewBag.toDate as string) ?? "-";
 
-    Func<Vastwebmulti.Models.gateway_report_Result, bool> isSuccess = x => !string.IsNullOrEmpty(x.status) && x.status.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0;
-    Func<Vastwebmulti.Models.gateway_report_Result, bool> isFailed = x => !string.IsNullOrEmpty(x.status) && x.status.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0;
-    Func<Vastwebmulti.Models.gateway_report_Result, bool> isPending = x => !string.IsNullOrEmpty(x.status) && x.status.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0;
+    Func<Vastwebmulti.Models.show_upi_txn_details_Result, bool> isSuccess = x => !string.IsNullOrEmpty(x.status) && x.status.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0;
+    Func<Vastwebmulti.Models.show_upi_txn_details_Result, bool> isFailed = x => !string.IsNullOrEmpty(x.status) && x.status.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0;
+    Func<Vastwebmulti.Models.show_upi_txn_details_Result, bool> isPending = x => !string.IsNullOrEmpty(x.status) && x.status.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0;
 
-    var totalSuccess = rows.Where(isSuccess).Sum(x => x.amount ?? 0m);
-    var totalPending = rows.Where(isPending).Sum(x => x.amount ?? 0m);
-    var totalFailed = rows.Where(isFailed).Sum(x => x.amount ?? 0m);
+    var totalSuccess = rows.Where(isSuccess).Sum(x => x.amt ?? 0m);
+    var totalPending = rows.Where(isPending).Sum(x => x.amt ?? 0m);
+    var totalFailed = rows.Where(isFailed).Sum(x => x.amt ?? 0m);
     var totalCharges = rows.Sum(x => x.charge ?? 0m);
-    var totalAmount = rows.Sum(x => x.amount ?? 0m);
-    var totalNet = rows.Sum(x => x.totalpay ?? 0m);
+    var totalAmount = rows.Sum(x => x.amt ?? 0m);
+    var totalNet = rows.Sum(x => x.finalpay ?? 0m);
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Gateway Transfer Report</title>
+    <title>UPI Transfer Report</title>
     <style type="text/css">
         @@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }
         * { box-sizing: border-box; }
@@ -72,8 +72,8 @@
 <div class="sheet">
     <div class="hero">
         <div class="hero-top">
-            <h1>Gateway Transfer Report</h1>
-            <p>Dealer fund transfer - add wallet by payment gateway</p>
+            <h1>UPI Transfer Report</h1>
+            <p>Dealer fund transfer - add wallet by UPI QR code</p>
         </div>
         <table class="meta" cellpadding="0" cellspacing="0">
             <tr>
@@ -97,14 +97,12 @@
         <thead>
             <tr>
                 <th>Status</th>
-                <th>Mode</th>
-                <th>Mode Type</th>
+                <th>Payer Name</th>
                 <th>Amount</th>
                 <th>Charges</th>
                 <th>Net Received</th>
                 <th>Bank RRN</th>
                 <th>Transaction Time</th>
-                <th>Response Time</th>
             </tr>
         </thead>
         <tbody>
@@ -119,40 +117,33 @@
                     else if (statusRaw.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0) { badge = "badge-fail"; statusLabel = "Failed"; }
                     else if (statusRaw.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0) { badge = "badge-wait"; statusLabel = "Pending"; }
 
-                    var bankrrn = item.errormsg;
-                    if (string.Equals(item.status, "Success", StringComparison.OrdinalIgnoreCase))
-                    {
-                        bankrrn = item.bankrrnno;
-                    }
                     <tr>
                         <td><span class="badge @badge">@statusLabel</span></td>
-                        <td>@(string.IsNullOrWhiteSpace(item.mode) ? "-" : item.mode)</td>
-                        <td>@(string.IsNullOrWhiteSpace(item.PG_TYPE) ? "-" : item.PG_TYPE)</td>
-                        <td class="num">@((item.amount ?? 0m).ToString("N2"))</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.PayerName) ? "-" : item.PayerName)</td>
+                        <td class="num">@((item.amt ?? 0m).ToString("N2"))</td>
                         <td class="num">@((item.charge ?? 0m).ToString("N2"))</td>
-                        <td class="num">@((item.totalpay ?? 0m).ToString("N2"))</td>
-                        <td>@(string.IsNullOrWhiteSpace(bankrrn) ? "-" : bankrrn)</td>
-                        <td>@(item.f_date.HasValue ? item.f_date.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-")</td>
-                        <td>@(item.resptime.HasValue ? item.resptime.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-")</td>
+                        <td class="num">@((item.finalpay ?? 0m).ToString("N2"))</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.BankRRN) ? "-" : item.BankRRN)</td>
+                        <td>@(item.txndate.HasValue ? item.txndate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-")</td>
                     </tr>
                 }
                 <tr class="total-row">
-                    <td colspan="3">Total</td>
+                    <td colspan="2">Total</td>
                     <td class="num">@totalAmount.ToString("N2")</td>
                     <td class="num">@totalCharges.ToString("N2")</td>
                     <td class="num">@totalNet.ToString("N2")</td>
-                    <td colspan="3">&nbsp;</td>
+                    <td colspan="2">&nbsp;</td>
                 </tr>
             }
             else
             {
                 <tr>
-                    <td colspan="9" class="empty">Gateway transaction not found for the selected date range.</td>
+                    <td colspan="7" class="empty">UPI transaction not found for the selected date range.</td>
                 </tr>
             }
         </tbody>
     </table>
-    <div class="foot">Generated from Dealer panel - Gateway Transfer Report</div>
+    <div class="foot">Generated from Dealer panel - UPI Transfer Report</div>
 </div>
 </body>
 </html>

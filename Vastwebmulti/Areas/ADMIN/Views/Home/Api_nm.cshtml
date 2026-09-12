@@ -77,11 +77,16 @@
                                         <td class="vm-api-nm-url-cell">
                                             <div class="vm-api-nm-url-wrap">
                                                 <span class="vm-api-nm-url-text" title="@(item.api_url ?? "")">@(item.api_url ?? "")</span>
-                                                <input type="hidden" id="@copyInputId" value="@(item.api_url ?? "")" />
+                                                <input type="hidden" id="@copyInputId" class="vm-api-nm-data-apiurl" value="@(item.api_url ?? "")" />
+                                                <input type="hidden" class="vm-api-nm-data-apiname" value="@(item.apiname ?? "")" />
+                                                <input type="hidden" class="vm-api-nm-data-viewbill" value="@(item.viewbill ?? "")" />
+                                                <input type="hidden" class="vm-api-nm-data-heavyrefresh" value="@(item.heavyRefresh ?? "")" />
+                                                <input type="hidden" class="vm-api-nm-data-status-url" value="@(item.status_url ?? "")" />
+                                                <input type="hidden" class="vm-api-nm-data-report-url" value="@(item.Report_url ?? "")" />
+                                                <input type="hidden" class="vm-api-nm-data-ipaddress" value="@(item.ipaddress ?? "")" />
                                                 <button type="button"
                                                         class="vm-api-nm-copy-btn"
                                                         data-copy-target="@copyInputId"
-                                                        data-copy-text="@Html.AttributeEncode(item.api_url ?? "")"
                                                         title="Copy URL">
                                                     <i class="fas fa-copy" aria-hidden="true"></i>
                                                     <span>Copy</span>
@@ -93,13 +98,6 @@
                                                 <button type="button"
                                                         class="vm-api-operator-edit-btn vm-api-nm-edit-btn"
                                                         data-id="@item.idno"
-                                                        data-apiname="@(item.apiname ?? "")"
-                                                        data-apiurl="@Html.AttributeEncode(item.api_url ?? "")"
-                                                        data-viewbill="@Html.AttributeEncode(item.viewbill ?? "")"
-                                                        data-heavyrefresh="@Html.AttributeEncode(item.heavyRefresh ?? "")"
-                                                        data-status-url="@Html.AttributeEncode(item.status_url ?? "")"
-                                                        data-report-url="@Html.AttributeEncode(item.Report_url ?? "")"
-                                                        data-ipaddress="@Html.AttributeEncode(item.ipaddress ?? "")"
                                                         data-toggle="modal"
                                                         data-target="#apiNmEditModal">
                                                     <i class="fas fa-edit" aria-hidden="true"></i> Edit
@@ -279,14 +277,15 @@
     });
 
     function openApiNmEdit($btn) {
+        var $row = $btn.closest('tr');
         $('#editTxtid').val($btn.attr('data-id') || '');
-        $('#txtapiname').val($btn.attr('data-apiname') || '');
-        $('#txtapiurl').val($btn.attr('data-apiurl') || '');
-        $('#viewurledit').val($btn.attr('data-viewbill') || '');
-        $('#viewdthheavyrefresh').val($btn.attr('data-heavyrefresh') || '');
-        $('#status_url_edit').val($btn.attr('data-status-url') || '');
-        $('#Report_url1').val($btn.attr('data-report-url') || '');
-        $('#ipaddress_edit').val($btn.attr('data-ipaddress') || '');
+        $('#txtapiname').val($row.find('.vm-api-nm-data-apiname').val());
+        $('#txtapiurl').val($row.find('.vm-api-nm-data-apiurl').val());
+        $('#viewurledit').val($row.find('.vm-api-nm-data-viewbill').val());
+        $('#viewdthheavyrefresh').val($row.find('.vm-api-nm-data-heavyrefresh').val());
+        $('#status_url_edit').val($row.find('.vm-api-nm-data-status-url').val());
+        $('#Report_url1').val($row.find('.vm-api-nm-data-report-url').val());
+        $('#ipaddress_edit').val($row.find('.vm-api-nm-data-ipaddress').val());
     }
 
     $(document).on('click', '.vm-api-nm-edit-btn', function () {
@@ -294,12 +293,9 @@
     });
 
     $(document).on('click', '.vm-api-nm-copy-btn', function () {
-        var text = $(this).attr('data-copy-text') || '';
-        if (!text) {
-            var targetId = $(this).data('copy-target');
-            var $input = $('#' + targetId);
-            text = $input.val() || '';
-        }
+        var targetId = $(this).data('copy-target');
+        var $input = $('#' + targetId);
+        var text = $input.val() || '';
 
         if (!text) {
             return;

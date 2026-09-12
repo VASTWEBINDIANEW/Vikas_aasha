@@ -1,0 +1,148 @@
+@model IEnumerable<Vastwebmulti.Models.show_upi_txn_details_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.show_upi_txn_details_Result>()).ToList();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var frmDate = (ViewBag.frmDate as string) ?? "-";
+    var toDate = (ViewBag.toDate as string) ?? "-";
+
+    Func<Vastwebmulti.Models.show_upi_txn_details_Result, bool> isSuccess = x => !string.IsNullOrEmpty(x.status) && x.status.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0;
+    Func<Vastwebmulti.Models.show_upi_txn_details_Result, bool> isFailed = x => !string.IsNullOrEmpty(x.status) && x.status.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0;
+    Func<Vastwebmulti.Models.show_upi_txn_details_Result, bool> isPending = x => !string.IsNullOrEmpty(x.status) && x.status.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0;
+
+    var totalSuccess = rows.Where(isSuccess).Sum(x => x.amt ?? 0m);
+    var totalPending = rows.Where(isPending).Sum(x => x.amt ?? 0m);
+    var totalFailed = rows.Where(isFailed).Sum(x => x.amt ?? 0m);
+    var totalCharges = rows.Sum(x => x.charge ?? 0m);
+    var totalAmount = rows.Sum(x => x.amt ?? 0m);
+    var totalNet = rows.Sum(x => x.finalpay ?? 0m);
+}
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
+<head>
+    <meta charset="utf-8" />
+    <title>UPI Transfer Report</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <x:ExcelWorkbook>
+            <x:ExcelWorksheets>
+                <x:ExcelWorksheet>
+                    <x:Name>UPI Transfer</x:Name>
+                    <x:WorksheetOptions>
+                        <x:Print><x:ValidPrinterInfo/></x:Print>
+                    </x:WorksheetOptions>
+                </x:ExcelWorksheet>
+            </x:ExcelWorksheets>
+        </x:ExcelWorkbook>
+    </xml>
+    <![endif]-->
+    <style>
+        td, th {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 11pt;
+            border: 1px solid #94a3b8;
+            vertical-align: middle;
+        }
+
+        .num {
+            mso-number-format: '#,##0.00';
+            text-align: right;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;width:100%;">
+        <tr>
+            <td colspan="7" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;border:1px solid #1d4ed8;">UPI Transfer Report</td>
+        </tr>
+        <tr>
+            <td colspan="7" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;border:1px solid #1d4ed8;">Dealer fund transfer - add wallet by UPI QR code</td>
+        </tr>
+        <tr>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">From Date</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@frmDate</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">To Date</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@toDate</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Generated On</td>
+            <td bgcolor="#FFFFFF" style="font-size:11pt;font-weight:bold;">@generatedOn</td>
+            <td bgcolor="#F1F5F9" style="font-weight:bold;font-size:10pt;">Records: @rows.Count</td>
+        </tr>
+        <tr>
+            <td bgcolor="#ECFDF5" style="font-weight:bold;font-size:10pt;color:#047857;">Total Success</td>
+            <td class="num" bgcolor="#ECFDF5" style="font-weight:bold;font-size:11pt;color:#047857;">@totalSuccess.ToString("N2")</td>
+            <td bgcolor="#FEFCE8" style="font-weight:bold;font-size:10pt;color:#854D0E;">Total Pending</td>
+            <td class="num" bgcolor="#FEFCE8" style="font-weight:bold;font-size:11pt;color:#854D0E;">@totalPending.ToString("N2")</td>
+            <td bgcolor="#FEF2F2" style="font-weight:bold;font-size:10pt;color:#B91C1C;">Total Failed</td>
+            <td class="num" bgcolor="#FEF2F2" style="font-weight:bold;font-size:11pt;color:#B91C1C;">@totalFailed.ToString("N2")</td>
+            <td bgcolor="#EFF6FF" style="font-weight:bold;font-size:10pt;color:#1D4ED8;">Charges: @totalCharges.ToString("N2")</td>
+        </tr>
+        <tr>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Status</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Payer Name</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Amount</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Charges</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Net Received</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Bank RRN</th>
+            <th bgcolor="#334155" style="color:#FFFFFF;font-size:10pt;font-weight:bold;">Transaction Time</th>
+        </tr>
+        @if (rows.Any())
+        {
+            var alt = false;
+            foreach (var item in rows)
+            {
+                var statusRaw = item.status ?? "";
+                var statusLabel = string.IsNullOrWhiteSpace(statusRaw) ? "-" : statusRaw;
+                var statusBg = "#FEFCE8";
+                var statusFg = "#854D0E";
+                if (statusRaw.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    statusLabel = "Success";
+                    statusBg = "#ECFDF5";
+                    statusFg = "#047857";
+                }
+                else if (statusRaw.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    statusLabel = "Failed";
+                    statusBg = "#FEE2E2";
+                    statusFg = "#B91C1C";
+                }
+                else if (statusRaw.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    statusLabel = "Pending";
+                    statusBg = "#FEFCE8";
+                    statusFg = "#854D0E";
+                }
+
+                var rowBg = alt ? "#F8FAFC" : "#FFFFFF";
+                alt = !alt;
+                <tr>
+                    <td bgcolor="@statusBg" class="center" style="color:@statusFg;font-weight:bold;font-size:11pt;">@statusLabel</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.PayerName) ? "-" : item.PayerName)</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@((item.amt ?? 0m).ToString("N2"))</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@((item.charge ?? 0m).ToString("N2"))</td>
+                    <td class="num" bgcolor="@rowBg" style="font-size:11pt;">@((item.finalpay ?? 0m).ToString("N2"))</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(string.IsNullOrWhiteSpace(item.BankRRN) ? "-" : item.BankRRN)</td>
+                    <td bgcolor="@rowBg" style="font-size:11pt;">@(item.txndate.HasValue ? item.txndate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-")</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">Total</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalAmount.ToString("N2")</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalCharges.ToString("N2")</td>
+                <td class="num" bgcolor="#EFF6FF" style="font-weight:bold;font-size:11pt;color:#1d4ed8;">@totalNet.ToString("N2")</td>
+                <td colspan="2" bgcolor="#EFF6FF">&nbsp;</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" bgcolor="#FFF7ED" style="font-size:11pt;font-weight:bold;color:#9a3412;text-align:center;">UPI transaction not found for the selected date range.</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

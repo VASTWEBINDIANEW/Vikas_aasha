@@ -1,1608 +1,1038 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.upiChargeAndgateway
+@using System.Linq
 @{
     ViewBag.Title = "Self UPI Payment";
-    decimal? TOTALAMOUNT = 0M;
-    decimal? TOTALNET = 0M;
-    decimal? TOTALCHARGE = 0M;
-    int i = 0;
+    Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
 
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
 
+    var selectedRole = (ViewBag.ddlname as string) ?? (Request["ddlname"] ?? "ALL");
+    var selectedRetailer = (Request["Retailerid"] ?? "").Trim();
+    var selectedStatus = (ViewBag.ddlstatus as string) ?? (Request["ddlstatus"] ?? "ALL");
+    if (string.IsNullOrEmpty(selectedStatus)) { selectedStatus = "ALL"; }
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+
+    var reports = Model.UPIREPORT ?? Enumerable.Empty<Vastwebmulti.Models.show_upi_txn_details_Result>();
+
+    Func<Vastwebmulti.Models.show_upi_txn_details_Result, bool> isSuccess = x =>
+        !string.IsNullOrEmpty(x.status) && x.status.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0;
+    Func<Vastwebmulti.Models.show_upi_txn_details_Result, bool> isFailed = x =>
+        !string.IsNullOrEmpty(x.status) && x.status.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0;
+    Func<Vastwebmulti.Models.show_upi_txn_details_Result, bool> isPending = x =>
+        !string.IsNullOrEmpty(x.status) && x.status.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0;
+
+    var totalAmount = reports.Sum(x => x.amt ?? 0m);
+    var totalNet = reports.Sum(x => x.finalpay ?? 0m);
+    var totalCharge = reports.Sum(x => x.charge ?? 0m);
+    var totalSuccess = reports.Where(isSuccess).Sum(x => x.amt ?? 0m);
+    var totalFailed = reports.Where(isFailed).Sum(x => x.amt ?? 0m);
+    var totalPending = reports.Where(isPending).Sum(x => x.amt ?? 0m);
+    var rowIndex = 0;
 }
 
-<style>
-    .btn:not(.btn-link):not(.btn-circle) i {
-        top: 3px;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page');</script>
 
-    .btn:not(.btn-link):not(.btn-circle) span {
-        top: -1px;
-    }
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
-    .second-design .datepicker-dropdown.datepicker {
-        margin-top: 0px !important;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page saas-giftcard-report-page saas-upi-dealer-charges-page">
 
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .cas-hdeposi-tcharge-page .bank-name ul {
-        margin-top: 8px;
-    }
-
-    .cash-charg-tab .nav-pills > li.active > a {
-        background: transparent;
-        color: inherit;
-    }
-
-    .cash-charg-tab .nav-pills > li > a {
-        background: transparent;
-        color: inherit;
-        padding: 0px;
-    }
-
-    .input-daterange {
-        width: 95%;
-    }
-
-    input#txt_frm_date {
-        padding-left: 22px;
-        border: 1px solid;
-    }
-
-    input#txt_to_date {
-        padding-left: 25px;
-        border: 1px solid;
-    }
-
-    .cash-charg-tab .nav-pills > li > a::before {
-        content: '';
-        border: 2px solid #bbb;
-        width: 12px;
-        height: 12px;
-        display: inline-block;
-        border-radius: 50%;
-        margin-right: 5px;
-    }
-
-    .cash-charg-tab .nav-pills > li.active > a::before {
-        background: var(--main-bg-lcolor);
-        border-color: var(--main-bg-lcolor);
-    }
-
-    .cash-charg-tab .nav-pills > li {
-        padding: 5px 9px;
-        margin: 0px auto;
-    }
-
-    .select2-container--default .select2-selection--single {
-        border-radius: 0px !important;
-    }
-    /*.cash-charg-tab-first .btn.btn-default{background-color:transparent !important;}*/
-    .select2-container .select2-selection--single {
-        height: 32px !important;
-        border-color: #ccc !important;
-    }
-
-    .cash-charg-tab-first #btnsubmit1, .cash-charg-tab-first #btnsubmit, .cash-charg-tab-first #btnsubmit2, .cash-charg-tab-first #btnsubmit3,
-    .cash-charg-tab-first #btnsubmit4 {
-        position: absolute;
-        right: 29px;
-        top: 83px;
-    }
-
-    #remcash table tbody tr th, #Distributor table tbody tr th, #Master table tbody tr th, #API table tbody tr th, #WhiteLabel table tbody tr th {
-        padding: 5px 10px;
-    }
-
-    .three-page-same.upi-charge {
-        width: 66%;
-    }
-
-    .onoffswitch {
-        width: 32px;
-        height: 32px;
-        margin-right: 5px;
-    }
-
-    .costom-on::after {
-        width: 20px;
-        height: 20px;
-        top: 5px;
-    }
-
-    p.green_p {
-        width: fit-content;
-        font-size: 9px;
-        line-height: .4;
-        text-align: center;
-        font-weight: 500;
-        color: green;
-    }
-
-    span.costom-on {
-        font-size: 12px;
-    }
-
-    .custom-off::before {
-        width: 20px;
-        height: 20px;
-        top: 5px;
-        right: 5px;
-    }
-
-    .onoffswitch {
-        float: right;
-    }
-
-    .qrclassnewaddsame {
-        padding-right: 7px;
-        margin-top: -8px;
-    }
-
-    .three-page-same.upi-charge {
-        width: 60%;
-    }
-
-    .qrclassnewaddsame .onoffswitch {
-        margin-right: 0;
-    }
-
-    .qrclassnewaddsame {
-        display: grid;
-        align-items: center;
-        text-align: center;
-        justify-content: center;
-        justify-items: center;
-    }
-
-        .qrclassnewaddsame .onoffswitch {
-            height: 24px;
-            width: 24px;
+        @{
+            var upiFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "dealerUpiChargesForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
+        @using (Html.BeginForm("UPIDealerCharges", "Home", FormMethod.Post, upiFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-            .qrclassnewaddsame .onoffswitch .costom-on::after, .qrclassnewaddsame .onoffswitch .custom-off::before {
-                width: 15px;
-                height: 17px;
-                top: 2px;
-                right: 4px;
-            }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-            .qrclassnewaddsame .onoffswitch span {
-                height: 24px !important;
-            }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Reports</li>
+                        <li>Self UPI Payment</li>
+                    </ol>
 
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
 
-    .paybyupiclassnewaddsame {
-        padding-right: 7px;
-        margin-top: -8px;
-    }
-
-    .three-page-same.upi-charge {
-        width: 50%;
-    }
-
-    .three-page-same .unload-item .leftt {
-        width: 72% !important;
-    }
-
-
-
-    .newfourdesign-admin .page-header-third ul.ulautopadd-third li:nth-child(1), .newfourdesign-admin .page-header-third ul.ulautopadd-third li:nth-child(2) {
-        display: none;
-    }
-
-    .upi-charge-modal .form-group .form-control {
-        border: 1px solid #bfbebe;
-        height: 32px;
-    }
-
-    .upi-charge-modal .form-group input.form-control {
-        -webkit-appearance: none;
-        -moz-appearance: textfield;
-    }
-
-    .paybyupiclassnewaddsamenewadd strong {
-        display: block;
-    }
-
-    .paybyupiclassnewaddsamenewadd button {
-        background: #f0f0f0;
-        border: 1px solid #bfbebe;
-        padding: 2px 7px;
-    }
-
-    .upi-chargeresponsiv .three-page-same.upi-charge {
-        width: 55%;
-    }
-
-    .paybyupiclassnewaddsamenewadd button span {
-        font-size: 10px;
-        text-transform: uppercase;
-        position: relative;
-        top: -4px;
-        color: red;
-    }
-
-    .paybyupiclassnewaddsamenewadd button strong {
-        font-size: 14px;
-        line-height: normal;
-        position: relative;
-        top: -1px;
-    }
-
-    .paybyupiclassnewaddsamenewadd button {
-        background: #f0f0f0;
-        border: 1px solid #bfbebe;
-        padding: 2px 7px;
-        height: 32px;
-    }
-
-    .paybyupiclassnewaddsamenewadd {
-        padding-right: 4px;
-    }
-
-    .paybyupiclassnewaddsame, .qrclassnewaddsame {
-        padding-right: 4px;
-    }
-
-
-
-    @@media screen and (max-width:1366px) {
-        .upinamecssresp {
-            display: none;
-        }
-    }
-
-
-    @@media screen and (max-width:766px) {
-        .upicharges-mainadmin .bread-same-all-page ul {
-            width: 100% !important;
-            float: left;
-        }
-
-        .upicharges-mainadmin .unload-item {
-            width: 50% !important;
-            padding-right: 5px;
-        }
-
-            .upicharges-mainadmin .unload-item.special-iii {
-                width: 100% !important;
-                float: left;
-                margin-top: 5px;
-            }
-
-                .upicharges-mainadmin .unload-item.special-iii .leftt {
-                    width: 100% !important;
-                    float: left;
-                    margin-bottom: 5px;
-                }
-
-                .upicharges-mainadmin .unload-item.special-iii .rightt.rightt-left-third {
-                    width: auto !important;
-                    float: left;
-                }
-
-                    .upicharges-mainadmin .unload-item.special-iii .rightt.rightt-left-third button {
-                        margin-left: 0 !important;
-                        width: 100% !important;
-                    }
-
-        .upicharges-mainadmin .bread-same-all-page {
-            position: relative;
-        }
-
-            .upicharges-mainadmin .bread-same-all-page .when-tr-left.position-third {
-                margin-top: 0;
-                position: absolute;
-                bottom: 0;
-                right: 0;
-            }
-
-                .upicharges-mainadmin .bread-same-all-page .when-tr-left.position-third button {
-                    position: static;
-                    width: auto;
-                }
-
-                .upicharges-mainadmin .bread-same-all-page .when-tr-left.position-third .onoffswitch {
-                    position: relative;
-                    top: 0px;
-                    left: 0px;
-                }
-    }
-
-    .paybyupiclassnewaddsame .onoffswitch {
-        margin-right: 0;
-    }
-
-    .paybyupiclassnewaddsame {
-        display: grid;
-        align-items: center;
-        text-align: center;
-        justify-content: center;
-        justify-items: center;
-    }
-
-        .paybyupiclassnewaddsame .onoffswitch {
-            height: 24px;
-            width: 24px;
-        }
-
-            .paybyupiclassnewaddsame .onoffswitch .costom-on::after, .paybyupiclassnewaddsame .onoffswitch .custom-off::before {
-                width: 15px;
-                height: 17px;
-                top: 2px;
-                right: 4px;
-            }
-
-            .paybyupiclassnewaddsame .onoffswitch span {
-                height: 24px !important;
-            }
-
-    .bread-same-all-page li:last-child {
-        margin-right: 0px;
-    }
-
-    .upi-chargeresponsiv .ulautopadd-third {
-        width: 100% !important;
-        float: left;
-    }
-
-    .upi-chargeresponsiv .three-page-same.upi-charge {
-        width: 55%;
-    }
-
-    .upi-chargeresponsiv .three-page-same .unload-item.item-three {
-        width: 45% !important;
-    }
-
-    .upi-chargeresponsiv .input-daterange span.input-group-addon {
-        min-width: 5px !important;
-    }
-
-    .upi-chargeresponsiv .input-daterange .custom-date-icon {
-        width: 23px;
-    }
-
-        .upi-chargeresponsiv .input-daterange .custom-date-icon i {
-            left: 3px;
-        }
-
-    .upi-chargeresponsiv .input-daterange input {
-        padding-left: 7px;
-        text-align: center;
-    }
-
-    .three-page-same .unload-item {
-        margin-right: 4px;
-    }
-
-    .upi-chargeresponsiv .unload-item button.btn.dropdown-toggle.btn-default {
-        padding-left: 2px;
-        background: transparent !important;
-    }
-
-        .upi-chargeresponsiv .unload-item button.btn.dropdown-toggle.btn-default span {
-            color: #555;
-        }
-
-    .three-page-same .unload-item .bootstrap-select button.btn::after {
-        border-bottom: 1px solid #555;
-        border-left: 1px solid #555;
-        width: 7px;
-        height: 7px;
-        right: 7px;
-        top: 9px;
-    }
-
-    .upi-chargeresponsiv .input-daterange input {
-        padding-right: 4px;
-    }
-
-    .unload-item.filter-upi .btn-group.bootstrap-select .dropdown-menu {
-        padding: 0;
-        margin-top: -2px !important;
-        box-shadow: none;
-    }
-
-        .unload-item.filter-upi .btn-group.bootstrap-select .dropdown-menu ul li {
-            margin-right: 0;
-            margin-bottom: 0;
-            border-bottom: 1px solid #bbb;
-            width: 100%;
-        }
-
-            .unload-item.filter-upi .btn-group.bootstrap-select .dropdown-menu ul li a {
-                padding: 3px 6px;
-                width: 100%;
-            }
-
-        .unload-item.filter-upi .btn-group.bootstrap-select .dropdown-menu ul {
-            border: 1px solid #bbb;
-            border-bottom: 0;
-        }
-
-            .unload-item.filter-upi .btn-group.bootstrap-select .dropdown-menu ul li a span {
-                color: #555;
-                font-weight: normal !important;
-            }
-
-    .upi-chargeresponsiv .unload-item .open button.btn.dropdown-toggle.btn-default {
-        border-color: #bfbebe !important;
-    }
-
-    .bread-same-all-page a:hover {
-        font-weight: normal;
-    }
-
-    .datepicker-dropdown.datepicker {
-        margin-top: 75px !important;
-    }
-
-    .paybyupiclassnewaddsame .onoffswitch, .qrclassnewaddsame .onoffswitch {
-        height: 32px;
-        width: auto;
-        text-transform: capitalize;
-        padding: 3px 5px;
-        padding-left: 5px;
-        background: #f0f0f0;
-        font-size: 14px;
-        padding-left: 20px;
-    }
-
-        .paybyupiclassnewaddsame .onoffswitch .costom-on::after, .paybyupiclassnewaddsame .onoffswitch .custom-off::before,
-        .qrclassnewaddsame .onoffswitch .costom-on::after, .qrclassnewaddsame .onoffswitch .custom-off::before {
-            width: 15px;
-            height: 17px;
-            top: 7px;
-            left: 4px;
-        }
-
-    .qrclassnewaddsame, .paybyupiclassnewaddsame {
-        margin-top: 0px;
-    }
-
-    .paybyupiclassnewaddsamenewadd button strong {
-        font-size: 9px;
-        font-weight: 400;
-    }
-
-    .paybyupiclassnewaddsamenewadd button span {
-        font-size: 12px;
-        text-transform: uppercase;
-        position: relative;
-        top: -2px;
-        color: red;
-    }
-
-    .paybyupiclassnewaddsame .onoffswitch span {
-        padding-top: 2px;
-        padding-bottom: 0;
-    }
-
-    .paybyupiclassnewaddsame .onoffswitch .costom-on::after, .paybyupiclassnewaddsame .onoffswitch .custom-off::before, .qrclassnewaddsame .onoffswitch .costom-on::after, .qrclassnewaddsame .onoffswitch .custom-off::before {
-        width: 15px;
-        height: 15px;
-        top: 8px;
-        left: 4px;
-    }
-
-    .qrclassnewaddsame .onoffswitch span {
-        padding-top: 3px;
-        padding-bottom: 0;
-    }
-
-
-
-    @@media screen and (max-width:1366px) {
-
-        .upi-chargeresponsiv .input-daterange input {
-            text-align: right;
-        }
-
-        .upi-chargeresponsiv .three-page-same.upi-charge {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-    }
-
-
-    @@media only screen and (min-width:481px) and (max-width:991px) {
-        .dust-gr-terw ul {
-            width: 100% !important;
-            float: left;
-        }
-
-        .dust-gr-terw .three-page-same.upi-charge {
-            width: 100% !important;
-            float: left;
-        }
-
-        .dust-gr-terw .un-re-wa-right {
-            padding-left: 0px !important;
-        }
-
-        .when-tr-left {
-            width: auto;
-            float: left;
-            margin-top: 10px;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .upi-charge-modal .col-md-4, .upi-charge-modal .col-md-8 {
-            width: 100%;
-            float: left;
-        }
-
-        .upi-chargeresponsiv .three-page-same .unload-item.item-three {
-            width: 100% !important;
-        }
-
-        .upi-chargeresponsiv .input-daterange input {
-            text-align: center;
-        }
-
-        .upi-chargeresponsiv .three-page-same.upi-charge {
-            width: 100% !important;
-        }
-
-        .upicharges-mainadmin .bread-same-all-page .when-tr-left.position-third {
-            position: static;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-        .bread-same-all-page ul {
-            width: 100% !important;
-        }
-
-        .three-page-same.upi-charge {
-            width: 100%;
-        }
-
-        .un-re-wa-right {
-            padding-left: 0px !important;
-        }
-
-        .three-page-same.upi-charge .unload-item.item-two {
-            width: 49% !important;
-            padding: 0px;
-            margin-right: 2%;
-        }
-
-        .three-page-same.upi-charge .unload-item.item-one {
-            width: 49% !important;
-        }
-
-        .three-page-same.upi-charge .unload-item.item-two.item-two-width {
-            width: 100% !important;
-            margin-right: 2%;
-        }
-
-        .three-page-same.upi-charge .unload-item .rightt button span {
-            float: none;
-        }
-
-        .three-page-same.upi-charge .unload-item .rightt button {
-            width: 100% !important;
-            margin-left: 0px !important;
-        }
-
-        .three-page-same.upi-charge .unload-item .rightt {
-            width: 28% !important;
-        }
-
-        .onoffswitch {
-            position: absolute;
-            top: 213px;
-            left: 41%;
-        }
-
-        .for-button-upi {
-            position: absolute;
-            width: 45%;
-            top: 213px;
-            right: 15px;
-        }
-
-        .Wallet-To-Bank-Charge-modal .modal-dialog {
-            width: 96%;
-            margin-right: 1% !important;
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > tbody > tr > td:first-child {
-            border-left: 1px solid var(--border-color);
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-right: 1px solid var(--border-color);
-        }
-
-        .upistatus-admin {
-            position: static !important;
-            width: 100%;
-            margin-top: 10px !important;
-        }
-    }
-
-    @@media screen and (max-width:400px) {
-        .upicharges-mainadmin .bread-same-all-page .when-tr-left.position-third {
-            position: static;
-        }
-
-        .upistatus-admin .qrclassnewaddsame, .upistatus-admin .paybyupiclassnewaddsame {
-            width: 15% !important;
-            float: left !important;
-        }
-
-        .upistatus-admin .qrclassnewaddsame, .upistatus-admin .paybyupiclassnewaddsame {
-            width: 50% !important;
-            float: left !important;
-            margin-bottom: 10px;
-            margin-top: 10px;
-            display: block;
-        }
-
-        .paybyupiclassnewaddsame .onoffswitch, .qrclassnewaddsame .onoffswitch {
-            width: 100% !important;
-            float: left !important;
-        }
-
-        .paybyupiclassnewaddsamenewadd {
-            width: 50%;
-            display: block;
-            margin-top: 10px;
-        }
-    }
-</style>
-
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-<section class="content cas-hdeposi-tcharge-page upicharge-thirddesign">
-    <div id="loadermoney" class="loadermoney" style="display:none;"></div>
-    <div class="container-fluid upicharges-mainadmin">
-
-        <div class="col-md-12" style="padding: 0px;">
-            <ul style="width: 100%; float: left; padding: 0px; display: inline-flex;">
-
-
-                <li class="smli">
-                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                    </a>
-                </li>
-
-                <li class="fullbodydycolorbg tmw-total-color-one">
-                    Self UPI Payment
-                </li>
-            </ul>
-        </div>
-
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
-            <div class="card card-dth-report" style="margin-bottom:0px;">
-
-                <div class="row">
-                    @using (Html.BeginForm("UPIDealerCharges", "Home", FormMethod.Post))
-                    {
-                        @*<form action="/AashaDigitalIndia24Testing/DEALER/Home/DthBookingReport" method="post">*@
-
-                        <div class="col-md-1 unload-item item-two unloadupi-third-design" style="">
+                        <div class="vm-opr-field vm-dmt-field">
                             @Html.DropDownList("ddlname", new List<SelectListItem>
-                              {
-                          new SelectListItem{ Text="All",Value="ALL"},
-                           new SelectListItem{ Text="Retailer",Value="Retailer"},
-
-                          }, new { @class = "selectpicker form-control", data_live_search = "true", @onchange = "ddlnamechange()" })
-
+                            {
+                                new SelectListItem { Text = "All Roles", Value = "ALL", Selected = selectedRole == "ALL" },
+                                new SelectListItem { Text = "Retailer", Value = "Retailer", Selected = selectedRole == "Retailer" }
+                            }, new { id = "ddlname", @class = "vm-opr-select vm-dmt-select form-control for-select2", @title = "Role", data_live_search = "true", onchange = "ddlnamechange()" })
                         </div>
 
-                        <div id="drpretailer" class=" col-md-1 unload-item item-one" style="display:none;">
-                            @Html.DropDownList("Retailerid", ViewBag.Retailerid as SelectList, "Select Retailer ID", new { @class = " form-control border-0", @style = "border:1px solid #8e7f7f4d;" })
+                        <div class="vm-opr-field vm-dmt-field vm-upi-retailer-field@(selectedRole == "Retailer" ? "" : " vm-upi-retailer-field--hidden")" id="drpretailer">
+                            @{
+                                var retailerItems = ViewBag.Retailerid as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+                            }
+                            @Html.DropDownList("Retailerid", new SelectList(retailerItems, "Value", "Text", selectedRetailer), "Select Retailer", new { id = "Retailerid", @class = "vm-opr-select vm-dmt-select form-control for-select2-retailer", @title = "Retailer", data_live_search = "true" })
                         </div>
-                        <div class=" col-md-1 unload-item item-two item-two-width ">
+
+                        <div class="vm-opr-field vm-dmt-field vm-radiant-field--status">
                             @Html.DropDownList("ddlstatus", new List<SelectListItem>
-                              {
-                          new SelectListItem{ Text="Status",Value="ALL"},
-                           new SelectListItem{ Text="Pending",Value="Pending"},
-                           new SelectListItem{Text="Success",Value="Success"},
-                           new SelectListItem{Text="Rejected",Value="Failed"}
-                          }, new { @class = "selectpicker form-control", data_live_search = "true" })
-
+                            {
+                                new SelectListItem { Text = "All Status", Value = "ALL", Selected = selectedStatus == "ALL" },
+                                new SelectListItem { Text = "Pending", Value = "Pending", Selected = selectedStatus == "Pending" },
+                                new SelectListItem { Text = "Success", Value = "Success", Selected = selectedStatus == "Success" },
+                                new SelectListItem { Text = "Failed", Value = "Failed", Selected = selectedStatus == "Failed" }
+                            }, new { id = "ddlstatus", @class = "vm-opr-select vm-dmt-select form-control for-select2", @title = "Status", data_live_search = "true" })
                         </div>
-                        <div class="col-md-4 dth-date-report" style="padding:0px;">
-                            <div class="form-group for-web-date" style="margin-bottom:0px;width:100%;">
-                                <div>
-                                    <div class="input-daterange input-group">
-                                        <div class="all-report-inputclass all-report-inputclass-left">
-                                            <div class="custom-date-icon" style="height: 32px;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", autocomplete = "off" })
-                                            <span class="input-group-addon" style="min-width:10px;padding:0px;">
 
-                                            </span>
-                                        </div>
-
-                                        <div class="all-report-inputclass all-report-inputclass-right">
-                                            <div class="custom-date-icon" style="height: 32px;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", autocomplete = "off" })
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <!-- /.input group -->
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
                             </div>
-                        </div>
-                        <div class="col-md-1" style="padding-left:5px;">
-                            <center>
-                                <button type="submit" class="btn" style="width:100%;  height:32px;border:1px solid #c7c2c2;background:#f5f5f5;">
-
-                                    <span style="top:-2px;color:black;"><i class="fa fa-search" style="top:0px;font-size:13px;color:#444;left:-4px;" aria-hidden="true"></i>Search</span>
-                                </button>
-                            </center>
-                        </div>
-                    }
-                    <div class="col-md-4 dth-buttonpdfexl" style="width:auto;float:right;">
-
-                        <div class="when-tr-left position-third upistatus-admin" style="float:left;margin-right:8px;">
-
-                            <button data-toggle="modal" id="myModal123showdata" data-target="#myModal123" class="fullbodydycolorbg for-button-upi back-button-third" style="float: right; color: #fff; padding: 5px 5px; border: 1px solid #bfbebe; background: #f0f0f0 !important; color: #777; "><i class="fa fa-cog fa-spin" aria-hidden="true" style="margin-right:6px;font-size:16px;position:relative;top:1px;"></i>Add VPA Details</button>
-
-                        </div>
-
-                        @*<button class="white-success-button" style="margin-left:4px;background:#eeebeb;">Total</button>
-                            <div class="white-success" style="display:none;width: 192px;right: 15px">
-                                <button type="button" class="btn btn-default waves-effect" style="margin-top:2px;" title="Total  Success"><img src="/AashaDigitalIndia24Testing/ashok-images/correct.svg" style="width: 19px;background: green;border-radius: 50%;padding: 3px;">&nbsp;0</button>
-                                <button type="button" class="btn btn-default waves-effect" style="margin-top:2px;" title="Total  Failed"><img src="/AashaDigitalIndia24Testing/ashok-images/closes.svg" style="width: 19px;background: red;border-radius: 50%;padding: 3px;">&nbsp;0</button>
-                                <button type="button" class="btn btn-default waves-effect" style="margin-top:2px;" title="Total  Pending"><img src="/AashaDigitalIndia24Testing/ashok-images/clock.svg" style="width: 20px;">&nbsp;</button>
-
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
                             </div>
-                            <div class="web-white-filter fil" style="float: left;margin-right: 0px;margin-top:0px;">
-                                <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                    background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                                <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                    background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                            </div>*@
-                        <div class="web-white-filter" style="float:right;">
-                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
-                                <div id="DataTables_Table_0_filter" class="dataTables_filter"><label>Search:<input type="search" class="" placeholder="" aria-controls="DataTables_Table_0"></label></div><table class="dataTable js-exportable no-footer dtr-inline" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info" style="width: 0px;">
-                                    <thead>
-                                        <tr role="row"><td class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 0px;" aria-sort="ascending" aria-label=": activate to sort column descending"></td></tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr role="row" class="odd">
-                                            <td tabindex="0" class="sorting_1"></td>
-                                        </tr>
-                                    </tbody>
-                                </table><div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to 1 of 1 entries</div><div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate"><a class="paginate_button previous disabled" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="-1" id="DataTables_Table_0_previous">Previous</a><span><a class="paginate_button current" aria-controls="DataTables_Table_0" data-dt-idx="1" tabindex="0">1</a></span><a class="paginate_button next disabled" aria-controls="DataTables_Table_0" data-dt-idx="2" tabindex="-1" id="DataTables_Table_0_next">Next</a></div>
-                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
 
+                    </div>
+
+                </div>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="upiChargesTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Self UPI totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideUpiChargesTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Amount</span>
+                            <strong class="vm-opr-total-card__value">@totalAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value">@totalSuccess.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value">@totalFailed.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value">@totalPending.ToString("N2")</strong>
+                        </div>
                     </div>
                 </div>
 
             </div>
-        </div>
+        }
 
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-qrcode" aria-hidden="true"></i>
+                        <span>Self UPI payment report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-ft-search-wrap vm-upi-table-search">
+                            <input class="form-control" type="text" id="myInput" placeholder="Search report..." autocomplete="off" onkeyup="upiChargesSearch()" />
+                        </div>
+                        <span class="vm-radiant-inline-total" title="Total amount for current filter">
+                            Total: <strong>&#8377; @totalAmount.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="saas-acc-btn saas-acc-btn--ghost vm-upi-vpa-btn" data-toggle="modal" data-target="#myModal123" title="Add VPA Details">
+                                <i class="fas fa-cog" aria-hidden="true"></i> VPA Details
+                            </button>
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-sell-rch-totals-btn vm-ecom-totals-btn vm-upi-totals-btn" onclick="toggleUpiChargesTotals()" title="Show totals" aria-expanded="false" aria-controls="upiChargesTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="row clearfix">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-
-
-                <div class="" style="">
-
-
-                    <div class="three-page-same">
-                        <div class="row clearfix" id="RetailerSRC">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-
-
-                                <div id="RetailerSearchList">
-                                    <div class="table-responsive tableseconddes-admin" style="width:100%;">
-                                        <table class="table table-bordered table-striped table-hover third-design-table" style="background:#f5f5f5;">
-                                            <thead style="background-color:whitesmoke;">
-                                                <tr>
-                                                    <th>S.NO</th>
-                                                    <th>Role</th>
-                                                    <th>User</th>
-                                                    <th>Payer&nbsp;Name</th>
-                                                    <th>Remain&nbsp;Pre</th>
-                                                    <th>Amount</th>
-                                                    <th>Charges</th>
-                                                    <th>Net&nbsp;Pay</th>
-                                                    <th>Remain&nbsp;Post</th>
-                                                    <th>Bank RRN</th>
-                                                    <th>Transaction&nbsp;Time</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var item in Model.UPIREPORT)
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="upiChargesReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Status</th>
+                                    <th>Role</th>
+                                    <th>User</th>
+                                    <th>Payer&nbsp;Name</th>
+                                    <th>Remain&nbsp;Pre</th>
+                                    <th>Amount</th>
+                                    <th>Charges</th>
+                                    <th>Net&nbsp;Pay</th>
+                                    <th>Remain&nbsp;Post</th>
+                                    <th>Bank RRN</th>
+                                    <th>Transaction&nbsp;Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (reports.Any())
+                                {
+                                    foreach (var item in reports)
+                                    {
+                                        rowIndex++;
+                                        var frmname = string.IsNullOrWhiteSpace(item.Frm_Name) ? item.RetailerName : item.Frm_Name;
+                                        var statusRaw = item.status ?? "";
+                                        var statusTone = "pending";
+                                        var statusFa = "fa-clock-o";
+                                        var statusLabel = string.IsNullOrWhiteSpace(statusRaw) ? "-" : statusRaw;
+                                        if (statusRaw.IndexOf("SUCCESS", StringComparison.OrdinalIgnoreCase) >= 0)
+                                        {
+                                            statusTone = "success";
+                                            statusFa = "fa-check";
+                                            statusLabel = "Success";
+                                        }
+                                        else if (statusRaw.IndexOf("FAILED", StringComparison.OrdinalIgnoreCase) >= 0)
+                                        {
+                                            statusTone = "failed";
+                                            statusFa = "fa-times";
+                                            statusLabel = "Failed";
+                                        }
+                                        else if (statusRaw.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0)
+                                        {
+                                            statusTone = "pending";
+                                            statusFa = "fa-clock-o";
+                                            statusLabel = "Pending";
+                                        }
+                                        var txnDate = item.txndate.HasValue ? item.txndate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+                                        <tr class="vm-dmt-row vm-dmt-row--@statusTone tr" data-status="@statusRaw">
+                                            <td>@rowIndex</td>
+                                            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                                                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                                                    <i class="fa @statusFa" aria-hidden="true"></i>
+                                                </span>
+                                                <span class="vm-radiant-status-text">@statusLabel</span>
+                                            </td>
+                                            <td>@(item.rolename ?? "-")</td>
+                                            <td>@(frmname ?? "-")</td>
+                                            <td>@(string.IsNullOrWhiteSpace(item.PayerName) ? "-" : item.PayerName)</td>
+                                            <td class="vm-dmt-amt-cell">@(item.remainpre.HasValue ? item.remainpre.Value.ToString("N2") : "-")</td>
+                                            <td class="vm-dmt-amt-cell">@(item.amt.HasValue ? item.amt.Value.ToString("N2") : "-")</td>
+                                            <td class="vm-dmt-amt-cell">@(item.charge.HasValue ? item.charge.Value.ToString("N2") : "-")</td>
+                                            <td class="vm-dmt-amt-cell">@(item.finalpay.HasValue ? item.finalpay.Value.ToString("N2") : "-")</td>
+                                            <td class="vm-dmt-amt-cell">@(item.remainpost.HasValue ? item.remainpost.Value.ToString("N2") : "-")</td>
+                                            <td>@(string.IsNullOrWhiteSpace(item.BankRRN) ? "-" : item.BankRRN)</td>
+                                            <td>@txnDate</td>
+                                            <td class="vm-dmt-action-cell">
+                                                @if (statusRaw.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0)
                                                 {
-
-                                                    i++;
-                                                    var frmname = item.Frm_Name == null || item.Frm_Name == "" ? item.RetailerName : item.Frm_Name;
-
-                                                    TOTALAMOUNT = item.amt + TOTALAMOUNT;
-                                                    TOTALNET = item.finalpay + TOTALNET;
-                                                    TOTALCHARGE = item.charge + TOTALCHARGE;
-                                                    var img = "";
-                                                    var bg = "";
-                                                    var pd = "";
-
-                                                    if (item.status.ToUpper() == "SUCCESS")
-                                                    {
-                                                        img = "../../ashok-images/correct.svg";
-                                                        bg = "green";
-                                                        pd = "3px";
-
-                                                    }
-                                                    else if (item.status.ToUpper() == "PENDING")
-                                                    {
-                                                        img = "../../ashok-images/clock.svg";
-                                                    }
-                                                    else
-                                                    {
-                                                        img = "../../ashok-images/closes.svg";
-                                                        bg = "red";
-                                                        pd = "3px";
-                                                    }
-                                                    <tr>
-                                                        <td>@i</td>
-                                                        <td>@item.rolename</td>
-                                                        <td>@frmname</td>
-                                                        <td><img src='@img' style="width: 20px;background:@bg;padding:@pd;border-radius:50%;">&nbsp;@item.PayerName</td>
-                                                        <td style="font-weight:bold;">@item.remainpre</td>
-                                                        <td>@item.amt</td>
-                                                        <td>@item.charge</td>
-                                                        <td>@item.finalpay</td>
-                                                        <td>@item.remainpost</td>
-                                                        <td>@item.BankRRN</td>
-                                                        <td>@item.txndate</td>
-
-                                                        <td>
-                                                            @if (@item.status.ToUpper() == "PENDING")
-                                                            {
-                                                                <button data-toggle="modal" data-target="#myModalUPITXN" onclick="UPIRESPONSEsss('APPROVED', '@item.idno','@frmname' ,'@item.txndate', '@item.amt')" style="background:transparent;border:none;font-size:20px;margin-top:-6px;"><i class="fa fa-check" style="top:1px;border: 1px solid #c7c2c2;padding: 3px;font-size: 10px;" aria-hidden="true"></i>	</button>
-                                                                <button data-toggle="modal" data-target="#myModalUPITXN" onclick="UPIRESPONSEsss('REJECTED', '@item.idno','@frmname','@item.txndate' ,'@item.amt')" style="background:transparent;border:none;font-size:20px;margin-top:-6px;"> <i class="fa fa-times" style="top:1px;border: 1px solid #c7c2c2;padding: 3px 4px;font-size: 10px;" aria-hidden="true"></i></button>
-                                                            }
-                                                        </td>
-                                                    </tr>
-
+                                                    <button type="button" class="vm-opr-icon-btn vm-upi-action-btn vm-upi-action-btn--ok" data-toggle="modal" data-target="#myModalUPITXN" onclick="UPIRESPONSEsss('APPROVED', '@item.idno','@frmname' ,'@txnDate', '@item.amt')" title="Approve">
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    </button>
+                                                    <button type="button" class="vm-opr-icon-btn vm-upi-action-btn vm-upi-action-btn--fail" data-toggle="modal" data-target="#myModalUPITXN" onclick="UPIRESPONSEsss('REJECTED', '@item.idno','@frmname','@txnDate' ,'@item.amt')" title="Reject">
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    </button>
                                                 }
-                                                <tr>
-                                                    <td colspan="5">TOTAL</td>
-                                                    <td>@TOTALAMOUNT</td>
-                                                    <td>@TOTALCHARGE</td>
-                                                    <td>@TOTALNET</td>
-                                                    <td colspan="4"></td>
-
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                    </div><!--.three-page-same-->
-                </div><!--.three-page-same-->
+                                                else
+                                                {
+                                                    <span>-</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                    <tr class="vm-dmt-total-row tr">
+                                        <td colspan="6"><strong>Total</strong></td>
+                                        <td class="vm-dmt-amt-cell"><strong>@totalAmount.ToString("N2")</strong></td>
+                                        <td class="vm-dmt-amt-cell"><strong>@totalCharge.ToString("N2")</strong></td>
+                                        <td class="vm-dmt-amt-cell"><strong>@totalNet.ToString("N2")</strong></td>
+                                        <td colspan="4"></td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="13" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-qrcode" aria-hidden="true"></i>
+                                            <span>Self UPI transaction not found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-
         </div>
+
     </div>
 </section>
 
-<div id="myModalUPITXN" class="modal fade Wallet-To-Bank-Charge-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="float: right;margin: 0px;">
+@if (!string.IsNullOrWhiteSpace(Model.msg))
+{
+    <div class="vm-upi-page-msg">@Model.msg</div>
+}
+
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-upi-txn-modal" id="myModalUPITXN" tabindex="-1" role="dialog" aria-labelledby="upiTxnModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background:#bbb;">
-                <h4 class="modal-title" id="defaultModalLabel"> Confirm Transection</h4>
-            </div>
-
-
-            <div class="modal-body" style="margin-top:0px;background:#f5f5f5;">
-                <div class="body">
-
-                    @using (Html.BeginForm("UPI_Manual_Pending_To_Success", "Home", FormMethod.Post))
-                    {
-                        <input type="hidden" id="hideupiidres" name="hideupiidres" />
-                        <input type="hidden" id="hideupiidrestypes" name="hideupiidrestypes" />
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-                                <label for="email_address_2">Retailer Firm</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="">
-                                        <input id="txtremfrmname" name="txtremfrmname" type="text" disabled="disabled" class="form-control" required />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-                                <label for="email_address_2">Transection Date</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="">
-                                        <input id="txttxndate" name="txttxndate" type="text" disabled="disabled" class="form-control" required />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-                                <label for="email_address_2">Amount</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="">
-                                        <input id="txtremamount" name="txtremamount" type="text" disabled="disabled" class="form-control" required />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-                                <label for="email_address_2">Enter Bank RRN</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="">
-                                        <input id="txtBankRRN" name="txtBankRRN" type="text" disabled="disabled" placeholder="Enter Bank RRN" class="form-control" required />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5">
-                                <label for="email_address_2">Enter Transection Password</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="">
-                                        <input id="txtcode" name="txtcode" type="password" placeholder="Enter Transection Password" class="form-control" value="" required />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer special-iii">
-                            <button id="Saveotp123" type="submit" class="btn waves-effect btnssl2233 fullbodydycolorbg enableOnInput" style="width:auto;border: 1px solid #ddd;color:#fff;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                Enter Transection Password
-                            </button>
-                            <button type="button" class="btn waves-effect" style="width:auto;border: 1px solid #ddd;" id="closebtn" data-dismiss="modal">
-                                Close
-                            </button>
-
-                        </div>
-
-                    }
-                    <label id="lblmsg"></label>
-
-                    <div class="table-responsive " style="width:100%; height:auto;" id="RemTbl11">
+            <div class="modal-header saas-admin-modal-header accent-blue">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-exchange-alt" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title" id="upiTxnModalTitle">Confirm Transaction</h4>
+                        <span class="saas-admin-modal-subtitle">Approve or reject pending UPI transaction</span>
                     </div>
-
                 </div>
-
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
             </div>
-
-        </div>
-    </div>
-
-</div>
-
-
-
-
-
-<!-- ========   Wallet To Bank Charge Add New Modal  =============-->
-<div id="myModal" class="modal fade Wallet-To-Bank-Charge-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="float: right;margin: 0px;">
-        <div class="modal-content">
-            <div class="modal-header" style="background:#bbb;">
-                <h4 class="modal-title" id="defaultModalLabel"> Add UPI Charges</h4>
-            </div>
-
-
-
-            <div class="modal-body upi-charge-modal" style="margin-top:0px;background:#f5f5f5;">
-                <div class="body">
-
-                    <form id="form_validation" method="POST">
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-                                <label for="email_address_2">Minimum Charge (Rs)</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="">
-                                        <select class="form-control" id="RemMinAmt" name="RemMinAmt">
-                                            <option value="">Select one</option>
-                                            <option value="0.00">0.00</option>
-                                            <option value="0.05">0.05</option>
-                                            <option value="0.15">0.15</option>
-                                            <option value="0.25">0.25</option>
-                                        </select>
-
-                                    </div>
-                                </div>
-                            </div>
+            <div class="modal-body saas-admin-modal-body">
+                @using (Html.BeginForm("UPI_Manual_Pending_To_Success", "Home", FormMethod.Post))
+                {
+                    <input type="hidden" id="hideupiidres" name="hideupiidres" />
+                    <input type="hidden" id="hideupiidrestypes" name="hideupiidrestypes" />
+                    <div class="vm-dmt-modal-grid vm-dmt-modal-grid--2">
+                        <div class="vm-dmt-modal-field">
+                            <label>Retailer Firm</label>
+                            <input id="txtremfrmname" name="txtremfrmname" type="text" disabled="disabled" class="form-control vm-dmt-modal-readonly" required />
                         </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-
-                                <label for="email_address_2"> Charge (%)</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                <div class="form-group" style="margin-bottom:10px;">
-                                    <div class="">
-                                        <select class="form-control" id="RemMaxAmt" name="RemMaxAmt">
-                                            <option value="">Select one</option>
-                                            <option value="0.00">0.00</option>
-                                            <option value="0.01">0.01</option>
-                                            <option value="0.02">0.02</option>
-
-                                        </select>
-
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-dmt-modal-field">
+                            <label>Transaction Date</label>
+                            <input id="txttxndate" name="txttxndate" type="text" disabled="disabled" class="form-control vm-dmt-modal-readonly" required />
                         </div>
-
-                        <div class="modal-footer special-iii">
-                            <button id="SaveChargeREM" type="button" class="btn waves-effect btnssl2233 fullbodydycolorbg enableOnInput" style="width:auto;border: 1px solid #ddd;color:#fff;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                Save Change
-                            </button>
-
-                            <button type="button" class="btn waves-effect" style="width:auto;border: 1px solid #ddd;" id="closebtn" data-dismiss="modal">
-                                Close
-                            </button>
-
+                        <div class="vm-dmt-modal-field">
+                            <label>Amount</label>
+                            <input id="txtremamount" name="txtremamount" type="text" disabled="disabled" class="form-control vm-dmt-modal-readonly" required />
                         </div>
-                    </form>
-
-
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
-</div>
-
-<!-- ========   Wallet To Bank Charge Add New Modal  =============-->
-<div id="myModal123" class="modal fade Wallet-To-Bank-Charge-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="float: right;margin: 0px;">
-        <div class="modal-content">
-            <div class="modal-header" style="background:#bbb;">
-                <h4 class="modal-title" id="defaultModalLabel">VPA Details</h4>
-            </div>
-            <div class="modal-body upi-charge-modal" style="margin-top:0px;background:#f5f5f5;">
-                <div class="body">
-
-
-
-                    <label id="lblmsg"></label>
-                    <input type="hidden" id="hideupiid" />
-                    <input type="hidden" id="hidemin" />
-                    <input type="hidden" id="hidemax" />
-                    <input type="hidden" id="hidddlpaymenttype" />
-
-
-
-                    <div class="" style="width: 100%; height: auto; overflow-y: auto;" id="RemTbl222">
-                        @Html.Partial("_VPAsetDealer_SelfList")
-
-
+                        <div class="vm-dmt-modal-field">
+                            <label>Enter Bank RRN</label>
+                            <input id="txtBankRRN" name="txtBankRRN" type="text" placeholder="Enter Bank RRN" class="form-control" required />
+                        </div>
+                        <div class="vm-dmt-modal-field vm-dmt-modal-field--full">
+                            <label>Enter Transaction Password</label>
+                            <input id="txtcode" name="txtcode" type="password" placeholder="Enter Transaction Password" class="form-control" required autocomplete="off" />
+                        </div>
                     </div>
-
-                </div>
-
+                    <div class="modal-footer saas-admin-modal-footer">
+                        <button id="Saveotp123" type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--primary" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                            <i class="fas fa-lock" aria-hidden="true"></i> Submit
+                        </button>
+                        <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                            <i class="fas fa-times" aria-hidden="true"></i> Close
+                        </button>
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        ddlnamechange();
-    });
-</script>
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-upi-vpa-modal" id="myModal123" tabindex="-1" role="dialog" aria-labelledby="upiVpaModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-violet">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-id-card" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title" id="upiVpaModalTitle">VPA Details</h4>
+                        <span class="saas-admin-modal-subtitle">Manage dealer UPI VPA settings</span>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll">
+                <label id="lblmsg" class="vm-vpa-lblmsg"></label>
+                <input type="hidden" id="hideupiid" />
+                <input type="hidden" id="hidemin" />
+                <input type="hidden" id="hidemax" />
+                <input type="hidden" id="hidddlpaymenttype" />
+                <div id="RemTbl222">
+                    @Html.Partial("_VPAsetDealer_SelfList")
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                    <i class="fas fa-times" aria-hidden="true"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-<script>
-    function ddlnamechange() {
-        var selectname = $('#ddlname').val();
-        if (selectname == "Retailer") {
-            $('#drpretailer').show()
-            $('#drpdealer').hide();
-            $('#drpmaster').hide();
-            $('#drpwhite').hide();
-        }
-        else if (selectname == "Distributor") {
-            $('#drpretailer').hide()
-            $('#drpdealer').show();
-            $('#drpmaster').hide();
-            $('#drpwhite').hide();
-        }
-        else if (selectname == "Master") {
-            $('#drpretailer').hide()
-            $('#drpdealer').hide();
-            $('#drpmaster').show();
-            $('#drpwhite').hide();
-        }
-        else if (selectname == "Whitelabel") {
-            $('#drpretailer').hide()
-            $('#drpdealer').hide();
-            $('#drpmaster').hide();
-            $('#drpwhite').show();
-        }
-        else {
-            $('#drpretailer').hide()
-            $('#drpdealer').hide();
-            $('#drpmaster').hide();
-            $('#drpwhite').hide();
-        }
-    }
-</script>
-<script>
-    function ddlnamechange1() {
-        var selectname = $('#ddlname1').val();
-        if (selectname == "Retailer") {
-            $('#drpretailer1').show()
-            $('#drpdealer1').hide();
-            $('#drpmaster1').hide();
-            $('#drpwhite1').hide();
-        }
-        else if (selectname == "Distributor") {
-            $('#drpretailer1').hide()
-            $('#drpdealer1').show();
-            $('#drpmaster1').hide();
-            $('#drpwhite1').hide();
-        }
-        else if (selectname == "Master") {
-            $('#drpretailer1').hide()
-            $('#drpdealer1').hide();
-            $('#drpmaster1').show();
-            $('#drpwhite1').hide();
-        }
-        else if (selectname == "Whitelabel") {
-            $('#drpretailer1').hide()
-            $('#drpdealer1').hide();
-            $('#drpmaster1').hide();
-            $('#drpwhite1').show();
-        }
-        else {
-            $('#drpretailer1').hide()
-            $('#drpdealer1').hide();
-            $('#drpmaster1').hide();
-            $('#drpwhite1').hide();
-        }
-    }
-</script>
-<script>
-    function editmaster() {
-        $('#editbuttonmaster').hide();
-        $('#btnsubmit').show();
-        $('#tbodyshow').hide();
-        $('#tbodyedit').show();
-    }
-    function editRetailer() {
-        $('#editbuttonRetailer').hide();
-        $('#btnsubmit1').show();
-        $('#tbodyshowretailer').hide();
-        $('#tbodyeditretailer').show();
-    }
-    function editDealer() {
-        $('#editbuttonDealer').hide();
-        $('#btnsubmit2').show();
-        $('#tbodyshowdealer').hide();
-        $('#tbodyeditdealer').show();
-    }
-
-    function editApi() {
-        $('#editbuttonapi').hide();
-        $('#btnsubmit3').show();
-        $('#tbodyshowapi').hide();
-        $('#tbodyeditapi').show();
-    }
-    function editWhite() {
-        $('#editbuttonwhite').hide();
-        $('#btnsubmit4').show();
-        $('#tbodyshowwhite').hide();
-        $('#tbodyeditwhite').show();
-    }
-</script>
-<script>
-    function success() {
-        $('#editbuttonmaster').show();
-        $('#btnsubmit').hide();
-        $('#tbodyshow').show();
-        $('#tbodyedit').hide();
-        //$('#mastersubmit').submit();
-    }
-    function success1() {
-        $('#editbuttonRetailer').show();
-        $('#btnsubmit1').hide();
-        $('#tbodyshowretailer').show();
-        $('#tbodyeditretailer').hide();
-        //$('#Retailersubmit').submit();
-    }
-    function success2() {
-        $('#editbuttonDealer').show();
-        $('#btnsubmit2').hide();
-        $('#tbodyshowdealer').show();
-        $('#tbodyeditdealer').hide();
-        $('#Dealersubmit').submit();
-    }
-
-    function success3() {
-        $('#editbuttonApi').show();
-        $('#btnsubmit3').hide();
-        $('#tbodyshowapi').show();
-        $('#tbodyeditapi').hide();
-        $('#Apisubmit').submit();
-    }
-
-    function success4() {
-        $('#editbuttonWhite').show();
-        $('#btnsubmit4').hide();
-        $('#tbodyshowWhite').show();
-        $('#tbodyeditWhite').hide();
-        $('#Whitesubmit').submit();
-    }
-</script>
-
-<!--=======    Modal For Bank Details   ========-->
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
-
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-@*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
-
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-<!------------------------------------------partialpage-->
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
-
 <script>
-    function failed(error) {
-        alert(error.statusText);
+    window.upiSelect2Url = '@Url.Content("~/MainFrontDesign/select2/dist/js/select2.full.min.js")';
+
+    function initUpiRetailerSelect2() {
+        var $ = window.jQuery;
+        var $retailer = $('#Retailerid');
+        if (!$retailer.length || !$.fn.select2) {
+            return;
+        }
+        if ($retailer.hasClass('select2-hidden-accessible')) {
+            $retailer.select2('destroy');
+        }
+        $retailer.select2({
+            width: '100%',
+            dropdownParent: $('#dealerUpiChargesForm'),
+            containerCssClass: 'vm-ecom-select2',
+            dropdownCssClass: 'vm-ecom-select2-drop',
+            minimumResultsForSearch: 0,
+            placeholder: 'Select Retailer'
+        });
     }
-    function failed1(error) {
-        alert(error.statusText);
-    }
-</script>
 
-<script>
-    $('#ddlname').select2();
-    $('#Retailerid').select2();
-    $('#Dealerid').select2();
-    $('#Masterid').select2();
-    $('#Whitelabelid').select2();
-    $('#ddlstatus').select2();
-</script>
-
-<!------------------------>
-
-<script>
-$(document).ready(function(){
-    $("button.shownextrow").click(function () {
-        $(this).closest("tr").next().show();
-        $(this).closest("tr").hide();
-    });
-     $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true,
-                orientation: "bottom auto",
-
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-    }
-     if (val != "post") {
-                $("#txt_frm_date1").datepicker("setDate", new Date());
-                $("#txt_to_date1").datepicker("setDate", new Date());
+    function ddlnamechange() {
+        var $ = window.jQuery;
+        var selectname = $('#ddlname').val();
+        var $retailerWrap = $('#drpretailer');
+        if (selectname === 'Retailer') {
+            $retailerWrap.removeClass('vm-upi-retailer-field--hidden');
+            initUpiRetailerSelect2();
+        } else {
+            $retailerWrap.addClass('vm-upi-retailer-field--hidden');
+            var $retailer = $('#Retailerid');
+            if ($retailer.hasClass('select2-hidden-accessible')) {
+                $retailer.val('').trigger('change.select2');
+                $retailer.select2('destroy');
+            } else {
+                $retailer.val('');
             }
-    });
-</script>
-
-
-<script>
-    window.onload = function () {
-        var message = '@ViewData["successorder"]';
-        if (message != "" && message != null) {
-            swal("Good job!", message, "success");
-
-        }
-        var errormessage = '@ViewData["failedorder"]';
-        if (errormessage != "" && errormessage != null) {
-            swal("Oops!", errormessage, "error");
-
-        }
-
-    }
-</script>
-<script type="text/jscript">
-    $(function () {
-        var data = '@ViewData["show"]';
-        if (data != "") {
-            sweetAlert("Oops...", data, "error");
-        }
-        })
-
-
-</script>
-
-
-
-<script>
-    $(document).ready(function () {
-        $("button#edit-to-change").click(function () {
-            $('#banks-modal2').show();
-            $('#banks-modal1').hide();
-        });
-        $("button#edit-to-change1").click(function () {
-            $('#banks-modal4').show();
-            $('#banks-modal3').hide();
-        });
-        $("button#edit-to-change2").click(function () {
-            $('#banks-modal6').show();
-            $('#banks-modal5').hide();
-        });
-        $("button#edit-to-change3").click(function () {
-            $('#banks-modal8').show();
-            $('#banks-modal7').hide();
-        });
-    });
-</script>
-<!--  ==   Script For tabs2  ==--->
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        $('ul.tabs2 li').click(function () {
-            var tab_id = $(this).attr('data-tab');
-
-
-            $('ul.tabs2 li').removeClass('current2');
-            $('.tab-content2').removeClass('current2');
-
-
-            $(this).addClass('current2');
-            $("#" + tab_id).addClass('current2');
-
-        })
-
-    })
-</script>
-<!--  ==   Script For tabs3  ==--->
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        $('ul.tabs3 li').click(function () {
-            var tab_id = $(this).attr('data-tab');
-
-            $('ul.tabs3 li').removeClass('current3');
-            $('.tab-content3').removeClass('current3');
-
-            $(this).addClass('current3');
-            $("#" + tab_id).addClass('current3');
-        })
-
-    })
-</script>
-
-
-
-
-<script type="text/javascript">
-
-    function show(elementId) {
-        if (elementId == "RetailerSRC") {
-            document.getElementById("RetailerSRC").style.display = "block";
-            document.getElementById("WAdminSRC").style.display = "none";
-            document.getElementById("VendorSRC").style.display = "none";
-
-        }
-        else if (elementId == "WAdminSRC") {
-            document.getElementById("RetailerSRC").style.display = "none";
-            document.getElementById("WAdminSRC").style.display = "block";
-            document.getElementById("VendorSRC").style.display = "none";
-
-        }
-        else {
-            document.getElementById("RetailerSRC").style.display = "none";
-            document.getElementById("WAdminSRC").style.display = "none";
-            document.getElementById("VendorSRC").style.display = "block";
-
         }
     }
-</script>
-<script>
-    $(document).ready(function () {
-        $('.ca-dipo-right ul.just-bottom li.fli2').click(function () {
-            $(".ca-dipo-right ul.just-bottom li.fli1,.ca-dipo-right ul.just-bottom li.fli3").removeClass("acttt");
-            $(this).addClass("acttt");
-        });
 
-        $('.ca-dipo-right ul.just-bottom li.fli3').click(function () {
-            $(".ca-dipo-right ul.just-bottom li.fli1,.ca-dipo-right ul.just-bottom li.fli2").removeClass("acttt");
-            $(this).addClass("acttt");
-        });
-
-        $('.ca-dipo-right ul.just-bottom li.fli1').click(function () {
-            $(".ca-dipo-right ul.just-bottom li.fli2,.ca-dipo-right ul.just-bottom li.fli3").removeClass("acttt");
-            $(this).addClass("acttt");
-        });
-    });
-</script>
-
-
-
-<label style="color:red;">@Model.msg</label>
-
-
-
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        var msg = '@TempData["msgupi"]';
-        if (msg != "") {
-            sweetAlert("Oops...", msg, "error");
+    window.initDealerVpaModalControls = function initDealerVpaModalControls() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn.select2) {
+            return;
         }
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        var msg = '@TempData["msgupisucc"]';
-        if (msg != "") {
-            swal("Success", "Pending To Success", "success");
+        var $modal = $('#myModal123');
+        var $type = $('#ddlpaytmtype');
+        if ($type.length) {
+            $type.addClass('form-control vm-vpa-type-select');
+            if ($type.hasClass('select2-hidden-accessible')) {
+                $type.select2('destroy');
+            }
+            $type.select2({
+                width: '100%',
+                dropdownParent: $modal,
+                containerCssClass: 'vm-vpa-select2',
+                dropdownCssClass: 'vm-vpa-select2-drop',
+                minimumResultsForSearch: Infinity,
+                placeholder: 'Select VPA Name'
+            });
         }
-    });
-</script>
+        $('#txtupiid, #txtotp').addClass('form-control vm-vpa-input');
+    };
 
+    function upiChargesSearch() {
+        var value = ($('#myInput').val() || '').toLowerCase();
+        $('#upiChargesReport tbody tr.tr').filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    }
 
-<script>
+    function toggleUpiChargesTotals() {
+        var panel = $('#upiChargesTotalsPanel');
+        var btn = $('.vm-upi-totals-btn');
+        if (panel.is(':visible')) {
+            hideUpiChargesTotals();
+            return;
+        }
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        btn.attr('aria-expanded', 'true');
+    }
+
+    function hideUpiChargesTotals() {
+        $('#upiChargesTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-upi-totals-btn').attr('aria-expanded', 'false');
+    }
+
     function UPIRESPONSEsss(status, idno, firmname, txndate, amount) {
-        $('#txtBankRRN').val('')
-        $('#txtcode').val('')
-        if (status == 'REJECTED') {
-            $('#defaultModalLabel').text('Fail Transection');
-            /* $('#txtBankRRN').val('REJECTED')*/
-            $('#txtBankRRN').prop('disabled', true)
-
+        $('#txtBankRRN').val('');
+        $('#txtcode').val('');
+        if (status === 'REJECTED') {
+            $('#upiTxnModalTitle').text('Fail Transaction');
+            $('#txtBankRRN').prop('disabled', true);
+        } else {
+            $('#upiTxnModalTitle').text('Confirm Transaction');
+            $('#txtBankRRN').prop('disabled', false);
         }
-        else {
-            $('#defaultModalLabel').text('Confirm Transection');
-            $('#txtBankRRN').prop('disabled', false)
-
-
-        }
-
         $('#hideupiidres').val(idno);
         $('#hideupiidrestypes').val(status);
         $('#txtremfrmname').val(firmname);
         $('#txttxndate').val(txndate);
         $('#txtremamount').val(amount);
     }
-</script>
 
-
-<script type="text/javascript">
-    function eselectAll() {
-        var items = document.getElementsByName('acs1');
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].type == 'checkbox')
-                items[i].checked = true;
-        }
+    function upiEsc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
     }
-    function eUnSelectAll() {
-        var items = document.getElementsByName('acs1');
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].type == 'checkbox')
-                items[i].checked = false;
-        }
+
+    function upiNum(value) {
+        var n = parseFloat(String(value || '').replace(/,/g, '').replace(/[^\d.-]/g, ''));
+        return isNaN(n) ? 0 : n;
     }
-</script>
 
-
-<script type="text/javascript">
-                $(document).ready(function () {
-                    loadSelfUpiBlockStatus();
-        $("#SaveAll").click(function () {
-            var optCode = []
-
-                $("#SelfUpiCheckUncheck input").each(function () {
-                    if ($(this).prop('checked') == true) {
-                        optCode.push($(this).val() + ",Y");
-                    }
-                    if ($(this).prop('checked') == false) {
-                        optCode.push($(this).val() + ",N");
-                    }
-                });
-
-            document.getElementById("loadermoney").style.display = "block";
-
-            $.ajax({
-                         type: "POST",
-                         url: '@Url.Action("Blocked_Self_Upi_SettingSave", "Home")',
-                         data: { 'ch': optCode },
-                         cache: false,
-                         dataType: 'json',
-                         async: true,
-                         success: function (data) {
-                             var pp = data.status;
-                             var mm = data.Message;
-
-                             if (pp) {
-                                 document.getElementById("loadermoney").style.display = "none";
-                                 toastr.success('UPI Mode Successfully Blocked', 'Self UPI Block');
-                             }
-                             else {
-                                 toastr.error(mm, 'Self UPI Block Error');
-                             }
-
-                         }
-                     });
-
+    function upiTableRows() {
+        var rows = [];
+        $('#upiChargesReport tbody tr.tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-dmt-total-row')) {
+                return;
+            }
+            var $cells = $tr.children('td');
+            if ($cells.length < 12) {
+                return;
+            }
+            rows.push({
+                sno: $.trim($cells.eq(0).text()),
+                status: $.trim($cells.eq(1).find('.vm-radiant-status-text').text() || $cells.eq(1).text()).replace(/\s+/g, ' '),
+                role: $.trim($cells.eq(2).text()),
+                user: $.trim($cells.eq(3).text()),
+                payer: $.trim($cells.eq(4).text()),
+                remainPre: $.trim($cells.eq(5).text()),
+                amount: $.trim($cells.eq(6).text()),
+                charge: $.trim($cells.eq(7).text()),
+                netPay: $.trim($cells.eq(8).text()),
+                remainPost: $.trim($cells.eq(9).text()),
+                bankRrn: $.trim($cells.eq(10).text()),
+                txnTime: $.trim($cells.eq(11).text())
+            });
         });
+        return rows;
+    }
 
-        function loadSelfUpiBlockStatus() {
-             $.ajax({
-                type: "GET",
-                url: '@Url.Action("Check_Unchek_Blocked_Self_Upi_Setting", "Home")',
-                cache: false,
-                dataType: 'json',
-                async: true,
-                success: function (data) {
-                    var obj = data;
+    function upiStatusColors(status) {
+        var raw = String(status || '').toLowerCase();
+        if (raw.indexOf('success') >= 0) {
+            return { bg: '#ECFDF5', fg: '#047857', badge: 'badge-ok', label: 'Success' };
+        }
+        if (raw.indexOf('fail') >= 0) {
+            return { bg: '#FEE2E2', fg: '#B91C1C', badge: 'badge-fail', label: 'Failed' };
+        }
+        return { bg: '#FEFCE8', fg: '#854D0E', badge: 'badge-wait', label: 'Pending' };
+    }
 
-                    for (var item in obj) {
-                        var sts = obj[item].status;
-                        var name = obj[item].Upi_Mode;
-                        if (sts == "Y") {
-                            $("#" + name + "").prop("checked", true);
-                        }
-                    }
+    function upiExportMeta(rows) {
+        var total = 0, success = 0, failed = 0, pending = 0, charge = 0, net = 0;
+        for (var i = 0; i < rows.length; i++) {
+            var amt = upiNum(rows[i].amount);
+            var ch = upiNum(rows[i].charge);
+            var np = upiNum(rows[i].netPay);
+            var raw = String(rows[i].status || '').toLowerCase();
+            total += amt;
+            charge += ch;
+            net += np;
+            if (raw.indexOf('success') >= 0) { success += amt; }
+            else if (raw.indexOf('fail') >= 0) { failed += amt; }
+            else { pending += amt; }
+        }
+        return {
+            generatedOn: new Date().toLocaleString(),
+            frmDate: $('#txt_frm_date').val() || '-',
+            toDate: $('#txt_to_date').val() || '-',
+            roleFilter: $('#ddlname').val() || 'ALL',
+            statusFilter: $('#ddlstatus').val() || 'ALL',
+            records: rows.length,
+            total: total.toFixed(2),
+            success: success.toFixed(2),
+            failed: failed.toFixed(2),
+            pending: pending.toFixed(2),
+            charge: charge.toFixed(2),
+            net: net.toFixed(2)
+        };
+    }
+
+    function upiBuildExcelHtml(rows) {
+        var m = upiExportMeta(rows);
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8" /><title>Self UPI Payment Report</title></head><body>';
+        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">';
+        html += '<tr><td colspan="12" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;">Self UPI Payment Report</td></tr>';
+        html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">From</td><td style="font-weight:bold;">' + upiEsc(m.frmDate) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">To</td><td style="font-weight:bold;">' + upiEsc(m.toDate) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Role</td><td style="font-weight:bold;">' + upiEsc(m.roleFilter) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Status</td><td style="font-weight:bold;">' + upiEsc(m.statusFilter) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Records</td><td colspan="3" style="font-weight:bold;">' + m.records + '</td></tr>';
+        html += '<tr><td bgcolor="#EEF2FF" style="font-weight:bold;">Total</td><td style="font-weight:bold;">' + m.total + '</td>';
+        html += '<td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">Success</td><td style="font-weight:bold;color:#047857;">' + m.success + '</td>';
+        html += '<td bgcolor="#FEF2F2" style="font-weight:bold;color:#B91C1C;">Failed</td><td style="font-weight:bold;color:#B91C1C;">' + m.failed + '</td>';
+        html += '<td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">Pending</td><td style="font-weight:bold;color:#854D0E;">' + m.pending + '</td>';
+        html += '<td bgcolor="#EFF6FF" style="font-weight:bold;color:#1D4ED8;">Charges</td><td style="font-weight:bold;color:#1D4ED8;">' + m.charge + '</td>';
+        html += '<td bgcolor="#EFF6FF" style="font-weight:bold;color:#1D4ED8;">Net</td><td style="font-weight:bold;color:#1D4ED8;">' + m.net + '</td></tr>';
+        var heads = ['S.No', 'Status', 'Role', 'User', 'Payer Name', 'Remain Pre', 'Amount', 'Charges', 'Net Pay', 'Remain Post', 'Bank RRN', 'Transaction Time'];
+        html += '<tr>';
+        for (var h = 0; h < heads.length; h++) {
+            html += '<th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">' + heads[h] + '</th>';
+        }
+        html += '</tr>';
+        if (!rows.length) {
+            html += '<tr><td colspan="12" bgcolor="#F8FAFC" style="text-align:center;font-weight:bold;color:#64748B;">Self UPI transaction not found.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                var c = upiStatusColors(r.status);
+                var rowBg = (i % 2 === 1) ? '#F8FAFC' : '#FFFFFF';
+                html += '<tr>';
+                html += '<td bgcolor="' + rowBg + '">' + upiEsc(r.sno) + '</td>';
+                html += '<td bgcolor="' + c.bg + '" style="color:' + c.fg + ';font-weight:bold;">' + upiEsc(c.label) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + upiEsc(r.role) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + upiEsc(r.user) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + upiEsc(r.payer) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + upiEsc(r.remainPre) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + upiEsc(r.amount) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + upiEsc(r.charge) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + upiEsc(r.netPay) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + upiEsc(r.remainPost) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + upiEsc(r.bankRrn) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + upiEsc(r.txnTime) + '</td>';
+                html += '</tr>';
+            }
+        }
+        html += '</table></body></html>';
+        return html;
+    }
+
+    function upiBuildPdfHtml(rows) {
+        var m = upiExportMeta(rows);
+        var body = '';
+        if (!rows.length) {
+            body = '<tr><td colspan="12" class="empty">Self UPI transaction not found for the selected date range.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                var c = upiStatusColors(r.status);
+                body += '<tr>';
+                body += '<td>' + upiEsc(r.sno) + '</td>';
+                body += '<td><span class="badge ' + c.badge + '">' + upiEsc(c.label) + '</span></td>';
+                body += '<td>' + upiEsc(r.role) + '</td>';
+                body += '<td>' + upiEsc(r.user) + '</td>';
+                body += '<td>' + upiEsc(r.payer) + '</td>';
+                body += '<td class="num">' + upiEsc(r.remainPre) + '</td>';
+                body += '<td class="num">' + upiEsc(r.amount) + '</td>';
+                body += '<td class="num">' + upiEsc(r.charge) + '</td>';
+                body += '<td class="num">' + upiEsc(r.netPay) + '</td>';
+                body += '<td class="num">' + upiEsc(r.remainPost) + '</td>';
+                body += '<td>' + upiEsc(r.bankRrn) + '</td>';
+                body += '<td>' + upiEsc(r.txnTime) + '</td>';
+                body += '</tr>';
+            }
+            body += '<tr class="total-row">';
+            body += '<td colspan="6">Total</td>';
+            body += '<td class="num">' + m.total + '</td>';
+            body += '<td class="num">' + m.charge + '</td>';
+            body += '<td class="num">' + m.net + '</td>';
+            body += '<td colspan="3">&nbsp;</td>';
+            body += '</tr>';
+        }
+        return '<!DOCTYPE html><html><head><meta charset="utf-8" /><title>Self UPI Payment Report</title><style type="text/css">'
+            + '@@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }'
+            + '* { box-sizing: border-box; }'
+            + 'html, body { width: 100%; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #0f172a; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }'
+            + 'body { padding: 16px; }'
+            + '.sheet { width: 100%; max-width: 100%; }'
+            + 'table { page-break-inside: auto; border-collapse: collapse; width: 100%; }'
+            + 'tr { page-break-inside: avoid; page-break-after: auto; }'
+            + 'thead { display: table-header-group; }'
+            + '.hero { width: 100%; border: 1px solid #1d4ed8; overflow: hidden; margin-bottom: 12px; }'
+            + '.hero-top { padding: 14px 18px; background: #2563eb; color: #fff; }'
+            + '.hero-top h1 { margin: 0; font-size: 20px; font-weight: 700; }'
+            + '.hero-top p { margin: 4px 0 0; font-size: 11px; color: #dbeafe; }'
+            + '.meta { width: 100%; background: #f8fafc; border-top: 1px solid #bfdbfe; }'
+            + '.meta td { padding: 8px 12px; border-right: 1px solid #e2e8f0; vertical-align: top; }'
+            + '.meta td:last-child { border-right: none; }'
+            + '.meta-label { display: block; font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #64748b; margin-bottom: 3px; }'
+            + '.meta-value { font-size: 12px; font-weight: 700; color: #0f172a; }'
+            + '.cards { width: 100%; margin: 0 0 12px 0; table-layout: fixed; }'
+            + '.cards td { width: 25%; padding: 0 6px 0 0; vertical-align: top; }'
+            + '.cards td:last-child { padding-right: 0; }'
+            + '.card { border: 1px solid #e2e8f0; padding: 10px 12px; min-height: 58px; }'
+            + '.card-label { display: block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }'
+            + '.card-value { font-size: 16px; font-weight: 800; }'
+            + '.card-total { background: #eef2ff; border-color: #c7d2fe; }'
+            + '.card-total .card-label, .card-total .card-value { color: #1d4ed8; }'
+            + '.card-ok { background: #ecfdf5; border-color: #a7f3d0; }'
+            + '.card-ok .card-label, .card-ok .card-value { color: #047857; }'
+            + '.card-fail { background: #fef2f2; border-color: #fecaca; }'
+            + '.card-fail .card-label, .card-fail .card-value { color: #b91c1c; }'
+            + '.card-wait { background: #fefce8; border-color: #fde68a; }'
+            + '.card-wait .card-label, .card-wait .card-value { color: #854d0e; }'
+            + '.grid { width: 100%; border: 1px solid #cbd5e1; table-layout: auto; }'
+            + '.grid th { padding: 9px 7px; text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #fff; background: #334155; border-right: 1px solid #1e293b; white-space: nowrap; }'
+            + '.grid td { padding: 8px 7px; font-size: 11px; color: #1e293b; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; vertical-align: middle; }'
+            + '.grid tbody tr:nth-child(even) td { background: #f8fafc; }'
+            + '.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }'
+            + '.badge { display: inline-block; min-width: 58px; padding: 3px 8px; font-size: 10px; font-weight: 700; text-align: center; }'
+            + '.badge-ok { background: #ecfdf5; color: #047857; }'
+            + '.badge-fail { background: #fee2e2; color: #b91c1c; }'
+            + '.badge-wait { background: #fef9c3; color: #854d0e; }'
+            + '.total-row td { background: #eff6ff !important; font-weight: 700; color: #1d4ed8; }'
+            + '.empty { padding: 36px 16px; text-align: center; font-size: 14px; font-weight: 700; color: #64748b; background: #f8fafc; }'
+            + '.foot { margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 10px; color: #94a3b8; text-align: center; }'
+            + '</style></head><body>'
+            + '<div class="sheet">'
+            + '<div class="hero"><div class="hero-top"><h1>Self UPI Payment Report</h1><p>Dealer reports - self UPI payment transactions</p></div>'
+            + '<table class="meta" cellpadding="0" cellspacing="0"><tr>'
+            + '<td style="width:22%;"><span class="meta-label">Generated On</span><span class="meta-value">' + upiEsc(m.generatedOn) + '</span></td>'
+            + '<td style="width:28%;"><span class="meta-label">Date Range</span><span class="meta-value">' + upiEsc(m.frmDate) + ' to ' + upiEsc(m.toDate) + '</span></td>'
+            + '<td style="width:18%;"><span class="meta-label">Role Filter</span><span class="meta-value">' + upiEsc(m.roleFilter) + '</span></td>'
+            + '<td style="width:18%;"><span class="meta-label">Status Filter</span><span class="meta-value">' + upiEsc(m.statusFilter) + '</span></td>'
+            + '<td style="width:14%;"><span class="meta-label">Records</span><span class="meta-value">' + m.records + '</span></td>'
+            + '</tr></table></div>'
+            + '<table class="cards" cellpadding="0" cellspacing="0"><tr>'
+            + '<td><div class="card card-total"><span class="card-label">Total Amount</span><span class="card-value">' + m.total + '</span></div></td>'
+            + '<td><div class="card card-ok"><span class="card-label">Success</span><span class="card-value">' + m.success + '</span></div></td>'
+            + '<td><div class="card card-fail"><span class="card-label">Failed</span><span class="card-value">' + m.failed + '</span></div></td>'
+            + '<td><div class="card card-wait"><span class="card-label">Pending</span><span class="card-value">' + m.pending + '</span></div></td>'
+            + '</tr></table>'
+            + '<table class="grid" cellpadding="0" cellspacing="0"><thead><tr>'
+            + '<th>S.No</th><th>Status</th><th>Role</th><th>User</th><th>Payer</th><th>Remain Pre</th><th>Amount</th><th>Charges</th><th>Net Pay</th><th>Remain Post</th><th>Bank RRN</th><th>Txn Time</th>'
+            + '</tr></thead><tbody>' + body + '</tbody></table>'
+            + '<div class="foot">Generated from Dealer panel - Self UPI Payment Report</div>'
+            + '</div>'
+            + '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},300);};<\/script>'
+            + '</body></html>';
+    }
+
+    function upiDownloadExcel(html) {
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel' });
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'Self_UPI_Payment_Report.xls');
+            return;
+        }
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'Self_UPI_Payment_Report.xls';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+    }
+
+    function upiOpenPdf(html) {
+        var w = window.open('', '_blank');
+        if (!w) { return; }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+        w.focus();
+    }
+
+    function upiLoadScript(src, done) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = done;
+        s.onerror = done;
+        document.body.appendChild(s);
+    }
+
+    function bootUpiChargesReport() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.datepicker) {
+            window.setTimeout(bootUpiChargesReport, 50);
+            return;
+        }
+
+        function afterPlugins() {
+            $('.saas-upi-dealer-charges-page .for-select2').each(function () {
+                var $el = $(this);
+                if ($.fn.select2 && !$el.hasClass('select2-hidden-accessible')) {
+                    $el.select2({
+                        width: '100%',
+                        dropdownParent: $('#dealerUpiChargesForm'),
+                        containerCssClass: 'vm-ecom-select2',
+                        dropdownCssClass: 'vm-ecom-select2-drop',
+                        minimumResultsForSearch: 0
+                    });
                 }
             });
+
+            $('#ddlname').off('change.upiRole').on('change.upiRole', ddlnamechange);
+            ddlnamechange();
+
+            $('#myModal123').off('shown.bs.modal.upiVpa').on('shown.bs.modal.upiVpa', function () {
+                initDealerVpaModalControls();
+            });
+
+            if (typeof window.initAdminReportDateForm === 'function') {
+                window.initAdminReportDateForm('#dealerUpiChargesForm');
+            } else {
+                $('#txt_frm_date, #txt_to_date').datepicker({
+                    format: 'yyyy-mm-dd',
+                    todayHighlight: true,
+                    autoclose: true,
+                    orientation: 'bottom auto',
+                    container: 'body'
+                });
+                if ($('#dealerUpiChargesForm').attr('data-date-mode') !== 'post') {
+                    $('#txt_frm_date').datepicker('setDate', new Date());
+                    $('#txt_to_date').datepicker('setDate', new Date());
+                }
+            }
+
+            $('#btnExport').off('click.upiEx').on('click.upiEx', function () {
+                upiDownloadExcel(upiBuildExcelHtml(upiTableRows()));
+            });
+            $('#btnPDF').off('click.upiPdf').on('click.upiPdf', function () {
+                upiOpenPdf(upiBuildPdfHtml(upiTableRows()));
+            });
         }
-        });
+
+        if ($.fn.select2) {
+            afterPlugins();
+            return;
+        }
+        upiLoadScript(window.upiSelect2Url, afterPlugins);
+    }
+
+    if (document.readyState === 'complete') {
+        bootUpiChargesReport();
+    } else {
+        window.addEventListener('load', bootUpiChargesReport);
+    }
+
+    window.onload = function () {
+        var message = '@ViewData["successorder"]';
+        if (message !== '' && message != null) {
+            swal('Good job!', message, 'success');
+        }
+        var errormessage = '@ViewData["failedorder"]';
+        if (errormessage !== '' && errormessage != null) {
+            swal('Oops!', errormessage, 'error');
+        }
+        var data = '@ViewData["show"]';
+        if (data !== '') {
+            sweetAlert('Oops...', data, 'error');
+        }
+        var msg = '@TempData["msgupi"]';
+        if (msg !== '') {
+            sweetAlert('Oops...', msg, 'error');
+        }
+        var msgSucc = '@TempData["msgupisucc"]';
+        if (msgSucc !== '') {
+            swal('Success', 'Pending To Success', 'success');
+        }
+    };
 </script>
+
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-upi-dealer-charges-page .vm-upi-table-search {
+            min-width: 160px;
+            max-width: 220px;
+        }
+
+        body.saas-admin-ui section.content.saas-upi-dealer-charges-page .vm-upi-table-search input {
+            height: 34px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        body.saas-admin-ui section.content.saas-upi-dealer-charges-page .vm-upi-vpa-btn {
+            white-space: nowrap;
+        }
+
+        body.saas-admin-ui section.content.saas-upi-dealer-charges-page .vm-upi-action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            margin-right: 4px;
+        }
+
+        body.saas-admin-ui section.content.saas-upi-dealer-charges-page .vm-upi-action-btn--ok {
+            color: #047857;
+        }
+
+        body.saas-admin-ui section.content.saas-upi-dealer-charges-page .vm-upi-action-btn--fail {
+            color: #b91c1c;
+        }
+
+        body.saas-admin-ui section.content.saas-upi-dealer-charges-page .vm-dmt-total-row td {
+            background: #eff6ff !important;
+            font-weight: 700;
+            color: #1d4ed8;
+        }
+
+        body.saas-admin-ui section.content.saas-upi-dealer-charges-page .vm-upi-page-msg {
+            display: none;
+        }
+
+        body.saas-admin-ui section.content.saas-upi-dealer-charges-page .vm-dmt-modal-field--full {
+            grid-column: 1 / -1;
+        }
+
+        body.saas-admin-ui section.content.saas-upi-dealer-charges-page #drpretailer.vm-upi-retailer-field--hidden {
+            display: none !important;
+            width: 0 !important;
+            min-width: 0 !important;
+            max-width: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
+        body.saas-admin-ui section.content.saas-upi-dealer-charges-page #drpretailer.vm-upi-retailer-field--hidden .select2-container {
+            display: none !important;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .saas-admin-modal-title,
+        body.saas-admin-ui .vm-upi-vpa-modal .saas-admin-modal-subtitle {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel,
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel table,
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel th,
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel td,
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel input,
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel select,
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel button,
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel .select2-container .select2-selection__rendered,
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-vpa-lblmsg {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel th {
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel td {
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel .vm-vpa-input,
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel .vm-vpa-type-select,
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel .select2-container--default .select2-selection--single {
+            height: 38px !important;
+            min-height: 38px !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 10px !important;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 36px !important;
+            padding-left: 12px !important;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px !important;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel .vm-vpa-btn {
+            height: 38px;
+            padding: 0 14px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            color: #334155;
+            font-size: 14px !important;
+            font-weight: 700 !important;
+            white-space: nowrap;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel .vm-vpa-btn--primary {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #fff;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel .vm-vpa-btn--prefer {
+            background: #ecfdf5;
+            border-color: #bbf7d0;
+            color: #047857;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel .vm-vpa-btn--danger {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-dealer-vpa-panel .vm-vpa-add-row td {
+            background: #f8fafc;
+        }
+
+        body.saas-admin-ui .vm-upi-vpa-modal .vm-vpa-lblmsg {
+            display: block;
+            color: #dc2626;
+            margin-bottom: 8px;
+        }
+
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters input.form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters select.form-control,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-opr-select,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-dmt-select,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search span,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .select2-container .select2-selection--single,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page .vm-radiant-inline-filters .select2-container--default .select2-selection--single .select2-selection__rendered {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-ecommerce-report-page #txt_frm_date,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page #txt_to_date,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_frm_date.form-control.saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-ecommerce-report-page input#txt_to_date.form-control.saas-acc-dp-input {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+    </style>
+}

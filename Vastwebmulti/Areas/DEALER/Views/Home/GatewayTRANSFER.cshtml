@@ -1,920 +1,1018 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.gateway_report_Result>
+@using System.Linq
 @{
     ViewBag.Title = "GatewayTRANSFER";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
 
-    var totalsuccess = ViewBag.totalsuccess ?? 0;
-    var totalfailamnt = ViewBag.totalfailedamount ?? 0;
-    var penamount = ViewBag.totalpendingamount ?? 0;
-    var totalcharges = ViewBag.totalchargesamount ?? 0;
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.gateway_report_Result>();
+    var totalsuccess = ViewBag.totalsuccess ?? 0m;
+    var totalfailamnt = ViewBag.totalfailedamount ?? 0m;
+    var penamount = ViewBag.totalpendingamount ?? 0m;
+    var totalcharges = ViewBag.totalchargesamount ?? 0m;
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
 }
-<style>
-    .dropdown-menu.datepicker-dropdown.datepicker {
-        margin-top: 96px !important;
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-fund-transfer-fonts.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-fund-transfer-mobile.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page', 'saas-dealer-fund-transfer-page', 'saas-dealer-gateway-transfer-page');</script>
+
+<style type="text/css">
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page {
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+        padding: 6px 10px 12px !important;
+        min-height: calc(100vh - var(--admin-header-height, 58px)) !important;
+        display: flex !important;
+        flex-direction: column !important;
     }
 
-    span {
-        color: #fff !important;
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-page-shell.container-fluid,
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-layout-wrap,
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-layout.vm-ft-layout--full {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        float: none !important;
+        box-sizing: border-box !important;
     }
 
-    section.content {
-        margin: 87px 0px 0 164px;
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-layout.vm-ft-layout--full {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
     }
 
-    .datepicker table tr td span {
-        color: #555 !important;
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-form-col,
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-history-col {
+        float: none !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
     }
 
-        .datepicker table tr td span.active {
-            color: #fff !important;
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .fund-trasfer-left.vm-ft-form-card,
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .fund-trasfer-right.vm-ft-history-panel {
+        height: 600px !important;
+        min-height: 600px !important;
+        max-height: 600px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-left-tab-pane {
+        padding: 16px 18px 18px !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-history-body {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-table-wrap {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: auto !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-page-toolbar.vm-ft-page-toolbar--premium.vm-gw-page-toolbar {
+        margin-bottom: 10px !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 7px 10px !important;
+        min-height: 0 !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-page-toolbar .vm-ft-page-hero {
+        flex: 0 1 auto !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        margin-left: auto !important;
+        flex: 1 1 520px !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        min-height: 44px !important;
+        height: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        width: 100% !important;
+        padding: 6px 8px !important;
+        border-radius: 10px !important;
+        border: 1px solid #e2e8f0 !important;
+        background: #fff !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile__icon {
+        width: 26px !important;
+        height: 26px !important;
+        border-radius: 8px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 12px !important;
+        flex-shrink: 0 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile__body {
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+        overflow: hidden !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile__label {
+        display: block !important;
+        font-size: 8px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.02em !important;
+        color: #64748b !important;
+        line-height: 1.15 !important;
+        margin-bottom: 1px !important;
+        white-space: normal !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        word-break: break-word !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile__value {
+        display: block !important;
+        font-size: 12px !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        line-height: 1.1 !important;
+        font-variant-numeric: tabular-nums !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-date-search-group .saas-acc-dp-field .saas-acc-dp-input,
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-date-search-group .saas-acc-dp-field .form-control.saas-acc-dp-input,
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page #txt_frm_date,
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page #txt_to_date {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        line-height: 1.2 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-date-search-group .saas-acc-dp-input::placeholder {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--success {
+        background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%) !important;
+        border-color: #bbf7d0 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--success .vm-gw-summary-tile__icon {
+        background: #dcfce7 !important;
+        color: #047857 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--success .vm-gw-summary-tile__value {
+        color: #047857 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--pending {
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+        border-color: #fde68a !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--pending .vm-gw-summary-tile__icon {
+        background: #fef3c7 !important;
+        color: #b45309 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--pending .vm-gw-summary-tile__value {
+        color: #b45309 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--failed {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+        border-color: #fecaca !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--failed .vm-gw-summary-tile__icon {
+        background: #fee2e2 !important;
+        color: #b91c1c !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--failed .vm-gw-summary-tile__value {
+        color: #b91c1c !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--charges {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+        border-color: #bfdbfe !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--charges .vm-gw-summary-tile__icon {
+        background: #dbeafe !important;
+        color: #1d4ed8 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile--charges .vm-gw-summary-tile__value {
+        color: #1d4ed8 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-form-block label {
+        display: block !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        color: #334155 !important;
+        margin-bottom: 6px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-form-block input.form-control,
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-form-block select.form-control {
+        width: 100% !important;
+        height: 40px !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 10px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        padding: 0 12px !important;
+        box-shadow: none !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-type-row {
+        display: flex !important;
+        gap: 8px !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-type-row select {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-proceed-btn,
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-change-btn {
+        height: 40px !important;
+        padding: 0 16px !important;
+        border-radius: 10px !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        white-space: nowrap !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-change-btn {
+        display: none !important;
+        border: 1px solid #e2e8f0 !important;
+        background: #fff !important;
+        color: #475569 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-form-block {
+        margin-bottom: 14px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-error {
+        color: #dc2626 !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        margin-top: 6px !important;
+        display: block !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-msg {
+        color: #dc2626 !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        margin-top: 6px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page #showdata {
+        margin-top: 12px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page #showdata .responsive-scroll-sate {
+        overflow-x: auto !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 10px !important;
+        background: #fff !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page #showdata table {
+        margin: 0 !important;
+        width: 100% !important;
+        font-size: 12px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-pay-btn-wrap {
+        margin-top: 12px !important;
+        text-align: right !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-notes {
+        margin-top: 16px !important;
+        padding: 12px 14px !important;
+        border-radius: 10px !important;
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        font-size: 12px !important;
+        color: #475569 !important;
+        line-height: 1.5 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-notes ol {
+        margin: 0 !important;
+        padding-left: 18px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-search-wrap--history {
+        flex: 0 1 220px !important;
+        min-width: 160px !important;
+        max-width: 260px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-search-wrap--history input#myInput {
+        width: 100% !important;
+        height: 34px !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 10px !important;
+        padding: 0 12px !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-history-toolbar__filters.vm-ft-history-filters-row {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page #tblGatewayHistory.vm-ft-table thead th,
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page #tblGatewayHistory.vm-ft-table tbody td {
+        font-size: 12px !important;
+        vertical-align: middle !important;
+        padding: 9px 10px !important;
+        white-space: nowrap !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-mode-cell {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+    }
+
+    body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-mode-cell img {
+        width: 18px !important;
+        height: 18px !important;
+        border-radius: 50% !important;
+        padding: 2px !important;
+        flex-shrink: 0 !important;
+    }
+
+    @@media (min-width: 1200px) {
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-layout.vm-ft-layout--full {
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
         }
 
-    .tab-menur li a::before {
-        content: '';
-        width: 12px;
-        height: 12px;
-        display: inline-block;
-        border: 2px solid #bbb;
-        border-radius: 50%;
-        margin: 2px 6px 0px 0px;
-    }
-
-    .tab-menur li a.active-ar::before {
-        border-color: var(--main-bg-lcolor);
-        background: var(--main-bg-lcolor);
-    }
-
-    .tab-menur li a.active-ar {
-        color: var(--main-bg-lcolor);
-    }
-
-    .fund-t-dalear input {
-        border: 1px solid #bbb;
-        height: 32px;
-        padding: 0px 5px;
-        padding-top: 0px !important;
-        width: 100%;
-        padding-left: 40px;
-    }
-
-    .fund-t-dalear button {
-        height: 32px;
-        border: 1px solid #c7c2c2;
-        background: #fff;
-    }
-
-    .for-change-fund {
-        margin: 0px;
-        width: 100%;
-    }
-
-    .fund-fistory {
-        float: left;
-        margin-top: 0px;
-        font-size: 18px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-        .fund-fistory sub {
-            position: absolute;
-            bottom: 4px !important;
-            top: 24px;
-            line-height: 8px;
-            left: 11px;
-            font-size: 9px;
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-form-col {
+            flex: 0 0 calc(32% - 6px) !important;
+            max-width: calc(32% - 6px) !important;
+            width: calc(32% - 6px) !important;
         }
 
-    .nav-tabs li.active .for-change-fund .fa {
-        float: left;
-        font-size: 44px;
-        transform: rotate(-90deg);
-        margin-left: 5px;
-        color: var(--main-bg-lcolor) !important;
-        margin-top: -2px;
-        line-height: 36px;
-    }
-
-    .fund-trasfer-right .nav-tabs + .tab-content {
-        padding: 5px !important;
-    }
-
-    .fund-trasfer-right .tab-content {
-        height: 74vh;
-    }
-
-    .fund-trasfer-right .table-bordered tbody tr td {
-        padding: 10px;
-    }
-
-    .retailer-upitransfer {
-        padding-right: 0;
-    }
-
-        .retailer-upitransfer .col-md-3 {
-            padding-right: 0;
-        }
-
-            .retailer-upitransfer .col-md-3 label {
-                font-size: 10px;
-                text-transform: uppercase;
-                margin-bottom: 0px !important;
-            }
-
-            .retailer-upitransfer .col-md-3 input {
-                height: auto !important;
-                min-height: 28px;
-            }
-
-        .retailer-upitransfer .col-md-3 {
-            padding-left: 5px;
-        }
-
-    .retailer-upitransfer {
-        margin-bottom: 8px;
-        margin-top: -7px;
-    }
-
-        .retailer-upitransfer .col-md-3 .btn.btn-success {
-            background: #eeebeb !important;
-            color: #555 !important;
-        }
-
-    .gatewaytransfer-retailer-date .trypurchasecewq-new input, .gatewaytransfer-retailer-date .trypurchasecewq-new .custom-date-icon {
-        border-color: #555 !important;
-    }
-
-    .gatewaytransfer-retailer-date .trypurchasecewq-new .custom-date-icon {
-        height: 29px !important;
-        top: 1px !important;
-    }
-
-    .gatewaytransfer-retailer-date .apiclass-satenew-responshive button {
-        border-color: #555 !important;
-    }
-
-    .gatewaytransfer-pdfexal .trypurchasecewq-new {
-        width: 30%;
-        padding-right: 5px;
-        text-align: center;
-    }
-
-    .gatewaytransfer-pdfexal .apiclass-satenew-responshive {
-        width: 15%;
-        float: left;
-    }
-
-    .gatewaytransfer-pdfexal .col-md-3.buttonPdf {
-        padding: 0px !important;
-    }
-
-        .gatewaytransfer-pdfexal .col-md-3.buttonPdf button {
-            background-color: #fff !important;
-            color: #555;
-            border: 1px solid #555 !important;
-        }
-
-    .col-md-3.buttonPdf button:last-child {
-        padding-left: 15px;
-    }
-
-    .gatewaytransfer-class .col-md-12 {
-        padding: 0px;
-        margin-bottom: 5px;
-    }
-
-        .gatewaytransfer-class .col-md-12 input {
-            width: 100%;
-        }
-
-        .gatewaytransfer-class .col-md-12 select {
-            text-align: left !important;
-            width: 70%;
-            float: left;
-        }
-
-        .gatewaytransfer-class .col-md-12 button {
-            float: right;
-        }
-
-    .fourthdesign-retailer-allnone .col-md-4 {
-        padding-left: 0;
-    }
-
-    .fourthdesign-retailer-allnone .col-md-8 {
-        padding-right: 0px;
-    }
-
-
-
-    @@media screen and (max-width:1366px) {
-        .retailer-upitransfer {
-            margin-top: 0;
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-history-col {
+            flex: 1 1 0 !important;
+            max-width: none !important;
+            width: auto !important;
         }
     }
 
-    @@media screen and (max-width:992px) {
-        .retailer-upitransfer {
+    @@media (max-width: 1199px) {
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page {
+            padding: 6px 10px 14px !important;
+            overflow-x: hidden !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-page-toolbar {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            margin-left: 0 !important;
+            flex: 1 1 100% !important;
             width: 100% !important;
-            float: left;
         }
 
-            .retailer-upitransfer .col-md-3 {
-                width: 25%;
-                float: left;
-            }
-
-                .retailer-upitransfer .col-md-3 label, .retailer-upitransfer .col-md-3 input {
-                    width: 100%;
-                    float: left;
-                }
-
-        .col-md-12.retailer-upitransfer {
-            padding: 0;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .gatewaytransfer-pdfexal .col-md-3.buttonPdf {
-            display: block;
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile__label {
+            font-size: 9px !important;
         }
 
-        .gatewaytransfer-pdfexal .trypurchasecewq-new {
-            width: 50%;
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile__value {
+            font-size: 13px !important;
         }
 
-        .gatewaytransfer-pdfexal .apiclass-satenew-responshive {
-            width: auto;
-            float: left;
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-layout.vm-ft-layout--full {
+            flex-direction: column !important;
         }
 
-            .gatewaytransfer-pdfexal .apiclass-satenew-responshive button {
-                padding: 0 8px !important;
-            }
-
-        .gatewaytransfer-pdfexal .trypurchasecewq-new {
-            width: 50%;
-            padding-right: 5px;
-            text-align: center;
-            margin-bottom: 5px;
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-form-col,
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-history-col {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+            width: 100% !important;
         }
 
-        .gatewaytransfer-retailer-date.gatewaytransfer-pdfexal {
-            padding-left: 5px !important;
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .fund-trasfer-left.vm-ft-form-card,
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .fund-trasfer-right.vm-ft-history-panel {
+            height: auto !important;
+            min-height: 0 !important;
+            max-height: none !important;
         }
 
-        .gatewaytransfer-pdfexal .col-md-5:nth-child(2) {
-            padding-right: 0;
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-left-tab-pane {
+            overflow-y: visible !important;
         }
 
-        .fourthdesign-retailer-allnone .col-md-4, .fourthdesign-retailer-allnone .col-md-8 {
-            padding: 0;
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-history-toolbar__filters,
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-history-filters-row {
+            flex-wrap: wrap !important;
+            gap: 8px !important;
         }
-    }
 
-    @@media screen and (max-width:420px) {
-        #leftsidebar.sidebar.retailer-header-left, .second-design #leftsidebar.retailer-header-left.header-left-newresponshive.newresponshive-secondde {
-            margin-top: -88px !important;
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-search-wrap--history {
+            flex: 1 1 100% !important;
+            max-width: 100% !important;
+            width: 100% !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-date-search-group {
+            flex: 1 1 100% !important;
+            width: 100% !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-table-wrap {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page #tblGatewayHistory {
+            min-width: 880px !important;
         }
     }
 
-    @@media screen and (max-width:375px) {
-        .retailer-upitransfer .col-md-3 {
-            width: 50%;
-            float: left;
+    @@media (max-width: 767px) {
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page {
+            padding: 4px 8px 12px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-grid {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 6px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-tile {
+            min-height: 48px !important;
+            padding: 8px 10px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-type-row {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-type-row select,
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-proceed-btn,
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-change-btn {
+            width: 100% !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-history-toolbar {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-history-toolbar__filters {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-dmt-filter-search-group.vm-ft-date-search-group {
+            flex-direction: column !important;
+            width: 100% !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-date-search-group .saas-acc-dp-field {
+            width: 100% !important;
+            flex: 1 1 100% !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-date-search-group .vm-ft-search-btn,
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-date-search-group .saas-acc-btn {
+            width: 100% !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-export-group {
+            width: 100% !important;
+            justify-content: flex-end !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-form-card-header {
+            padding: 10px 12px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-left-tab-pane {
+            padding: 12px 14px 14px !important;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-gw-summary-grid {
+            grid-template-columns: 1fr !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-breadcrumb {
+            font-size: 12px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-form-card-header__title {
+            font-size: 14px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gateway-transfer-page .vm-ft-form-card-header__sub {
+            font-size: 12px !important;
         }
     }
 </style>
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section">
-    <div class="container-fluid">
-        <!--Four-Design-Page-Header-Start-->
 
-        <div class="page-title-box-fourde">
-            <h3>Add By Gateway</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Add By Gateway</a></li>
-            </ul>
-        </div>
+<section class="content saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium saas-dealer-fund-transfer-page saas-dealer-gateway-transfer-page">
 
-        <!--Four-Design-Page-Header-End-->
-        <div class="bread-same-all-page allpage-responshivenew">
-            <ul style="width:auto;float:left;">
-                <li class="smli">
-                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                    </a>
-                </li>
+    <div class="container-fluid vm-ft-page-shell">
 
-                <li class="fullbodydycolorbg tmw-total-color-one">
-                    Payment Gateway
-                </li>
-            </ul>
-            <div class="col-md-12 retailer-upitransfer" style="float:right;width:auto;">
-                <div class="col-md-3">
-                    <label>TOTAL SUCCESS</label> <input type="button" class="btn btn-success col-md-12" style="color:white;" value="@totalsuccess" />
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium vm-gw-page-toolbar">
+            <div class="vm-ft-page-hero">
+                <div>
+                    <ol class="vm-ft-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Fund Transfer</li>
+                        <li>Add By Gateway</li>
+                    </ol>
                 </div>
-                <div class="col-md-3">
-                    <label>TOTAL Pending</label> <input type="button" class="btn btn-warning  col-md-12" style="color:white;" value="@penamount" />
-                </div>
-
-                <div class="col-md-3">
-                    <label>TOTAL Failed</label>  <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalfailamnt" />
-                </div>
-
-                <div class="col-md-3">
-                    <label>TOTAL Charges</label> <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalcharges" />
-                </div>
-
             </div>
-        </div>
-
-    </div>
-
-    <div class="col-md-12">
-
-        <div class="row clearfix four-design-table-design">
-            <div class="col-md-4">
-                <div class="fund-trasfer-left fund-user-left">
-                    <ul class="nav nav-tabs tabtypeschages" id="tabs">
-                        <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true" style="font-size: 18px !important;font-weight: 600;">+ Wallet By Payment Gateway</a></li>
-                    </ul>
-                    <div class="width100 float-left ">
-                        <div id="home" class="width100 float-left tab-pane fade active in min-heightresponsive-inhe changeback-four-design" style="background: var(--second-bg-color);min-height:590px;">
-                            <div class="pay-mode">
-                                @using (Html.BeginForm("GatewayTransfer_new", "Home", FormMethod.Post))
-                                {
-
-
-                                    <input type="hidden" id="latss" required name="latss" />
-                                    <input type="hidden" id="longloc" required name="longloc" />
-                                    <div class="pay-mode-first paymt-mode-second gatewaytransfer-class">
-                                        <div class="col-md-12">
-                                            <label>Purchase Amount</label>
-                                            @Html.TextBox("txtamt", "", new { @onkeypress = "return isNumberKey(event)", @placeholder = "Enter Purchase Amount", @required = true })
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label>Transfer Type</label>
-                                            @Html.DropDownList("ddl_type", new List<SelectListItem>
-                           {
-                           new SelectListItem{Text="Net Banking",Value="NB"},
-                           new SelectListItem{Text="Wallet",Value="WA"},
-                           new SelectListItem{Text="UPI",Value="UP"},
-                           new SelectListItem{Text="Debit Card",Value="DC"},
-                           new SelectListItem{Text="Credit Card",Value="CC"},
-                           }, "Select Type", new { @class = "form-control", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;", @required = true })
-
-                                            <button type="button" class="fullbodydycolorbg" onclick="proceed()">
-                                                Proceed
-                                            </button>
-                                            <button type="button" class="pay-mode-edit" style="color: #000;border: 1px solid var(--border-color);background: var(--second-bg-color);">
-                                                Change
-                                            </button>
-
-                                        </div>
-
-
-                                        <label id="txtmsgerror" style="color:red;width:100%;float:left;"></label>
-                                        <label style="color:red;position:relative;top:5px;">@ViewBag.msg</label>
-                                    </div>
-                                    <div id="showdata" style="display:none;" class="pay-mode-second pay-mode-second-res">
-                                        <div class="responsive-scroll-sate" style="width:100%;float:left;">
-                                            <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
-
-                                                <tr>
-                                                    <th>Transaction Mode</th>
-                                                    <th>Charge&nbsp;(%)</th>
-                                                    <th>Total Charge</th>
-                                                    <th>Net Receiving</th>
-                                                </tr>
-                                                <tr>
-                                                    <td>Debit Card</td>
-                                                    <td> <label id="txtdebitcardcharge"></label>  %</td>
-                                                    <td> <label id="txtdebitcard_total"></label></td>
-                                                    <td><label id="txtdebitcard_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>RuPay Card</td>
-                                                    <td> <label id="txtrupay"></label>  %</td>
-                                                    <td> <label id="txtrupay_total"></label></td>
-                                                    <td><label id="txtrupay_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Credit Card</td>
-                                                    <td><label id="txtcc"></label>  %</td>
-                                                    <td><label id="txtcc_total"></label></td>
-                                                    <td><label id="txtcc_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Amex Card</td>
-                                                    <td><label id="txtamex"></label>  %</td>
-                                                    <td><label id="txtamex_total"></label></td>
-                                                    <td><label id="txtamex_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>International Card</td>
-                                                    <td><label id="txtic"></label>  %</td>
-                                                    <td><label id="txtic_total"></label></td>
-                                                    <td><label id="txtic_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Net Banking</td>
-                                                    <td> <label id="txtnet"></label>  %</td>
-                                                    <td> <label id="txtnet_total"></label></td>
-                                                    <td><label id="txtnet_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Wallet's</td>
-                                                    <td> <label id="txtwallet"></label>  %</td>
-                                                    <td> <label id="txtwallet_total"></label></td>
-                                                    <td><label id="txtwallet_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>UPI</td>
-                                                    <td> <label id="txtupi"></label>  %</td>
-                                                    <td> <label id="txtupi_total"></label></td>
-                                                    <td><label id="txtupi_total_pay"></label></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        <div class="pay-mobe-pay">
-                                            <button type="submit" class="fullbodydycolorbg">Proceed To Pay</button>
-                                        </div>
-                                    </div>
-                                    <div class="pay-mode-third">
-
-                                        <ol>
-                                            <li>With the payment gateway you can purchase wallet balance and note that the gateway fee will apply.</li>
-                                            <li>Gateway fees and if there is any credit outstanding then the balance after deduction will be fixed in your wallet.</li>
-                                            <li>
-                                                Please do not refresh and close this page on transaction processing.
-                                            </li>
-                                        </ol>
-                                    </div>
-
-                                }
-                            </div>
-                        </div>
+            <div class="vm-gw-summary-grid">
+                <div class="vm-gw-summary-tile vm-gw-summary-tile--success">
+                    <div class="vm-gw-summary-tile__icon" aria-hidden="true"><i class="fas fa-check-circle"></i></div>
+                    <div class="vm-gw-summary-tile__body">
+                        <span class="vm-gw-summary-tile__label">Total Success</span>
+                        <strong class="vm-gw-summary-tile__value">@Convert.ToDecimal(totalsuccess).ToString("N2")</strong>
+                    </div>
+                </div>
+                <div class="vm-gw-summary-tile vm-gw-summary-tile--pending">
+                    <div class="vm-gw-summary-tile__icon" aria-hidden="true"><i class="fas fa-clock"></i></div>
+                    <div class="vm-gw-summary-tile__body">
+                        <span class="vm-gw-summary-tile__label">Total Pending</span>
+                        <strong class="vm-gw-summary-tile__value">@Convert.ToDecimal(penamount).ToString("N2")</strong>
+                    </div>
+                </div>
+                <div class="vm-gw-summary-tile vm-gw-summary-tile--failed">
+                    <div class="vm-gw-summary-tile__icon" aria-hidden="true"><i class="fas fa-times-circle"></i></div>
+                    <div class="vm-gw-summary-tile__body">
+                        <span class="vm-gw-summary-tile__label">Total Failed</span>
+                        <strong class="vm-gw-summary-tile__value">@Convert.ToDecimal(totalfailamnt).ToString("N2")</strong>
+                    </div>
+                </div>
+                <div class="vm-gw-summary-tile vm-gw-summary-tile--charges">
+                    <div class="vm-gw-summary-tile__icon" aria-hidden="true"><i class="fas fa-percentage"></i></div>
+                    <div class="vm-gw-summary-tile__body">
+                        <span class="vm-gw-summary-tile__label">Total Charges</span>
+                        <strong class="vm-gw-summary-tile__value">@Convert.ToDecimal(totalcharges).ToString("N2")</strong>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
-                <div class="fund-trasfer-right fund-user-right">
+        </div>
 
+        <div class="vm-ft-layout-wrap">
+            <div class="vm-ft-layout vm-ft-layout--full">
+                <div class="vm-ft-form-col">
+                    <div class="fund-trasfer-left vm-ft-form-card">
+                        <div class="vm-ft-form-card-header">
+                            <div class="vm-ft-form-card-header__icon" aria-hidden="true">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div>
+                                <span class="vm-ft-form-card-header__title">Wallet By Payment Gateway</span>
+                                <span class="vm-ft-form-card-header__sub">Purchase wallet balance via payment gateway</span>
+                            </div>
+                        </div>
 
-                    <ul class="nav nav-tabs responsive-sateulce" id="tabs">
-                        <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
-                            <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
-                                <label class="for-change-fund">
-                                    <span class="fund-fistory">History<sub class="tmw-total-color-one fullbodydycolorbg">buy gateway</sub></span>
-                                    <i class="fa fa-caret-down" aria-hidden="true"></i>
-                                </label>
-                            </a>
-                        </li>
-                        <li class="gatewaytransfer-retailer-date gatewaytransfer-pdfexal" style="width: 72%;float: right;margin-top: 4px;padding-right: 5px;">
-                            <div class="row fund-t-dalear" style="margin:0px;">
-                                @using (Html.BeginForm("GatewayTRANSFER", "Home", FormMethod.Post))
-                                {
-                                    <div class="input-daterange input-group">
-                                        <div class="col-md-5 date-sateclassee trypurchasecewq-new" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                        <div class="vm-ft-left-tab-pane vm-dealer-ft-form-fs14">
+                            @using (Html.BeginForm("GatewayTransfer_new", "Home", FormMethod.Post, new { id = "gatewayPayForm" }))
+                            {
+                                <input type="hidden" id="latss" name="latss" value="" />
+                                <input type="hidden" id="longloc" name="longloc" value="" />
+
+                                <div class="vm-gw-form-block">
+                                    <label for="txtamt">Purchase Amount</label>
+                                    @Html.TextBox("txtamt", "", new { @onkeypress = "return isNumberKey(event)", @placeholder = "Enter Purchase Amount", @required = true, @class = "form-control vm-dealer-ft-fs14", @id = "txtamt", @autocomplete = "off" })
+                                </div>
+
+                                <div class="vm-gw-form-block">
+                                    <label for="ddl_type">Transfer Type</label>
+                                    <div class="vm-gw-type-row">
+                                        @Html.DropDownList("ddl_type", new List<SelectListItem>
+                                        {
+                                            new SelectListItem { Text = "Net Banking", Value = "NB" },
+                                            new SelectListItem { Text = "Wallet", Value = "WA" },
+                                            new SelectListItem { Text = "UPI", Value = "UP" },
+                                            new SelectListItem { Text = "Debit Card", Value = "DC" },
+                                            new SelectListItem { Text = "Credit Card", Value = "CC" }
+                                        }, "Select Type", new { @class = "form-control for-select2 vm-opr-select vm-dmt-select vm-dealer-ft-fs14", @required = true, @id = "ddl_type" })
+
+                                        <button type="button" class="saas-acc-btn saas-acc-btn--search vm-gw-proceed-btn" id="btnGatewayProceed" onclick="proceed()">
+                                            <i class="fas fa-arrow-right" aria-hidden="true"></i><span>Proceed</span>
+                                        </button>
+                                        <button type="button" class="vm-gw-change-btn pay-mode-edit" id="btnGatewayChange">
+                                            Change
+                                        </button>
+                                    </div>
+                                    <label id="txtmsgerror" class="vm-gw-error"></label>
+                                    @if (ViewBag.msg != null)
+                                    {
+                                        <label class="vm-gw-msg">@ViewBag.msg</label>
+                                    }
+                                </div>
+
+                                <div id="showdata" style="display:none;">
+                                    <div class="responsive-scroll-sate">
+                                        <table class="table table-bordered table-striped table-hover">
+                                            <tr>
+                                                <th>Transaction Mode</th>
+                                                <th>Charge (%)</th>
+                                                <th>Total Charge</th>
+                                                <th>Net Receiving</th>
+                                            </tr>
+                                            <tr>
+                                                <td>Debit Card</td>
+                                                <td><label id="txtdebitcardcharge"></label> %</td>
+                                                <td><label id="txtdebitcard_total"></label></td>
+                                                <td><label id="txtdebitcard_total_pay"></label></td>
+                                            </tr>
+                                            <tr>
+                                                <td>RuPay Card</td>
+                                                <td><label id="txtrupay"></label> %</td>
+                                                <td><label id="txtrupay_total"></label></td>
+                                                <td><label id="txtrupay_total_pay"></label></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Credit Card</td>
+                                                <td><label id="txtcc"></label> %</td>
+                                                <td><label id="txtcc_total"></label></td>
+                                                <td><label id="txtcc_total_pay"></label></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Amex Card</td>
+                                                <td><label id="txtamex"></label> %</td>
+                                                <td><label id="txtamex_total"></label></td>
+                                                <td><label id="txtamex_total_pay"></label></td>
+                                            </tr>
+                                            <tr>
+                                                <td>International Card</td>
+                                                <td><label id="txtic"></label> %</td>
+                                                <td><label id="txtic_total"></label></td>
+                                                <td><label id="txtic_total_pay"></label></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Net Banking</td>
+                                                <td><label id="txtnet"></label> %</td>
+                                                <td><label id="txtnet_total"></label></td>
+                                                <td><label id="txtnet_total_pay"></label></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Wallet's</td>
+                                                <td><label id="txtwallet"></label> %</td>
+                                                <td><label id="txtwallet_total"></label></td>
+                                                <td><label id="txtwallet_total_pay"></label></td>
+                                            </tr>
+                                            <tr>
+                                                <td>UPI</td>
+                                                <td><label id="txtupi"></label> %</td>
+                                                <td><label id="txtupi_total"></label></td>
+                                                <td><label id="txtupi_total_pay"></label></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="vm-gw-pay-btn-wrap">
+                                        <button type="submit" class="fullbodydycolorbg vm-ft-submit-btn">
+                                            <span>Proceed To Pay</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="vm-gw-notes">
+                                    <ol>
+                                        <li>With the payment gateway you can purchase wallet balance and note that the gateway fee will apply.</li>
+                                        <li>Gateway fees and if there is any credit outstanding then the balance after deduction will be fixed in your wallet.</li>
+                                        <li>Please do not refresh and close this page on transaction processing.</li>
+                                    </ol>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-ft-history-col">
+                    <div class="fund-trasfer-right vm-ft-history-panel">
+                        <div class="vm-ft-history-body">
+                            <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium">
+                                <div class="vm-ft-history-toolbar__head">
+                                    <i class="fas fa-history" aria-hidden="true"></i>
+                                    <div>
+                                        <span class="vm-ft-history-toolbar__title">Gateway History</span>
+                                        <span class="vm-ft-history-toolbar__sub">View, filter &amp; export gateway transactions</span>
+                                    </div>
+                                </div>
+                                <div class="vm-ft-history-toolbar__filters vm-ft-history-filters-row">
+                                    <div class="vm-ft-search-wrap vm-ft-search-wrap--history">
+                                        <input class="form-control vm-dealer-ft-fs14" type="text" value="" id="myInput" name="myInput" placeholder="Search gateway history..." autocomplete="off" onkeyup="gatewayHistorySearch()" />
+                                    </div>
+                                    @using (Html.BeginForm("GatewayTRANSFER", "Home", FormMethod.Post, new { id = "gatewayHistoryForm", @class = "vm-gw-history-form" }))
+                                    {
+                                        <div class="vm-dmt-filter-search-group vm-ft-date-search-group">
+                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                <input type="text" id="txt_frm_date" name="txt_frm_date" class="form-control saas-acc-dp-input vm-dealer-ft-fs14" required="required" autocomplete="off" placeholder="From" title="From date" value="@frmDate" />
                                             </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #fff; margin-top:1px;", autocomplete = "off" })
-                                            @*<input type="datetime" id="txt_frm_date" name="txt_frm_date" />*@
-                                        </div>
-                                        <div class="col-md-5 date-sateclassee trypurchasecewq-new" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                <input type="text" id="txt_to_date" name="txt_to_date" class="form-control saas-acc-dp-input vm-dealer-ft-fs14" required="required" autocomplete="off" placeholder="To" title="To date" value="@toDate" />
                                             </div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #fff; margin-top:4px;margin-top:1px !important;", autocomplete = "off" })
-
-                                            @*  <input type="datetime" id="txt_to_date" name="txt_to_date" style=" margin-top: 0px !important;" />*@
-                                        </div>
-                                        <div class="col-md-2 apiclass-satenew apiclass-satenew-responshive" style="padding:0px;">
-                                            <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height:31px;margin-top:0px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
+                                            <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-ft-search-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
                                             </button>
                                         </div>
-                                        <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;padding-top: 3px;padding-left: 5px;">
-
-                                            <button id="btnPDF">PDF</button>
-                                            <button id="btnExport">Export</button>
-
-                                        </div>
+                                    }
+                                    <div class="vm-ft-export-group">
+                                        <button type="button" id="btnExport" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i></button>
+                                        <button type="button" id="btnPDF" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i></button>
                                     </div>
-
-
-
-                                }
+                                </div>
                             </div>
-                        </li>
 
-                    </ul>
-                    <div id="tab-1" class="width100 float-left tab-content current changeback-four-design">
-
-                        <div class="table-responsive table-rsponsive-paddfont tablethirddesign-newnew" style="width:100%;">
-                            <table class="table table-bordered table-striped table-hover">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th style="width:110px">Mode</th>
-                                        <th>Mode&nbsp;Type</th>
-                                        <th>Amount</th>
-                                        <th>Charges</th>
-                                        <th>Net&nbsp;Received</th>
-                                        <th>Bank RRN</th>
-                                        <th>Transaction&nbsp;Time</th>
-                                        <th>Response&nbsp;Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        var sts = item.status;
-                                        var code = "";
-                                        var bankrrn = item.errormsg;
-                                        var color = "";
-                                        var margin = "";
-                                        var padding = "";
-                                        var width = "20px";
-                                        if (sts == "Success")
+                            <div class="vm-ft-table-wrap table-responsive">
+                                <table id="tblGatewayHistory" class="table table-bordered table-striped table-hover fundtransfer-tableclass third-design-table vm-ft-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Mode</th>
+                                            <th>Mode&nbsp;Type</th>
+                                            <th>Amount</th>
+                                            <th>Charges</th>
+                                            <th>Net&nbsp;Received</th>
+                                            <th>Bank RRN</th>
+                                            <th>Transaction&nbsp;Time</th>
+                                            <th>Response&nbsp;Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblbody">
+                                        @if (reports.Any())
                                         {
-                                            code = "../../ashok-images/correct.svg";
-                                            bankrrn = item.bankrrnno;
-                                            color = "green";
-                                        }
-                                        else if (sts == "Failed")
-                                        {
-                                            code = "../../ashok-images/closes.svg";
-                                            color = "red";
+                                            foreach (var item in reports)
+                                            {
+                                                var sts = item.status;
+                                                var bankrrn = item.errormsg;
+                                                var code = "";
+                                                var color = "";
+                                                var margin = "";
+                                                var padding = "";
+                                                var width = "20px";
+                                                if (sts == "Success")
+                                                {
+                                                    code = "../../ashok-images/correct.svg";
+                                                    bankrrn = item.bankrrnno;
+                                                    color = "green";
+                                                }
+                                                else if (sts == "Failed")
+                                                {
+                                                    code = "../../ashok-images/closes.svg";
+                                                    color = "red";
+                                                }
+                                                else
+                                                {
+                                                    code = "../../ashok-images/clock.svg";
+                                                    width = "21px";
+                                                    margin = "0";
+                                                    padding = "0";
+                                                }
+                                                <tr class="tr">
+                                                    <td>
+                                                        <span class="vm-gw-mode-cell">
+                                                            <img src="@code" alt="@sts" style="width:@width;background-color:@color;padding:@padding;margin:@margin;" />
+                                                            <span>@(item.mode ?? "-")</span>
+                                                        </span>
+                                                    </td>
+                                                    <td>@(item.PG_TYPE ?? "-")</td>
+                                                    <td class="vm-dmt-amt-cell">@(item.amount.HasValue ? item.amount.Value.ToString("N2") : "-")</td>
+                                                    <td class="vm-dmt-amt-cell">@(item.charge.HasValue ? item.charge.Value.ToString("N2") : "-")</td>
+                                                    <td class="vm-dmt-amt-cell">@(item.totalpay.HasValue ? item.totalpay.Value.ToString("N2") : "-")</td>
+                                                    <td>@(bankrrn ?? "-")</td>
+                                                    <td>@(item.f_date.HasValue ? item.f_date.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-")</td>
+                                                    <td>@(item.resptime.HasValue ? item.resptime.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-")</td>
+                                                </tr>
+                                            }
                                         }
                                         else
                                         {
-                                            code = "../../ashok-images/clock.svg";
-                                            width = "21px;";
-                                            margin = "0";
-                                            padding = "0";
+                                            <tr class="vm-opr-table-empty-row">
+                                                <td colspan="8" class="vm-opr-table-empty vm-dmt-table-empty">
+                                                    <i class="fas fa-credit-card" aria-hidden="true"></i>
+                                                    <span>Gateway transaction not found.</span>
+                                                </td>
+                                            </tr>
                                         }
-
-                                        <tr>
-                                            <td><img src="@code" style="width:@width;margin-right:0px;float:left; background-color:@color;border-radius: 50%;padding: 3px;padding:@padding;margin:@margin;">&nbsp;@item.mode</td>
-                                            <td>@item.PG_TYPE</td>
-                                            <td>@item.amount</td>
-                                            <td>@item.charge</td>
-                                            <td>@item.totalpay</td>
-                                            <td>@bankrrn</td>
-                                            <td>@item.f_date</td>
-                                            <td>@item.resptime</td>
-
-                                        </tr>
-                                    }
-                                    @*<tr>
-                                            <td><img style="height:20px;width:20px;margin-right:3px;float:left; background-color:red;border-radius: 50%;padding: 3px;" src="../../ashok-images/closes.svg">&nbsp;Sanjay Choudhary</td>
-                                            <td>9166940603</td>
-                                            <td>5000</td>
-                                            <td>50</td>
-                                            <td>4950</td>
-                                            <td>18517104506</td>
-                                            <td>ljuyhggv</td>
-                                        </tr>
-                                        <tr>
-                                            <td> <img style="height:20px;width:20px; background-color:green;border-radius: 50%;padding: 3px;" src="../../ashok-images/correct.svg"> &nbsp;Sanjay Choudhary</td>
-                                            <td>9166940603</td>
-                                            <td>5000</td>
-                                            <td>50</td>
-                                            <td>4950</td>
-                                            <td>18517104506</td>
-                                            <td>ljuyhggv</td>
-                                        </tr>*@
-                                </tbody>
-                            </table>
-
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
         </div>
     </div>
-    <div id="backtodashboardcall" data-request-url="@Url.Action("Dashboard", "Home")"></div>
 
+    <div id="backtodashboardcall" data-request-url="@Url.Action("Dashboard", "Home")"></div>
 </section>
 
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<!--Add State dropdown list-->
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-@*<script src="~/Scripts/CheckValidation/valideatelocations.js"></script>*@
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
-<style>
-
-    .tab-menur ul {
-        margin: 0;
-        padding: 0;
-    }
-
-
-
-        .tab-menur ul li {
-            width: 50%;
-            text-align: center;
-        }
-
-        .tab-menur ul li {
-            float: left;
-        }
-</style>
 <script>
-    $('.pay-mode-process').click(function () {
-        $(this).hide();
-        $('.pay-mode-second').show();
-        $('.pay-mode-edit').show();
-        $('.pay-mode-first input').attr('readonly', 'readonly')
+    window.dealerGatewayExcelUrl = '@Url.Action("Execel_Gateway_TRANSFER", "Home")';
+    window.dealerGatewayPdfUrl = '@Url.Action("PDFGatewayTRANSFER", "Home")';
 
-    });
-    $('.pay-mode-edit').click(function () {
-        $(this).hide();
-        $('.pay-mode-second').hide();
-        $('.pay-mode-process').show();
-        $('.pay-mode-first input').removeAttr('readonly', 'readonly')
-    });
-    (function () {
-        $('.pay-mode-first input').keyup(function () {
-            var empty = false;
-            $('.pay-mode-first input').each(function () {
-                if ($(this).val() == '') {
-                    empty = true;
-                }
-            });
-            if (empty) {
-                $('.pay-mode-process').attr('disabled', 'disabled');
-            }
-            else {
-                $('.pay-mode-process').removeAttr('disabled');
-            }
+    function gatewayHistorySearch() {
+        var value = ($('#myInput').val() || '').toLowerCase();
+        $('#tblGatewayHistory tbody tr.tr').filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
-    })()
+    }
 
     function isNumberKey(evt) {
-        var charCode = (evt.which) ? evt.which : event.keyCode
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
             return false;
-
+        }
         return true;
     }
-</script>
 
-
-<!--Active_Class_jQuery-->
-
-<script>
-    $(document).ready(function()
-    {
-
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-
-    })
-</script>
-
-<script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('.report-list-change li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('active');
-
-
-            }
-        })
-    });
-</script>
-<script>
     function proceed() {
-        //$this.button('loading');
-        if ($('#txtamt').val() == "") {
-           $('#txtmsgerror').text("Amount Not Blank");
+        if ($('#txtamt').val() === '') {
+            $('#txtmsgerror').text('Amount Not Blank');
+            return;
         }
-        else if ($('#ddl_type').val() == "")
-        {
-            $('#txtmsgerror').text("Select Any Type");
+        if ($('#ddl_type').val() === '' || $('#ddl_type').val() === null) {
+            $('#txtmsgerror').text('Select Any Type');
+            return;
         }
-        else {
-            $('#txtmsgerror').text("");
+
+        $('#txtmsgerror').text('');
         $.ajax({
-              url: '@Url.Action("calculatecharge_gateway", "Home")',
-              type: 'GET',
-              dataType: "json",
+            url: '@Url.Action("calculatecharge_gateway", "Home")',
+            type: 'GET',
+            dataType: 'json',
             data: { amount: $('#txtamt').val(), type: $('#ddl_type').val() },
             success: function (response) {
-
                 if (response.status) {
                     $('#showdata').show();
                     $('#showdata').find('table').empty();
-
-                    document.getElementById('showdata').querySelector('table').appendChild(tableCreate($('#txtamt').val(), response.cols, response.values, $('#ddl_type').val()));
-
-                }
-                else {
+                    document.getElementById('showdata').querySelector('table').appendChild(
+                        tableCreate($('#txtamt').val(), response.cols, response.values, $('#ddl_type').val())
+                    );
+                    $('#txtamt').prop('readonly', true);
+                    $('#ddl_type').prop('disabled', true).trigger('change.select2');
+                    $('.vm-gw-proceed-btn').hide();
+                    $('.vm-gw-change-btn').show();
+                } else {
                     $('#showdata').hide();
-                    $('#txtmsgerror').text("Charge Not Set");
+                    $('#txtmsgerror').text('Charge Not Set');
                 }
-
-
             }
         });
-            }
-
-        //setTimeout(function () {
-        //    $this.button('reset');
-        //}, 500);
     }
-</script>
 
-
-<script>
-    $(document).ready(function () {
-        $(".date-sateclassee input").click(function () {
-            $(".datepicker").addClass('daqqqqkerrteyyecharge');
-        });
-    });
-</script>
-
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("Execel_Gateway_TRANSFER", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        location.href = url
-});
-
-</script>
-<script>
-    $("#btnPDF").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("PDFGatewayTRANSFER", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
-    });
-</script>
-
-<script>
-
-
-    function tableCreate(amount, columns, row, type = null) {
-        const body = document.body,
-            tbl = document.createElement('table');
+    function tableCreate(amount, columns, row, type) {
+        type = type || null;
+        var tbl = document.createElement('table');
         tbl.style.width = '100%';
-        //tbl.style.border = '1px solid black';
-        const tr = tbl.insertRow();
-        const tr1 = tbl.insertRow();
-        const tr2 = tbl.insertRow();
+        var tr = tbl.insertRow();
+        var tr1 = tbl.insertRow();
+        var tr2 = tbl.insertRow();
 
-        for (let i = 0; i < columns.length; i++) {
-            const td1 = tr.insertCell();
-
-            td1.style.border = '1px solid black';
-            td1.style.backgroundColor = '#dca167';
-            //td1.style.padding = '2px 5px';
-            //td1.style.fontWeight = 'bold';
+        for (var i = 0; i < columns.length; i++) {
+            var td1 = tr.insertCell();
+            td1.style.border = '1px solid #e2e8f0';
+            td1.style.backgroundColor = '#eff6ff';
             td1.style.textAlign = 'center';
-            var col_name = typeof columns[i] == 'string' ? columns[i] : columns[i].text;
+            var col_name = typeof columns[i] === 'string' ? columns[i] : columns[i].text;
             td1.appendChild(document.createTextNode(col_name));
 
             if (columns[i].cols) {
                 if (Array.isArray(columns[i].cols)) {
                     td1.setAttribute('colSpan', columns[i].cols.length.toString());
-
-                    for (let j = 0; j < columns[i].cols.length; j++) {
+                    for (var j = 0; j < columns[i].cols.length; j++) {
                         var td = tr1.insertCell();
-                        var tdr;
-
-                        if (typeof columns[i].cols[j] == 'string') {
-                            if (type == "DC" && col_name == 'RUPAY') {
+                        if (typeof columns[i].cols[j] === 'string') {
+                            if (!(type === 'DC' && col_name === 'RUPAY')) {
+                                if (type !== 'NB') {
+                                    tr2.insertCell();
+                                }
+                            } else {
                                 td.setAttribute('rowSpan', 2);
                             }
-                            else if (type == "NB") {
-
-                            }
-                            else {
-                                tr2.insertCell();
-                            }
                             td.appendChild(document.createTextNode(ucFirst(columns[i].cols[j])));
-                            td.style.border = '1px solid black';
-                            //td.style.fontWeight = 'bold';
-                            td.style.backgroundColor = '#dca167';
-                            td.style.textAlign = 'center';
-                            td.style.fontSize = '11px';
-                        }
-                        else {
+                        } else {
                             var cols3 = columns[i].cols[j].cols;
-
                             td.setAttribute('colSpan', cols3.length.toString());
                             td1.setAttribute('colSpan', (2 * cols3.length).toString());
                             td.appendChild(document.createTextNode(ucFirst(columns[i].cols[j].text)));
-                            td.style.border = '1px solid black';
-                            td.style.backgroundColor = '#dca167';
-                            //td.style.fontWeight = 'bold';
-                            td.style.textAlign = 'center';
-                            td.style.fontSize = '11px';
-
-
-                            for (let k = 0; k < cols3.length; k++) {
+                            for (var k = 0; k < cols3.length; k++) {
                                 var td3 = tr2.insertCell();
-
-                                var text3 = cols3[k];
-
-                                td3.appendChild(document.createTextNode(ucFirst(text3)));
-                                td3.style.border = '1px solid black';
-                                td3.style.backgroundColor = '#dca167';
-                                //td3.style.fontWeight = 'bold';
-                                td3.style.textAlign = 'center';
-                                td3.style.fontSize = '10px';
+                                td3.appendChild(document.createTextNode(ucFirst(cols3[k])));
                             }
-
                         }
-
+                        td.style.border = '1px solid #e2e8f0';
+                        td.style.backgroundColor = '#eff6ff';
+                        td.style.textAlign = 'center';
+                        td.style.fontSize = '11px';
                     }
-
-                }
-
-            } else {
-
-                if (type == "DC" && col_name == 'Status') {
-                    td1.setAttribute('rowSpan', 3);
-                }
-                else if (type == "NB" && col_name == 'Status') {
-                    td1.setAttribute('rowSpan', 2);
-                }
-                else {
-                    //tr1.insertCell();
-                    //tr2.insertCell();
                 }
             }
-
         }
+
         var merged_array = [].concat.apply([], [].concat.apply([], row));
         var tr_val = tbl.insertRow();
-        console.log(merged_array[0])
-
-        for (let i = 0; i < merged_array.length; i++) {
-            var td = tr_val.insertCell();
-
-            if (i > 0) {
-                td.appendChild(document.createTextNode(parseFloat(merged_array[i]).toFixed(2)));
-                td.style.border = '1px solid black';
-                td.style.textAlign = 'center';
-                td.style.fontSize = '10px';
-            }
-            else {
+        for (var m = 0; m < merged_array.length; m++) {
+            var tdCell = tr_val.insertCell();
+            tdCell.style.border = '1px solid #e2e8f0';
+            tdCell.style.textAlign = 'center';
+            tdCell.style.fontSize = '11px';
+            if (m > 0) {
+                tdCell.appendChild(document.createTextNode(parseFloat(merged_array[m]).toFixed(2)));
+            } else {
                 var img = document.createElement('img');
-                img.src = merged_array[i] ? "../../ashok-images/correct.svg" : "../../ashok-images/closes.svg";
-                img.style.width = "12px";
-                img.style.borderRadius = "99px";
-                img.style.backgroundColor = merged_array[i] ? 'green' : 'red'
-                td.style.border = '1px solid black';
-                td.style.textAlign = 'center';
-
-                var span = document.createElement('small')
+                img.src = merged_array[m] ? '../../ashok-images/correct.svg' : '../../ashok-images/closes.svg';
+                img.style.width = '12px';
+                img.style.borderRadius = '99px';
+                img.style.backgroundColor = merged_array[m] ? 'green' : 'red';
+                var span = document.createElement('small');
                 span.textContent = amount;
                 span.style.fontSize = '11px';
                 span.style.marginLeft = '3px';
-
-                td.appendChild(img);
-                td.appendChild(span);
+                tdCell.appendChild(img);
+                tdCell.appendChild(span);
             }
         }
-
-        tbl.style.margin = "30px 0";
+        tbl.style.margin = '12px 0';
         return tbl;
     }
 
@@ -922,57 +1020,56 @@ url,
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    $(document).ready(function () {
+        if (typeof window.initDealerFundTransferPageSelect2 === 'function') {
+            window.initDealerFundTransferPageSelect2($('#ddl_type'));
+        }
 
-    //function tableCreate(columns, row) {
-    //    //debugger;
-    //    tbl = document.createElement('table');
-    //    tbl.style.width = '100px';
-    //    tbl.style.border = '1px solid black';
-    //    const tr = tbl.insertRow();
-    //    const tr1 = tbl.insertRow();
-    //    // td1.style.border = '2px solid black';
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#gatewayHistoryForm');
+        } else if ($.fn.datepicker) {
+            var dateOpts = {
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                autoclose: true,
+                orientation: 'bottom auto',
+                forceParse: false,
+                enableOnReadonly: true,
+                container: 'body'
+            };
+            $('#txt_frm_date, #txt_to_date').datepicker(dateOpts);
+            if ('@dateMode' !== 'post') {
+                $('#txt_frm_date').datepicker('setDate', new Date());
+                $('#txt_to_date').datepicker('setDate', new Date());
+            }
+        }
 
-    //    for (let i = 0; i < columns.length; i++) {
-    //        const td1 = tr.insertCell();
-    //        td1.style.border = '1px solid black';
-    //        td1.style.color = 'white';
-    //        td1.style.backgroundColor = '#dca167';
-    //        td1.style.padding = '2px 5px';
-    //        td1.style.fontWeight = 'bold';
-    //        td1.style.textAlign = 'center';
-    //        td1.appendChild(document.createTextNode(typeof columns[i] == 'string' ? columns[i] : columns[i].text));
+        $('#btnGatewayChange').on('click', function () {
+            $(this).hide();
+            $('#showdata').hide();
+            $('.vm-gw-proceed-btn').show();
+            $('#txtamt').prop('readonly', false);
+            $('#ddl_type').prop('disabled', false).trigger('change.select2');
+            $('#txtmsgerror').text('');
+        });
 
+        $('#gatewayPayForm').on('submit', function () {
+            $('#ddl_type').prop('disabled', false);
+        });
 
-    //        if (columns[i].cols) {
-    //            var tdr;
-    //            td1.setAttribute('colSpan', columns[i].cols.length.toString());
+        $('#btnExport').on('click', function (e) {
+            e.preventDefault();
+            var url = window.dealerGatewayExcelUrl
+                + '?txt_frm_date=' + encodeURIComponent($('#txt_frm_date').val() || '')
+                + '&txt_to_date=' + encodeURIComponent($('#txt_to_date').val() || '');
+            window.location.href = url;
+        });
 
-    //            for (let j = 0; j < columns[i].cols.length; j++) {
-    //                const td = tr1.insertCell();
-    //                td.appendChild(document.createTextNode(columns[i].cols[j]));
-    //                td.style.border = '1px solid black';
-    //                td.style.backgroundColor = '#dca167';
-    //                td.style.padding = '2px 5px';
-    //                td.style.color = 'white';
-    //                td.style.fontWeight = 'bold';
-    //                td.style.textAlign = 'center';
-    //            }
-
-
-    //        } else {
-    //            tr1.insertCell();
-    //        }
-
-    //    }
-    //    var merged_array = [].concat.apply([], row);
-    //    var tr_val = tbl.insertRow();
-
-    //    for (let i = 0; i < merged_array.length; i++) {
-    //        var td = tr_val.insertCell();
-    //        td.appendChild(document.createTextNode(merged_array[i]));
-    //        td.style.border = '1px solid black';
-    //        td.style.textAlign = 'center';
-    //    }
-    //    return tbl;
-    //}
+        $('#btnPDF').on('click', function () {
+            var url = window.dealerGatewayPdfUrl
+                + '?txt_frm_date=' + encodeURIComponent($('#txt_frm_date').val() || '')
+                + '&txt_to_date=' + encodeURIComponent($('#txt_to_date').val() || '');
+            window.open(url, '_blank');
+        });
+    });
 </script>

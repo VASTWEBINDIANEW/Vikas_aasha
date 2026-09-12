@@ -73,7 +73,7 @@
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=46" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=38" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-user-wise-comm-modern.css?v=9" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-user-wise-comm-modern.css?v=10" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-giftcard-report-page saas-prepaid-card-report-page saas-user-wise-comm-page">
@@ -227,7 +227,7 @@
                                     <th>Name</th>
                                     <th>Firm Name</th>
                                     <th>Operator Name</th>
-                                    <th id="distributor_income1" class="vm-uwc-col-hidden">Distributor Income</th>
+                                    <th id="distributor_income1">Distributor Income</th>
                                     <th>Income</th>
                                     <th>Total Success</th>
                                 </tr>
@@ -261,7 +261,9 @@
                                     <td data-label="Name"></td>
                                     <td data-label="Firm Name"></td>
                                     <td data-label="Operator Name"></td>
-                                    <td id="distributor_income3" class="vm-uwc-num vm-uwc-col-hidden" data-label="Distributor Income"></td>
+                                    <td id="distributor_income3" class="vm-uwc-num" data-label="Distributor Income">
+                                        @reports.Select(r => r.RetailerName).Distinct().Sum(name => dealerIncomeDict.ContainsKey(name) ? dealerIncomeDict[name] : 0)
+                                    </td>
                                     <td class="vm-uwc-num" data-label="Income">@reports.Sum(a => a.remincome)</td>
                                     <td class="vm-uwc-num" data-label="Total Success">@reports.Sum(a => a.total)</td>
                                 </tr>
@@ -305,12 +307,6 @@
         }
     }
 
-    function uwcSetDealerIncomeVisible(visible) {
-        var method = visible ? 'removeClass' : 'addClass';
-        $('#distributor_income1')[method]('vm-uwc-col-hidden');
-        $('#distributor_income3')[method]('vm-uwc-col-hidden');
-    }
-
     function uwcAnswers() {
         var answer = document.getElementById('ddlusers').value;
 
@@ -321,13 +317,11 @@
         uwcShowExtra('uwc-wrap-servicelist', false);
         uwcShowExtra('uwc-wrap-retailer', false);
         uwcShowExtra('uwc-wrap-api', false);
-        uwcSetDealerIncomeVisible(false);
 
         if (answer === 'Dealer') {
             uwcShowExtra('uwc-wrap-dealer', true);
             uwcShowExtra('uwc-wrap-retailerlist', true);
             uwcShowExtra('uwc-wrap-servicelist', true);
-            uwcSetDealerIncomeVisible(true);
         } else if (answer === 'Whitelabel') {
             uwcShowExtra('uwc-wrap-whitelabel', true);
         } else if (answer === 'Master') {

@@ -1,0 +1,40 @@
+@model IEnumerable<Vastwebmulti.Models.fundTransferALLReports_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var items = (Model ?? Enumerable.Empty<Vastwebmulti.Models.fundTransferALLReports_Result>()).ToList();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var oldcrs = item.oldcrbalance ?? 0m;
+        var currentcr = item.cr ?? 0m;
+        var crStl = oldcrs - currentcr;
+        if (crStl <= 0m) { crStl = 0m; }
+        var txnTime = item.RechargeDate.HasValue ? item.RechargeDate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "-";
+        <tr class="vm-dmt-row">
+            <td>@(string.IsNullOrWhiteSpace(item.Role) ? "-" : item.Role)</td>
+            <td>@(string.IsNullOrWhiteSpace(item.Head) ? "-" : item.Head)</td>
+            <td>@(string.IsNullOrWhiteSpace(item.bal_type) ? "-" : item.bal_type)</td>
+            <td>@(string.IsNullOrWhiteSpace(item.FirmName) ? "-" : item.FirmName)</td>
+            <td class="vm-dmt-amt-cell">@(item.Balance.HasValue ? item.Balance.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.charge.HasValue ? item.charge.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@crStl.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@(item.NetTransfer.HasValue ? item.NetTransfer.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.TotalBal.HasValue ? item.TotalBal.Value.ToString("N2") : "-")</td>
+            <td class="vm-dmt-amt-cell">@(item.cr.HasValue ? item.cr.Value.ToString("N2") : "-")</td>
+            <td>@(string.IsNullOrWhiteSpace(item.comment) ? "-" : item.comment)</td>
+            <td>@txnTime</td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="12" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-wallet" aria-hidden="true"></i>
+            <span>Wallet history not found.</span>
+        </td>
+    </tr>
+}

@@ -76,10 +76,6 @@
     var entry = db.RetailerCreationCharges.FirstOrDefault();
     bool isAdminFree = entry?.CreatedByAdminIsFree ?? false;
     bool isSignUpFree = entry?.CreatedBySignUpIsFree ?? false;
-    var useGradientBg = !string.IsNullOrEmpty(backgroundImage);
-    if (string.IsNullOrEmpty(size)) { size = "cover"; }
-    if (string.IsNullOrEmpty(repeat)) { repeat = "no-repeat"; }
-
     var loginAccent = (color ?? "").Trim();
     var loginAccent2 = loginAccent;
     var accentKey = loginAccent.Replace("#", "").ToLowerInvariant();
@@ -169,7 +165,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <link href="~/MainFrontDesign/css/Custom-style.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link href="~/MainFrontDesign/css/public-login-modern.css?v=34" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/public-login-modern.css?v=36" rel="stylesheet" />
     <script src="~/MainFrontDesign/js/public-login-modern.js?v=6"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -189,7 +185,6 @@
             --main-bg-lcolor: @loginAccent;
             --main-bg-rcolor: @loginAccent2;
             --vm-login-accent: @loginAccent;
-            --vm-login-page-bg: @themeSidebar;
             --vm-login-visual-bg: @themeSidebar;
             --vm-login-panel-bg: @themeTopbar;
             --vm-login-surface: @themeTopbar;
@@ -197,8 +192,7 @@
     </style>
 </head>
 
-<body class="body Login_body vm-login-page vm-public-login vm-login-page--theme @(themeTopbarDark ? "vm-login-panel--dark" : "")">
-    <div class="vm-login-page__backdrop" aria-hidden="true"></div>
+<body class="body Login_body vm-login-page vm-public-login vm-login-page--theme @(themeTopbarDark ? "vm-login-panel--dark" : "")" style="background: url(@background); background-size: @size; background-repeat: @repeat; background-position: center center; background-attachment: fixed; min-height: @(string.IsNullOrEmpty(height) ? "100vh" : height); background-image: @backgroundImage; display: flex; align-items: center; justify-content: center;">
     <div class="main custome-loginpage vm-login-page__wrap vm-public-login__shell">
         <div id="horizontalTab" class="vm-login-page__tabs-root" data-initial-tab="@(ViewBag.signin_signup == "singup" ? "singup" : "singin")">
             <div class="container-fluid">

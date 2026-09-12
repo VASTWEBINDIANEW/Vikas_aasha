@@ -11744,36 +11744,44 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             ViewData["remincome"] = ch.Sum(x => x.remincome);
 
             // ---- Dealer Income Calculation (GetRetailerTxnSummary se) ----
+            var dealerIncomeDict = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
             var dealers = db.select_Dealer_for_ddl().ToList();
-            var dealerIncomeList = new List<dynamic>();
+            var incomeFromDate = Convert.ToDateTime(frm_date);
+            var incomeToDate = Convert.ToDateTime(to_date);
 
             foreach (var dealer in dealers)
             {
-                decimal dealerTotal = 0;
-
                 var retailers = db.select_retailer_for_ddl(dealer.DealerId).ToList();
                 foreach (var retailer in retailers)
                 {
-                    var summary = db.GetRetailerTxnSummary(null, dealer.DealerId, retailer.RetailerId, null, null).FirstOrDefault();
-                    if (summary != null)
+                    var summary = db.GetRetailerTxnSummary(null, dealer.DealerId, retailer.RetailerId, incomeFromDate, incomeToDate).FirstOrDefault();
+                    if (summary == null)
                     {
-                        dealerTotal += (summary.Recharge_UserDiff
-                                     + summary.Imps_UserDiff
-                                     + summary.Aeps_UserDiff
-                                     + summary.MicroAtm_UserDiff);
+                        continue;
+                    }
+
+                    var income = summary.Recharge_DealerDiff
+                               + summary.Imps_DealerDiff
+                               + summary.Aeps_DealerDiff
+                               + summary.MicroAtm_DealerDiff;
+                    var key = (retailer.RetailerName ?? string.Empty).Trim();
+                    if (string.IsNullOrEmpty(key))
+                    {
+                        continue;
+                    }
+
+                    if (dealerIncomeDict.ContainsKey(key))
+                    {
+                        dealerIncomeDict[key] += income;
+                    }
+                    else
+                    {
+                        dealerIncomeDict[key] = income;
                     }
                 }
-
-                dealerIncomeList.Add(new
-                {
-                    DealerId = dealer.DealerId,
-                    DealerName = dealer.FarmName,
-                    TotalIncome = dealerTotal
-                });
             }
 
-            // ViewBag me Dealer Income set
-            ViewBag.DealerIncome = dealerIncomeList.ToDictionary(d => d.DealerId, d => new { d.DealerName, d.TotalIncome });
+            ViewBag.DealerIncome = dealerIncomeDict;
 
             return View(ch);
         }
@@ -11911,13 +11919,11 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             ViewData["remincome"] = ch.Sum(x => x.remincome);
 
             // ---- Dealer Income Calculation (GetRetailerTxnSummary se) ----
+            var dealerIncomeDict = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
             var dealers = db.select_Dealer_for_ddl().ToList();
-            var dealerIncomeList = new List<dynamic>();
 
             foreach (var dealer in dealers)
             {
-                decimal dealerTotal = 0;
-
                 var retailers = db.select_retailer_for_ddl(dealer.DealerId).ToList();
                 foreach (var retailer in retailers)
                 {
@@ -11929,31 +11935,33 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                         txt_to_date
                     ).FirstOrDefault();
 
-                    if (summary != null)
+                    if (summary == null)
                     {
-                        dealerTotal += summary.Recharge_DealerDiff
-                                      + summary.Imps_DealerDiff
-                                      + summary.Aeps_DealerDiff
-                                      + summary.MicroAtm_DealerDiff;
+                        continue;
+                    }
 
-                        // ✅ अब RetailerName जो DB में है वही use करो
-                        dealerIncomeList.Add(new
-                        {
-                            DealerId = dealer.DealerId,
-                            DealerName = dealer.FarmName,
-                            RetailerName = retailer.RetailerName,  // DB column के अनुसार
-                            TotalIncome = dealerTotal
-                        });
+                    var income = summary.Recharge_DealerDiff
+                               + summary.Imps_DealerDiff
+                               + summary.Aeps_DealerDiff
+                               + summary.MicroAtm_DealerDiff;
+                    var key = (retailer.RetailerName ?? string.Empty).Trim();
+                    if (string.IsNullOrEmpty(key))
+                    {
+                        continue;
+                    }
+
+                    if (dealerIncomeDict.ContainsKey(key))
+                    {
+                        dealerIncomeDict[key] += income;
+                    }
+                    else
+                    {
+                        dealerIncomeDict[key] = income;
                     }
                 }
             }
 
-            // ViewBag dictionary
-            ViewBag.DealerIncome = dealerIncomeList.ToDictionary(
-                d => d.RetailerName,
-                d => d.TotalIncome
-            );
-
+            ViewBag.DealerIncome = dealerIncomeDict;
 
             return View(ch);
         }

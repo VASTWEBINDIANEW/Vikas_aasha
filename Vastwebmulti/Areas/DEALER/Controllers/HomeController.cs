@@ -5080,6 +5080,8 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
             var userid = "ALL";
             var remlist = db.select_retailer_for_ddl(Roleidrid);
             ViewBag.Retailerid = new SelectList(remlist, "RetailerId", "Frm_Name", null);
+            ViewBag.ddlname = "ALL";
+            ViewBag.ddlstatus = "ALL";
 
             upiChargeAndgateway model = new upiChargeAndgateway();
             model.msg = "";
@@ -5102,8 +5104,10 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
             ViewBag.chk = "post";
             var Roleidrid = User.Identity.GetUserId();
             var remlist = db.select_retailer_for_ddl(Roleidrid);
-            ViewBag.Retailerid = new SelectList(remlist, "RetailerId", "Frm_Name", null);
-            ViewBag.Retailerid1 = new SelectList(db.select_retailer_for_ddl(Roleidrid), "RetailerId", "Frm_Name", null);
+            ViewBag.Retailerid = new SelectList(remlist, "RetailerId", "Frm_Name", Retailerid);
+            ViewBag.Retailerid1 = new SelectList(db.select_retailer_for_ddl(Roleidrid), "RetailerId", "Frm_Name", Retailerid);
+            ViewBag.ddlname = ddlname ?? "ALL";
+            ViewBag.ddlstatus = ddlstatus ?? "ALL";
 
             var userid = "ALL";
 
@@ -10009,11 +10013,66 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
         //}
         public ActionResult Wallethistory_Dealer()
         {
-            return View();
+            ViewBag.ddtrnsfrom = "";
+            return View(LoadDealerWalletHistoryRows(null, null, null, false));
         }
-        public ActionResult UPITRANSFER_Dealer()
+
+        [HttpPost]
+        public ActionResult Wallethistory_Dealer(string txt_frm_date, string txt_to_date, string ddtrnsfrom)
+        {
+            ViewBag.chk = "post";
+            ViewBag.ddtrnsfrom = ddtrnsfrom ?? "";
+            return View(LoadDealerWalletHistoryRows(txt_frm_date, txt_to_date, ddtrnsfrom, true));
+        }
+
+        private List<fundTransferALLReports_Result> LoadDealerWalletHistoryRows(string txt_frm_date, string txt_to_date, string ddtrnsfrom, bool filterDates)
         {
             var userid = User.Identity.GetUserId();
+            DateTime frm_date;
+            DateTime toExclusive;
+            if (!filterDates)
+            {
+                frm_date = DateTime.Today;
+                toExclusive = DateTime.Today.AddDays(1);
+            }
+            else
+            {
+                frm_date = ParseDealerGiftDate(txt_frm_date);
+                toExclusive = ParseDealerGiftDate(txt_to_date).AddDays(1);
+            }
+
+            var rows = db.fundTransferALLReports(500, 1, frm_date, toExclusive, userid).ToList();
+            if (!string.IsNullOrWhiteSpace(ddtrnsfrom))
+            {
+                rows = rows.Where(x => string.Equals(x.Role, ddtrnsfrom.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            return rows;
+        }
+
+        public ActionResult Excel_Wallethistory_Dealer(string txt_frm_date, string txt_to_date, string ddtrnsfrom)
+        {
+            var filterDates = !string.IsNullOrWhiteSpace(txt_frm_date) || !string.IsNullOrWhiteSpace(txt_to_date);
+            var rows = LoadDealerWalletHistoryRows(txt_frm_date, txt_to_date, ddtrnsfrom, filterDates);
+            Response.Clear();
+            Response.Buffer = true;
+            Response.Charset = "utf-8";
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("content-disposition", "attachment; filename=Wallet_History_Dealer.xls");
+            return View(rows);
+        }
+
+        public ActionResult PDF_Wallethistory_Dealer(string txt_frm_date, string txt_to_date, string ddtrnsfrom)
+        {
+            var filterDates = !string.IsNullOrWhiteSpace(txt_frm_date) || !string.IsNullOrWhiteSpace(txt_to_date);
+            var rows = LoadDealerWalletHistoryRows(txt_frm_date, txt_to_date, ddtrnsfrom, filterDates);
+            return new ViewAsPdf("PDF_Wallethistory_Dealer", rows)
+            {
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                PageSize = Rotativa.Options.Size.A4
+            };
+        }
+        private void SetDealerUpiSlabViewBag()
+        {
             var slab = db.Upi_slab.SingleOrDefault();
             if (slab == null)
             {
@@ -10025,41 +10084,66 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                 ViewBag.min = slab.min;
                 ViewBag.charge = slab.Charge;
             }
-            DateTime from = DateTime.Now.Date;
-            DateTime to = DateTime.Now.AddDays(1).Date;
-            var ch = db.show_upi_txn_details("Distributor", userid, "ALL", from, to);
-
-            var upitxndetails = db.Upi_txn_details.Where(x => x.userid == userid && x.rolename == "Dealer" && x.txndate >= from && x.txndate <= to);
-            var totalcharges = upitxndetails.Sum(x => x.charge);
-            ViewBag.totalchargesamount = totalcharges;
-            return View(ch);
         }
 
+        private void SetDealerUpiTotalsViewBag(string userid, DateTime from, DateTime toExclusive)
+        {
+            var upitxndetails = db.Upi_txn_details.Where(x => x.userid == userid && x.rolename == "Dealer" && x.txndate >= from && x.txndate <= toExclusive);
+            ViewBag.totalsuccess = upitxndetails.Where(x => x.status != null && x.status.ToUpper().Contains("SUCCESS")).Sum(x => (decimal?)x.amt) ?? 0;
+            ViewBag.totalfailedamount = upitxndetails.Where(x => x.status != null && x.status.ToUpper().Contains("FAILED")).Sum(x => (decimal?)x.amt) ?? 0;
+            ViewBag.totalpendingamount = upitxndetails.Where(x => x.status != null && x.status.ToUpper().Contains("PENDING")).Sum(x => (decimal?)x.amt) ?? 0;
+            ViewBag.totalchargesamount = upitxndetails.Sum(x => (decimal?)x.charge) ?? 0;
+        }
+
+        private List<Vastwebmulti.Models.show_upi_txn_details_Result> LoadDealerUpiTransferRows(string txt_frm_date, string txt_to_date)
+        {
+            var userid = User.Identity.GetUserId();
+            DateTime from = string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.Today : ParseDealerGiftDate(txt_frm_date);
+            DateTime toDate = string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.Today : ParseDealerGiftDate(txt_to_date);
+            DateTime toExclusive = toDate.AddDays(1).Date;
+
+            ViewBag.frmDate = from.ToString("yyyy-MM-dd");
+            ViewBag.toDate = toDate.ToString("yyyy-MM-dd");
+
+            SetDealerUpiSlabViewBag();
+            SetDealerUpiTotalsViewBag(userid, from, toExclusive);
+
+            return db.show_upi_txn_details("Distributor", userid, "ALL", from, toExclusive).ToList();
+        }
+
+        public ActionResult UPITRANSFER_Dealer()
+        {
+            var rows = LoadDealerUpiTransferRows("", "");
+            return View(rows);
+        }
 
         [HttpPost]
         public ActionResult UPITRANSFER_Dealer(DateTime txt_frm_date, DateTime txt_to_date)
         {
             ViewBag.chk = "post";
-            var userid = User.Identity.GetUserId();
-            var slab = db.Upi_slab.SingleOrDefault();
-            if (slab == null)
-            {
-                ViewBag.min = 0;
-                ViewBag.charge = 0;
-            }
-            else
-            {
-                ViewBag.min = slab.min;
-                ViewBag.charge = slab.Charge;
-            }
-            DateTime from = txt_frm_date;
-            DateTime to = txt_to_date.AddDays(1).Date;
-            var ch = db.show_upi_txn_details("Distributor", userid, "ALL", from, to);
+            var rows = LoadDealerUpiTransferRows(txt_frm_date.ToString("yyyy-MM-dd"), txt_to_date.ToString("yyyy-MM-dd"));
+            return View(rows);
+        }
 
-            var upitxndetails = db.Upi_txn_details.Where(x => x.userid == userid && x.rolename == "Dealer" && x.txndate >= from && x.txndate <= to);
-            var totalcharges = upitxndetails.Sum(x => x.charge);
-            ViewBag.totalchargesamount = totalcharges;
-            return View(ch);
+        public ActionResult PDF_UPI_TRANSFER_Dealer(string txt_frm_date = "", string txt_to_date = "")
+        {
+            var rows = LoadDealerUpiTransferRows(txt_frm_date, txt_to_date);
+            return new ViewAsPdf("PDF_UPI_TRANSFER_Dealer", rows)
+            {
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                PageSize = Rotativa.Options.Size.A4
+            };
+        }
+
+        public ActionResult Execel_UPI_TRANSFER_Dealer(string txt_frm_date = "", string txt_to_date = "")
+        {
+            var rows = LoadDealerUpiTransferRows(txt_frm_date, txt_to_date);
+            Response.Clear();
+            Response.Buffer = true;
+            Response.Charset = "utf-8";
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("content-disposition", "attachment; filename=UPI_TRANSFER_Dealer_Report.xls");
+            return View("Excel_UPI_TRANSFER_Dealer", rows);
         }
 
         #region RetailerCreationToken
@@ -11108,79 +11192,38 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
             return View(chk);
         }
 
-        public ActionResult PDFGatewayTRANSFER(DateTime txt_frm_date, DateTime txt_to_date)
+        private List<Vastwebmulti.Models.gateway_report_Result> LoadDealerGatewayTransferRows(string txt_frm_date, string txt_to_date)
         {
-
-            ViewBag.chk = "post";
             var userid = User.Identity.GetUserId();
-            DateTime to = txt_to_date.AddDays(1).Date;
+            DateTime from = ParseDealerGiftDate(txt_frm_date);
+            DateTime toDate = ParseDealerGiftDate(txt_to_date);
+            DateTime toExclusive = toDate.AddDays(1).Date;
 
-            var chk = db.gateway_report(userid, "Dealer", txt_frm_date, to, "");
+            ViewBag.frmDate = from.ToString("yyyy-MM-dd");
+            ViewBag.toDate = toDate.ToString("yyyy-MM-dd");
 
-            var getwaytotals = db.Payment_Gateway_Txn_history.Where(x => x.userid == userid && x.roles == "Dealer" && x.f_date >= txt_frm_date && x.f_date <= to);
-            var totalsuccess = getwaytotals.Where(x => x.status.ToUpper().Contains("SUCCESS")).Sum(x => x.amount);
-            var totalFailed = getwaytotals.Where(x => x.status.ToUpper().Contains("FAILED")).Sum(x => x.amount);
-            var totalpending = getwaytotals.Where(x => x.status.ToUpper().Contains("PENDING")).Sum(x => x.amount);
-            var totalcharges = getwaytotals.Sum(x => x.charge);
-
-            ViewBag.totalsuccess = totalsuccess;
-            ViewBag.totalfailedamount = totalFailed;
-            ViewBag.totalpendingamount = totalpending;
-            ViewBag.totalchargesamount = totalcharges;
-
-
-            return new ViewAsPdf(chk);
+            return db.gateway_report(userid, "Dealer", from, toExclusive, "").ToList();
         }
 
-        public ActionResult Execel_Gateway_TRANSFER(DateTime txt_frm_date, DateTime txt_to_date)
+        public ActionResult PDFGatewayTRANSFER(string txt_frm_date = "", string txt_to_date = "")
         {
-
-            var userid = User.Identity.GetUserId();
-            DateTime to = txt_to_date.AddDays(1).Date;
-
-            var chk = db.gateway_report(userid, "Dealer", txt_frm_date, to, "").ToList();
-            DataTable dataTbl = new DataTable();
-            dataTbl.Columns.Add("Mode Mode", typeof(string));
-            dataTbl.Columns.Add("Amount", typeof(string));
-            dataTbl.Columns.Add("Charges", typeof(string));
-            dataTbl.Columns.Add("Net Received", typeof(string));
-            dataTbl.Columns.Add("Bank RRN ", typeof(string));
-            dataTbl.Columns.Add("Transaction Time ", typeof(string));
-            dataTbl.Columns.Add("Response Time", typeof(string));
-
-            if (chk.Count() > 0)
+            var rows = LoadDealerGatewayTransferRows(txt_frm_date, txt_to_date);
+            return new ViewAsPdf("PDFGatewayTRANSFER", rows)
             {
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                PageSize = Rotativa.Options.Size.A4
+            };
+        }
 
-                foreach (var item in chk)
-                {
-                    var sts = item.status;
-                    var bankrrn = item.errormsg;
-                    if (sts == "Success")
-                    {
-                        bankrrn = item.bankrrnno;
-                    }
-                    dataTbl.Rows.Add(item.PG_TYPE, item.amount, item.charge, item.totalpay, bankrrn, item.f_date, item.resptime);
-                }
-            }
-            else
-            {
-                dataTbl.Rows.Add("", "", "", "", "", "", "");
-            }
-            var grid = new GridView();
-            grid.DataSource = dataTbl;
-            grid.DataBind();
-            Response.ClearContent();
+        public ActionResult Execel_Gateway_TRANSFER(string txt_frm_date = "", string txt_to_date = "")
+        {
+            var rows = LoadDealerGatewayTransferRows(txt_frm_date, txt_to_date);
+            Response.Clear();
             Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment; filename=Execel_Gateway_TRANSFER.xls");
-            Response.ContentType = "application/ms-excel";
-            Response.Charset = "";
-            StringWriter sw = new StringWriter();
-            HtmlTextWriter htw = new HtmlTextWriter(sw);
-            grid.RenderControl(htw);
-            Response.Output.Write(sw.ToString());
-            Response.Flush();
-            Response.End();
-            return View();
+            Response.Charset = "utf-8";
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("content-disposition", "attachment; filename=Gateway_TRANSFER_Report.xls");
+            return View("Excel_GatewayTRANSFER", rows);
         }
 
 
