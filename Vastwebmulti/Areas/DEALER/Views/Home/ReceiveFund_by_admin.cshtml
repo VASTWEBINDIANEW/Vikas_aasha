@@ -1,285 +1,696 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.dealer_total_fund_recive_by_admin_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "ReceiveFund_by_admin";
+    ViewBag.Title = "Receive Fund By Admin";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.dealer_total_fund_recive_by_admin_Result>();
+
+    var totalNetAmt = reports.Sum(x => x.balance ?? 0m);
+    var totalTransfer = reports.Sum(x => x.Newbalance ?? 0m);
+    var totalCredit = reports.Sum(x => x.cr ?? 0m);
+    var totalOldCredit = reports.Sum(x => x.Oldcreditbalance ?? 0m);
+    var totalRemainPre = reports.Sum(x => x.dealer_prebal ?? 0m);
+    var totalRemainPost = reports.Sum(x => x.dealer_postbal ?? 0m);
 }
-<style>
-    .res_set {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=24" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page');</script>
 
-    .dropdown-menu {margin-top: 75px !important;}
-     
-    .btn-group, .btn-group-vertical {box-shadow: none;}
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
-    .ppp {margin-top: -20px !important;}
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-receive-fund-admin-page saas-ecommerce-report-page">
 
-    .form-inline .bootstrap-select.btn-group, .form-horizontal .bootstrap-select.btn-group, .form-group .bootstrap-select.btn-group {height: 29px;}
-    .selected.active::before{display:none;}
+    <div class="container-fluid vm-opr-page-shell">
 
-    @@media screen and (max-width:768px){
-        .receivefundbyadmin .table-responsive{position:relative !important;z-index:9;}
-        .receivefundbyadmin .table-responsive.web-white-table.table-responsive-customeclass {padding-bottom: 15px;}
-        .fundrecive-dealer {width: 100% !important;text-align: center;}
-        .reciveddate-dealer {width: 100% !important;float: left !important;}
-        .search-button-report {float: left !important;padding-left: 15px !important;width: auto !important;}
-        .search-button-report {order: 4;float: left !important;width: 30% !important;}
-        .card.cardrecived-dealer .col-md-4.reciveddate-dealer {order: 2;}
-        .card.cardrecived-dealer form {display: inline-grid;width: 100%;float: none;}
-        .col-md-2.recharge-report-dealer {
-            width: 68% !important;float: right !important;order: 3;position: absolute;bottom: 0;right: -16px;
+        @{
+            var rfAdminFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "dealerReceiveFundAdminForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate },
+                { "data-report-date-form", "true" }
+            };
         }
-        .card.cardrecived-dealer .col-md-5.fundrecive-dealer {order: 1;}
-        .reciveddate-dealer .form-group {margin-bottom: 10px;}
-        .card.all-reporttable-css {margin-top: 15px;margin-bottom: 0px;}
+        @using (Html.BeginForm("ReceiveFund_by_admin", "Home", FormMethod.Post, rfAdminFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-    @@media screen and (max-width:520px){
-        .receivefundbyadmin table tr td button.btn.dropdown-toggle.btn-default::before, .selectdiv::before {width: 7px;height: 7px;right:-4px;top:12px;}
-        .table-responsive-customeclass tbody tr td .btn-group {width: 100%;float: left;}
-        .table-responsive-customeclass tbody tr td .btn-group button{width:100% !important;padding-left:4px;padding-right:4px;text-align:left;}
-        .table-responsive-customeclass table thead tr th:first-child {padding-right: 110px;}
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Reports</li>
+                        <li>Receive Fund By Admin</li>
+                    </ol>
 
-    }
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
 
-    @@media screen and (max-width:420px){
-        .receivefundbyadmin table tr td button.btn.dropdown-toggle.btn-default::before{top:9px;}
-        .receivefundbyadmin table tr td button.btn.dropdown-toggle.btn-default{font-size:12px !important;}
-    }
-
-</style>
-<section class="content receivefundbyadmin">
-    <div class="container-fluid full-dealer-secondanimation">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>ReceiveFund By Admin</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account Active&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">ReceiveFund By Admin</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix" style="margin: 0px; padding-top: 8px;">
-            <div class="col-md-12 page-header-third" style="width:100%;float:left;">
-                <div class="card cardrecived-dealer" style="margin-bottom:0px;">
-                    <div class="row">
-                        @using (Html.BeginForm("ReceiveFund_by_admin", "Home", FormMethod.Post, new { @class = "res_set" }))
-                        {
-
-                            <div class="col-md-5 fundrecive-dealer dealer-none-fourclass" style="width:auto;float:left;padding-right:0px;">
-                                <div class="form-group">
-                                    <ol style="padding:0px;margin:0;">
-                                        <li class="active" style="color:#555; font-size:15px;font-weight:700;">Fund&nbsp;Receive&nbsp;From&nbsp;Admin&nbsp;History</li>
-                                    </ol>
-                                </div>
-
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
                             </div>
-                            
-                            <div style="width: 70%; padding-right: 15px;">
-                                <div class="col-md-2 recharge-report-dealer" style="width:auto;float:right;padding-left:5px;padding-right:0px;">
-                                    <div class="form-group" style="margin-bottom:0px;width:100%;float:left;">
-                                        <div style="padding-top:0px;float:right">
-
-                                            <div class="web-white-filter fil" style="float: left;margin-right: 0px;margin-top:0px;">
-                                                <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-    background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                                                <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-    background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-1 search-button-report" style="padding:0px 5px;float:right;padding-right:0px;">
-                                    <center>
-                                        <button type="submit" class="btn  waves-effect" style="width:100%; height:32px;">
-
-                                            <span style="color:#555;"><i class="fa fa-search" style="top:0px;font-size:13px;color:#444;left:-4px;" aria-hidden="true"></i>Search</span>
-                                        </button>
-                                    </center>
-                                </div>
-                                <div class="col-md-4 reciveddate-dealer" style="padding:0px;float:right;">
-                                    <div class="form-group for-web-date" style="width:100%;">
-                                        <div class="input-daterange input-group">
-                                            <div class="all-report-inputclass all-report-inputclass-left">
-                                                <div class="custom-date-icon" style="height: 32px;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; ", autocomplete = "off" })
-                                            </div>
-                                            
-                                            <div class="all-report-inputclass all-report-inputclass-right">
-                                                <div class="custom-date-icon" style="height: 32px;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-                                </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
                             </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
 
+                    </div>
 
-                        }
-                        <div class="col-md-2 pdf-totalbuttonclass">
-                            <div class="web-white-filter" style="float:right;">
-                                <table class="dataTable js-exportable ">
-                                    <thead>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                </div>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="rfAdminTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Receive fund totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRfAdminTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Net Amount</span>
+                            <strong class="vm-opr-total-card__value">@totalNetAmt.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Total Transfer</span>
+                            <strong class="vm-opr-total-card__value">@totalTransfer.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Current Credit</span>
+                            <strong class="vm-opr-total-card__value">@totalCredit.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Old Credit</span>
+                            <strong class="vm-opr-total-card__value">@totalOldCredit.ToString("N2")</strong>
                         </div>
                     </div>
                 </div>
+
             </div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card all-reporttable-css">
+        }
 
-                    <div class=" page-header-third">
-                        <div class="table-responsive web-white-table table-responsive-customeclass tableseconddes-dealer" style="position:inherit;">
-                            <table class="table table-bordered table-striped table-hover third-design-table" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Admin&nbsp;Info</th>
-                                        <th>Total&nbsp;Transfer</th>
-                                        <th>Type</th>
-                                        <th>Remain&nbsp;Pre</th>
-                                        <th>Remain&nbsp;Post</th>
-                                        <th>Current&nbsp;Credit</th>
-                                        <th>Old&nbsp;Credit</th>
-                                        <th>Net&nbsp;Amt</th>
-                                        <th>Date</th>
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
+                        <span>Fund receive from admin history</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-ft-search-wrap vm-rf-admin-table-search">
+                            <input class="form-control vm-rf-admin-search-input" type="text" id="rfAdminSearchInput" placeholder="Search report..." autocomplete="off" onkeyup="rfAdminSearch()" />
+                        </div>
+                        <span class="vm-radiant-inline-total" title="Total net amount for current filter">
+                            Total: <strong>&#8377; @totalNetAmt.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-rf-admin-totals-btn" onclick="toggleRfAdminTotals()" title="Show totals" aria-expanded="false" aria-controls="rfAdminTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="receiveFundAdminReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Admin&nbsp;Info</th>
+                                    <th>Total&nbsp;Transfer</th>
+                                    <th>Type</th>
+                                    <th>Remain&nbsp;Pre</th>
+                                    <th>Remain&nbsp;Post</th>
+                                    <th>Current&nbsp;Credit</th>
+                                    <th>Old&nbsp;Credit</th>
+                                    <th>Net&nbsp;Amt</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (reports.Any())
+                                {
+                                    foreach (var item in reports)
                                     {
-                                        <tr style="background:no-repeat;">
+                                        <tr>
                                             <td>
-                                                <div class="btn-group" role="group">
-                                                    <div class="btn-group" role="group">
-                                                        <button type="button" class="btn btn-default waves-effect dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Click to All information">
-                                                            @item.email
-                                                        </button>
-                                                        <ul class="dropdown-menu ppp">
-                                                            <li>
-                                                                <a href="javascript:void(0);" class="waves-effect waves-block" style="border-bottom:1px solid #f1efef;line-height:11px;">
-                                                                    @item.Name
-                                                                    <p style="font-size: 11px;margin-left: 0px;margin-top: 6px;">Name</p>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0);" class="waves-effect waves-block" style="border-bottom:1px solid #f1efef;line-height:11px;">
-                                                                    @item.comment
-                                                                    <p style="font-size: 11px;margin-left: 0px;margin-top: 6px;">Comment</p>
-                                                                </a>
-                                                            </li>
-
-                                                        </ul>
-
-                                                    </div>
-                                                </div>
-
+                                                <button type="button" class="vm-rf-admin-info-btn vm-rf-admin-detail-btn"
+                                                        data-email="@(item.email ?? "")"
+                                                        data-name="@(item.Name ?? "")"
+                                                        data-comment="@(item.comment ?? "")"
+                                                        title="View admin details">
+                                                    @(string.IsNullOrWhiteSpace(item.email) ? "—" : item.email)
+                                                </button>
                                             </td>
-                                            <td><p style="margin-top:6px;">@item.Newbalance</p></td>
-
-                                            <td><p style="margin-top:6px;">@item.bal_type</p></td>
-                                            <td><p style="margin-top:6px;">@item.dealer_prebal</p></td>
-                                            <td><p style="margin-top:6px;">@item.dealer_postbal</p></td>
-                                            <td><p style="margin-top:6px;">@item.cr</p></td>
-                                            <td><p style="margin-top:6px;">@item.Oldcreditbalance</p></td>
-
-                                            <td><p style="margin-top:6px;">@item.balance</p></td>
-                                            <td><p style="margin-top:6px;">@item.date_dlm</p></td>
-
+                                            <td>@(item.Newbalance.HasValue ? item.Newbalance.Value.ToString("N2") : "0.00")</td>
+                                            <td>@(item.bal_type ?? "—")</td>
+                                            <td>@(item.dealer_prebal.HasValue ? item.dealer_prebal.Value.ToString("N2") : "0.00")</td>
+                                            <td>@(item.dealer_postbal.HasValue ? item.dealer_postbal.Value.ToString("N2") : "0.00")</td>
+                                            <td>@(item.cr.HasValue ? item.cr.Value.ToString("N2") : "0.00")</td>
+                                            <td>@(item.Oldcreditbalance.HasValue ? item.Oldcreditbalance.Value.ToString("N2") : "0.00")</td>
+                                            <td>@(item.balance.HasValue ? item.balance.Value.ToString("N2") : "0.00")</td>
+                                            <td>@(item.date_dlm.HasValue ? item.date_dlm.Value.ToString("dd-MM-yyyy HH:mm") : "—")</td>
                                         </tr>
                                     }
-                                </tbody>
-                                <tfoot style="background-color:whitesmoke;">
-                                    <tr>
-                                        <td>Total</td>
-                                        <td>@Model.Sum(m => m.balance)</td>
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="9" class="vm-opr-table-empty">No records found for selected dates.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            @if (reports.Any())
+                            {
+                                <tfoot>
+                                    <tr class="vm-rf-admin-table-foot">
+                                        <td><strong>Total</strong></td>
+                                        <td><strong>@totalTransfer.ToString("N2")</strong></td>
                                         <td></td>
-                                        <td>@Model.Sum(m => m.dealer_prebal)</td>
-                                        <td>@Model.Sum(m => m.dealer_postbal)</td>
-                                        <td>@Model.Sum(m => m.cr)</td>
-                                        <td>@Model.Sum(m => m.Oldcreditbalance)</td>
-                                        <td>@Model.Sum(m => m.Newbalance)</td>
+                                        <td><strong>@totalRemainPre.ToString("N2")</strong></td>
+                                        <td><strong>@totalRemainPost.ToString("N2")</strong></td>
+                                        <td><strong>@totalCredit.ToString("N2")</strong></td>
+                                        <td><strong>@totalOldCredit.ToString("N2")</strong></td>
+                                        <td><strong>@totalNetAmt.ToString("N2")</strong></td>
                                         <td></td>
-
                                     </tr>
                                 </tfoot>
-                            </table>
-                        </div>
+                            }
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-dmt-detail-modal vm-rf-admin-detail-modal" id="rfAdminDetailModal" tabindex="-1" role="dialog" aria-labelledby="rfAdminDetailTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-violet">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-user-shield" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title" id="rfAdminDetailTitle">Admin details</h4>
+                        <span class="saas-admin-modal-subtitle" id="rfAdminDetSubtitle">Fund receive information</span>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-dmt-modal-body">
+                <div class="vm-dmt-modal-grid vm-dmt-modal-grid--2">
+                    <div class="vm-dmt-modal-field">
+                        <label>Email</label>
+                        <div class="vm-dmt-modal-readonly" id="rfAdminDetEmail">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label>Name</label>
+                        <div class="vm-dmt-modal-readonly" id="rfAdminDetName">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-dmt-modal-field--full">
+                        <label>Comment</label>
+                        <div class="vm-dmt-modal-readonly" id="rfAdminDetComment">—</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                    <i class="fas fa-times" aria-hidden="true"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=4"></script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
-
-    $(document).ready(function()
-    {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
+    function rfAdminSearch() {
+        var $ = window.jQuery;
+        var value = ($('#rfAdminSearchInput').val() || '').toLowerCase();
+        $('#receiveFundAdminReport tbody tr').filter(function () {
+            if ($(this).hasClass('vm-opr-table-empty-row')) {
+                return true;
+            }
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+    }
+
+    function rfAdminEsc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function rfAdminQueryData() {
+        var $ = window.jQuery;
+        return {
+            txt_frm_date: $('#txt_frm_date').val() || '',
+            txt_to_date: $('#txt_to_date').val() || '',
+            search: $.trim($('#rfAdminSearchInput').val() || '')
+        };
+    }
+
+    function rfAdminNow() {
+        var d = new Date();
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var h = d.getHours();
+        var ampm = h >= 12 ? 'PM' : 'AM';
+        var hr = h % 12;
+        if (!hr) { hr = 12; }
+        var min = d.getMinutes();
+        return ('0' + d.getDate()).slice(-2) + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + ('0' + hr).slice(-2) + ':' + ('0' + min).slice(-2) + ' ' + ampm;
+    }
+
+    function rfAdminNum(value) {
+        var n = parseFloat(String(value || '').replace(/,/g, '').replace(/[^\d.-]/g, ''));
+        return isNaN(n) ? 0 : n;
+    }
+
+    function rfAdminTableRows() {
+        var $ = window.jQuery;
+        var rows = [];
+        $('#receiveFundAdminReport tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-opr-table-empty-row') || !$tr.is(':visible')) {
+                return;
+            }
+            var $cells = $tr.children('td');
+            if ($cells.length < 9) {
+                return;
+            }
+            var $btn = $cells.eq(0).find('.vm-rf-admin-detail-btn');
+            rows.push({
+                admin: $.trim($btn.attr('data-email') || $cells.eq(0).text()).replace(/\s+/g, ' '),
+                name: $.trim($btn.attr('data-name') || '').replace(/\s+/g, ' '),
+                comment: $.trim($btn.attr('data-comment') || '').replace(/\s+/g, ' '),
+                transfer: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+                type: $.trim($cells.eq(2).text()).replace(/\s+/g, ' '),
+                pre: $.trim($cells.eq(3).text()).replace(/\s+/g, ' '),
+                post: $.trim($cells.eq(4).text()).replace(/\s+/g, ' '),
+                credit: $.trim($cells.eq(5).text()).replace(/\s+/g, ' '),
+                oldCredit: $.trim($cells.eq(6).text()).replace(/\s+/g, ' '),
+                net: $.trim($cells.eq(7).text()).replace(/\s+/g, ' '),
+                date: $.trim($cells.eq(8).text()).replace(/\s+/g, ' ')
+            });
+        });
+        return rows;
+    }
+
+    function rfAdminExportMeta(rows) {
+        var q = rfAdminQueryData();
+        var transfer = 0;
+        var pre = 0;
+        var post = 0;
+        var credit = 0;
+        var oldCredit = 0;
+        var net = 0;
+        for (var i = 0; i < rows.length; i++) {
+            transfer += rfAdminNum(rows[i].transfer);
+            pre += rfAdminNum(rows[i].pre);
+            post += rfAdminNum(rows[i].post);
+            credit += rfAdminNum(rows[i].credit);
+            oldCredit += rfAdminNum(rows[i].oldCredit);
+            net += rfAdminNum(rows[i].net);
         }
-    });
+        return {
+            generatedOn: rfAdminNow(),
+            frmDate: q.txt_frm_date || '-',
+            toDate: q.txt_to_date || '-',
+            search: q.search || '',
+            records: rows.length,
+            transfer: transfer.toFixed(2),
+            pre: pre.toFixed(2),
+            post: post.toFixed(2),
+            credit: credit.toFixed(2),
+            oldCredit: oldCredit.toFixed(2),
+            net: net.toFixed(2)
+        };
+    }
+
+    function rfAdminHeads() {
+        return ['Admin Email', 'Admin Name', 'Comment', 'Total Transfer', 'Type', 'Remain Pre', 'Remain Post', 'Current Credit', 'Old Credit', 'Net Amt', 'Date'];
+    }
+
+    function rfAdminBuildExcelHtml(rows) {
+        var m = rfAdminExportMeta(rows);
+        var colCount = 11;
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8" /><title>Receive Fund By Admin</title></head><body>';
+        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">';
+        html += '<tr><td colspan="' + colCount + '" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;">Receive Fund By Admin</td></tr>';
+        html += '<tr><td colspan="' + colCount + '" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;">Dealer reports - fund receive from admin</td></tr>';
+        html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Generated On</td><td colspan="3" style="font-weight:bold;">' + rfAdminEsc(m.generatedOn) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Date Range</td><td colspan="3" style="font-weight:bold;">' + rfAdminEsc(m.frmDate) + ' to ' + rfAdminEsc(m.toDate) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Records</td><td style="font-weight:bold;">' + m.records + '</td></tr>';
+        if (m.search) {
+            html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Search Filter</td><td colspan="' + (colCount - 1) + '" style="font-weight:bold;">' + rfAdminEsc(m.search) + '</td></tr>';
+        }
+        html += '<tr><td bgcolor="#EEF2FF" style="font-weight:bold;">Net Amount</td><td bgcolor="#EEF2FF" style="font-weight:bold;">' + m.net + '</td>';
+        html += '<td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">Total Transfer</td><td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">' + m.transfer + '</td>';
+        html += '<td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">Current Credit</td><td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">' + m.credit + '</td>';
+        html += '<td bgcolor="#FEF2F2" style="font-weight:bold;color:#B91C1C;">Old Credit</td><td bgcolor="#FEF2F2" style="font-weight:bold;color:#B91C1C;">' + m.oldCredit + '</td>';
+        html += '<td bgcolor="#EFF6FF" style="font-weight:bold;color:#1D4ED8;">Remain Pre</td><td bgcolor="#EFF6FF" style="font-weight:bold;color:#1D4ED8;">' + m.pre + '</td>';
+        html += '<td bgcolor="#F8FAFC" style="font-weight:bold;color:#334155;">Remain Post</td><td bgcolor="#F8FAFC" style="font-weight:bold;color:#334155;">' + m.post + '</td></tr>';
+        html += '<tr>';
+        var heads = rfAdminHeads();
+        for (var h = 0; h < heads.length; h++) {
+            html += '<th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">' + rfAdminEsc(heads[h]) + '</th>';
+        }
+        html += '</tr>';
+        if (!rows.length) {
+            html += '<tr><td colspan="' + colCount + '" bgcolor="#F8FAFC" style="text-align:center;font-weight:bold;color:#64748B;height:48px;">No records found for selected dates.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                var rowBg = (i % 2 === 1) ? '#F8FAFC' : '#FFFFFF';
+                html += '<tr>';
+                html += '<td bgcolor="' + rowBg + '">' + rfAdminEsc(r.admin) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + rfAdminEsc(r.name || '—') + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + rfAdminEsc(r.comment || '—') + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + rfAdminEsc(r.transfer) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + rfAdminEsc(r.type) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + rfAdminEsc(r.pre) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + rfAdminEsc(r.post) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + rfAdminEsc(r.credit) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + rfAdminEsc(r.oldCredit) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + rfAdminEsc(r.net) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + rfAdminEsc(r.date) + '</td>';
+                html += '</tr>';
+            }
+            html += '<tr>';
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">Total</td><td bgcolor="#EFF6FF"></td><td bgcolor="#EFF6FF"></td>';
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">' + m.transfer + '</td><td bgcolor="#EFF6FF"></td>';
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">' + m.pre + '</td>';
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">' + m.post + '</td>';
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">' + m.credit + '</td>';
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">' + m.oldCredit + '</td>';
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">' + m.net + '</td><td bgcolor="#EFF6FF"></td>';
+            html += '</tr>';
+        }
+        html += '</table></body></html>';
+        return html;
+    }
+
+    function rfAdminBuildPdfHtml(rows) {
+        var m = rfAdminExportMeta(rows);
+        var heads = rfAdminHeads();
+        var headHtml = '';
+        for (var h = 0; h < heads.length; h++) {
+            headHtml += '<th>' + rfAdminEsc(heads[h]) + '</th>';
+        }
+        var body = '';
+        if (!rows.length) {
+            body = '<tr><td colspan="11" class="empty">No records found for selected dates.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                body += '<tr>';
+                body += '<td>' + rfAdminEsc(r.admin) + '</td>';
+                body += '<td>' + rfAdminEsc(r.name || '—') + '</td>';
+                body += '<td>' + rfAdminEsc(r.comment || '—') + '</td>';
+                body += '<td>' + rfAdminEsc(r.transfer) + '</td>';
+                body += '<td>' + rfAdminEsc(r.type) + '</td>';
+                body += '<td>' + rfAdminEsc(r.pre) + '</td>';
+                body += '<td>' + rfAdminEsc(r.post) + '</td>';
+                body += '<td>' + rfAdminEsc(r.credit) + '</td>';
+                body += '<td>' + rfAdminEsc(r.oldCredit) + '</td>';
+                body += '<td>' + rfAdminEsc(r.net) + '</td>';
+                body += '<td>' + rfAdminEsc(r.date) + '</td>';
+                body += '</tr>';
+            }
+            body += '<tr class="foot-row">';
+            body += '<td><strong>Total</strong></td><td></td><td></td>';
+            body += '<td><strong>' + rfAdminEsc(m.transfer) + '</strong></td><td></td>';
+            body += '<td><strong>' + rfAdminEsc(m.pre) + '</strong></td>';
+            body += '<td><strong>' + rfAdminEsc(m.post) + '</strong></td>';
+            body += '<td><strong>' + rfAdminEsc(m.credit) + '</strong></td>';
+            body += '<td><strong>' + rfAdminEsc(m.oldCredit) + '</strong></td>';
+            body += '<td><strong>' + rfAdminEsc(m.net) + '</strong></td><td></td>';
+            body += '</tr>';
+        }
+        var searchRow = m.search
+            ? '<tr><td colspan="3"><span class="meta-label">Search Filter</span><span class="meta-value">' + rfAdminEsc(m.search) + '</span></td></tr>'
+            : '';
+        return '<!DOCTYPE html><html><head><meta charset="utf-8" /><title>Receive Fund By Admin</title><style type="text/css">'
+            + '@@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }'
+            + '* { box-sizing: border-box; } body { margin:0; padding:16px; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#0f172a; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }'
+            + 'table { border-collapse:collapse; } .hero { width:100%; border:1px solid #1d4ed8; } .hero-top { padding:14px 18px; background:#2563eb; color:#fff; }'
+            + '.hero-top h1 { margin:0; font-size:20px; } .hero-top p { margin:4px 0 0; font-size:11px; color:#dbeafe; }'
+            + '.meta { width:100%; background:#f8fafc; } .meta td { padding:8px 12px; border-right:1px solid #e2e8f0; vertical-align:top; }'
+            + '.meta-label { display:block; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748b; margin-bottom:3px; }'
+            + '.meta-value { font-size:12px; font-weight:700; } .cards { width:100%; margin:12px 0; } .cards td { width:25%; padding:0 6px 0 0; vertical-align:top; }'
+            + '.card { border:1px solid #e2e8f0; padding:10px 12px; } .card-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; margin-bottom:4px; } .card-value { font-size:16px; font-weight:800; }'
+            + '.card-total { background:#eef2ff; } .card-ok { background:#ecfdf5; } .card-fail { background:#fef2f2; } .card-wait { background:#fefce8; }'
+            + '.grid { width:100%; border:1px solid #cbd5e1; } .grid th { padding:9px 7px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; color:#fff; background:#334155; }'
+            + '.grid td { padding:8px 7px; font-size:11px; border-top:1px solid #e2e8f0; vertical-align:top; } .grid tbody tr:nth-child(even):not(.foot-row) td { background:#f8fafc; }'
+            + '.grid tbody tr.foot-row td { background:#eff6ff; border-top:2px solid #93c5fd; font-weight:700; }'
+            + '.empty { padding:36px 16px; text-align:center; font-size:14px; font-weight:700; color:#64748b; background:#f8fafc; }'
+            + '.foot { margin-top:10px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:10px; color:#94a3b8; text-align:center; }'
+            + '</style></head><body><div class="sheet"><div class="hero"><div class="hero-top"><h1>Receive Fund By Admin</h1><p>Dealer reports - fund receive from admin</p></div>'
+            + '<table class="meta" cellpadding="0" cellspacing="0"><tr>'
+            + '<td style="width:34%;"><span class="meta-label">Generated On</span><span class="meta-value">' + rfAdminEsc(m.generatedOn) + '</span></td>'
+            + '<td style="width:46%;"><span class="meta-label">Date Range</span><span class="meta-value">' + rfAdminEsc(m.frmDate) + ' to ' + rfAdminEsc(m.toDate) + '</span></td>'
+            + '<td style="width:20%;"><span class="meta-label">Records</span><span class="meta-value">' + m.records + '</span></td>'
+            + '</tr>' + searchRow + '</table></div>'
+            + '<table class="cards" cellpadding="0" cellspacing="0"><tr>'
+            + '<td><div class="card card-total"><span class="card-label">Net Amount</span><span class="card-value">' + m.net + '</span></div></td>'
+            + '<td><div class="card card-ok"><span class="card-label">Total Transfer</span><span class="card-value">' + m.transfer + '</span></div></td>'
+            + '<td><div class="card card-wait"><span class="card-label">Current Credit</span><span class="card-value">' + m.credit + '</span></div></td>'
+            + '<td><div class="card card-fail"><span class="card-label">Old Credit</span><span class="card-value">' + m.oldCredit + '</span></div></td>'
+            + '</tr></table>'
+            + '<table class="grid" cellpadding="0" cellspacing="0"><thead><tr>' + headHtml + '</tr></thead><tbody>' + body + '</tbody></table>'
+            + '<div class="foot">Generated from Dealer panel - Receive Fund By Admin</div></div></body></html>';
+    }
+
+    function rfAdminDownloadExcel(html) {
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'Receive_Fund_By_Admin.xls');
+            return;
+        }
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'Receive_Fund_By_Admin.xls';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+    }
+
+    function rfAdminOpenPdf(html) {
+        var w = window.open('', '_blank');
+        if (!w) {
+            return;
+        }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+    }
+
+    function toggleRfAdminTotals() {
+        var $ = window.jQuery;
+        var panel = $('#rfAdminTotalsPanel');
+        if (panel.is(':visible')) {
+            hideRfAdminTotals();
+            return;
+        }
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        $('.vm-rf-admin-totals-btn').attr('aria-expanded', 'true');
+    }
+
+    function hideRfAdminTotals() {
+        var $ = window.jQuery;
+        $('#rfAdminTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-rf-admin-totals-btn').attr('aria-expanded', 'false');
+    }
+
+    function rfAdminDetailText(btn, name) {
+        var value = (btn && btn.getAttribute('data-' + name)) || '';
+        value = String(value).replace(/\s+/g, ' ').trim();
+        return value || '—';
+    }
+
+    function rfAdminSetDetail(id, value) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.textContent = value;
+        }
+    }
+
+    function showRfAdminModal(selector) {
+        if (typeof window.showAdminModal === 'function') {
+            window.showAdminModal(selector);
+            return;
+        }
+        var $ = window.jQuery;
+        var $modal = $(selector);
+        if ($modal.parent().length && !$modal.parent().is('body')) {
+            $modal.appendTo(document.body);
+        }
+        if ($ && $.fn && $.fn.modal) {
+            $modal.modal('show');
+        }
+    }
+
+    function openRfAdminDetail(btn) {
+        var email = rfAdminDetailText(btn, 'email');
+        rfAdminSetDetail('rfAdminDetSubtitle', email === '—' ? 'Fund receive information' : email);
+        rfAdminSetDetail('rfAdminDetEmail', email);
+        rfAdminSetDetail('rfAdminDetName', rfAdminDetailText(btn, 'name'));
+        rfAdminSetDetail('rfAdminDetComment', rfAdminDetailText(btn, 'comment'));
+        showRfAdminModal('#rfAdminDetailModal');
+    }
+
+    function bindRfAdminModals() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.modal) {
+            window.setTimeout(bindRfAdminModals, 40);
+            return;
+        }
+        $(document).off('click.rfAdminDetail', '.vm-rf-admin-detail-btn').on('click.rfAdminDetail', '.vm-rf-admin-detail-btn', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openRfAdminDetail(this);
+        });
+    }
+
+    function bootReceiveFundAdminReport() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.datepicker) {
+            window.setTimeout(bootReceiveFundAdminReport, 50);
+            return;
+        }
+
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#dealerReceiveFundAdminForm');
+        } else {
+            $('#txt_frm_date, #txt_to_date').datepicker({
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                autoclose: true,
+                orientation: 'bottom auto',
+                container: 'body'
+            });
+            if ($('#dealerReceiveFundAdminForm').attr('data-date-mode') !== 'post') {
+                $('#txt_frm_date').datepicker('setDate', new Date());
+                $('#txt_to_date').datepicker('setDate', new Date());
+            }
+        }
+
+        function pinRfAdminDatepicker(e) {
+            if (typeof window.repositionAdminDatepickerForMobile === 'function') {
+                window.repositionAdminDatepickerForMobile(e && e.target ? e.target : this);
+            } else if (typeof window.repositionAdminDatepicker === 'function') {
+                window.repositionAdminDatepicker(e && e.target ? e.target : this);
+            }
+        }
+
+        $(document).off('show.rfAdminDp shown.rfAdminDp').on('show.rfAdminDp shown.rfAdminDp', '#txt_frm_date, #txt_to_date', pinRfAdminDatepicker);
+        $(window).off('resize.rfAdminDp orientationchange.rfAdminDp').on('resize.rfAdminDp orientationchange.rfAdminDp', pinRfAdminDatepicker);
+
+        $('#btnExport').off('click.rfAdminEx').on('click.rfAdminEx', function () {
+            var rows = rfAdminTableRows();
+            if (!rows.length) {
+                if (typeof swal === 'function') {
+                    swal('No records to export', '', 'warning');
+                }
+                return;
+            }
+            rfAdminDownloadExcel(rfAdminBuildExcelHtml(rows));
+        });
+
+        $('#btnPDF').off('click.rfAdminPdf').on('click.rfAdminPdf', function () {
+            var rows = rfAdminTableRows();
+            if (!rows.length) {
+                if (typeof swal === 'function') {
+                    swal('No records to export', '', 'warning');
+                }
+                return;
+            }
+            rfAdminOpenPdf(rfAdminBuildPdfHtml(rows));
+        });
+    }
+
+    bindRfAdminModals();
+    if (document.readyState === 'complete') {
+        bootReceiveFundAdminReport();
+    } else {
+        window.addEventListener('load', bootReceiveFundAdminReport);
+    }
 </script>
 
-<script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5',
-                'print'
-            ]
-        });
-    });
-</script>
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page .vm-radiant-inline-filters .form-control,
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page .vm-radiant-inline-filters input.form-control,
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search,
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search span,
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page .vm-rf-admin-table-search input.vm-rf-admin-search-input,
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page #receiveFundAdminReport.vm-opr-data-table thead th,
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page #receiveFundAdminReport.vm-opr-data-table tbody td,
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page #receiveFundAdminReport.vm-opr-data-table tfoot td {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page .vm-rf-admin-table-search {
+            min-width: 200px;
+            max-width: 260px;
+        }
+
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page .vm-rf-admin-table-search input.vm-rf-admin-search-input {
+            height: 38px !important;
+            border-radius: 8px !important;
+            border: 1.5px solid #cbd5e1 !important;
+            background: #fff !important;
+            padding: 0 12px !important;
+            font-weight: 500 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page input#txt_frm_date.form-control.saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-receive-fund-admin-page.saas-ecommerce-report-page input#txt_to_date.form-control.saas-acc-dp-input {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+    </style>
+}

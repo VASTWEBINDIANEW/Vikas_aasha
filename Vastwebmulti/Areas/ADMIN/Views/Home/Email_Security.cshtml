@@ -16,10 +16,12 @@
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-api-user-page.css?v=5" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-high-security-gate.css?v=2" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-email-security-page.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-sms-api-page.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-email-security-page.css?v=14" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 <div id="loadermoney" class="loadermoney" style="display:none;"></div>
-<section class="content Email_Security_Page tmw-email-securty Masterlist-page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-user-page saas-master-list-page saas-fund-transfer-premium">
+<section class="content Email_Security_Page email-security-pages tmw-email-securty Masterlist-page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-user-page saas-master-list-page saas-fund-transfer-premium">
     <div class="container-fluid vm-ft-page-shell">
 
         <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
@@ -53,18 +55,21 @@
                                         <span class="vm-ft-form-card-header__sub">Sender setup, bulk mail &amp; SSL</span>
                                     </div>
                                 </div>
-                                <div class="body es-left-body">
-                                    <div class="">
-                                        <div class="au-tabs">
-                                            <button type="button" id="top-mail-setting" class="au-tab-btn active">
-                                                <i class="fa fa-cog" aria-hidden="true"></i>
-                                                <span>Email Setting</span>
-                                            </button>
-                                            <button type="button" id="top-mail" class="au-tab-btn">
-                                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                                                <span>Bulk Email</span>
-                                            </button>
-                                        </div>
+                                <div class="head-sms es-left-body">
+                                    <div class="au-tabs">
+                                        <button type="button" id="top-mail-setting" class="au-tab-btn sa-left-tab-btn es-left-tab-btn is-active active" data-es-left="es-pane-setting">
+                                            <i class="fa fa-cog" aria-hidden="true"></i>
+                                            <span>Email Setting</span>
+                                        </button>
+                                        <button type="button" id="top-mail" class="au-tab-btn sa-left-tab-btn es-left-tab-btn" data-es-left="es-pane-bulk">
+                                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                            <span>Bulk Email</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="smsapi-first es-left-first custom-table-responsive">
+                                    <div class="es-left-panes">
+                                        <div id="es-pane-setting" class="sa-left-tab-pane es-left-pane is-active">
                                         <div class="table-and-model tabcurrent-seconddesign input-border-third es-pane" style="margin-bottom:5px;">
                                             <fieldset class="es-sender-fieldset">
                                                 <legend>Add Sender Email</legend>
@@ -101,8 +106,61 @@
 
                                             </fieldset>
                                         </div>
+                                        <div class="bodys">
+                                            <p>
+                                                <b style="color:red; font-size:14px;">
+                                                    <i class="fa fa-exclamation-triangle fullbodydycolorbg" style="-webkit-background-clip: text !important;-moz-background-clip: text !important;-webkit-text-fill-color: transparent;" aria-hidden="true"></i>
+                                                </b> When Send the Mail with Your <b>Gmail Account</b> Then SSL TRUE is <b style="color:green;background:#fff;">"ON"</b> And Send the Mail with Your <b>Mail Account</b> Then SSL FALSE is <b style="color:red;background:#fff;">"OFF"</b>
+                                            </p>
+                                        </div>
+                                        <div class="table-responsive for-table-one" style="padding:0 5px;">
+                                            <table class="table table-hover table-striped table-bordered mari-table" id="maillist">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="border: 1px solid !important;">SMTP/Email</th>
+                                                        <th style="border: 1px solid !important;"><img src="~/AdminDesign/images/ssl.svg" style="width:15px;" /> SSL</th>
+                                                        <th style="border: 1px solid !important;">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{ var EI = 1;}
+                                                    @if (Model.priorityEmail.Count() > 0)
+                                                    {
+                                                        foreach (var item in Model.priorityEmail)
+                                                        {
+                                                            <tr>
+                                                                <td style="border: 1px solid !important;">
+                                                                    <p><span style="background: #bbb;font-size: 10px;padding: 0px 5px;margin-right: 2px;">@EI</span>@item.Smpthost</p>
+                                                                    <p>@item.Email</p>
+                                                                </td>
+                                                                <td style="border: 1px solid !important;">
+                                                                    @if (item.Enablessl == "true")
+                                                                    {
+                                                                        <div class="onoffswitch">
+                                                                            <span class="costom-on" onclick="sslOnOff(@item.idno)">ON</span>
+                                                                        </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="onoffswitch">
+                                                                            <span class="custom-off" onclick="sslOnOff(@item.idno)">OFF</span>
+                                                                        </div>
+                                                                    }
+                                                                </td>
+                                                                <td style="border: 1px solid !important;">
+                                                                    <button type="button" class="es-action-btn" onclick="editBussMail(@item.idno)">Edit</button>
+                                                                    <button type="button" class="es-action-btn es-action-btn--danger" onclick="delBussMail(@item.idno)">Del</button>
+                                                                </td>
+                                                            </tr>
+                                                            EI++;
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </div><!-- es-pane-setting -->
+                                        <div id="es-pane-bulk" class="sa-left-tab-pane es-left-pane">
                                             <div class="table-and-remail tabcurrent-seconddesign input-border-third es-pane">
-
                                                 <div class="bodyremail email-security-left">
                                                     @using (Ajax.BeginForm("SendEmail", "Home", new AjaxOptions { OnSuccess = "OnSuccess", OnFailure = "OnFailure" }))
                                                     {
@@ -120,7 +178,7 @@
                                                                         new SelectListItem { Text = "Retailer", Value= "Retailer" },
                                                                         new SelectListItem { Text = "API User", Value= "API" },
                                                                         new SelectListItem { Text = "Whitelabel", Value= "Whitelabel" },
-                                                                      }, "Select User", new { @class = "form-control" })
+                                                                      }, "Select User", new { @class = "form-control for-select2" })
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -170,120 +228,28 @@
                                                 </div>
 
                                             </div><!--.table-and-remail-->
-                                        </div><!--.table-responsive-->
-                                        <div class="bodys">
-                                            <p>
-                                                <b style="color:red; font-size:14px;">
-                                                    <i class="fa fa-exclamation-triangle fullbodydycolorbg" style="-webkit-background-clip: text !important;-moz-background-clip: text !important;-webkit-text-fill-color: transparent;" aria-hidden="true"></i>
-                                                </b> When Send the Mail with Your <b>Gmail Account</b> Then SSL TRUE is <b style="color:green;background:#fff;">"ON"</b> And Send the Mail with Your <b>Mail Account</b> Then SSL FALSE is <b style="color:red;background:#fff;">"OFF"</b>
-                                            </p>
-                                        </div>
-                                        <div class="table-responsive for-table-one" style="padding:0 5px;">
-                                            <table class="table table-hover table-striped table-bordered mari-table" id="maillist">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="border: 1px solid !important;">SMTP/Email</th>
-
-                                                        @*<th style="border: 1px solid !important;">Password</th>*@
-                                                        <th style="border: 1px solid !important;"><img src="~/AdminDesign/images/ssl.svg" style="width:15px;" /> SSL</th>
-                                                        <th style="border: 1px solid !important;">Action</th>
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @*<tr>
-                                                            <td>
-                                                                <p><span style="background: #bbb;font-size: 10px;padding: 0px 5px;margin-right: 2px;">45</span>mail.aashadigitalindia.co.in</p>
-                                                                <p>Support@aashadigitalindia.co.in</p>
-                                                            </td>
-
-                                                            <td>********</td>
-                                                            <td>
-                                                                <div class="onoffswitch" style="width:23px;float:left;">
-                                                                    <span class="costom-on" style="height:22px;"></span>
-
-                                                                </div>
-                                                                <button style="height: 24px;float: left;padding: 0px 3px;background: #f0f0f0;border: 1px solid #bfbebe;margin-left: 2px;">Edit</button><button style="height: 24px;float: left;padding: 0px 3px;background: #f0f0f0;border: 1px solid #bfbebe;margin-left: 2px;">Del</button>
-                                                            </td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <p><span style="background: #bbb;font-size: 10px;padding: 0px 5px;margin-right: 2px;">45</span>mail.aashadigitalindia.co.in</p>
-                                                                <p>Support@aashadigitalindia.co.in</p>
-                                                            </td>
-
-                                                            <td>********</td>
-                                                            <td>
-                                                                <div class="onoffswitch" style="width:23px;float:left;">
-
-                                                                    <span class="custom-off" style="height:22px;"></span>
-                                                                </div>
-                                                                <button style="height: 24px;float: left;padding: 0px 3px;background: #f0f0f0;border: 1px solid #bfbebe;margin-left: 2px;">Edit</button><button style="height: 24px;float: left;padding: 0px 3px;background: #f0f0f0;border: 1px solid #bfbebe;margin-left: 2px;">Del</button>
-                                                            </td>
-
-                                                        </tr>*@
-                                                    @{ var EI = 1;}
-                                                    @if (Model.priorityEmail.Count() > 0)
-                                                    {
-                                                        foreach (var item in Model.priorityEmail)
-                                                        {
-                                                            <tr>
-                                                                <td style="border: 1px solid !important;">
-                                                                    <p><span style="background: #bbb;font-size: 10px;padding: 0px 5px;margin-right: 2px;">@EI</span>@item.Smpthost</p>
-                                                                    <p>@item.Email</p>
-                                                                </td>
-
-                                                                @*<td  style="border: 1px solid !important;">********</td>*@
-                                                                <td style="border: 1px solid !important;">
-                                                                    @if (item.Enablessl == "true")
-                                                                    {
-                                                                        <div class="onoffswitch">
-                                                                            <span class="costom-on" onclick="sslOnOff(@item.idno)">ON</span>
-
-                                                                        </div>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <div class="onoffswitch">
-                                                                            <span class="custom-off" onclick="sslOnOff(@item.idno)">OFF</span>
-
-                                                                        </div>
-                                                                    }
-                                                                </td>
-                                                                <td style="border: 1px solid !important;">
-                                                                    <button type="button" class="es-action-btn" onclick="editBussMail(@item.idno)">Edit</button>
-                                                                    <button type="button" class="es-action-btn es-action-btn--danger" onclick="delBussMail(@item.idno)">Del</button>
-                                                                </td>
-
-                                                            </tr>
-                                                            EI++;
-                                                        }
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+                                        </div><!-- es-pane-bulk -->
+                                    </div><!-- es-left-panes -->
+                                </div><!-- smsapi-first -->
 
                             </div>
                         </div>
 
-                            <div class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col" style="padding-left:0;">
-                                <div class="fund-trasfer-right fund-user-right vm-ft-history-panel tt-right-table">
+                            <div class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col">
+                                <div class="fund-trasfer-right fund-user-right vm-ft-history-panel tt-right-table smsapi-second">
                                     <div class="vm-ft-history-body">
-                                        <ul class="tabs2 es-right-tabs" role="tablist">
-                                            <li class="tab-link current2" data-tab="tab-5" role="tab">
+                                        <ul class="es-right-tabs es-email-right-tabs" role="tablist">
+                                            <li class="tab-link current current2" data-tab="es-history-tab" role="tab">
                                                 <i class="fas fa-history" aria-hidden="true"></i>
                                                 <span>Sending Email History</span>
                                             </li>
-                                            <li class="tab-link" data-tab="tab-6" role="tab">
+                                            <li class="tab-link" data-tab="es-outbox-tab" role="tab">
                                                 <i class="fas fa-inbox" aria-hidden="true"></i>
                                                 <span>Manage Email Outbox</span>
                                             </li>
                                         </ul>
                                         <div class="es-right-tab-body">
-                                            <div id="tab-5" class="tab-content2 current2">
+                                            <div id="es-history-tab" class="es-right-tab-pane is-active">
                                                 <div class="es-history-toolbar es-history-toolbar--one-line">
                                                     <div class="es-history-toolbar__intro">
                                                         <span class="vm-ft-history-toolbar__title">Sending email history</span>
@@ -305,7 +271,7 @@
                                                     @Html.Partial("_EmailHistory", Model)
                                                 </div>
                                             </div>
-                                            <div id="tab-6" class="tab-content2">
+                                            <div id="es-outbox-tab" class="es-right-tab-pane">
                                             <div class="sms-settingpage">
                                                 <ul class="smssetting-top backgfull-third lllkggt">
                                                     <li class="button-seconddesign">
@@ -1376,15 +1342,6 @@
                 e.preventDefault();
             });
 
-            $('.Email_Security_Page .es-right-tabs > li.tab-link').on('click', function () {
-                var tabId = $(this).attr('data-tab');
-                $('.Email_Security_Page .es-right-tabs > li.tab-link').removeClass('current2');
-                $('.Email_Security_Page .es-right-tab-body > .tab-content2').removeClass('current2');
-                $(this).addClass('current2');
-                if (tabId) {
-                    $('#' + tabId).addClass('current2');
-                }
-            });
         });
     </script>
     <script>
@@ -1597,34 +1554,66 @@
 
 
     <script>
-        function esInitLeftTabs() {
-            $('.Email_Security_Page .table-and-remail').hide();
-            $('.Email_Security_Page .table-and-model').show();
-            $('.Email_Security_Page .left-table .bodys').show();
-            $('.Email_Security_Page .left-table .for-table-one').show();
-            $('#top-mail-setting').addClass('active');
-            $('#top-mail').removeClass('active');
+        function esGetActiveLeftPaneId() {
+            var $btn = $('.Email_Security_Page .head-sms .es-left-tab-btn.is-active').first();
+            return ($btn.length && $btn.attr('data-es-left')) ? $btn.attr('data-es-left') : 'es-pane-setting';
+        }
+
+        function esRestoreLeftTabPane() {
+            var paneId = esGetActiveLeftPaneId();
+            $('.Email_Security_Page .es-left-first .sa-left-tab-pane').removeClass('is-active');
+            $('.Email_Security_Page .es-left-first #' + paneId).addClass('is-active');
+        }
+
+        function esSwitchLeftTab(paneId) {
+            $('.Email_Security_Page .head-sms .es-left-tab-btn').removeClass('is-active active');
+            $('.Email_Security_Page .es-left-first .sa-left-tab-pane').removeClass('is-active');
+            $('.Email_Security_Page .head-sms .es-left-tab-btn[data-es-left="' + paneId + '"]').addClass('is-active active');
+            $('.Email_Security_Page .es-left-first #' + paneId).addClass('is-active');
+            if (paneId === 'es-pane-bulk' && typeof esInitEmailSelect2 === 'function') {
+                window.setTimeout(esInitEmailSelect2, 60);
+            }
+        }
+
+        function esSwitchRightTab(tabId) {
+            $('.Email_Security_Page .es-email-right-tabs > li.tab-link').removeClass('current current2');
+            $('.Email_Security_Page .es-right-tab-body > .es-right-tab-pane').removeClass('is-active current2');
+            $('.Email_Security_Page .es-email-right-tabs > li.tab-link[data-tab="' + tabId + '"]').addClass('current current2');
+            $('#' + tabId).addClass('is-active current2');
+            esRestoreLeftTabPane();
+        }
+
+        function esInitEmailSelect2() {
+            if (typeof $.fn.select2 !== 'function') {
+                return;
+            }
+            $('#es-pane-bulk select.for-select2').each(function () {
+                var $el = $(this);
+                if ($el.hasClass('select2-hidden-accessible')) {
+                    $el.select2('destroy');
+                }
+                $el.select2({
+                    width: '100%',
+                    dropdownParent: $(document.body),
+                    dropdownCssClass: 'es-select2-dropdown'
+                });
+            });
         }
 
         $(document).ready(function () {
-            esInitLeftTabs();
+            esSwitchLeftTab('es-pane-setting');
+            esSwitchRightTab('es-history-tab');
 
-            $('#top-mail').on('click', function () {
-                $('.Email_Security_Page .table-and-remail').show();
-                $('.Email_Security_Page .table-and-model').hide();
-                $('.Email_Security_Page .left-table .bodys').hide();
-                $('.Email_Security_Page .left-table .for-table-one').hide();
-                $('#top-mail-setting').removeClass('active');
-                $(this).addClass('active');
+            $(document).on('click', '.Email_Security_Page .head-sms .es-left-tab-btn', function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                esSwitchLeftTab($(this).attr('data-es-left'));
             });
 
-            $('#top-mail-setting').on('click', function () {
-                $('.Email_Security_Page .table-and-remail').hide();
-                $('.Email_Security_Page .table-and-model').show();
-                $('.Email_Security_Page .left-table .bodys').show();
-                $('.Email_Security_Page .left-table .for-table-one').show();
-                $('#top-mail').removeClass('active');
-                $(this).addClass('active');
+            $(document).on('click', '.Email_Security_Page .es-email-right-tabs > li.tab-link', function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                esSwitchRightTab($(this).attr('data-tab'));
             });
         });
     </script>

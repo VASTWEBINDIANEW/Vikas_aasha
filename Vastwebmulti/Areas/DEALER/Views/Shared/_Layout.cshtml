@@ -283,7 +283,7 @@
     </section>
 
     @RenderBody()
-    <link href="~/MainFrontDesign/css/dealer-panel-fonts.css?v=19" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/dealer-panel-fonts.css?v=25" rel="stylesheet" />
     @RenderSection("LateCss", required: false)
     <link href="~/MainFrontDesign/css/dealer-report-table-fix-modern.css?v=4" rel="stylesheet" />
 
@@ -493,6 +493,107 @@
             }
         });
         }
+    </script>
+
+    <!-- Dealer topbar badges — Tokens & Chat (dynamic, hide when page seen) -->
+    <script>
+        window.dealerTopbarIsTokenPage = @(Request.Path.IndexOf("tokenPurchaseHistory", StringComparison.OrdinalIgnoreCase) >= 0 ? "true" : "false");
+        window.dealerTopbarIsChatPage = @(Request.Path.IndexOf("Complaint", StringComparison.OrdinalIgnoreCase) >= 0 ? "true" : "false");
+
+        window.syncDealerTopbarTokenBadge = function (value) {
+            var $badge = window.jQuery ? window.jQuery('#dealerTopbarTokenBadge') : null;
+            if (!$badge || !$badge.length) {
+                return;
+            }
+            var n = parseInt(value, 10);
+            if (isNaN(n) || n <= 0) {
+                $badge.hide().text('0');
+                return;
+            }
+            $badge.text(String(n)).show();
+        };
+
+        window.hideDealerTopbarTokenBadge = function () {
+            var $badge = window.jQuery ? window.jQuery('#dealerTopbarTokenBadge') : null;
+            if ($badge && $badge.length) {
+                $badge.hide();
+            }
+        };
+
+        window.syncDealerTopbarChatBadge = function (value) {
+            var $badge = window.jQuery ? window.jQuery('#dealerTopbarChatBadge') : null;
+            if (!$badge || !$badge.length) {
+                return;
+            }
+            var n = parseInt(value, 10);
+            if (isNaN(n) || n <= 0) {
+                $badge.hide().text('0');
+                return;
+            }
+            $badge.text(String(n)).show();
+        };
+
+        window.hideDealerTopbarChatBadge = function () {
+            var $badge = window.jQuery ? window.jQuery('#dealerTopbarChatBadge') : null;
+            if ($badge && $badge.length) {
+                $badge.hide();
+            }
+        };
+
+        function refreshDealerTokenBadge() {
+            if (!window.jQuery || window.dealerTopbarIsTokenPage) {
+                return;
+            }
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DealerTokenSummary", "Home")',
+                dataType: 'json',
+                cache: false,
+                success: function (x) {
+                    if (x && x.currentTokens != null) {
+                        window.syncDealerTopbarTokenBadge(x.currentTokens);
+                    }
+                }
+            });
+        }
+
+        function refreshDealerChatBadge() {
+            if (!window.jQuery || window.dealerTopbarIsChatPage) {
+                return;
+            }
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetDealerComplaintMessages", "Home")',
+                dataType: 'json',
+                cache: false,
+                success: function (x) {
+                    if (x && x.openCount != null) {
+                        window.syncDealerTopbarChatBadge(x.openCount);
+                    }
+                }
+            });
+        }
+
+        function bootDealerTopbarBadges() {
+            if (window.dealerTopbarIsTokenPage) {
+                window.hideDealerTopbarTokenBadge();
+            } else {
+                refreshDealerTokenBadge();
+            }
+            if (window.dealerTopbarIsChatPage) {
+                window.hideDealerTopbarChatBadge();
+            } else {
+                refreshDealerChatBadge();
+            }
+        }
+
+        if (window.jQuery) {
+            window.jQuery(bootDealerTopbarBadges);
+        } else {
+            document.addEventListener('DOMContentLoaded', bootDealerTopbarBadges);
+        }
+
+        window.refreshDealerTopbarBadges = bootDealerTopbarBadges;
     </script>
 
     <!--Transfer Total Balance Retailer All Users and Recived Balannce from master and admin-->

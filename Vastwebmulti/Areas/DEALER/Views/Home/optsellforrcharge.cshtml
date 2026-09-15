@@ -1,36 +1,69 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.operatorcommforsellStatu>
+@using System.Linq
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.operatorcommforsellStatu>();
+}
 
-<style>
-
-    .b_set {
-        border: 1px solid #000;
-        padding: 2px 6px;
-        background: red;
-        color: #fff;
-    }
-
-</style>
-
-<div id="divEditFormComm"> 
-    <table class="table">
+<table id="dealerSellerSettingTable" class="table vm-opr-data-table" cellspacing="0">
+    <thead>
         <tr>
             <th>Operator Name</th>
-            <th>Comm%</th>
+            <th>Comm %</th>
             <th>Status</th>
-            <th>Action</th>
-
+            <th class="text-center">Action</th>
         </tr>
-        @foreach (var i in Model)
+    </thead>
+    <tbody>
+        @if (items.Any())
         {
+            foreach (var i in items)
+            {
+                var statusRaw = i.status ?? "";
+                var statusTone = "pending";
+                var statusFa = "fa-clock-o";
+                var statusLabel = string.IsNullOrWhiteSpace(statusRaw) ? "-" : statusRaw;
 
-    <tr>
-        <td>@i.operator_1</td>
-        <td>@i.comm%</td>
-        <td>@i.status</td>
-       
-        <td style="text-align:center;"><a class="b_set" href="@Url.Action("DeleteOptComm","home",new {idno = i.idno})">Delete</a></td>
-    </tr>
+                if (statusRaw.IndexOf("Success", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    statusTone = "success";
+                    statusFa = "fa-check";
+                    statusLabel = "Success";
+                }
+                else if (statusRaw.IndexOf("Pending", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    statusTone = "pending";
+                    statusFa = "fa-clock-o";
+                    statusLabel = "Pending";
+                }
+                else if (statusRaw.IndexOf("Reject", StringComparison.OrdinalIgnoreCase) >= 0 || statusRaw.IndexOf("Fail", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    statusTone = "failed";
+                    statusFa = "fa-times";
+                }
+
+                <tr class="vm-dmt-row vm-dmt-row--@statusTone">
+                    <td>@i.operator_1</td>
+                    <td><span class="vm-seller-comm-value">@(i.comm)%</span></td>
+                    <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                        <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                            <i class="fa @statusFa" aria-hidden="true"></i>
+                        </span>
+                        <span class="vm-radiant-status-text">@statusLabel</span>
+                    </td>
+                    <td class="text-center">
+                        <a class="vm-seller-delete-btn" href="@Url.Action("DeleteOptComm", "Home", new { idno = i.idno })" onclick="return confirm('Delete this operator commission?');" title="Delete">
+                            <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+            }
         }
-
-    </table>
-</div>
+        else
+        {
+            <tr class="vm-seller-empty-row">
+                <td colspan="4">No operator commission added yet.</td>
+            </tr>
+        }
+    </tbody>
+</table>

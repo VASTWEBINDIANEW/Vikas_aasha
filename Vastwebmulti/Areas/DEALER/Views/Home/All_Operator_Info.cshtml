@@ -1,538 +1,110 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.Operater_Commission
+@using System.Linq
 @{
     ViewBag.Title = "All_Operator_Info";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var prepaidCount = Model.Prepaid != null ? Model.Prepaid.Count() : 0;
+    var utilityCount = Model.Electricity_comm != null ? Model.Electricity_comm.Count() : 0;
+    var giftCount = Model.Giftcard != null ? Model.Giftcard.Count() : 0;
+    var initialTab = (ViewData["type"] ?? "Prepaid").ToString();
+    if (string.Equals(initialTab, "insuranceoperator", StringComparison.OrdinalIgnoreCase))
+    {
+        initialTab = "Insurance";
+    }
 }
-<script>
-    $(function () {
-        var chh = '@ViewData["type"]';
-        $('#' + chh+'').show();
-    });
-</script>
-<link href="../../MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-<style>
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-    }
 
-    .operatior-infocssdealer table .activeinactive-dealer span {
-        color: #fff !important;
-        background: green;
-        padding: 1px 12px;
-        font-size: 13px !important;
-        margin-right: 1%;
-    }
-
-        .operatior-infocssdealer table .activeinactive-dealer span.inactivebuttontable {
-            padding: 1px 7px;
-            background: red;
-        }
-
-    .utility-dealerclass th, .giftcard-oprator-table th {
-        border-bottom: 0 !important;
-    }
-
-    .card.operatior-infocssdealer .table-responsive thead tr th {
-        border-bottom: 0;
-    }
-
-    .operatior-infocssdealer table tr td p.activeinactive-dealer {
-        margin-bottom: 0;
-    }
-
-    .operatior-infocssdealer .table-responsive table tr td {
-        padding: 8px 5px !important;
-    }
-
-    .operatior-infocssdealer .table-responsive table tr th {
-        padding: 8px 5px !important;
-    }
-
-    .operatior-infocssdealer .table-responsive {
-        overflow: inherit;
-    }
-
-    .operatior-infocssdealer .table-responsive {
-        overflow: auto;
-    }
-
-    .operatior-index-dealer li a {
-        background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor));
-        position:relative;
-        transition: all .4s linear;
-    }
-    .operatior-index-dealer li a span {
-        color:#fff;
-        font-size:12px;
-    }
-    .operatior-index-dealer li.active a span {
-        color:#fff !important;
-    }
-    .operatior-index-dealer li.active a, .operatior-index-dealer li.active a:hover, .operatior-index-dealer li.active a:focus {
-        background: #a4a0a0 !important;
-    }
-    .operatior-index-dealer li a::after {
-        content: "";
-        display: block;
-        width:100%;
-        height: 5px;
-        background: transparent;
-        transition: all .4s linear;
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        transform:scale(0);
-    }
-    .operatior-index-dealer li.active a::after {
-        background:#000;
-        transform:scale(1);
-        transition: all .4s linear;
-
-    }
-    .operatior-index-dealer li a {
-        padding-left:0px;padding-right:0px;
-    }
-    .operatior-index-dealer {
-        display: flex;
-    }
-    .operatior-index-dealer li {width:10%;float:left;}
-    .operatior-index-dealer li a {
-        width:98%;
-    }
-    .operatior-index-dealer li:last-child a {
-        width:100%;
-    }
-    .operatior-index-dealer li.active a {
-    padding-top: 13px;
-    padding-bottom: 13px;
-    margin-top: -6px;
-}
-        .operatior-index-dealer li a span {
-            position: relative;
-            top: 3px;
-        }
-        .operatior-index-dealer li.active a span {
-            top: 4px;
-            font-weight:bold;
-        }
-        .operatior-index-dealer {
-            margin-top:10px;
-        }
-    .operatior-infocssdealer table .activeinactive-dealer span {
-        padding-top: 3px;
-        padding-bottom: 3px;
-    }
-
-    @*Four-design-dealer-css-start*@
-
-    .dealer-four-design .operatior-index-dealer {
-        display: none;
-    }
-    .dealer-four-design .opratior-index-foudesign {
-        display: flex !important;
-        background: var( --fullbodybg-four) !important;
-    }
-    .dealer-four-design .opratior-index-foudesign li a, .dealer-four-design .opratior-index-foudesign li.active a, .dealer-four-design .opratior-index-foudesign li.active a:hover, .dealer-four-design .opratior-index-foudesign li.active a:focus {
-        background: transparent !important;
-    }
-
-    .dealer-four-design .opratior-index-foudesign li a {
-        padding-bottom: 5px !important;
-    }
-
-    .dealer-four-design .opratior-index-foudesign li a {
-        margin-right: 0 !important;
-    }
-
-    .dealer-four-design .opratior-index-foudesign li a {
-        position: relative;
-    }
-
-    .dealer-four-design .opratior-index-foudesign li.active a i {
-        width: 63px;
-        height: 63px !important;
-        margin-top: -19px !important;
-        z-index: 99;
-        position: relative !important;
-        border-radius: 50%;
-        padding: 15px;
-        text-align: center;
-        background: transparent;
-    }
-
-    .dealer-four-design .opratior-index-foudesign li a i {
-        margin: 0px !important;
-        margin-top: 0px;
-        position: static !important;
-        border-radius: 0;
-        padding: 0;
-        display: block;
-        width: 40px;
-        height: 40px;
-        background: transparent;
-    }
-    .dealer-four-design .opratior-index-foudesign li.active a span {
-        margin-top: 2px !important;
-    }
-
-    .dealer-four-design .opratior-index-foudesign li a span {
-        margin: 0 !important;
-        margin-top: 0px;
-        display: block;
-        position: static !important;
-        margin-top: 3px !important;
-        padding: 0 !important;
-    }
-    .dealer-four-design .opratior-index-foudesign li.active a::after {
-        transform: scaleX(1);
-        transition: all .4s linear;
-    }
-
-    .dealer-four-design .opratior-index-foudesign li a::after {
-        content: "";
-        display: block;
-        width: 100%;
-        height: 28px;
-        position: absolute;
-        left: 0;
-        background: var( --fullbodybg-four) !important;
-        top: -21px;
-        clip-path: url(#menu);
-        transform: scaleX(0);
-        transition: all .4s linear;
-    }
-    .dealer-four-design .opratior-index-foudesign li a i img {
-        width: 100% !important;
-        position: static !important;
-        margin: 0 !important;
-        display: block !important;
-        max-width: 100% !important;
-    }
-
-    .dealer-four-design .opratior-index-foudesign li.active a i {
-        text-align: center;
-    }
-    .dealer-four-design .opratior-index-foudesign li.active a i::after {
-        transition: all .4s linear;
-        transform: scaleX(1);
-    }
-
-    .dealer-four-design .opratior-index-foudesign li a i::after {
-        content: "";
-        display: block;
-        width: 100%;
-        height: 100%;
-        background: var(--four-design-bg-first);
-        position: absolute;
-        top: 0;
-        left: 0;
-        border-radius: 50%;
-        z-index: -1;
-        transition: all .4s linear;
-        transform: scaleX(0);
-    }
-    .dealer-four-design .svg-container-third-designmaster {
-        width: 0;
-        height: 0;
-        display: block !important;
-    }
-
-    @*Four-design-dealer-css-end*@
-
-
-    @@media screen and (max-width:990px) {
-        .operatior-infocssdealer .table-responsive {
-            overflow: auto;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .card.operatior-infocssdealer .table-responsive {
-            padding-bottom: 10px;
-        }
-        .operatior-index-dealer {
-            display: inherit;
-        }
-            .operatior-index-dealer li a img, .operatior-index-dealer li a br {
-                display: none;
-            }
-            .operatior-index-dealer li a span {white-space:nowrap;}
-            .operatior-index-dealer li.active a {margin-top:0px;}
-            .operatior-index-dealer li a {
-                padding-top: 8px !important;
-                padding-bottom: 16px !important;
-                height:44px;
-            }
-            .operatior-index-dealer li {margin-bottom:10px;}
-            .operatior-index-dealer li {
-                width: 20%;
-                float: left;
-            }
-        .dealer-four-design .operatior-index-dealer.opratior-index-foudesign {
-            display: none !important;
-        }
-        .dealer-four-design .operatior-index-dealer {
-            display: block !important;
-        }
-
-    }
-
-    @@media screen and (max-width:520px) {
-        .alloperator-class .col-md-1 {
-            left: 0;
-            padding: 0 !important;
-        }
-
-        .alloperator-class .col-md-3.only-select-css {
-            padding-left: 0 !important;
-        }
-    }
-
-    @@media screen and (max-width:400px) {
-        .operatior-index-dealer li a span {
-            white-space: normal;
-        }
-        .operatior-index-dealer li:nth-child(1) a span, .operatior-index-dealer li:nth-child(3) a span {
-            top: -9px;
-        }
-    }
-
-</style>
-<style>
-    .button_1 {
-       @* border: 1px solid #bfbebe;*@
-        width: fit-content;
-        margin-bottom: 5px;
-    }
-</style>
-
-<section class="content alloperator-class" style="margin-top:80px;">
-    <div class="container-fluid">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Show Operator Wise Commission Details</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account Active&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Commissions</a></li>
-            </ul>
-        </div>
-        
-
-
-        <div class="row clearfix table-responsive-tabledatacss">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                <div class="col-md-12 giftcardcategory giftcardcategory-third-design-master" style="margin-bottom:8px;padding:0px;">
-
-                    @*Third_Design-Start*@
-
-                    <div class="svg-container-third-designmaster" style="display:none;">
-                        <svg viewBox="0 0 202.9 45.5">
-                            <clipPath id="menu" clipPathUnits="objectBoundingBox" transform="scale(0.0049285362247413 0.021978021978022)">
-                                <path d="M6.7,45.5c5.7,0.1,14.1-0.4,23.3-4c5.7-2.3,9.9-5,18.1-10.5c10.7-7.1,11.8-9.2,20.6-14.3c5-2.9,9.2-5.2,15.2-7
-                                         c7.1-2.1,13.3-2.3,17.6-2.1c4.2-0.2,10.5,0.1,17.6,2.1c6.1,1.8,10.2,4.1,15.2,7c8.8,5,9.9,7.1,20.6,14.3c8.3,5.5,12.4,8.2,18.1,10.5
-                                         c9.2,3.6,17.6,4.2,23.3,4H6.7z" />
-                            </clipPath>
-                        </svg>
-                    </div>
-
-                    @*Third_Design-End*@
-
-                    <center>
-                        <ul id="leftulbar" class="nav nav-tabs operatior-index-dealer page-header-third" role="tablist" style="border-bottom:none;background:transparent !important;">
-
-                            <li role="presentation" class="active" style="">
-                                <a href="#Prepaid" data-toggle="tab" aria-expanded="true">
-                                    <img src="../../ashok-images/mobile-application.svg" style="height:45px; margin-top:-5px;">
-                                    <br>
-                                    <span id="alltab" style="">Prepaid &amp; Dth</span>
-                                </a>
-                            </li>
-                            <li role="presentation" class="" style="">
-                                <a href="#Utility" data-toggle="tab" aria-expanded="false">
-                                    <img src="../../ashok-images/increase.svg" style="height:45px; margin-top:-5px;">
-                                    <br><span>Utilities</span>
-                                </a>
-                            </li>
-                            <li role="presentation" class="" style="">
-                                <a href="#Money" data-toggle="tab" aria-expanded="false">
-                                    <img src="../../images/transfer-money.png" style="height:45px; margin-top:-5px;">
-                                    <br>
-                                    <span style="">Money Transfer</span>
-                                </a>
-                            </li>
-
-
-                            <li role="presentation" class="" style="">
-                                <a href="#Pancard" data-toggle="tab" aria-expanded="false">
-                                    <img src="../../images/pancardicon.png" style="height:45px; margin-top:-5px;">
-                                    <br>
-                                    <span style="">Pancard</span>
-                                </a>
-                            </li>
-                            <li role="presentation" class="" style="box-shadow:none;">
-                                <a href="#AEPS" data-toggle="tab" aria-expanded="false">
-                                    <img src="../../images/aespicon.png" style="height:45px;margin-top:-5px;">
-                                    <br><span style="">AEPS</span>
-                                </a>
-                            </li>
-                            <li role="presentation" class="" style="">
-                                <a href="#MPOS" data-toggle="tab" aria-expanded="false">
-                                    <img src="../../images/mposicon.png" style="height:45px; margin-top:-5px;">
-                                    <br>
-                                    <span style="padding-left:5px;">M-POS</span>
-                                </a>
-                            </li>
-
-
-                            <li role="presentation" class="" style="">
-                                <a href="#FLIGHT" data-toggle="tab" aria-expanded="false">
-                                    <img src="../../ashok-images/airplane.svg" style="height:45px; margin-top:-5px;">
-                                    <br>
-                                    <span style="">FLIGHT</span>
-                                </a>
-                            </li>
-
-                            <li role="presentation" class="" style="box-shadow:none;">
-                                <a href="#BUS" data-toggle="tab" aria-expanded="false">
-                                    <img src="../../ashok-images/bus (1).svg" style="height:38px;margin-top:2px;">
-                                    <br>
-                                    <span style="">BUS</span>
-                                </a>
-                            </li>
-
-                            <li role="presentation" class="" style="box-shadow:none;">
-                                <a href="#HOTEL" data-toggle="tab" aria-expanded="false">
-                                    <img src="../../ashok-images/hotel(1).svg" style="height:38px;margin-top:2px;">
-                                    <br>
-                                    <span style="">HOTEL</span>
-                                </a>
-                            </li>
-                            <li role="presentation" class="" style="box-shadow:none;">
-                                <a href="#GIFT" data-toggle="tab" aria-expanded="false">
-                                    <img src="../../ashok-images/business(1).png" style="height:38px;margin-top:2px;">
-                                    <br>
-                                    <span style="">Giftcard</span>
-                                </a>
-                            </li>
-
-                            <li role="presentation" class="" style="box-shadow:none;">
-                                <a href="#insuranceoperator" data-toggle="tab" aria-expanded="false">
-                                    <img src="../../ashok-images/computer.png" style="height:38px;margin-top:2px;">
-                                    <br>
-                                    <span style="">Security</span>
-                                </a>
-                            </li>
-
-                        </ul>
-                    </center>
-
-                    @*Operator-Info-Third-Design-Start*@
-
-                    <center>
-                        <ul id="leftulbar" class="nav nav-tabs tab-col-orange operatior-index-dealer opratior-index-foudesign" role="tablist" style="border-bottom:none;display:none;">
-
-                            <li role="presentation" class="active">
-                                <a href="#Prepaid" data-toggle="tab" aria-expanded="true">
-                                    <i><img src="../../ashok-images/mobile-application.svg" /></i>
-
-                                    <span id="alltab">Prepaid &amp; Dth</span>
-                                </a>
-                            </li>
-                            <li role="presentation" class="">
-                                <a href="#Utility" data-toggle="tab" aria-expanded="false">
-                                    <i><img src="../../ashok-images/increase.svg" /></i>
-                                    <span>Utilities</span>
-                                </a>
-                            </li>
-                            <li role="presentation" class="">
-                                <a href="#Money" data-toggle="tab" aria-expanded="false">
-                                    <i><img src="../../images/transfer-money.png" /></i>
-
-                                    <span>Money Transfer</span>
-                                </a>
-                            </li>
-
-
-                            <li role="presentation" class="">
-                                <a href="#Pancard" data-toggle="tab" aria-expanded="false">
-                                    <i><img src="../../images/pancardicon.png" /></i>
-
-                                    <span>Pancard</span>
-                                </a>
-                            </li>
-                            <li role="presentation" class="">
-                                <a href="#AEPS" data-toggle="tab" aria-expanded="false">
-                                    <i><img src="../../images/aespicon.png" /></i>
-                                    <span>AEPS</span>
-                                </a>
-                            </li>
-                            <li role="presentation" class="">
-                                <a href="#MPOS" data-toggle="tab" aria-expanded="false">
-                                    <i><img src="../../images/mposicon.png" /></i>
-
-                                    <span>M-POS</span>
-                                </a>
-                            </li>
-
-
-                            <li role="presentation" class="">
-                                <a href="#FLIGHT" data-toggle="tab" aria-expanded="false">
-                                    <i><img src="../../ashok-images/airplane.svg" /></i>
-
-                                    <span>FLIGHT</span>
-                                </a>
-                            </li>
-
-                            <li role="presentation" class="">
-                                <a href="#BUS" data-toggle="tab" aria-expanded="false">
-                                    <i><img src="../../ashok-images/bus (1).svg" /></i>
-
-                                    <span>BUS</span>
-                                </a>
-                            </li>
-
-                            <li role="presentation" class="">
-                                <a href="#HOTEL" data-toggle="tab" aria-expanded="false">
-                                    <i><img src="../../ashok-images/hotel(1).svg" /></i>
-
-                                    <span>HOTEL</span>
-                                </a>
-                            </li>
-                            <li role="presentation" class="">
-                                <a href="#GIFT" data-toggle="tab" aria-expanded="false">
-                                    <i><img src="../../ashok-images/business(1).png" /></i>
-
-                                    <span>Giftcard</span>
-                                </a>
-                            </li>
-
-                            <li role="presentation" class="">
-                                <a href="#insuranceoperator" data-toggle="tab" aria-expanded="false">
-                                    <i><img src="../../ashok-images/computer.png" /></i>
-
-                                    <span>Security</span>
-                                </a>
-                            </li>
-
-                        </ul>
-                    </center>
-                    @*Operator-Info-Third-Design-End*@
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-gst-report-modern.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-block-opt-modern.css?v=6" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page saas-dealer-block-opt-page saas-dealer-all-operator-info-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell vm-dealer-opinfo-toolbar">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-dealer-opinfo-toolbar-row">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb vm-dealer-opinfo-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Account Active</li>
+                    <li>Commissions</li>
+                </ol>
+                <div class="vm-dealer-opinfo-tabs-wrap">
+                <ul class="nav nav-tabs vm-dealer-opinfo-tabs" role="tablist">
+                    <li role="presentation" class="@(initialTab == "Prepaid" ? "active" : "")">
+                        <a href="#Prepaid" data-toggle="tab" aria-expanded="@(initialTab == "Prepaid" ? "true" : "false")"><i class="fas fa-mobile-alt" aria-hidden="true"></i><span>Prepaid &amp; Dth</span></a>
+                    </li>
+                    <li role="presentation" class="@(initialTab == "Utility" ? "active" : "")">
+                        <a href="#Utility" data-toggle="tab"><i class="fas fa-bolt" aria-hidden="true"></i><span>Utilities</span></a>
+                    </li>
+                    <li role="presentation" class="@(initialTab == "Money" ? "active" : "")">
+                        <a href="#Money" data-toggle="tab"><i class="fas fa-exchange-alt" aria-hidden="true"></i><span>Money Transfer</span></a>
+                    </li>
+                    <li role="presentation" class="@(initialTab == "Pancard" ? "active" : "")">
+                        <a href="#Pancard" data-toggle="tab"><i class="fas fa-id-card" aria-hidden="true"></i><span>Pancard</span></a>
+                    </li>
+                    <li role="presentation" class="@(initialTab == "AEPS" ? "active" : "")">
+                        <a href="#AEPS" data-toggle="tab"><i class="fas fa-fingerprint" aria-hidden="true"></i><span>AEPS</span></a>
+                    </li>
+                    <li role="presentation" class="@(initialTab == "MPOS" ? "active" : "")">
+                        <a href="#MPOS" data-toggle="tab"><i class="fas fa-credit-card" aria-hidden="true"></i><span>M-POS</span></a>
+                    </li>
+                    <li role="presentation" class="@(initialTab == "FLIGHT" ? "active" : "")">
+                        <a href="#FLIGHT" data-toggle="tab"><i class="fas fa-plane" aria-hidden="true"></i><span>Flight</span></a>
+                    </li>
+                    <li role="presentation" class="@(initialTab == "BUS" ? "active" : "")">
+                        <a href="#BUS" data-toggle="tab"><i class="fas fa-bus" aria-hidden="true"></i><span>Bus</span></a>
+                    </li>
+                    <li role="presentation" class="@(initialTab == "HOTEL" ? "active" : "")">
+                        <a href="#HOTEL" data-toggle="tab"><i class="fas fa-hotel" aria-hidden="true"></i><span>Hotel</span></a>
+                    </li>
+                    <li role="presentation" class="@(initialTab == "GIFT" ? "active" : "")">
+                        <a href="#GIFT" data-toggle="tab"><i class="fas fa-gift" aria-hidden="true"></i><span>Giftcard</span></a>
+                    </li>
+                    <li role="presentation" class="@(initialTab == "Insurance" ? "active" : "")">
+                        <a href="#Insurance" data-toggle="tab"><i class="fas fa-shield-alt" aria-hidden="true"></i><span>Security</span></a>
+                    </li>
+                </ul>
                 </div>
-                <div class="card operatior-infocssdealer all-reporttable-css page-header-third" >
-                    <div class="tab-content tab-contentoperators tableseconddes-master">
-                        <div id="Prepaid" class="table-responsive tableseconddes-dealer tab-pane flash active" style="position:inherit; margin-top:0px;">
-                            <div class="button_1">
-                                @if (ViewBag.allow == true)
-                                {
-                                    <a href="@Url.Action("Prepaid_Slab_setting", "Home")" class="btn btn-default"> Prepaid Slab Setting </a>
-                                }
-                            </div>
-                            <table class="table table-bordered table-striped table-hover">
+            </div>
+        </div>
+
+        <div class="vm-opr-main-card vm-dealer-opinfo-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-percent" aria-hidden="true"></i>
+                        <span id="dealerOpInfoPanelTitle">Operator wise commission details</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-ft-search-wrap vm-dealer-opinfo-table-search">
+                            <input class="form-control vm-dealer-opinfo-search-input" type="text" id="dealerOpInfoSearch" placeholder="Search current tab..." autocomplete="off" />
+                        </div>
+                        <span class="vm-dealer-opinfo-record-badge" title="Records in current tab">
+                            Records: <strong id="dealerOpInfoRecordCount">@prepaidCount</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="tab-content vm-dealer-opinfo-tab-body" id="dealerOpInfoTabBody">
+                        <div id="Prepaid" class="tab-pane vm-dealer-opinfo-pane @(initialTab == "Prepaid" ? "active" : "")" data-opinfo-title="Prepaid &amp; Dth commission">
+                            @if (ViewBag.allow == true)
+                            {
+                                <div class="vm-dealer-opinfo-slab-link">
+                                    <a href="@Url.Action("Prepaid_Slab_setting", "Home")" class="btn btn-default"><i class="fas fa-sliders-h" aria-hidden="true"></i> Prepaid Slab Setting</a>
+                                </div>
+                            }
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         @{
@@ -581,10 +153,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-                        <div role="tabpanel" id="Utility" class="table-responsive utility-dealerclass tableseconddes-dealer tab-pane flash" style="position:inherit; ">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable" style="margin-top:0 !important;">
+                        <div id="Utility" class="tab-pane vm-dealer-opinfo-pane @(initialTab == "Utility" ? "active" : "")" data-opinfo-title="Utilities commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th style="padding-left:0px; text-align:center">Operator&nbsp;Current&nbsp;Status</th>
@@ -625,11 +199,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-                        <div id="Money" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit; ">
-
-                            <table class="table table-bordered table-striped">
+                        <div id="Money" class="tab-pane vm-dealer-opinfo-pane @(initialTab == "Money" ? "active" : "")" data-opinfo-title="Money transfer commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped vm-opr-data-table">
 
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
@@ -850,13 +425,12 @@
                                     }
                                 </tbody>
                             </table>
-
-
-                            
+                            </div>
                         </div>
 
-                        <div id="Pancard" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit; ">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
+                        <div id="Pancard" class="tab-pane vm-dealer-opinfo-pane @(initialTab == "Pancard" ? "active" : "")" data-opinfo-title="Pancard commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
 
@@ -880,10 +454,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-                        <div id="AEPS" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit; ">
-                            <table class="table table-bordered table-striped">
+                        <div id="AEPS" class="tab-pane vm-dealer-opinfo-pane @(initialTab == "AEPS" ? "active" : "")" data-opinfo-title="AEPS commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped vm-opr-data-table">
 
                                 <thead style="background-color:whitesmoke;">
 
@@ -1082,10 +658,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-                        <div id="MPOS" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit;">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
+                        <div id="MPOS" class="tab-pane vm-dealer-opinfo-pane @(initialTab == "MPOS" ? "active" : "")" data-opinfo-title="M-POS commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
 
@@ -1116,10 +694,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-                        <div id="INDONEPAL" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit;">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
+                        <div id="INDONEPAL" class="tab-pane vm-dealer-opinfo-pane" data-opinfo-title="Indo Nepal commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th>Min&nbsp;Value&nbsp;(₹)</th>
@@ -1142,10 +722,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-                        <div id="FLIGHT" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit;">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
+                        <div id="FLIGHT" class="tab-pane vm-dealer-opinfo-pane @(initialTab == "FLIGHT" ? "active" : "")" data-opinfo-title="Flight commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th>Flight&nbsp;Type</th>
@@ -1165,11 +747,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-
-                        <div id="BUS" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit; ">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
+                        <div id="BUS" class="tab-pane vm-dealer-opinfo-pane @(initialTab == "BUS" ? "active" : "")" data-opinfo-title="Bus commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th>Type</th>
@@ -1189,11 +772,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-
-                        <div id="HOTEL" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit; ">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
+                        <div id="HOTEL" class="tab-pane vm-dealer-opinfo-pane @(initialTab == "HOTEL" ? "active" : "")" data-opinfo-title="Hotel commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th>Hotel&nbsp;Type</th>
@@ -1213,10 +797,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-                        <div id="GIFT" class="table-responsive giftcard-oprator-table tableseconddes-dealer tab-pane flash" style="position:inherit;  margin-top:0;">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                        <div id="GIFT" class="tab-pane vm-dealer-opinfo-pane @(initialTab == "GIFT" ? "active" : "")" data-opinfo-title="Giftcard commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th style="padding-left:0px; text-align:center">Operator&nbsp;Current&nbsp;Status</th>
@@ -1251,10 +837,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-                        <div id="Loan" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit;  margin-top:0;">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                        <div id="Loan" class="tab-pane vm-dealer-opinfo-pane" data-opinfo-title="Loan commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th style="padding-left:0px; text-align:center">Operator&nbsp;Name</th>
@@ -1291,9 +879,11 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
-                        <div id="Broadband" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit;  margin-top:0;">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                        <div id="Broadband" class="tab-pane vm-dealer-opinfo-pane" data-opinfo-title="Broadband commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th style="padding-left:0px; text-align:center">Operator&nbsp;Name</th>
@@ -1327,10 +917,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-                        <div id="Water" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit;  margin-top:0;">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                        <div id="Water" class="tab-pane vm-dealer-opinfo-pane" data-opinfo-title="Water commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th style="padding-left:0px; text-align:center">Operator&nbsp;Name</th>
@@ -1364,10 +956,12 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
 
-                        <div id="Insurance" class="table-responsive tableseconddes-dealer tab-pane flash" style="position:inherit; ">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
+                        <div id="Insurance" class="tab-pane vm-dealer-opinfo-pane @(initialTab == "Insurance" ? "active" : "")" data-opinfo-title="Security commission">
+                            <div class="vm-dealer-opinfo-table-wrap table-responsive">
+                            <table class="table table-bordered table-striped table-hover vm-opr-data-table dataTable js-exportable">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
                                         <th style="padding-left:0px; text-align:center">Operator&nbsp;Name</th>
@@ -1405,29 +999,72 @@
                                     }
                                 </tbody>
                             </table>
+                            </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
 
-
-
-
-
     </div>
-
-
 </section>
 
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
-
 <script>
-    $('.for-select2').select2();
+    (function ($) {
+        function dealerOpInfoCountRows($pane) {
+            if (!$pane || !$pane.length) {
+                return 0;
+            }
+            return $pane.find('table tbody tr').filter(function () {
+                return $.trim($(this).text()).length > 0;
+            }).length;
+        }
 
+        function dealerOpInfoApplySearch() {
+            var query = ($('#dealerOpInfoSearch').val() || '').toLowerCase();
+            var $pane = $('#dealerOpInfoTabBody .tab-pane.active');
+            $pane.find('table tbody tr').each(function () {
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(text.indexOf(query) > -1);
+            });
+            $('#dealerOpInfoRecordCount').text($pane.find('table tbody tr:visible').length);
+        }
 
+        function dealerOpInfoOnTabShown($tab) {
+            var title = $tab.attr('data-opinfo-title') || 'Operator wise commission details';
+            $('#dealerOpInfoPanelTitle').text(title);
+            $('#dealerOpInfoSearch').val('');
+            $('#dealerOpInfoRecordCount').text(dealerOpInfoCountRows($tab));
+            dealerOpInfoApplySearch();
+        }
+
+        $(function () {
+            var initialTab = '@initialTab';
+            if (initialTab) {
+                $('.vm-dealer-opinfo-tabs a[href="#' + initialTab + '"]').tab('show');
+            }
+
+            dealerOpInfoOnTabShown($('#dealerOpInfoTabBody .tab-pane.active').first());
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var target = $(e.target).attr('href');
+                dealerOpInfoOnTabShown($(target));
+            });
+
+            $('#dealerOpInfoSearch').on('keyup input', dealerOpInfoApplySearch);
+        });
+    })(jQuery);
 </script>
 
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-dealer-all-operator-info-page,
+        body.saas-admin-ui section.content.saas-dealer-all-operator-info-page .vm-opr-table-panel__title,
+        body.saas-admin-ui section.content.saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li > a,
+        body.saas-admin-ui section.content.saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.table,
+        body.saas-admin-ui section.content.saas-dealer-all-operator-info-page .vm-dealer-opinfo-record-badge {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+    </style>
+}
 

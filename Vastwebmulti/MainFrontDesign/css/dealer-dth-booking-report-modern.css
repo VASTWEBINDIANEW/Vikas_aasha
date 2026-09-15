@@ -1143,6 +1143,117 @@ body.saas-admin-ui .saas-sell-recharge-report-page .vm-sell-rch-upd-btn--failed 
         width: 100% !important;
         max-width: 100% !important;
     }
+
+    body.saas-admin-ui.saas-dealer-ledger-dp-page .datepicker.datepicker-dropdown,
+    body.saas-admin-ui.saas-dealer-ledger-dp-page .datepicker.dropdown-menu,
+    body.saas-admin-ui.saas-dealer-ledger-dp-page .datepicker.datepicker-dropdown.dropdown-menu {
+        position: fixed !important;
+        margin: 0 !important;
+        margin-top: 0 !important;
+        width: calc(100vw - 32px) !important;
+        max-width: 320px !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        z-index: 12000 !important;
+    }
+
+    body.saas-admin-ui.saas-dealer-ledger-dp-page .datepicker-dropdown:before,
+    body.saas-admin-ui.saas-dealer-ledger-dp-page .datepicker-dropdown:after {
+        display: none !important;
+    }
+}
+
+/* Dealer Ledger — same shell as Sell Recharge Report */
+body.saas-admin-ui .saas-dealer-ledger-page .vm-opr-table-wrap,
+body.saas-admin-ui .saas-dealer-ledger-page .table-responsive.vm-opr-table-scroll {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page #dealerLedgerTable.vm-opr-data-table,
+body.saas-admin-ui .saas-dealer-ledger-page table#dealerLedgerTable {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: none !important;
+    table-layout: auto !important;
+    font-size: 12px !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page #dealerLedgerTable.vm-opr-data-table thead th,
+body.saas-admin-ui .saas-dealer-ledger-page #dealerLedgerTable.vm-opr-data-table tbody td,
+body.saas-admin-ui .saas-dealer-ledger-page #dealerLedgerTable.vm-opr-data-table tfoot td {
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page #dealerLedgerTable tbody td.vm-opr-table-empty-row,
+body.saas-admin-ui .saas-dealer-ledger-page #dealerLedgerTable tbody td.vm-opr-table-empty {
+    white-space: normal !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page .vm-dealer-ledger-particular-cell {
+    max-width: 220px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page .vm-dealer-ledger-credit-cell {
+    color: #047857 !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page .vm-dealer-ledger-debit-cell {
+    color: #b91c1c !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page .vm-dealer-ledger-balance-cell {
+    color: #1d4ed8 !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page .vm-dealer-ledger-foot-row td {
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%) !important;
+    font-weight: 700 !important;
+    border-top: 2px solid #93c5fd !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page .vm-dealer-ledger-inline-total {
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page .vm-opr-totals-panel.vm-dmt-totals-panel#dealerLedgerTotalsPanel.is-open {
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page .saas-acc-dp-field.is-active {
+    border-color: #93c5fd !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12) !important;
+}
+
+body.saas-admin-ui .saas-dealer-ledger-page .saas-acc-dp-field .saas-acc-dp-icon {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-dealer-ledger-page .saas-acc-toolbar,
+    body.saas-admin-ui .saas-dealer-ledger-page .vm-opr-toolbar-unified,
+    body.saas-admin-ui .saas-dealer-ledger-page .vm-radiant-toolbar-one-line,
+    body.saas-admin-ui .saas-dealer-ledger-page .vm-radiant-inline-filters {
+        overflow: visible !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-ledger-page .vm-dealer-ledger-inline-total {
+        display: none !important;
+    }
 }
 
 /* Dealer Auto Fund Transfer Setting table */
@@ -1403,4 +1514,229 @@ body.saas-admin-ui .saas-matm-rental-report-page #sellRechargeReport tbody tr::b
 body.saas-admin-ui .saas-matm-rental-report-page #sellRechargeReport tbody td.vm-opr-table-empty {
     white-space: normal !important;
     text-align: center !important;
+}
+
+/* Dealer Receive Fund By Admin — same shell as Sell Recharge Report */
+body.saas-admin-ui .saas-receive-fund-admin-page .vm-opr-table-wrap,
+body.saas-admin-ui .saas-receive-fund-admin-page .table-responsive.vm-opr-table-scroll {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-admin-page #receiveFundAdminReport.vm-opr-data-table,
+body.saas-admin-ui .saas-receive-fund-admin-page table#receiveFundAdminReport {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: none !important;
+    table-layout: auto !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-admin-page #receiveFundAdminReport.vm-opr-data-table thead th,
+body.saas-admin-ui .saas-receive-fund-admin-page #receiveFundAdminReport.vm-opr-data-table tbody td,
+body.saas-admin-ui .saas-receive-fund-admin-page #receiveFundAdminReport.vm-opr-data-table tfoot td {
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-admin-page #receiveFundAdminReport.vm-opr-data-table thead th:first-child,
+body.saas-admin-ui .saas-receive-fund-admin-page #receiveFundAdminReport.vm-opr-data-table tbody td:first-child {
+    min-width: 160px !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-admin-page #receiveFundAdminReport tbody td.vm-opr-table-empty {
+    white-space: normal !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-admin-page .vm-rf-admin-info-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    max-width: 100% !important;
+    height: 30px !important;
+    padding: 0 10px !important;
+    border: 1px solid #dbe4f0 !important;
+    border-radius: 8px !important;
+    background: #f8fafc !important;
+    color: #2563eb !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-admin-page .vm-rf-admin-info-btn:hover {
+    background: #eff6ff !important;
+    border-color: #bfdbfe !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-admin-page .vm-rf-admin-table-foot td {
+    background: #f8fafc !important;
+    border-top: 2px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-admin-page .saas-acc-toolbar,
+body.saas-admin-ui .saas-receive-fund-admin-page .vm-opr-toolbar-unified,
+body.saas-admin-ui .saas-receive-fund-admin-page .vm-radiant-toolbar-one-line,
+body.saas-admin-ui .saas-receive-fund-admin-page .vm-radiant-inline-filters {
+    overflow: visible !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-receive-fund-admin-page .vm-dmt-filter-search-group {
+        width: 100% !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-receive-fund-admin-page .vm-rf-admin-table-search {
+        min-width: 0 !important;
+        max-width: none !important;
+        width: 100% !important;
+    }
+}
+
+/* Dealer Receive Fund By Master — same shell as Receive Fund By Admin */
+body.saas-admin-ui .saas-receive-fund-master-page .vm-opr-table-wrap,
+body.saas-admin-ui .saas-receive-fund-master-page .table-responsive.vm-opr-table-scroll {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-master-page #receiveFundMasterReport.vm-opr-data-table,
+body.saas-admin-ui .saas-receive-fund-master-page table#receiveFundMasterReport {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: none !important;
+    table-layout: auto !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-master-page #receiveFundMasterReport.vm-opr-data-table thead th,
+body.saas-admin-ui .saas-receive-fund-master-page #receiveFundMasterReport.vm-opr-data-table tbody td,
+body.saas-admin-ui .saas-receive-fund-master-page #receiveFundMasterReport.vm-opr-data-table tfoot td {
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-master-page #receiveFundMasterReport.vm-opr-data-table thead th:first-child,
+body.saas-admin-ui .saas-receive-fund-master-page #receiveFundMasterReport.vm-opr-data-table tbody td:first-child {
+    min-width: 160px !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-master-page #receiveFundMasterReport tbody td.vm-opr-table-empty {
+    white-space: normal !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-master-page .vm-rf-master-info-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    max-width: 100% !important;
+    height: 30px !important;
+    padding: 0 10px !important;
+    border: 1px solid #dbe4f0 !important;
+    border-radius: 8px !important;
+    background: #f8fafc !important;
+    color: #2563eb !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-master-page .vm-rf-master-info-btn:hover {
+    background: #eff6ff !important;
+    border-color: #bfdbfe !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-master-page .vm-rf-master-table-foot td {
+    background: #f8fafc !important;
+    border-top: 2px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .saas-receive-fund-master-page .saas-acc-toolbar,
+body.saas-admin-ui .saas-receive-fund-master-page .vm-opr-toolbar-unified,
+body.saas-admin-ui .saas-receive-fund-master-page .vm-radiant-toolbar-one-line,
+body.saas-admin-ui .saas-receive-fund-master-page .vm-radiant-inline-filters {
+    overflow: visible !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-receive-fund-master-page .vm-dmt-filter-search-group {
+        width: 100% !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-receive-fund-master-page .vm-rf-master-table-search {
+        min-width: 0 !important;
+        max-width: none !important;
+        width: 100% !important;
+    }
+}
+
+/* Dealer Token Purchase History — same shell as Receive Fund By Admin */
+body.saas-admin-ui .saas-token-purchase-history-page .vm-opr-table-wrap,
+body.saas-admin-ui .saas-token-purchase-history-page .table-responsive.vm-opr-table-scroll {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+}
+
+body.saas-admin-ui .saas-token-purchase-history-page #tokenPurchaseHistoryReport.vm-opr-data-table,
+body.saas-admin-ui .saas-token-purchase-history-page table#tokenPurchaseHistoryReport {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: none !important;
+    table-layout: auto !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-token-purchase-history-page #tokenPurchaseHistoryReport.vm-opr-data-table thead th,
+body.saas-admin-ui .saas-token-purchase-history-page #tokenPurchaseHistoryReport.vm-opr-data-table tbody td,
+body.saas-admin-ui .saas-token-purchase-history-page #tokenPurchaseHistoryReport.vm-opr-data-table tfoot td {
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-token-purchase-history-page #tokenPurchaseHistoryReport tbody td.vm-opr-table-empty {
+    white-space: normal !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-token-purchase-history-page .vm-token-hist-table-foot td {
+    background: #f8fafc !important;
+    border-top: 2px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .saas-token-purchase-history-page .saas-acc-toolbar,
+body.saas-admin-ui .saas-token-purchase-history-page .vm-opr-toolbar-unified,
+body.saas-admin-ui .saas-token-purchase-history-page .vm-radiant-toolbar-one-line,
+body.saas-admin-ui .saas-token-purchase-history-page .vm-radiant-inline-filters {
+    overflow: visible !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-token-purchase-history-page .vm-dmt-filter-search-group {
+        width: 100% !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-token-purchase-history-page .vm-token-hist-table-search {
+        min-width: 0 !important;
+        max-width: none !important;
+        width: 100% !important;
+    }
 }

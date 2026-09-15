@@ -1,273 +1,127 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.dlm_purchase_info_Result>
+@using System.Linq
 @{
-    ViewBag.Title = "DealerSellgst";
+    ViewBag.Title = "Dealer Sell GST";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.dlm_purchase_info_Result>();
+    var rowCount = rows.Count;
+    var defaultMonth = DateTime.Today.AddMonths(-1).ToString("MMMM");
+    var defaultYear = DateTime.Today.AddMonths(-1).Year.ToString();
+    var selectedMonth = (Request["Month"] ?? ViewBag.chkmonth ?? defaultMonth).ToString();
+    var selectedYear = (Request["Year"] ?? defaultYear).ToString();
 }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=31" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-incoming-report-modern.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-flight-report-modern.css?v=10" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
-<style>
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-incoming-report-page saas-dealer-flight-report-page saas-dealer-tds-report-page saas-dealer-sell-gst-page">
 
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
+        @using (Html.BeginForm("DealerSellgst", "Home", FormMethod.Post, new { id = "dealerSellGstForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-pan-toolbar-unified saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head">
+                    <ol class="saas-acc-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>GST Invoice</li>
+                        <li>Sell GST</li>
+                    </ol>
+                    <div class="vm-opr-page-nav">
+                        <nav class="vm-opr-nav--page" aria-label="GST invoice reports">
+                            <a class="vm-opr-nav__link is-active" href="@Url.Action("DealerSellgst", "Home")">Sell GST</a>
+                            <a class="vm-opr-nav__link" href="@Url.Action("uploadgst", "Home")">Upload GST</a>
+                        </nav>
+                    </div>
+                </div>
 
-    body .datepicker-dropdown.datepicker {
-        margin-top: 75px !important;
-    }
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-inc-filter-row vm-rpt-filters-panel__bar vm-dealer-tds-filter-bar vm-dealer-sell-gst-filter-bar">
+                        <div class="vm-dealer-tds-filter-label">
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                            <span>Select period</span>
+                        </div>
+                        <div class="vm-dealer-sell-gst-filter-fields">
+                            <div class="vm-dealer-sell-gst-field">
+                                @Html.DropDownList("Month", ViewBag.month as SelectList, new { id = "Month", @class = "form-control vm-dealer-sell-gst-select", title = "Month" })
+                            </div>
+                            <div class="vm-dealer-sell-gst-field vm-dealer-sell-gst-field--year">
+                                @Html.DropDownList("Year", ViewBag.year as SelectList, new { id = "Year", @class = "form-control vm-dealer-sell-gst-select", title = "Year" })
+                            </div>
+                            <button type="submit" id="RetailerSearch" class="saas-acc-btn saas-acc-btn--search vm-opr-toolbar-search vm-dealer-sell-gst-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+                        <span class="vm-dealer-tds-active-month-badge vm-dealer-sell-gst-period-badge" title="Active period">
+                            Period: <strong id="dealerSellGstPeriodLabel">@selectedMonth @selectedYear</strong>
+                        </span>
+                    </div>
+                </div>
+            </div>
 
-    .dataTables_wrapper .dt-buttons a.dt-button {
-        padding: 7px 10px 8px 8px;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-        margin-top: 2px;
-    }
-
-    .recharge-report-dealer {
-        padding: 0;
-    }
-
-    .white-success-dealer {
-        position: absolute;
-        top: inherit;
-        bottom: -35px;
-        right: 15px;
-        width: auto;
-        z-index: 99;
-    }
-
-    @@media screen and (max-width:1300px) {
-        .col-md-1.allretailer-report-four button span {
-            text-transform: capitalize !important;
-        }
-
-        .recharge-reportdateclass {
-            width: 27%;
-        }
-
-        .classrecharge-report .recharge-reportdateclass .custom-date-icon {
-            width: 25px;
-        }
-    }
-
-    @@media screen and (max-width:990px) {
-        .allretailer-report, .allretailer-report-first, .allretailer-report-second {
-            width: 25% !important;
-            float: left !important;
-        }
-
-        .col-md-1.allretailer-report-three {
-            float: left;
-            width: 16%;
-        }
-
-        .recharge-reportdateclass {
-            width: 31%;
-        }
-
-        .col-md-1.allretailer-report-four {
-            float: left;
-            width: 10%;
-            padding-right: 0 !important;
-        }
-
-        .col-md-2.recharge-report-dealer {
-            float: right;
-            width: auto;
-        }
-
-        .classrecharge-report .form-group {
-            margin-bottom: 10px;
-        }
-    }
-
-    @@media screen and (max-width:768px) {
-        .recharge-reportdateclass .custom-date-icon {
-            display: none;
-        }
-
-        .recharge-reportdateclass input {
-            text-align: center !important;
-            font-size: 12px;
-        }
-
-        .classrecharge-report .table-responsive {
-            position: relative !important;
-            z-index: 9;
-        }
-
-        .white-success-dealer {
-            bottom: -50px;
-        }
-    }
-
-    @@media screen and (max-width:520px) {
-        .col-md-1.allretailer-report-three {
-            float: left;
-            width: 25%;
-        }
-
-        .recharge-reportdateclass {
-            width: 57%;
-        }
-
-        .col-md-2.recharge-report-dealer {
-            margin-bottom: 15px;
-            position: relative;
-            left: -16px;
-        }
-
-        .classrecharge-report .table-responsive table tr th:first-child {
-            padding-right: 175px;
-        }
-    }
-
-    @@media screen and (max-width:420px) {
-        .col-md-1.allretailer-report-four button span {
-            margin: 0;
-            font-size: 0;
-        }
-
-        .classrecharge-report .select2 span {
-            font-size: 12px;
-            padding-left: 2px !important;
-            float: left;
-            width: 100%;
-        }
-
-        .allretailer-report, .allretailer-report-first, .allretailer-report-second {
-            padding-right: 1px !important;
-        }
-
-        .col-md-1.allretailer-report-three input {
-            font-size: 12px;
-        }
-
-        .col-md-1.allretailer-report-three {
-            padding-right: 3px !important;
-        }
-
-        .all-report-inputclass.all-report-inputclass-left {
-            padding-right: 1px;
-        }
-
-        .all-report-inputclass.all-report-inputclass-right {
-            padding-left: 2px;
-        }
-
-        .recharge-reportdateclass {
-            width: 62%;
-        }
-
-        .classrecharge-report .responshive-rechargereport {
-            padding-right: 0;
-        }
-    }
-</style>
-
-<section class="content classrecharge-report">
-    <div class="container-fluid full-dealer-secondanimation">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Recharge_Report</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Dealer Sell GST</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 responshive-rechargereport">
-                <div class="" style="width:100%;float:left;">
-                    <div class="">
-                        <div class="col-md-10 report-divsate" style="padding-left: 0;">
-                            <div style="margin-top: 2px;">
-                                @using (Html.BeginForm("DealerSellgst", "Home", FormMethod.Post))
-                                {
-                                    <div class="">
-                                        <div class="col-md-2 only-select-css allretailer-report" style="padding:0px;padding-right:5px;">
-                                            <div class="">
-                                                @Html.DropDownList("Month", ViewBag.month as SelectList, new { @class = " form-control", @style = "border:1px solid #8e7f7f4d;" })
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1 only-select-css allretailer-report-first" style="padding:0px;padding-right:5px;">
-                                            <div class="form-group">
-                                                <div class="">
-                                                    @Html.DropDownList("Year", ViewBag.year as SelectList, new { @class = " form-control", @style = "border:1px solid #8e7f7f4d;" })
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1 allretailer-report-four" style="padding:0px;padding-right:5px;">
-                                            <div class="form-group">
-                                                <div class="form-line" style="border-bottom:none;margin-top:0px;">
-                                                    <center>
-                                                        <button type="submit" id="RetailerSearch" class="btn  waves-effect btnssl2233 input-back-second button-center-third" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" style="width: 94%;margin-left: 8px;display:flex;justify-content:center;align-items:center;">
-                                                            <i class="fa fa-search"></i>
-                                                            <span>Search</span>
-                                                        </button>
-                                                    </center>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
+            <div class="vm-opr-main-card">
+                <div class="vm-opr-table-panel" id="dealerSellGstPanel">
+                    <div class="vm-opr-table-panel__head">
+                        <div class="vm-opr-table-panel__title">
+                            <i class="fas fa-file-invoice" aria-hidden="true"></i>
+                            <span>Dealer sell GST invoices</span>
+                        </div>
+                        <div class="vm-opr-table-panel__right vm-flight-table-head-right">
+                            <div class="vm-ft-search-wrap vm-dealer-tds-table-search">
+                                <input class="form-control vm-dealer-tds-search-input" type="text" id="dealerSellGstSearch" placeholder="Search firm name, email..." autocomplete="off" />
+                            </div>
+                            <span class="vm-radiant-record-badge vm-dealer-tds-record-badge" title="Records">
+                                Records: <strong id="dealerSellGstRecordCount">@rowCount</strong>
+                            </span>
+                            <div class="vm-opr-filter-actions saas-acc-export-group">
+                                <button type="button" id="btnDealerSellGstExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                    <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                                </button>
+                                <button type="button" id="btnDealerSellGstPdf" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                    <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                </div>
-
-
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-            </div>
-        </div>
-        @Html.Partial("_menu_invoice")
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card all-reporttable-css">
-                    <div>
-                        <div class="table-responsive tableseconddes-dealer" style="position:inherit;">
-                            <table class="table table-bordered table-striped table-hover  text-nowrap example-second third-design-table" cellspacing="0" style="width:100%;font-size:12px;">
-                                <thead style="background-color:whitesmoke;">
+                    <div class="vm-opr-table-wrap">
+                        <div class="table-responsive vm-opr-table-scroll">
+                            <table id="dealerSellGstTable" class="table table-bordered table-striped table-hover vm-opr-data-table vm-inc-data-table vm-flight-data-table vm-dealer-tds-data-table vm-dealer-sell-gst-table">
+                                <thead>
                                     <tr>
-
                                         <th>Firm Name</th>
                                         <th>Email</th>
-                                        <th>#</th>
+                                        <th>Download</th>
                                     </tr>
                                 </thead>
-                                <tbody class="alin">
-                                    @foreach (var item in Model)
+                                <tbody>
+                                    @if (rows.Any())
                                     {
-
-                                        <tr>
-                                            <td>@item.FarmName</td>
-                                            <td>@item.Email</td>
-                                            <td>
-                                                <button onclick="Download('@item.DealerId')" type="button" target="_blank" class="btn btn-sm btn-success" style="border-color:transparent !important;background-color:transparent !important;">
-                                                    <i class="fa fa-file-pdf-o fa-2x" style="color:red;"></i>
-                                                </button>
-                                            </td>
+                                        foreach (var item in rows)
+                                        {
+                                            <tr>
+                                                <td class="vm-dealer-sell-gst-firm-cell">@item.FarmName</td>
+                                                <td>@item.Email</td>
+                                                <td class="vm-dealer-sell-gst-action-col">
+                                                    <button type="button" onclick="dealerSellGstDownload()" class="vm-dealer-sell-gst-pdf-btn" title="Download GST PDF" aria-label="Download GST PDF">
+                                                        <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                                                        <span>PDF</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr class="vm-dealer-tds-empty-row">
+                                            <td colspan="3">No sell GST records found for @selectedMonth @selectedYear.</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -276,130 +130,189 @@
                     </div>
                 </div>
             </div>
-        </div>
+        }
+
     </div>
 </section>
-<!-- model for table -->
 
-<script src="~/Swalalert/datatablejquery.js"></script>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+<script src="~/MainFrontDesign/js/admin-operator-report-nav.js"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-
-
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
-
 <script>
-    $('.for-select2').select2();
-
-
-</script>
-
-
-<script>
-    function isNumber(evt) {
-        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
-            return false;
-        return true;
-    }
-</script>
-<!--Calendar Javascript-->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+    (function () {
+        function dealerSellGstEsc(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
         }
-        //answers();
-    });
-</script>
-<script type="text/javascript">
-    function answers() {
-        var e = document.getElementById("ddlusers");
-        var answer = e.options[e.selectedIndex].value;
-        if (answer == "Dealer") {
-            document.getElementById("rem").style.display = "none";
-            //document.getElementById("allretailer").selectedIndex = "0";
 
-        }
-        else if (answer == "Retailer") {
-            document.getElementById("rem").style.display = "block";
-        }
-    }
-</script>
-<script>
-    $('.white-success-button').click(function () {
-        $('.white-success').toggle();
-    });
-</script>
-
-
-
-
-
-
-
-<script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('.sidebar-dealer-responshive ul li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('active');
-
-
+        function dealerSellGstGetPeriodLabel() {
+            var $ = window.jQuery;
+            if (!$) {
+                return '';
             }
-        })
-    });
-</script>
+            return ($('#Month').val() || '') + ' ' + ($('#Year').val() || '');
+        }
 
-<script>
-    $(document).ready(function () {
-        var month = '@ViewBag.chkmonth';
-        $('#Month').val(month);
-        $('#Month').select2().trigger('change');
-        $('#dealerid').select2();
-        $('#Year').select2();
-    });
-</script>
-<script>
-    function Download(apiid) {
-        var Month = $('#Month').val();
-        var Year = $('#Year').val();
-            var url = '@Url.Action("Print_Sell_Gst_dealer", "Home")?Month=' + Month + '&Year=' + Year + '';
+        function dealerSellGstUpdatePeriodBadge() {
+            var label = dealerSellGstGetPeriodLabel().trim();
+            var el = document.getElementById('dealerSellGstPeriodLabel');
+            if (el && label) {
+                el.textContent = label;
+            }
+        }
+
+        function dealerSellGstGetVisibleRows() {
+            var $ = window.jQuery;
+            var rows = [];
+            $('#dealerSellGstTable tbody tr').each(function () {
+                var $tr = $(this);
+                if ($tr.hasClass('vm-dealer-tds-empty-row') || !$tr.is(':visible')) {
+                    return;
+                }
+                var $cells = $tr.children('td');
+                if ($cells.length < 3) {
+                    return;
+                }
+                rows.push({
+                    firm: $.trim($cells.eq(0).text()),
+                    email: $.trim($cells.eq(1).text())
+                });
+            });
+            return rows;
+        }
+
+        function dealerSellGstUpdateCounts() {
+            var $ = window.jQuery;
+            if (!$) {
+                return;
+            }
+            var visible = $('#dealerSellGstTable tbody tr:not(.vm-dealer-tds-empty-row):visible').length;
+            $('#dealerSellGstRecordCount').text(visible);
+        }
+
+        function dealerSellGstFilterTable(term) {
+            var $ = window.jQuery;
+            var q = (term || '').toLowerCase().trim();
+            $('#dealerSellGstTable tbody tr').each(function () {
+                if ($(this).hasClass('vm-dealer-tds-empty-row')) {
+                    return;
+                }
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(q === '' || text.indexOf(q) > -1);
+            });
+            dealerSellGstUpdateCounts();
+        }
+
+        function dealerSellGstExportStyles() {
+            return 'body{font-family:Segoe UI,Arial,sans-serif;padding:24px;color:#0f172a;background:#fff;}'
+                + '.vm-block-export-head{margin:0 0 18px;padding-bottom:14px;border-bottom:2px solid #e2e8f0;}'
+                + '.vm-block-export-head h3{margin:0 0 6px;font-size:22px;font-weight:700;color:#1e293b;}'
+                + '.vm-block-export-head p{margin:0;font-size:13px;color:#64748b;line-height:1.5;}'
+                + 'table{border-collapse:collapse;width:100%;font-size:12px;}'
+                + 'th,td{border:1px solid #dbe4f0;padding:8px 10px;text-align:left;vertical-align:middle;}'
+                + 'th{background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%);color:#334155;font-weight:700;}';
+        }
+
+        function dealerSellGstBuildExportHtml(rows, periodLabel) {
+            var body = '';
+            for (var i = 0; i < rows.length; i++) {
+                body += '<tr>'
+                    + '<td>' + dealerSellGstEsc(rows[i].firm) + '</td>'
+                    + '<td>' + dealerSellGstEsc(rows[i].email) + '</td>'
+                    + '</tr>';
+            }
+
+            return '<html><head><meta charset="utf-8"><title>Dealer Sell GST</title>'
+                + '<style>' + dealerSellGstExportStyles() + '</style></head><body>'
+                + '<div class="vm-block-export-head"><h3>Dealer Sell GST</h3>'
+                + '<p>Period: ' + dealerSellGstEsc(periodLabel) + ' | Generated on ' + dealerSellGstEsc(new Date().toLocaleString()) + '</p></div>'
+                + '<table><thead><tr><th>Firm Name</th><th>Email</th></tr></thead>'
+                + '<tbody>' + body + '</tbody></table></body></html>';
+        }
+
+        function dealerSellGstWarnNoRecords() {
+            if (typeof swal === 'function') {
+                swal('No records to export', '', 'warning');
+                return;
+            }
+            window.alert('No records to export');
+        }
+
+        function dealerSellGstExportExcel() {
+            var rows = dealerSellGstGetVisibleRows();
+            if (!rows.length) {
+                dealerSellGstWarnNoRecords();
+                return;
+            }
+            var html = dealerSellGstBuildExportHtml(rows, dealerSellGstGetPeriodLabel());
+            var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, 'Dealer_Sell_GST.xls');
+                return;
+            }
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'Dealer_Sell_GST.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+        }
+
+        function dealerSellGstExportPdf() {
+            var rows = dealerSellGstGetVisibleRows();
+            if (!rows.length) {
+                dealerSellGstWarnNoRecords();
+                return;
+            }
+            var w = window.open('', '_blank');
+            if (!w) {
+                return;
+            }
+            w.document.open();
+            w.document.write(dealerSellGstBuildExportHtml(rows, dealerSellGstGetPeriodLabel()));
+            w.document.close();
+            w.focus();
+        }
+
+        window.dealerSellGstDownload = function () {
+            var $ = window.jQuery;
+            var month = $ ? $('#Month').val() : '';
+            var year = $ ? $('#Year').val() : '';
+            var url = '@Url.Action("Print_Sell_Gst_dealer", "Home")?Month=' + encodeURIComponent(month || '') + '&Year=' + encodeURIComponent(year || '');
             window.open(url, '_blank');
-    }
+        };
+
+        function bootDealerSellGstPage() {
+            var $ = window.jQuery;
+            if (!$) {
+                window.setTimeout(bootDealerSellGstPage, 50);
+                return;
+            }
+
+            $('#Month').val('@Html.Raw(HttpUtility.JavaScriptStringEncode(selectedMonth))');
+            $('#Year').val('@Html.Raw(HttpUtility.JavaScriptStringEncode(selectedYear))');
+            dealerSellGstUpdatePeriodBadge();
+
+            $('#Month, #Year').on('change', dealerSellGstUpdatePeriodBadge);
+
+            $('#dealerSellGstSearch').on('input', function () {
+                dealerSellGstFilterTable($(this).val());
+            });
+
+            $('#btnDealerSellGstExport').on('click', dealerSellGstExportExcel);
+            $('#btnDealerSellGstPdf').on('click', dealerSellGstExportPdf);
+
+            dealerSellGstUpdateCounts();
+        }
+
+        if (document.readyState === 'complete') {
+            bootDealerSellGstPage();
+        } else {
+            window.addEventListener('load', bootDealerSellGstPage);
+        }
+    })();
 </script>
-
-
-

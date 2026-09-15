@@ -83,12 +83,29 @@
         el.style.setProperty("left", Math.round(left) + "px", "important");
     }
 
-    function repositionDatepickerForMobile(inputEl) {
-        if (!isMobileViewport() || !window.jQuery) {
+    function isSendFundDateInput(inputEl) {
+        if (!inputEl || !inputEl.closest) {
+            return false;
+        }
+        return !!inputEl.closest(".saas-dealer-send-fund-page");
+    }
+
+    function shouldPinDatepicker(inputEl) {
+        if (isMobileViewport()) {
+            return true;
+        }
+        return isSendFundDateInput(inputEl || lastDateInputEl);
+    }
+
+    function repositionDatepicker(inputEl) {
+        if (!window.jQuery) {
             return;
         }
         if (inputEl) {
             lastDateInputEl = inputEl;
+        }
+        if (!shouldPinDatepicker(lastDateInputEl)) {
+            return;
         }
         var $ = window.jQuery;
         window.setTimeout(function () {
@@ -104,6 +121,10 @@
                 pinDatepickerEl($dp[0], lastDateInputEl);
             }, 50);
         }, 0);
+    }
+
+    function repositionDatepickerForMobile(inputEl) {
+        repositionDatepicker(inputEl);
     }
 
     function applyGlobalDatepickerDefaults() {
@@ -144,7 +165,7 @@
 
         $input.on("show shown", function () {
             setActive($input, true);
-            repositionDatepickerForMobile($input[0]);
+            repositionDatepicker($input[0]);
         });
         $input.on("hide", function () {
             setActive($input, false);
@@ -275,11 +296,15 @@
         bindDelegatedReportDateClicks();
         window.jQuery(document).on("show shown", "input, .form-control", function () {
             if (window.jQuery(this).data("datepicker")) {
-                repositionDatepickerForMobile(this);
+                repositionDatepicker(this);
             }
         });
-        window.addEventListener("resize", repositionDatepickerForMobile);
-        window.addEventListener("orientationchange", repositionDatepickerForMobile);
+        window.addEventListener("resize", function () {
+            repositionDatepicker(lastDateInputEl);
+        });
+        window.addEventListener("orientationchange", function () {
+            repositionDatepicker(lastDateInputEl);
+        });
         initReportDateForm("#allDetailsForm");
         initReportDateForm("#panReportForm");
         initReportDateForm("#rchFailedReportForm");
@@ -295,6 +320,13 @@
         initReportDateForm("#rofferReportForm");
         initReportDateForm("#radiantPrepayForm");
         initReportDateForm("#dthBookingReportForm");
+        initReportDateForm("#sendFundHistoryForm1");
+        initReportDateForm("#sendFundHistoryForm2", "#txt_frm_datee", "#txt_to_datee");
+        initReportDateForm("#sendFundPurchaseDateForm", "#txt_frm_date1", "#txt_to_date1");
+        initReportDateForm("#sendFundRightDateForm", "#txt_frm_daterecived", "#txt_to_daterecived");
+        initReportDateForm("#dealerReceiveFundAdminForm");
+        initReportDateForm("#dealerReceiveFundMasterForm");
+        initReportDateForm("#dealerTokenPurchaseHistoryForm");
         initReportDateForm("#radiantCmsDepositForm");
         initReportDateForm("#ecommerceHistoryForm");
         initReportDateForm("#securityReportForm");
@@ -323,5 +355,6 @@
     }
 
     window.initAdminReportDateForm = initReportDateForm;
+    window.repositionAdminDatepicker = repositionDatepicker;
     window.repositionAdminDatepickerForMobile = repositionDatepickerForMobile;
 })(window, document);

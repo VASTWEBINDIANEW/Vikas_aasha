@@ -1,394 +1,697 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Retailer_Cr_Dr_Report_Result>
+@using System.Linq
 @{
-    ViewBag.Title = "DealerLedger";
+    ViewBag.Title = "Dealer Ledger";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.Retailer_Cr_Dr_Report_Result>();
+    var rowCount = rows.Count;
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate))
+    {
+        frmDate = DateTime.Today.ToString("yyyy-MM-dd");
+    }
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var totalCredit = rows.Sum(x => x.credit ?? 0);
+    var totalDebit = rows.Sum(x => x.debit ?? 0);
+    var closingBalance = rows.LastOrDefault()?.Balance ?? 0;
 }
-<style>
-    .dropdown-menu {
-        margin-top: 75px !important;
-    }
-    @@media screen and (max-width:990px){
-        .dealer-ladgerpage .col-md-7{float:left;width:30%;padding-right:0;}
-        .dealer-ladgerpage .col-md-2 {float: left;width: 20%;}
-        .dealer-ladgerpage .col-md-1{width:12%;float:left;}
-        .dealer-ladgerpage .col-md-2.pdf-totalbuttonclass {padding-right: 15px;float: right;width: auto;padding-left: 0;}
-        .dealer-ladgerpage .col-md-7 p {font-size: 16px !important;}
-    }
-    @@media screen and (max-width:768px){
-        .dealer-ladgerpage .col-md-7{width:100%;}
-        .dealer-ladgerpage .col-md-2{width:30%;float:left;}
-        .dealer-ladgerpage .col-md-2 {width: 30%;float: left;padding-left: 16px !important;}
-        .dealer-ladgerpage .col-md-2.pdf-totalbuttonclass .dt-buttons {padding: 0;}
-        .dealer-ladgerpage table tr th:last-child {padding-right: 132px;}
-        #m-d-fund-transfer .modal-dialog.modal-dialog-reportclass {width: 100% !important;float: left;}
-        .dealer-ladgerpage .table-responsive{border:0;}
-        .dealer-ladgerpage .table-responsive tr td ,.dealer-ladgerpage tr th ,.dealer-ladgerpage tr td p ,.dealer-ladgerpage tr td span{font-size:13px !important;}
-        .dealer-ladgerpage table tr th:last-child {padding-right: 145px;}
-        #m-d-fund-transfer .modal-dialog.modal-dialog-reportclass {width: 100% !important;float: left !important;}
-        .card.all-reporttable-css .table-responsive { padding-bottom: 15px; }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=24" rel="stylesheet" />
+<script>document.body.classList.add('saas-dealer-ledger-dp-page');</script>
 
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page saas-dealer-ledger-page">
 
+    <div class="container-fluid vm-opr-page-shell">
 
-    @@media only screen and (max-width:766px){
-        .ls-closed .bars::after, .ls-closed .bars::before {
-            top: 20px;
+        @{
+            var ledgerFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "dealerLedgerForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate }
+            };
         }
-        .for-search {
-            width: 100%;
-            padding-left: 15px;
-            padding-right: 15px;
-            margin-top: 7px;
-        }
+        @using (Html.BeginForm("DealerLedger", "Home", FormMethod.Post, ledgerFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-    }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Account</li>
+                        <li>Ledger Book</li>
+                    </ol>
 
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
 
-    @@media screen and (max-width:580px) {
-
-        .dealer-income-date {
-            width: 100% !important;
-            float: left !important;
-            margin-top: 10px;
-            padding-right: 15px !important;
-        }
-
-        .dealer-ladgerpage .actualdealer-title p {
-            font-size: 12px !important;
-        }
-
-        .recharge-report-dealer input {
-            font-size: 12px;
-        }
-    }
-
-   
-
-</style>
-<section class="content dealer-ladgerpage">
-    <div class="container-fluid full-dealer-secondanimation">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Dealer Ledger</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account Active 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Dealer Ledger</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card page-header-third">
-                    <div class="row">
-                        <div class="col-md-7 actualdealer-title dealer-none-fourclass" style="width:auto;float:left;">
-                            <div class="w-100 float-left">
-                                <ul class="float-left bred" style="margin: 0; padding: 0;">
-                                    <li class="smli">
-                                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">Dashboard&nbsp;<span style="font-size:18px;">&#187;</span></a>
-                                    </li>
-                                    <li class="fullbodydycolorbg tmw-total-color-one" style="margin-top: 5px;">&nbsp;Dealer&nbsp;Ledger&nbsp;</li>
-
-                                </ul>
-
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "Select date", title = "Ledger date" })
                             </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
 
-                        <div class="col-md-2 recharge-report-dealer" style="width:auto;float:right;padding-left:5px;">
-                            <div class="form-group" style="margin-bottom:0px;width:100%;float:left;">
-                                <div style="padding-top:0px;float:right">
-                                    @*<button class="white-success-button" style="height:32px;border:1px solid #b1a6a638;background:#b1a6a638;float: right;padding: 0px 4px;margin-top:-1px;" onclick="findtotal()">Total</button>*@
-                                    <div class="web-white-filter fil" style="float: left;margin-right: 0px;margin-top:0px;">
-                                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                                        <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                                    </div>
-                                </div>
+                    </div>
 
-                            </div>
+                </div>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="dealerLedgerTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Ledger totals</span>
                         </div>
-
-                        <div class="col-md-6 dealer-income-date" style="float:right;width:auto;padding-right:0px;">
-                            @using (Html.BeginForm("DealerLedger", "Home", FormMethod.Post))
-                            {
-
-
-                                <div class="col-md-8 col-sm-8 col-xs-8" style="padding:0px 5px;">
-                                    <div class="input-daterange input-group for-web-date" style="width:100%;">
-                                        <div class="custom-date-icon" style="height: 32px;">
-                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                        </div>
-                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height:32px;" })
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-sm-4 col-xs-4" style="padding:0px;">
-                                    <center>
-                                        <button type="submit" class="btn  waves-effect" style="width:100%; height:32px;">
-
-                                            <span style="top:0px;color:#555;"><i class="fa fa-search" style="top:0px;font-size:13px;color:black;" aria-hidden="true"></i> Search</span>
-                                        </button>
-                                    </center>
-                                </div>
-
-                            }
-
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideDealerLedgerTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Total Credit</span>
+                            <strong class="vm-opr-total-card__value" id="dealerLedgerPanelCredit">@totalCredit.ToString("N4")</strong>
                         </div>
-                        <div class="for-search tablesearch-second" style="position:static;float:right;width:auto;padding-left: 5px;">
-                            <div class="search-after-third">
-                                <input id="myInput" type="text" name="myInput" placeholder="Search..." onkeyup="myFunction()" style="height: 32px; border: 1px solid #ccc; padding: 5px 8px;" />
-                            </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Total Debit</span>
+                            <strong class="vm-opr-total-card__value" id="dealerLedgerPanelDebit">@totalDebit.ToString("N4")</strong>
                         </div>
-                        <div class="col-md-2 pdf-totalbuttonclass" style="display:none;">
-                            <div class="web-white-filter" style="float:right;">
-                                <table class="dataTable js-exportable ">
-                                    <thead>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Closing Balance</span>
+                            <strong class="vm-opr-total-card__value" id="dealerLedgerPanelBalance">@closingBalance.ToString("N4")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Records</span>
+                            <strong class="vm-opr-total-card__value" id="dealerLedgerPanelRecords">@rowCount</strong>
                         </div>
                     </div>
                 </div>
+
             </div>
-        </div>
+        }
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card all-reporttable-css">
-                    <div class="page-header-third">
-                        <div class="table-responsive tableseconddes-dealer" style="position: inherit;">
-                            <table class="table table-bordered " style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Sr.No</th>
-                                        <th>Request&nbsp;Id</th>
-                                        <th>Particular</th>
-                                        <th>₹&nbsp;Amount</th>
-                                        <th>Credit</th>
-                                        <th>Debit</th>
-                                        <th>Balance</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="trow">
-                                    @{int i = 1;}
-                                    @foreach (var item in Model)
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-book" aria-hidden="true"></i>
+                        <span>Dealer ledger report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-ft-search-wrap vm-sell-rch-table-search">
+                            <input class="form-control vm-sell-rch-search-input" type="text" id="dealerLedgerSearch" placeholder="Search request id, particular, amount..." autocomplete="off" />
+                        </div>
+                        <span class="vm-radiant-inline-total vm-dealer-ledger-inline-total" title="Ledger totals for current filter">
+                            Credit: <strong id="dealerLedgerCreditTotal">@totalCredit.ToString("N4")</strong>
+                            | Debit: <strong id="dealerLedgerDebitTotal">@totalDebit.ToString("N4")</strong>
+                            | Balance: <strong id="dealerLedgerBalanceTotal">@closingBalance.ToString("N4")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-dealer-ledger-totals-btn" title="Show totals" aria-expanded="false" aria-controls="dealerLedgerTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnDealerLedgerExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnDealerLedgerPdf" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="dealerLedgerTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.No</th>
+                                    <th>Request Id</th>
+                                    <th>Particular</th>
+                                    <th>Amount</th>
+                                    <th>Credit</th>
+                                    <th>Debit</th>
+                                    <th>Balance</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trow">
+                                @if (rows.Any())
+                                {
+                                    var i = 1;
+                                    foreach (var item in rows)
                                     {
-
                                         <tr>
                                             <td>@i</td>
-                                            <td>@Html.DisplayFor(modelItem => item.RequestId)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Particulars)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.credit)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.debit)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Balance)</td>
-                                            <td class="leger-report-modal">@Html.DisplayFor(modelItem => item.Date)&nbsp;@*<img src="~/ashok-images/rightaeps.svg" data-toggle="modal" data-target="#m-d-fund-transfer" style="width: 11px;margin-top: 6px;float: right;" />*@</td>
+                                            <td>@item.RequestId</td>
+                                            <td class="vm-dealer-ledger-particular-cell">@item.Particulars</td>
+                                            <td class="vm-dealer-ledger-amount-cell">@item.Amount</td>
+                                            <td class="vm-dealer-ledger-credit-cell">@item.credit</td>
+                                            <td class="vm-dealer-ledger-debit-cell">@item.debit</td>
+                                            <td class="vm-dealer-ledger-balance-cell">@item.Balance</td>
+                                            <td>@(item.Date.HasValue ? item.Date.Value.ToString("dd-MMM-yyyy HH:mm") : "")</td>
                                         </tr>
                                         i++;
                                     }
-                                </tbody>
-                            </table>
-                        </div>
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="8" class="vm-opr-table-empty vm-dmt-table-empty">No ledger records found for @frmDate.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            @if (rows.Any())
+                            {
+                                <tfoot>
+                                    <tr class="vm-dealer-ledger-foot-row">
+                                        <td colspan="4"><strong>Total</strong></td>
+                                        <td class="vm-dealer-ledger-credit-cell"><strong id="dealerLedgerFootCredit">@totalCredit.ToString("N4")</strong></td>
+                                        <td class="vm-dealer-ledger-debit-cell"><strong id="dealerLedgerFootDebit">@totalDebit.ToString("N4")</strong></td>
+                                        <td class="vm-dealer-ledger-balance-cell"><strong id="dealerLedgerFootBalance">@closingBalance.ToString("N4")</strong></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            }
+                        </table>
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
 </section>
 
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<script>
+    window.dealerLedgerUpdateTotals = function () { };
 
-<!-- model for table -->
-<div class="modal fund-tr-history in" id="m-d-fund-transfer" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-reportclass" role="document" style="margin:0px;float:right;">
+    function toggleDealerLedgerTotals() {
+        var $ = window.jQuery;
+        if (!$) {
+            return;
+        }
+        var panel = $('#dealerLedgerTotalsPanel');
+        if (panel.hasClass('is-open') || panel.is(':visible')) {
+            hideDealerLedgerTotals();
+            return;
+        }
+        if (typeof window.dealerLedgerUpdateTotals === 'function') {
+            window.dealerLedgerUpdateTotals();
+        }
+        panel.addClass('is-open').stop(true, true).slideDown(180, function () {
+            panel.css('display', 'block');
+        }).attr('aria-hidden', 'false');
+        $('.vm-dealer-ledger-totals-btn').attr('aria-expanded', 'true');
+    }
 
-        <div class="modal-content width100">
-            <div class="modal-header width100 float-left dealer-pop-head">
-                <h5>Ledger Report</h5>
-                <button type="button" class="btn waves-effect " data-dismiss="modal" style="float:right;border:0px;color:var(--main-bg-lcolor);padding:0px; height:auto;background:transparent;">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                </button>
+    function hideDealerLedgerTotals() {
+        var $ = window.jQuery;
+        if (!$) {
+            return;
+        }
+        $('#dealerLedgerTotalsPanel').stop(true, true).slideUp(180, function () {
+            $(this).removeClass('is-open').css('display', 'none');
+        }).attr('aria-hidden', 'true');
+        $('.vm-dealer-ledger-totals-btn').attr('aria-expanded', 'false');
+    }
 
+    function initDealerLedgerSingleDatePicker() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.datepicker) {
+            return false;
+        }
 
-            </div><!--.modal-header-->
-            <div class="modal-body width100 float-left dealer-pop-body">
-                <div class="float-left width100">
-                    <form class="first-form">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                <div class="form-group">
-                                    <label> Firm Name</label>
+        var $form = $('#dealerLedgerForm');
+        var $frm = $('#txt_frm_date');
+        if (!$frm.length) {
+            return false;
+        }
 
-                                    <input class="form-control" readonly="readonly" required="required" type="text" value="">
+        if ($frm.data('datepicker')) {
+            $frm.datepicker('destroy');
+        }
 
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                <div class="form-group">
-                                    <label>Retailer Name</label>
+        $frm.prop('readonly', true);
+        $frm.datepicker({
+            format: 'yyyy-mm-dd',
+            todayHighlight: true,
+            autoclose: true,
+            orientation: 'bottom auto',
+            forceParse: false,
+            keyboardNavigation: true,
+            enableOnReadonly: true,
+            container: 'body'
+        });
 
-                                    <input class="form-control" readonly="readonly" required="required" type="text" value="">
+        $frm.off('.dealerLedgerDp').on('show.dealerLedgerDp shown.dealerLedgerDp', function () {
+            $frm.closest('.saas-acc-dp-field').addClass('is-active');
+            if (typeof window.repositionAdminDatepickerForMobile === 'function') {
+                window.repositionAdminDatepickerForMobile($frm[0]);
+            }
+        });
+        $frm.on('hide.dealerLedgerDp changeDate.dealerLedgerDp', function () {
+            $frm.closest('.saas-acc-dp-field').removeClass('is-active');
+        });
+        $frm.on('click.dealerLedgerDp', function (e) {
+            e.preventDefault();
+            $frm.datepicker('show');
+        });
+        $frm.siblings('.saas-acc-dp-icon').off('click.dealerLedgerDp').on('click.dealerLedgerDp', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $frm.datepicker('show');
+        });
 
-                                </div>
-                            </div>
+        var mode = ($form.attr('data-date-mode') || 'get').toLowerCase();
+        var frmVal = ($form.attr('data-frm-date') || $frm.val() || '').trim();
+        if (mode === 'post' || mode === 'set' || frmVal) {
+            if (frmVal) {
+                $frm.datepicker('update', frmVal);
+            } else {
+                $frm.datepicker('setDate', new Date());
+            }
+        } else if (!$frm.val()) {
+            $frm.datepicker('setDate', new Date());
+        }
 
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Recharge No</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Amount</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                        </div><!--.row-->
+        return true;
+    }
 
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Operator</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Operator Type</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                        </div><!--.row-->
+    (function () {
+        function dealerLedgerEsc(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
 
+        function dealerLedgerParseAmount(value) {
+            var num = parseFloat(String(value || '').replace(/[^\d.-]/g, ''));
+            return isNaN(num) ? 0 : num;
+        }
 
-
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Distributor Income</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Retailer Income</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase;" type="text" value="">
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Recharge Type</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Operator ID</label>
-                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" value="">
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                    </form>
-
-                    <!--=============-->
-
-                </div><!--.modal-body-->
-
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-
-               $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true
-
+        function dealerLedgerGetVisibleRows() {
+            var $ = window.jQuery;
+            var rows = [];
+            $('#dealerLedgerTable tbody tr').each(function () {
+                var $tr = $(this);
+                if ($tr.hasClass('vm-opr-table-empty-row') || !$tr.is(':visible')) {
+                    return;
+                }
+                var $cells = $tr.children('td');
+                if ($cells.length < 8) {
+                    return;
+                }
+                rows.push({
+                    sr: $.trim($cells.eq(0).text()),
+                    requestId: $.trim($cells.eq(1).text()),
+                    particular: $.trim($cells.eq(2).text()),
+                    amount: $.trim($cells.eq(3).text()),
+                    credit: $.trim($cells.eq(4).text()),
+                    debit: $.trim($cells.eq(5).text()),
+                    balance: $.trim($cells.eq(6).text()),
+                    date: $.trim($cells.eq(7).text())
+                });
             });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
+            return rows;
+        }
+
+        function dealerLedgerFormatAmount(value) {
+            var num = dealerLedgerParseAmount(value);
+            var text = String(num);
+            if (text.indexOf('.') === -1) {
+                return num.toFixed(4);
+            }
+            var parts = text.split('.');
+            var decimals = parts[1] ? parts[1].length : 0;
+            return num.toFixed(Math.min(Math.max(decimals, 2), 4));
+        }
+
+        function dealerLedgerUpdateTotals() {
+            var $ = window.jQuery;
+            if (!$) {
+                return;
             }
 
+            var credit = 0;
+            var debit = 0;
+            var balance = 0;
+            var visibleRows = [];
 
-        });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5',
-                'print'
-            ]
-        });
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $("#myInput").on("keyup", function () {
-
-            var value = $(this).val().toLowerCase();
-            $("#trow tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            $('#dealerLedgerTable tbody tr:not(.vm-opr-table-empty-row):visible').each(function () {
+                visibleRows.push(this);
+                var $cells = $(this).children('td');
+                credit += dealerLedgerParseAmount($cells.eq(4).text());
+                debit += dealerLedgerParseAmount($cells.eq(5).text());
+                balance = dealerLedgerParseAmount($cells.eq(6).text());
             });
-        });
-    });
-</script>
 
+            var visible = visibleRows.length;
+            var creditText = dealerLedgerFormatAmount(credit);
+            var debitText = dealerLedgerFormatAmount(debit);
+            var balanceText = dealerLedgerFormatAmount(balance);
 
-<script>
-    $("#btnExport").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var url = '@Url.Action("ExcelDealerLedger", "Home")?txt_frm_date=' + txt_frm_date;
-        location.href = url;
-});
+            $('#dealerLedgerCreditTotal, #dealerLedgerFootCredit, #dealerLedgerPanelCredit').text(creditText);
+            $('#dealerLedgerDebitTotal, #dealerLedgerFootDebit, #dealerLedgerPanelDebit').text(debitText);
+            $('#dealerLedgerBalanceTotal, #dealerLedgerFootBalance, #dealerLedgerPanelBalance').text(balanceText);
+            $('#dealerLedgerPanelRecords').text(visible);
+        }
+
+        window.dealerLedgerUpdateTotals = dealerLedgerUpdateTotals;
+
+        function dealerLedgerFilterTable(term) {
+            var $ = window.jQuery;
+            var q = (term || '').toLowerCase().trim();
+            $('#dealerLedgerTable tbody tr').each(function () {
+                if ($(this).hasClass('vm-opr-table-empty-row')) {
+                    return;
+                }
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(q === '' || text.indexOf(q) > -1);
+            });
+            dealerLedgerUpdateTotals();
+        }
+
+        function dealerLedgerGetDateLabel() {
+            var $ = window.jQuery;
+            return $ ? ($.trim($('#txt_frm_date').val() || '') || '@frmDate') : '@frmDate';
+        }
+
+        function dealerLedgerGetSearchLabel() {
+            var $ = window.jQuery;
+            var term = $ ? $.trim($('#dealerLedgerSearch').val() || '') : '';
+            return term;
+        }
+
+        function dealerLedgerExportStyles() {
+            return '@@page{margin:16mm;}'
+                + 'body{font-family:Segoe UI,Arial,sans-serif;padding:24px;color:#0f172a;background:#fff;}'
+                + '.vm-ledger-export-head{margin:0 0 16px;padding-bottom:14px;border-bottom:2px solid #e2e8f0;}'
+                + '.vm-ledger-export-head h3{margin:0 0 6px;font-size:22px;font-weight:700;color:#1e293b;}'
+                + '.vm-ledger-export-head p{margin:0;font-size:13px;color:#64748b;line-height:1.5;}'
+                + '.vm-ledger-export-summary{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px;}'
+                + '.vm-ledger-export-chip{display:inline-block;padding:6px 12px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700;}'
+                + '.vm-ledger-export-chip--credit{background:#ecfdf5;color:#047857;}'
+                + '.vm-ledger-export-chip--debit{background:#fef2f2;color:#b91c1c;}'
+                + '.vm-ledger-export-chip--balance{background:#eff6ff;color:#1d4ed8;}'
+                + 'table{border-collapse:collapse;width:100%;font-size:12px;}'
+                + 'th,td{border:1px solid #dbe4f0;padding:8px 10px;text-align:center;vertical-align:middle;}'
+                + 'th{background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%);color:#334155;font-weight:700;white-space:nowrap;}'
+                + 'tbody tr:nth-child(even){background:#f8fafc;}'
+                + 'td.vm-ledger-export-particular{text-align:left;max-width:260px;}'
+                + 'td.vm-ledger-export-credit{color:#047857;font-weight:700;}'
+                + 'td.vm-ledger-export-debit{color:#b91c1c;font-weight:700;}'
+                + 'td.vm-ledger-export-balance{color:#1d4ed8;font-weight:700;}'
+                + 'tfoot td{font-weight:700;background:#eff6ff;border-top:2px solid #93c5fd;}'
+                + 'tfoot td.vm-ledger-export-credit{color:#047857;}'
+                + 'tfoot td.vm-ledger-export-debit{color:#b91c1c;}'
+                + 'tfoot td.vm-ledger-export-balance{color:#1d4ed8;}'
+                + '@@media print{body{padding:0;} .vm-ledger-export-summary{break-inside:avoid;}}';
+        }
+
+        function dealerLedgerBuildExportHtml(rows, title) {
+            var dateLabel = dealerLedgerGetDateLabel();
+            var searchLabel = dealerLedgerGetSearchLabel();
+            var credit = 0;
+            var debit = 0;
+            var balance = 0;
+            var body = '';
+
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                credit += dealerLedgerParseAmount(r.credit);
+                debit += dealerLedgerParseAmount(r.debit);
+                balance = dealerLedgerParseAmount(r.balance);
+                body += '<tr>'
+                    + '<td>' + dealerLedgerEsc(r.sr) + '</td>'
+                    + '<td>' + dealerLedgerEsc(r.requestId) + '</td>'
+                    + '<td class="vm-ledger-export-particular">' + dealerLedgerEsc(r.particular) + '</td>'
+                    + '<td>' + dealerLedgerEsc(r.amount) + '</td>'
+                    + '<td class="vm-ledger-export-credit">' + dealerLedgerEsc(r.credit) + '</td>'
+                    + '<td class="vm-ledger-export-debit">' + dealerLedgerEsc(r.debit) + '</td>'
+                    + '<td class="vm-ledger-export-balance">' + dealerLedgerEsc(r.balance) + '</td>'
+                    + '<td>' + dealerLedgerEsc(r.date) + '</td>'
+                    + '</tr>';
+            }
+
+            var creditText = dealerLedgerFormatAmount(credit);
+            var debitText = dealerLedgerFormatAmount(debit);
+            var balanceText = dealerLedgerFormatAmount(balance);
+            var filterNote = searchLabel ? (' | Filter: ' + searchLabel) : '';
+            var footer = '<tfoot><tr>'
+                + '<td colspan="4" style="text-align:right;"><strong>Total</strong></td>'
+                + '<td class="vm-ledger-export-credit"><strong>' + dealerLedgerEsc(creditText) + '</strong></td>'
+                + '<td class="vm-ledger-export-debit"><strong>' + dealerLedgerEsc(debitText) + '</strong></td>'
+                + '<td class="vm-ledger-export-balance"><strong>' + dealerLedgerEsc(balanceText) + '</strong></td>'
+                + '<td></td>'
+                + '</tr></tfoot>';
+
+            return '<html><head><meta charset="utf-8"><title>' + dealerLedgerEsc(title) + '</title>'
+                + '<style>' + dealerLedgerExportStyles() + '</style></head><body>'
+                + '<div class="vm-ledger-export-head">'
+                + '<h3>' + dealerLedgerEsc(title) + '</h3>'
+                + '<p>Date: ' + dealerLedgerEsc(dateLabel) + filterNote + ' | Generated on ' + dealerLedgerEsc(new Date().toLocaleString()) + '</p>'
+                + '</div>'
+                + '<div class="vm-ledger-export-summary">'
+                + '<span class="vm-ledger-export-chip">Date: ' + dealerLedgerEsc(dateLabel) + '</span>'
+                + '<span class="vm-ledger-export-chip">Records: ' + rows.length + '</span>'
+                + '<span class="vm-ledger-export-chip vm-ledger-export-chip--credit">Credit: ' + dealerLedgerEsc(creditText) + '</span>'
+                + '<span class="vm-ledger-export-chip vm-ledger-export-chip--debit">Debit: ' + dealerLedgerEsc(debitText) + '</span>'
+                + '<span class="vm-ledger-export-chip vm-ledger-export-chip--balance">Balance: ' + dealerLedgerEsc(balanceText) + '</span>'
+                + '</div>'
+                + '<table><thead><tr>'
+                + '<th>Sr.No</th><th>Request Id</th><th>Particular</th><th>Amount</th><th>Credit</th><th>Debit</th><th>Balance</th><th>Date</th>'
+                + '</tr></thead><tbody>' + body + '</tbody>' + footer + '</table></body></html>';
+        }
+
+        function dealerLedgerWarn(message) {
+            if (typeof swal === 'function') {
+                swal(message, '', 'warning');
+                return;
+            }
+            window.alert(message);
+        }
+
+        function dealerLedgerDownloadExcel(html) {
+            var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, 'Dealer_Ledger_Report.xls');
+                return;
+            }
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'Dealer_Ledger_Report.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+        }
+
+        function dealerLedgerBuildPdfDoc(rows) {
+            var dateLabel = dealerLedgerGetDateLabel();
+            var searchLabel = dealerLedgerGetSearchLabel();
+            var credit = 0;
+            var debit = 0;
+            var balance = 0;
+            var tableBody = [[
+                { text: 'Sr.No', style: 'tableHeader' },
+                { text: 'Request Id', style: 'tableHeader' },
+                { text: 'Particular', style: 'tableHeader' },
+                { text: 'Amount', style: 'tableHeader' },
+                { text: 'Credit', style: 'tableHeader' },
+                { text: 'Debit', style: 'tableHeader' },
+                { text: 'Balance', style: 'tableHeader' },
+                { text: 'Date', style: 'tableHeader' }
+            ]];
+
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                credit += dealerLedgerParseAmount(r.credit);
+                debit += dealerLedgerParseAmount(r.debit);
+                balance = dealerLedgerParseAmount(r.balance);
+                tableBody.push([
+                    { text: r.sr || '', style: 'tableCellCenter' },
+                    { text: r.requestId || '', style: 'tableCellCenter' },
+                    { text: r.particular || '', style: 'tableCellLeft' },
+                    { text: r.amount || '', style: 'tableCellCenter' },
+                    { text: r.credit || '', style: 'tableCellCredit' },
+                    { text: r.debit || '', style: 'tableCellDebit' },
+                    { text: r.balance || '', style: 'tableCellBalance' },
+                    { text: r.date || '', style: 'tableCellCenter' }
+                ]);
+            }
+
+            var creditText = dealerLedgerFormatAmount(credit);
+            var debitText = dealerLedgerFormatAmount(debit);
+            var balanceText = dealerLedgerFormatAmount(balance);
+
+            tableBody.push([
+                { text: 'Total', style: 'tableTotalLabel', colSpan: 4, alignment: 'right' }, {}, {}, {},
+                { text: creditText, style: 'tableTotalCredit' },
+                { text: debitText, style: 'tableTotalDebit' },
+                { text: balanceText, style: 'tableTotalBalance' },
+                { text: '', style: 'tableCellCenter' }
+            ]);
+
+            var metaLine = 'Date: ' + dateLabel + ' | Records: ' + rows.length + ' | Generated on ' + new Date().toLocaleString();
+            if (searchLabel) {
+                metaLine += ' | Filter: ' + searchLabel;
+            }
+
+            return {
+                pageSize: 'A4',
+                pageOrientation: 'landscape',
+                pageMargins: [18, 18, 18, 18],
+                info: {
+                    title: 'Dealer Ledger Report',
+                    author: 'Dealer Panel'
+                },
+                content: [
+                    { text: 'Dealer Ledger Report', style: 'title' },
+                    { text: metaLine, style: 'subtitle', margin: [0, 0, 0, 10] },
+                    {
+                        columns: [
+                            { width: '*', text: 'Date: ' + dateLabel, style: 'chip' },
+                            { width: 'auto', text: 'Records: ' + rows.length, style: 'chip' },
+                            { width: 'auto', text: 'Credit: ' + creditText, style: 'chipCredit' },
+                            { width: 'auto', text: 'Debit: ' + debitText, style: 'chipDebit' },
+                            { width: 'auto', text: 'Balance: ' + balanceText, style: 'chipBalance' }
+                        ],
+                        columnGap: 8,
+                        margin: [0, 0, 0, 12]
+                    },
+                    {
+                        table: {
+                            headerRows: 1,
+                            widths: [28, 52, '*', 42, 42, 42, 42, 68],
+                            body: tableBody
+                        },
+                        layout: {
+                            fillColor: function (rowIndex) {
+                                if (rowIndex === 0) {
+                                    return '#334155';
+                                }
+                                if (rowIndex === tableBody.length - 1) {
+                                    return '#eff6ff';
+                                }
+                                return rowIndex % 2 === 0 ? '#f8fafc' : null;
+                            },
+                            hLineColor: '#dbe4f0',
+                            vLineColor: '#dbe4f0',
+                            paddingLeft: function () { return 5; },
+                            paddingRight: function () { return 5; },
+                            paddingTop: function () { return 4; },
+                            paddingBottom: function () { return 4; }
+                        }
+                    },
+                    { text: 'Generated from Dealer panel - Ledger Book', style: 'footer', margin: [0, 10, 0, 0] }
+                ],
+                defaultStyle: {
+                    fontSize: 8,
+                    color: '#1e293b'
+                },
+                styles: {
+                    title: { fontSize: 16, bold: true, color: '#1e293b' },
+                    subtitle: { fontSize: 9, color: '#64748b' },
+                    chip: { fontSize: 8, bold: true, color: '#3730a3', fillColor: '#eef2ff', margin: [0, 2, 0, 2] },
+                    chipCredit: { fontSize: 8, bold: true, color: '#047857', fillColor: '#ecfdf5', margin: [0, 2, 0, 2] },
+                    chipDebit: { fontSize: 8, bold: true, color: '#b91c1c', fillColor: '#fef2f2', margin: [0, 2, 0, 2] },
+                    chipBalance: { fontSize: 8, bold: true, color: '#1d4ed8', fillColor: '#eff6ff', margin: [0, 2, 0, 2] },
+                    tableHeader: { bold: true, color: '#ffffff', fontSize: 8, alignment: 'center' },
+                    tableCellCenter: { alignment: 'center', fontSize: 8 },
+                    tableCellLeft: { alignment: 'left', fontSize: 8 },
+                    tableCellCredit: { alignment: 'center', fontSize: 8, bold: true, color: '#047857' },
+                    tableCellDebit: { alignment: 'center', fontSize: 8, bold: true, color: '#b91c1c' },
+                    tableCellBalance: { alignment: 'center', fontSize: 8, bold: true, color: '#1d4ed8' },
+                    tableTotalLabel: { bold: true, fontSize: 8, color: '#1e293b' },
+                    tableTotalCredit: { bold: true, fontSize: 8, color: '#047857', alignment: 'center' },
+                    tableTotalDebit: { bold: true, fontSize: 8, color: '#b91c1c', alignment: 'center' },
+                    tableTotalBalance: { bold: true, fontSize: 8, color: '#1d4ed8', alignment: 'center' },
+                    footer: { fontSize: 8, color: '#94a3b8', alignment: 'center' }
+                }
+            };
+        }
+
+        function dealerLedgerExportExcel() {
+            var rows = dealerLedgerGetVisibleRows();
+            if (!rows.length) {
+                dealerLedgerWarn('No records to export');
+                return;
+            }
+            dealerLedgerDownloadExcel(dealerLedgerBuildExportHtml(rows, 'Dealer Ledger Report'));
+        }
+
+        function dealerLedgerExportPdf() {
+            var rows = dealerLedgerGetVisibleRows();
+            if (!rows.length) {
+                dealerLedgerWarn('No records to export');
+                return;
+            }
+            if (typeof pdfMake === 'undefined' || !pdfMake.createPdf) {
+                dealerLedgerWarn('PDF library not loaded. Please refresh the page and try again.');
+                return;
+            }
+            var pdf = pdfMake.createPdf(dealerLedgerBuildPdfDoc(rows));
+            pdf.open();
+        }
+
+        function bootDealerLedgerPage() {
+            var $ = window.jQuery;
+            if (!$ || !$.fn || !$.fn.datepicker) {
+                window.setTimeout(bootDealerLedgerPage, 50);
+                return;
+            }
+
+            document.body.classList.add('saas-dealer-ledger-dp-page');
+
+            if (!initDealerLedgerSingleDatePicker()) {
+                window.setTimeout(function () {
+                    initDealerLedgerSingleDatePicker();
+                }, 80);
+            }
+
+            $(window).off('resize.dealerLedgerDp orientationchange.dealerLedgerDp').on('resize.dealerLedgerDp orientationchange.dealerLedgerDp', function () {
+                if (typeof window.repositionAdminDatepickerForMobile === 'function') {
+                    window.repositionAdminDatepickerForMobile(document.getElementById('txt_frm_date'));
+                }
+            });
+
+            $('#dealerLedgerSearch').on('input', function () {
+                dealerLedgerFilterTable($(this).val());
+            });
+
+            $('.vm-dealer-ledger-totals-btn').off('click.dealerLedgerTotals').on('click.dealerLedgerTotals', function (e) {
+                e.preventDefault();
+                toggleDealerLedgerTotals();
+            });
+
+            $('#btnDealerLedgerExport').off('click.dealerLedgerEx').on('click.dealerLedgerEx', dealerLedgerExportExcel);
+            $('#btnDealerLedgerPdf').off('click.dealerLedgerPdf').on('click.dealerLedgerPdf', dealerLedgerExportPdf);
+
+            dealerLedgerUpdateTotals();
+        }
+
+        if (document.readyState === 'complete') {
+            bootDealerLedgerPage();
+        } else {
+            window.addEventListener('load', bootDealerLedgerPage);
+        }
+    })();
 </script>

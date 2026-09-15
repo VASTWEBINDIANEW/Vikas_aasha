@@ -1610,6 +1610,22 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
         #endregion
 
         //check Retailer Outstanding and My Credit
+        public ActionResult DealerTokenSummary()
+        {
+            var userid = User.Identity.GetUserId();
+            var token = db.RetailerCreationTokens.SingleOrDefault(a => a.DealerId == userid);
+            var currentTokens = token != null ? token.Tokens : 0;
+            var purchasedTotal = db.RetailerCreationTokensAssignHistories
+                .Where(a => a.DealerId == userid)
+                .Select(a => (int?)a.Tokens)
+                .Sum() ?? 0;
+            return Json(new
+            {
+                currentTokens = currentTokens,
+                purchasedTotal = purchasedTotal
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Chkbalance()
         {
             var userid = User.Identity.GetUserId();
@@ -2752,20 +2768,37 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
             vmodel.SendPurchaserequest = null;
 
             string dealerid = User.Identity.GetUserId();
+            DateTime fromdate;
+            DateTime todate;
+
+            if (string.IsNullOrWhiteSpace(txt_frm_daterecived) || string.IsNullOrWhiteSpace(txt_to_daterecived))
+            {
+                fromdate = DateTime.Now.AddDays(-1);
+                todate = DateTime.Now.AddDays(1);
+            }
+            else
+            {
+                string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+                DateTime dt = DateTime.ParseExact(txt_frm_daterecived, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+                DateTime dt1 = DateTime.ParseExact(txt_to_daterecived, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+                fromdate = dt.Date;
+                todate = dt1.Date.AddDays(1);
+            }
+
             if (tabtype == "FUNDTORETailer" || hdtype == "FUNDTORETailer")
             {
-                vmodel.DealerToRemFundTransfer = db.select_dlm_rem(dealerid, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1), "ALL", 1, 20).ToList();
+                vmodel.DealerToRemFundTransfer = db.select_dlm_rem(dealerid, fromdate, todate, "ALL", 1, 20).ToList();
                 return PartialView("_SendFundPartial", vmodel);
             }
             else if (tabtype == "FUNDTOMD" || hdtype == "FUNDTOMD")
             {
-                vmodel.SendPurchaserequest = db.select_dlm_pur_order(dealerid, "ALL", DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).ToList();
+                vmodel.SendPurchaserequest = db.select_dlm_pur_order(dealerid, "ALL", fromdate, todate).ToList();
                 return PartialView("_PurchaserequestDLMTOMDADMIN", vmodel);
 
             }
             else if (tabtype == "FUNDRecived" || hdtype == "FUNDRecived")
             {
-                vmodel.PurchaseRequestRecived = db.select_rem_pur_order("ALL", dealerid, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).ToList();
+                vmodel.PurchaseRequestRecived = db.select_rem_pur_order("ALL", dealerid, fromdate, todate).ToList();
                 return PartialView("_PurchaserequestRecived", vmodel);
 
             }
@@ -4212,6 +4245,25 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
             return View(ch);
         }
 
+        [HttpGet]
+        public JsonResult GetDealerComplaintMessages()
+        {
+            var userid = User.Identity.GetUserId();
+            var list = db.proc_Complaint_request(userid, "").ToList();
+            var messages = list.Select(x => new
+            {
+                idno = x.idno,
+                complant = x.complant,
+                response = x.response,
+                sts = x.sts,
+                rdate = x.rdate.HasValue ? x.rdate.Value.ToString("dd-MM-yyyy HH:mm") : null,
+                resdate = x.resdate.HasValue ? x.resdate.Value.ToString("dd-MM-yyyy HH:mm") : null
+            }).ToList();
+            var openCount = list.Count(x => x.sts == "Open");
+            return Json(new { messages = messages, openCount = openCount }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public ActionResult Complaint_insert(string message)
         {
             var statusAdmin = db.PushNotificationStatus.Where(a => a.UserRole == "Admin").SingleOrDefault().Status;

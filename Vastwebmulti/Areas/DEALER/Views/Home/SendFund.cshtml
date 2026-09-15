@@ -1,12 +1,34 @@
 ﻿@using System.Net.Mime
 @using Vastwebmulti.Models
-@*@model IEnumerable<Vastwebmulti.Models.select_dlm_rem_Result>*@
 @model Vastwebmulti.Areas.DEALER.ViewModel.FundRequestViewmodel
 @{
-    ViewBag.Title = "Send";
+    ViewBag.Title = "Send Fund";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+    var sendFundDateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var sendFundToday = DateTime.Today.ToString("yyyy-MM-dd");
 }
+
+<script>document.body.classList.add('saas-dealer-send-fund-page');</script>
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-block-opt-modern.css?v=19" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+
 <style>
+    body.saas-admin-ui .saas-dealer-send-fund-page .vm-sendfund-legacy-breadcrumb,
+    body.saas-admin-ui .saas-dealer-send-fund-page .sendfund-pdf {
+        display: none !important;
+    }
 
     .dropdown-menu {
         margin-top: 81px !important;
@@ -36,38 +58,34 @@
             padding-top: 6px !important;
         }
 
-    .left-side-customnav ul li {
+    body.saas-admin-ui .saas-dealer-send-fund-page .left-side-customnav ul.tabs li {
         width: 50% !important;
         float: left !important;
         text-align: center !important;
         padding: 8px 0 !important;
         color: #fff !important;
-    }
-
-        .left-side-customnav ul li.current {
-            background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
-            color: #fff !important;
-        }
-
-        .left-side-customnav ul li.current, .left-side-customnav ul li {
-            border: 0 !important;
-        }
-
-    .left-side-customnav ul li {
         background: #c7c7c7 !important;
-        color: #555 !important;
     }
 
-    .left-side-customnav .tab-content {
-        background: #eae9e9 !important;
-        height: auto !important;
-        overflow: inherit !important;
+    body.saas-admin-ui .saas-dealer-send-fund-page .left-side-customnav ul.tabs li.current {
+        background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
+        color: #fff !important;
     }
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-       
+
+    body.saas-admin-ui .saas-dealer-send-fund-page .left-side-customnav .tab-content {
+        background: transparent !important;
+        height: auto !important;
+        overflow: visible !important;
+        min-height: 0 !important;
+        margin-bottom: 0 !important;
+        float: none !important;
+        width: 100% !important;
+    }
+    body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .select2-container--default .select2-selection--single,
+    body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form-body .select2-container--default .select2-selection--single {
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        height: 38px !important;
     }
     .tab-content-funtransferdealer .col-md-12 .form-group button {
     height: 32px !important;
@@ -109,13 +127,9 @@
     margin-top: 8px !important;
 }
     .leftside-customenavsecond ul.admin-andfundtransfer li:nth-child(2) a{float:right;text-align:right;}
-    .left-side-customnav .smsapi-second {
-    background: transparent;
-}
-    .left-side-customnav .tab-content {
-    min-height: 285px;
-    margin-bottom: 20px;
-}
+    body.saas-admin-ui .saas-dealer-send-fund-page .left-side-customnav .smsapi-second {
+        background: transparent;
+    }
     .second-tab-sendmoney ul li {
     width: 33.3% !important;
     text-align: center;
@@ -168,9 +182,9 @@
    border-right:0 !important;
 }
         .rightclass-sendfund .fundtransferrightclass .tab0.active{color:#fff;background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;}
-        .bgcustome-background {
-    background: #eae9e9;
-    min-height: 281px;
+        body.saas-admin-ui .saas-dealer-send-fund-page .bgcustome-background {
+    background: transparent !important;
+    min-height: 0 !important;
 }
         .sendfundright-date .all-report-inputclass {
     position: relative;
@@ -189,76 +203,55 @@
 </style>
 <script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
 
-<section class="content smsapi-pages">
-    <!--================Custum Work SendFund Start=====================-->
-    <div class="container-fluid full-dealer-secondanimation">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="w-100 float-left bread-same-all-page">
-                    <ul class="float-left bred" style="margin: 0; padding: 0;;">
-                        <li class="smli">
-                            <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">Dashboard&nbsp;<span style="font-size:18px;">&#187;</span></a>
-                        </li>
-                        <li class="fullbodydycolorbg tmw-total-color-one" style="margin-top: 5px; ">Fund&nbsp;Transfer</li>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dealer-block-opt-page saas-dealer-bank-info-page saas-dealer-send-fund-page">
 
-                    </ul>
-                    <div class="tow-btn sendfund-pdf">
-                        <div class="web-white-filter" style="float:right;">
-                            <table class="dataTable js-exportable ">
-                                <thead>
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell vm-dealer-sendfund-toolbar">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Fund Transfer</li>
+                </ol>
             </div>
         </div>
-        <div class="row">
-            <!--==================Lest side Custum Nav Tabs Start===========================-->
-            <div class="col-md-4 col-sm-12 left-side-customnav">
-                <div class="w-100 float-left smsapi-second">
-                    <div class="w-100 float-left head2-sms main-bg-color">
-                        <ul class="w-100 float-left tabs">
-                            <li class="tab-link current" data-tab="tab-1">Fund Transfer To Retailer</li>
-                            <li class="tab-link" data-tab="tab-2">Fund Request</li>
-                            @*<li class="tab-link" data-tab="tab-3">Wallet Req-Admin</li>*@
 
-                        </ul>
+        <div class="row clearfix vm-dealer-bankinfo-layout vm-dealer-sendfund-layout vm-sendfund-top-row">
+            <div class="col-md-4 col-sm-12 vm-dealer-bankinfo-form-col vm-dealer-sendfund-top-form-col">
+                <div class="vm-opr-main-card vm-dealer-bankinfo-form-card vm-dealer-sendfund-top-card">
+                    <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-dealer-bankinfo-form-head">
+                        <div class="vm-opr-table-panel__title">
+                            <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
+                            <span>Quick Fund Transfer</span>
+                        </div>
                     </div>
-                    <div id="tab-1" class="w-100 float-left tab-content current tab-content-funtransferdealer">
+                    <div class="vm-dealer-bankinfo-form-body vm-dealer-sendfund-top-body left-side-customnav">
+                        <ul class="nav nav-tabs vm-dealer-bankinfo-left-tabs vm-dealer-sendfund-top-left-tabs" id="sendFundTopLeftTabs" role="tablist">
+                            <li class="tab-link current active" role="presentation" data-tab="tab-1"><a href="#tab-1" aria-expanded="true">Fund Transfer To Retailer</a></li>
+                            <li class="tab-link" role="presentation" data-tab="tab-2"><a href="#tab-2" aria-expanded="false">Fund Request</a></li>
+                        </ul>
+                    <div id="tab-1" class="tab-content current tab-content-funtransferdealer vm-dealer-sendfund-top-pane vm-dealer-sendfund-quick-pane">
                         @using (Html.BeginForm("Dealer_retailer_bal", "Home", FormMethod.Post))
                         {
-                            <div class="w-100 float-left">
+                            <div class="vm-dealer-sendfund-quick-form">
 
-                                <div class="col-md-12">
-                                    <div class="form-group" style="margin-top:4px;">
-                                        <div class="w-100 float-left only-select-css">
-                                            @Html.DropDownList("RetailerId", ViewBag.RetailerId as SelectList, "Select Retailer", new { @class = "selectpicker form-control for-select2", data_live_search = "true", required = "required" })
-                                        </div>
+                                <div class="vm-dealer-sendfund-quick-field">
+                                    <label for="RetailerId">Retailer</label>
+                                    <div class="only-select-css">
+                                        @Html.DropDownList("RetailerId", ViewBag.RetailerId as SelectList, "Select Retailer", new { @class = "selectpicker form-control for-select2", data_live_search = "true", required = "required" })
                                     </div>
                                 </div>
 
-                                <div class="col-md-12">
-                                    <div class="form-group only-select-css">
-                                        <div class="d-none">
-                                            <select id="ddl_fund_type" name="ddl_fund_type" class="selectpicker form-control for-select2" data-live-search="true" style="padding-top:4px;" required="">
-                                                @*<option value="Cash"> CASH TRANSFER</option>*@
-                                                <option value="Cash Payment">CASH PAYMENT</option>
-                                                <option value="Bank Cash Deposit">BANK CASH DEPOSIT</option>
-                                                <option value="Online TRANSFER">ONLINE TRANSFER</option>
-                                                <option value="Upi TRANSFER">UPI TRANSFER</option>
-                                                <option value="Credit" style="color:red !important;">CREDIT TRANSFER</option>
-
-                                            </select>
-                                        </div>
+                                <div class="vm-dealer-sendfund-quick-field">
+                                    <label for="ddl_fund_type">Payment Mode</label>
+                                    <div class="only-select-css">
+                                        <select id="ddl_fund_type" name="ddl_fund_type" class="selectpicker form-control for-select2" data-live-search="true" required="">
+                                            <option value="Cash Payment">CASH PAYMENT</option>
+                                            <option value="Bank Cash Deposit">BANK CASH DEPOSIT</option>
+                                            <option value="Online TRANSFER">ONLINE TRANSFER</option>
+                                            <option value="Upi TRANSFER">UPI TRANSFER</option>
+                                            <option value="Credit" style="color:red !important;">CREDIT TRANSFER</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -355,41 +348,24 @@
                                 <!--===================Custum Select Dropdown==========================-->
 
 
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="">
-                                            @Html.TextBox("balance", "", new { @class = "form-control", placeholder = "Enter Amount", required = "required", @onkeyup = "word.innerHTML=convertNumberToWords(this.value)", onkeypress = "return isNumber(event)", @style = " height:40px;border: 1px solid #ccc;" })
-                                            <h2 id="word" class="amout-word"></h2>
-
-                                        </div>
-
-                                    </div>
+                                <div class="vm-dealer-sendfund-quick-field">
+                                    <label for="balance">Enter Amount</label>
+                                    @Html.TextBox("balance", "", new { @class = "form-control", placeholder = "Enter Amount", required = "required", @onkeyup = "word.innerHTML=convertNumberToWords(this.value)", onkeypress = "return isNumber(event)" })
+                                    <h2 id="word" class="amout-word vm-dealer-sendfund-amount-word"></h2>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group textarea">
-                                        <div class="w-100 float-left">
-                                            <textarea id="comment" name="comment" class="form-control" placeholder="Enter Comment"></textarea>
-                                        </div>
-                                    </div>
+                                <div class="vm-dealer-sendfund-quick-field">
+                                    <label for="comment">Enter Comment</label>
+                                    <textarea id="comment" name="comment" class="form-control" placeholder="Enter Comment"></textarea>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group" style="text-align:right;">
-
-                                        <button type="reset" id="submit" class="btn  waves-effect" style="margin-top:4px;height:34px;border:1px solid #c7c2c2;background:#dedddd;">
-                                            <i @*class="fa fa-window-restore"*@ style="top:1px;font-size:18px;"></i>
-                                            <span style="top:-4px;color:#555;">Reset</span>
-                                        </button>
-                                        <button type="submit" id="submit" class="btn fullbodydycolorbg  waves-effect" style="margin-top:4px;height:34px;border:1px solid #c7c2c2;">
-                                            @*<i class="fa fa-exchange" style="top:1px;font-size:18px;"></i>*@
-                                            <span style="top:-1px;color:#fff;">Transfer</span>
-                                        </button>
-                                    </div>
+                                <div class="vm-dealer-sendfund-quick-footer">
+                                    <button type="reset" class="saas-acc-btn vm-dealer-sendfund-quick-reset">Reset</button>
+                                    <button type="submit" class="saas-acc-btn saas-acc-btn--search vm-dealer-sendfund-quick-submit">Transfer</button>
                                 </div>
 
                             </div>
                         }
                     </div>
-                    <div id="tab-2" class="w-100 float-left tab-content leftside-customenavsecond">
+                    <div id="tab-2" class="tab-content leftside-customenavsecond vm-dealer-sendfund-top-pane vm-dealer-sendfund-quick-pane">
 
                         <div class="w-100 float-left tab-containerr">
                             <div class="w-100 float-left tab-menur">
@@ -937,82 +913,56 @@
 
                         </div><!--end of container-->
 
-
                     </div>
-
-
+                    </div>
                 </div>
             </div>
-            <!--==================Lest side Custum Nav Tabs End===========================-->
-            <!--==================Right side Custum Nav Tabs End===========================-->
-            <div class="col-md-8 col-sm-12 margin-top-10 rightclass-sendfund">
 
-                <div class="row">
-
-
-                    <!--history tabs Strat-->
-                    <!--HISTORY-->
-                    <div class="w-100 float-left history-main" id="history-tabs">
-                        <div class="col-md-12">
+            <div class="col-md-8 col-sm-12 vm-dealer-bankinfo-list-col vm-dealer-sendfund-top-table-col rightclass-sendfund">
+                <div class="vm-opr-main-card vm-dealer-bankinfo-list-card vm-dealer-sendfund-top-card">
+                    <div class="vm-opr-table-panel">
+                        <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                            <div class="vm-opr-table-panel__title">
+                                <i class="fas fa-history" aria-hidden="true"></i>
+                                <span>Fund History</span>
+                            </div>
+                        </div>
+                        <div class="vm-dealer-bankinfo-tab-body vm-dealer-sendfund-top-history-body">
+                    <div class="w-100 float-left history-main vm-dealer-sendfund-history-main" id="history-tabs">
                             <div class='w-100 float-left toggle0'>
-                                <div class='w-100 float-left tabs0 text-uppercase fundtransferrightclass'>
-                                    <div class='tab0 active'>Fund Transfer History</div>
-                                    <div class='tab0' style="border-right:0;">+ &nbsp;Add Fund History</div>
-                                    <div class='tab0 tablastfund'>Purcharge Request</div>
-                                </div>
+                                <ul class="nav nav-tabs vm-dealer-bankinfo-right-tabs vm-dealer-sendfund-top-right-tabs tabs0 fundtransferrightclass" role="tablist">
+                                    <li role="presentation" class="tab0 active"><a href="javascript:void(0)">Fund Transfer History</a></li>
+                                    <li role="presentation" class="tab0"><a href="javascript:void(0)">+ Add Fund History</a></li>
+                                    <li role="presentation" class="tab0 tablastfund"><a href="javascript:void(0)">Purcharge Request</a></li>
+                                </ul>
 
-                                <div class="w-100 float-left bg bgcustome-background">
+                                <div class="w-100 float-left bg vm-dealer-sendfund-history-panels bgcustome-background">
                                     
                                     <!--tab panel 1 Start-->
                                     <div class='w-100 float-left panels0'>
                                         <div class='w-100 float-left panel0'>
                                             <div class="w-100 float-left margin-top-10">
-                                                @using (Html.BeginForm("SendFund", "Home", FormMethod.Post))
+                                                @using (Html.BeginForm("SendFund", "Home", FormMethod.Post, new { id = "sendFundHistoryForm1", @class = "vm-dealer-sendfund-history-form", data_date_mode = sendFundDateMode, data_report_date_form = "true" }))
                                                 {
-                                                    <div class="w-100 float-left">
-
-                                                        <div class="coll-md-12">
-                                                            <div class="row">
-                                                                <div class="col-md-4 ss send-right-select">
-                                                                    <div class="form-group only-select-css">
-                                                                        <div class="" @*style="padding-bottom:3px;border:1px solid #dddddd;"*@>
-                                                                            @Html.DropDownList("RetailerId1", ViewBag.RetailerId1 as SelectList, "Select Retailer", new { @class = "selectpicker form-control for-select2", data_live_search = "true", @style = "height:29px;padding:0px;" })
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6 sendfundright-date">
-                                                                    <div class="form-group for-web-date">
-                                                                        <div class="input-daterange input-group">
-                                                                            <div class="all-report-inputclass all-report-inputclass-left">
-                                                                                <div class="custom-date-icon" style="height: 32px;">
-                                                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                                                </div>
-                                                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                                                                </div>
-
-                                                                            <div class="all-report-inputclass all-report-inputclass-right">
-                                                                                <div class="custom-date-icon" style="height: 32px;">
-                                                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                                                </div>
-                                                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; ", autocomplete = "off" })
-                                                                                </div>
-
-                                                                            </div>
-                                                                        <!-- /.input group -->
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-2 sendfund-search">
-                                                                    <center>
-                                                                        <button type="submit" class="w-100 float-left btn bg-grey waves-effect" style=" height:32px;">
-                                                                            <i class="fa fa-search" style="top:-1px;font-size:14px;color:#555;"></i>
-                                                                            <span style="top:-2px;color:#555;">Search</span>
-                                                                        </button>
-                                                                    </center>
-                                                                </div>
+                                                    <div class="vm-dealer-sendfund-history-filter">
+                                                        <div class="vm-dealer-sendfund-history-filter__item vm-dealer-sendfund-history-filter__retailer">
+                                                            @Html.DropDownList("RetailerId1", ViewBag.RetailerId1 as SelectList, "Select Retailer", new { @class = "selectpicker form-control for-select2", data_live_search = "true" })
+                                                        </div>
+                                                        <div class="vm-dealer-sendfund-history-filter__item vm-dealer-sendfund-history-filter__dates vm-dmt-filter-search-group">
+                                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                                @Html.TextBox("txt_frm_date", sendFundToday, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                                                            </div>
+                                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                                @Html.TextBox("txt_to_date", sendFundToday, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
                                                             </div>
                                                         </div>
-
+                                                        <div class="vm-dealer-sendfund-history-filter__item vm-dealer-sendfund-history-filter__search">
+                                                            <button type="submit" class="saas-acc-btn saas-acc-btn--search vm-dealer-sendfund-date-search">
+                                                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 }
 
@@ -1054,48 +1004,27 @@
                                         <!--tab panel 2 start-->
                                         <div class='panel0 w-100 float-left'>
                                             <div class="w-100 float-left margin-top-10">
-                                                @using (Html.BeginForm("SendFund", "Home", FormMethod.Post))
+                                                @using (Html.BeginForm("SendFund", "Home", FormMethod.Post, new { id = "sendFundHistoryForm2", @class = "vm-dealer-sendfund-history-form", data_date_mode = sendFundDateMode, data_report_date_form = "true" }))
                                                 {
-                                                    <div class="w-100 float-left">
-
-                                                        <div class="coll-md-12">
-                                                            <div class="row">
-                                                                <div class="col-md-4 ss">
-                                                                    <div class="form-group">
-                                                                        <div class="" @*style="padding-bottom:3px;border:1px solid #dddddd;"*@>
-                                                                            @Html.DropDownList("RetailerId1", ViewBag.RetailerId1 as SelectList, "Select Retailer", new { @class = "selectpicker form-control", data_live_search = "true", @style = "height:29px;padding:0px;" })
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group for-web-date">
-                                                                        <div class="input-daterange input-group">
-                                                                            <div class="custom-date-icon" style="height: 32px;">
-                                                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                                            </div>
-                                                                            @Html.TextBox("txt_frm_datee", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; ", autocomplete = "off" })
-                                                                            <span class="input-group-addon">
-                                                                                <i class="fa fa-exchange"></i>
-                                                                            </span>
-                                                                            <div class="custom-date-icon" style="height: 32px;">
-                                                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                                            </div>
-                                                                            @Html.TextBox("txt_to_datee", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                                                        </div>
-                                                                        <!-- /.input group -->
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <center>
-                                                                        <button type="submit" class="w-100 float-left btn bg-grey waves-effect" style="height:34px;">
-                                                                            <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                                                            <span style="top:-2px;color:black;">Search</span>
-                                                                        </button>
-                                                                    </center>
-                                                                </div>
+                                                    <div class="vm-dealer-sendfund-history-filter">
+                                                        <div class="vm-dealer-sendfund-history-filter__item vm-dealer-sendfund-history-filter__retailer">
+                                                            @Html.DropDownList("RetailerId1", ViewBag.RetailerId1 as SelectList, "Select Retailer", new { @class = "selectpicker form-control for-select2", data_live_search = "true" })
+                                                        </div>
+                                                        <div class="vm-dealer-sendfund-history-filter__item vm-dealer-sendfund-history-filter__dates vm-dmt-filter-search-group">
+                                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                                @Html.TextBox("txt_frm_datee", sendFundToday, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_datee", placeholder = "From", title = "From date" })
+                                                            </div>
+                                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                                @Html.TextBox("txt_to_datee", sendFundToday, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_datee", placeholder = "To", title = "To date" })
                                                             </div>
                                                         </div>
-
+                                                        <div class="vm-dealer-sendfund-history-filter__item vm-dealer-sendfund-history-filter__search">
+                                                            <button type="submit" class="saas-acc-btn saas-acc-btn--search vm-dealer-sendfund-date-search">
+                                                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 }
 
@@ -1167,40 +1096,22 @@
                                         <div class='panel0 w-100 float-left'>
                                             <div class="w-100 float-left margin-top-10">
 
-                                                <div class="w-100 float-left">
-
-                                                    <div class="coll-md-12">
-                                                        <div class="row">
-
-                                                            <div class="col-md-6">
-                                                                <div class="form-group for-web-date">
-                                                                    <div class="input-daterange input-group">
-                                                                        <div class="custom-date-icon" style="height: 32px;">
-                                                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                                        </div>
-                                                                        @Html.TextBox("txt_frm_date1", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; ", autocomplete = "off" })
-                                                                        <span class="input-group-addon">
-                                                                            <i class="fa fa-exchange"></i>
-                                                                        </span>
-                                                                        <div class="custom-date-icon" style="height: 32px;">
-                                                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                                        </div>
-                                                                        @Html.TextBox("txt_to_date1", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                                                    </div>
-                                                                    <!-- /.input group -->
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <center>
-                                                                    <button type="submit" onclick="Reportmpos()" class="w-100 float-left btn bg-grey waves-effect" style="height:34px;">
-                                                                        <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                                                        <span style="top:-2px;color:black;">Search</span>
-                                                                    </button>
-                                                                </center>
-                                                            </div>
+                                                <div id="sendFundPurchaseDateForm" class="vm-dealer-sendfund-history-filter vm-dealer-sendfund-history-filter--purchase" data-report-date-form="true" data-date-mode="@sendFundDateMode">
+                                                    <div class="vm-dealer-sendfund-history-filter__item vm-dealer-sendfund-history-filter__dates vm-dmt-filter-search-group">
+                                                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                            @Html.TextBox("txt_frm_date1", sendFundToday, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date1", placeholder = "From", title = "From date" })
+                                                        </div>
+                                                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                            @Html.TextBox("txt_to_date1", sendFundToday, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date1", placeholder = "To", title = "To date" })
                                                         </div>
                                                     </div>
-
+                                                    <div class="vm-dealer-sendfund-history-filter__item vm-dealer-sendfund-history-filter__search">
+                                                        <button type="button" onclick="Reportmpos()" class="saas-acc-btn saas-acc-btn--search vm-dealer-sendfund-date-search">
+                                                            <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
 
 
@@ -1237,51 +1148,38 @@
 
                                 </div>
                             </div>
-                        </div>
-
-
-
-
                     </div>
-
-                    <!--=====================Bottom Table End===============================-->
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <!--==================Right side Custum Nav Tabs End===========================-->
-
-
         </div>
 
+        <div class="row clearfix vm-dealer-bankinfo-layout vm-dealer-sendfund-layout vm-sendfund-bottom-row">
+            <div class="col-md-4 col-sm-12 vm-dealer-bankinfo-form-col vm-dealer-sendfund-form-col">
+                <div class="vm-opr-main-card vm-dealer-bankinfo-form-card vm-dealer-sendfund-form-card">
+                    <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-dealer-bankinfo-form-head">
+                        <div class="vm-opr-table-panel__title">
+                            <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                            <span>Fund Transfer</span>
+                        </div>
+                    </div>
 
-
-
-    </div>
-
-    <!--================Custum Work SendFund End=====================-->
-
-
-
-    <div class="col-md-12">
-
-        <div class="row clearfix">
-            <div class="col-md-4 second-tab-sendmoney">
-                <div class="fund-trasfer-left fund-user-left">
-
-                    <ul class="nav nav-tabs" id="tabs" style="background:#c7c7c7;">
-                        <li class="tab-link  current active" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true">FundTransfer<sup style="top: -5px;left: 2px;">2</sup>&nbsp;Retailer</a></li>
-                        <li class="tab-link  " data-tab="tab-1"><a href="#menu1" data-toggle="tab" aria-expanded="false">FundRequested&nbsp;Admin</a></li>
-                        <li class="tab-link  " data-tab="tab-1"><a href="#menu2" data-toggle="tab" aria-expanded="false">FundRequested&nbsp;M/D</a></li>
+                    <ul class="nav nav-tabs vm-dealer-bankinfo-left-tabs vm-dealer-sendfund-bottom-left-tabs" id="sendFundLeftTabs" role="tablist">
+                        <li class="tab-link active" role="presentation" data-tab="home"><a data-toggle="tab" href="#home" aria-expanded="true"><span>Fund Transfer To Retailer</span></a></li>
+                        <li class="tab-link" role="presentation" data-tab="menu1"><a href="#menu1" data-toggle="tab" aria-expanded="false"><span>Fund Request Admin</span></a></li>
+                        <li class="tab-link" role="presentation" data-tab="menu2"><a href="#menu2" data-toggle="tab" aria-expanded="false"><span>Fund Request M/D</span></a></li>
                         @*<li class="tab-link  " data-tab="tab-1"><a href="#menu3" data-toggle="tab" aria-expanded="false"></a></li>*@
 
 
                     </ul>
 
-                    <div class="width100 float-left ">
+                    <div class="vm-dealer-bankinfo-form-body vm-dealer-sendfund-form-body">
+                        <div class="tab-content vm-dealer-sendfund-bottom-tab-content">
 
-                        <div id="home" class="width100 float-left tab-pane fade active in">
+                        <div id="home" class="tab-pane fade active in vm-dealer-sendfund-bottom-pane">
 
-                            <div class="fund-transfer-form" id="frmdata">
+                            <div class="fund-transfer-form vm-dealer-sendfund-form" id="frmdata">
                                 <p style="color:red;font-size:16px;" id="rtlchk"> </p>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <label>
@@ -1348,7 +1246,7 @@
                                     <div>
                                         <div class="custom-district">
 
-                                            @Html.DropDownList("dealermdbank", (IEnumerable<SelectListItem>)ViewBag.fillaccount, "Select Bank", new { @class = "form-control", required = "required" })
+                                            @Html.DropDownList("dealermdbank", (IEnumerable<SelectListItem>)ViewBag.fillaccount, "Select Bank", new { id = "dealermdbank", @class = "for-select2 form-control vm-dealer-sendfund-field-fs14", required = "required" })
                                             @*<select id="mdbank" name="mdbank" required class="form-control">
                         <option></option>
                     </select>*@
@@ -1358,7 +1256,7 @@
                                 <div class="col-md-12 col-sm-12 col-xs-12 account-no" style="display:none;">
                                     <label>Account No.</label>
                                     <div>
-                                        <input type="text" readonly id="txtmddistaccount" name="txtmddistaccount" placeholder="Enter Account No." />
+                                        <input type="text" readonly id="txtmddistaccount" name="txtmddistaccount" class="form-control vm-dealer-sendfund-field-fs14" placeholder="Enter Account No." />
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12 utr-no" style="display:none;">
@@ -1371,7 +1269,7 @@
                                     <label>Select Wallet</label>
                                     <div>
                                         <div class="custom-district">
-                                            @Html.DropDownList("mdwallet", ViewBag.walletsdlm as SelectList, "Select Wallet", new { id = "mdwallet", @class = "form-control" })
+                                            @Html.DropDownList("mdwallet", ViewBag.walletsdlm as SelectList, "Select Wallet", new { id = "mdwallet", @class = "for-select2 form-control vm-dealer-sendfund-field-fs14" })
 
 
                                             @*<select id="mdwallet" name="mdwallet" required class="form-control">
@@ -1423,8 +1321,8 @@
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div>
                                         <label id="divTestdealer"></label>
-                                        <button id="btnnshowmaster" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
-                                            Submit
+                                        <button id="btnnshowmaster" type="button" class="saas-acc-btn saas-acc-btn--search vm-dealer-bankinfo-save-btn vm-dealer-sendfund-submit-btn">
+                                            <i class="fas fa-paper-plane" aria-hidden="true"></i><span>Submit</span>
                                         </button>
                                     </div>
                                 </div>
@@ -1455,8 +1353,8 @@
                                             <div id="hdninputvalues">
 
                                             </div>
-                                            <button class="fullbodydycolorbg" id="btnTransferDlmToRdm" type="submit" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;margin-left:10px;">
-                                                Submit
+                                            <button class="saas-acc-btn saas-acc-btn--search vm-dealer-bankinfo-save-btn vm-dealer-sendfund-submit-btn" id="btnTransferDlmToRdm" type="submit">
+                                                <i class="fas fa-check" aria-hidden="true"></i><span>Confirm Transfer</span>
                                             </button>
 
                                         </div>
@@ -1467,9 +1365,9 @@
                             </div>
                         </div>
 
-                        <div id="menu1" class="width100 float-left tab-pane fade ">
+                        <div id="menu1" class="tab-pane fade vm-dealer-sendfund-bottom-pane">
 
-                            <div id="frmdata1" class="fund-transfer-form">
+                            <div id="frmdata1" class="fund-transfer-form vm-dealer-sendfund-form">
 
 
                                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -1522,7 +1420,7 @@
                                             @*<select id="ddlAdminAccountname" name="ddlAdminAccountname" class="form-control">
                         <option value="">Select Account No</option>
                     </select>*@
-                                            @Html.DropDownList("ddlAdminAccountname", ViewBag.ddAdminaccountname as SelectList, "Select Account No", new { id = "ddlAdminAccountname", @class = "form-control", @required = "required" })
+                                            @Html.DropDownList("ddlAdminAccountname", ViewBag.ddAdminaccountname as SelectList, "Select Account No", new { id = "ddlAdminAccountname", @class = "for-select2 form-control vm-dealer-sendfund-field-fs14", @required = "required" })
 
 
                                         </div>
@@ -1531,7 +1429,7 @@
                                 <div class="col-md-12 col-sm-12 col-xs-12 daccount-no" style="display:none;">
                                     <label>Account No.</label>
                                     <div>
-                                        <input type="text" readonly="readonly" id="txtAdminACCOUNTNO" name="txtAdminACCOUNTNO" placeholder="Enter Account No." />
+                                        <input type="text" readonly="readonly" id="txtAdminACCOUNTNO" name="txtAdminACCOUNTNO" class="form-control vm-dealer-sendfund-field-fs14" placeholder="Enter Account No." />
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12 dutr-no" style="display:none;">
@@ -1547,7 +1445,7 @@
                                             @*<select id="ddlDealerWalletname" name="ddlDealerWalletname" class="form-control">
                         <option value="">Select Account No</option>
                     </select>*@
-                                            @Html.DropDownList("ddlAdminWallettname", ViewBag.ddAdminwalletname as SelectList, "Select Wallet", new { id = "ddlAdminWallettname", @class = "form-control", @required = "required" })
+                                            @Html.DropDownList("ddlAdminWallettname", ViewBag.ddAdminwalletname as SelectList, "Select Wallet", new { id = "ddlAdminWallettname", @class = "for-select2 form-control vm-dealer-sendfund-field-fs14", @required = "required" })
 
                                         </div>
                                     </div>
@@ -1606,8 +1504,8 @@
                                     <div>
                                         <label id="divTestadmin"></label>
                                         <label class="errorss"></label>
-                                        <button id="btndistributorInform" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
-                                            Submit
+                                        <button id="btndistributorInform" type="button" class="saas-acc-btn saas-acc-btn--search vm-dealer-bankinfo-save-btn vm-dealer-sendfund-submit-btn">
+                                            <i class="fas fa-paper-plane" aria-hidden="true"></i><span>Submit</span>
                                         </button>
                                     </div>
                                     <label id="errorss"></label>
@@ -1650,7 +1548,7 @@
                                 }
 
                             </div>
-                        <div id="menu2" class="width100 float-left tab-pane fade">
+                        <div id="menu2" class="tab-pane fade vm-dealer-sendfund-bottom-pane">
                             @*@using (Ajax.BeginForm("PlacePurchaseOrder", "Home",
                                   new AjaxOptions
                                   {
@@ -1665,7 +1563,7 @@
 
 
 
-                            <div id="formRetailer" class="fund-transfer-form">
+                            <div id="formRetailer" class="fund-transfer-form vm-dealer-sendfund-form">
 
 
 
@@ -1712,7 +1610,7 @@
                                     <label>Select Bank </label>
                                     <div>
                                         <div class="custom-district">
-                                            @Html.DropDownList("ddMDaccountname", ViewBag.superaccount as SelectList, "Select Account No", new { id = "ddMDaccountname", @class = "form-control" })*
+                                            @Html.DropDownList("ddMDaccountname", ViewBag.superaccount as SelectList, "Select Account No", new { id = "ddMDaccountname", @class = "for-select2 form-control vm-dealer-sendfund-field-fs14" })
 
                                             @*<select id="RETRIbankid" name="RETRIbankid">
                         <option>axis</option>
@@ -1724,7 +1622,7 @@
                                 <div class="col-md-12 col-sm-12 col-xs-12 raccount-no" style="display:none;">
                                     <label>Account No.</label>
                                     <div>
-                                        <input id="txtMDACCOUNTNO" name="txtMDACCOUNTNO" readonly="readonly" type="text" placeholder="Enter Account No." />
+                                        <input id="txtMDACCOUNTNO" name="txtMDACCOUNTNO" readonly="readonly" type="text" class="form-control vm-dealer-sendfund-field-fs14" placeholder="Enter Account No." />
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12 rutr-no" style="display:none;">
@@ -1738,7 +1636,7 @@
                                     <div>
                                         <div class="custom-district">
 
-                                            @Html.DropDownList("ddlMDWalletname", ViewBag.superwallet as SelectList, "Select Wallet", new { id = "ddlMDWalletname", @class = "form-control" })
+                                            @Html.DropDownList("ddlMDWalletname", ViewBag.superwallet as SelectList, "Select Wallet", new { id = "ddlMDWalletname", @class = "for-select2 form-control vm-dealer-sendfund-field-fs14" })
 
                                             @*@Html.DropDownListFor(m => m.walletid, Model.ddlwalletInfo, "--Select One--", new { @id = "ddlRETwalletname" })*@
 
@@ -1803,8 +1701,8 @@
                                     <div>
                                         <label id="divTestmd"></label>
                                         <label class="errorss"></label>
-                                        <button id="btnRetailerInform" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
-                                            Submit
+                                        <button id="btnRetailerInform" type="button" class="saas-acc-btn saas-acc-btn--search vm-dealer-bankinfo-save-btn vm-dealer-sendfund-submit-btn">
+                                            <i class="fas fa-paper-plane" aria-hidden="true"></i><span>Submit</span>
                                         </button>
                                     </div>
                                 </div>
@@ -1848,26 +1746,94 @@
 
                         </div>
 
+                        </div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="col-md-8">
-                <div class="fund-trasfer-right fund-user-right">
-                    <ul class="nav nav-tabs" id="tabs" style="display:flex;">
-                        <li class="tab-link tabChangeType current active" data-href="@Url.Action("BindAllFundGrid","Home",new { tabtype="FUNDTORETailer"})" data-tab="tab-1"><a href="#fundtrans" data-toggle="tab" aria-expanded="true">FundTransfer To Retailer</a></li>
-                        <li class="tab-link tabChangeType  " data-tab="tab-1" data-href="@Url.Action("BindAllFundGrid","Home",new { tabtype="FUNDTOMD"})"><a href="#sendreq" data-toggle="tab" aria-expanded="false">Fund Request Send</a></li>
-                        <li class="tab-link tabChangeType  " data-href="@Url.Action("BindAllFundGrid","Home",new { tabtype="FUNDRecived"})" data-tab="tab-1"><a href="#recivedreq" data-toggle="tab" aria-expanded="false">Fund Request Recived</a></li>
+            <div class="col-md-8 col-sm-12 vm-dealer-bankinfo-list-col vm-dealer-sendfund-list-col">
+                <div class="vm-opr-main-card vm-dealer-bankinfo-list-card vm-dealer-sendfund-list-card">
+                    <div class="vm-opr-table-panel">
+                        <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                            <div class="vm-opr-table-panel__title">
+                                <i class="fas fa-list-alt" aria-hidden="true"></i>
+                                <span id="sendFundPanelTitle">Fund Transfer To Retailer</span>
+                            </div>
+                            <div class="vm-dmt-table-panel__right">
+                                <div class="vm-ft-search-wrap vm-dealer-bankinfo-table-search">
+                                    <input class="form-control vm-dealer-bankinfo-search-input" type="text" id="sendFundTableSearch" placeholder="Search records..." autocomplete="off" />
+                                </div>
+                                <span class="vm-radiant-record-badge vm-dealer-bankinfo-record-badge" title="Records in current tab">
+                                    Records: <strong id="sendFundRecordCount">0</strong>
+                                </span>
+                                <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group vm-dealer-block-opt-export-group">
+                                    <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-dealer-bankinfo-totals-btn" id="sendFundTotalsBtn" title="Show totals" aria-expanded="false" aria-controls="sendFundTotalsPanel">
+                                        <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" id="sendFundExportExcel" class="saas-acc-btn saas-acc-btn--excel vm-dealer-block-opt-export-btn vm-dealer-block-opt-export-btn--excel" title="Export Excel">
+                                        <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                                    </button>
+                                    <button type="button" id="sendFundExportPdf" class="saas-acc-btn saas-acc-btn--pdf vm-dealer-block-opt-export-btn vm-dealer-block-opt-export-btn--pdf" title="Export PDF">
+                                        <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="vm-opr-totals-panel vm-dmt-totals-panel vm-dealer-bankinfo-totals-panel" id="sendFundTotalsPanel" style="display:none;" aria-hidden="true">
+                            <div class="vm-dmt-totals-head">
+                                <div class="vm-dmt-totals-head__title">
+                                    <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                                    <span id="sendFundTotalsTitle">Fund Transfer — Summary</span>
+                                </div>
+                                <button type="button" class="vm-dmt-totals-hide-btn" id="sendFundTotalsHideBtn" title="Hide totals" aria-label="Hide totals">
+                                    <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                                <div class="vm-opr-total-card vm-opr-total-card--primary">
+                                    <span class="vm-opr-total-card__label">Total Records</span>
+                                    <strong class="vm-opr-total-card__value" id="sendFundTotalCount">0</strong>
+                                </div>
+                                <div class="vm-opr-total-card vm-opr-total-card--success">
+                                    <span class="vm-opr-total-card__label">Visible (Filtered)</span>
+                                    <strong class="vm-opr-total-card__value" id="sendFundVisibleCount">0</strong>
+                                </div>
+                                <div class="vm-opr-total-card vm-opr-total-card--pending">
+                                    <span class="vm-opr-total-card__label">Active Section</span>
+                                    <strong class="vm-opr-total-card__value" id="sendFundActiveSection">Fund Transfer To Retailer</strong>
+                                </div>
+                            </div>
+                        </div>
 
-                    </ul>
-                    <div class="width100 float-left ">
-                        <div id="fundtrans" class="width100 float-left tab-pane fade active in">
+                        <ul class="nav nav-tabs vm-dealer-bankinfo-right-tabs vm-dealer-sendfund-right-tabs" id="sendFundRightTabs" role="tablist">
+                            <li class="tab-link tabChangeType active" role="presentation" data-href="@Url.Action("BindAllFundGrid","Home",new { tabtype="FUNDTORETailer"})" data-tab="fundtrans" data-title="Fund Transfer To Retailer"><a href="#fundtrans" data-toggle="tab" aria-expanded="true"><i class="fas fa-exchange-alt" aria-hidden="true"></i><span>Fund Transfer To Retailer</span></a></li>
+                            <li class="tab-link tabChangeType" role="presentation" data-href="@Url.Action("BindAllFundGrid","Home",new { tabtype="FUNDTOMD"})" data-tab="sendreq" data-title="Fund Request Send"><a href="#sendreq" data-toggle="tab" aria-expanded="false"><i class="fas fa-paper-plane" aria-hidden="true"></i><span>Fund Request Send</span></a></li>
+                            <li class="tab-link tabChangeType" role="presentation" data-href="@Url.Action("BindAllFundGrid","Home",new { tabtype="FUNDRecived"})" data-tab="recivedreq" data-title="Fund Request Received"><a href="#recivedreq" data-toggle="tab" aria-expanded="false"><i class="fas fa-inbox" aria-hidden="true"></i><span>Fund Request Recived</span></a></li>
+                        </ul>
 
-                            <div id="tblshowMasterD" class="table-responsive " style="width:100%;">
+                        <div id="sendFundRightDateForm" class="vm-dealer-sendfund-date-filter vm-dealer-sendfund-right-date-filter sendfundright-date vm-dmt-filter-search-group" data-report-date-form="true" data-date-mode="@sendFundDateMode">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                @Html.TextBox("txt_frm_daterecived", sendFundToday, new { @class = "form-control saas-acc-dp-input", autocomplete = "off", id = "txt_frm_daterecived", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                @Html.TextBox("txt_to_daterecived", sendFundToday, new { @class = "form-control saas-acc-dp-input", autocomplete = "off", id = "txt_to_daterecived", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="button" id="sendFundRightDateSearch" class="saas-acc-btn saas-acc-btn--search vm-dealer-sendfund-date-search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
 
-                                <table class="table table-bordered table-striped table-hover">
+                        <div class="vm-dealer-bankinfo-tab-body vm-dealer-sendfund-tab-body">
+                        <div class="tab-content vm-dealer-sendfund-bottom-tab-content vm-dealer-sendfund-right-tab-content">
+                        <div id="fundtrans" class="tab-pane fade active in vm-dealer-bankinfo-pane active in vm-dealer-sendfund-bottom-pane">
+
+                            <div id="tblshowMasterD" class="table-responsive vm-dealer-bankinfo-table-wrap">
+
+                                <table class="table table-bordered table-striped table-hover vm-opr-data-table">
                                     <thead>
                                         <tr>
                                             <th>MD Firm</th>
@@ -1888,9 +1854,9 @@
                                 </table>
                             </div>
                         </div>
-                        <div id="sendreq" class="width100 float-left tab-pane fade ">
-                            <div class="table-responsive " style="width:100%;">
-                                <table class="table table-bordered table-striped table-hover">
+                        <div id="sendreq" class="tab-pane fade vm-dealer-bankinfo-pane vm-dealer-sendfund-bottom-pane">
+                            <div class="table-responsive vm-dealer-bankinfo-table-wrap">
+                                <table class="table table-bordered table-striped table-hover vm-opr-data-table">
                                     <thead>
                                         <tr>
                                             <th>Request TO</th>
@@ -1919,43 +1885,10 @@
                             </div>
                         </div>
 
-                        <div id="recivedreq" class="width100 float-left tab-pane fade ">
-                            @using (Ajax.BeginForm("Filterrecivedrequestfilterdate", "Home", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, OnSuccess = "chkfillform", UpdateTargetId = "tblRecivedPurchaseReq" }))
-                            {
-                                <div class="coll-md-12">
-                                    <div class="row">
-                                        <input type="hidden" id="hdtype" name="hdtype" value="FUNDRecived" />
-                                        <div class="col-md-6">
-                                            <div class="form-group for-web-date">
-                                                <div class="input-daterange input-group">
-                                                    <div class="custom-date-icon" style="height: 32px;">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_frm_daterecived", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; ", autocomplete = "off" })
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-exchange"></i>
-                                                    </span>
-                                                    <div class="custom-date-icon" style="height: 32px;">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_to_daterecived", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                                </div>
-                                                <!-- /.input group -->
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <center>
-                                                <button type="submit" onclick="Reportmpos()" class="w-100 float-left btn bg-grey waves-effect" style="height:34px;">
-                                                    <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                                    <span style="top:-2px;color:black;">Search</span>
-                                                </button>
-                                            </center>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            <div class="table-responsive " style="width:100%;">
-                                <table class="table table-bordered table-striped table-hover">
+                        <div id="recivedreq" class="tab-pane fade vm-dealer-bankinfo-pane vm-dealer-sendfund-bottom-pane">
+                            <input type="hidden" id="hdtype" name="hdtype" value="FUNDRecived" />
+                            <div class="table-responsive vm-dealer-bankinfo-table-wrap">
+                                <table class="table table-bordered table-striped table-hover vm-opr-data-table">
                                     <thead>
                                         <tr>
                                             <th>Status11111</th>
@@ -1981,6 +1914,7 @@
                                     <img src="~/img/ajax-loader.gif" />
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -2091,13 +2025,29 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 <script>
-    $('select').on('change', function () {
-        $('#rtlchk').empty()
-        $("#divTestdealer").empty();
-        $("#divTestadmin").empty();
-        $("#divTestmd").empty();
-        $('input[type=text]').val('')
-    });
+    (function () {
+        var sendFundLinkedSelectIds = {
+            dealermdbank: 1,
+            mdwallet: 1,
+            ddlAdminAccountname: 1,
+            ddlAdminWallettname: 1,
+            ddMDaccountname: 1,
+            ddlMDWalletname: 1
+        };
+        $('select').on('change', function () {
+            if (sendFundLinkedSelectIds[this.id]) {
+                if (typeof window.fillSendFundLinkedField === 'function') {
+                    window.fillSendFundLinkedField(this);
+                }
+                return;
+            }
+            $('#rtlchk').empty();
+            $("#divTestdealer").empty();
+            $("#divTestadmin").empty();
+            $("#divTestmd").empty();
+            $('input[type=text]').val('');
+        });
+    })();
 </script>
 
 <script>
@@ -2108,16 +2058,13 @@
                 $.ajax({
                     type: 'Post',
                     url: "@Url.Action("R_Creditchk", "Home")",
-                    data: { MID: mid },
+                    data: { retailerid: mid },
                     dataType: 'json',
                     cache: false,
                     async: false,
                     success: function (data) {
-                          $('#rtlchk').html('Old Credit : '+ data)
-                        //if (data > 0) {
-                        //    $('#rtlchk').html(data)
-                        //   // $("#creditModal").modal('show');
-                        //}
+                        var credit = (data && data.currntcr != null) ? data.currntcr : 0;
+                        $('#rtlchk').html('Old Credit : ' + credit);
                     }
                 });
             }
@@ -2126,96 +2073,79 @@
 </script>
 
 <script>
-    $('#ddlDealerWalletname').change(function () {
-        var wllet = $('#ddlDealerWalletname').val();
-
-        $('#txtAdminWALLETNO').val(wllet)
-
-
-
-    })
-    $('#ddlAdminAccountname').change(function () {
-        var account = $('#ddlAdminAccountname').val();
-
-        $('#txtAdminACCOUNTNO').val(account)
-
-
-
-    })
-
-    $('#ddlAdminWallettname').change(function () {
-        var account = $('#ddlAdminWallettname').val();
-
-        $('#txtAdminWALLETNO').val(account)
-
-
-
-    })
-
-
-    $('#ddlMDWalletname').change(function () {
-        var wllet = $('#ddlMDWalletname').val();
-
-        $('#txtMDWALLETNO').val(wllet)
-
-
-
-    })
-
-
-    $('#ddMDaccountname').change(function () {
-        var wllet = $('#ddMDaccountname').val();
-
-        $('#txtMDACCOUNTNO').val(wllet)
-
-
-
-    })
-</script>
-<script>
 
     function OnSuccessfuntransfer(data) {
-
         $('#tblfundtransfer').html(data);
+        if (typeof window.sendFundUpdateRecordCount === 'function') {
+            window.sendFundUpdateRecordCount();
+        }
     }
     function OnSuccessSendreq(data) {
-
         $('#tblsendREquest').html(data);
+        if (typeof window.sendFundUpdateRecordCount === 'function') {
+            window.sendFundUpdateRecordCount();
+        }
     }
 </script>
 
 <script>
-    $('.tabChangeType').click(function () {
+    function sendFundGetRightTabType($li) {
+        var href = ($li && $li.attr('data-href')) ? $li.attr('data-href') : '';
+        var match = href.match(/tabtype=([^&]+)/);
+        return match ? match[1] : '';
+    }
 
-        var getsurlss = $(this).attr('data-href')
-        var paramss = getsurlss.split('=')[1];
-        $.ajax({
-            url: $(this).attr('data-href'),
-            success: function (data) {
+    window.sendFundLoadRightGrid = function ($li, fromDate, toDate) {
+        if (!$li || !$li.length) { return; }
+        var tabtype = sendFundGetRightTabType($li);
+        if (!tabtype) { return; }
 
-                if (paramss == 'FUNDTORETailer') {
-                    $('#tblfundtransfer').html(data)
+        if (tabtype === 'FUNDRecived') {
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("Filterrecivedrequestfilterdate", "Home")",
+                data: { txt_frm_daterecived: fromDate, txt_to_daterecived: toDate },
+                success: function (data) {
+                    $('#tblRecivedPurchaseReq').html(data);
+                    if (typeof window.sendFundUpdateRecordCount === 'function') {
+                        window.sendFundUpdateRecordCount();
+                    }
                 }
-                if (paramss == 'FUNDTOMD') {
+            });
+            return;
+        }
+
+        $.ajax({
+            url: "@Url.Action("BindAllFundGrid", "Home")",
+            data: { tabtype: tabtype, txt_frm_daterecived: fromDate, txt_to_daterecived: toDate },
+            success: function (data) {
+                if (tabtype === 'FUNDTORETailer') {
+                    $('#tblfundtransfer').html(data);
+                } else if (tabtype === 'FUNDTOMD') {
                     $('#tblsendREquest').html(data);
                 }
-                if (paramss == 'FUNDRecived') {
-                    $('#tblRecivedPurchaseReq').html(data);
+                if (typeof window.sendFundUpdateRecordCount === 'function') {
+                    window.sendFundUpdateRecordCount();
                 }
-
-
             }
+        });
+    };
 
-        })
+    $('.tabChangeType').click(function () {
+        window.sendFundLoadRightGrid($(this), $('#txt_frm_daterecived').val(), $('#txt_to_daterecived').val());
+    });
 
+    $('#sendFundRightDateSearch').on('click', function () {
+        var $active = $('#sendFundRightTabs li.active, #sendFundRightTabs li.current').first();
+        window.sendFundLoadRightGrid($active, $('#txt_frm_daterecived').val(), $('#txt_to_daterecived').val());
+    });
 
-
-    })
     function chkfillform(data) {
-
         $('#myModalaccept').modal('hide');
         $('#tblRecivedPurchaseReq').html(data);
-
+        if (typeof window.sendFundUpdateRecordCount === 'function') {
+            window.sendFundUpdateRecordCount();
+        }
     }
 
 </script>
@@ -2300,24 +2230,73 @@
 
 </script>
 
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=4"></script>
 <script>
-
-
-    $(document).ready(function()
-    {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+    function bootSendFundDatepickers() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.datepicker) {
+            window.setTimeout(bootSendFundDatepickers, 50);
+            return;
         }
-    });
+
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#sendFundHistoryForm1', null, null, true);
+            window.initAdminReportDateForm('#sendFundHistoryForm2', '#txt_frm_datee', '#txt_to_datee', true);
+            window.initAdminReportDateForm('#sendFundPurchaseDateForm', '#txt_frm_date1', '#txt_to_date1', true);
+            window.initAdminReportDateForm('#sendFundRightDateForm', '#txt_frm_daterecived', '#txt_to_daterecived', true);
+        }
+
+        function sendFundFixDatepickerLayout() {
+            var $dp = $('body > .datepicker.dropdown-menu:visible').last();
+            if (!$dp.length) {
+                $dp = $('.datepicker.dropdown-menu:visible, .datepicker:visible').last();
+            }
+            if (!$dp.length) {
+                return;
+            }
+
+            var el = $dp[0];
+            el.classList.add('vm-sendfund-dp');
+            el.style.setProperty('min-width', '296px', 'important');
+            el.style.setProperty('width', '296px', 'important');
+            el.style.setProperty('max-width', '296px', 'important');
+            el.style.setProperty('overflow', 'visible', 'important');
+            el.style.setProperty('padding', '8px', 'important');
+            el.style.setProperty('box-sizing', 'border-box', 'important');
+
+            var table = el.querySelector('.datepicker-days table, table.table-condensed, table');
+            if (table) {
+                table.style.setProperty('width', '100%', 'important');
+                table.style.setProperty('table-layout', 'fixed', 'important');
+                table.style.setProperty('margin', '0', 'important');
+            }
+
+            $(el).find('th, td').each(function () {
+                this.style.setProperty('width', '14.2857%', 'important');
+                this.style.setProperty('max-width', 'none', 'important');
+                this.style.setProperty('padding', '4px 1px', 'important');
+                this.style.setProperty('box-sizing', 'border-box', 'important');
+                this.style.setProperty('overflow', 'visible', 'important');
+                this.style.setProperty('text-overflow', 'clip', 'important');
+            });
+        }
+
+        $(document)
+            .off('show.sendFundDpFix shown.sendFundDpFix', '.saas-dealer-send-fund-page .saas-acc-dp-input')
+            .on('show.sendFundDpFix shown.sendFundDpFix', '.saas-dealer-send-fund-page .saas-acc-dp-input', function () {
+                if (typeof window.repositionAdminDatepicker === 'function') {
+                    window.repositionAdminDatepicker(this);
+                }
+                sendFundFixDatepickerLayout();
+                window.setTimeout(sendFundFixDatepickerLayout, 50);
+            });
+    }
+
+    if (document.readyState === 'complete') {
+        bootSendFundDatepickers();
+    } else {
+        window.addEventListener('load', bootSendFundDatepickers);
+    }
 </script>
 
 <!-----dlm-->
@@ -2404,27 +2383,10 @@
 </script>
 
 <script>
-    $('#dealermdbank').change(function () {
-
-        $('#txtmddistaccount').val($('#dealermdbank').val());
-
-    })
-    $('#mdwallet').change(function () {
-
-        $('#txtmddistwalletno').val($('#mdwallet').val());
-
-    })
-</script>
-<script>
-    $('#ddadminbankname').change(function () {
-        $('#txtAdminACCOUNTNO').val($('#ddadminbankname').val())
-
-    })
     function changemoded(value) {
 
 
         var res = $(value).val();
-        alert(res);
         if (res == 1) {
             $('.dcollection-by').show();
             $('.dtransfer-type').hide();
@@ -3181,29 +3143,6 @@
 
 
 <!--second calender-->
-
-<script>
-
-
-    $(document).ready(function()
-    {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_datee").datepicker("setDate", new Date());
-            $("#txt_to_datee").datepicker("setDate", new Date());
-            $("#txt_frm_date1").datepicker("setDate", new Date());
-            $("#txt_frm_date1").datepicker("setDate", new Date());
-        }
-    });
-</script>
-<!--second calender-->
 <!--Insert Popuop-->
 <script>
     $(document).ready(function () {
@@ -3452,17 +3391,44 @@
 
 <!--SCRIPT  FOR  TAB-1 Start-->
 <script type="text/javascript">
+    function sendFundSyncTabActive($tabs, $activeLi) {
+        if (!$tabs || !$tabs.length || !$activeLi || !$activeLi.length) { return; }
+        $tabs.find('li').removeClass('current active');
+        $activeLi.addClass('active');
+        $tabs.find('li > a').attr('aria-expanded', 'false');
+        $activeLi.find('> a').attr('aria-expanded', 'true');
+    }
+
     $(document).ready(function () {
-        $('ul.tabs li').click(function () {
-            var tab_id = $(this).attr('data-tab');
-            $('ul.tabs li').removeClass('current');
-            $('.tab-content').removeClass('current');
+        sendFundSyncTabActive($('#sendFundLeftTabs'), $('#sendFundLeftTabs li.active').first());
+        sendFundSyncTabActive($('#sendFundRightTabs'), $('#sendFundRightTabs li.active').first());
 
-            $(this).addClass('current');
-            $("#" + tab_id).addClass('current');
-        })
+        $('#sendFundLeftTabs a[data-toggle="tab"]').on('show.bs.tab', function () {
+            $('#sendFundLeftTabs li').removeClass('current');
+        });
+        $('#sendFundLeftTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            sendFundSyncTabActive($('#sendFundLeftTabs'), $(e.target).closest('li'));
+        });
 
-    })
+        $('#sendFundRightTabs a[data-toggle="tab"]').on('show.bs.tab', function () {
+            $('#sendFundRightTabs li').removeClass('current');
+        });
+
+        $('#sendFundTopLeftTabs').on('click', 'li.tab-link, li.tab-link a', function (e) {
+            e.preventDefault();
+            var $li = $(this).closest('li.tab-link');
+            if (!$li.length) {
+                return;
+            }
+            var tab_id = $li.attr('data-tab');
+            $('#sendFundTopLeftTabs li.tab-link').removeClass('current active');
+            $('#sendFundTopLeftTabs li.tab-link a').attr('aria-expanded', 'false');
+            $li.addClass('current active');
+            $li.find('a').attr('aria-expanded', 'true');
+            $('.vm-dealer-sendfund-top-body > .tab-content').removeClass('current');
+            $('#' + tab_id).addClass('current');
+        });
+    });
 </script>
 <!--    SCRIPT  FOR  TAB-1 End-->
 <!--SCRIPT  FOR  TAB-2 Start-->
@@ -3481,6 +3447,8 @@
 <script>
     (function () {
         $(function () {
+            $('.toggle0 .panel0').hide();
+            $('.toggle0 .panel0').first().show();
             var toggle;
             return toggle = new Toggle('.toggle0');
         });
@@ -3786,7 +3754,254 @@
 
 
 <script>
-    $('.for-select2').select2();
+    window.fillSendFundLinkedField = function (selectEl) {
+        if (!selectEl || !selectEl.id) { return; }
+        var map = {
+            dealermdbank: 'txtmddistaccount',
+            mdwallet: 'txtmddistwalletno',
+            ddlAdminAccountname: 'txtAdminACCOUNTNO',
+            ddlAdminWallettname: 'txtAdminWALLETNO',
+            ddMDaccountname: 'txtMDACCOUNTNO',
+            ddlMDWalletname: 'txtMDWALLETNO'
+        };
+        var inputId = map[selectEl.id];
+        if (!inputId) { return; }
+        var input = document.getElementById(inputId);
+        if (!input) { return; }
+        var val = (selectEl.value || '').trim();
+        if (!val || val === '0' || val.toLowerCase().indexOf('select') >= 0) {
+            input.value = '';
+            return;
+        }
+        input.value = val;
+        if (window.jQuery) {
+            window.jQuery(input).trigger('input').trigger('change');
+        }
+    };
 
+    function bindSendFundLinkedFields() {
+        var $ = window.jQuery;
+        if (!$) { return; }
+        $(document).off('change.sendFundLinked select2:select.sendFundLinked', '#dealermdbank, #mdwallet, #ddlAdminAccountname, #ddlAdminWallettname, #ddMDaccountname, #ddlMDWalletname');
+        $(document).on('change.sendFundLinked select2:select.sendFundLinked', '#dealermdbank, #mdwallet, #ddlAdminAccountname, #ddlAdminWallettname, #ddMDaccountname, #ddlMDWalletname', function () {
+            window.fillSendFundLinkedField(this);
+        });
+    }
 
+    $(document).ready(function () {
+        if ($.fn.select2) {
+            $('.for-select2').select2({
+                dropdownCssClass: 'vm-sendfund-select2-drop'
+            });
+        }
+        bindSendFundLinkedFields();
+    });
+</script>
+
+<script>
+    (function ($) {
+        function sendFundGetActiveListTab() {
+            return $('#sendFundRightTabs li.active, #sendFundRightTabs li.current').first();
+        }
+
+        function sendFundGetActiveTableTitle() {
+            var $active = sendFundGetActiveListTab();
+            return $active.data('title') || 'Fund Transfer To Retailer';
+        }
+
+        function sendFundGetActivePane() {
+            var $tab = sendFundGetActiveListTab();
+            var tabId = $tab.data('tab') || 'fundtrans';
+            return $('#' + tabId);
+        }
+
+        function sendFundGetActiveTable() {
+            var $pane = sendFundGetActivePane();
+            return $pane.find('table').first();
+        }
+
+        window.sendFundUpdateRecordCount = function () {
+            var $tab = sendFundGetActiveListTab();
+            var $pane = sendFundGetActivePane();
+            var $rows = $pane.find('table tbody tr').not('.vm-dealer-bankinfo-empty-row');
+            var total = $rows.length;
+            var visible = $rows.filter(':visible').length;
+            $('#sendFundRecordCount').text(visible);
+            $('#sendFundTotalCount').text(total);
+            $('#sendFundVisibleCount').text(visible);
+            var title = sendFundGetActiveTableTitle();
+            $('#sendFundActiveSection').text(title);
+            $('#sendFundTotalsTitle').text(title + ' — Summary');
+            $('#sendFundPanelTitle').text(title);
+        };
+
+        function sendFundFilterActiveTable(term) {
+            var q = (term || '').toLowerCase().trim();
+            var $pane = sendFundGetActivePane();
+            $pane.find('table tbody tr').each(function () {
+                if ($(this).hasClass('vm-dealer-bankinfo-empty-row')) {
+                    return;
+                }
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(q === '' || text.indexOf(q) > -1);
+            });
+            sendFundUpdateRecordCount();
+        }
+
+        function sendFundHideTotals() {
+            $('#sendFundTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+            $('#sendFundTotalsBtn').attr('aria-expanded', 'false');
+        }
+
+        function sendFundToggleTotals() {
+            var $panel = $('#sendFundTotalsPanel');
+            if ($panel.is(':visible')) {
+                sendFundHideTotals();
+                return;
+            }
+            sendFundUpdateRecordCount();
+            $panel.slideDown(180).attr('aria-hidden', 'false');
+            $('#sendFundTotalsBtn').attr('aria-expanded', 'true');
+        }
+
+        function sendFundEsc(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function sendFundCollectExportRows($table) {
+            var headers = [];
+            $table.find('thead th').each(function () {
+                if ($(this).text().trim().toLowerCase() === 'action') {
+                    return;
+                }
+                headers.push($(this).text().trim());
+            });
+
+            var rows = [];
+            $table.find('tbody tr:visible').each(function () {
+                if ($(this).hasClass('vm-dealer-bankinfo-empty-row')) {
+                    return;
+                }
+                var cells = [];
+                $(this).find('td').each(function () {
+                    if ($(this).hasClass('vm-dealer-bankinfo-action-col')) {
+                        return;
+                    }
+                    cells.push($(this).text().trim());
+                });
+                if (cells.length) {
+                    rows.push(cells);
+                }
+            });
+
+            return { headers: headers, rows: rows };
+        }
+
+        function sendFundExportStyles() {
+            return 'body{font-family:Segoe UI,Arial,sans-serif;padding:24px;color:#0f172a;background:#fff;}'
+                + '.vm-block-export-head{margin:0 0 18px;padding-bottom:14px;border-bottom:2px solid #e2e8f0;}'
+                + '.vm-block-export-head h3{margin:0 0 6px;font-size:22px;font-weight:700;color:#1e293b;}'
+                + '.vm-block-export-head p{margin:0;font-size:13px;color:#64748b;line-height:1.5;}'
+                + 'table{border-collapse:collapse;width:100%;font-size:12px;}'
+                + 'th,td{border:1px solid #dbe4f0;padding:8px 10px;text-align:center;vertical-align:middle;}'
+                + 'th{background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%);color:#334155;font-weight:700;}';
+        }
+
+        function sendFundBuildExportHtml(title, data) {
+            var body = '';
+            for (var i = 0; i < data.rows.length; i++) {
+                body += '<tr>';
+                for (var c = 0; c < data.rows[i].length; c++) {
+                    body += '<td>' + sendFundEsc(data.rows[i][c]) + '</td>';
+                }
+                body += '</tr>';
+            }
+
+            var head = '';
+            for (var h = 0; h < data.headers.length; h++) {
+                head += '<th>' + sendFundEsc(data.headers[h]) + '</th>';
+            }
+
+            return '<html><head><meta charset="utf-8"><title>' + sendFundEsc(title) + '</title>'
+                + '<style>' + sendFundExportStyles() + '</style></head><body>'
+                + '<div class="vm-block-export-head"><h3>' + sendFundEsc(title) + '</h3>'
+                + '<p>Generated on ' + sendFundEsc(new Date().toLocaleString()) + '</p></div>'
+                + '<table><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table></body></html>';
+        }
+
+        function sendFundWarnNoRecords() {
+            if (typeof swal === 'function') {
+                swal('No records to export', '', 'warning');
+                return;
+            }
+            window.alert('No records to export');
+        }
+
+        function sendFundExportExcel() {
+            var $table = sendFundGetActiveTable();
+            var data = sendFundCollectExportRows($table);
+            if (!data.rows.length) {
+                sendFundWarnNoRecords();
+                return;
+            }
+            var title = sendFundGetActiveTableTitle();
+            var html = sendFundBuildExportHtml(title, data);
+            var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, 'Send_Fund_Report.xls');
+                return;
+            }
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'Send_Fund_Report.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+        }
+
+        function sendFundExportPdf() {
+            var $table = sendFundGetActiveTable();
+            var data = sendFundCollectExportRows($table);
+            if (!data.rows.length) {
+                sendFundWarnNoRecords();
+                return;
+            }
+            var title = sendFundGetActiveTableTitle();
+            var w = window.open('', '_blank');
+            if (!w) {
+                return;
+            }
+            w.document.open();
+            w.document.write(sendFundBuildExportHtml(title, data));
+            w.document.close();
+            w.focus();
+            setTimeout(function () { w.print(); }, 400);
+        }
+
+        $(function () {
+            $('#sendFundTableSearch').on('input', function () {
+                sendFundFilterActiveTable($(this).val());
+            });
+
+            $('#sendFundTotalsBtn').on('click', sendFundToggleTotals);
+            $('#sendFundTotalsHideBtn').on('click', sendFundHideTotals);
+            $('#sendFundExportExcel').on('click', sendFundExportExcel);
+            $('#sendFundExportPdf').on('click', sendFundExportPdf);
+
+            $('#sendFundRightTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                sendFundSyncTabActive($('#sendFundRightTabs'), $(e.target).closest('li'));
+                sendFundHideTotals();
+                $('#sendFundTableSearch').val('');
+                sendFundFilterActiveTable('');
+            });
+
+            sendFundUpdateRecordCount();
+        });
+    })(jQuery);
 </script>

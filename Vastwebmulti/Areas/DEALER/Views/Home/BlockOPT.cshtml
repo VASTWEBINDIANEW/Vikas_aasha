@@ -1,275 +1,537 @@
 ﻿@using Vastwebmulti.Models;
 @model IEnumerable<Vastwebmulti.Models.select_operator_retailer_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "BlockOPT";
+    ViewBag.Title = "Block Service's";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var nick = "Retailer";
     VastwebmultiEntities DB1 = new VastwebmultiEntities();
     var usernname = DB1.Usernicknames.Where(aa => aa.Role == "Retailer").ToList();
-    if (usernname.Count() > 0)
+    if (usernname.Any())
     {
-        if (usernname.SingleOrDefault().Role == "Retailer")
+        var row = usernname.SingleOrDefault();
+        if (row != null && row.Role == "Retailer" && !string.IsNullOrWhiteSpace(row.NickName))
         {
-            var favimage = usernname.SingleOrDefault().NickName;
-            ViewBag.nickname = favimage;
+            nick = row.NickName;
+        }
+    }
+    ViewBag.nickname = nick;
+
+    var rows = Model ?? Enumerable.Empty<select_operator_retailer_Result>();
+    var rowList = rows.ToList();
+    var rowCount = rowList.Count;
+    var activeCount = rowList.Count(x => x.status);
+    var blockedCount = rowList.Count(x => !x.status);
+
+    var selectedOpttype = (Request["opttype"] ?? "").Trim();
+    var selectedRem = (Request["rem"] ?? "").Trim();
+
+    var opttypeItems = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "", Text = "", Selected = string.IsNullOrEmpty(selectedOpttype) }
+    };
+    var opttypeSelect = ViewBag.opttype as SelectList;
+    if (opttypeSelect != null)
+    {
+        foreach (SelectListItem item in opttypeSelect)
+        {
+            var label = !string.IsNullOrWhiteSpace(item.Text) ? item.Text.Trim() : (item.Value ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(label))
+            {
+                continue;
+            }
+            opttypeItems.Add(new SelectListItem
+            {
+                Value = label,
+                Text = label,
+                Selected = string.Equals(label, selectedOpttype, StringComparison.OrdinalIgnoreCase)
+            });
+        }
+    }
+
+    var remItems = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "", Text = "", Selected = string.IsNullOrEmpty(selectedRem) }
+    };
+    var retailerSelect = ViewBag.retailer as SelectList;
+    if (retailerSelect != null)
+    {
+        foreach (SelectListItem item in retailerSelect)
+        {
+            var val = (item.Value ?? "").Trim();
+            var txt = !string.IsNullOrWhiteSpace(item.Text) ? item.Text.Trim() : val;
+            if (string.IsNullOrWhiteSpace(val))
+            {
+                continue;
+            }
+            remItems.Add(new SelectListItem
+            {
+                Value = val,
+                Text = txt,
+                Selected = string.Equals(val, selectedRem, StringComparison.OrdinalIgnoreCase)
+            });
         }
     }
 }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-gst-report-modern.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-block-opt-modern.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
-<style>
-    .dropdown-menu {
-        margin-top: 75px !important;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page saas-dealer-block-opt-page">
 
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    @@media screen and (max-width:766px) {
-        .blockotp-dealer {
-            width: 100% !important;
-            float: left !important;
-            margin: 10px 0;
-            padding-right: 8px;
+        @{
+            var blockOptFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "dealerBlockOptForm" },
+                { "class", "vm-block-opt-form-shell" }
+            };
         }
-    }
+        @using (Html.BeginForm("BlockOPT", "Home", FormMethod.Post, blockOptFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    @@media screen and (max-width:400px) {
-        .block-pagecssclass .card-all-retailerclass ol li {
-            font-size: 12px !important;
-        }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-        .col-md-2.recharge-report-dealer {
-            padding-left: 0px !important;
-        }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Account Active</li>
+                        <li>Block Service's</li>
+                    </ol>
 
-            .col-md-2.recharge-report-dealer input {
-                font-size: 9px;
-            }
-    }
-</style>
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-radiant-inline-filters vm-block-opt-toolbar-filters">
 
-<section class="content block-pagecssclass">
-    <div class="container-fluid full-dealer-secondanimation">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Block Service's</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account Active&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Block Service's</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix" style="margin-top: 8px;">
-            <div class="col-md-12">
-                <div class="card page-header-third" style="">
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 card-all-retailerclass dealer-none-fourclass" style="padding-left:0;width:auto;float:left;">
-                        <div class="w-100 float-left">
-                            <ul class="float-left bred" style="margin:0;padding:0;">
-                                <li class="smli">
-                                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">Dashboard&nbsp;<span style="font-size:18px;">&#187;</span></a>
-                                </li>
-                                <li class="fullbodydycolorbg tmw-total-color-one" style="margin-top:5px;">&nbsp;All @ViewBag.nickname  Block & UnBlock Status</li>
-                            </ul>
-
+                        <div class="vm-opr-field vm-dmt-field vm-block-opt-field">
+                            @Html.DropDownList("opttype", opttypeItems, new { id = "opttype", @class = "vm-opr-select vm-dmt-select vm-block-opt-filter-select form-control for-select2", @title = "Operator Type", data_placeholder = "Operator Type", data_live_search = "true" })
                         </div>
-                        
-                    </div>
-                    <div class="col-md-2 recharge-report-dealer" style="width:auto;float:right;padding-left:5px;padding-right:0px;">
-                        <div class="form-group" style="margin-bottom:0px;width:100%;float:left;">
-                            <div style="padding-top:0px;float:right">
-                                @*<button class="white-success-button" style="height:32px;border:1px solid #b1a6a638;background:#b1a6a638;float: right;padding: 0px 4px;margin-top:-1px;" onclick="findtotal()">Total</button>*@
-                                <div class="web-white-filter fil" style="float: left;margin-right: 0px;margin-top:0px;">
-                                    <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                                    <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                                </div>
-                            </div>
 
+                        <div class="vm-opr-field vm-dmt-field vm-block-opt-field vm-block-opt-field--user">
+                            @Html.DropDownList("rem", remItems, new { id = "rem", @class = "vm-opr-select vm-dmt-select vm-block-opt-filter-select form-control for-select2", @title = "Select user", data_placeholder = ("Select " + nick), data_live_search = "true", required = "required" })
                         </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 blockotp-dealer" style="float:right;">
-                        @using (Html.BeginForm("BlockOPT", "Home", FormMethod.Post))
-                        {
-                            <div class="row">
-                                <div class="col-md-5 only-select-css" style="padding:0px;">
 
-                                    <div class="form-group" style="margin-bottom:0px;">
-                                        <div class="">
-                                            @Html.DropDownList("opttype", ViewBag.opttype as SelectList, "Operator Type", new { id = "opttype", @class = "selectpicker for-select2", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5 only-select-css" style="padding:0px 5px;">
+                        <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                            <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                        </button>
 
-                                    <div class="form-group" style="margin-bottom:0px;">
-                                        <div class="">
-                                            @Html.DropDownList("rem", ViewBag.retailer as SelectList, "Select User", new { id = "rem", @class = "selectpicker for-select2", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;", @required = "required" })
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2" style="padding:0px;">
-                                    <center>
-                                        <button type="submit" class="btn bg-grey waves-effect" style="width:100%; height:32px;">
-
-                                            <span style="color:black;"><i class="fa fa-search" style="top:0px;font-size:13px;color:black;left:-3px;" aria-hidden="true"></i>Search</span>
-                                        </button>
-                                    </center>
-                                </div>
-
-
-                            </div>
-                        }
                     </div>
 
                 </div>
-            </div>
 
-        </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:0;">
-                <div class="card all-reporttable-css">
-
-                    <div class="body  page-header-third" style="padding:5px;">
-                        <div class="table-responsive tableseconddes-dealer" style="position:inherit;margin-top:0;">
-                            <table class="table table-bordered table-striped table-hover example-second third-design-table" style="width:100%;margin:0;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Sr.No</th>
-                                        <th>Operator Name</th>
-                                        <th>Operator Type</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{
-                                        int i = 1;
-                                        foreach (var item in Model)
-                                        {
-                                            var color1 = "#424242";
-                                            var color = "#fff";
-                                            if (item.Operator_type == "PrePaid")
-                                            {
-                                                color1 = "#484343";
-                                                color = "#f7f1f3";
-                                            }
-                                            else if (item.Operator_type == "PostPaid")
-                                            {
-                                                color1 = "#484343";
-                                                color = "#25c59121";
-                                            }
-                                            else if (item.Operator_type == "Landline")
-                                            {
-                                                color1 = "#484343";
-                                                color = "#2531c51a";
-                                            }
-                                            else if (item.Operator_type == "Insurance")
-                                            {
-                                                color1 = "#484343";
-                                                color = "#c525c01a";
-                                            }
-                                            else if (item.Operator_type == "Gas")
-                                            {
-                                                color1 = "#484343";
-                                                color = "#c3c5251a";
-                                            }
-                                            else if (item.Operator_type == "Electricity")
-                                            {
-                                                color1 = "#484343";
-                                                color = "#71c5251a";
-                                            }
-                                            else if (item.Operator_type == "DTH")
-                                            {
-                                                color1 = "#484343";
-                                                color = "#13090f1a";
-                                            }
-                                            <tr style="color:@color1;">
-                                                <td>
-                                                    @i
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.opt_name)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Operator_type)
-                                                </td>
-                                                <td>
-                                                    @Html.HiddenFor(modelItem => item.status)
-                                                    @{
-                                                        if (@item.status == true)
-                                                        {
-                                                            <center>
-                                                                <a href="@Url.Action("BlockOPT", new { id = item.Operator_id, rem = item.RetailerId,opttype=item.Operator_type })" style="text-decoration:none;">
-                                                                    <div class="onoffswitch" style="float:left;">
-                                                                        <span class="costom-on">on</span>
-
-                                                                    </div>
-                                                                </a>
-                                                            </center>
-                                                        }
-                                                        else
-                                                        {
-                                                            <center>
-                                                                <a href="@Url.Action("BlockOPT", new { id = item.Operator_id, rem = item.RetailerId,opttype=item.Operator_type })" style="text-decoration:none;">
-                                                                    <div class="onoffswitch" style="float:left;">
-
-                                                                        <span class="custom-off">off</span>
-                                                                    </div>
-                                                                </a>
-                                                            </center>
-
-                                                        }
-                                                    }
-                                                </td>
-                                            </tr>
-                                            i++;
-                                        }
-                                    }
-                                </tbody>
-                            </table>
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="blockOptTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Block service summary</span>
                         </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideBlockOptTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Operators</span>
+                            <strong class="vm-opr-total-card__value">@rowCount</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Active (ON)</span>
+                            <strong class="vm-opr-total-card__value">@activeCount</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Blocked (OFF)</span>
+                            <strong class="vm-opr-total-card__value">@blockedCount</strong>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-ban" aria-hidden="true"></i>
+                        <span>All @nick block &amp; unblock status</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-ft-search-wrap vm-block-opt-table-search">
+                            <input class="form-control vm-block-opt-search-input" type="text" id="myInput" placeholder="Search operators..." autocomplete="off" onkeyup="blockOptSearch()" />
+                        </div>
+                        <span class="vm-radiant-inline-total" title="Active operators">
+                            Active: <strong>@activeCount</strong>
+                        </span>
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group vm-dealer-block-opt-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-block-opt-totals-btn" onclick="toggleBlockOptTotals()" title="Show totals" aria-expanded="false" aria-controls="blockOptTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel vm-dealer-block-opt-export-btn vm-dealer-block-opt-export-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf vm-dealer-block-opt-export-btn vm-dealer-block-opt-export-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap" id="blockOptExportWrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="blockOptTable" class="table vm-opr-data-table vm-block-opt-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.No</th>
+                                    <th>Operator Name</th>
+                                    <th>Operator Type</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.Partial("_BlockOPTRows", rows)
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
 
-<script src="~/AdminDesign/plugins/jquery-validation/jquery.validate.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
-
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
-    $('.for-select2').select2();
+    window.blockOptSelect2Url = '@Url.Content("~/MainFrontDesign/select2/dist/js/select2.full.min.js")';
+    window.blockOptNickName = '@Html.Raw(HttpUtility.JavaScriptStringEncode(nick))';
 
-
-</script>
-
-
-<script>
-    $(document).ready(function () {
-        $('.second-design-dealer .example-second').DataTable({
-
-
-            paging: false
+    function blockOptSearch() {
+        var $ = window.jQuery;
+        var value = ($('#myInput').val() || '').toLowerCase();
+        $('#blockOptTable tbody tr').filter(function () {
+            if ($(this).hasClass('vm-opr-table-empty-row')) {
+                return true;
+            }
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
-    });
+    }
 
+    function toggleBlockOptTotals() {
+        var $ = window.jQuery;
+        var panel = $('#blockOptTotalsPanel');
+        if (panel.is(':visible')) {
+            hideBlockOptTotals();
+            return;
+        }
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        $('.vm-block-opt-totals-btn').attr('aria-expanded', 'true');
+    }
+
+    function hideBlockOptTotals() {
+        var $ = window.jQuery;
+        $('#blockOptTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-block-opt-totals-btn').attr('aria-expanded', 'false');
+    }
+
+    function blockOptEsc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function blockOptTableRows() {
+        var $ = window.jQuery;
+        var rows = [];
+        $('#blockOptTable tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-opr-table-empty-row') || !$tr.is(':visible')) {
+                return;
+            }
+            var $cells = $tr.children('td');
+            if ($cells.length < 4) {
+                return;
+            }
+            rows.push({
+                sr: $.trim($cells.eq(0).text()).replace(/\s+/g, ' '),
+                operator: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+                type: $.trim($cells.eq(2).text()).replace(/\s+/g, ' '),
+                status: $.trim($cells.eq(3).text()).replace(/\s+/g, ' ')
+            });
+        });
+        return rows;
+    }
+
+    function blockOptExportStyles() {
+        return 'body{font-family:Segoe UI,Arial,sans-serif;padding:24px;color:#0f172a;background:#fff;}'
+            + '.vm-block-export-head{margin:0 0 18px;padding-bottom:14px;border-bottom:2px solid #e2e8f0;}'
+            + '.vm-block-export-head h3{margin:0 0 6px;font-size:22px;font-weight:700;color:#1e293b;}'
+            + '.vm-block-export-head p{margin:0;font-size:13px;color:#64748b;line-height:1.5;}'
+            + '.vm-block-export-summary{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px;}'
+            + '.vm-block-export-chip{display:inline-block;padding:6px 12px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700;}'
+            + 'table{border-collapse:collapse;width:100%;font-size:12px;}'
+            + 'th,td{border:1px solid #dbe4f0;padding:8px 10px;text-align:center;vertical-align:middle;}'
+            + 'th{background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%);color:#334155;font-weight:700;}'
+            + 'tbody tr:nth-child(even){background:#f8fafc;}'
+            + 'td.vm-block-export-name{text-align:left;font-weight:600;}'
+            + 'td.vm-block-export-on{color:#047857;font-weight:700;}'
+            + 'td.vm-block-export-off{color:#b91c1c;font-weight:700;}';
+    }
+
+    function blockOptBuildExportHtml(rows, title) {
+        var userLabel = window.blockOptNickName || 'User';
+        var selectedUser = '';
+        var $ = window.jQuery;
+        if ($ && $('#rem').length) {
+            selectedUser = $.trim($('#rem option:selected').text() || '');
+        }
+        var body = '';
+        for (var i = 0; i < rows.length; i++) {
+            var r = rows[i];
+            var statusClass = (r.status || '').toUpperCase().indexOf('ON') >= 0 ? 'vm-block-export-on' : 'vm-block-export-off';
+            body += '<tr>'
+                + '<td>' + blockOptEsc(r.sr) + '</td>'
+                + '<td class="vm-block-export-name">' + blockOptEsc(r.operator) + '</td>'
+                + '<td>' + blockOptEsc(r.type) + '</td>'
+                + '<td class="' + statusClass + '">' + blockOptEsc(r.status) + '</td>'
+                + '</tr>';
+        }
+
+        return '<html><head><meta charset="utf-8"><title>' + blockOptEsc(title) + '</title>'
+            + '<style>' + blockOptExportStyles() + '</style></head><body>'
+            + '<div class="vm-block-export-head">'
+            + '<h3>' + blockOptEsc(title) + '</h3>'
+            + '<p>Generated on ' + blockOptEsc(new Date().toLocaleString()) + '</p>'
+            + '</div>'
+            + '<div class="vm-block-export-summary">'
+            + '<span class="vm-block-export-chip">' + blockOptEsc(userLabel) + ': ' + blockOptEsc(selectedUser || 'All') + '</span>'
+            + '<span class="vm-block-export-chip">Records: ' + rows.length + '</span>'
+            + '</div>'
+            + '<table><thead><tr>'
+            + '<th>Sr.No</th><th>Operator Name</th><th>Operator Type</th><th>Status</th>'
+            + '</tr></thead><tbody>' + body + '</tbody></table></body></html>';
+    }
+
+    function blockOptDownloadExcel(html) {
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'Block_Service_Report.xls');
+            return;
+        }
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'Block_Service_Report.xls';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+    }
+
+    function blockOptOpenPdf(html) {
+        var w = window.open('', '_blank');
+        if (!w) {
+            return;
+        }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+        w.focus();
+    }
+
+    function blockOptWarnNoRecords() {
+        if (typeof swal === 'function') {
+            swal('No records to export', '', 'warning');
+            return;
+        }
+        window.alert('No records to export');
+    }
+
+    function blockOptLoadScript(src, done) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = done;
+        s.onerror = done;
+        document.body.appendChild(s);
+    }
+
+    function bootBlockOptPage() {
+        var $ = window.jQuery;
+        if (!$) {
+            window.setTimeout(bootBlockOptPage, 50);
+            return;
+        }
+
+        function blockOptInitSelect2($el) {
+            if (!$el || !$el.length || !$.fn.select2) {
+                return;
+            }
+            if ($el.hasClass('select2-hidden-accessible')) {
+                try { $el.select2('destroy'); } catch (ignore) { }
+            }
+            var placeholder = ($el.data('placeholder') || $el.attr('data-placeholder') || $el.attr('title') || 'Select').toString();
+            $el.select2({
+                width: '100%',
+                dropdownParent: $('body'),
+                placeholder: placeholder,
+                allowClear: true,
+                containerCssClass: 'vm-block-opt-select2',
+                dropdownCssClass: 'vm-block-opt-select2-drop',
+                minimumResultsForSearch: 0,
+                language: {
+                    noResults: function () { return 'No matching result'; },
+                    searching: function () { return 'Searching...'; }
+                }
+            });
+        }
+
+        function blockOptClearSelect2Search() {
+            var field = document.querySelector('.select2-dropdown.vm-block-opt-select2-drop .select2-search__field');
+            if (!field) {
+                return;
+            }
+            field.value = '';
+            field.focus();
+            if (typeof Event === 'function') {
+                field.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        }
+
+        function afterPlugins() {
+            $('.saas-dealer-block-opt-page select.for-select2').each(function () {
+                blockOptInitSelect2($(this));
+            });
+
+            $(document).off('select2:open.blockOptSearch').on('select2:open.blockOptSearch', '.saas-dealer-block-opt-page select.for-select2', function () {
+                window.setTimeout(blockOptClearSelect2Search, 0);
+            });
+
+            $('#btnExport').off('click.blockOptEx').on('click.blockOptEx', function () {
+                var rows = blockOptTableRows();
+                if (!rows.length) {
+                    blockOptWarnNoRecords();
+                    return;
+                }
+                blockOptDownloadExcel(blockOptBuildExportHtml(rows, 'Block Service Report'));
+            });
+
+            $('#btnPDF').off('click.blockOptPdf').on('click.blockOptPdf', function () {
+                var rows = blockOptTableRows();
+                if (!rows.length) {
+                    blockOptWarnNoRecords();
+                    return;
+                }
+                blockOptOpenPdf(blockOptBuildExportHtml(rows, 'Block Service Report'));
+            });
+        }
+
+        if ($.fn.select2) {
+            afterPlugins();
+            return;
+        }
+        blockOptLoadScript(window.blockOptSelect2Url, afterPlugins);
+    }
+
+    if (document.readyState === 'complete') {
+        bootBlockOptPage();
+    } else {
+        window.addEventListener('load', bootBlockOptPage);
+    }
 </script>
+
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-breadcrumb,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-breadcrumb a,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-opr-table-panel__title,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-opr-table-panel__title span,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters .form-control,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters input.form-control,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters select.form-control,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters .vm-opr-select,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters .vm-dmt-select,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters .saas-acc-btn--search,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters .saas-acc-btn--search span,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters .vm-opr-toolbar-search,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters .vm-radiant-search-btn,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters .select2-container .select2-selection--single,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters .select2-container--default .select2-selection--single .select2-selection__rendered,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-filters .select2-container--default .select2-selection--single .select2-selection__placeholder,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-block-opt-table-search input.vm-block-opt-search-input,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page #blockOptTable.vm-opr-data-table thead th,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page #blockOptTable.vm-opr-data-table tbody td,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-block-opt-type-badge,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-block-opt-status,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-dealer-block-opt-export-btn,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-inline-total,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-radiant-record-badge,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-dmt-totals-head__title,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-dmt-totals-head__title span,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-opr-total-card__label,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-opr-total-card__value {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-block-opt-table-search {
+            min-width: 200px;
+            max-width: 260px;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-block-opt-table-search input.vm-block-opt-search-input {
+            height: 38px !important;
+            border-radius: 8px !important;
+            border: 1.5px solid #cbd5e1 !important;
+            background: #fff !important;
+            background-image: none !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            cursor: text !important;
+            font-weight: 500 !important;
+            padding: 0 12px !important;
+        }
+
+        body.saas-admin-ui .select2-dropdown.vm-block-opt-select2-drop,
+        body.saas-admin-ui .select2-dropdown.vm-block-opt-select2-drop .select2-results__option,
+        body.saas-admin-ui .select2-dropdown.vm-block-opt-select2-drop .select2-search__field,
+        body.saas-admin-ui .select2-container.vm-block-opt-select2 .select2-selection__rendered,
+        body.saas-admin-ui .select2-container.vm-block-opt-select2 .select2-selection__placeholder {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-block-opt-filter-select,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-block-opt-filter-select + .select2-container .select2-selection--single {
+            height: 38px !important;
+            min-height: 38px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-block-opt-filter-select + .select2-container .select2-selection__rendered,
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-block-opt-filter-select + .select2-container .select2-selection__arrow {
+            line-height: 36px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-block-opt-page .vm-dmt-table-panel__right {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+    </style>
+}

@@ -17,7 +17,8 @@
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-api-user-page.css?v=5" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-sms-api-page.css?v=39" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-email-security-page.css?v=12" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-sms-api-page.css?v=45" rel="stylesheet" />
 
 <div id="loadermoney" class="loadermoney" style="display:none;"></div>
 
@@ -43,8 +44,9 @@
         </div>
 
         <div class="col-md-12 vm-ft-layout-wrap">
-            <div class="sa-sms-split">
-            <div class="sa-sms-split__left vm-ft-form-col left-rowss">
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full">
+
+                <div class="col-md-4 col-sm-12 vm-ft-form-col left-table">
                 <div class="fund-trasfer-left fund-user-left vm-ft-form-card">
                     <div class="vm-ft-form-card-header">
                         <div class="vm-ft-form-card-header__icon"><i class="fas fa-comment-sms"></i></div>
@@ -53,16 +55,25 @@
                             <span class="vm-ft-form-card-header__sub">Priority, send SMS &amp; templates</span>
                         </div>
                     </div>
-                    <div class="head-sms">
-                        <ul class="sa-sms-left-tabs tab-seconddesign tab-third-design">
-                            <li class="tab-link2 current2" data-tab="tab-5">SMS PRIORITY</li>
-                            <li class="tab-link2" data-tab="tab-6">SEND SMS</li>
-                            <li class="tab-link2 sa-template-tab" data-tab="tab-7">SET TEMPLATE</li>
-                        </ul>
+                    <div class="head-sms es-left-body">
+                        <div class="au-tabs">
+                            <button type="button" class="au-tab-btn sa-left-tab-btn is-active" data-tab="tab-5">
+                                <i class="fas fa-list-ol" aria-hidden="true"></i>
+                                <span>SMS Priority</span>
+                            </button>
+                            <button type="button" class="au-tab-btn sa-left-tab-btn" data-tab="tab-6">
+                                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                                <span>Send SMS</span>
+                            </button>
+                            <button type="button" class="au-tab-btn sa-left-tab-btn sa-template-tab" data-tab="tab-7">
+                                <i class="fas fa-file-lines" aria-hidden="true"></i>
+                                <span>Set Template</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="smsapi-first custom-table-responsive padding-top-second padding-topclass-third">
                         <div class="sams-next ">
-                            <div id="tab-5" class="tab-content2 current2">
+                            <div id="tab-5" class="sa-left-tab-pane is-active">
                                 <div class="sa-priority-shell">
                                     <div class="sa-table-host sa-priority-table-wrap">
                                         <table class="table sa-priority-table" id="gridtbl">
@@ -80,28 +91,32 @@
                                                     <tr class="sa-priority-row" data-id="@item.idno" data-api="@item.smsapi" data-sim="@item.sim">
                                                         <td><span class="sa-priority-label">@item.sms</span></td>
                                                         <td>
-                                                            <span class="sa-priority-badge sa-priority-view">@item.smsapi</span>
-                                                            <select class="sa-form-control sa-priority-input sa-priority-api-input sa-priority-field-edit">
-                                                                @for (var p = 1; p <= saPriorityCount; p++)
-                                                                {
-                                                                    <option value="@p" @(item.smsapi == p ? "selected" : "")>@p</option>
-                                                                }
-                                                            </select>
+                                                            <div class="sa-priority-cell">
+                                                                <span class="sa-priority-badge sa-priority-view">@item.smsapi</span>
+                                                                <select class="sa-priority-input sa-priority-api-input sa-priority-field-edit" aria-label="API SMS priority" disabled="disabled" style="display:none;">
+                                                                    @for (var p = 1; p <= saPriorityCount; p++)
+                                                                    {
+                                                                        <option value="@p" @(item.smsapi == p ? "selected" : "")>@p</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
                                                         </td>
                                                         <td>
-                                                            <span class="sa-priority-badge sa-priority-view">@item.sim</span>
-                                                            <select class="sa-form-control sa-priority-input sa-priority-sim-input sa-priority-field-edit">
-                                                                @for (var p = 1; p <= saPriorityCount; p++)
-                                                                {
-                                                                    <option value="@p" @(item.sim == p ? "selected" : "")>@p</option>
-                                                                }
-                                                            </select>
+                                                            <div class="sa-priority-cell">
+                                                                <span class="sa-priority-badge sa-priority-view">@item.sim</span>
+                                                                <select class="sa-priority-input sa-priority-sim-input sa-priority-field-edit" aria-label="SIM SMS priority" disabled="disabled" style="display:none;">
+                                                                    @for (var p = 1; p <= saPriorityCount; p++)
+                                                                    {
+                                                                        <option value="@p" @(item.sim == p ? "selected" : "")>@p</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
                                                         </td>
                                                         <td class="sa-priority-actions">
                                                             <div class="sa-priority-action-group">
-                                                                <button type="button" class="sa-priority-edit-btn sa-priority-action-view"><i class="fas fa-pen"></i><span>Edit</span></button>
-                                                                <button type="button" class="sa-priority-save-btn sa-priority-action-edit"><i class="fas fa-check"></i><span>Save</span></button>
-                                                                <button type="button" class="sa-priority-cancel-btn sa-priority-action-edit"><i class="fas fa-times"></i><span>Cancel</span></button>
+                                                                <button type="button" class="sa-priority-edit-btn sa-priority-action-view" title="Edit priority"><i class="fas fa-pen"></i><span>Edit</span></button>
+                                                                <button type="button" class="sa-priority-save-btn sa-priority-action-edit" title="Save priority" style="display:none;"><i class="fas fa-check"></i><span>Save</span></button>
+                                                                <button type="button" class="sa-priority-cancel-btn sa-priority-action-edit" title="Cancel edit" style="display:none;"><i class="fas fa-times"></i><span>Cancel</span></button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -112,7 +127,7 @@
                                 </div>
                             </div>
                             <!-- #tab-5 -->
-                            <div id="tab-6" class="tab-content2">
+                            <div id="tab-6" class="sa-left-tab-pane">
                                 <div class="sa-send-sms-shell">
                                     <form class="sa-send-sms-form">
                                         <div class="sa-send-mode-toggle" role="radiogroup" aria-label="Send mode">
@@ -131,14 +146,14 @@
                                                     new SelectListItem { Text = "Retailer", Value= "Retailer" },
                                                     new SelectListItem { Text = "API User", Value= "API" },
                                                     new SelectListItem { Text = "Whitelabel", Value= "Whitelabel" },
-                                                }, "Select User", new { @class = "sa-form-control" })
+                                                }, "Select User", new { @class = "sa-form-control for-select2" })
                                             </div>
                                         </div>
 
                                         <div id="prtno" class="sa-form-field sa-form-field--full" style="display:none;">
                                             <label for="Lapuno"><i class="fas fa-plug"></i> Port No</label>
                                             <div class="sa-form-control-wrap">
-                                                @Html.DropDownList("Lapuno", ViewBag.Lapuno as SelectList, "Select Port No", new { @class = "sa-form-control", required = "required" })
+                                                @Html.DropDownList("Lapuno", ViewBag.Lapuno as SelectList, "Select Port No", new { @class = "sa-form-control for-select2", required = "required" })
                                             </div>
                                         </div>
 
@@ -172,7 +187,7 @@
                                 </div>
                             </div>
                             <!-- #tab-6 -->
-                            <div id="tab-7" class="tab-content2">
+                            <div id="tab-7" class="sa-left-tab-pane">
                                 <div class="sa-template-form-shell">
                                     <div id="home" class="sa-template-form-pane">
                                         @using (Ajax.BeginForm("Save_SMS_Templates", "Home",
@@ -318,36 +333,42 @@
                     </div>
 
                 </div>
-            </div>
+                </div>
 
-            <div class="sa-sms-split__right sa-sms-main-right" id="saMainRightCol">
+                <div class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col">
+
+            <div id="saMainRightCol" class="sa-right-col-inner sa-right-col-inner--main">
             <div id="right_tab1" class="sa-right-panel sa-right-panel--main">
-                <div class="fund-trasfer-right fund-user-right vm-ft-history-panel smsapi-second">
+                <div class="fund-trasfer-right fund-user-right vm-ft-history-panel smsapi-second tt-right-table">
                     <div class="vm-ft-history-body">
-                        <div class="sa-right-toolbar">
+                        <div class="sa-right-toolbar es-right-toolbar">
                             <div class="sa-right-toolbar__row">
-                                <ul class="sa-sms-right-tabs sa-right-tabs sa-right-tabs--cover" role="tablist">
-                                    <li class="tab-link current" data-tab="tab-1" id="SMS_API_HistoryTab" role="tab">
-                                        <span class="sa-right-tab-inner"><img src="~/img/api_gateway2.png" alt="" /><span class="sa-right-tab-text">API - SMS History</span></span>
+                                <ul class="es-right-tabs sa-sms-right-tabs sa-right-tabs sa-right-tabs--cover" role="tablist">
+                                    <li class="tab-link current current2" data-tab="tab-1" id="SMS_API_HistoryTab" role="tab">
+                                        <i class="fas fa-history" aria-hidden="true"></i>
+                                        <span class="sa-right-tab-text">API SMS History</span>
                                     </li>
                                     <li class="tab-link" data-tab="tab-2" id="SMS_SIM_HistoryTab" role="tab">
-                                        <span class="sa-right-tab-inner"><img src="~/img/phone-card-back.svg" alt="" /><span class="sa-right-tab-text">SIM - SMS History</span></span>
+                                        <i class="fas fa-sim-card" aria-hidden="true"></i>
+                                        <span class="sa-right-tab-text">SIM SMS History</span>
                                     </li>
                                     <li class="tab-link" data-tab="tab-3" role="tab">
-                                        <span class="sa-right-tab-inner"><i class="fa fa-paper-plane" aria-hidden="true"></i><span class="sa-right-tab-text">Manage Outbox</span></span>
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                        <span class="sa-right-tab-text">Manage Outbox</span>
                                     </li>
                                     <li class="tab-link" data-tab="tab-4" id="LoaddataTemp" role="tab">
-                                        <span class="sa-right-tab-inner"><i class="fa fa-wrench" aria-hidden="true"></i><span class="sa-right-tab-text">API Setting</span></span>
+                                        <i class="fa fa-wrench" aria-hidden="true"></i>
+                                        <span class="sa-right-tab-text">API Setting</span>
                                     </li>
                                 </ul>
-                                <button type="button" class="sa-tool-btn sa-right-toolbar__action sa-right-toolbar__api-btn" data-toggle="modal" data-target="#defaultModal">
+                                <button type="button" class="es-tool-btn sa-tool-btn sa-right-toolbar__action sa-right-toolbar__api-btn" data-toggle="modal" data-target="#defaultModal">
                                     <i class="fa fa-plus"></i><span>API</span>
                                 </button>
                             </div>
                         </div>
 
-                        <div class="sa-right-tab-body">
-                    <div id="tab-1" class="tab-content current sa-tab-active custom-table-responsive padding-top-second">
+                        <div class="sa-right-tab-body es-right-tab-body">
+                    <div id="tab-1" class="tab-content current current2 sa-tab-active custom-table-responsive padding-top-second">
                         <div class="sa-history-toolbar">
                         <ul class="tabinputclass-third">
 
@@ -443,9 +464,9 @@
             </div>
             </div><!-- saMainRightCol -->
 
-            <div class="sa-sms-split__right sa-sms-template-right" id="saTemplateRightCol">
+            <div id="saTemplateRightCol" class="sa-right-col-inner sa-right-col-inner--template">
             <div id="right_tab2" class="sa-right-panel sa-right-panel--template">
-                <div class="fund-trasfer-right fund-user-right vm-ft-history-panel sa-template-panel sa-template-panel-card">
+                <div class="fund-trasfer-right fund-user-right vm-ft-history-panel sa-template-panel sa-template-panel-card tt-right-table">
                     <div class="sa-template-panel-header">
                         <div class="sa-template-panel-header__icon"><i class="fas fa-list-alt"></i></div>
                         <div>
@@ -484,7 +505,8 @@
             </div>
             </div><!-- saTemplateRightCol -->
 
-        </div><!-- sa-sms-split -->
+                </div><!-- vm-ft-history-col -->
+            </div><!-- vm-ft-layout -->
         </div><!-- vm-ft-layout-wrap -->
 
     </div>
@@ -510,9 +532,9 @@
                     <label for="smsapiCheck"><i class="fas fa-wallet"></i> SMS Check Balance URL</label>
                     <input type="text" id="smsapiCheck" class="form-control searchInput" placeholder="https://example.com/balance" />
                 </div>
-                <div class="sa-modal-field">
+                <div class="sa-modal-field sa-modal-select-wrap">
                     <label for="sms_type"><i class="fas fa-layer-group"></i> API Type</label>
-                    <select class="form-control sa-modal-select" id="sms_type" name="sms_type">
+                    <select class="form-control sa-modal-select for-select2" id="sms_type" name="sms_type" data-live-search="false">
                         <option value="sms">Text SMS</option>
                         <option value="whatsapp">Whatsapp</option>
                     </select>
@@ -832,15 +854,15 @@ else
     }
 
     function saSwitchRightTab(tabId) {
-        $('.SMSAPI_Page .smsapi-second .sa-sms-right-tabs > li.tab-link').removeClass('current');
-        $('.SMSAPI_Page .smsapi-second .tab-content').removeClass('current sa-tab-active');
-        $('.SMSAPI_Page .smsapi-second .sa-sms-right-tabs > li.tab-link[data-tab="' + tabId + '"]').addClass('current');
+        $('.SMSAPI_Page .smsapi-second .sa-sms-right-tabs > li.tab-link').removeClass('current current2');
+        $('.SMSAPI_Page .smsapi-second .tab-content').removeClass('current current2 sa-tab-active');
+        $('.SMSAPI_Page .smsapi-second .sa-sms-right-tabs > li.tab-link[data-tab="' + tabId + '"]').addClass('current current2');
 
         var $panel = (tabId === 'tab-4')
             ? $('#ApiSettings > #tab-4')
             : $('.SMSAPI_Page .smsapi-second .sa-right-tab-body > #' + tabId);
 
-        $panel.addClass('current sa-tab-active');
+        $panel.addClass('current current2 sa-tab-active');
 
         if (tabId === 'tab-4') {
             $('.SMSAPI_Page .sa-right-toolbar__action').addClass('is-visible');
@@ -851,17 +873,34 @@ else
         saApplyToolbarSearch($('#searchSms').val());
     }
 
+    function saGetActiveLeftTabId() {
+        var $btn = $('.head-sms .au-tabs .sa-left-tab-btn.is-active').first();
+        return ($btn.length && $btn.attr('data-tab')) ? $btn.attr('data-tab') : 'tab-5';
+    }
+
+    function saRestoreLeftTabPane() {
+        var tabId = saGetActiveLeftTabId();
+        $('.smsapi-first .sams-next > .sa-left-tab-pane').removeClass('is-active');
+        $('.smsapi-first .sams-next > #' + tabId).addClass('is-active');
+    }
+
     function saSwitchLeftTab(tabId) {
-        $('.head-sms .sa-sms-left-tabs li.tab-link2').removeClass('current2');
-        $('.smsapi-first .sams-next > .tab-content2').removeClass('current2');
-        $('.head-sms .sa-sms-left-tabs li.tab-link2[data-tab="' + tabId + '"]').addClass('current2');
-        $('.smsapi-first .sams-next > #' + tabId).addClass('current2');
+        $('.head-sms .au-tabs .sa-left-tab-btn').removeClass('is-active');
+        $('.smsapi-first .sams-next > .sa-left-tab-pane').removeClass('is-active');
+        $('.head-sms .au-tabs .sa-left-tab-btn[data-tab="' + tabId + '"]').addClass('is-active');
+        $('.smsapi-first .sams-next > #' + tabId).addClass('is-active');
 
         if (tabId === 'tab-7') {
             saShowTemplatePanel();
         } else {
             saShowMainPanel();
         }
+
+        if (typeof saInitSmsPageSelect2 === 'function') {
+            window.setTimeout(function () { saInitSmsPageSelect2(tabId); }, 60);
+        }
+
+        saRestoreLeftTabPane();
         saApplyToolbarSearch($('#searchSms').val());
     }
 
@@ -874,6 +913,8 @@ else
     $(document).ready(function () {
         saShowMainPanel();
         saSwitchRightTab('tab-1');
+        saRestoreLeftTabPane();
+        saSyncAllPriorityRows();
 
         $('#FileUpload').on('change', function () {
             var fileName = (this.files && this.files[0]) ? this.files[0].name : 'Browse file';
@@ -945,6 +986,25 @@ else
         return html;
     }
 
+    function saSyncPriorityRowUi($row) {
+        if (!$row || !$row.length) {
+            return;
+        }
+        var editing = $row.hasClass('is-editing');
+        $row.find('.sa-priority-view').css('display', editing ? 'none' : 'inline-flex');
+        $row.find('select.sa-priority-field-edit')
+            .prop('disabled', !editing)
+            .css('display', editing ? 'block' : 'none');
+        $row.find('.sa-priority-action-view').css('display', editing ? 'none' : 'inline-flex');
+        $row.find('.sa-priority-action-edit').css('display', editing ? 'inline-flex' : 'none');
+    }
+
+    function saSyncAllPriorityRows() {
+        $('#gridtbl .sa-priority-row').each(function () {
+            saSyncPriorityRowUi($(this));
+        });
+    }
+
     function saCancelPriorityEdit($row) {
         if (!$row || !$row.length) {
             return;
@@ -952,6 +1012,7 @@ else
         $row.removeClass('is-editing');
         $row.find('.sa-priority-api-input').val($row.data('api'));
         $row.find('.sa-priority-sim-input').val($row.data('sim'));
+        saSyncPriorityRowUi($row);
     }
 
     function saEnterPriorityEdit($row) {
@@ -959,6 +1020,8 @@ else
             saCancelPriorityEdit($(this));
         });
         $row.addClass('is-editing');
+        saSyncPriorityRowUi($row);
+        $row.find('.sa-priority-api-input').focus();
     }
 
     function saRebuildPriorityTable(list) {
@@ -966,10 +1029,10 @@ else
         $.each(list, function (a, b) {
             tblHtml += '<tr class="sa-priority-row" data-id="' + b.idno + '" data-api="' + b.smsapi + '" data-sim="' + b.sim + '">';
             tblHtml += '<td><span class="sa-priority-label">' + b.sms + '</span></td>';
-            tblHtml += '<td><span class="sa-priority-badge sa-priority-view">' + b.smsapi + '</span>';
-            tblHtml += '<select class="sa-form-control sa-priority-input sa-priority-api-input sa-priority-field-edit">' + saPriorityOptions(b.smsapi) + '</select></td>';
-            tblHtml += '<td><span class="sa-priority-badge sa-priority-view">' + b.sim + '</span>';
-            tblHtml += '<select class="sa-form-control sa-priority-input sa-priority-sim-input sa-priority-field-edit">' + saPriorityOptions(b.sim) + '</select></td>';
+            tblHtml += '<td><div class="sa-priority-cell"><span class="sa-priority-badge sa-priority-view">' + b.smsapi + '</span>';
+            tblHtml += '<select class="sa-priority-input sa-priority-api-input sa-priority-field-edit" aria-label="API SMS priority" disabled="disabled" style="display:none;">' + saPriorityOptions(b.smsapi) + '</select></div></td>';
+            tblHtml += '<td><div class="sa-priority-cell"><span class="sa-priority-badge sa-priority-view">' + b.sim + '</span>';
+            tblHtml += '<select class="sa-priority-input sa-priority-sim-input sa-priority-field-edit" aria-label="SIM SMS priority" disabled="disabled" style="display:none;">' + saPriorityOptions(b.sim) + '</select></div></td>';
             tblHtml += '<td class="sa-priority-actions"><div class="sa-priority-action-group">';
             tblHtml += '<button type="button" class="sa-priority-edit-btn sa-priority-action-view"><i class="fas fa-pen"></i><span>Edit</span></button>';
             tblHtml += '<button type="button" class="sa-priority-save-btn sa-priority-action-edit"><i class="fas fa-check"></i><span>Save</span></button>';
@@ -977,6 +1040,7 @@ else
             tblHtml += '</div></td></tr>';
         });
         $('#gridtbl > tbody').html(tblHtml);
+        saSyncAllPriorityRows();
     }
 
     function saSavePriorityRow($row) {
@@ -1006,7 +1070,10 @@ else
                     if (typeof toastr !== 'undefined') {
                         toastr.success('SMS priority updated successfully.');
                     }
+                } else if (typeof toastr !== 'undefined') {
+                    toastr.warning('Priority saved but table could not refresh. Please reload the page.');
                 }
+                $saveBtn.prop('disabled', false);
             },
             error: function () {
                 if (typeof toastr !== 'undefined') {
@@ -1019,17 +1086,24 @@ else
 
     $(document).on('click', '.sa-priority-edit-btn', function (e) {
         e.preventDefault();
+        e.stopPropagation();
         saEnterPriorityEdit($(this).closest('.sa-priority-row'));
     });
 
     $(document).on('click', '.sa-priority-cancel-btn', function (e) {
         e.preventDefault();
+        e.stopPropagation();
         saCancelPriorityEdit($(this).closest('.sa-priority-row'));
     });
 
     $(document).on('click', '.sa-priority-save-btn', function (e) {
         e.preventDefault();
+        e.stopPropagation();
         saSavePriorityRow($(this).closest('.sa-priority-row'));
+    });
+
+    $(document).ready(function () {
+        saSyncAllPriorityRows();
     });
 </script>
 <script>
@@ -1163,30 +1237,55 @@ else
 
 <script>
     (function ($) {
-        function saInitTemplateSelect2() {
-            $('.smsapi-first select.for-select2').each(function () {
-                var $el = $(this);
-                if ($el.hasClass('select2-hidden-accessible')) {
-                    return;
+        function saGetSelect2DropdownParent($el) {
+            if ($el && $el.length) {
+                var $smsModal = $el.closest('#defaultModal');
+                if ($smsModal.length) {
+                    var $content = $smsModal.find('.modal-content').first();
+                    if ($content.length) {
+                        return $content;
+                    }
                 }
-                $el.select2({ width: '100%' });
+            }
+            if (window.getAdminSelect2DropdownParent && $el && $el.length) {
+                return window.getAdminSelect2DropdownParent($el);
+            }
+            var $modal = $el && $el.length ? $el.closest('.modal') : $();
+            return $modal.length ? $modal.first() : $(document.body);
+        }
+
+        function saInitSelect2Field($el, dropdownParent) {
+            if (!$el || !$el.length || typeof $.fn.select2 !== 'function') {
+                return;
+            }
+            if ($el.hasClass('select2-hidden-accessible')) {
+                $el.select2('destroy');
+            }
+            $el.select2({
+                width: '100%',
+                dropdownParent: dropdownParent || saGetSelect2DropdownParent($el),
+                minimumResultsForSearch: ($el.find('option').length > 12) ? 0 : Infinity,
+                dropdownCssClass: 'sa-sms-select2-dropdown vm-csp-select2-dropdown'
             });
         }
 
-        function saInitModalApiTypeSelect() {
-            var $modal = $('#defaultModal');
-            var $type = $('#sms_type');
-            if (!$type.length || !$modal.length) {
-                return;
+        function saInitSmsPageSelect2(tabId) {
+            var $pane = tabId ? $('#' + tabId) : $('.smsapi-first .sa-left-tab-pane.is-active');
+            if (!$pane.length) {
+                $pane = $('.smsapi-first');
             }
-            if ($type.hasClass('select2-hidden-accessible')) {
-                $type.select2('destroy');
-            }
-            $type.select2({
-                dropdownParent: $modal,
-                minimumResultsForSearch: Infinity,
-                width: '100%'
+            $pane.find('select.for-select2').each(function () {
+                saInitSelect2Field($(this), $(document.body));
             });
+        }
+
+        function saInitTemplateSelect2() {
+            saInitSmsPageSelect2('tab-7');
+        }
+
+        function saInitModalApiTypeSelect() {
+            var $type = $('#sms_type');
+            saInitSelect2Field($type, saGetSelect2DropdownParent($type));
         }
 
         function saDestroyModalApiTypeSelect() {
@@ -1196,16 +1295,17 @@ else
             }
         }
 
+        window.saInitSmsPageSelect2 = saInitSmsPageSelect2;
         window.saInitTemplateSelect2 = saInitTemplateSelect2;
         window.saInitModalApiTypeSelect = saInitModalApiTypeSelect;
         window.saDestroyModalApiTypeSelect = saDestroyModalApiTypeSelect;
 
         $(document).ready(function () {
-            saInitTemplateSelect2();
+            saInitSmsPageSelect2('tab-5');
         });
 
         $(document).ajaxComplete(function () {
-            saInitTemplateSelect2();
+            saInitSmsPageSelect2(saGetActiveLeftTabId ? saGetActiveLeftTabId() : 'tab-7');
         });
     })(jQuery);
 </script>
@@ -1231,9 +1331,18 @@ else
             saInitModalApiTypeSelect();
         });
 
+        $(document).on('select2:open', '#sms_type', function () {
+            $('#defaultModal').addClass('vm-admin-select2-open sa-sms-modal-select2-open');
+        });
+
+        $(document).on('select2:close', '#sms_type', function () {
+            $('#defaultModal').removeClass('sa-sms-modal-select2-open');
+        });
+
         $('#defaultModal, #defaultModal1').on('hidden.bs.modal', function () {
             $('body').removeClass('modal-open');
             $('.modal-backdrop').remove();
+            $('#defaultModal').removeClass('sa-sms-modal-select2-open vm-admin-select2-open');
             $('#smsapiurl, #smsapiCheck').val('');
             saDestroyModalApiTypeSelect();
             $('#sms_type').val('sms');
@@ -1259,7 +1368,7 @@ else
             }
         });
 
-        $(document).on('click', '.head-sms .sa-sms-left-tabs li.tab-link2', function (e) {
+        $(document).on('click', '.head-sms .au-tabs .sa-left-tab-btn', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             if (typeof saSwitchLeftTab === 'function') {

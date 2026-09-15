@@ -42,7 +42,7 @@
 
                 <div>
 
-                    @Html.DropDownList("sellerapi", new SelectList(ViewBag.sellerapi, "Value", "Text"), "Select (seller) Party", new { @class = "for-select2 vm-opr-select vm-dmt-select form-control", data_live_search = "true", @required = "required" })
+                    @Html.DropDownList("sellerapi", new SelectList(ViewBag.sellerapi, "Value", "Text"), "Select (seller) Party", new { @class = "for-select2 vm-opr-select vm-dmt-select form-control", data_live_search = "true", @required = "required", onchange = "if(window.apOnSellerPartyChange){window.apOnSellerPartyChange(this);}" })
 
                 </div>
 
@@ -462,31 +462,147 @@
 
 <script>
 
-    $("#sellerapi").change(function () {
+    (function ($) {
 
-        var val = $(this).val();
+        function apTriggerSellerBankFill(apiName) {
 
-        $.ajax({
+            if (typeof window.apOnSellerPartyChange === 'function') {
 
-            url: '@Url.Action("Showsellinfo", "Home")',
+                window.apOnSellerPartyChange({ value: apiName });
 
-            type: "POST",
-
-            data: { Apinm: val },
-
-            cache: false,
-
-            success: function (data2) {
-
-                $('#saccount').val(data2.AccountNo);
-
-                $('#sifsc').val(data2.Ifsccode);
+                return;
 
             }
 
+            if (typeof window.apFillSellerBankDetails === 'function') {
+
+                window.apFillSellerBankDetails(apiName);
+
+                return;
+
+            }
+
+            var val = String(apiName || '').trim();
+
+            if (!val) {
+
+                $('#saccount').val('');
+
+                $('#sifsc').val('');
+
+                return;
+
+            }
+
+            var $opt = $('#sellerapi option').filter(function () {
+
+                return String($(this).val()).trim() === val;
+
+            }).first();
+
+            if ($opt.length) {
+
+                $('#saccount').val($opt.attr('data-account') || '');
+
+                $('#sifsc').val($opt.attr('data-ifsc') || '');
+
+                if ($opt.attr('data-account') || $opt.attr('data-ifsc')) {
+
+                    return;
+
+                }
+
+            }
+
+            $.ajax({
+
+                url: '@Url.Action("Showsellinfo", "Home")',
+
+                type: 'POST',
+
+                data: { Apinm: val },
+
+                dataType: 'json',
+
+                cache: false,
+
+                success: function (data2) {
+
+                    if (data2) {
+
+                        $('#saccount').val(data2.AccountNo || '');
+
+                        $('#sifsc').val(data2.Ifsccode || '');
+
+                    }
+
+                }
+
+            });
+
+        }
+
+
+
+        function apBindSellerPartyChange() {
+
+            var $ = window.vmAdminJq || window.jQuery;
+
+            if (!$) {
+
+                return;
+
+            }
+
+            $(document).off('change.apSellerPartial select2:select.apSellerPartial', '#sellerapi');
+
+            $(document).on('change.apSellerPartial select2:select.apSellerPartial', '#sellerapi', function (e) {
+
+                var val = $(this).val();
+
+                if (e && e.type === 'select2:select' && e.params && e.params.data) {
+
+                    val = e.params.data.id || e.params.data.text || val;
+
+                }
+
+                apTriggerSellerBankFill(val);
+
+            });
+
+        }
+
+
+
+        function apBootSellerPartyDropdown() {
+
+            if (typeof window.apSyncSellerDropdownFromBankTable === 'function') {
+
+                window.apSyncSellerDropdownFromBankTable();
+
+            }
+
+            if (typeof window.apBindSellerPartyAutoFill === 'function') {
+
+                window.apBindSellerPartyAutoFill();
+
+            } else {
+
+                apBindSellerPartyChange();
+
+            }
+
+        }
+
+
+
+        $(function () {
+
+            window.setTimeout(apBootSellerPartyDropdown, 500);
+
         });
 
-    });
+    })(window.vmAdminJq || window.jQuery);
 
 </script>
 

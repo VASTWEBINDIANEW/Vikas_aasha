@@ -1,181 +1,559 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.GST_Monthly_Dealer_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "Gst_Invocing_Master_report";
+    ViewBag.Title = "GST Invoice Report";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.GST_Monthly_Dealer_Result>();
+    var rowList = reports.ToList();
+    var rowCount = rowList.Count;
+    var oldMonth = (ViewBag.OldMonth as string) ?? DateTime.Now.AddMonths(-1).ToString("MMMM");
+
+    var totalDmtComm = rowList.Sum(x => x.dmtcomm);
+    var totalDmtGst = rowList.Sum(x => x.dmtgst);
+    var totalRchComm = rowList.Sum(x => x.rchcomm);
+    var totalRchGst = rowList.Sum(x => x.rchgst);
+    var totalAepsComm = rowList.Sum(x => x.aepscomm);
+    var totalAepsGst = rowList.Sum(x => x.aepsgst);
+    var totalPanComm = rowList.Sum(x => x.pancomm);
+    var totalPanGst = rowList.Sum(x => x.pangst);
+    var totalMposComm = rowList.Sum(x => x.mposcomm);
+    var totalMposGst = rowList.Sum(x => x.mposgst);
+    var totalFlightComm = rowList.Sum(x => x.flightcomm);
+    var totalFlightGst = rowList.Sum(x => (decimal)x.flightgst);
+    var totalGst = rowList.Sum(x => x.total ?? 0m);
 }
 
-<style>
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
-     
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px;
-    }
-     
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    } 
-    @@media screen and (max-width:766px){
-        .card.gstinvocing-report .table-responsive {border: 0;padding-bottom:15px;}
-        .bars.sidebar-toggle-responshiveclass {
-            top: 14px !important;
-        }
-
-    }
-</style>
-
-<section class="content">
-    <div class="container-fluid" style="padding-top:8px;">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Gst Invocing Dealer Report</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account Active&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">GST Invoice</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:0px;">
-                <div class="card" style="margin-bottom: 0;">
-                    <div class="page-header-third">
-                        <div class="col-md-7 dealer-none-fourclass" style="width:auto;float:left;padding-left:0;">
-                            <div class="w-100 float-left">
-                                <ul class="float-left bred" style="margin: 0; padding: 0;">
-                                    <li class="smli">
-                                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">Dashboard&nbsp;<span style="font-size:18px;">&#187;</span></a>
-                                    </li>
-                                    <li class="fullbodydycolorbg tmw-total-color-one" style="margin-top: 5px;">&nbsp;GST&nbsp;Invoice&nbsp;Report</li>
-
-                                </ul>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="col-md-5 dth-buttonpdfexl" style="width:auto;float:right;padding-right:0px;">
-
-
-                            <button class="white-success-button" style="margin-left:4px;background:#eeebeb;border: 1px solid #e1dcdc;">Total</button>
-
-                            <div class="web-white-filter fil" style="float: left;margin-right: 0px;margin-top:0px;">
-                                <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                                <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-2" style="width:auto;float:right;padding:0;">
-                            <p style="font-size:20px;margin:0px;font-weight:700;color:#55555a;">Month&nbsp;:-&nbsp;@ViewBag.OldMonth</p>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="">
-                <div class="card gstinvocing-report">
-
-                    <div class="body all-reporttable-css page-header-third" style="padding:5px;">
-                        <div class="table-responsive" style="position:inherit;">
-                            <table class="table table-bordered table-striped table-hover" style="width:100%; font-size:12px;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Sr.No</th>
-                                        <th>Email&nbsp;ID</th>
-                                        <th>Frim&nbsp;Name</th>
-                                        <th>Account Transfer&nbsp;Comm</th>
-                                        <th>Account Transfer&nbsp;GST</th>
-                                        <th>RCH&nbsp;Comm</th>
-                                        <th>RCH&nbsp;GST</th>
-                                        <th>Aeps&nbsp;Comm</th>
-                                        <th>Aeps&nbsp;GST</th>
-                                        <th>PAN&nbsp;Comm</th>
-                                        <th>PAN&nbsp;GST</th>
-                                        <th>MPOS&nbsp;Comm</th>
-                                        <th>MPOS&nbsp;GST</th>
-                                        <th>Flight&nbsp;Comm</th>
-                                        <th>Flight&nbsp;GST</th>
-                                        <th>Total&nbsp;GST</th>
-                                        <th>Print</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{
-                                        var i = 1;
-                                    }
-
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>@i</td>
-                                            <td><p style="font-size:12px;">@item.Email</p></td>
-                                            <td><p style="font-size:12px;">@item.FarmName</p></td>
-                                            <td><p style="font-size:12px;">@item.dmtcomm</p></td>
-                                            <td><p style="font-size:12px;">@item.dmtgst</p></td>
-                                            <td><p style="font-size:12px;">@item.rchcomm</p></td>
-                                            <td><p style="font-size:12px;">@item.rchgst</p></td>
-                                            <td><p style="font-size:12px;">@String.Format("{0:0.00#}", item.aepscomm)</p></td>
-                                            <td><p style="font-size:12px;">@item.aepsgst</p></td>
-                                            <td><p style="font-size:12px;">@item.pancomm</p></td>
-                                            <td><p style="font-size:12px;">@item.pangst</p></td>
-                                            <td><p style="font-size:12px;">@item.mposcomm</p></td>
-                                            <td><p style="font-size:12px;">@item.mposgst</p></td>
-                                            <td><p style="font-size:12px;">@String.Format("{0:0.00#}", item.flightcomm)</p></td>
-                                            <td><p style="font-size:12px;">@item.flightgst</p></td>
-                                            <td><p style="font-size:12px;">@item.total</p></td>
-                                            <td><a href="@Url.Action("GST_Invocing_Report_Pdf","Home")" style="font-size:14px;color:blue;font-weight:500;" target="_blank">Print</a></td>
-                                        </tr>
-                                        i++;
-                                    }
-                                    <tr><td colspan="17" style="text-align:center;">No&nbsp;Data&nbsp;Found</td></tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-gst-report-modern.css?v=8" rel="stylesheet" />
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page saas-dealer-gst-invoice-page">
 
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
+
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Reports</li>
+                    <li>GST Invoice Report</li>
+                </ol>
+
+                <div class="vm-dealer-gst-month-badge" title="Report month">
+                    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                    <span>Month: <strong>@oldMonth</strong></span>
+                </div>
+
+            </div>
+
+            <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="dealerGstTotalsPanel" style="display:none;" aria-hidden="true">
+                <div class="vm-dmt-totals-head">
+                    <div class="vm-dmt-totals-head__title">
+                        <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                        <span>GST invoice totals</span>
+                    </div>
+                    <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideDealerGstTotals()" title="Hide totals" aria-label="Hide totals">
+                        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                    <div class="vm-opr-total-card vm-opr-total-card--primary">
+                        <span class="vm-opr-total-card__label">Total GST</span>
+                        <strong class="vm-opr-total-card__value">@totalGst.ToString("N2")</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--success">
+                        <span class="vm-opr-total-card__label">DMT GST</span>
+                        <strong class="vm-opr-total-card__value">@totalDmtGst.ToString("N2")</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--pending">
+                        <span class="vm-opr-total-card__label">RCH GST</span>
+                        <strong class="vm-opr-total-card__value">@totalRchGst.ToString("N2")</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--failed">
+                        <span class="vm-opr-total-card__label">AEPS GST</span>
+                        <strong class="vm-opr-total-card__value">@totalAepsGst.ToString("N2")</strong>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-file-invoice" aria-hidden="true"></i>
+                        <span>GST invoice report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-ft-search-wrap vm-dealer-gst-table-search">
+                            <input class="form-control vm-dealer-gst-search-input" type="text" id="myInput" placeholder="Search report..." autocomplete="off" onkeyup="dealerGstSearch()" />
+                        </div>
+                        <span class="vm-radiant-inline-total" title="Total GST for current month">
+                            Total GST: <strong>&#8377; @totalGst.ToString("N2")</strong>
+                        </span>
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group vm-dealer-gst-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-dealer-gst-totals-btn" onclick="toggleDealerGstTotals()" title="Show totals" aria-expanded="false" aria-controls="dealerGstTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel vm-dealer-gst-export-btn vm-dealer-gst-export-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf vm-dealer-gst-export-btn vm-dealer-gst-export-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap" id="dealerGstExportWrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="dealerGstInvoiceTable" class="table vm-opr-data-table vm-dealer-gst-invoice-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.No</th>
+                                    <th>Email ID</th>
+                                    <th>Firm Name</th>
+                                    <th>Account Transfer Comm</th>
+                                    <th>Account Transfer GST</th>
+                                    <th>RCH Comm</th>
+                                    <th>RCH GST</th>
+                                    <th>Aeps Comm</th>
+                                    <th>Aeps GST</th>
+                                    <th>PAN Comm</th>
+                                    <th>PAN GST</th>
+                                    <th>MPOS Comm</th>
+                                    <th>MPOS GST</th>
+                                    <th>Flight Comm</th>
+                                    <th>Flight GST</th>
+                                    <th>Total GST</th>
+                                    <th>Print</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.Partial("_Gst_Invocing_Dealer_report", reports)
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<script>
+    window.dealerGstReportMonth = '@Html.Raw(HttpUtility.JavaScriptStringEncode(oldMonth))';
+    window.dealerGstReportTotal = '@totalGst.ToString("N2")';
+
+    function dealerGstSearch() {
+        var $ = window.jQuery;
+        var value = ($('#myInput').val() || '').toLowerCase();
+        $('#dealerGstInvoiceTable tbody tr').filter(function () {
+            if ($(this).hasClass('vm-opr-table-empty-row')) {
+                return true;
+            }
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    }
+
+    function toggleDealerGstTotals() {
+        var $ = window.jQuery;
+        var panel = $('#dealerGstTotalsPanel');
+        if (panel.is(':visible')) {
+            hideDealerGstTotals();
+            return;
+        }
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        $('.vm-dealer-gst-totals-btn').attr('aria-expanded', 'true');
+    }
+
+    function hideDealerGstTotals() {
+        var $ = window.jQuery;
+        $('#dealerGstTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-dealer-gst-totals-btn').attr('aria-expanded', 'false');
+    }
+
+    function dealerGstEsc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function dealerGstParseAmount(value) {
+        var num = parseFloat(String(value || '').replace(/[^\d.-]/g, ''));
+        return isNaN(num) ? 0 : num;
+    }
+
+    function dealerGstTableRows() {
+        var $ = window.jQuery;
+        var rows = [];
+        $('#dealerGstInvoiceTable tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-opr-table-empty-row') || !$tr.is(':visible')) {
+                return;
+            }
+            var $cells = $tr.children('td');
+            if ($cells.length < 16) {
+                return;
+            }
+            rows.push({
+                sr: $.trim($cells.eq(0).text()).replace(/\s+/g, ' '),
+                email: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+                firm: $.trim($cells.eq(2).text()).replace(/\s+/g, ' '),
+                dmtComm: $.trim($cells.eq(3).text()).replace(/\s+/g, ' '),
+                dmtGst: $.trim($cells.eq(4).text()).replace(/\s+/g, ' '),
+                rchComm: $.trim($cells.eq(5).text()).replace(/\s+/g, ' '),
+                rchGst: $.trim($cells.eq(6).text()).replace(/\s+/g, ' '),
+                aepsComm: $.trim($cells.eq(7).text()).replace(/\s+/g, ' '),
+                aepsGst: $.trim($cells.eq(8).text()).replace(/\s+/g, ' '),
+                panComm: $.trim($cells.eq(9).text()).replace(/\s+/g, ' '),
+                panGst: $.trim($cells.eq(10).text()).replace(/\s+/g, ' '),
+                mposComm: $.trim($cells.eq(11).text()).replace(/\s+/g, ' '),
+                mposGst: $.trim($cells.eq(12).text()).replace(/\s+/g, ' '),
+                flightComm: $.trim($cells.eq(13).text()).replace(/\s+/g, ' '),
+                flightGst: $.trim($cells.eq(14).text()).replace(/\s+/g, ' '),
+                totalGst: $.trim($cells.eq(15).text()).replace(/\s+/g, ' ')
+            });
+        });
+        return rows;
+    }
+
+    function dealerGstExportStyles() {
+        return 'body{font-family:Segoe UI,Arial,sans-serif;padding:24px;color:#0f172a;background:#fff;}'
+            + '.vm-gst-export-head{margin:0 0 18px;padding-bottom:14px;border-bottom:2px solid #e2e8f0;}'
+            + '.vm-gst-export-head h3{margin:0 0 6px;font-size:22px;font-weight:700;color:#1e293b;}'
+            + '.vm-gst-export-head p{margin:0;font-size:13px;color:#64748b;line-height:1.5;}'
+            + '.vm-gst-export-summary{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px;}'
+            + '.vm-gst-export-chip{display:inline-block;padding:6px 12px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700;}'
+            + '.vm-gst-export-chip--total{background:#ecfdf5;color:#047857;}'
+            + 'table{border-collapse:collapse;width:100%;font-size:12px;}'
+            + 'th,td{border:1px solid #dbe4f0;padding:8px 10px;text-align:center;vertical-align:middle;}'
+            + 'th{background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%);color:#334155;font-weight:700;white-space:nowrap;}'
+            + 'tbody tr:nth-child(even){background:#f8fafc;}'
+            + 'td.vm-gst-export-firm,td.vm-gst-export-email{text-align:left;}'
+            + 'td.vm-gst-export-total{font-weight:700;color:#0f172a;background:#f1f5f9;}'
+            + 'tfoot td{font-weight:700;background:#ecfdf5;color:#065f46;border-top:2px solid #86efac;}';
+    }
+
+    function dealerGstBuildExportHtml(rows, title) {
+        var month = window.dealerGstReportMonth || '';
+        var totalGst = 0;
+        var body = '';
+        for (var i = 0; i < rows.length; i++) {
+            var r = rows[i];
+            totalGst += dealerGstParseAmount(r.totalGst);
+            body += '<tr>'
+                + '<td>' + dealerGstEsc(r.sr) + '</td>'
+                + '<td class="vm-gst-export-email">' + dealerGstEsc(r.email) + '</td>'
+                + '<td class="vm-gst-export-firm">' + dealerGstEsc(r.firm) + '</td>'
+                + '<td>' + dealerGstEsc(r.dmtComm) + '</td>'
+                + '<td>' + dealerGstEsc(r.dmtGst) + '</td>'
+                + '<td>' + dealerGstEsc(r.rchComm) + '</td>'
+                + '<td>' + dealerGstEsc(r.rchGst) + '</td>'
+                + '<td>' + dealerGstEsc(r.aepsComm) + '</td>'
+                + '<td>' + dealerGstEsc(r.aepsGst) + '</td>'
+                + '<td>' + dealerGstEsc(r.panComm) + '</td>'
+                + '<td>' + dealerGstEsc(r.panGst) + '</td>'
+                + '<td>' + dealerGstEsc(r.mposComm) + '</td>'
+                + '<td>' + dealerGstEsc(r.mposGst) + '</td>'
+                + '<td>' + dealerGstEsc(r.flightComm) + '</td>'
+                + '<td>' + dealerGstEsc(r.flightGst) + '</td>'
+                + '<td class="vm-gst-export-total">' + dealerGstEsc(r.totalGst) + '</td>'
+                + '</tr>';
+        }
+
+        var footer = '<tfoot><tr>'
+            + '<td colspan="15" style="text-align:right;">Total GST (visible records)</td>'
+            + '<td class="vm-gst-export-total">' + dealerGstEsc(totalGst.toFixed(2)) + '</td>'
+            + '</tr></tfoot>';
+
+        return '<html><head><meta charset="utf-8"><title>' + dealerGstEsc(title) + '</title>'
+            + '<style>' + dealerGstExportStyles() + '</style></head><body>'
+            + '<div class="vm-gst-export-head">'
+            + '<h3>' + dealerGstEsc(title) + '</h3>'
+            + '<p>Generated on ' + dealerGstEsc(new Date().toLocaleString()) + '</p>'
+            + '</div>'
+            + '<div class="vm-gst-export-summary">'
+            + '<span class="vm-gst-export-chip">Month: ' + dealerGstEsc(month) + '</span>'
+            + '<span class="vm-gst-export-chip">Records: ' + rows.length + '</span>'
+            + '<span class="vm-gst-export-chip vm-gst-export-chip--total">Total GST: ' + dealerGstEsc(totalGst.toFixed(2)) + '</span>'
+            + '</div>'
+            + '<table><thead><tr>'
+            + '<th>Sr.No</th><th>Email ID</th><th>Firm Name</th>'
+            + '<th>Account Transfer Comm</th><th>Account Transfer GST</th>'
+            + '<th>RCH Comm</th><th>RCH GST</th>'
+            + '<th>Aeps Comm</th><th>Aeps GST</th>'
+            + '<th>PAN Comm</th><th>PAN GST</th>'
+            + '<th>MPOS Comm</th><th>MPOS GST</th>'
+            + '<th>Flight Comm</th><th>Flight GST</th>'
+            + '<th>Total GST</th>'
+            + '</tr></thead><tbody>' + body + '</tbody>' + footer + '</table></body></html>';
+    }
+
+    function dealerGstDownloadExcel(html) {
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'GST_Invoice_Dealer_Report.xls');
+            return;
+        }
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'GST_Invoice_Dealer_Report.xls';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+    }
+
+    function dealerGstOpenPdf(html) {
+        var w = window.open('', '_blank');
+        if (!w) {
+            return;
+        }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+        w.focus();
+    }
+
+    function dealerGstWarnNoRecords() {
+        if (typeof swal === 'function') {
+            swal('No records to export', '', 'warning');
+            return;
+        }
+        window.alert('No records to export');
+    }
+
+    function bootDealerGstInvoiceReport() {
+        var $ = window.jQuery;
+        if (!$) {
+            window.setTimeout(bootDealerGstInvoiceReport, 50);
+            return;
+        }
+        $('#btnExport').off('click.dealerGstEx').on('click.dealerGstEx', function () {
+            var rows = dealerGstTableRows();
+            if (!rows.length) {
+                dealerGstWarnNoRecords();
+                return;
+            }
+            dealerGstDownloadExcel(dealerGstBuildExportHtml(rows, 'GST Invoice Dealer Report'));
+        });
+        $('#btnPDF').off('click.dealerGstPdf').on('click.dealerGstPdf', function () {
+            var rows = dealerGstTableRows();
+            if (!rows.length) {
+                dealerGstWarnNoRecords();
+                return;
+            }
+            dealerGstOpenPdf(dealerGstBuildExportHtml(rows, 'GST Invoice Dealer Report'));
+        });
+    }
+
+    if (document.readyState === 'complete') {
+        bootDealerGstInvoiceReport();
+    } else {
+        window.addEventListener('load', bootDealerGstInvoiceReport);
+    }
+</script>
+
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-month-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #3730a3;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            margin-left: auto;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-table-search {
+            min-width: 200px;
+            max-width: 260px;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-search-input {
+            height: 38px !important;
+            border-radius: 8px !important;
+            border: 1.5px solid #cbd5e1 !important;
+            background: #fff !important;
+            background-image: none !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            padding: 0 12px !important;
+            cursor: text !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page #dealerGstInvoiceTable.vm-opr-data-table {
+            min-width: 1600px;
+            width: 100%;
+            font-size: 14px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page #dealerGstInvoiceTable thead th,
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page #dealerGstInvoiceTable tbody td {
+            font-size: 14px !important;
+            vertical-align: middle !important;
+            white-space: nowrap;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page #dealerGstInvoiceTable tbody td.vm-opr-table-empty {
+            white-space: normal !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-print-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 1px solid #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            text-decoration: none !important;
+            white-space: nowrap;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-print-btn:hover {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-total-cell {
+            font-weight: 700 !important;
+            color: #0f172a !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-radiant-record-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: #f1f5f9;
+            color: #334155;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-export-group {
+            gap: 8px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-export-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 7px !important;
+            min-height: 38px !important;
+            height: 38px !important;
+            padding: 0 14px !important;
+            border-radius: 10px !important;
+            font-size: 14px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.01em !important;
+            cursor: pointer !important;
+            transition: all 0.18s ease !important;
+            border-width: 1.5px !important;
+            border-style: solid !important;
+            white-space: nowrap !important;
+            flex: 0 0 auto !important;
+            width: auto !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-export-btn i {
+            font-size: 16px !important;
+            line-height: 1 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-export-btn--excel {
+            border-color: #86efac !important;
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%) !important;
+            color: #047857 !important;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.1) !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-export-btn--excel i {
+            color: #16a34a !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-export-btn--excel:hover {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+            border-color: #4ade80 !important;
+            color: #065f46 !important;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.18) !important;
+            transform: translateY(-1px);
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-export-btn--pdf {
+            border-color: #fca5a5 !important;
+            background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%) !important;
+            color: #dc2626 !important;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1) !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-export-btn--pdf i {
+            color: #ef4444 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-export-btn--pdf:hover {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+            border-color: #f87171 !important;
+            color: #b91c1c !important;
+            box-shadow: 0 4px 14px rgba(220, 38, 38, 0.18) !important;
+            transform: translateY(-1px);
+        }
+
+        @@media (max-width: 991px) {
+            body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dmt-toolbar-head--one-line {
+                flex-wrap: wrap !important;
+                row-gap: 8px !important;
+            }
+
+            body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-month-badge {
+                margin-left: 0 !important;
+            }
+
+            body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-export-group {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                width: auto !important;
+            }
+
+            body.saas-admin-ui section.content.saas-dealer-gst-invoice-page .vm-dealer-gst-export-btn {
+                min-height: 36px !important;
+                height: 36px !important;
+                padding: 0 12px !important;
+            }
+        }
+    </style>
+}

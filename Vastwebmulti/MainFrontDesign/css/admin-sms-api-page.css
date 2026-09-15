@@ -1,7 +1,7 @@
 /* ============================================================
    admin-sms-api-page.css
    Modern UI for ADMIN/Home/SMSAPI (matches Email_Security shell)
-   v23
+   v43
    ============================================================ */
 
 body.saas-admin-ui .SMSAPI_Page {
@@ -152,42 +152,71 @@ body.saas-admin-ui .SMSAPI_Page .vm-ft-layout {
     padding: 0 !important;
 }
 
-/* ── Grid split: left col 1 | right col 2 (main OR template) ── */
-body.saas-admin-ui section.content.SMSAPI_Page .sa-sms-split {
-    display: grid !important;
-    grid-template-columns: minmax(280px, 34%) minmax(0, 1fr) !important;
-    grid-template-rows: auto !important;
-    align-items: start !important;
-    gap: 12px !important;
+/* ── Layout: Email_Security shell (vm-ft-layout 34% / 66%) ── */
+body.saas-admin-ui .SMSAPI_Page .vm-ft-layout-wrap {
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
     float: none !important;
-    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
 }
 
-body.saas-admin-ui section.content.SMSAPI_Page .sa-sms-split__left {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    float: none !important;
-    padding: 0 8px 0 0 !important;
-    box-sizing: border-box !important;
-}
-
-body.saas-admin-ui section.content.SMSAPI_Page #saMainRightCol,
-body.saas-admin-ui section.content.SMSAPI_Page #saTemplateRightCol {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    float: none !important;
+body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
+    display: grid !important;
+    grid-template-columns: minmax(280px, 34%) minmax(0, 1fr) !important;
+    grid-template-rows: auto !important;
+    align-items: stretch !important;
+    margin: 0 !important;
     padding: 0 !important;
-    box-sizing: border-box !important;
-    align-self: stretch !important;
+    gap: 12px !important;
+    width: 100% !important;
+    float: none !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .vm-ft-layout.vm-ft-layout--full::before,
+body.saas-admin-ui .SMSAPI_Page .vm-ft-layout.vm-ft-layout--full::after {
+    display: none !important;
+    content: none !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-form-col,
+body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .col-md-4.vm-ft-form-col,
+body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .left-table,
+body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-history-col,
+body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .col-md-8.vm-ft-history-col,
+body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .fund-transfer-main-admin.vm-ft-history-col {
+    flex: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    float: none !important;
+    clear: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .vm-ft-form-col {
+    padding-right: 0 !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .vm-ft-history-col {
+    padding-left: 0 !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .vm-ft-form-col .vm-ft-form-card,
+body.saas-admin-ui .SMSAPI_Page .vm-ft-history-col .vm-ft-history-panel {
+    flex: 1 1 auto !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
 }
 
 body.saas-admin-ui section.content.SMSAPI_Page #saTemplateRightCol {
@@ -210,6 +239,12 @@ body.saas-admin-ui section.content.SMSAPI_Page:not(.sa-template-view) #saMainRig
     flex-direction: column !important;
     min-height: 0 !important;
     height: auto !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .sa-right-col-inner {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
 }
 
 body.saas-admin-ui section.content.SMSAPI_Page #right_tab1,
@@ -278,8 +313,8 @@ body.saas-admin-ui .SMSAPI_Page.sa-template-view .vm-ft-form-col .vm-ft-form-car
     min-height: 0 !important;
 }
 
-body.saas-admin-ui .SMSAPI_Page .sa-sms-split__right > .sa-right-panel > .vm-ft-history-panel,
-body.saas-admin-ui .SMSAPI_Page .sa-sms-split__right > .sa-right-panel > .sa-template-panel-card {
+body.saas-admin-ui .SMSAPI_Page .sa-right-col-inner > .sa-right-panel > .vm-ft-history-panel,
+body.saas-admin-ui .SMSAPI_Page .sa-right-col-inner > .sa-right-panel > .sa-template-panel-card {
     flex: 1 1 auto !important;
     min-height: 0 !important;
     height: 100% !important;
@@ -287,24 +322,139 @@ body.saas-admin-ui .SMSAPI_Page .sa-sms-split__right > .sa-right-panel > .sa-tem
     float: none !important;
 }
 
-/* Stack on phone — duplicated in @media (max-width: 991px) at file end for tablet too */
-@media (max-width: 767px) {
-    body.saas-admin-ui section.content.SMSAPI_Page .sa-sms-split {
-        display: flex !important;
-        flex-direction: column !important;
-        grid-template-columns: none !important;
-    }
+/* Left au-tabs (Email_Security style) */
+body.saas-admin-ui .SMSAPI_Page .head-sms .au-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 12px 0;
+    border-bottom: 1.5px solid #e2e8f0;
+    margin: 0;
+}
 
-    body.saas-admin-ui section.content.SMSAPI_Page .sa-sms-split__left,
-    body.saas-admin-ui section.content.SMSAPI_Page #saMainRightCol,
-    body.saas-admin-ui section.content.SMSAPI_Page #saTemplateRightCol {
-        grid-column: auto !important;
-        grid-row: auto !important;
-        flex: 0 0 100% !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 0 !important;
-    }
+body.saas-admin-ui .SMSAPI_Page .head-sms .au-tab-btn {
+    flex: 1;
+    width: 100% !important;
+    height: 34px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px 8px 0 0 !important;
+    background: #f8fafc !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #64748b !important;
+    cursor: pointer;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    padding: 0 8px !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .head-sms .au-tab-btn.is-active,
+body.saas-admin-ui .SMSAPI_Page .head-sms .sa-left-tab-btn.is-active {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    border-color: #2563eb !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .smsapi-first .sa-left-tab-pane {
+    display: none !important;
+    padding: 6px 8px !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .smsapi-first .sa-left-tab-pane.is-active {
+    display: block !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .smsapi-first .sa-left-tab-pane#tab-5 {
+    padding: 4px 6px !important;
+}
+
+/* Right es-right-tabs toolbar row */
+body.saas-admin-ui .SMSAPI_Page .es-right-toolbar .sa-right-toolbar__row {
+    display: flex !important;
+    align-items: flex-end !important;
+    gap: 8px !important;
+    padding: 10px 12px 0 !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .es-right-toolbar .sa-sms-right-tabs {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .es-right-toolbar .sa-right-toolbar__api-btn {
+    flex-shrink: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page ul.es-right-tabs.sa-sms-right-tabs li,
+body.saas-admin-ui .SMSAPI_Page ul.tabs2.es-right-tabs li {
+    flex: 1 !important;
+    float: none !important;
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: 34px !important;
+    padding: 0 8px !important;
+    margin: 0 !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px 8px 0 0 !important;
+    background: #f8fafc !important;
+    color: #64748b !important;
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+body.saas-admin-ui .SMSAPI_Page ul.es-right-tabs.sa-sms-right-tabs li.current,
+body.saas-admin-ui .SMSAPI_Page ul.es-right-tabs.sa-sms-right-tabs li.current2,
+body.saas-admin-ui .SMSAPI_Page ul.tabs2.es-right-tabs li.current,
+body.saas-admin-ui .SMSAPI_Page ul.tabs2.es-right-tabs li.current2 {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    border-color: #2563eb !important;
+    border-bottom: 1.5px solid #2563eb !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page ul.es-right-tabs.sa-sms-right-tabs li img,
+body.saas-admin-ui .SMSAPI_Page ul.tabs2.es-right-tabs li img {
+    display: none !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .select2-container.sa-sms-select2-dropdown,
+body.saas-admin-ui .select2-dropdown.sa-sms-select2-dropdown {
+    z-index: 200120 !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .select2-container--open {
+    z-index: 200110 !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page #defaultModal .select2-container {
+    width: 100% !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page #defaultModal .select2-selection--single {
+    height: 38px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page #defaultModal .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 12px !important;
+    font-size: 0.78rem !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page #defaultModal .select2-selection__arrow {
+    height: 36px !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .custom-table-responsive {
@@ -496,11 +646,15 @@ body.saas-admin-ui .SMSAPI_Page .head-sms ul.tabs2 li.tab-link2.current2 {
 
 body.saas-admin-ui .SMSAPI_Page .smsapi-first .tab-content2 {
     display: none !important;
-    padding: var(--sa-sms-space-md) !important;
+    padding: 6px 8px !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .smsapi-first .tab-content2.current2 {
     display: block !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .smsapi-first .tab-content2#tab-5 {
+    padding: 4px 6px !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .sa-right-tab-body > .tab-content,
@@ -698,7 +852,7 @@ body.saas-admin-ui .SMSAPI_Page .smsapi-first label {
 
 body.saas-admin-ui .SMSAPI_Page .smsapi-first .form-control,
 body.saas-admin-ui .SMSAPI_Page .smsapi-first .searchInput,
-body.saas-admin-ui .SMSAPI_Page .smsapi-first select,
+body.saas-admin-ui .SMSAPI_Page .smsapi-first select:not(.sa-priority-input),
 body.saas-admin-ui .SMSAPI_Page .smsapi-first textarea,
 body.saas-admin-ui .SMSAPI_Page .smsapi-first input[type="text"] {
     height: 34px !important;
@@ -719,21 +873,36 @@ body.saas-admin-ui .SMSAPI_Page .smsapi-first textarea {
 body.saas-admin-ui .SMSAPI_Page #gridtbl,
 body.saas-admin-ui .SMSAPI_Page .sa-priority-table {
     width: 100% !important;
-    min-width: 540px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
     margin: 0 !important;
-    font-size: 0.76rem !important;
-    border-collapse: separate !important;
+    font-size: 0.72rem !important;
+    border-collapse: collapse !important;
     border-spacing: 0 !important;
+    table-layout: fixed !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .sa-priority-table thead th:nth-child(1) {
+    width: 36% !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .sa-priority-table thead th:nth-child(2),
+body.saas-admin-ui .SMSAPI_Page .sa-priority-table thead th:nth-child(3) {
+    width: 18% !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .sa-priority-table thead th:nth-child(4) {
+    width: 28% !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .sa-priority-shell {
-    padding: var(--sa-sms-space-md) !important;
+    padding: 6px 8px !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .sa-priority-table-wrap {
     border: 1px solid #e2e8f0 !important;
-    border-radius: 12px !important;
-    overflow-x: auto !important;
+    border-radius: 10px !important;
+    overflow-x: hidden !important;
     overflow-y: visible !important;
     background: #fff !important;
     max-width: 100% !important;
@@ -742,20 +911,22 @@ body.saas-admin-ui .SMSAPI_Page .sa-priority-table-wrap {
 body.saas-admin-ui .SMSAPI_Page .sa-priority-table thead th {
     background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
     color: #475569 !important;
-    font-size: 0.68rem !important;
+    font-size: 0.62rem !important;
     font-weight: 800 !important;
     text-transform: uppercase !important;
-    border-bottom: 1.5px solid #e2e8f0 !important;
-    padding: 10px 8px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding: 6px 4px !important;
     position: sticky;
     top: 0;
     z-index: 1;
+    line-height: 1.2 !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .sa-priority-table tbody td {
     border-bottom: 1px solid #eef2f7 !important;
-    padding: 10px 8px !important;
+    padding: 4px 4px !important;
     vertical-align: middle !important;
+    line-height: 1.2 !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .sa-priority-row.is-editing {
@@ -765,31 +936,72 @@ body.saas-admin-ui .SMSAPI_Page .sa-priority-row.is-editing {
 body.saas-admin-ui .SMSAPI_Page .sa-priority-label {
     font-weight: 700 !important;
     color: #0f172a !important;
+    font-size: 0.72rem !important;
+    line-height: 1.25 !important;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .SMSAPI_Page .sa-priority-cell {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 24px !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .sa-priority-badge {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-width: 28px !important;
-    height: 28px !important;
-    padding: 0 8px !important;
+    min-width: 22px !important;
+    height: 22px !important;
+    padding: 0 6px !important;
     border-radius: 999px !important;
     background: #eff6ff !important;
     color: #1d4ed8 !important;
     font-weight: 800 !important;
-    font-size: 0.74rem !important;
+    font-size: 0.68rem !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .sa-priority-input {
-    min-width: 72px !important;
-    height: 34px !important;
-    padding: 4px 8px !important;
+    width: 46px !important;
+    min-width: 46px !important;
+    max-width: 100% !important;
+    height: 26px !important;
+    min-height: 26px !important;
+    padding: 2px 4px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    background: #fff !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
 }
 
+body.saas-admin-ui .SMSAPI_Page .smsapi-first select.sa-priority-field-edit {
+    -webkit-appearance: menulist !important;
+    appearance: menulist !important;
+    background: #fff !important;
+    position: static !important;
+    z-index: auto !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .sa-priority-row:not(.is-editing) select.sa-priority-field-edit,
 body.saas-admin-ui .SMSAPI_Page .sa-priority-row:not(.is-editing) .sa-priority-field-edit,
 body.saas-admin-ui .SMSAPI_Page .sa-priority-row:not(.is-editing) .sa-priority-action-edit {
     display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .sa-priority-row:not(.is-editing) .sa-priority-view {
+    display: inline-flex !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .sa-priority-row:not(.is-editing) .sa-priority-action-view {
@@ -801,8 +1013,11 @@ body.saas-admin-ui .SMSAPI_Page .sa-priority-row.is-editing .sa-priority-action-
     display: none !important;
 }
 
+body.saas-admin-ui .SMSAPI_Page .sa-priority-row.is-editing select.sa-priority-field-edit,
 body.saas-admin-ui .SMSAPI_Page .sa-priority-row.is-editing .sa-priority-field-edit {
     display: block !important;
+    visibility: visible !important;
+    height: 26px !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .sa-priority-row.is-editing .sa-priority-action-edit {
@@ -811,16 +1026,19 @@ body.saas-admin-ui .SMSAPI_Page .sa-priority-row.is-editing .sa-priority-action-
 
 body.saas-admin-ui .SMSAPI_Page .sa-priority-actions {
     white-space: nowrap !important;
-    min-width: 128px !important;
-    text-align: right !important;
+    min-width: 0 !important;
+    text-align: center !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .sa-priority-action-group {
     display: inline-flex !important;
     align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 6px !important;
-    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .sa-priority-edit-actions {
@@ -840,12 +1058,12 @@ body.saas-admin-ui .SMSAPI_Page .sa-priority-cancel-btn {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 6px !important;
+    gap: 4px !important;
     min-width: 0 !important;
-    height: 34px !important;
-    padding: 0 12px !important;
+    height: 26px !important;
+    padding: 0 8px !important;
     border-radius: 999px !important;
-    font-size: 0.72rem !important;
+    font-size: 0.64rem !important;
     font-weight: 700 !important;
     line-height: 1 !important;
     cursor: pointer !important;
@@ -905,17 +1123,33 @@ body.saas-admin-ui .SMSAPI_Page .sa-priority-cancel-btn:hover {
 body.saas-admin-ui .SMSAPI_Page #gridtbl thead th {
     background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
     color: #475569 !important;
-    font-size: 0.68rem !important;
+    font-size: 0.62rem !important;
     font-weight: 800 !important;
     text-transform: uppercase !important;
     border: 1px solid #e2e8f0 !important;
-    padding: 9px 8px !important;
+    padding: 6px 4px !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page #gridtbl tbody td {
     border: 1px solid #e2e8f0 !important;
-    padding: 8px !important;
+    padding: 4px !important;
     vertical-align: middle !important;
+}
+
+/* Override legacy Dashcustom rules on priority table */
+body.saas-admin-ui .SMSAPI_Page.smsapi-pages .smsapi-first #gridtbl select.sa-priority-input {
+    border: 1px solid #cbd5e1 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    height: 26px !important;
+    width: 46px !important;
+    position: static !important;
+    z-index: auto !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page.smsapi-pages .smsapi-first #gridtbl select.sa-priority-input.sa-priority-field-edit {
+    -webkit-appearance: menulist !important;
+    appearance: menulist !important;
 }
 
 body.saas-admin-ui .SMSAPI_Page .switch-edit-button,
@@ -2779,7 +3013,7 @@ body.saas-admin-ui .SMSAPI_Page #ApiSettings #tab-4 .sa-api-settings-table-wrap 
         --sa-sms-panel-height: 560px;
     }
 
-    body.saas-admin-ui section.content.SMSAPI_Page .sa-sms-split {
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
         display: grid !important;
         grid-template-columns: minmax(260px, 34%) minmax(0, 1fr) !important;
         gap: 10px !important;
@@ -2817,7 +3051,7 @@ body.saas-admin-ui .SMSAPI_Page #ApiSettings #tab-4 .sa-api-settings-table-wrap 
         float: none !important;
     }
 
-    body.saas-admin-ui section.content.SMSAPI_Page .sa-sms-split {
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
         display: flex !important;
         flex-direction: column !important;
         flex-wrap: nowrap !important;
@@ -2827,13 +3061,17 @@ body.saas-admin-ui .SMSAPI_Page #ApiSettings #tab-4 .sa-api-settings-table-wrap 
         max-width: 100% !important;
     }
 
-    body.saas-admin-ui section.content.SMSAPI_Page .sa-sms-split__left,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-form-col,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .col-md-4.vm-ft-form-col,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .left-table,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-history-col,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .col-md-8.vm-ft-history-col,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .fund-transfer-main-admin.vm-ft-history-col,
     body.saas-admin-ui section.content.SMSAPI_Page #saMainRightCol,
     body.saas-admin-ui section.content.SMSAPI_Page #saTemplateRightCol,
     body.saas-admin-ui .SMSAPI_Page .vm-ft-form-col,
     body.saas-admin-ui .SMSAPI_Page .vm-ft-history-col,
-    body.saas-admin-ui .SMSAPI_Page .sa-right-col-wrap,
-    body.saas-admin-ui .SMSAPI_Page .left-rowss,
+    body.saas-admin-ui .SMSAPI_Page .left-table,
     body.saas-admin-ui .SMSAPI_Page .fund-trasfer-left,
     body.saas-admin-ui .SMSAPI_Page .fund-trasfer-right {
         grid-column: auto !important;
@@ -2896,7 +3134,7 @@ body.saas-admin-ui .SMSAPI_Page #ApiSettings #tab-4 .sa-api-settings-table-wrap 
 
     body.saas-admin-ui .SMSAPI_Page .sa-priority-table,
     body.saas-admin-ui .SMSAPI_Page #gridtbl {
-        min-width: 540px !important;
+        min-width: 0 !important;
     }
 
     body.saas-admin-ui .SMSAPI_Page .sa-api-settings-table,
@@ -3083,7 +3321,7 @@ body.saas-admin-ui .SMSAPI_Page .sa-right-tabs li.tab-link {
     body.saas-admin-ui .SMSAPI_Page .sa-priority-table,
     body.saas-admin-ui .SMSAPI_Page #gridtbl,
     body.saas-admin-ui .SMSAPI_Page #tbldata {
-        min-width: 560px !important;
+        min-width: 0 !important;
     }
 
     body.saas-admin-ui .SMSAPI_Page .sa-priority-edit-btn,
@@ -3209,8 +3447,8 @@ body.saas-admin-ui .sa-api-modal .saas-admin-modal-btn--success:not(:disabled):h
 }
 
 /* Modal API Type select — select2 inside Bootstrap modal */
-body.saas-admin-ui #defaultModal .sa-modal-select,
-body.saas-admin-ui #defaultModal select#sms_type {
+body.saas-admin-ui #defaultModal .sa-modal-select:not(.select2-hidden-accessible),
+body.saas-admin-ui #defaultModal select#sms_type:not(.select2-hidden-accessible) {
     height: 38px !important;
     border: 1.5px solid #e2e8f0 !important;
     border-radius: 10px !important;
@@ -3220,13 +3458,59 @@ body.saas-admin-ui #defaultModal select#sms_type {
     padding: 4px 10px !important;
     width: 100% !important;
     cursor: pointer !important;
-    appearance: auto !important;
-    -webkit-appearance: menulist !important;
+}
+
+body.saas-admin-ui #defaultModal select#sms_type.select2-hidden-accessible {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+body.saas-admin-ui #defaultModal.vm-admin-select2-open.modal,
+body.saas-admin-ui #defaultModal.sa-sms-modal-select2-open.modal,
+body.saas-admin-ui #defaultModal.vm-admin-select2-open .modal-dialog,
+body.saas-admin-ui #defaultModal.sa-sms-modal-select2-open .modal-dialog,
+body.saas-admin-ui #defaultModal.vm-admin-select2-open .modal-content,
+body.saas-admin-ui #defaultModal.sa-sms-modal-select2-open .modal-content,
+body.saas-admin-ui #defaultModal.vm-admin-select2-open .saas-admin-modal-body,
+body.saas-admin-ui #defaultModal.sa-sms-modal-select2-open .saas-admin-modal-body,
+body.saas-admin-ui #defaultModal.vm-admin-select2-open .modal-body,
+body.saas-admin-ui #defaultModal.sa-sms-modal-select2-open .modal-body {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui #defaultModal .modal-body,
+body.saas-admin-ui #defaultModal .saas-admin-modal-body {
+    position: relative !important;
+    z-index: 2 !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui #defaultModal .modal-footer,
+body.saas-admin-ui #defaultModal .saas-admin-modal-footer {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+body.saas-admin-ui #defaultModal .sa-modal-select-wrap {
+    position: relative !important;
+    z-index: 5 !important;
 }
 
 body.saas-admin-ui #defaultModal .select2-container {
     width: 100% !important;
-    z-index: 1060 !important;
+    z-index: 10 !important;
+}
+
+body.saas-admin-ui #defaultModal .select2-container--open {
+    z-index: 200130 !important;
 }
 
 body.saas-admin-ui #defaultModal .select2-container--default .select2-selection--single {
@@ -3255,12 +3539,23 @@ body.saas-admin-ui #defaultModal .select2-container--default.select2-container--
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
 }
 
-body.saas-admin-ui #defaultModal .select2-dropdown {
+body.saas-admin-ui #defaultModal .select2-dropdown,
+body.saas-admin-ui #defaultModal .modal-content > .select2-dropdown,
+body.saas-admin-ui #defaultModal .select2-dropdown.sa-sms-select2-dropdown,
+body.saas-admin-ui #defaultModal .select2-dropdown.vm-csp-select2-dropdown {
     border: 1.5px solid #e2e8f0 !important;
     border-radius: 10px !important;
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14) !important;
-    z-index: 10650 !important;
+    z-index: 200140 !important;
     overflow: hidden !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui #defaultModal.sa-sms-modal-select2-open .select2-dropdown,
+body.saas-admin-ui #defaultModal.vm-admin-select2-open .select2-dropdown {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 body.saas-admin-ui #defaultModal .select2-results__option {
@@ -3503,8 +3798,9 @@ body.saas-admin-ui #defaultModal .select2-results__option--highlighted[aria-sele
         overflow-y: auto !important;
     }
 
-    body.saas-admin-ui section.content.SMSAPI_Page .sa-sms-split__right,
-    body.saas-admin-ui section.content.SMSAPI_Page .sa-sms-main-right {
+    body.saas-admin-ui section.content.SMSAPI_Page .sa-right-col-inner,
+    body.saas-admin-ui section.content.SMSAPI_Page #saMainRightCol,
+    body.saas-admin-ui section.content.SMSAPI_Page #saTemplateRightCol {
         width: 100% !important;
         max-width: 100% !important;
         min-width: 0 !important;
@@ -3615,4 +3911,58 @@ body.saas-admin-ui #defaultModal .select2-results__option--highlighted[aria-sele
         padding: 0 !important;
         border-bottom: none !important;
     }
+}
+
+/* Priority table — view/edit toggle (override legacy Dashcustom) */
+body.saas-admin-ui section.content.SMSAPI_Page.smsapi-pages .smsapi-first #gridtbl tr.sa-priority-row:not(.is-editing) select.sa-priority-field-edit {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    left: -9999px !important;
+}
+
+body.saas-admin-ui section.content.SMSAPI_Page.smsapi-pages .smsapi-first #gridtbl tr.sa-priority-row.is-editing select.sa-priority-field-edit {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    left: auto !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    width: 46px !important;
+    height: 26px !important;
+    min-height: 26px !important;
+}
+
+body.saas-admin-ui section.content.SMSAPI_Page.smsapi-pages .smsapi-first #gridtbl tr.sa-priority-row:not(.is-editing) .sa-priority-action-edit {
+    display: none !important;
+}
+
+body.saas-admin-ui section.content.SMSAPI_Page.smsapi-pages .smsapi-first #gridtbl tr.sa-priority-row.is-editing .sa-priority-view,
+body.saas-admin-ui section.content.SMSAPI_Page.smsapi-pages .smsapi-first #gridtbl tr.sa-priority-row.is-editing .sa-priority-action-view {
+    display: none !important;
+}
+
+/* Add SMS API modal — Select2 dropdown must stay above modal footer (last override) */
+body.saas-admin-ui.modal-open #defaultModal.sa-api-modal .modal-content > .select2-container.select2-container--open,
+body.saas-admin-ui.modal-open #defaultModal.sa-api-modal .modal-content .select2-container.select2-container--open {
+    z-index: 200130 !important;
+}
+
+body.saas-admin-ui.modal-open #defaultModal.sa-api-modal .modal-content > .select2-dropdown,
+body.saas-admin-ui.modal-open #defaultModal.sa-api-modal .select2-dropdown.sa-sms-select2-dropdown,
+body.saas-admin-ui.modal-open #defaultModal.sa-api-modal .select2-dropdown.vm-csp-select2-dropdown {
+    z-index: 200140 !important;
+}
+
+body.saas-admin-ui.modal-open #defaultModal.sa-api-modal.sa-sms-modal-select2-open .modal-content,
+body.saas-admin-ui.modal-open #defaultModal.sa-api-modal.vm-admin-select2-open .modal-content {
+    overflow: visible !important;
 }

@@ -1,314 +1,211 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.proc_Complaint_request_Result>
+
+@using System.Linq
+
 @{
+
     ViewBag.Title = "Complaint";
+
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
-}
-<link href="~/Swalalert/chatting.css" rel="stylesheet" />
 
-<style>
-    .body.admin-sendmassegeclass {
-    width: 100%;
-    float: left;
-}
-    .body.admin-sendmassegeclass .form-group {
-    margin-top: 0 !important;
-}
-    .admin-replymassage span.chat-img.img_cont_msg {
-    height: auto;
-    width: auto;float:left;
-}
-    .admin-replymassage span.chat-img.img_cont_msg img {
-    width: 44px;
-    height: 44px;border-radius:50%;
-}
-    .admin-replymassage span.chat-img.img_cont_msg p.rounded-circle.user_img_msg {
-    border-radius: 0 !important;
-    width: auto;
-    height: auto;
-    border: 0;
-    background: transparent;
-    font-weight: bold;
-    color: var(--main-bg-lcolor);
-}
-    .admin-replymassage span.chat-img.img_cont_msg p.rounded-circle.user_img_msg {
-    border-radius: 0 !important;
-    width: auto;
-    height: auto;
-    border: 0;
-    background: transparent;
-    font-weight: bold;
-    color: var(--main-bg-lcolor);
-}
-    .admin-replymassage .showrepalychat {
-    width: 48%;
-    margin-top: 0;
-    float: left;
-    height: auto;
-    margin-bottom: 0;
-    border-radius: 3px;
-    min-height: inherit;
-    margin-left: 40px;
-    margin-top:10px;
-    box-shadow: 0px 3px 5px 0px #555;
-}
-    .admin-replymassage .showrepalychat p {
-    color: #fff !important;font-size:14px;
-}
-    .admin-replymassage .showrepalychat span.msg_time {
-    position: static !important;
-    float: right;
-    color: #fff;
-    font-size: 14px;
-    width: 100%;
-    text-align: right;
-}
-    .admin-replymassage li.d-flex.justify-content-start.mb-4 {
-    display: block !important;
-}
-    .admin-replymassage .showrepalychat span.msg_time .fa.fa-clock-o {
-    position: relative;
-    left: -5px;
-    font-weight: 400;
-    font-size: 14px;
-}
-    .admin-replymassage .showrepalychat::before{content: "";
-width: 27px;right: 0px;left: -25px;top: 0;position: absolute;border-style: solid;border-width: 0 20px 15px 0;border-color: transparent var(--main-bg-lcolor) transparent transparent;
-    }
-    .admin-replymassage .showrepalychat{position:relative;}
-    .classmechatsent .img_cont_msg {
-    border: 0;border-radius: 0;width: auto;height: auto;
-}
-    .classmechatsent .img_cont_msg img {
-    height: 44px;width: 44px;border-radius: 50%;
-} 
-    .classmechatsent .img_cont_msg p.rounded-circle.user_img_msg {
-    border: 0;border-radius: 0 !important;width: auto;
-    height: auto;font-weight: bold;color: #555;
-    text-align: center;margin-bottom: 0;font-size: 14px;
-}
-    .classmechatsent .chat-body.clearfix.msg_cotainer_send {
-    width: 48%;border-radius: 3px;margin-right:40px;margin-top:10px;box-shadow: 0px 3px 5px 0px #555;
-} 
-    .classmechatsent .chat-body.clearfix.msg_cotainer_send .msg_time_send {
-    position: static !important;width: 100%;float: left;
-    text-align: right;font-size: 14px;
-}
-        .classmechatsent .chat-body.clearfix.msg_cotainer_send::before {
-            width: 27px;right: 0px;top: 0;position: absolute;
-            border-style: solid;
-            border-width: 0 20px 15px 0;
-            border-color: transparent transparent var(--main-bg-rcolor) transparent;
-            right: -18px;
-        }
-        .classmechatsent .chat-body.clearfix.msg_cotainer_send .msg_time_send, .classmechatsent .chat-body.clearfix.msg_cotainer_send p {
-            color: #fff;
-            font-size: 14px;
-        }
-        .classmechatsent .chat-body.clearfix.msg_cotainer_send .msg_time_send .fa.fa-clock-o {
-    position: relative;
-    left: -5px;
-    font-size: 14px;
-    font-weight: 400;
-}
-        .admin-replymassage .showrepalychat {
-    background: var(--main-bg-lcolor) !important;
-}
-        .classmechatsent .chat-body.clearfix.msg_cotainer_send {
-    background: var(--main-bg-rcolor);
-}
-        @@media screen and (max-width:766px){
-            .body.admin-sendmassegeclass ,.admin-replymassage .panel-body{
-    height: auto !important;
-}
-        }
-    @@media screen and (max-width:520px) {
-        .admin-replymassage .showrepalychat, .classmechatsent .chat-body.clearfix.msg_cotainer_send {
-            width: 76%;
-            float: left;
-        }
-        .body.admin-sendmassegeclass textarea {
-    height: 80px !important;
-}
-    }
-    @@media screen and (max-width:420px){
-        .admin-replymassage .showrepalychat {
-    margin-left: 20px;
-    
-}
-        .classmechatsent .chat-body.clearfix.msg_cotainer_send {
-    margin-right: 30px;
-    
-}
-        .classmechatsent .chat-body.clearfix.msg_cotainer_send, .admin-replymassage .showrepalychat {
-            width: 75%;
-        }
-        .header-sentmassegeclass .col-md-12 button span {
-    font-size: 16px !important;margin-left:0px !important;
-}
-        .header-sentmassegeclass .col-md-12 button .fa.fa-send-o {
-    font-size: 14px !important;
-    left: -5px !important;
-}
-        .header-sentmassegeclass .col-md-12 button {
-    padding: 4px 12px;
+    var messages = Model ?? Enumerable.Empty<Vastwebmulti.Models.proc_Complaint_request_Result>();
+
+    var openCount = messages.Count(x => x.sts == "Open");
+
 }
 
-    }
-</style>
 
-<section class="content">
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-support-pages-modern.css?v=14" rel="stylesheet" />
+
+
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-support-page saas-complaint-page saas-dealer-complaint-page">
+
     <div class="container-fluid">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Complaint</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);">Chat's</a></li>
-            </ul>
+        <div class="saas-acc-toolbar saas-pan-toolbar-unified" style="margin-bottom:16px;">
+
+            <ol class="saas-acc-breadcrumb">
+
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+
+                <li><a href="javascript:void(0);">Support</a></li>
+
+                <li>Chats</li>
+
+            </ol>
+
         </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
 
-        <div class="row clearfix">
-            <div class="col-md-4 header-sentmassegeclass">
-                <div class="card" style="margin-top:0px;background:#f5f5f5;">
 
-                    <div class="header" style="background-color: #dedddd; width: 100%; float: left; padding: 10px 15px; padding-bottom: 9px; border-top-left-radius: 3px; border-top-right-radius: 3px; ">
-                        <h2>
-                            <i class="fa fa-keyboard-o" aria-hidden="true" style="color:#555; font-size:14px;float:left;margin-right:5px;"></i>&nbsp;&nbsp;<span style="color:#555;float:left;font-size:14px;">Insert Complaint</span>
-                        </h2>
 
-                    </div>
-                    @using (Html.BeginForm("Complaint_insert", "Home", FormMethod.Post))
+        <button type="button" class="saas-complaint-mobile-toggle" id="saasDealerComplaintToggleCompose" aria-expanded="true">
+
+            <i class="fas fa-pen-to-square" aria-hidden="true"></i> Show / hide compose
+
+        </button>
+
+
+
+        <div class="saas-complaint-layout saas-dealer-complaint-layout">
+
+            <div class="saas-complaint-compose-card" id="saasDealerComplaintComposeCard">
+
+                <div class="saas-complaint-card-head">
+
+                    <i class="fas fa-keyboard" aria-hidden="true"></i> Insert complaint
+
+                </div>
+
+                <div class="saas-dealer-complaint-compose-body">
+
+                    @using (Html.BeginForm("Complaint_insert", "Home", FormMethod.Post, new { id = "dealerComplaintForm", @class = "saas-dealer-complaint-form" }))
+
                     {
-                        <div class="body admin-sendmassegeclass" style="height:80vh;">
-                            <div class="form-group" style="margin-top:22px;">
-                                <div class="">
-                                    <textarea id="message" name="message" class="form-control" style="height:189px; border:1px solid #1b171714;" required="" placeholder="Enter Message"></textarea>
 
-                                </div>
+                        @Html.AntiForgeryToken()
+
+                        <div class="saas-dealer-complaint-message-shell">
+
+                            <label class="saas-dealer-complaint-label" for="message">Message</label>
+
+                            <div class="saas-dealer-complaint-textarea-wrap">
+
+                                <textarea id="message" name="message" class="form-control saas-dealer-complaint-textarea" required="" maxlength="2000" placeholder="Type your complaint or message for admin..." autocomplete="off" rows="8"></textarea>
+
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button type="submit" class="btn  waves-effect" style="border:1px solid #c7c2c2;background:#dedddd;width:100%;height:auto;">
-                                        <i class="fa fa-send-o" style="font-size: 18px;top:2px;left: -13px;padding: 8px 8px 8px 8px;background: whitesmoke;border-radius: 35px;"></i>
-                                        <span style="top: 3px;font-weight: 600;font-size: 19px;text-transform: uppercase;">Insert Message</span>
-                                    </button>
-                                </div>
-                                <div class="col-xs-6">
-                                    <button type="reset" class="btn  waves-effect" style="border:1px solid #c7c2c2;background:#dedddd;width:100%;">
-                                        <i class="fa fa-eraser" style="top: 1px;"></i>
-                                        <span style="top:-2px;font-size: 14px;">Reset</span>
-                                    </button>
-                                </div>
-                                <div class="col-xs-6">
-                                    <a href="@Url.Action("Dashboard","Home")" class="btn  waves-effect" style="float:right;border:1px solid #c7c2c2;background:#dedddd;width:100%;">
-                                        <i class="fa fa-arrow-left" style="top:0px;color: #525050;"></i>
-                                        <span style="top:-2px;font-size: 14px;color:black;">Back</span>
-                                    </a>
-                                </div>
-                            </div>
-
-
-
 
                         </div>
+
+                        <div class="saas-dealer-complaint-actions">
+
+                            <button type="submit" class="saas-dealer-complaint-btn saas-dealer-complaint-btn--primary" id="dealerComplaintSendBtn">
+
+                                <i class="fas fa-paper-plane" aria-hidden="true"></i><span>Send message</span>
+
+                            </button>
+
+                            <div class="saas-dealer-complaint-actions-secondary">
+
+                                <button type="reset" class="saas-dealer-complaint-btn saas-dealer-complaint-btn--secondary">
+
+                                    <i class="fas fa-eraser" aria-hidden="true"></i><span>Reset</span>
+
+                                </button>
+
+                                <a href="@Url.Action("Dashboard", "Home")" class="saas-dealer-complaint-btn saas-dealer-complaint-btn--secondary">
+
+                                    <i class="fas fa-arrow-left" aria-hidden="true"></i><span>Back</span>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
                     }
+
                 </div>
+
             </div>
 
-            <div class="col-md-8 admin-replymassage admin-replymassage-second">
-
-                <div class="card" style="margin-top:0px;">
-                    <div class="panel-heading" style="border:0px solid #dddddd;background:#dedddd;color:#555;">
-                        <span class="fa fa-comments-o" style="color:#555;"></span> Chatting Details
-
-                    </div>
-                    <div class="panel-collapse collapse" style="display:block;">
-                        <div class="panel-body" style="height:424px;">
-                            <div class="card-body msg_card_body">
-                                <ul class="chat">
-
-                                    @foreach (var item in Model)
-                                    {
-
-                                        if (item.resdate != null)
-                                        {
-
-                                            <li class="d-flex justify-content-start mb-4">
-                                                <span class="chat-img img_cont_msg">
-                                                    <img src="../../images/reportimage/chatuserimage.png" />
-                                                    <p class="rounded-circle user_img_msg">Admin</p>
-                                                </span>
-                                                <div class="chat-body clearfix msg_cotainer fullbodydycolorbg showrepalychat">
-                                                    @*<div class="msg_time" style="border-bottom:none;">
-                                                        <p class="text-muted"><span class="fa fa-clock-o"></span>&nbsp;</p>
-                                                        <strong class="primary-font"></strong>
-                                                    </div>*@
-                                                    <p>
-                                                        @item.response
-
-                                                    </p>
-                                                    <span class="msg_time"><i class="fa fa-clock-o" style="color:#fff;" aria-hidden="true"></i>@item.resdate</span>
-                                                </div>
-                                            </li>
-                                        }
-                                        if (item.rdate != null)
-                                        {
-
-                                            <li class="d-flex justify-content-end mb-4 classmechatsent">
-                                                <div class="chat-body clearfix msg_cotainer_send">
-
-                                                    @if (item.sts == "Open")
-                                                    {
-                                                        <p>@item.complant </p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p>@item.complant </p>
-
-                                                    }
-                                                    <span class="msg_time_send"><i class="fa fa-clock-o" style="color:#fff;" aria-hidden="true"></i>@item.rdate</span>
-                                                    @*<div class="" style="border-bottom:none;">
-                                                        <strong class="primary-font"></strong> <p class="text-muted">
-                                                            <span class="fa fa-clock-o"></span>&nbsp;
-                                                        </p>
-                                                    </div>*@
-                                                </div>
-                                                <span class="img_cont_msg">
-                                                    <img src="../../images/reportimage/chatuserimage.png" />
-                                                    <p class="rounded-circle user_img_msg">You</p>
-                                                </span>
-
-                                            </li>
-                                        }
-
-                                    }
 
 
-                                </ul>
-                            </div>
-                        </div>
+            <div class="saas-complaint-chat-card">
 
-                    </div>
+                <div class="saas-complaint-card-head">
+
+                    <i class="fas fa-comments" aria-hidden="true"></i> Chatting details
+
+                    @if (openCount > 0)
+
+                    {
+
+                        <span class="saas-dealer-complaint-open-badge" id="dealerComplaintOpenBadge">@openCount open</span>
+
+                    }
+
+                    else
+
+                    {
+
+                        <span class="saas-dealer-complaint-open-badge is-zero" id="dealerComplaintOpenBadge" style="display:none;">0 open</span>
+
+                    }
 
                 </div>
+
+                <div class="saas-complaint-messages" id="dealerComplaintMessages">
+
+                    @if (!messages.Any())
+
+                    {
+
+                        <p class="saas-dealer-complaint-empty text-muted text-center">No messages yet. Send your first complaint using the form.</p>
+
+                    }
+
+                    @foreach (var item in messages)
+
+                    {
+
+                        if (item.rdate != null)
+
+                        {
+
+                            <div class="saas-chat-bubble saas-chat-bubble--in clearfix" data-id="@item.idno">
+
+                                <div class="saas-chat-bubble-head"><strong>You</strong> <i class="far fa-clock saas-chat-time-ico" aria-hidden="true"></i> @item.rdate.Value.ToString("dd-MM-yyyy HH:mm")@if (item.sts == "Open") { <span class="saas-dealer-complaint-status-open">Open</span> }</div>
+
+                                <div class="saas-chat-bubble-body">@item.complant</div>
+
+                            </div>
+
+                        }
+
+                        if (item.resdate != null)
+
+                        {
+
+                            <div class="saas-chat-bubble saas-chat-bubble--out clearfix" data-id="@item.idno">
+
+                                <div class="saas-chat-bubble-head"><strong>Admin</strong> <i class="far fa-clock saas-chat-time-ico" aria-hidden="true"></i> @item.resdate.Value.ToString("dd-MM-yyyy HH:mm")</div>
+
+                                <div class="saas-chat-bubble-body">@item.response</div>
+
+                            </div>
+
+                        }
+
+                    }
+
+                </div>
+
             </div>
 
         </div>
 
     </div>
+
 </section>
 
 
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+<script src="~/MainFrontDesign/js/dealer-complaint-chat.js?v=2"></script>
 
+<script>
+
+    window.dealerComplaintMessagesUrl = '@Url.Action("GetDealerComplaintMessages", "Home")';
+
+    window.dealerComplaintInsertUrl = '@Url.Action("Complaint_insert", "Home")';
+
+    window.dealerComplaintPageUrl = '@Url.Action("Complaint", "Home")';
+
+</script>
 
 

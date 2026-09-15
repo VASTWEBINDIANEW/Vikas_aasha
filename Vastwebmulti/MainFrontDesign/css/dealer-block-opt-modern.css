@@ -1,0 +1,1823 @@
+/* DEALER — Block Service (BlockOPT) */
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-filter-select {
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #fff !important;
+    background-image: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    padding: 0 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .select2-container.vm-block-opt-select2 .select2-selection--single {
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #fff !important;
+    background-image: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .select2-container.vm-block-opt-select2 .select2-selection__rendered,
+body.saas-admin-ui .saas-dealer-block-opt-page .select2-container.vm-block-opt-select2 .select2-selection__placeholder {
+    line-height: 34px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    padding-left: 10px !important;
+}
+
+body.saas-admin-ui .select2-dropdown.vm-block-opt-select2-drop .select2-search__field {
+    height: 36px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #fff !important;
+    background-image: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    padding: 0 10px !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-toolbar-filters {
+    display: inline-flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    margin-left: auto !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-field {
+    flex: 0 0 180px !important;
+    width: 180px !important;
+    min-width: 150px !important;
+    max-width: 200px !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-field--user {
+    flex: 0 0 200px !important;
+    width: 200px !important;
+    min-width: 160px !important;
+    max-width: 220px !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page #blockOptTable.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 720px !important;
+    font-size: 14px !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page #blockOptTable thead th,
+body.saas-admin-ui .saas-dealer-block-opt-page #blockOptTable tbody td {
+    font-size: 14px !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page #blockOptTable tbody td.vm-opr-table-empty {
+    white-space: normal !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-name-cell {
+    font-weight: 600 !important;
+    color: #0f172a !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-type-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-type-badge--default {
+    background: #f1f5f9;
+    color: #475569;
+    border-color: #e2e8f0;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-type-badge--prepaid {
+    background: #fdf2f8;
+    color: #9d174d;
+    border-color: #fbcfe8;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-type-badge--postpaid {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: #a7f3d0;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-type-badge--landline {
+    background: #eef2ff;
+    color: #3730a3;
+    border-color: #c7d2fe;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-type-badge--insurance {
+    background: #faf5ff;
+    color: #7e22ce;
+    border-color: #e9d5ff;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-type-badge--gas {
+    background: #fefce8;
+    color: #a16207;
+    border-color: #fde68a;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-type-badge--electricity {
+    background: #f0fdf4;
+    color: #15803d;
+    border-color: #bbf7d0;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-type-badge--dth {
+    background: #f8fafc;
+    color: #334155;
+    border-color: #cbd5e1;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-status-cell {
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 72px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    border: 1.5px solid transparent;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-status i {
+    font-size: 15px !important;
+    line-height: 1 !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-status--on {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-color: #6ee7b7;
+    color: #047857;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.12);
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-status--on:hover {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-color: #34d399;
+    color: #065f46;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-status--off {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-color: #fca5a5;
+    color: #b91c1c;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-status--off:hover {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-color: #f87171;
+    color: #991b1b;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-dealer-block-opt-export-group {
+    gap: 8px !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-dealer-block-opt-export-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 14px !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.01em !important;
+    cursor: pointer !important;
+    transition: all 0.18s ease !important;
+    border-width: 1.5px !important;
+    border-style: solid !important;
+    white-space: nowrap !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-dealer-block-opt-export-btn i {
+    font-size: 16px !important;
+    line-height: 1 !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-dealer-block-opt-export-btn--excel {
+    border-color: #86efac !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%) !important;
+    color: #047857 !important;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.1) !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-dealer-block-opt-export-btn--excel i {
+    color: #16a34a !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-dealer-block-opt-export-btn--excel:hover {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+    border-color: #4ade80 !important;
+    color: #065f46 !important;
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.18) !important;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-dealer-block-opt-export-btn--pdf {
+    border-color: #fca5a5 !important;
+    background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%) !important;
+    color: #dc2626 !important;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1) !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-dealer-block-opt-export-btn--pdf i {
+    color: #ef4444 !important;
+}
+
+body.saas-admin-ui .saas-dealer-block-opt-page .vm-dealer-block-opt-export-btn--pdf:hover {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+    border-color: #f87171 !important;
+    color: #b91c1c !important;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.18) !important;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-dealer-block-opt-page .vm-dmt-toolbar-head--one-line {
+        flex-wrap: wrap !important;
+        row-gap: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-toolbar-filters {
+        width: 100% !important;
+        margin-left: 0 !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-field,
+    body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-field--user {
+        flex: 1 1 calc(50% - 4px) !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: calc(50% - 4px) !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-block-opt-page .vm-block-opt-toolbar-filters .saas-acc-btn--search {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* DEALER — All Operator Info (BlockOPT matched shell) */
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-opr-page-shell {
+    padding-top: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-toolbar {
+    margin-bottom: 10px !important;
+    padding-bottom: 0 !important;
+    gap: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-toolbar-row {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-height: 42px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-breadcrumb {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    padding: 0 10px 0 0 !important;
+    border-right: 1px solid #e2e8f0 !important;
+    white-space: nowrap !important;
+    font-size: 0.78rem !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-main-card {
+    margin-top: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs-wrap {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs {
+    display: inline-flex !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    overflow: visible !important;
+    list-style: none !important;
+    min-width: max-content !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li {
+    float: none !important;
+    width: auto !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li > a {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    min-height: 34px !important;
+    padding: 6px 12px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    background: #f8fafc !important;
+    color: #64748b !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+    transition: all 0.16s ease !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li > a i {
+    font-size: 14px !important;
+    line-height: 1 !important;
+    color: inherit !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li > a img {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li > a br {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li.active > a,
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li.active > a:hover,
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li.active > a:focus {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    border-color: #2563eb !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22) !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body {
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body > .tab-pane {
+    padding: 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-slab-link {
+    margin: 0 0 10px !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-slab-link .btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    min-height: 34px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #bfdbfe !important;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+    color: #1d4ed8 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-table-wrap {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    overflow: auto !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.table {
+    width: 100% !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.table thead {
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%) !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.table.table-bordered {
+    border: 1px solid #cbd5e1 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.table thead th,
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.table thead td,
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.vm-opr-data-table thead th,
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.vm-opr-data-table thead td {
+    padding: 10px 8px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-bottom: 1.5px solid #94a3b8 !important;
+    color: #334155 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%) !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.table tbody td,
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.vm-opr-data-table tbody td {
+    padding: 9px 8px !important;
+    border: 1px solid #dbe4f0 !important;
+    color: #0f172a !important;
+    font-size: 14px !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.table tbody tr:nth-child(even) {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body table.table tbody tr:hover {
+    background: #eff6ff !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .activeinactive-dealer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .activebuttontable,
+body.saas-admin-ui .saas-dealer-all-operator-info-page .inactivebuttontable {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 68px !important;
+    padding: 4px 10px !important;
+    border-radius: 999px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    border: 1.5px solid transparent !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .activebuttontable {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%) !important;
+    border-color: #6ee7b7 !important;
+    color: #047857 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .inactivebuttontable {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+    border-color: #fca5a5 !important;
+    color: #b91c1c !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-table-search {
+    min-width: 200px !important;
+    max-width: 280px !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-table-search input {
+    height: 38px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #fff !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    padding: 0 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-record-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    min-height: 32px !important;
+    padding: 0 10px !important;
+    border-radius: 999px !important;
+    background: #eff6ff !important;
+    border: 1px solid #bfdbfe !important;
+    color: #1e40af !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body .rangeone_123 {
+    display: block !important;
+    font-weight: 700 !important;
+    color: #334155 !important;
+}
+
+body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tab-body .rangeone_123 + p {
+    margin: 2px 0 0 !important;
+    font-size: 12px !important;
+    color: #64748b !important;
+    font-weight: 600 !important;
+}
+
+@media (max-width: 991px) {
+    /* Override saas-dmt-report-page mobile rule that pushes breadcrumb below nav */
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-toolbar-row {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+        justify-content: flex-start !important;
+        gap: 8px !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-breadcrumb {
+        order: 1 !important;
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 0 8px !important;
+        border-right: none !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        font-size: 0.76rem !important;
+        line-height: 1.35 !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs-wrap {
+        order: 2 !important;
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        overflow: visible !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li {
+        width: 100% !important;
+        max-width: none !important;
+        flex: none !important;
+        margin: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li > a {
+        width: 100% !important;
+        min-height: 38px !important;
+        padding: 8px 10px !important;
+        font-size: 12px !important;
+        justify-content: flex-start !important;
+        white-space: normal !important;
+        text-align: left !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li > a span {
+        max-width: none !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        white-space: normal !important;
+        line-height: 1.2 !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dmt-table-panel__right {
+        width: 100% !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-table-search {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-breadcrumb {
+        font-size: 0.72rem !important;
+        padding-bottom: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs {
+        gap: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-all-operator-info-page .vm-dealer-opinfo-tabs > li > a {
+        min-height: 36px !important;
+        padding: 7px 8px !important;
+        font-size: 11px !important;
+        gap: 4px !important;
+    }
+}
+
+/* All Operator Info — thead borders override (must stay last) */
+body.saas-admin-ui section.content.saas-dealer-all-operator-info-page.saas-operator-report-page .vm-dealer-opinfo-tab-body table.vm-opr-data-table.table-bordered > thead > tr > th,
+body.saas-admin-ui section.content.saas-dealer-all-operator-info-page.saas-operator-report-page .vm-dealer-opinfo-tab-body table.vm-opr-data-table.table-bordered > thead > tr > td,
+body.saas-admin-ui section.content.saas-dealer-all-operator-info-page.saas-operator-report-page .vm-dealer-opinfo-tab-body table.table.table-bordered > thead > tr > th,
+body.saas-admin-ui section.content.saas-dealer-all-operator-info-page.saas-operator-report-page .vm-dealer-opinfo-tab-body table.table.table-bordered > thead > tr > td {
+    border: 1px solid #cbd5e1 !important;
+    border-bottom: 1.5px solid #94a3b8 !important;
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%) !important;
+}
+
+body.saas-admin-ui section.content.saas-dealer-all-operator-info-page.saas-operator-report-page .vm-dealer-opinfo-tab-body table.vm-opr-data-table.table-bordered > tbody > tr > td,
+body.saas-admin-ui section.content.saas-dealer-all-operator-info-page.saas-operator-report-page .vm-dealer-opinfo-tab-body table.table.table-bordered > tbody > tr > td {
+    border: 1px solid #dbe4f0 !important;
+}
+
+/* DEALER — Bank Info (BlockOPT matched shell) */
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-opr-page-shell {
+    padding-top: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-toolbar {
+    margin-bottom: 10px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-layout {
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-form-col,
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-list-col {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-form-card,
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-list-card {
+    margin-top: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-form-head {
+    border-bottom: 1px solid #e2e8f0 !important;
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-left-tabs,
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-right-tabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+    margin: 10px 12px 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    list-style: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-left-tabs > li,
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-right-tabs > li {
+    float: none !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-left-tabs > li > a,
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-right-tabs > li > a {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    width: 100% !important;
+    min-height: 36px !important;
+    padding: 7px 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    background: #f8fafc !important;
+    color: #64748b !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    transition: all 0.16s ease !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-left-tabs > li.active > a,
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-right-tabs > li.active > a {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    border-color: #2563eb !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22) !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-form-body,
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-tab-body {
+    padding: 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-pane {
+    display: none;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-pane.active,
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-pane.active.in {
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-field {
+    margin-bottom: 10px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-field label {
+    display: block !important;
+    margin: 0 0 4px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-field .form-control {
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #fff !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    padding: 0 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-form-footer {
+    display: flex !important;
+    justify-content: flex-end !important;
+    margin-top: 6px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-save-btn {
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
+    border-radius: 8px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-table-search {
+    min-width: 200px !important;
+    max-width: 280px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-table-search input {
+    height: 38px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #fff !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    padding: 0 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-record-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    min-height: 32px !important;
+    padding: 0 10px !important;
+    border-radius: 999px !important;
+    background: #eff6ff !important;
+    border: 1px solid #bfdbfe !important;
+    color: #1e40af !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-table-wrap {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    overflow: auto !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-table-wrap table.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 720px !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-table-wrap table.vm-opr-data-table thead th {
+    padding: 10px 8px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-bottom: 1.5px solid #94a3b8 !important;
+    color: #334155 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%) !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-table-wrap table.vm-opr-data-table tbody td {
+    padding: 9px 8px !important;
+    border: 1px solid #dbe4f0 !important;
+    color: #0f172a !important;
+    font-size: 14px !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-table-wrap table.vm-opr-data-table tbody tr:nth-child(even) {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-table-wrap table.vm-opr-data-table tbody tr:hover {
+    background: #eff6ff !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-empty-row td {
+    text-align: center !important;
+    color: #64748b !important;
+    font-weight: 600 !important;
+    padding: 24px 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-action-col {
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-del-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 34px !important;
+    height: 34px !important;
+    padding: 0 !important;
+    border: 1.5px solid #fecaca !important;
+    border-radius: 8px !important;
+    background: #fef2f2 !important;
+    color: #dc2626 !important;
+    cursor: pointer !important;
+    transition: all 0.16s ease !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-del-btn:hover:not(:disabled) {
+    background: #fee2e2 !important;
+    border-color: #f87171 !important;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-totals-panel {
+    margin: 0 12px 10px !important;
+}
+
+body.saas-admin-ui .saas-dealer-bank-info-page .vm-dmt-table-panel__right {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-form-col,
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-list-col {
+        width: 100% !important;
+        float: none !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-list-col {
+        margin-top: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-left-tabs,
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-right-tabs {
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-left-tabs > li,
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-right-tabs > li {
+        flex: 1 1 calc(50% - 3px) !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dmt-table-panel__right {
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-table-search {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-left-tabs > li > a,
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-right-tabs > li > a {
+        font-size: 11px !important;
+        padding: 7px 6px !important;
+        white-space: normal !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-bank-info-page .vm-dealer-bankinfo-save-btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
+
+/* DEALER — Send Fund (extends Bank Info shell) */
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-toolbar {
+    margin-bottom: 10px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form .col-md-12.col-sm-12.col-xs-12 {
+    float: none !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-bottom: 10px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form .col-md-12.col-sm-12.col-xs-12 > label {
+    display: block !important;
+    margin: 0 0 4px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form input[type="text"],
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form textarea,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form select,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form .form-control {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #fff !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    padding: 0 12px !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form textarea {
+    height: auto !important;
+    min-height: 72px !important;
+    padding: 8px 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form .custom-district::after {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form .old-cr {
+    margin-top: 4px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form .old-cr span {
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-submit-btn {
+    float: right !important;
+    margin-top: 6px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .mycriditblanceshow {
+    float: none !important;
+    width: 100% !important;
+    margin-top: 8px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .mycriditblanceshow table {
+    width: 100% !important;
+    margin: 0 !important;
+    border-collapse: collapse !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .mycriditblanceshow table tr td {
+    padding: 8px 12px !important;
+    border: 1px solid #dbe4f0 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .mycriditblanceshow table tr td:first-child {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .select2-container--default .select2-selection--single {
+    height: 38px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 12px !important;
+    font-size: 14px !important;
+    color: #0f172a !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .fund-transfer-form {
+    height: auto !important;
+    min-height: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-tab-body {
+    padding: 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-date-filter {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 0 10px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-date-fields {
+    flex: 1 1 240px !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-daterange {
+    display: flex !important;
+    align-items: stretch !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-daterange .form-control {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-daterange .input-group-addon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 10px !important;
+    background: #f8fafc !important;
+    border: 1.5px solid #cbd5e1 !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-date-search {
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page #loadingdiv {
+    margin: 10px 0 !important;
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-submit-btn,
+    body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-date-search {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
+
+/* Send Fund — 2x2 top row */
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-sendfund-top-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    margin-bottom: 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-sendfund-top-row > [class*="col-"] {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-card {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-height: 100% !important;
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06) !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-history-body,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-main,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-panels,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter__dates,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-right-date-filter {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .datepicker.vm-sendfund-dp,
+body.saas-admin-ui .saas-dealer-send-fund-page .datepicker.dropdown-menu {
+    z-index: 12000 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    padding: 12px !important;
+    background: #fff !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-left-tabs {
+    margin: 0 0 10px !important;
+    flex-shrink: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-pane {
+    float: none !important;
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-quick-form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-height: 100% !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-quick-field {
+    width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-quick-field label {
+    display: block !important;
+    margin: 0 0 4px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-quick-field .form-control,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-quick-field .select2-container--default .select2-selection--single {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #fff !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-quick-field textarea.form-control {
+    height: auto !important;
+    min-height: 72px !important;
+    padding: 8px 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-amount-word {
+    margin: 4px 0 0 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-quick-footer {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: auto !important;
+    padding-top: 4px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-quick-reset {
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #f8fafc !important;
+    color: #334155 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-quick-submit {
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
+    border-radius: 8px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .col-md-12 {
+    float: none !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-sendfund-bottom-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    margin-top: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-sendfund-bottom-row > [class*="col-"] {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form-card,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-list-card {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-height: 100% !important;
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06) !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form-body {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    padding: 12px !important;
+    background: #fff !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-bottom-tab-content {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-bottom-pane {
+    float: none !important;
+    width: 100% !important;
+    clear: both !important;
+    position: relative !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form {
+    display: block !important;
+    width: 100% !important;
+    float: none !important;
+    clear: both !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form::after,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-bottom-pane::after,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-bottom-tab-content::after {
+    content: "" !important;
+    display: table !important;
+    clear: both !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form .col-md-12,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form .col-sm-12,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form .col-xs-12 {
+    float: none !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    clear: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-tab-body {
+    padding: 12px !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page #sendFundLeftTabs,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-bottom-left-tabs {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    margin: 0 12px !important;
+    flex-shrink: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    list-style: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page #sendFundLeftTabs > li,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-bottom-left-tabs > li {
+    float: none !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page #sendFundLeftTabs > li > a,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-bottom-left-tabs > li > a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-height: 42px !important;
+    padding: 6px 4px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    background: #f8fafc !important;
+    color: #64748b !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page #sendFundLeftTabs > li > a > span,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-bottom-left-tabs > li > a > span {
+    display: block !important;
+    width: 100% !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page #sendFundLeftTabs > li.active > a,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-bottom-left-tabs > li.active > a {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    border-color: #2563eb !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22) !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page #sendFundRightTabs > li > a {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-align: center !important;
+    min-height: 42px !important;
+    padding: 6px 4px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page #sendFundRightTabs > li > a > span {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-right-date-filter {
+    margin: 0 12px 10px !important;
+    padding-top: 2px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-right-date-filter .form-control {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    height: 38px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form-body {
+    padding-bottom: 20px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form {
+    padding-bottom: 16px !important;
+    margin-bottom: 8px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-form-card {
+    padding-bottom: 4px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-card {
+    margin-top: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-table-col .vm-dealer-sendfund-top-card {
+    min-height: 100% !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .left-side-customnav .vm-dealer-bankinfo-left-tabs > li,
+body.saas-admin-ui .saas-dealer-send-fund-page .left-side-customnav .vm-dealer-bankinfo-right-tabs > li {
+    width: auto !important;
+    float: none !important;
+    text-align: inherit !important;
+    padding: 0 !important;
+    color: inherit !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body > .tab-content {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body > .tab-content.current {
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .tab-content-funtransferdealer,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .leftside-customenavsecond {
+    background: transparent !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .form-group,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .col-md-12 {
+    margin-bottom: 10px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .form-control,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body textarea,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body select {
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body textarea {
+    height: auto !important;
+    min-height: 72px !important;
+    padding: 8px 12px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .admin-andfundtransfer {
+    display: flex !important;
+    gap: 8px !important;
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .admin-andfundtransfer li {
+    flex: 1 1 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .admin-andfundtransfer li a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 34px !important;
+    padding: 6px 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    background: #f8fafc !important;
+    color: #64748b !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .admin-andfundtransfer li a.active-ar {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    border-color: #2563eb !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .admin-andfundtransfer li a::before {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .tabr {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .tabr.tab-activer {
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-main {
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-right-tabs {
+    margin-top: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-right-tabs > li {
+    float: none !important;
+    flex: 1 1 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-panels {
+    background: transparent !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-panels .panel0 {
+    padding-top: 10px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 0 12px !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter__item {
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter__retailer {
+    flex: 0 1 180px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter__dates {
+    flex: 1 1 280px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter__search {
+    flex: 0 0 auto !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter--purchase .vm-dealer-sendfund-history-filter__dates {
+    flex: 1 1 320px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter .form-control,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter .select2-container--default .select2-selection--single {
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    font-size: 14px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter .vm-dealer-sendfund-daterange {
+    display: flex !important;
+    align-items: stretch !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter .vm-dealer-sendfund-daterange .form-control {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter .vm-dealer-sendfund-daterange .input-group-addon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 10px !important;
+    background: #f8fafc !important;
+    border: 1.5px solid #cbd5e1 !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter .vm-dmt-filter-search-group,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-right-date-filter.vm-dmt-filter-search-group {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter .saas-acc-dp-field,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-right-date-filter .saas-acc-dp-field {
+    position: relative !important;
+    flex: 1 1 120px !important;
+    min-width: 120px !important;
+    max-width: 160px !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter .saas-acc-dp-input,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-right-date-filter .saas-acc-dp-input {
+    height: 38px !important;
+    min-height: 38px !important;
+    padding-left: 34px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter .saas-acc-dp-icon,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-right-date-filter .saas-acc-dp-icon {
+    position: absolute !important;
+    left: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 2 !important;
+    color: #64748b !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .datepicker.dropdown-menu,
+body.saas-admin-ui .saas-dealer-send-fund-page .datepicker.vm-admin-report-dp,
+body.saas-admin-ui.saas-dealer-send-fund-page .datepicker.dropdown-menu.vm-sendfund-dp,
+body.saas-admin-ui.saas-dealer-send-fund-page .datepicker.dropdown-menu.vm-admin-report-dp {
+    z-index: 12000 !important;
+    min-width: 296px !important;
+    width: 296px !important;
+    max-width: 296px !important;
+    overflow: visible !important;
+    padding: 8px !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui.saas-dealer-send-fund-page .datepicker.vm-sendfund-dp table,
+body.saas-admin-ui.saas-dealer-send-fund-page .datepicker.vm-admin-report-dp table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui.saas-dealer-send-fund-page .datepicker.vm-sendfund-dp table th,
+body.saas-admin-ui.saas-dealer-send-fund-page .datepicker.vm-sendfund-dp table td,
+body.saas-admin-ui.saas-dealer-send-fund-page .datepicker.vm-admin-report-dp table th,
+body.saas-admin-ui.saas-dealer-send-fund-page .datepicker.vm-admin-report-dp table td {
+    width: 14.2857% !important;
+    max-width: none !important;
+    padding: 4px 1px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .rightclass-sendfund .fundtransferrightclass .tab0,
+body.saas-admin-ui .saas-dealer-send-fund-page .rightclass-sendfund .fundtransferrightclass li.tab0 {
+    width: auto !important;
+    float: none !important;
+    border-right: 0 !important;
+    color: inherit !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .tab-content-funtransferdealer .form-group button {
+    min-height: 38px !important;
+    height: 38px !important;
+    border-radius: 8px !important;
+    padding: 0 16px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .tab-content-funtransferdealer .form-group button[type="submit"] {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    border: 1px solid #2563eb !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-body .tab-content-funtransferdealer .form-group button[type="reset"] {
+    background: #f1f5f9 !important;
+    border: 1.5px solid #cbd5e1 !important;
+    color: #334155 !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter__retailer,
+    body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter__dates,
+    body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter__search {
+        flex: 1 1 100% !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-history-filter__search .vm-dealer-sendfund-date-search {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-history-body .btn.bg-grey,
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-history-body button[type="submit"] {
+    min-height: 38px !important;
+    height: 38px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background: #f8fafc !important;
+    color: #334155 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-history-body table {
+    font-size: 14px !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-history-body table thead th {
+    padding: 10px 8px !important;
+    border: 1px solid #cbd5e1 !important;
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%) !important;
+    color: #334155 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-dealer-send-fund-page .vm-dealer-sendfund-top-history-body table tbody td {
+    padding: 9px 8px !important;
+    border: 1px solid #dbe4f0 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+

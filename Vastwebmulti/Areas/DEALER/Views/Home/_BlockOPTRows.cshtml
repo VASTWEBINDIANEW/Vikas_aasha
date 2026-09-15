@@ -1,0 +1,58 @@
+@model IEnumerable<Vastwebmulti.Models.select_operator_retailer_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.select_operator_retailer_Result>();
+    var i = 1;
+}
+
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var typeClass = "vm-block-opt-type-badge--default";
+        var operatorType = item.Operator_type ?? "";
+        if (operatorType == "PrePaid") { typeClass = "vm-block-opt-type-badge--prepaid"; }
+        else if (operatorType == "PostPaid") { typeClass = "vm-block-opt-type-badge--postpaid"; }
+        else if (operatorType == "Landline") { typeClass = "vm-block-opt-type-badge--landline"; }
+        else if (operatorType == "Insurance") { typeClass = "vm-block-opt-type-badge--insurance"; }
+        else if (operatorType == "Gas") { typeClass = "vm-block-opt-type-badge--gas"; }
+        else if (operatorType == "Electricity") { typeClass = "vm-block-opt-type-badge--electricity"; }
+        else if (operatorType == "DTH") { typeClass = "vm-block-opt-type-badge--dth"; }
+
+        var toggleUrl = Url.Action("BlockOPT", "Home", new { id = item.Operator_id, rem = item.RetailerId, opttype = item.Operator_type });
+        <tr class="vm-dmt-row vm-block-opt-row">
+            <td>@i</td>
+            <td class="vm-block-opt-name-cell">@(item.opt_name ?? "-")</td>
+            <td>
+                <span class="vm-block-opt-type-badge @typeClass">@operatorType</span>
+            </td>
+            <td class="vm-block-opt-status-cell">
+                @if (item.status)
+                {
+                    <a class="vm-block-opt-status vm-block-opt-status--on" href="@toggleUrl" title="Click to block this operator">
+                        <i class="fas fa-toggle-on" aria-hidden="true"></i>
+                        <span>ON</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="vm-block-opt-status vm-block-opt-status--off" href="@toggleUrl" title="Click to unblock this operator">
+                        <i class="fas fa-toggle-off" aria-hidden="true"></i>
+                        <span>OFF</span>
+                    </a>
+                }
+            </td>
+        </tr>
+        i++;
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="4" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-ban" aria-hidden="true"></i>
+            <span>Select a user and search to view block / unblock status.</span>
+        </td>
+    </tr>
+}

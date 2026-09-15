@@ -1,242 +1,529 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Dealer_upload_gst>
+@using System.Linq
 @{
-    ViewBag.Title = "uploadgst";
+    ViewBag.Title = "Upload GST";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.Dealer_upload_gst>();
+    var rowCount = rows.Count;
+    var defaultMonth = DateTime.Today.AddMonths(-1).ToString("MMMM");
+    var defaultYear = DateTime.Today.AddMonths(-1).Year.ToString();
+    var selectedMonth = (Request["Month"] ?? ViewBag.chkmonth ?? defaultMonth).ToString();
+    var selectedYear = (Request["Year"] ?? defaultYear).ToString();
 }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=31" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-incoming-report-modern.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-flight-report-modern.css?v=12" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
-<style>
-    section.content {
-        margin: 87px 0px 0 164px;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-incoming-report-page saas-dealer-flight-report-page saas-dealer-tds-report-page saas-dealer-sell-gst-page saas-dealer-upload-gst-page">
 
-    span {
-        color: #fff !important;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .second-design .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .inputpdfbu-retailer-second button {
-        border-color: #555 !important;
-    }
+        <div class="saas-acc-toolbar saas-pan-toolbar-unified saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head">
+                <ol class="saas-acc-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>GST Invoice</li>
+                    <li>Upload GST</li>
+                </ol>
+                <div class="vm-opr-page-nav">
+                    <nav class="vm-opr-nav--page" aria-label="GST invoice reports">
+                        <a class="vm-opr-nav__link" href="@Url.Action("DealerSellgst", "Home")">Sell GST</a>
+                        <a class="vm-opr-nav__link is-active" href="@Url.Action("uploadgst", "Home")">Upload GST</a>
+                    </nav>
+                </div>
+            </div>
 
-    .for-search input {
-        box-shadow: none !important;
-        outline: none !important;
-        border-radius: 0;
-        border: 1px solid #aaa4a4;
-    }
+            <div class="vm-rpt-filters-panel">
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-inc-filter-row vm-rpt-filters-panel__bar vm-dealer-tds-filter-bar vm-dealer-sell-gst-filter-bar vm-dealer-upload-gst-filter-bar">
+                    <div class="vm-dealer-tds-filter-label">
+                        <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                        <span>Select period</span>
+                    </div>
 
-    .form-control:focus {
-        border-color: #ccc;
-    }
-
-    .datepicker table tr td span {
-        color: #555 !important;
-    }
-
-        .datepicker table tr td span.active {
-            color: #fff !important;
-        }
-
-    .trypurchasecewq-newadd select {
-        padding-left: 1px;
-    }
-
-    @@media screen and (max-width:766px) {
-        .fund-tr-history .modal-dialog {
-            width: 100% !important;
-        }
-    }
-
-    @@media screen and (max-width:480px) {
-        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq.trypurchasecewq-newadd {
-            width: 100% !important;
-            margin-bottom: 10px;
-        }
-    }
-
-    @@media screen and (max-width:420px) {
-        #leftsidebar.sidebar.retailer-header-left, .second-design #leftsidebar.retailer-header-left.header-left-newresponshive.newresponshive-secondde {
-            margin-top: -88px !important;
-        }
-    }
-</style>
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section">
-    <div class="container-fluid">
-        <!--Four-Design-Page-Header-Start-->
-        <div class="page-title-box-fourde">
-            <h3>Dealer Upload History</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Wallet History</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Page-Header-End-->
-        <div class="bread-same-all-page wallethistory-newadd wallethistory-responshive wallethistory-newadd-four">
-            <ul>
-                <li class="smli four-design-noneclass">
-                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                    </a>
-                </li>
-                <li class="fullbodydycolorbg tmw-total-color-one four-design-noneclass">
-                     Upload GST
-                </li>
-                <li>
-                    @using (Html.BeginForm("uploadgst", "Home", FormMethod.Post))
+                    @using (Html.BeginForm("uploadgst", "Home", FormMethod.Post, new { id = "dealerUploadGstSearchForm", @class = "vm-dealer-upload-gst-search-form" }))
                     {
-                        <div class="row fund-t-dalear fund-t-dalear-erfrdfgdf">
-                            <div class="col-md-3 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
-                                @Html.DropDownList("Month", ViewBag.month as SelectList, new { @class = " form-control", @style = "border:1px solid #8e7f7f4d;" })
+                        <div class="vm-dealer-sell-gst-filter-fields">
+                            <div class="vm-dealer-sell-gst-field">
+                                @Html.DropDownList("Month", ViewBag.month as SelectList, new { id = "Month", @class = "form-control vm-dealer-sell-gst-select", title = "Month" })
                             </div>
-                            <div class="col-md-3 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
-                                @Html.DropDownList("Year", ViewBag.year as SelectList, new { @class = " form-control", @style = "border:1px solid #8e7f7f4d;" })
+                            <div class="vm-dealer-sell-gst-field vm-dealer-sell-gst-field--year">
+                                @Html.DropDownList("Year", ViewBag.year as SelectList, new { id = "Year", @class = "form-control vm-dealer-sell-gst-select", title = "Year" })
                             </div>
-                            <div class="col-md-2 apiclass-satenew" style="padding:0px;">
-                                <input type="hidden" id="tabtype" name="tabtype" value="FundTranferAllReport" />
-                                <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height:30px;margin-top:2px;cursor:pointer; " data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
-                                </button>
-                            </div>
-                            <div class="col-md-3 apiclass-satenew">
-                                @Html.TextBox("upload", "", new { type = "file", accept = "application/pdf" })
-                                <label style="color:red;">Accept Only pdf File</label>
-                                @*<button type="submit" name="Uploadgst" class="btnssl22" style="padding:0px 15px;float:left;height:30px;margin-top:2px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                        <i class="fa fa-upload" style="top:-1px;font-size:13px;color:black;"></i>Upload
-                                    </button>*@
-                            </div>
-                            <div class="col-md-1 apiclass-satenew">
-                                <button id="btnupload" type="button" name="Uploadgst" class="btnssl22" style="padding: 0px 15px; float: left; height: 30px; margin-top: 2px; cursor: pointer;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                    <i class="fa fa-upload" style="top:-1px;font-size:13px;color:black;"></i>
-                                </button>
-                            </div>
+                            <button type="submit" id="btnUploadGstSearch" class="saas-acc-btn saas-acc-btn--search vm-opr-toolbar-search vm-dealer-sell-gst-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
                     }
-                </li>
-            </ul>
+
+                    <div class="vm-dealer-upload-gst-upload-group">
+                        <label class="vm-dealer-upload-gst-file-label" for="upload">
+                            <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                            <span id="dealerUploadGstFileName">Choose PDF file</span>
+                        </label>
+                        <input type="file" id="upload" name="upload" accept="application/pdf,.pdf" class="vm-dealer-upload-gst-file-input" />
+                        <button type="button" id="btnupload" class="saas-acc-btn vm-dealer-upload-gst-upload-btn" title="Upload GST PDF">
+                            <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><span>Upload</span>
+                        </button>
+                        <span class="vm-dealer-upload-gst-file-hint">PDF only</span>
+                    </div>
+
+                    <span class="vm-dealer-tds-active-month-badge vm-dealer-sell-gst-period-badge" title="Active period">
+                        Period: <strong id="dealerUploadGstPeriodLabel">@selectedMonth @selectedYear</strong>
+                    </span>
+                </div>
+            </div>
         </div>
-    </div>
-    @Html.Partial("_menu_invoice")
-    <div class=" col-md-12" style="width:100%;float:left;">
-        <div class="row clearfix">
-            <div class=" col-md-12 padding-both-none-four">
-                <div class="wallet-history" style="padding:0;">
-                    <div class="table-responsive">
-                        <div id="tblshowMasterD" class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
-                            <table class="table table-bordered table-striped table-hover third-design-table table-white-third">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Month</th>
-                                        <th>Year</th>
-                                        <th>Status</th>
-                                        <th>View</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel" id="dealerUploadGstPanel">
+                <div class="vm-opr-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                        <span>Dealer upload GST history</span>
+                    </div>
+                    <div class="vm-opr-table-panel__right vm-flight-table-head-right">
+                        <div class="vm-ft-search-wrap vm-dealer-tds-table-search">
+                            <input class="form-control vm-dealer-tds-search-input" type="text" id="dealerUploadGstSearch" placeholder="Search month, year, status..." autocomplete="off" />
+                        </div>
+                        <span class="vm-radiant-record-badge vm-dealer-tds-record-badge" title="Records">
+                            Records: <strong id="dealerUploadGstRecordCount">@rowCount</strong>
+                        </span>
+                        <div class="vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" id="btnDealerUploadGstExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnDealerUploadGstPdf" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="dealerUploadGstTable" class="table table-bordered table-striped table-hover vm-opr-data-table vm-inc-data-table vm-flight-data-table vm-dealer-tds-data-table vm-dealer-upload-gst-table">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Year</th>
+                                    <th>Status</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (rows.Any())
+                                {
+                                    foreach (var item in rows)
                                     {
+                                        var statusClass = "vm-dealer-upload-gst-status";
+                                        if (string.Equals(item.status, "Pending", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            statusClass += " vm-dealer-upload-gst-status--pending";
+                                        }
+                                        else if (string.Equals(item.status, "Approved", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            statusClass += " vm-dealer-upload-gst-status--approved";
+                                        }
+                                        else if (string.Equals(item.status, "Rejected", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            statusClass += " vm-dealer-upload-gst-status--rejected";
+                                        }
+                                        else
+                                        {
+                                            statusClass += " vm-dealer-upload-gst-status--default";
+                                        }
+
                                         <tr>
                                             <td>@item.monthchk</td>
                                             <td>@item.yearchk</td>
-                                            <td>@item.status</td>
                                             <td>
-                                                <i class="fa fa-file-pdf-o fa-2x" style="color:red;cursor:pointer;" onclick="show('@item.uploadfile')"></i>
+                                                <span class="@statusClass" title="@item.reason">@item.status</span>
+                                            </td>
+                                            <td class="vm-dealer-sell-gst-action-col">
+                                                @if (!string.IsNullOrWhiteSpace(item.uploadfile))
+                                                {
+                                                    var fileUrl = Url.Content("~/" + item.uploadfile.Replace("\\", "/"));
+                                                    <button type="button"
+                                                            class="vm-dealer-sell-gst-pdf-btn js-dealer-upload-gst-view"
+                                                            data-file-url="@fileUrl"
+                                                            data-file-label="@item.monthchk @item.yearchk GST"
+                                                            title="View uploaded PDF"
+                                                            aria-label="View uploaded PDF">
+                                                        <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                                                        <span>View</span>
+                                                    </button>
+                                                }
                                             </td>
                                         </tr>
                                     }
-                                </tbody>
-                            </table>
-                        </div>
+                                }
+                                else
+                                {
+                                    <tr class="vm-dealer-tds-empty-row">
+                                        <td colspan="4">No upload GST records found for @selectedMonth @selectedYear.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-------------orderrecive-->
-</section>
-<!---------Purchase request send-->
-<div class="modal fund-tr-history  in purchase-model purchase-model-newadd model-responshive-full" id="m-d-fund-transfer12" tabindex="-1" role="dialog" style="margin-top: 77px;width:auto;">
-    <div class="modal-dialog" role="document" style="margin:0px;float:right;height:auto;width:auto;">
-        <div class="modal-content width100 float-left">
-            <div class="modal-header width100 float-left ecomm-pop-head">
-                <h5 id="mdhis">Dealer Upload GST</h5>
-                <button type="button" class="btn waves-effect " data-dismiss="modal" style="float:right;border:0px;color:var(--main-bg-lcolor);padding:0px; height:auto;">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                </button>
-            </div><!--.modal-header-->
-            <div class="modal-body width100 float-left ecomm-pop-body">
-                <div class="float-left width100">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12 ">
-                            <div class="form-group">
-                                <iframe id="ifrmgst" src="#" style="width:1000px;height:1000px;"></iframe>
-                            </div>
-                        </div>
-                    </div>
-                    <!--=============-->
-                </div><!--.modal-body-->
-            </div>
 
+    </div>
+</section>
+
+<div class="modal fade saas-admin-modal vm-dealer-upload-gst-modal" id="dealerUploadGstModal" tabindex="-1" role="dialog" aria-labelledby="dealerUploadGstModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg vm-dealer-upload-gst-modal__dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-danger vm-dealer-upload-gst-modal__head">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-file-pdf" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title" id="dealerUploadGstModalTitle">Uploaded GST PDF</h4>
+                        <span class="saas-admin-modal-subtitle" id="dealerUploadGstModalSubtitle">Preview uploaded GST document</span>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body saas-admin-modal-body vm-dealer-upload-gst-modal__body">
+                <div class="vm-dealer-upload-gst-modal__frame-wrap">
+                    <div class="vm-dealer-upload-gst-modal__loader" id="dealerUploadGstLoader" aria-hidden="true">
+                        <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        <span>Loading PDF...</span>
+                    </div>
+                    <iframe id="ifrmgst" src="about:blank" title="Uploaded GST file"></iframe>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer vm-dealer-upload-gst-modal__footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" id="dealerUploadGstOpenTab" title="Open PDF in new tab">
+                    <i class="fas fa-external-link-alt" aria-hidden="true"></i> Open in new tab
+                </button>
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--primary" data-dismiss="modal">
+                    <i class="fas fa-times" aria-hidden="true"></i> Close
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
+<script src="~/MainFrontDesign/js/admin-operator-report-nav.js"></script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<script>
+    (function () {
+        var dealerUploadGstCurrentUrl = '';
 
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<!--Add State dropdown list-->
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
-<script>
-    $(document).ready(function () {
-        var month = '@ViewBag.chkmonth';
-        $('#Month').val(month);
-    });
-</script>
-<script>
-    $('#btnupload').click(function () {
-        var fileUpload = $("#upload").get(0);
-        var files = fileUpload.files;
-        var month = $('#Month').val();
-        var year = $('#Year').val();
-        // Create FormData object
-        var fileData = new FormData();
-        for (var i = 0; i < files.length; i++) {
-            fileData.append(files[i].name, files[i]);
+        function dealerUploadGstEsc(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
         }
-        fileData.append("month", month);
-        fileData.append("year", year);
-        $.ajax({
-            url: "@Url.Action("uploadgstfile", "Home")",
-            type: "POST",
-            contentType: false, // Not to set any content header
-            processData: false, // Not to process data
-            data:  fileData ,// '{files:' + fileData + ',Month:' + month + ',Year:' + year+'}',
-            //data: '{"fileData":"+fileData"}' ,
-            success: function (result) {
-                location.reload();
-            },
-            error: function (err) {
-                alert(err.statusText);
-            }
-        });
-    });
-</script>
-<script>
-    function show(str) {
-        $('#m-d-fund-transfer12').modal('toggle');
-        $('#ifrmgst').attr("src", "../../"+str)
-    }
-</script>
 
+        function dealerUploadGstGetPeriodLabel() {
+            var $ = window.jQuery;
+            if (!$) {
+                return '';
+            }
+            return ($('#Month').val() || '') + ' ' + ($('#Year').val() || '');
+        }
+
+        function dealerUploadGstUpdatePeriodBadge() {
+            var label = dealerUploadGstGetPeriodLabel().trim();
+            var el = document.getElementById('dealerUploadGstPeriodLabel');
+            if (el && label) {
+                el.textContent = label;
+            }
+        }
+
+        function dealerUploadGstGetVisibleRows() {
+            var $ = window.jQuery;
+            var rows = [];
+            $('#dealerUploadGstTable tbody tr').each(function () {
+                var $tr = $(this);
+                if ($tr.hasClass('vm-dealer-tds-empty-row') || !$tr.is(':visible')) {
+                    return;
+                }
+                var $cells = $tr.children('td');
+                if ($cells.length < 4) {
+                    return;
+                }
+                rows.push({
+                    month: $.trim($cells.eq(0).text()),
+                    year: $.trim($cells.eq(1).text()),
+                    status: $.trim($cells.eq(2).text())
+                });
+            });
+            return rows;
+        }
+
+        function dealerUploadGstUpdateCounts() {
+            var $ = window.jQuery;
+            if (!$) {
+                return;
+            }
+            var visible = $('#dealerUploadGstTable tbody tr:not(.vm-dealer-tds-empty-row):visible').length;
+            $('#dealerUploadGstRecordCount').text(visible);
+        }
+
+        function dealerUploadGstFilterTable(term) {
+            var $ = window.jQuery;
+            var q = (term || '').toLowerCase().trim();
+            $('#dealerUploadGstTable tbody tr').each(function () {
+                if ($(this).hasClass('vm-dealer-tds-empty-row')) {
+                    return;
+                }
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(q === '' || text.indexOf(q) > -1);
+            });
+            dealerUploadGstUpdateCounts();
+        }
+
+        function dealerUploadGstExportStyles() {
+            return 'body{font-family:Segoe UI,Arial,sans-serif;padding:24px;color:#0f172a;background:#fff;}'
+                + '.vm-block-export-head{margin:0 0 18px;padding-bottom:14px;border-bottom:2px solid #e2e8f0;}'
+                + '.vm-block-export-head h3{margin:0 0 6px;font-size:22px;font-weight:700;color:#1e293b;}'
+                + '.vm-block-export-head p{margin:0;font-size:13px;color:#64748b;line-height:1.5;}'
+                + 'table{border-collapse:collapse;width:100%;font-size:12px;}'
+                + 'th,td{border:1px solid #dbe4f0;padding:8px 10px;text-align:center;vertical-align:middle;}'
+                + 'th{background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%);color:#334155;font-weight:700;}';
+        }
+
+        function dealerUploadGstBuildExportHtml(rows, periodLabel) {
+            var body = '';
+            for (var i = 0; i < rows.length; i++) {
+                body += '<tr>'
+                    + '<td>' + dealerUploadGstEsc(rows[i].month) + '</td>'
+                    + '<td>' + dealerUploadGstEsc(rows[i].year) + '</td>'
+                    + '<td>' + dealerUploadGstEsc(rows[i].status) + '</td>'
+                    + '</tr>';
+            }
+
+            return '<html><head><meta charset="utf-8"><title>Upload GST</title>'
+                + '<style>' + dealerUploadGstExportStyles() + '</style></head><body>'
+                + '<div class="vm-block-export-head"><h3>Dealer Upload GST</h3>'
+                + '<p>Period: ' + dealerUploadGstEsc(periodLabel) + ' | Generated on ' + dealerUploadGstEsc(new Date().toLocaleString()) + '</p></div>'
+                + '<table><thead><tr><th>Month</th><th>Year</th><th>Status</th></tr></thead>'
+                + '<tbody>' + body + '</tbody></table></body></html>';
+        }
+
+        function dealerUploadGstWarn(message, icon) {
+            if (typeof swal === 'function') {
+                swal(message, '', icon || 'warning');
+                return;
+            }
+            window.alert(message);
+        }
+
+        function dealerUploadGstExportExcel() {
+            var rows = dealerUploadGstGetVisibleRows();
+            if (!rows.length) {
+                dealerUploadGstWarn('No records to export');
+                return;
+            }
+            var html = dealerUploadGstBuildExportHtml(rows, dealerUploadGstGetPeriodLabel());
+            var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, 'Dealer_Upload_GST.xls');
+                return;
+            }
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'Dealer_Upload_GST.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+        }
+
+        function dealerUploadGstExportPdf() {
+            var rows = dealerUploadGstGetVisibleRows();
+            if (!rows.length) {
+                dealerUploadGstWarn('No records to export');
+                return;
+            }
+            var w = window.open('', '_blank');
+            if (!w) {
+                return;
+            }
+            w.document.open();
+            w.document.write(dealerUploadGstBuildExportHtml(rows, dealerUploadGstGetPeriodLabel()));
+            w.document.close();
+            w.focus();
+        }
+
+        function dealerUploadGstEnsureModalInBody() {
+            var $ = window.jQuery;
+            if (!$) {
+                return null;
+            }
+            var $modal = $('#dealerUploadGstModal');
+            if (!$modal.length) {
+                return null;
+            }
+            if ($modal.parent()[0] !== document.body) {
+                $modal.appendTo('body');
+            }
+            return $modal;
+        }
+
+        function dealerUploadGstOpenModal(fileUrl, fileLabel) {
+            var $ = window.jQuery;
+            if (!$ || !fileUrl) {
+                return;
+            }
+
+            var $modal = dealerUploadGstEnsureModalInBody();
+            if (!$modal) {
+                window.open(fileUrl, '_blank');
+                return;
+            }
+
+            dealerUploadGstCurrentUrl = fileUrl;
+            $('#dealerUploadGstModalTitle').text(fileLabel || 'Uploaded GST PDF');
+            $('#dealerUploadGstModalSubtitle').text('Preview uploaded GST document');
+            $('#dealerUploadGstLoader').show();
+
+            var $iframe = $('#ifrmgst');
+            $iframe.off('load.dealerUploadGst').on('load.dealerUploadGst', function () {
+                $('#dealerUploadGstLoader').hide();
+            });
+            $iframe.attr('src', fileUrl);
+
+            $('#dealerUploadGstOpenTab').off('click.dealerUploadGst').on('click.dealerUploadGst', function () {
+                window.open(dealerUploadGstCurrentUrl, '_blank');
+            });
+
+            $('body').addClass('dealer-upload-gst-modal-open');
+
+            if ($.fn.modal) {
+                $modal.off('shown.bs.modal.dealerUploadGst hidden.bs.modal.dealerUploadGst')
+                    .on('shown.bs.modal.dealerUploadGst', function () {
+                        $('body').addClass('dealer-upload-gst-modal-open');
+                    })
+                    .on('hidden.bs.modal.dealerUploadGst', function () {
+                        $('body').removeClass('dealer-upload-gst-modal-open');
+                    })
+                    .modal({
+                        backdrop: true,
+                        keyboard: true,
+                        show: true
+                    });
+                return;
+            }
+
+            $modal.addClass('in').css('display', 'block');
+            $('body').addClass('modal-open dealer-upload-gst-modal-open');
+            if (!$('.modal-backdrop').length) {
+                $('<div class="modal-backdrop fade in"></div>').appendTo('body');
+            }
+        }
+
+        function dealerUploadGstUploadFile() {
+            var $ = window.jQuery;
+            if (!$) {
+                return;
+            }
+
+            var fileUpload = document.getElementById('upload');
+            if (!fileUpload || !fileUpload.files || !fileUpload.files.length) {
+                dealerUploadGstWarn('Please choose a PDF file to upload');
+                return;
+            }
+
+            var file = fileUpload.files[0];
+            var ext = (file.name || '').split('.').pop().toLowerCase();
+            if (ext !== 'pdf') {
+                dealerUploadGstWarn('Only PDF files are allowed');
+                return;
+            }
+
+            var fileData = new FormData();
+            fileData.append(file.name, file);
+            fileData.append('month', $('#Month').val() || '');
+            fileData.append('year', $('#Year').val() || '');
+
+            var $btn = $('#btnupload');
+            $btn.prop('disabled', true);
+
+            $.ajax({
+                url: '@Url.Action("uploadgstfile", "Home")',
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: fileData,
+                success: function () {
+                    window.location.reload();
+                },
+                error: function (xhr) {
+                    dealerUploadGstWarn((xhr && xhr.statusText) ? xhr.statusText : 'Upload failed', 'error');
+                    $btn.prop('disabled', false);
+                }
+            });
+        }
+
+        function bootDealerUploadGstPage() {
+            var $ = window.jQuery;
+            if (!$) {
+                window.setTimeout(bootDealerUploadGstPage, 50);
+                return;
+            }
+
+            $('#Month').val('@Html.Raw(HttpUtility.JavaScriptStringEncode(selectedMonth))');
+            $('#Year').val('@Html.Raw(HttpUtility.JavaScriptStringEncode(selectedYear))');
+            dealerUploadGstUpdatePeriodBadge();
+
+            $('#Month, #Year').on('change', dealerUploadGstUpdatePeriodBadge);
+
+            $('#upload').on('change', function () {
+                var name = (this.files && this.files[0]) ? this.files[0].name : 'Choose PDF file';
+                $('#dealerUploadGstFileName').text(name);
+            });
+
+            $('#btnupload').on('click', dealerUploadGstUploadFile);
+
+            $('#dealerUploadGstSearch').on('input', function () {
+                dealerUploadGstFilterTable($(this).val());
+            });
+
+            $('#btnDealerUploadGstExport').on('click', dealerUploadGstExportExcel);
+            $('#btnDealerUploadGstPdf').on('click', dealerUploadGstExportPdf);
+
+            $(document).off('click.dealerUploadGstView').on('click.dealerUploadGstView', '.js-dealer-upload-gst-view', function (e) {
+                e.preventDefault();
+                var fileUrl = $(this).data('file-url') || $(this).attr('data-file-url') || '';
+                var fileLabel = $(this).data('file-label') || $(this).attr('data-file-label') || 'Uploaded GST PDF';
+                dealerUploadGstOpenModal(String(fileUrl), String(fileLabel));
+            });
+
+            dealerUploadGstEnsureModalInBody();
+
+            $('#dealerUploadGstModal').on('hidden.bs.modal', function () {
+                dealerUploadGstCurrentUrl = '';
+                $('body').removeClass('dealer-upload-gst-modal-open');
+                $('#dealerUploadGstLoader').hide();
+                $('#ifrmgst').off('load.dealerUploadGst').attr('src', 'about:blank');
+            });
+
+            dealerUploadGstUpdateCounts();
+        }
+
+        if (document.readyState === 'complete') {
+            bootDealerUploadGstPage();
+        } else {
+            window.addEventListener('load', bootDealerUploadGstPage);
+        }
+    })();
+</script>

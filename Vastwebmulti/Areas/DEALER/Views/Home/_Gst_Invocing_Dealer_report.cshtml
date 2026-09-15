@@ -1,0 +1,46 @@
+@model IEnumerable<Vastwebmulti.Models.GST_Monthly_Dealer_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.GST_Monthly_Dealer_Result>();
+    var i = 1;
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        <tr class="vm-dmt-row vm-dealer-gst-row">
+            <td>@i</td>
+            <td>@(item.Email ?? "-")</td>
+            <td>@(item.FarmName ?? "-")</td>
+            <td class="vm-dmt-amt-cell">@item.dmtcomm.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@item.dmtgst.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@item.rchcomm.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@item.rchgst.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@String.Format("{0:N2}", item.aepscomm)</td>
+            <td class="vm-dmt-amt-cell">@item.aepsgst.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@item.pancomm.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@item.pangst.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@item.mposcomm.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@item.mposgst.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell">@String.Format("{0:N2}", item.flightcomm)</td>
+            <td class="vm-dmt-amt-cell">@item.flightgst.ToString("N2")</td>
+            <td class="vm-dmt-amt-cell vm-dealer-gst-total-cell">@((item.total ?? 0m).ToString("N2"))</td>
+            <td class="vm-dmt-action-cell">
+                <a class="vm-dealer-gst-print-btn" href="@Url.Action("GST_Invocing_Report_Pdf", "Home")" target="_blank" title="Print GST invoice">
+                    <i class="fas fa-print" aria-hidden="true"></i> Print
+                </a>
+            </td>
+        </tr>
+        i++;
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="17" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-file-invoice" aria-hidden="true"></i>
+            <span>No GST invoice data found for this month.</span>
+        </td>
+    </tr>
+}

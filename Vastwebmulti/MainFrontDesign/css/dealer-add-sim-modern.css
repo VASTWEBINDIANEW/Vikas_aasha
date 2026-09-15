@@ -1,0 +1,601 @@
+/* Dealer Add SIM — matches UPI / Seller Setting report shell */
+
+body.saas-admin-ui .saas-dealer-add-sim-page {
+    padding-bottom: 12px;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-toolbar {
+    margin-bottom: 12px;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-toolbar .vm-dmt-toolbar-head--one-line {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-toolbar .vm-dmt-breadcrumb {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    border-right: none !important;
+    padding-right: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-actions .vm-add-sim-search-wrap {
+    flex: 0 1 260px !important;
+    min-width: 180px !important;
+    max-width: 280px !important;
+    width: auto !important;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-actions .saas-acc-btn {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    display: inline-flex !important;
+}
+
+/* Plain text search — override DMT filter dropdown arrow on .form-control */
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-search-input,
+body.saas-admin-ui .saas-dealer-add-sim-page input#myInput.vm-add-sim-search-input {
+    width: 100% !important;
+    height: 38px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    padding: 0 12px 0 38px !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    font-weight: 500 !important;
+    color: #0f172a !important;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.1a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat 12px center !important;
+    background-size: 16px !important;
+    box-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    cursor: text !important;
+    float: none !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-search-input:focus {
+    border-color: #2563eb !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-search-input::placeholder {
+    color: #94a3b8 !important;
+    font-size: 14px !important;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-actions .saas-acc-btn {
+    height: 38px !important;
+    font-size: 14px !important;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page #dealerSimTable.vm-opr-data-table {
+    width: 100%;
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page #dealerSimTable thead th {
+    white-space: nowrap;
+    font-size: 0.76rem;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page #dealerSimTable tbody td {
+    vertical-align: middle;
+    font-size: 0.82rem;
+    text-align: center;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-msg-banner {
+    margin: 0 0 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #bbf7d0;
+    background: #f0fdf4;
+    color: #166534;
+    font-size: 0.86rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-msg-banner--error {
+    border-color: #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-status-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 52px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-status-btn:hover {
+    opacity: 0.88;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-status-btn--on {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-status-btn--off {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-icon-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-icon-btn img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-icon-btn--login {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 64px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #334155;
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-action-btn:hover {
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-action-btn--delete {
+    border-color: #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-action-btn--delete:hover {
+    background: #fee2e2;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #3730a3;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-empty-row td {
+    text-align: center;
+    padding: 28px 12px !important;
+    color: #64748b;
+    font-size: 0.88rem;
+}
+
+/* Confirm / login overlays */
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-overlay {
+    position: fixed;
+    z-index: 1050;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-overlay-card {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(15, 23, 42, 0.28);
+    padding: 22px;
+    text-align: center;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-overlay-title {
+    margin: 0 0 12px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-overlay-msg {
+    margin: 0 0 16px;
+    font-size: 0.92rem;
+    color: #334155;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-overlay-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-overlay-actions .saas-acc-btn,
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-overlay-actions .saas-admin-modal-btn {
+    min-width: 110px;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .vm-sim-overlay-card input[type="number"] {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 12px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 14px;
+}
+
+body.saas-admin-ui .vm-sim-page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 1060;
+    background: rgba(15, 23, 42, 0.35);
+    align-items: center;
+    justify-content: center;
+}
+
+/* Add / Edit modal — force 14px typography everywhere */
+body.saas-admin-ui .vm-sim-modal,
+body.saas-admin-ui .vm-sim-modal .modal-content,
+body.saas-admin-ui .vm-sim-modal .saas-admin-modal-body,
+body.saas-admin-ui .vm-sim-modal .modal-footer {
+    font-size: 14px !important;
+}
+
+body.saas-admin-ui .vm-sim-modal .modal-dialog {
+    max-width: 720px !important;
+}
+
+body.saas-admin-ui .vm-sim-modal .saas-admin-modal-title,
+body.saas-admin-ui .vm-sim-modal .modal-title {
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .vm-sim-modal .saas-admin-modal-subtitle {
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+    font-weight: 500 !important;
+}
+
+body.saas-admin-ui .vm-sim-modal .vm-dmt-modal-field label,
+body.saas-admin-ui .vm-sim-modal .saas-admin-modal-body label:not(.labledesign) {
+    font-size: 14px !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .vm-sim-modal .vm-dmt-modal-grid--2 {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px 14px !important;
+    align-items: start !important;
+}
+
+body.saas-admin-ui .vm-sim-modal .vm-dmt-modal-field--full {
+    grid-column: 1 / -1 !important;
+}
+
+body.saas-admin-ui .vm-sim-modal .vm-sim-modal-field:empty,
+body.saas-admin-ui .vm-sim-modal #colw2:empty,
+body.saas-admin-ui .vm-sim-modal #colw5:empty,
+body.saas-admin-ui .vm-sim-modal #colw9:empty,
+body.saas-admin-ui .vm-sim-modal #colw10:empty {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .labledesign,
+body.saas-admin-ui .vm-sim-modal .labledesign,
+body.saas-admin-ui .vm-sim-modal label.labledesign {
+    display: block;
+    margin: 0 0 6px;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    line-height: 1.3 !important;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .inputdesign,
+body.saas-admin-ui .saas-dealer-add-sim-page .selectdesign,
+body.saas-admin-ui .vm-sim-modal .inputdesign,
+body.saas-admin-ui .vm-sim-modal .selectdesign,
+body.saas-admin-ui .vm-sim-modal #dropsd select.selectdesign,
+body.saas-admin-ui .vm-sim-modal #zone select.selectdesign {
+    width: 100% !important;
+    height: 40px !important;
+    float: none !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    font-weight: 500 !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    padding: 0 10px !important;
+    box-sizing: border-box;
+    background-color: #fff !important;
+    background-image: none !important;
+    cursor: text !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+}
+
+body.saas-admin-ui .vm-sim-modal #dropsd select.selectdesign,
+body.saas-admin-ui .vm-sim-modal #zone select.selectdesign,
+body.saas-admin-ui .vm-sim-modal #colw2 select.selectdesign {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    background-size: 14px !important;
+    padding-right: 32px !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .vm-sim-modal #dropsd,
+body.saas-admin-ui .vm-sim-modal #zone,
+body.saas-admin-ui .vm-sim-modal #rchpin,
+body.saas-admin-ui .vm-sim-modal #posd,
+body.saas-admin-ui .vm-sim-modal #macad {
+    display: block;
+    width: 100%;
+}
+
+body.saas-admin-ui .vm-sim-modal .vm-sim-imei-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+body.saas-admin-ui .vm-sim-modal .vm-sim-imei-input {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+body.saas-admin-ui .vm-sim-modal .vm-sim-imei-row .inputdesign {
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .inputdesign[readonly],
+body.saas-admin-ui .vm-sim-modal .inputdesign[readonly] {
+    background: #f1f5f9 !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .vm-sim-modal .vm-sim-auto-imei-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 14px !important;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .vm-sim-modal .vm-sim-modal-field {
+    margin-bottom: 0;
+    min-width: 0;
+}
+
+body.saas-admin-ui .vm-sim-modal .saas-admin-modal-footer .saas-admin-modal-btn {
+    font-size: 14px !important;
+    min-height: 40px;
+}
+
+body.saas-admin-ui .vm-sim-modal #colw1,
+body.saas-admin-ui .vm-sim-modal #colw2,
+body.saas-admin-ui .vm-sim-modal #colw3,
+body.saas-admin-ui .vm-sim-modal #colw4,
+body.saas-admin-ui .vm-sim-modal #colw5,
+body.saas-admin-ui .vm-sim-modal #colw6,
+body.saas-admin-ui .vm-sim-modal #colw7,
+body.saas-admin-ui .vm-sim-modal #colw8,
+body.saas-admin-ui .vm-sim-modal #colw9,
+body.saas-admin-ui .vm-sim-modal #colw10,
+body.saas-admin-ui .vm-sim-modal #colw11 {
+    margin-bottom: 4px;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page input[type=number]::-webkit-outer-spin-button,
+body.saas-admin-ui .saas-dealer-add-sim-page input[type=number]::-webkit-inner-spin-button,
+body.saas-admin-ui .vm-sim-modal input[type=number]::-webkit-outer-spin-button,
+body.saas-admin-ui .vm-sim-modal input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page input[type=number],
+body.saas-admin-ui .vm-sim-modal input[type=number] {
+    -moz-appearance: textfield;
+}
+
+@keyframes vm-sim-ripple {
+    0% {
+        top: 96px;
+        left: 96px;
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        top: 18px;
+        left: 18px;
+        width: 156px;
+        height: 156px;
+        opacity: 0;
+    }
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .ldio-zdyd6mf6t5 div {
+    position: absolute;
+    border-width: 4px;
+    border-style: solid;
+    opacity: 1;
+    border-radius: 50%;
+    animation: vm-sim-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    box-sizing: content-box;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .ldio-zdyd6mf6t5 div:nth-child(1) {
+    border-color: #2563eb;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .ldio-zdyd6mf6t5 div:nth-child(2) {
+    border-color: #60a5fa;
+    animation-delay: -0.5s;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .loadingio-spinner-ripple-92ar2pfqk5j {
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    overflow: hidden;
+    background: transparent;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page .ldio-zdyd6mf6t5 {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(1);
+    backface-visibility: hidden;
+    transform-origin: 0 0;
+}
+
+/* Override global DMT report toolbar rules on this page */
+body.saas-admin-ui .saas-dealer-add-sim-page.saas-dmt-report-page .vm-add-sim-toolbar .vm-dmt-toolbar-head--one-line .vm-add-sim-actions,
+body.saas-admin-ui .saas-dealer-add-sim-page.saas-dmt-report-page .vm-add-sim-actions > .vm-add-sim-search-wrap,
+body.saas-admin-ui .saas-dealer-add-sim-page.saas-dmt-report-page .vm-add-sim-actions > .saas-acc-btn {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .saas-dealer-add-sim-page.saas-dmt-report-page .vm-add-sim-actions > .vm-add-sim-search-wrap {
+    flex: 0 1 260px !important;
+    max-width: 280px !important;
+}
+
+body.saas-admin-ui .vm-sim-modal .form-control,
+body.saas-admin-ui .vm-sim-modal .saas-admin-modal-btn,
+body.saas-admin-ui .vm-sim-modal .saas-admin-modal-btn span,
+body.saas-admin-ui .vm-sim-modal .vm-sim-auto-imei-btn,
+body.saas-admin-ui .vm-sim-modal .vm-sim-auto-imei-btn i {
+    font-size: 14px !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-toolbar .vm-dmt-toolbar-head--one-line {
+        flex-wrap: wrap !important;
+        row-gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-actions {
+        width: auto !important;
+        margin-left: auto !important;
+        justify-content: flex-end !important;
+        flex-wrap: nowrap !important;
+    }
+
+    body.saas-admin-ui .saas-dealer-add-sim-page .vm-add-sim-actions .vm-add-sim-search-wrap {
+        flex: 1 1 auto !important;
+        min-width: 140px !important;
+        max-width: 220px !important;
+    }
+
+    body.saas-admin-ui .vm-sim-modal .vm-dmt-modal-grid--2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .vm-sim-modal .vm-sim-imei-inline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .vm-sim-modal .vm-sim-auto-imei-btn {
+        width: 100%;
+    }
+}

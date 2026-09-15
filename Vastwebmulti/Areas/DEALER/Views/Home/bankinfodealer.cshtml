@@ -1,581 +1,572 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.BankInfoList
+@using System.Linq
 @{
-    ViewBag.Title = "bankinfodealer";
+    ViewBag.Title = "Bank Info";
+    Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var bankCount = Model.bankinfo != null ? Model.bankinfo.Count() : 0;
+    var walletCount = Model.walletinfo != null ? Model.walletinfo.Count() : 0;
 }
 
-<style type="text/css">
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-gst-report-modern.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-block-opt-modern.css?v=7" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
-    @@keyframes ldio-zdyd6mf6t5 {
-        0% {
-            top: 96px;
-            left: 96px;
-            width: 0;
-            height: 0;
-            opacity: 1;
-        }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page saas-dealer-block-opt-page saas-dealer-bank-info-page">
 
-        100% {
-            top: 18px;
-            left: 18px;
-            width: 156px;
-            height: 156px;
-            opacity: 0;
-        }
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .ldio-zdyd6mf6t5 div {
-        position: absolute;
-        border-width: 4px;
-        border-style: solid;
-        opacity: 1;
-        border-radius: 50%;
-        animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
-    }
-
-        .ldio-zdyd6mf6t5 div:nth-child(1) {
-            border-color: #e90c59
-        }
-
-        .ldio-zdyd6mf6t5 div:nth-child(2) {
-            border-color: #46dff0;
-            animation-delay: -0.5s;
-        }
-
-    .loadingio-spinner-ripple-92ar2pfqk5j {
-        width: 200px;
-        height: 200px;
-        display: inline-block;
-        overflow: hidden;
-        background: transparent;
-    }
-
-    .ldio-zdyd6mf6t5 {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform: translateZ(0) scale(1);
-        backface-visibility: hidden;
-        transform-origin: 0 0; /* see note above */
-    }
-
-        .ldio-zdyd6mf6t5 div {
-            box-sizing: content-box;
-        }
-
-    .modal-dialog-reportclass.reportclass-modalnewclass .modal-footer button span {
-        margin: 0;
-        text-align: center;
-        color: #555 !important;
-        top: 0 !important;
-    }
-</style>
-<style>
-    .fund-t-dalear input {
-        border: 1px solid #dddddd;
-        height: 32px;
-        padding: 0px 5px;
-        width: 100%;
-        padding-left: 40px;
-    }
-
-    .fund-t-dalear button {
-        height: 32px;
-        border: 1px solid #c7c2c2;
-        background: #dedddd;
-        padding: 0px 20px
-    }
-
-    .tab-menur li a.active-ar {
-        color: var(--main-bg-lcolor);
-    }
-
-    .select2-selection.select2-selection--single {
-        border-radius: 0px !important;
-        height: 32px !important;
-    }
-
-    .nav-tabs li.active .for-change-fund .fa {
-        float: left;
-        font-size: 44px;
-        transform: rotate(-90deg);
-        margin-left: 5px;
-        color: var(--main-bg-lcolor) !important;
-        margin-top: -2px;
-        line-height: 36px;
-    }
-
-    .for-change-fund .select2.select2-container.select2-container--default {
-        width: 220px !important;
-        text-align: left;
-    }
-
-    .for-change-fund select {
-        width: 220px !important;
-        height: 32px;
-    }
-
-    .for-change-fund {
-        margin: 0px;
-        width: 100%;
-    }
-
-        .for-change-fund select {
-            width: 220px !important;
-            height: 30px;
-        }
-
-        .for-change-fund .select2.select2-container.select2-container--default {
-            width: 220px !important;
-            text-align: left;
-        }
-
-    .fund-fistory {
-        float: left;
-        margin-top: 0px;
-        font-size: 18px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-        .fund-fistory sub {
-            position: absolute;
-            bottom: 4px !important;
-            top: 24px;
-            line-height: 8px;
-            left: 11px;
-            font-size: 9px;
-        }
-
-    .tab-menur li a::before {
-        content: '';
-        width: 12px;
-        height: 12px;
-        display: inline-block;
-        border: 2px solid #bbb;
-        border-radius: 50%;
-        margin: 2px 6px 0px 0px;
-    }
-
-    .tab-menur li a.active-ar::before {
-        border-color: var(--main-bg-lcolor);
-        background: var(--main-bg-lcolor);
-    }
-
-    .tab-menur ul li a.active-ar {
-        background-color: transparent;
-    }
-
-    body .datepicker-dropdown.datepicker {
-        margin-top: 75px !important;
-    }
-
-    .table-search-historyshow {
-        width: auto;
-        float: right;
-        padding: 0;
-    }
-
-        .table-search-historyshow input {
-            border: 1px solid #aaa;
-            height: 30px;
-            padding: 0 6px;
-        }
-    .fund-transfer-form{padding:15px !important;}
-        .fund-transfer-form input {
-            margin-bottom: 10px;
-        }
-    .fund-user-right.fund-trasfer-right .nav-tabs li {
-        width: 50% !important;
-    }
-        .fund-user-right.fund-trasfer-right .nav-tabs li.active a {
-            background: var(--main-bg-lcolor) !important;
-            width: 100%;color:#fff !important;
-        }
-    .dealer-four-design .fund-user-right.fund-trasfer-right .nav-tabs li.active a {
-        background: var(--fullbodybg-four) !important;
-    }
-        .fund-user-right.fund-trasfer-right .nav-tabs li.active a{
-            width:100%;
-        }
-
-
-    @@media screen and (max-width:1367px) {
-    }
-</style>
-
-<style>
-    .table-bordered thead tr th, .table-bordered tbody tr td {
-        padding: 10px 5px;
-    }
-
-    .third-design-dealer .third-design-table tr:hover td a {
-        color: #fff;
-    }
-</style>
-
-<section class="content">
-    <div class="container-fluid" style="height:auto !important;min-height:inherit !important;">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Bank Info</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account Active 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Bank Info</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="bread-same-all-page">
-            <div class="col-md-6 dealer-none-fourclass">
-                <ul>
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                        </a>
-                    </li>
-
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Add Bank a/c&nbsp;&&nbsp; Wallet
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-6 table-search-historyshow">
-
-                <div class="for-search">
-                    <input id="myInput" name="myInput" type="text" placeholder="Search..." onkeyup="myFunction()">
-
-                </div>
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell vm-dealer-bankinfo-toolbar">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Account Active</li>
+                    <li>Bank Info</li>
+                </ol>
             </div>
         </div>
 
-    </div>
-
-    <div class="col-md-12">
-
-        <div class="row clearfix">
-            <div class="col-md-4 fund-transfer-activedata transfer-activedata-responshive">
-                <div class="fund-trasfer-left fund-user-left">
-                    <ul class="nav nav-tabs fulltabchange" id="tabs">
-                        <li id="activelinkkarahfundtransfer" class="tab-link current  active" data-tab="tab-1"><a data-toggle="tab" href="#home1" aria-expanded="true">Add Bank Account</a></li>
-
-
-                        <li id="activelinkkarahfundrequest" class="tab-link retailerrequest" data-tab="tab-1"><a href="#menu11" data-toggle="tab">Add Wallet</a></li>
-
-                    </ul>
-
-                    <div class="width100 float-left ">
-
-                        <div id="home1" class="width100 float-left tab-pane fade remove-activein active in">
-
-                            <div class="fund-transfer-form dealer-box-back-four">
-                                @*@using (Ajax.BeginForm("AddBank", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "tblshowMasterD",InsertionMode = InsertionMode.InsertBefore,OnSuccess="onsuccessaddbnk",LoadingElementId= "outer-loader" }))
-                                    {*@
-                                @using (Html.BeginForm("AddBank", "Home", FormMethod.Post))
-                                {
-                                    <span>Bank Name</span>
-                                    <input placeholder="Enter Bank Name" class="form-input" id="Banknm" name="Banknm" required="True" type="text" value=""> <span>Branch Name</span>
-                                    <input placeholder="Enter Branch Name" class="form-input" id="BranchName" name="BranchName" required="True" type="text" value=""> <span>IFSC CODE</span>
-                                    <input placeholder="Enter Ifsc Code" class="form-input" id="ifsccode" name="ifsccode" required="True" type="text" value=""> <span>Account Number</span>
-                                    <input placeholder="Enter Account Number" class="form-input" id="accountno" name="accountno" required="True" type="text" value=""> <span>Account Type</span>
-                                    <input placeholder="Enter Account Type" class="form-input" id="accounttype" name="accounttype" required="True" type="text" value=""> <span>Account Holder Name</span>
-                                    <input placeholder="Enter Account Holder Name" class="form-input" id="accountholder" name="accountholder" required="True" type="text" value=""> <span>City / Town</span>
-                                    <input placeholder="Enter City" class="form-input" id="City" name="City" required="True" type="text" value="">
-                                    <input type="submit" class="fullbodydycolorbg button-third" value="Save" style="color:white;float: right;width: 100px;">
-
-                                }
-                            </div>
-
+        <div class="row clearfix vm-dealer-bankinfo-layout">
+            <div class="col-md-4 col-sm-12 vm-dealer-bankinfo-form-col">
+                <div class="vm-opr-main-card vm-dealer-bankinfo-form-card">
+                    <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-dealer-bankinfo-form-head">
+                        <div class="vm-opr-table-panel__title">
+                            <i class="fas fa-university" aria-hidden="true"></i>
+                            <span>Add A/C &amp; Wallet</span>
                         </div>
-                        <div id="menu11" class="width100 float-left remove-activein-add tab-pane fade">
-                            <div class="fund-transfer-form dealer-box-back-four" id="frmdata1">
-
-                                @using (Html.BeginForm("AddWallet", "Home", FormMethod.Post))
-                                {
-                                    <span>Wallet Name</span>
-                                    <input placeholder="Wallet Name" class="form-input" id="walletnm" name="walletnm" required="True" type="text" value=""> <span>Wallet No</span>
-                                    <input placeholder="Wallet No" class="form-input" id="walletno" name="walletno" required="True" type="text" value=""> <span>Wallet Holder Name</span>
-                                    <input placeholder="Wallet Holder Name" class="form-input" id="walletholdername" name="walletholdername" required="True" type="text" value="">
-                                    <input type="submit" class="fullbodydycolorbg button-third" value="Save" style="color:white;float: right;
-width: 100px;">
-                                }
-
-                            </div>
-                        </div>
-
-
-
                     </div>
 
-                    <div id="outer-loader" style="position: absolute;background: rgba(0,0,0,.5);right: 15px;left: 15px;bottom: 0px;top: 0px;display:none;">
-                        <div id="loader" style="position: absolute; right: 30%; top: 50%; transform: translate(0%, -50%);">
-                            <div class="loadingio-spinner-ripple-92ar2pfqk5j">
-                                <div class="ldio-zdyd6mf6t5">
-                                    <div></div><div></div>
+                    <ul class="nav nav-tabs vm-dealer-bankinfo-left-tabs" id="dealerBankLeftTabs" role="tablist">
+                        <li role="presentation" class="active" data-tab="dealer-bank-form">
+                            <a href="#dealer-bank-form" aria-expanded="true"><i class="fas fa-landmark" aria-hidden="true"></i><span>Add Bank Account</span></a>
+                        </li>
+                        <li role="presentation" data-tab="dealer-wallet-form">
+                            <a href="#dealer-wallet-form" aria-expanded="false"><i class="fas fa-wallet" aria-hidden="true"></i><span>Add Wallet</span></a>
+                        </li>
+                    </ul>
+
+                    <div class="vm-dealer-bankinfo-form-body">
+                        <div id="dealer-bank-form" class="vm-dealer-bankinfo-pane active in">
+                            @using (Html.BeginForm("AddBank", "Home", FormMethod.Post, new { @class = "vm-dealer-bankinfo-form" }))
+                            {
+                                <div class="vm-dealer-bankinfo-field">
+                                    <label for="Banknm">Bank Name</label>
+                                    <input class="form-control" id="Banknm" name="Banknm" placeholder="Enter Bank Name" required type="text" value="" />
+                                </div>
+                                <div class="vm-dealer-bankinfo-field">
+                                    <label for="BranchName">Branch Name</label>
+                                    <input class="form-control" id="BranchName" name="BranchName" placeholder="Enter Branch Name" required type="text" value="" />
+                                </div>
+                                <div class="vm-dealer-bankinfo-field">
+                                    <label for="ifsccode">IFSC Code</label>
+                                    <input class="form-control" id="ifsccode" name="ifsccode" placeholder="Enter IFSC Code" required type="text" value="" />
+                                </div>
+                                <div class="vm-dealer-bankinfo-field">
+                                    <label for="accountno">Account Number</label>
+                                    <input class="form-control" id="accountno" name="accountno" placeholder="Enter Account Number" required type="text" value="" />
+                                </div>
+                                <div class="vm-dealer-bankinfo-field">
+                                    <label for="accounttype">Account Type</label>
+                                    <input class="form-control" id="accounttype" name="accounttype" placeholder="Enter Account Type" required type="text" value="" />
+                                </div>
+                                <div class="vm-dealer-bankinfo-field">
+                                    <label for="accountholder">Account Holder Name</label>
+                                    <input class="form-control" id="accountholder" name="accountholder" placeholder="Enter Account Holder Name" required type="text" value="" />
+                                </div>
+                                <div class="vm-dealer-bankinfo-field">
+                                    <label for="City">City / Town</label>
+                                    <input class="form-control" id="City" name="City" placeholder="Enter City" required type="text" value="" />
+                                </div>
+                                <div class="vm-dealer-bankinfo-form-footer">
+                                    <button type="submit" class="saas-acc-btn saas-acc-btn--search vm-dealer-bankinfo-save-btn">
+                                        <i class="fas fa-save" aria-hidden="true"></i><span>Save Bank</span>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+
+                        <div id="dealer-wallet-form" class="vm-dealer-bankinfo-pane">
+                            @using (Html.BeginForm("AddWallet", "Home", FormMethod.Post, new { @class = "vm-dealer-bankinfo-form" }))
+                            {
+                                <div class="vm-dealer-bankinfo-field">
+                                    <label for="walletnm">Wallet Name</label>
+                                    <input class="form-control" id="walletnm" name="walletnm" placeholder="Wallet Name" required type="text" value="" />
+                                </div>
+                                <div class="vm-dealer-bankinfo-field">
+                                    <label for="walletno">Wallet No</label>
+                                    <input class="form-control" id="walletno" name="walletno" placeholder="Wallet No" required type="text" value="" />
+                                </div>
+                                <div class="vm-dealer-bankinfo-field">
+                                    <label for="walletholdername">Wallet Holder Name</label>
+                                    <input class="form-control" id="walletholdername" name="walletholdername" placeholder="Wallet Holder Name" required type="text" value="" />
+                                </div>
+                                <div class="vm-dealer-bankinfo-form-footer">
+                                    <button type="submit" class="saas-acc-btn saas-acc-btn--search vm-dealer-bankinfo-save-btn">
+                                        <i class="fas fa-save" aria-hidden="true"></i><span>Save Wallet</span>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-sm-12 vm-dealer-bankinfo-list-col">
+                <div class="vm-opr-main-card vm-dealer-bankinfo-list-card">
+                    <div class="vm-opr-table-panel">
+                        <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                            <div class="vm-opr-table-panel__title">
+                                <i class="fas fa-list-alt" aria-hidden="true"></i>
+                                <span id="dealerBankPanelTitle">Bank Details</span>
+                            </div>
+                            <div class="vm-dmt-table-panel__right">
+                                <div class="vm-ft-search-wrap vm-dealer-bankinfo-table-search">
+                                    <input class="form-control vm-dealer-bankinfo-search-input" type="text" id="dealerBankSearch" placeholder="Search bank, wallet, account..." autocomplete="off" />
+                                </div>
+                                <span class="vm-radiant-record-badge vm-dealer-bankinfo-record-badge" title="Records in current tab">
+                                    Records: <strong id="dealerBankRecordCount">@bankCount</strong>
+                                </span>
+                                <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group vm-dealer-block-opt-export-group">
+                                    <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-dealer-bankinfo-totals-btn" id="dealerBankTotalsBtn" title="Show totals" aria-expanded="false" aria-controls="dealerBankTotalsPanel">
+                                        <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" id="dealerBankExportExcel" class="saas-acc-btn saas-acc-btn--excel vm-dealer-block-opt-export-btn vm-dealer-block-opt-export-btn--excel" title="Export Excel">
+                                        <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                                    </button>
+                                    <button type="button" id="dealerBankExportPdf" class="saas-acc-btn saas-acc-btn--pdf vm-dealer-block-opt-export-btn vm-dealer-block-opt-export-btn--pdf" title="Export PDF">
+                                        <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
 
+                        <div class="vm-opr-totals-panel vm-dmt-totals-panel vm-dealer-bankinfo-totals-panel" id="dealerBankTotalsPanel" style="display:none;" aria-hidden="true">
+                            <div class="vm-dmt-totals-head">
+                                <div class="vm-dmt-totals-head__title">
+                                    <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                                    <span id="dealerBankTotalsTitle">Bank Details — Summary</span>
+                                </div>
+                                <button type="button" class="vm-dmt-totals-hide-btn" id="dealerBankTotalsHideBtn" title="Hide totals" aria-label="Hide totals">
+                                    <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                                <div class="vm-opr-total-card vm-opr-total-card--primary">
+                                    <span class="vm-opr-total-card__label">Total Records</span>
+                                    <strong class="vm-opr-total-card__value" id="dealerBankTotalCount">@bankCount</strong>
+                                </div>
+                                <div class="vm-opr-total-card vm-opr-total-card--success">
+                                    <span class="vm-opr-total-card__label">Visible (Filtered)</span>
+                                    <strong class="vm-opr-total-card__value" id="dealerBankVisibleCount">@bankCount</strong>
+                                </div>
+                                <div class="vm-opr-total-card vm-opr-total-card--pending">
+                                    <span class="vm-opr-total-card__label">Active Section</span>
+                                    <strong class="vm-opr-total-card__value" id="dealerBankActiveSection">Bank Details</strong>
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="col-md-8">
-                <div class="fund-trasfer-right fund-user-right fund-user-right-responshive">
-
-                    <div id="tab-1" class="width100 float-left tab-content current dealer-box-back-four" style="padding:0px;">
-
-                        <ul class="nav nav-tabs" style="padding-bottom:0px;">
-
-                            <li class="active" id="hometabe123"><a data-toggle="tab" href="#home123">Bank Details</a></li>
-                            <li id="menutabe123"><a data-toggle="tab" href="#menu1234">Wallets Details</a></li>
-
+                        <ul class="nav nav-tabs vm-dealer-bankinfo-right-tabs" id="dealerBankRightTabs" role="tablist">
+                            <li role="presentation" class="active" data-tab="dealer-bank-list" data-title="Bank Details" data-count="@bankCount">
+                                <a href="#dealer-bank-list" aria-expanded="true"><i class="fas fa-university" aria-hidden="true"></i><span>Bank Details</span></a>
+                            </li>
+                            <li role="presentation" data-tab="dealer-wallet-list" data-title="Wallets Details" data-count="@walletCount">
+                                <a href="#dealer-wallet-list" aria-expanded="false"><i class="fas fa-wallet" aria-hidden="true"></i><span>Wallets Details</span></a>
+                            </li>
                         </ul>
-                        <div id="home123" class="width100 float-left tab-pane fade remove-activein active in">
-                            <div id="tblshowMasterD" class="table-responsive tableseconddes-dealer" style="width:100%;margin-top:15px;">
 
-                                <div class="table-responsive" id="tblshowmastertbl">
-                                    <table class="third-design-table table-resp-padd-third" style="margin-top:5px;width: 100%;margin-bottom:5px; float:left;" border="1">
+                        <div class="vm-dealer-bankinfo-tab-body">
+                            <div id="dealer-bank-list" class="vm-dealer-bankinfo-pane active in">
+                                <div class="vm-dealer-bankinfo-table-wrap table-responsive">
+                                    <table class="table table-bordered vm-opr-data-table" id="dealerBankTable">
                                         <thead>
                                             <tr>
-                                                <th style="width:220px; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black; position:initial;border:1px solid var(--border-color);background-color:whitesmoke;">
-                                                    Bank&nbsp;Name
-                                                </th>
-                                                <th style="width:220px;background-color:whitesmoke;   height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                    Branch&nbsp;Name
-                                                </th>
-                                                <th style="width:220px;background-color:whitesmoke;  height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                    IFSC&nbsp;CODE
-                                                </th>
-                                                <th style="width:220px;background-color:whitesmoke; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                    Account&nbsp;Number
-                                                </th>
-                                                <th style="width:220px; height: 42px;background-color:whitesmoke; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                    Account&nbsp;Type
-                                                </th>
-                                                <th style="width:220px; height: 42px;background-color:whitesmoke; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black; position:initial;border:1px solid var(--border-color);">
-                                                    Account&nbsp;Holder&nbsp;Name
-                                                </th>
-                                                <th style="width:220px; background-color:whitesmoke; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                    City&nbsp;/&nbsp;Town
-                                                </th>
-
-                                                <th style="width:220px; background-color:whitesmoke; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                    Action
-                                                </th>
-
+                                                <th>Bank Name</th>
+                                                <th>Branch Name</th>
+                                                <th>IFSC Code</th>
+                                                <th>Account Number</th>
+                                                <th>Account Type</th>
+                                                <th>Account Holder</th>
+                                                <th>City / Town</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @{ var hasBankRows = false; }
                                             @if (Model.bankinfo != null)
                                             {
                                                 foreach (var item in Model.bankinfo)
                                                 {
+                                                    hasBankRows = true;
                                                     <tr>
-                                                        <td style="width:320px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                            @item.banknm
-                                                        </td>
-                                                        <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                            @item.branch_nm
-                                                        </td>
-                                                        <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                            @item.ifsccode
-                                                        </td>
-                                                        <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                            @item.acno
-                                                        </td>
-                                                        <td style="width:160px;  font-size:14px;  font-family:Arial; text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                            @item.actype
-                                                        </td>
-                                                        <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                            @item.holdername
-                                                        </td>
-                                                        <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                            @item.address
-                                                        </td>
-                                                        <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                            <button class="first-del done-third" style="width: auto; padding: 4px 4px;border:0px;background:transparent;"><img src="../../MainFrontDesign/images/delete.svg" style="width:13px;"></button>
-                                                            <button onclick="deletebank('@item.idno')" class="fullbodydycolorbg second-del done-third" style="display:none;width: auto;height: auto;padding: 2px 2px;color:#fff;font-size: 12px;background: var(--main-bg-lcolor) !important;border: 1px solid var(--main-bg-rcolor);">Sure<br />?</button>
+                                                        <td>@item.banknm</td>
+                                                        <td>@item.branch_nm</td>
+                                                        <td>@item.ifsccode</td>
+                                                        <td>@item.acno</td>
+                                                        <td>@item.actype</td>
+                                                        <td>@item.holdername</td>
+                                                        <td>@item.address</td>
+                                                        <td class="vm-dealer-bankinfo-action-col">
+                                                            <button type="button" class="vm-dealer-bankinfo-del-btn" data-action="bank-delete" data-id="@item.idno" title="Delete bank account" aria-label="Delete bank account">
+                                                                <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                 }
                                             }
+                                            @if (!hasBankRows)
+                                            {
+                                                <tr class="vm-dealer-bankinfo-empty-row">
+                                                    <td colspan="8">No bank accounts added yet.</td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
-
-
-
-
-
-
                             </div>
-                        </div>
 
-                        <div id="menu1234" class="width100 tab-pane fade remove-activein">
-                            <div class="table-responsive " style="width:100%;">
-
-                                <table class="third-design-table" style="margin-top:5px;width: 100%;margin-bottom:5px; float:left;" border="1">
-                                    <tbody>
-                                        <tr>
-                                            <th style="width:220px; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black; position:initial;border:1px solid var(--border-color);background-color:whitesmoke;">
-                                                Company Name
-                                            </th>
-                                            <th style="width:220px;background-color:whitesmoke;   height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                Wallet No.
-                                            </th>
-                                            <th style="width:220px;background-color:whitesmoke;  height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                Wallet Holder
-                                            </th>
-                                            <th style="width:220px;background-color:whitesmoke; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                Action
-                                            </th>
-                                        </tr>
-
-                                        @if (Model.walletinfo != null)
-                                        {
-
-                                            foreach (var item in Model.walletinfo)
+                            <div id="dealer-wallet-list" class="vm-dealer-bankinfo-pane">
+                                <div class="vm-dealer-bankinfo-table-wrap table-responsive">
+                                    <table class="table table-bordered vm-opr-data-table" id="dealerWalletTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Company Name</th>
+                                                <th>Wallet No.</th>
+                                                <th>Wallet Holder</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{ var hasWalletRows = false; }
+                                            @if (Model.walletinfo != null)
                                             {
-                                                <tr>
-                                                    <td style="width:320px;  font-size:14px; padding: 10px; font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.walletname
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px;padding: 10px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.walletno
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px; padding: 10px; font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.walletholdername
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px; padding: 10px; font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-
-
-                                                        <button class="first-del done-third" style="width: auto; padding: 4px 4px;"><i style="font-size:24px;color:red;" class="fa" aria-hidden="true"></i></button>
-                                                        <button onclick="deleteWallet('@item.walletid')" class="fullbodydycolorbg second-del done-third" style="display:none;width: auto;height: auto;padding: 2px 2px;color:#fff;font-size: 12px;background: var(--main-bg-lcolor) !important;border: 1px solid var(--main-bg-rcolor);">Sure<br />?</button>
-                                                    </td>
+                                                foreach (var item in Model.walletinfo)
+                                                {
+                                                    hasWalletRows = true;
+                                                    <tr>
+                                                        <td>@item.walletname</td>
+                                                        <td>@item.walletno</td>
+                                                        <td>@item.walletholdername</td>
+                                                        <td class="vm-dealer-bankinfo-action-col">
+                                                            <button type="button" class="vm-dealer-bankinfo-del-btn" data-action="wallet-delete" data-id="@item.walletid" title="Delete wallet" aria-label="Delete wallet">
+                                                                <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            @if (!hasWalletRows)
+                                            {
+                                                <tr class="vm-dealer-bankinfo-empty-row">
+                                                    <td colspan="4">No wallets added yet.</td>
                                                 </tr>
                                             }
-
-                                        }
-
-
-                                    </tbody>
-
-                                </table>
-
-
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-
-                        <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
-                            <img src="~/img/ajax-loader.gif">
-                        </div>
                     </div>
-                    @*<div id="tab-2n " class="width100 float-left tab-content ">*@
-
-
-
                 </div>
             </div>
         </div>
-    </div>
 
-  
+    </div>
 </section>
 
-
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<!--Add State dropdown list-->
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
-    $('.third-design-dealer .third-design-table td').mouseenter(function () {
-
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-
-
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('cssText', 'color: #fff !important;background:var(--main-bg-rcolor) !important;');
-        $(".third-design-table tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-
-    });
-
-    $('.third-design-dealer .third-design-table td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-
-    });
-</script>
-
-
-
-@*<script>
-    function onsuccessaddbnk() {
-        updateDiv();
-    }
-
-
-
-    function updateDiv() {
-        
-        var url = '@Url.Action("bankinfodealer", "Home")';
-        window.location=url;
-      //  $("#tblshowMasterD").load(window.location.href + " #tblshowMasterD");
-    }
-</script>*@
-
-<script>
-    function deletebank(idno) {
-        var url = '@Url.Action("Deletebank", "Home")';
-        $.ajax({
-        url: url,
-        data: { id: idno},
-        cache: false,
-        type: "GET",
-        success: function (data) {
-        var url = '@Url.Action("bankinfodealer", "Home")';
-        window.location=url;
+    (function ($) {
+        function dealerBankActivateTabs($tabs, tabId) {
+            $tabs.find('li').removeClass('active');
+            var $activeLi = $tabs.find('li[data-tab="' + tabId + '"]');
+            $activeLi.addClass('active');
+            $tabs.find('li a').attr({ 'aria-selected': 'false', 'aria-expanded': 'false' });
+            $activeLi.find('a').attr({ 'aria-selected': 'true', 'aria-expanded': 'true' });
         }
-        })
+
+        function dealerBankSwitchLeftTab(tabId) {
+            dealerBankActivateTabs($('#dealerBankLeftTabs'), tabId);
+            $('#dealer-bank-form, #dealer-wallet-form').removeClass('active in').hide();
+            $('#' + tabId).addClass('active in').show();
         }
-        function deleteWallet(idno) {
-        var url = '@Url.Action("Deletewallet", "Home")';
-        $.ajax({
-        url: url,
-        data: { id: idno},
-        cache: false,
-        type: "GET",
-        success: function (data) {
-        var url = '@Url.Action("bankinfodealer", "Home")';
-        window.location=url;
+
+        function dealerBankGetActiveListTab() {
+            return $('#dealerBankRightTabs li.active, #dealerBankRightTabs li.current').first();
         }
-        })
+
+        function dealerBankGetActiveTableTitle() {
+            var $active = dealerBankGetActiveListTab();
+            return $active.data('title') || 'Bank Details';
         }
-        </script>
-        <script>
-            $('.first-del').click(function () {
-                $(this).hide();
-                $(this).next('.second-del').show();
+
+        function dealerBankGetActivePane() {
+            var $tab = dealerBankGetActiveListTab();
+            var tabId = $tab.data('tab');
+            return $('#' + tabId);
+        }
+
+        function dealerBankUpdateRecordCount() {
+            var $tab = dealerBankGetActiveListTab();
+            var $pane = dealerBankGetActivePane();
+            var total = $pane.find('table tbody tr:not(.vm-dealer-bankinfo-empty-row)').length;
+            var visible = $pane.find('table tbody tr:not(.vm-dealer-bankinfo-empty-row):visible').length;
+            $('#dealerBankRecordCount').text(visible);
+            $('#dealerBankTotalCount').text(total);
+            $('#dealerBankVisibleCount').text(visible);
+            $('#dealerBankActiveSection').text(dealerBankGetActiveTableTitle());
+            $('#dealerBankTotalsTitle').text(dealerBankGetActiveTableTitle() + ' — Summary');
+            $tab.data('count', total);
+        }
+
+        function dealerBankSwitchRightTab(tabId, $li) {
+            dealerBankActivateTabs($('#dealerBankRightTabs'), tabId);
+            $('#dealer-bank-list, #dealer-wallet-list').removeClass('active in').hide();
+            $('#' + tabId).addClass('active in').show();
+            var title = $li.data('title') || 'Details';
+            $('#dealerBankPanelTitle').text(title);
+            dealerBankFilterActiveTable($('#dealerBankSearch').val());
+            dealerBankHideTotals();
+            dealerBankUpdateRecordCount();
+        }
+
+        function dealerBankFilterActiveTable(term) {
+            var q = (term || '').toLowerCase().trim();
+            var $pane = dealerBankGetActivePane();
+            $pane.find('table tbody tr').each(function () {
+                if ($(this).hasClass('vm-dealer-bankinfo-empty-row')) {
+                    return;
+                }
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(q === '' || text.indexOf(q) > -1);
             });
-        </script>
+            dealerBankUpdateRecordCount();
+        }
+
+        function dealerBankHideTotals() {
+            $('#dealerBankTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+            $('#dealerBankTotalsBtn').attr('aria-expanded', 'false');
+        }
+
+        function dealerBankToggleTotals() {
+            var $panel = $('#dealerBankTotalsPanel');
+            if ($panel.is(':visible')) {
+                dealerBankHideTotals();
+                return;
+            }
+            dealerBankUpdateRecordCount();
+            $panel.slideDown(180).attr('aria-hidden', 'false');
+            $('#dealerBankTotalsBtn').attr('aria-expanded', 'true');
+        }
+
+        function dealerBankEsc(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function dealerBankCollectExportRows($table) {
+            var headers = [];
+            $table.find('thead th').each(function () {
+                if ($(this).text().trim().toLowerCase() === 'action') {
+                    return;
+                }
+                headers.push($(this).text().trim());
+            });
+
+            var rows = [];
+            $table.find('tbody tr:visible').each(function () {
+                if ($(this).hasClass('vm-dealer-bankinfo-empty-row')) {
+                    return;
+                }
+                var cells = [];
+                $(this).find('td').each(function () {
+                    if ($(this).hasClass('vm-dealer-bankinfo-action-col')) {
+                        return;
+                    }
+                    cells.push($(this).text().trim());
+                });
+                if (cells.length) {
+                    rows.push(cells);
+                }
+            });
+
+            return { headers: headers, rows: rows };
+        }
+
+        function dealerBankExportStyles() {
+            return 'body{font-family:Segoe UI,Arial,sans-serif;padding:24px;color:#0f172a;background:#fff;}'
+                + '.vm-block-export-head{margin:0 0 18px;padding-bottom:14px;border-bottom:2px solid #e2e8f0;}'
+                + '.vm-block-export-head h3{margin:0 0 6px;font-size:22px;font-weight:700;color:#1e293b;}'
+                + '.vm-block-export-head p{margin:0;font-size:13px;color:#64748b;line-height:1.5;}'
+                + 'table{border-collapse:collapse;width:100%;font-size:12px;}'
+                + 'th,td{border:1px solid #dbe4f0;padding:8px 10px;text-align:center;vertical-align:middle;}'
+                + 'th{background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%);color:#334155;font-weight:700;}';
+        }
+
+        function dealerBankBuildExportHtml(title, data) {
+            var body = '';
+            for (var i = 0; i < data.rows.length; i++) {
+                body += '<tr>';
+                for (var c = 0; c < data.rows[i].length; c++) {
+                    body += '<td>' + dealerBankEsc(data.rows[i][c]) + '</td>';
+                }
+                body += '</tr>';
+            }
+
+            var head = '';
+            for (var h = 0; h < data.headers.length; h++) {
+                head += '<th>' + dealerBankEsc(data.headers[h]) + '</th>';
+            }
+
+            return '<html><head><meta charset="utf-8"><title>' + dealerBankEsc(title) + '</title>'
+                + '<style>' + dealerBankExportStyles() + '</style></head><body>'
+                + '<div class="vm-block-export-head"><h3>' + dealerBankEsc(title) + '</h3>'
+                + '<p>Generated on ' + dealerBankEsc(new Date().toLocaleString()) + '</p></div>'
+                + '<table><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table></body></html>';
+        }
+
+        function dealerBankWarnNoRecords() {
+            if (typeof swal === 'function') {
+                swal('No records to export', '', 'warning');
+                return;
+            }
+            window.alert('No records to export');
+        }
+
+        function dealerBankExportExcel() {
+            var $pane = dealerBankGetActivePane();
+            var $table = $pane.find('table').first();
+            var data = dealerBankCollectExportRows($table);
+            if (!data.rows.length) {
+                dealerBankWarnNoRecords();
+                return;
+            }
+            var title = dealerBankGetActiveTableTitle();
+            var html = dealerBankBuildExportHtml(title, data);
+            var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, 'Bank_Info_Report.xls');
+                return;
+            }
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'Bank_Info_Report.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+        }
+
+        function dealerBankExportPdf() {
+            var $pane = dealerBankGetActivePane();
+            var $table = $pane.find('table').first();
+            var data = dealerBankCollectExportRows($table);
+            if (!data.rows.length) {
+                dealerBankWarnNoRecords();
+                return;
+            }
+            var title = dealerBankGetActiveTableTitle();
+            var w = window.open('', '_blank');
+            if (!w) {
+                return;
+            }
+            w.document.open();
+            w.document.write(dealerBankBuildExportHtml(title, data));
+            w.document.close();
+            w.focus();
+        }
+
+        function bootDealerBankInfoPage() {
+            if (!window.jQuery) {
+                window.setTimeout(bootDealerBankInfoPage, 50);
+                return;
+            }
+
+            $('#dealer-wallet-form, #dealer-wallet-list').hide();
+
+            $('#dealerBankLeftTabs li a').on('click', function (e) {
+                e.preventDefault();
+                dealerBankSwitchLeftTab($(this).closest('li').data('tab'));
+            });
+
+            $('#dealerBankRightTabs li a').on('click', function (e) {
+                e.preventDefault();
+                dealerBankSwitchRightTab($(this).closest('li').data('tab'), $(this).closest('li'));
+            });
+
+            $('#dealerBankSearch').on('input', function () {
+                dealerBankFilterActiveTable($(this).val());
+            });
+
+            $('#dealerBankTotalsBtn').on('click', dealerBankToggleTotals);
+            $('#dealerBankTotalsHideBtn').on('click', dealerBankHideTotals);
+            $('#dealerBankExportExcel').on('click', dealerBankExportExcel);
+            $('#dealerBankExportPdf').on('click', dealerBankExportPdf);
+
+            dealerBankUpdateRecordCount();
+        }
+
+        $(document).on('click', '.saas-dealer-bank-info-page [data-action="bank-delete"]', function (e) {
+            e.preventDefault();
+            if (!confirm('Delete this bank account?')) {
+                return;
+            }
+            var $btn = $(this);
+            $btn.prop('disabled', true);
+            $.ajax({
+                url: '@Url.Action("Deletebank", "Home")',
+                data: { id: $btn.data('id') },
+                cache: false,
+                type: 'GET',
+                success: function () {
+                    window.location.href = '@Url.Action("bankinfodealer", "Home")';
+                },
+                error: function () {
+                    alert('Unable to delete bank account.');
+                    $btn.prop('disabled', false);
+                }
+            });
+        });
+
+        $(document).on('click', '.saas-dealer-bank-info-page [data-action="wallet-delete"]', function (e) {
+            e.preventDefault();
+            if (!confirm('Delete this wallet?')) {
+                return;
+            }
+            var $btn = $(this);
+            $btn.prop('disabled', true);
+            $.ajax({
+                url: '@Url.Action("Deletewallet", "Home")',
+                data: { id: $btn.data('id') },
+                cache: false,
+                type: 'GET',
+                success: function () {
+                    window.location.href = '@Url.Action("bankinfodealer", "Home")';
+                },
+                error: function () {
+                    alert('Unable to delete wallet.');
+                    $btn.prop('disabled', false);
+                }
+            });
+        });
+
+        if (document.readyState === 'complete') {
+            bootDealerBankInfoPage();
+        } else {
+            window.addEventListener('load', bootDealerBankInfoPage);
+        }
+    })(window.jQuery);
+</script>

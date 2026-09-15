@@ -42,7 +42,7 @@
 
 <div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
-<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page">
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page">
 
     <div class="container-fluid vm-opr-page-shell">
 
@@ -65,7 +65,7 @@
 
                     <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
                         <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
-                        <li>Prepaid &amp; Utilities</li>
+                        <li>Reports</li>
                         <li>Sell Recharge Report</li>
                     </ol>
 
@@ -153,12 +153,21 @@
                         <span>Sell recharge report</span>
                     </div>
                     <div class="vm-dmt-table-panel__right">
+                        <div class="vm-ft-search-wrap vm-sell-rch-table-search">
+                            <input class="form-control vm-sell-rch-search-input" type="text" id="myInput" placeholder="Search report..." autocomplete="off" onkeyup="sellRchSearch()" />
+                        </div>
                         <span class="vm-radiant-inline-total" title="Total amount for current filter">
                             Total: <strong>&#8377; @totalAmount.ToString("N2")</strong>
                         </span>
                         <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
-                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-sell-rch-totals-btn" onclick="toggleSellRechargeTotals()" title="Show totals" aria-expanded="false" aria-controls="sellRechargeTotalsPanel">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-sell-rch-totals-btn vm-ecom-totals-btn" onclick="toggleSellRechargeTotals()" title="Show totals" aria-expanded="false" aria-controls="sellRechargeTotalsPanel">
                                 <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
                             </button>
                         </div>
                     </div>
@@ -298,6 +307,114 @@
     window.sellRchSelect2Url = '@Url.Content("~/MainFrontDesign/select2/dist/js/select2.full.min.js")';
     window.sellRchUpdateUrl = '@Url.Action("Rechargesellupd", "Home")';
 
+    function sellRchSearch() {
+        var $ = window.jQuery;
+        var value = ($('#myInput').val() || '').toLowerCase();
+        $('#sellRechargeReport tbody tr').filter(function () {
+            if ($(this).hasClass('vm-opr-table-empty-row')) {
+                return true;
+            }
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    }
+
+    function sellRchQueryData() {
+        var $ = window.jQuery;
+        return {
+            txt_frm_date: $('#txt_frm_date').val() || '',
+            txt_to_date: $('#txt_to_date').val() || '',
+            ddl_status: $('#ddl_status').val() || '',
+            Operator: $('#Operator').val() || ''
+        };
+    }
+
+    function sellRchEsc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function sellRchTableRows() {
+        var $ = window.jQuery;
+        var rows = [];
+        $('#sellRechargeReport tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-opr-table-empty-row') || !$tr.is(':visible')) {
+                return;
+            }
+            var $cells = $tr.children('td');
+            if ($cells.length < 9) {
+                return;
+            }
+            rows.push({
+                status: $.trim($cells.eq(0).find('.vm-radiant-status-text').text() || $cells.eq(0).text()).replace(/\s+/g, ' '),
+                consumer: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+                operator: $.trim($cells.eq(2).text()).replace(/\s+/g, ' '),
+                amount: $.trim($cells.eq(3).text()).replace(/\s+/g, ' '),
+                earn: $.trim($cells.eq(4).text()).replace(/\s+/g, ' '),
+                pre: $.trim($cells.eq(5).text()).replace(/\s+/g, ' '),
+                post: $.trim($cells.eq(6).text()).replace(/\s+/g, ' '),
+                requestDate: $.trim($cells.eq(7).text()).replace(/\s+/g, ' '),
+                respDate: $.trim($cells.eq(8).text()).replace(/\s+/g, ' ')
+            });
+        });
+        return rows;
+    }
+
+    function sellRchBuildExportHtml(rows, title) {
+        var q = sellRchQueryData();
+        var body = '';
+        for (var i = 0; i < rows.length; i++) {
+            var r = rows[i];
+            body += '<tr>'
+                + '<td>' + sellRchEsc(r.status) + '</td>'
+                + '<td>' + sellRchEsc(r.consumer) + '</td>'
+                + '<td>' + sellRchEsc(r.operator) + '</td>'
+                + '<td>' + sellRchEsc(r.amount) + '</td>'
+                + '<td>' + sellRchEsc(r.earn) + '</td>'
+                + '<td>' + sellRchEsc(r.pre) + '</td>'
+                + '<td>' + sellRchEsc(r.post) + '</td>'
+                + '<td>' + sellRchEsc(r.requestDate) + '</td>'
+                + '<td>' + sellRchEsc(r.respDate) + '</td>'
+                + '</tr>';
+        }
+        return '<html><head><meta charset="utf-8"><title>' + sellRchEsc(title) + '</title></head><body>'
+            + '<h3>' + sellRchEsc(title) + '</h3>'
+            + '<p>From: ' + sellRchEsc(q.txt_frm_date) + ' | To: ' + sellRchEsc(q.txt_to_date)
+            + ' | Status: ' + sellRchEsc(q.ddl_status || 'ALL') + ' | Operator: ' + sellRchEsc(q.Operator || 'ALL') + '</p>'
+            + '<table border="1" cellpadding="4" cellspacing="0"><thead><tr>'
+            + '<th>Status</th><th>Consumer</th><th>Operator</th><th>Net Amt</th><th>Earn</th><th>Remain Pre</th><th>Remain Pos</th><th>Request Date</th><th>Resp Date</th>'
+            + '</tr></thead><tbody>' + body + '</tbody></table></body></html>';
+    }
+
+    function sellRchDownloadExcel(html) {
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel' });
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'Sell_Recharge_Report.xls');
+            return;
+        }
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'Sell_Recharge_Report.xls';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+    }
+
+    function sellRchOpenPdf(html) {
+        var w = window.open('', '_blank');
+        if (!w) {
+            return;
+        }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+    }
+
     function toggleSellRechargeTotals() {
         var $ = window.jQuery;
         var panel = $('#sellRechargeTotalsPanel');
@@ -436,6 +553,9 @@
                 if ($.fn.select2 && !$el.hasClass('select2-hidden-accessible')) {
                     $el.select2({
                         width: '100%',
+                        dropdownParent: $('body'),
+                        containerCssClass: 'vm-ecom-select2',
+                        dropdownCssClass: 'vm-ecom-select2-drop',
                         minimumResultsForSearch: 0
                     });
                 }
@@ -465,6 +585,27 @@
 
             $(document).off('show.sellRchDp shown.sellRchDp').on('show.sellRchDp shown.sellRchDp', '#txt_frm_date, #txt_to_date', pinSellRchDatepicker);
             $(window).off('resize.sellRchDp orientationchange.sellRchDp').on('resize.sellRchDp orientationchange.sellRchDp', pinSellRchDatepicker);
+
+            $('#btnExport').off('click.sellRchEx').on('click.sellRchEx', function () {
+                var rows = sellRchTableRows();
+                if (!rows.length) {
+                    if (typeof swal === 'function') {
+                        swal('No records to export', '', 'warning');
+                    }
+                    return;
+                }
+                sellRchDownloadExcel(sellRchBuildExportHtml(rows, 'Sell Recharge Report'));
+            });
+            $('#btnPDF').off('click.sellRchPdf').on('click.sellRchPdf', function () {
+                var rows = sellRchTableRows();
+                if (!rows.length) {
+                    if (typeof swal === 'function') {
+                        swal('No records to export', '', 'warning');
+                    }
+                    return;
+                }
+                sellRchOpenPdf(sellRchBuildExportHtml(rows, 'Sell Recharge Report'));
+            });
         }
 
         if ($.fn.select2) {
@@ -481,3 +622,63 @@
         window.addEventListener('load', bootSellRechargeReport);
     }
 </script>
+
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .form-control,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters input.form-control,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters select.form-control,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-opr-select,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-dmt-select,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search span,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-opr-toolbar-search,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-opr-toolbar-search span,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-radiant-search-btn,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-radiant-search-btn span,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .select2-container .select2-selection--single,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .select2-container--default .select2-selection--single .select2-selection__rendered,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-radiant-inline-filters .select2-container--default .select2-selection--single .select2-selection__placeholder,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-sell-rch-table-search input.vm-sell-rch-search-input,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page #sellRechargeReport.vm-opr-data-table thead th,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page #sellRechargeReport.vm-opr-data-table tbody td,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-sell-rch-upd-btn {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-sell-rch-table-search {
+            min-width: 200px;
+            max-width: 260px;
+        }
+
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page .vm-sell-rch-table-search input.vm-sell-rch-search-input {
+            height: 38px !important;
+            border-radius: 8px !important;
+            border: 1.5px solid #cbd5e1 !important;
+            background: #fff !important;
+            background-image: none !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            cursor: text !important;
+            font-weight: 500 !important;
+            padding: 0 12px !important;
+        }
+
+        body.saas-admin-ui .select2-dropdown.vm-ecom-select2-drop,
+        body.saas-admin-ui .select2-dropdown.vm-ecom-select2-drop .select2-results__option,
+        body.saas-admin-ui .select2-dropdown.vm-ecom-select2-drop .select2-search__field {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page #txt_frm_date,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page #txt_to_date,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page input#txt_frm_date.form-control.saas-acc-dp-input,
+        body.saas-admin-ui section.content.saas-sell-recharge-report-page.saas-ecommerce-report-page input#txt_to_date.form-control.saas-acc-dp-input {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+    </style>
+}

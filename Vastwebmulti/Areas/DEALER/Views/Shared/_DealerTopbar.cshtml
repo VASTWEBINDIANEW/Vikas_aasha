@@ -85,19 +85,13 @@
                         <a href="@Url.Action("tokenPurchaseHistory", "Home")" class="admin-topbar-btn" title="Tokens (@dealerTokenVal)">
                             <i class="fas fa-coins admin-topbar-icon" aria-hidden="true"></i>
                             <span class="admin-topbar-label">Tokens</span>
-                            @if (Convert.ToDecimal(dealerTokenVal) != 0)
-                            {
-                                <span class="admin-topbar-badge">@dealerTokenVal</span>
-                            }
+                            <span class="admin-topbar-badge" id="dealerTopbarTokenBadge" @(Convert.ToDecimal(dealerTokenVal) == 0 ? "style=\"display:none;\"" : "")>@dealerTokenVal</span>
                         </a>
                     </li>
                     <li class="admin-topbar-item saas-topbar-item">
                         <a href="@Url.Action("Complaint", "Home")" class="admin-topbar-btn" title="Chat's">
                             <i class="fas fa-comments admin-topbar-icon" aria-hidden="true"></i>
-                            @if (Convert.ToDecimal(notificount) != 0)
-                            {
-                                <span class="admin-topbar-badge">@notificount</span>
-                            }
+                            <span class="admin-topbar-badge" id="dealerTopbarChatBadge" @(Convert.ToDecimal(notificount) == 0 ? "style=\"display:none;\"" : "")>@notificount</span>
                             <span class="admin-topbar-label">Chat's</span>
                         </a>
                     </li>

@@ -1,222 +1,336 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.TDSReportModel
+@using System.Linq
 @{
-    ViewBag.Title = "TDSReport";
+    ViewBag.Title = "TDS Report";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var rows = Model.TDSDealer != null ? Model.TDSDealer.ToList() : new List<Vastwebmulti.Models.TDS_Report_Dealer_Result>();
+    var rowCount = rows.Count;
+    var totalTds = rows.Sum(a => a.TDS);
+    var currentMonth = (ViewBag.CurrentMonthName ?? "").ToString();
+    var oldMonth1 = (ViewBag.OldMonth1 ?? "").ToString();
+    var oldMonth2 = (ViewBag.OldMonth2 ?? "").ToString();
+    var activeMonth = (ViewBag.Crmonth ?? ViewBag.CurrentMonthName ?? "").ToString();
 }
 
-<style>
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-    .tdsreportclass-first .dt-buttons, .tdsreportclass-first .dataTables_filter ,.tdsreportclass-first .dataTables_info ,.tdsreportclass-first .dataTables_paginate.paging_simple_numbers{display:none;}
-    .tdsmonth-button button {
-    margin: 0;
-    width: 100%;
-    padding-left: 0;
-    padding-right: 0;
-}
-    
-    .tds-topclassheader .card ul.slab-setting-menu li a:hover {
-    background: var(--main-bg-lcolor);
-    color: #fff !important;
-    border-color: var(--main-bg-lcolor) !important;
-}
-    .tdsreportclass-first table tr th ,.tdsreportclass-first table tfoot tr td{
-    border-bottom: 0;
-        
-}
-    .tdsreportclass-first .table-responsive {
-    overflow: inherit;
-}
-    .tdsreportclass-first table tfoot tr td {
-    padding: 10px 5px;
-}
-    @@media screen and (max-width:766px){
-        .tdsreportclass-first table {
-    border: 0;
-        
-    margin: 0 !important;
-}
-        .tdsreportclass-first .table-responsive {
-    margin-top: 10px !important;
-}
-        .tdsmonth-button .col-xs-4 {
-    width: 20%;
-    padding-left: 0;
-    float: right;
-}
-        .tdsreportclass-first .table-responsive {
-    overflow: auto;
-}
-
-        .bars.sidebar-toggle-responshiveclass {
-            top: 13px !important;
-        }
-
-    }
-    
-    
-    
-    
-    
-    @@media screen and (max-width:520px){
-        .col-md-4.tdsmonth-button {
-            width: 100%;
-            float: left;
-        }
-        .tdsmonth-button .col-xs-4 {
-    width: 33%;
-    float: left;
-}
-        .col-md-4.tdsmonth-button .row {
-    margin-left: 0;
-}
-
-        .slab-setting-menu li {
-            width: 50%;
-            margin: 0;
-        }
-        .slab-setting-menu {
-            margin-bottom: 8px;
-        }
-
-
-    }
-
-</style>
-<section class="content">
-    <div class="container-fluid" style="padding-top:8px;">
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tds-topclassheader" style=" margin-top: 0px; ">
-                <div class="card page-header-third">
-                    <div class="row">
-                        <div class="col-md-8">
-                     
-                          @Html.Partial("Moneytransferreportpartialview")
-                     
-                        </div>
-                        <div class="col-md-4 tdsmonth-button">
-                            @using (Html.BeginForm("TDSReport", "Home", FormMethod.Post))
-                            {
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <center>
-                                            <button id="submit" type="submit" class="btn  waves-effect" style="height:32px;border:1px solid #c7c2c2;background:#dedddd;" name="submit" value='@ViewBag.CurrentMonthName'>
-                                                <i class="fa fa-search" style="top:-1px;font-size:14px;color:#555;"></i>
-                                                <span style="top:-2px;color:#555;">@ViewBag.CurrentMonthName</span>
-                                            </button>
-                                        </center>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <center>
-                                            <button id="submit" type="submit" class="btn  waves-effect" style="height:32px;border:1px solid #c7c2c2;background:#dedddd;" name="submit" value='@ViewBag.OldMonth1'>
-                                                <i class="fa fa-search" style="top:-1px;font-size:14px;color:#555;"></i>
-                                                <span style="top:-2px;color:#555;">@ViewBag.OldMonth1</span>
-                                            </button>
-                                        </center>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <center>
-                                            <button id="submit" type="submit" class="btn  waves-effect" style="height:32px;border:1px solid #c7c2c2;background:#dedddd;" name="submit" value='@ViewBag.OldMonth2'>
-                                                <i class="fa fa-search" style="top:-1px;font-size:14px;color:#555;"></i>
-                                                <span style="top:-2px;color:#555;">@ViewBag.OldMonth2</span>
-                                            </button>
-                                        </center>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tdsreportclass-first" style="margin-top:0;">
-                <div class="card page-header-third">
-                    
-                    <div class="body all-reporttable-css" style="padding:0px;">
-                        <div class="table-responsive" style="position:inherit;margin-top:0;">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable " style="width:100%; font-size:14px;margin:0 !important;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>SR.No</th>
-                                        <th>Role</th>
-                                        <th>FarmName</th>
-                                        <th>Name</th>
-                                        <th>DMT&nbsp;TDS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{
-                                        var i = 1;
-                                    }
-                                    @if (Model.TDSDealer != null)
-                                    {
-                                        foreach (var item in Model.TDSDealer)
-                                        {
-                                            <tr>
-                                                <td>@i</td>
-                                                <td>@item.Role</td>
-                                                <td>@item.FarmName</td>
-                                                <td>@item.Name</td>
-                                                <td>@item.TDS</td>
-                                            </tr>
-                                            i++;
-                                        }
-                                    }
-                                </tbody>
-                                <tfoot style="background-color:whitesmoke;">
-                                    @if (Model.TDSDealer != null)
-                                    {
-                                        <tr>
-                                            <td style="font-size:18px;">Total</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td style="font-size:18px;">@Model.TDSDealer.Sum(a => a.TDS)</td>
-                                        </tr>
-                                    }
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=31" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-incoming-report-modern.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-flight-report-modern.css?v=9" rel="stylesheet" />
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-incoming-report-page saas-dealer-flight-report-page saas-dealer-tds-report-page">
 
+    <div class="container-fluid vm-opr-page-shell">
 
+        @using (Html.BeginForm("TDSReport", "Home", FormMethod.Post, new { id = "dealerTdsReportForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-pan-toolbar-unified saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head">
+                    <ol class="saas-acc-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Tax Setting</li>
+                        <li>TDS Report</li>
+                    </ol>
+                    <div class="vm-opr-page-nav">
+                        <nav class="vm-opr-nav--page" aria-label="Tax reports">
+                            <a class="vm-opr-nav__link is-active" href="@Url.Action("TDSReport", "Home")">TDS Report</a>
+                            <a class="vm-opr-nav__link" href="@Url.Action("Money_Transfer_Report", "Home")">DMT Report</a>
+                        </nav>
+                    </div>
+                </div>
 
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-inc-filter-row vm-rpt-filters-panel__bar vm-dealer-tds-filter-bar">
+                        <div class="vm-dealer-tds-filter-label">
+                            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                            <span>Select month</span>
+                        </div>
+                        <div class="vm-dealer-tds-month-group">
+                            <button type="submit" name="submit" value="@currentMonth" class="saas-acc-btn vm-dealer-tds-month-btn @(activeMonth == currentMonth ? "is-active" : "")" title="Search @currentMonth">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>@currentMonth</span>
+                            </button>
+                            <button type="submit" name="submit" value="@oldMonth1" class="saas-acc-btn vm-dealer-tds-month-btn @(activeMonth == oldMonth1 ? "is-active" : "")" title="Search @oldMonth1">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>@oldMonth1</span>
+                            </button>
+                            <button type="submit" name="submit" value="@oldMonth2" class="saas-acc-btn vm-dealer-tds-month-btn @(activeMonth == oldMonth2 ? "is-active" : "")" title="Search @oldMonth2">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>@oldMonth2</span>
+                            </button>
+                        </div>
+                        <span class="vm-dealer-tds-active-month-badge" title="Active month">
+                            Month: <strong>@activeMonth</strong>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
 
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel" id="dealerTdsReportPanel">
+                <div class="vm-opr-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-file-invoice-dollar" aria-hidden="true"></i>
+                        <span>Money transfer TDS report</span>
+                    </div>
+                    <div class="vm-opr-table-panel__right vm-flight-table-head-right">
+                        <div class="vm-ft-search-wrap vm-dealer-tds-table-search">
+                            <input class="form-control vm-dealer-tds-search-input" type="text" id="dealerTdsSearch" placeholder="Search role, name, TDS..." autocomplete="off" />
+                        </div>
+                        <span class="vm-radiant-record-badge vm-dealer-tds-record-badge" title="Records">
+                            Records: <strong id="dealerTdsRecordCount">@rowCount</strong>
+                        </span>
+                        <span class="vm-flight-inline-total vm-dealer-tds-total-chip" id="dealerTdsTotalChip" style="display:none;">
+                            <span>Total TDS: <strong id="dealerTdsTotalValue">@totalTds</strong></span>
+                        </span>
+                        <div class="vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="saas-acc-btn" id="btnDealerTdsTotal" title="Show total">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i> Total
+                            </button>
+                            <button type="button" id="btnDealerTdsExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnDealerTdsPdf" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="dealerTdsTable" class="table table-bordered table-striped table-hover vm-opr-data-table vm-inc-data-table vm-flight-data-table vm-dealer-tds-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Sr.No</th>
+                                    <th>Role</th>
+                                    <th>Farm Name</th>
+                                    <th>Name</th>
+                                    <th>DMT TDS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var i = 1;
+                                }
+                                @if (rows.Any())
+                                {
+                                    foreach (var item in rows)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@item.Role</td>
+                                            <td>@item.FarmName</td>
+                                            <td>@item.Name</td>
+                                            <td class="vm-dealer-tds-amount-cell">@item.TDS</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-dealer-tds-empty-row">
+                                        <td colspan="5">No TDS records found for @activeMonth.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            @if (rows.Any())
+                            {
+                                <tfoot>
+                                    <tr class="vm-dealer-tds-foot-row">
+                                        <td colspan="4"><strong>Total</strong></td>
+                                        <td class="vm-dealer-tds-amount-cell"><strong id="dealerTdsFootTotal">@totalTds</strong></td>
+                                    </tr>
+                                </tfoot>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script src="~/MainFrontDesign/js/admin-operator-report-nav.js"></script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<script>
+    (function () {
+        function dealerTdsEsc(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function dealerTdsGetVisibleRows() {
+            var $ = window.jQuery;
+            var rows = [];
+            $('#dealerTdsTable tbody tr').each(function () {
+                var $tr = $(this);
+                if ($tr.hasClass('vm-dealer-tds-empty-row') || !$tr.is(':visible')) {
+                    return;
+                }
+                var $cells = $tr.children('td');
+                if ($cells.length < 5) {
+                    return;
+                }
+                rows.push({
+                    sr: $.trim($cells.eq(0).text()),
+                    role: $.trim($cells.eq(1).text()),
+                    farm: $.trim($cells.eq(2).text()),
+                    name: $.trim($cells.eq(3).text()),
+                    tds: $.trim($cells.eq(4).text())
+                });
+            });
+            return rows;
+        }
+
+        function dealerTdsUpdateCounts() {
+            var $ = window.jQuery;
+            if (!$) {
+                return;
+            }
+            var visible = $('#dealerTdsTable tbody tr:not(.vm-dealer-tds-empty-row):visible').length;
+            var sum = 0;
+            $('#dealerTdsTable tbody tr:not(.vm-dealer-tds-empty-row):visible').each(function () {
+                var val = parseFloat(String($(this).find('td').eq(4).text()).replace(/[^\d.-]/g, ''));
+                if (!isNaN(val)) {
+                    sum += val;
+                }
+            });
+            $('#dealerTdsRecordCount').text(visible);
+            $('#dealerTdsFootTotal').text(sum.toFixed(2));
+            $('#dealerTdsTotalValue').text(sum.toFixed(2));
+        }
+
+        function dealerTdsFilterTable(term) {
+            var $ = window.jQuery;
+            var q = (term || '').toLowerCase().trim();
+            $('#dealerTdsTable tbody tr').each(function () {
+                if ($(this).hasClass('vm-dealer-tds-empty-row')) {
+                    return;
+                }
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(q === '' || text.indexOf(q) > -1);
+            });
+            dealerTdsUpdateCounts();
+        }
+
+        function dealerTdsExportStyles() {
+            return 'body{font-family:Segoe UI,Arial,sans-serif;padding:24px;color:#0f172a;background:#fff;}'
+                + '.vm-block-export-head{margin:0 0 18px;padding-bottom:14px;border-bottom:2px solid #e2e8f0;}'
+                + '.vm-block-export-head h3{margin:0 0 6px;font-size:22px;font-weight:700;color:#1e293b;}'
+                + '.vm-block-export-head p{margin:0;font-size:13px;color:#64748b;line-height:1.5;}'
+                + 'table{border-collapse:collapse;width:100%;font-size:12px;}'
+                + 'th,td{border:1px solid #dbe4f0;padding:8px 10px;text-align:center;vertical-align:middle;}'
+                + 'th{background:linear-gradient(180deg,#f8fafc 0%,#eef2f7 100%);color:#334155;font-weight:700;}'
+                + 'tfoot td{background:#eff6ff;font-weight:700;}';
+        }
+
+        function dealerTdsBuildExportHtml(rows, title, monthLabel) {
+            var body = '';
+            var sum = 0;
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                var tdsNum = parseFloat(String(r.tds).replace(/[^\d.-]/g, ''));
+                if (!isNaN(tdsNum)) {
+                    sum += tdsNum;
+                }
+                body += '<tr>'
+                    + '<td>' + dealerTdsEsc(r.sr) + '</td>'
+                    + '<td>' + dealerTdsEsc(r.role) + '</td>'
+                    + '<td>' + dealerTdsEsc(r.farm) + '</td>'
+                    + '<td>' + dealerTdsEsc(r.name) + '</td>'
+                    + '<td>' + dealerTdsEsc(r.tds) + '</td>'
+                    + '</tr>';
+            }
+            body += '<tr><td colspan="4"><strong>Total</strong></td><td><strong>' + dealerTdsEsc(sum.toFixed(2)) + '</strong></td></tr>';
+
+            return '<html><head><meta charset="utf-8"><title>' + dealerTdsEsc(title) + '</title>'
+                + '<style>' + dealerTdsExportStyles() + '</style></head><body>'
+                + '<div class="vm-block-export-head"><h3>' + dealerTdsEsc(title) + '</h3>'
+                + '<p>Month: ' + dealerTdsEsc(monthLabel) + ' | Generated on ' + dealerTdsEsc(new Date().toLocaleString()) + '</p></div>'
+                + '<table><thead><tr><th>Sr.No</th><th>Role</th><th>Farm Name</th><th>Name</th><th>DMT TDS</th></tr></thead>'
+                + '<tbody>' + body + '</tbody></table></body></html>';
+        }
+
+        function dealerTdsWarnNoRecords() {
+            if (typeof swal === 'function') {
+                swal('No records to export', '', 'warning');
+                return;
+            }
+            window.alert('No records to export');
+        }
+
+        function dealerTdsExportExcel() {
+            var rows = dealerTdsGetVisibleRows();
+            if (!rows.length) {
+                dealerTdsWarnNoRecords();
+                return;
+            }
+            var monthLabel = '@Html.Raw(HttpUtility.JavaScriptStringEncode(activeMonth))';
+            var html = dealerTdsBuildExportHtml(rows, 'TDS Report', monthLabel);
+            var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, 'TDS_Report.xls');
+                return;
+            }
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'TDS_Report.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+        }
+
+        function dealerTdsExportPdf() {
+            var rows = dealerTdsGetVisibleRows();
+            if (!rows.length) {
+                dealerTdsWarnNoRecords();
+                return;
+            }
+            var monthLabel = '@Html.Raw(HttpUtility.JavaScriptStringEncode(activeMonth))';
+            var w = window.open('', '_blank');
+            if (!w) {
+                return;
+            }
+            w.document.open();
+            w.document.write(dealerTdsBuildExportHtml(rows, 'TDS Report', monthLabel));
+            w.document.close();
+            w.focus();
+        }
+
+        function bootDealerTdsReport() {
+            var $ = window.jQuery;
+            if (!$) {
+                window.setTimeout(bootDealerTdsReport, 50);
+                return;
+            }
+
+            $('#dealerTdsSearch').on('input', function () {
+                dealerTdsFilterTable($(this).val());
+            });
+
+            $('#btnDealerTdsTotal').on('click', function () {
+                $('#dealerTdsTotalChip').toggle();
+            });
+
+            $('#btnDealerTdsExport').on('click', dealerTdsExportExcel);
+            $('#btnDealerTdsPdf').on('click', dealerTdsExportPdf);
+
+            dealerTdsUpdateCounts();
+        }
+
+        if (document.readyState === 'complete') {
+            bootDealerTdsReport();
+        } else {
+            window.addEventListener('load', bootDealerTdsReport);
+        }
+    })();
+</script>

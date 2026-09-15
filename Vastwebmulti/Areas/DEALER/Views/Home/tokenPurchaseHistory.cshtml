@@ -1,195 +1,1303 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.RetailerCreationTokensAssignHistory>
+
+@using System.Linq
+
+@using System.Collections.Generic
+
 @{
-    ViewBag.Title = "Joining Tokens";
+
+    ViewBag.Title = "Token Purchase History";
+
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
-}
-<style>
-    .dropdown-menu {margin-top: 81px !important;}
-    .tokenpurchase-history .bread-same-all-page {
-    float: left;
-}
-    .tokenpurchase-history .bread-same-all-page ul{float:left;padding-top: 9px;margin: 0;}
-    .tokenpurchase-history .card.tokenhistory-table .body {padding-left: 0;padding-right: 0;padding-top:10px;}
-    .tokenpurchase-history .card.tokenhistory-table .body .table-responsive .dt-buttons ,.tokenpurchase-history .card.tokenhistory-table .body .table-responsive .dataTables_filter{display: none;}
-    .tokenpurchase-history .card.tokenhistory-table .body .table-responsive .dataTables_info {
-    display: none;
-}
-    .tokenpurchase-history .card.tokenhistory-table .body .table-responsive .dataTables_paginate.paging_simple_numbers{display:none;}
-    .tokenhistory-table .table-responsive {overflow: inherit;}
-    .tokenhistory-table .table-responsive table thead tr th {border-bottom: 0;}
-    .tokenpurchase-history .tokenpdfbutoon{width:auto;}
 
-    @@media screen and (max-width:1366px){
-        
 
-    }
-    @@media screen and (max-width:766px){
-        .tokenpurchase-history .table-responsive{border:0;}
-        .tokenpurchase-history .table-responsive table tr td {white-space: nowrap;}
-        .tokenpurchase-history .table-responsive{overflow:auto;padding-bottom:15px;}
-    }
-    @@media screen and (max-width:420px){
-        .tokenpurchase-history .table-responsive table {
-            border-right: 0;
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+
+
+    var reports = (Model ?? Enumerable.Empty<Vastwebmulti.Models.RetailerCreationTokensAssignHistory>())
+
+        .OrderByDescending(x => x.CreatedOn ?? DateTime.MinValue)
+
+        .ToList();
+
+
+
+    var totalTokens = reports.Sum(x => x.Tokens);
+
+    var latestRemainPost = reports.FirstOrDefault()?.RemainTokenPost ?? 0;
+
+    var latestRemainPre = reports.FirstOrDefault()?.RemainTokenPre ?? 0;
+
+    var currentDealerTokens = ViewBag.DealerTokenVal != null ? Convert.ToInt32(ViewBag.DealerTokenVal) : latestRemainPost;
+
+}
+
+
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=26" rel="stylesheet" />
+
+<script>document.body.classList.add('saas-sell-rch-dp-page');</script>
+
+
+
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
+
+
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-token-purchase-history-page saas-ecommerce-report-page">
+
+
+
+    <div class="container-fluid vm-opr-page-shell">
+
+
+
+        @{
+
+            var tokenHistFormAttrs = new Dictionary<string, object>
+
+            {
+
+                { "id", "dealerTokenPurchaseHistoryForm" },
+
+                { "class", "vm-rpt-filters-panel__form" },
+
+                { "data-date-mode", "get" },
+
+                { "data-frm-date", frmDate },
+
+                { "data-to-date", toDate },
+
+                { "data-report-date-form", "true" }
+
+            };
+
         }
 
-            .tokenpurchase-history .table-responsive table tr td ul.dtr-details {
-                width: 100%;
-            }
-        .tokenpurchase-history .table-responsive table tr td.child {border-right: 1px solid #aaa4a4;}
-        .tokenpurchase-history .table-responsive table tr td ul.dtr-details li {border-bottom: 1px solid #aaa4a4 !important;}
+        @using (Html.BeginForm("#", "Home", FormMethod.Get, tokenHistFormAttrs))
 
-    }
+        {
 
-</style>
-<section class="content tokenpurchase-history">
-    <div class="container-fluid full-dealer-secondanimation">
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Token Purchase History</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);">Token Purchase History</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
 
-        <div class="tokenpurchase-dashboard">
-            <div class="bread-same-all-page dealer-none-fourclass">
-                <ul style="padding-left:0;">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px; ">
-                        </a>
-                    </li>
 
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Token&nbsp;Purchase&nbsp;History
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-2 tokenpdfbutoon" style="padding:0;float:right;">
-                <div class="form-group" style="margin-top:-19px;">
-                    <div style="padding-top: 22px; float:right">
-                        <button class="white-success-button" style="height:32px;border:1px solid #b1a6a638;background:#b1a6a638;float: right;padding: 0px 4px;margin-top:-1px;" onclick="findtotal()">Total</button>
-                        <div class="web-white-filter fil" style="float: left;margin-right: 5px;margin-top:-1px;">
-                            <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-                            <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
+
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+
+                        <li>Tokens</li>
+
+                        <li>Token Purchase History</li>
+
+                    </ol>
+
+
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
+
+
+
+                        <div class="vm-dmt-filter-search-group">
+
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+
+                            </div>
+
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+
+                            </div>
+
+                            <button type="button" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Filter by date" onclick="tokenHistApplyDateFilter()">
+
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+
+                            </button>
+
+                            <button type="button" class="saas-acc-btn saas-acc-btn--ghost vm-token-hist-reset-btn" title="Show all records" onclick="tokenHistResetDateFilter()">
+
+                                <i class="fas fa-undo" aria-hidden="true"></i><span>Reset</span>
+
+                            </button>
+
                         </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="tokenHistTotalsPanel" style="display:none;" aria-hidden="true">
+
+                    <div class="vm-dmt-totals-head">
+
+                        <div class="vm-dmt-totals-head__title">
+
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+
+                            <span>Token purchase totals</span>
+
+                        </div>
+
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideTokenHistTotals()" title="Hide totals" aria-label="Hide totals">
+
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+
+                        </button>
+
+                    </div>
+
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+
+                            <span class="vm-opr-total-card__label">Total Tokens</span>
+
+                            <strong class="vm-opr-total-card__value" id="tokenHistTotalTokens">@totalTokens</strong>
+
+                        </div>
+
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+
+                            <span class="vm-opr-total-card__label">Records</span>
+
+                            <strong class="vm-opr-total-card__value" id="tokenHistTotalRecords">@reports.Count</strong>
+
+                        </div>
+
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+
+                            <span class="vm-opr-total-card__label">Latest Remain Pre</span>
+
+                            <strong class="vm-opr-total-card__value" id="tokenHistLatestPre">@latestRemainPre</strong>
+
+                        </div>
+
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+
+                            <span class="vm-opr-total-card__label">Latest Remain Post</span>
+
+                            <strong class="vm-opr-total-card__value" id="tokenHistLatestPost">@latestRemainPost</strong>
+
+                        </div>
+
                     </div>
 
                 </div>
-            </div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card all-reporttable-css tokenhistory-table" style="margin-top:0;">
 
-                    <div class="body">
-                        <div class="table-responsive" style="position:relative;margin-top:;">
-                            <table class="table table-bordered table-striped table-hover" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>SR.No</th>
-                                        @*<th>Dealer</th>*@
-                                        <th>Tokens</th>
-                                        <th>Remain&nbsp;Pre</th>
-                                        <th>Remain&nbsp;Post</th>
-                                        <th>Date</th>
-                                        @*<th>Free&nbsp;By&nbsp;Dealer</th>*@
-                                        @*<th>#</th>*@
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{ int i = 1;}
-                                    @foreach (var item in Model)
+
+
+            </div>
+
+        }
+
+
+
+        <div class="vm-opr-main-card">
+
+            <div class="vm-opr-table-panel">
+
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+
+                    <div class="vm-opr-table-panel__title">
+
+                        <i class="fas fa-ticket-alt" aria-hidden="true"></i>
+
+                        <span>Token purchase history</span>
+
+                    </div>
+
+                    <div class="vm-dmt-table-panel__right">
+
+                        <div class="vm-ft-search-wrap vm-token-hist-table-search">
+
+                            <input class="form-control vm-token-hist-search-input" type="text" id="tokenHistSearchInput" placeholder="Search report..." autocomplete="off" onkeyup="tokenHistSearch()" />
+
+                        </div>
+
+                        <span class="vm-radiant-inline-total" title="Total tokens for current filter">
+
+                            Available: <strong id="tokenHistInlineTotal">@currentDealerTokens</strong>
+
+                        </span>
+
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-token-hist-totals-btn" onclick="toggleTokenHistTotals()" title="Show totals" aria-expanded="false" aria-controls="tokenHistTotalsPanel">
+
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+
+                            </button>
+
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+
+                            </button>
+
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="vm-opr-table-wrap">
+
+                    <div class="table-responsive vm-opr-table-scroll">
+
+                        <table id="tokenPurchaseHistoryReport" class="table vm-opr-data-table" cellspacing="0">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Sr.No</th>
+
+                                    <th>Tokens</th>
+
+                                    <th>Remain&nbsp;Pre</th>
+
+                                    <th>Remain&nbsp;Post</th>
+
+                                    <th>Date</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @if (reports.Any())
+
+                                {
+
+                                    var sr = 1;
+
+                                    foreach (var item in reports)
+
                                     {
-                                        <tr>
-                                            <td>@i</td>
-                                            @*<td>@Html.DisplayFor(modelItem => item.Email)</td>*@
-                                            <td>@Html.DisplayFor(modelItem => item.Tokens)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.RemainTokenPre)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.RemainTokenPost)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.CreatedOn)</td>
+
+                                        var rowDate = item.CreatedOn.HasValue ? item.CreatedOn.Value.ToString("yyyy-MM-dd") : "";
+
+                                        var rowDateDisplay = item.CreatedOn.HasValue ? item.CreatedOn.Value.ToString("dd-MM-yyyy HH:mm") : "—";
+
+                                        <tr data-row-date="@rowDate">
+
+                                            <td>@sr</td>
+
+                                            <td>@item.Tokens</td>
+
+                                            <td>@item.RemainTokenPre</td>
+
+                                            <td>@item.RemainTokenPost</td>
+
+                                            <td>@rowDateDisplay</td>
+
                                         </tr>
-                                        i++;
+
+                                        sr++;
+
                                     }
-                                </tbody>
-                            </table>
-                        </div>
+
+                                }
+
+                                else
+
+                                {
+
+                                    <tr class="vm-opr-table-empty-row">
+
+                                        <td colspan="5" class="vm-opr-table-empty">No token purchase records found.</td>
+
+                                    </tr>
+
+                                }
+
+                            </tbody>
+
+                            @if (reports.Any())
+
+                            {
+
+                                <tfoot>
+
+                                    <tr class="vm-token-hist-table-foot">
+
+                                        <td><strong>Total</strong></td>
+
+                                        <td><strong id="tokenHistFootTokens">@totalTokens</strong></td>
+
+                                        <td><strong id="tokenHistFootPre">@latestRemainPre</strong></td>
+
+                                        <td><strong id="tokenHistFootPost">@latestRemainPost</strong></td>
+
+                                        <td></td>
+
+                                    </tr>
+
+                                </tfoot>
+
+                            }
+
+                        </table>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
+
+
     </div>
+
 </section>
 
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
+
+
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=4"></script>
 
 <script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
 <script>
-    $(document).ready(function () {
-        $("button.shownextrow").click(function () {
-            $(this).closest("tr").next().show();
-            $(this).closest("tr").hide();
-        });
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-    });
-</script>
-<script>
-    window.onload = function () {
-        var message = '@ViewData["successorder"]';
-        if (message != "" && message != null) {
-            swal("Good job!", message, "success");
 
-        }
-        var errormessage = '@ViewData["failedorder"]';
-        if (errormessage != "" && errormessage != null) {
-            swal("Oops!", errormessage, "error");
+    var tokenHistDateFilterActive = false;
 
-        }
+    function tokenHistEsc(value) {
+
+        return String(value == null ? '' : value)
+
+            .replace(/&/g, '&amp;')
+
+            .replace(/</g, '&lt;')
+
+            .replace(/>/g, '&gt;')
+
+            .replace(/"/g, '&quot;');
+
     }
-</script>
-<script type="text/jscript">
-    $(function () {
-        var data = '@ViewData["show"]';
-        if (data != "") {
-            sweetAlert("Oops...", data, "error");
+
+
+
+    function tokenHistParseDate(value) {
+
+        if (!value) { return null; }
+
+        var parts = String(value).split('-');
+
+        if (parts.length !== 3) { return null; }
+
+        var y = parseInt(parts[0], 10);
+
+        var m = parseInt(parts[1], 10) - 1;
+
+        var d = parseInt(parts[2], 10);
+
+        if (isNaN(y) || isNaN(m) || isNaN(d)) { return null; }
+
+        return new Date(y, m, d);
+
+    }
+
+
+
+    function tokenHistRowMatchesDate($tr) {
+
+        if (!tokenHistDateFilterActive) { return true; }
+
+        var $ = window.jQuery;
+
+        var frm = $.trim($('#txt_frm_date').val() || '');
+
+        var to = $.trim($('#txt_to_date').val() || '');
+
+        if (!frm && !to) { return true; }
+
+        var rowDate = $tr.attr('data-row-date') || '';
+
+        if (!rowDate) { return true; }
+
+        var rowDt = tokenHistParseDate(rowDate);
+
+        if (!rowDt) { return true; }
+
+        var frmDt = tokenHistParseDate(frm);
+
+        var toDt = tokenHistParseDate(to);
+
+        if (frmDt && rowDt < frmDt) { return false; }
+
+        if (toDt) {
+
+            var toEnd = new Date(toDt.getFullYear(), toDt.getMonth(), toDt.getDate(), 23, 59, 59, 999);
+
+            if (rowDt > toEnd) { return false; }
+
         }
-    })
+
+        return true;
+
+    }
+
+
+
+    function tokenHistApplyFilters() {
+
+        var $ = window.jQuery;
+
+        var term = ($('#tokenHistSearchInput').val() || '').toLowerCase();
+
+        $('#tokenPurchaseHistoryReport tbody tr').each(function () {
+
+            var $tr = $(this);
+
+            if ($tr.hasClass('vm-opr-table-empty-row')) { return; }
+
+            var textMatch = term === '' || $tr.text().toLowerCase().indexOf(term) > -1;
+
+            var dateMatch = tokenHistRowMatchesDate($tr);
+
+            $tr.toggle(textMatch && dateMatch);
+
+        });
+
+        tokenHistUpdateTotals();
+
+    }
+
+
+
+    function tokenHistSearch() { tokenHistApplyFilters(); }
+
+    function tokenHistApplyDateFilter() {
+
+        tokenHistDateFilterActive = true;
+
+        tokenHistApplyFilters();
+
+    }
+
+
+
+    function tokenHistResetDateFilter() {
+
+        var $ = window.jQuery;
+
+        var today = new Date();
+
+        var iso = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+
+        tokenHistDateFilterActive = false;
+
+        $('#txt_frm_date').val(iso);
+
+        $('#txt_to_date').val(iso);
+
+        $('#tokenHistSearchInput').val('');
+
+        $('#tokenPurchaseHistoryReport tbody tr').show();
+
+        tokenHistUpdateTotals();
+
+    }
+
+
+
+    function tokenHistNum(value) {
+
+        var n = parseInt(String(value || '').replace(/[^\d-]/g, ''), 10);
+
+        return isNaN(n) ? 0 : n;
+
+    }
+
+
+
+    function tokenHistTableRows() {
+
+        var $ = window.jQuery;
+
+        var rows = [];
+
+        var sr = 0;
+
+        $('#tokenPurchaseHistoryReport tbody tr').each(function () {
+
+            var $tr = $(this);
+
+            if ($tr.hasClass('vm-opr-table-empty-row') || !$tr.is(':visible')) { return; }
+
+            var $cells = $tr.children('td');
+
+            if ($cells.length < 5) { return; }
+
+            sr += 1;
+
+            rows.push({
+
+                sr: String(sr),
+
+                tokens: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+
+                pre: $.trim($cells.eq(2).text()).replace(/\s+/g, ' '),
+
+                post: $.trim($cells.eq(3).text()).replace(/\s+/g, ' '),
+
+                date: $.trim($cells.eq(4).text()).replace(/\s+/g, ' ')
+
+            });
+
+        });
+
+        return rows;
+
+    }
+
+
+
+    function tokenHistUpdateTotals() {
+
+        var rows = tokenHistTableRows();
+
+        var totalTokens = 0;
+
+        var latestPre = 0;
+
+        var latestPost = 0;
+
+        for (var i = 0; i < rows.length; i++) {
+
+            totalTokens += tokenHistNum(rows[i].tokens);
+
+            if (i === 0) {
+
+                latestPre = tokenHistNum(rows[i].pre);
+
+                latestPost = tokenHistNum(rows[i].post);
+
+            }
+
+        }
+
+        var map = {
+
+            tokenHistTotalTokens: String(totalTokens),
+
+            tokenHistTotalRecords: String(rows.length),
+
+            tokenHistLatestPre: String(latestPre),
+
+            tokenHistLatestPost: String(latestPost),
+
+            tokenHistInlineTotal: String(latestPost),
+
+            tokenHistFootTokens: String(totalTokens),
+
+            tokenHistFootPre: String(latestPre),
+
+            tokenHistFootPost: String(latestPost)
+
+        };
+
+        for (var id in map) {
+
+            var el = document.getElementById(id);
+
+            if (el) { el.textContent = map[id]; }
+
+        }
+
+        if (typeof window.hideDealerTopbarTokenBadge === 'function') {
+
+            window.hideDealerTopbarTokenBadge();
+
+        }
+
+    }
+
+
+
+    function tokenHistQueryData() {
+
+        var $ = window.jQuery;
+
+        return {
+
+            txt_frm_date: $('#txt_frm_date').val() || '',
+
+            txt_to_date: $('#txt_to_date').val() || '',
+
+            search: $.trim($('#tokenHistSearchInput').val() || '')
+
+        };
+
+    }
+
+
+
+    function tokenHistNow() {
+
+        var d = new Date();
+
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        var h = d.getHours();
+
+        var ampm = h >= 12 ? 'PM' : 'AM';
+
+        var hr = h % 12; if (!hr) { hr = 12; }
+
+        var min = d.getMinutes();
+
+        return ('0' + d.getDate()).slice(-2) + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + ('0' + hr).slice(-2) + ':' + ('0' + min).slice(-2) + ' ' + ampm;
+
+    }
+
+
+
+    function tokenHistExportMeta(rows) {
+
+        var q = tokenHistQueryData();
+
+        var totalTokens = 0;
+
+        var latestPre = 0;
+
+        var latestPost = 0;
+
+        for (var i = 0; i < rows.length; i++) {
+
+            totalTokens += tokenHistNum(rows[i].tokens);
+
+            if (i === 0) {
+
+                latestPre = tokenHistNum(rows[i].pre);
+
+                latestPost = tokenHistNum(rows[i].post);
+
+            }
+
+        }
+
+        return {
+
+            generatedOn: tokenHistNow(),
+
+            frmDate: q.txt_frm_date || 'All',
+
+            toDate: q.txt_to_date || 'All',
+
+            search: q.search || '',
+
+            records: rows.length,
+
+            tokens: String(totalTokens),
+
+            pre: String(latestPre),
+
+            post: String(latestPost)
+
+        };
+
+    }
+
+
+
+    function tokenHistHeads() {
+
+        return ['Sr.No', 'Tokens', 'Remain Pre', 'Remain Post', 'Date'];
+
+    }
+
+
+
+    function tokenHistBuildExcelHtml(rows) {
+
+        var m = tokenHistExportMeta(rows);
+
+        var colCount = 5;
+
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8" /><title>Token Purchase History</title></head><body>';
+
+        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">';
+
+        html += '<tr><td colspan="' + colCount + '" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;">Token Purchase History</td></tr>';
+
+        html += '<tr><td colspan="' + colCount + '" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;">Dealer tokens - purchase history</td></tr>';
+
+        html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Generated On</td><td colspan="2" style="font-weight:bold;">' + tokenHistEsc(m.generatedOn) + '</td>';
+
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Date Range</td><td style="font-weight:bold;">' + tokenHistEsc(m.frmDate) + ' to ' + tokenHistEsc(m.toDate) + '</td></tr>';
+
+        if (m.search) {
+
+            html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Search Filter</td><td colspan="' + (colCount - 1) + '" style="font-weight:bold;">' + tokenHistEsc(m.search) + '</td></tr>';
+
+        }
+
+        html += '<tr><td bgcolor="#EEF2FF" style="font-weight:bold;">Total Tokens</td><td bgcolor="#EEF2FF" style="font-weight:bold;">' + m.tokens + '</td>';
+
+        html += '<td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">Records</td><td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">' + m.records + '</td>';
+
+        html += '<td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">Latest Post: ' + m.post + '</td></tr>';
+
+        html += '<tr>';
+
+        var heads = tokenHistHeads();
+
+        for (var h = 0; h < heads.length; h++) {
+
+            html += '<th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">' + tokenHistEsc(heads[h]) + '</th>';
+
+        }
+
+        html += '</tr>';
+
+        if (!rows.length) {
+
+            html += '<tr><td colspan="' + colCount + '" bgcolor="#F8FAFC" style="text-align:center;font-weight:bold;color:#64748B;height:48px;">No token purchase records found.</td></tr>';
+
+        } else {
+
+            for (var i = 0; i < rows.length; i++) {
+
+                var r = rows[i];
+
+                var rowBg = (i % 2 === 1) ? '#F8FAFC' : '#FFFFFF';
+
+                html += '<tr>';
+
+                html += '<td bgcolor="' + rowBg + '">' + tokenHistEsc(r.sr) + '</td>';
+
+                html += '<td bgcolor="' + rowBg + '">' + tokenHistEsc(r.tokens) + '</td>';
+
+                html += '<td bgcolor="' + rowBg + '">' + tokenHistEsc(r.pre) + '</td>';
+
+                html += '<td bgcolor="' + rowBg + '">' + tokenHistEsc(r.post) + '</td>';
+
+                html += '<td bgcolor="' + rowBg + '">' + tokenHistEsc(r.date) + '</td>';
+
+                html += '</tr>';
+
+            }
+
+            html += '<tr>';
+
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">Total</td>';
+
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">' + m.tokens + '</td>';
+
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">' + m.pre + '</td>';
+
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">' + m.post + '</td>';
+
+            html += '<td bgcolor="#EFF6FF"></td>';
+
+            html += '</tr>';
+
+        }
+
+        html += '</table></body></html>';
+
+        return html;
+
+    }
+
+
+
+    function tokenHistBuildPdfHtml(rows) {
+
+        var m = tokenHistExportMeta(rows);
+
+        var heads = tokenHistHeads();
+
+        var headHtml = '';
+
+        for (var h = 0; h < heads.length; h++) {
+
+            headHtml += '<th>' + tokenHistEsc(heads[h]) + '</th>';
+
+        }
+
+        var body = '';
+
+        if (!rows.length) {
+
+            body = '<tr><td colspan="5" class="empty">No token purchase records found.</td></tr>';
+
+        } else {
+
+            for (var i = 0; i < rows.length; i++) {
+
+                var r = rows[i];
+
+                body += '<tr>';
+
+                body += '<td>' + tokenHistEsc(r.sr) + '</td>';
+
+                body += '<td>' + tokenHistEsc(r.tokens) + '</td>';
+
+                body += '<td>' + tokenHistEsc(r.pre) + '</td>';
+
+                body += '<td>' + tokenHistEsc(r.post) + '</td>';
+
+                body += '<td>' + tokenHistEsc(r.date) + '</td>';
+
+                body += '</tr>';
+
+            }
+
+            body += '<tr class="foot-row">';
+
+            body += '<td><strong>Total</strong></td>';
+
+            body += '<td><strong>' + tokenHistEsc(m.tokens) + '</strong></td>';
+
+            body += '<td><strong>' + tokenHistEsc(m.pre) + '</strong></td>';
+
+            body += '<td><strong>' + tokenHistEsc(m.post) + '</strong></td>';
+
+            body += '<td></td>';
+
+            body += '</tr>';
+
+        }
+
+        var searchRow = m.search
+
+            ? '<tr><td colspan="3"><span class="meta-label">Search Filter</span><span class="meta-value">' + tokenHistEsc(m.search) + '</span></td></tr>'
+
+            : '';
+
+        return '<!DOCTYPE html><html><head><meta charset="utf-8" /><title>Token Purchase History</title><style type="text/css">'
+
+            + '@@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }'
+
+            + '* { box-sizing: border-box; } body { margin:0; padding:16px; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#0f172a; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }'
+
+            + 'table { border-collapse:collapse; } .hero { width:100%; border:1px solid #1d4ed8; } .hero-top { padding:14px 18px; background:#2563eb; color:#fff; }'
+
+            + '.hero-top h1 { margin:0; font-size:20px; } .hero-top p { margin:4px 0 0; font-size:11px; color:#dbeafe; }'
+
+            + '.meta { width:100%; background:#f8fafc; } .meta td { padding:8px 12px; border-right:1px solid #e2e8f0; vertical-align:top; }'
+
+            + '.meta-label { display:block; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748b; margin-bottom:3px; }'
+
+            + '.meta-value { font-size:12px; font-weight:700; } .cards { width:100%; margin:12px 0; } .cards td { width:33%; padding:0 6px 0 0; vertical-align:top; }'
+
+            + '.card { border:1px solid #e2e8f0; padding:10px 12px; } .card-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; margin-bottom:4px; } .card-value { font-size:16px; font-weight:800; }'
+
+            + '.card-total { background:#eef2ff; } .card-ok { background:#ecfdf5; } .card-wait { background:#fefce8; }'
+
+            + '.grid { width:100%; border:1px solid #cbd5e1; } .grid th { padding:9px 7px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; color:#fff; background:#334155; }'
+
+            + '.grid td { padding:8px 7px; font-size:11px; border-top:1px solid #e2e8f0; vertical-align:top; } .grid tbody tr:nth-child(even):not(.foot-row) td { background:#f8fafc; }'
+
+            + '.grid tbody tr.foot-row td { background:#eff6ff; border-top:2px solid #93c5fd; font-weight:700; }'
+
+            + '.empty { padding:36px 16px; text-align:center; font-size:14px; font-weight:700; color:#64748b; background:#f8fafc; }'
+
+            + '.foot { margin-top:10px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:10px; color:#94a3b8; text-align:center; }'
+
+            + '</style></head><body><div class="sheet"><div class="hero"><div class="hero-top"><h1>Token Purchase History</h1><p>Dealer tokens - purchase history</p></div>'
+
+            + '<table class="meta" cellpadding="0" cellspacing="0"><tr>'
+
+            + '<td style="width:34%;"><span class="meta-label">Generated On</span><span class="meta-value">' + tokenHistEsc(m.generatedOn) + '</span></td>'
+
+            + '<td style="width:46%;"><span class="meta-label">Date Range</span><span class="meta-value">' + tokenHistEsc(m.frmDate) + ' to ' + tokenHistEsc(m.toDate) + '</span></td>'
+
+            + '<td style="width:20%;"><span class="meta-label">Records</span><span class="meta-value">' + m.records + '</span></td>'
+
+            + '</tr>' + searchRow + '</table></div>'
+
+            + '<table class="cards" cellpadding="0" cellspacing="0"><tr>'
+
+            + '<td><div class="card card-total"><span class="card-label">Total Tokens</span><span class="card-value">' + m.tokens + '</span></div></td>'
+
+            + '<td><div class="card card-ok"><span class="card-label">Records</span><span class="card-value">' + m.records + '</span></div></td>'
+
+            + '<td><div class="card card-wait"><span class="card-label">Latest Remain Post</span><span class="card-value">' + m.post + '</span></div></td>'
+
+            + '</tr></table>'
+
+            + '<table class="grid" cellpadding="0" cellspacing="0"><thead><tr>' + headHtml + '</tr></thead><tbody>' + body + '</tbody></table>'
+
+            + '<div class="foot">Generated from Dealer panel - Token Purchase History</div></div></body></html>';
+
+    }
+
+
+
+    function tokenHistDownloadExcel(html) {
+
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+
+            window.navigator.msSaveOrOpenBlob(blob, 'Token_Purchase_History.xls');
+
+            return;
+
+        }
+
+        var url = URL.createObjectURL(blob);
+
+        var a = document.createElement('a');
+
+        a.href = url;
+
+        a.download = 'Token_Purchase_History.xls';
+
+        document.body.appendChild(a);
+
+        a.click();
+
+        document.body.removeChild(a);
+
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+
+    }
+
+
+
+    function tokenHistOpenPdf(html) {
+
+        var w = window.open('', '_blank');
+
+        if (!w) { return; }
+
+        w.document.open();
+
+        w.document.write(html);
+
+        w.document.close();
+
+    }
+
+
+
+    function toggleTokenHistTotals() {
+
+        var $ = window.jQuery;
+
+        var panel = $('#tokenHistTotalsPanel');
+
+        if (panel.is(':visible')) { hideTokenHistTotals(); return; }
+
+        panel.slideDown(180).attr('aria-hidden', 'false');
+
+        $('.vm-token-hist-totals-btn').attr('aria-expanded', 'true');
+
+    }
+
+
+
+    function hideTokenHistTotals() {
+
+        var $ = window.jQuery;
+
+        $('#tokenHistTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+
+        $('.vm-token-hist-totals-btn').attr('aria-expanded', 'false');
+
+    }
+
+
+
+    function tokenHistShowAlerts() {
+
+        var message = '@ViewData["successorder"]';
+
+        if (message && message !== '' && typeof swal === 'function') { swal('Good job!', message, 'success'); }
+
+        var errormessage = '@ViewData["failedorder"]';
+
+        if (errormessage && errormessage !== '' && typeof swal === 'function') { swal('Oops!', errormessage, 'error'); }
+
+        var data = '@ViewData["show"]';
+
+        if (data && data !== '' && typeof swal === 'function') { swal('Oops...', data, 'error'); }
+
+    }
+
+
+
+    function bootTokenPurchaseHistory() {
+
+        var $ = window.jQuery;
+
+        if (!$ || !$.fn || !$.fn.datepicker) {
+
+            window.setTimeout(bootTokenPurchaseHistory, 50);
+
+            return;
+
+        }
+
+
+
+        $('#dealerTokenPurchaseHistoryForm').on('submit.tokenHist', function (e) {
+
+            e.preventDefault();
+
+            tokenHistApplyDateFilter();
+
+        });
+
+
+
+        if (typeof window.initAdminReportDateForm === 'function') {
+
+            window.initAdminReportDateForm('#dealerTokenPurchaseHistoryForm');
+
+        } else {
+
+            $('#txt_frm_date, #txt_to_date').datepicker({
+
+                format: 'yyyy-mm-dd',
+
+                todayHighlight: true,
+
+                autoclose: true,
+
+                orientation: 'bottom auto',
+
+                container: 'body'
+
+            });
+
+        }
+
+        function pinTokenHistDatepicker(e) {
+
+            if (typeof window.repositionAdminDatepickerForMobile === 'function') {
+
+                window.repositionAdminDatepickerForMobile(e && e.target ? e.target : this);
+
+            } else if (typeof window.repositionAdminDatepicker === 'function') {
+
+                window.repositionAdminDatepicker(e && e.target ? e.target : this);
+
+            }
+
+        }
+
+
+
+        $(document).off('show.tokenHistDp shown.tokenHistDp').on('show.tokenHistDp shown.tokenHistDp', '#txt_frm_date, #txt_to_date', pinTokenHistDatepicker);
+
+        $(window).off('resize.tokenHistDp orientationchange.tokenHistDp').on('resize.tokenHistDp orientationchange.tokenHistDp', pinTokenHistDatepicker);
+
+
+
+        $('#btnExport').off('click.tokenHistEx').on('click.tokenHistEx', function () {
+
+            var rows = tokenHistTableRows();
+
+            if (!rows.length) {
+
+                if (typeof swal === 'function') { swal('No records to export', '', 'warning'); }
+
+                return;
+
+            }
+
+            tokenHistDownloadExcel(tokenHistBuildExcelHtml(rows));
+
+        });
+
+
+
+        $('#btnPDF').off('click.tokenHistPdf').on('click.tokenHistPdf', function () {
+
+            var rows = tokenHistTableRows();
+
+            if (!rows.length) {
+
+                if (typeof swal === 'function') { swal('No records to export', '', 'warning'); }
+
+                return;
+
+            }
+
+            tokenHistOpenPdf(tokenHistBuildPdfHtml(rows));
+
+        });
+
+
+
+        tokenHistShowAlerts();
+
+        if (typeof window.hideDealerTopbarTokenBadge === 'function') {
+
+            window.hideDealerTopbarTokenBadge();
+
+        }
+
+    }
+
+
+
+    if (document.readyState === 'complete') {
+
+        bootTokenPurchaseHistory();
+
+    } else {
+
+        window.addEventListener('load', bootTokenPurchaseHistory);
+
+    }
+
 </script>
 
+
+
+@section LateCss {
+
+    <style>
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page .vm-radiant-inline-filters .form-control,
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page .vm-radiant-inline-filters input.form-control,
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-dp-input,
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search,
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page .vm-radiant-inline-filters .saas-acc-btn--search span,
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-token-hist-reset-btn,
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page .vm-radiant-inline-filters .vm-token-hist-reset-btn span,
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page .vm-token-hist-table-search input.vm-token-hist-search-input,
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page #tokenPurchaseHistoryReport.vm-opr-data-table thead th,
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page #tokenPurchaseHistoryReport.vm-opr-data-table tbody td,
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page #tokenPurchaseHistoryReport.vm-opr-data-table tfoot td {
+
+            font-size: 14px !important;
+
+            font-weight: 600 !important;
+
+        }
+
+
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page .vm-token-hist-table-search {
+
+            min-width: 200px;
+
+            max-width: 260px;
+
+        }
+
+
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page .vm-token-hist-table-search input.vm-token-hist-search-input {
+
+            height: 38px !important;
+
+            border-radius: 8px !important;
+
+            border: 1.5px solid #cbd5e1 !important;
+
+            background: #fff !important;
+
+            padding: 0 12px !important;
+
+            font-weight: 500 !important;
+
+        }
+
+
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page input#txt_frm_date.form-control.saas-acc-dp-input,
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page.saas-ecommerce-report-page input#txt_to_date.form-control.saas-acc-dp-input {
+
+            font-size: 14px !important;
+
+            font-weight: 600 !important;
+
+        }
+
+
+
+        body.saas-admin-ui section.content.saas-token-purchase-history-page .vm-token-hist-reset-btn {
+
+            height: 38px !important;
+
+            padding: 0 12px !important;
+
+            border-radius: 8px !important;
+
+            border: 1.5px solid #cbd5e1 !important;
+
+            background: #fff !important;
+
+            color: #475569 !important;
+
+        }
+
+    </style>
+
+}
 
 

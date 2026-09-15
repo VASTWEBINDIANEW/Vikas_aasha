@@ -1,137 +1,508 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.operatorcommforsellStatu>
-    <style>
 
-        select {
-            background: rgb(255 255 255 / 95%);
-            padding: 5px;
-            border-radius: 2px;
-            width: 30%;
-            border: 1px solid #a7a7a7;
-            color: #4a4646;
-        }
-        .w_set {
-            width: 100%;
-            float: left;
-            text-align: center;
-        }
+@using System.Linq
 
-        .w_set2 {
-            float: right;
-            text-align: right;
-        }
-            .w_set2 span {
-                border: 1px solid #CCC;
-                padding: 5px 15px;
-                background: var(--main-bg-lcolor);
-                color: #fff;
-                float: left;
-            }
-        #optname select {
-            margin: 3px 0;
-        }
+@{
 
-        #comsd {
-            width: 30%;
-            margin: auto;
-        }
-            #comsd input {
-                width: 100%;
-                padding: 7px 5px;
-                border: 1px solid #bfbebe;
-                background: transparent;
-                color: #777;
-                margin: 8px 0;
-            }
-        .table tbody tr td, .table tbody tr th {
-            border: 1px solid #cccccc;
-        }
+    ViewBag.Title = "Seller Setting";
 
-    </style>
-<section class="content classrecharge-report" style=" padding:5px 15px;">
+    Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var rows = Model ?? Enumerable.Empty<Vastwebmulti.Models.operatorcommforsellStatu>();
+
+    var rowCount = rows.Count();
+
+}
 
 
-    @using (Ajax.BeginForm("ADDSELLINGOPT", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess1", OnFailure = "onfailed", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
-    {
 
-    <div style="text-align:center;width:100%;float:left;margin-bottom: 10px;">
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 
-        <div class="w_set2 page-header-third">
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
 
-            <a style="display: table;" href="@Url.Action("addsim","Home")"><span>Add Sim</span></a>
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
 
-        </div> 
-        <div class="w_set page-header-third">
-            <div>
-                <select id="myDropdown" onchange="dropdownChanged()" name="drop1" class="allinput">
-                    <option>SELECT</option>
-                    <option>PrePaid</option>
-                    <option>DTH</option>
-                </select>
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=22" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/dealer-seller-setting-modern.css?v=6" rel="stylesheet" />
+
+
+
+<div id="div_Loader" class="vm-dmt-loader" style="display:none;" aria-hidden="true"></div>
+
+
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dealer-seller-setting-page">
+
+
+
+    <div class="container-fluid vm-opr-page-shell">
+
+
+
+        @using (Ajax.BeginForm("ADDSELLINGOPT", "Home", new AjaxOptions
+
+        {
+
+            HttpMethod = "POST",
+
+            OnSuccess = "cspSellerSettingOnSuccess",
+
+            OnFailure = "cspSellerSettingOnFailed",
+
+            UpdateTargetId = "divEditFormComm",
+
+            LoadingElementId = "div_Loader",
+
+            InsertionMode = InsertionMode.Replace
+
+        }, new { id = "dealerSellerSettingForm", @class = "vm-rpt-filters-panel__form" }))
+
+        {
+
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell vm-seller-setting-toolbar">
+
+
+
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
+
+
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+
+                        <li>Settings</li>
+
+                        <li>Seller Setting</li>
+
+                    </ol>
+
+
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-radiant-inline-filters vm-seller-setting-filters">
+
+
+
+                        <div class="vm-opr-field vm-dmt-field vm-seller-field vm-seller-field--type">
+
+                            <select id="myDropdown" name="drop1" class="vm-opr-select vm-dmt-select form-control vm-seller-native-select" title="Recharge type">
+
+                                <option value="">Select Type</option>
+
+                                <option value="PrePaid">PrePaid</option>
+
+                                <option value="DTH">DTH</option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="vm-opr-field vm-dmt-field vm-seller-field vm-seller-field--operator hidden" id="optnameWrap">
+
+                            <select id="drop2" name="drop2" class="vm-opr-select vm-dmt-select form-control vm-seller-native-select" title="Operator">
+
+                                <option value="">Select Operator</option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="vm-opr-field vm-dmt-field vm-seller-field vm-seller-field--comm hidden" id="comsd">
+
+                            <input type="number" step="0.01" min="0" name="comm1" id="sellerCommInput" class="form-control vm-seller-native-input" placeholder="Commission %" />
+
+                        </div>
+
+
+
+                        <div class="vm-seller-actions">
+
+                            <button type="submit" id="sellerSaveBtn" class="saas-acc-btn saas-acc-btn--search vm-opr-toolbar-search vm-radiant-search-btn hidden" title="Save commission" disabled="disabled">
+
+                                <i class="fas fa-save" aria-hidden="true"></i><span>Save</span>
+
+                            </button>
+
+                            <a href="@Url.Action("addsim", "Home")" class="saas-acc-btn saas-acc-btn--ghost" title="Add SIM">
+
+                                <i class="fas fa-sim-card" aria-hidden="true"></i> Add Sim
+
+                            </a>
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
             </div>
-            <div id="optname" onchange="dropdown1()">
+
+        }
+
+
+
+        <div class="vm-opr-main-card">
+
+            <div class="vm-opr-table-panel">
+
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+
+                    <div class="vm-opr-table-panel__title">
+
+                        <i class="fas fa-store" aria-hidden="true"></i>
+
+                        <span>Operator commission list</span>
+
+                    </div>
+
+                    <div class="vm-dmt-table-panel__right">
+
+                        <span class="vm-seller-count-badge" id="sellerSettingCountBadge" title="Total records">
+
+                            <i class="fas fa-list" aria-hidden="true"></i>
+
+                            <span>@rowCount record@(rowCount == 1 ? "" : "s")</span>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="vm-opr-table-wrap">
+
+                    <div class="table-responsive vm-opr-table-scroll">
+
+                        <div id="divEditFormComm">
+
+                            @Html.Partial("optsellforrcharge", rows)
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
-            <div id="comsd" style="display:none">
-                <input type="number" step="0.01" name="comm1" class="allinput" placeholder="ENTER COMMISSION IN %" required />
-                
-                <input type="submit" style="background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)); color: #fff; width: 30%; " />
-            </div>
+
         </div>
 
 
 
-
     </div>
-    }
 
-    <div class="page-header-third">
-        @Html.Partial("optsellforrcharge", Model)
-    </div>
 </section>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+
+
+
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
 <script>
+
+    function cspSellerGetOperatorName(item) {
+
+        if (!item) return '';
+
+        return item.optname || item.Optname || item.operator_1 || '';
+
+    }
+
+
+
+    function cspSellerShowField($el, show) {
+
+        if (!$el || !$el.length) return;
+
+        if (show) {
+
+            $el.removeClass('hidden').show();
+
+        } else {
+
+            $el.addClass('hidden').hide();
+
+        }
+
+    }
+
+
+
+    function cspSellerResetOperatorSelect() {
+
+        var $drop2 = window.jQuery('#drop2');
+
+        $drop2.empty().append(window.jQuery('<option>', { value: '', text: 'Select Operator' }));
+
+        $drop2.val('');
+
+    }
+
+
+
+    function cspSellerResetForm() {
+
+        var $ = window.jQuery;
+
+        $('#myDropdown').val('');
+
+        cspSellerResetOperatorSelect();
+
+        $('#sellerCommInput').val('');
+
+        cspSellerShowField($('#optnameWrap'), false);
+
+        cspSellerShowField($('#comsd'), false);
+
+        cspSellerShowField($('#sellerSaveBtn'), false);
+
+        $('#sellerSaveBtn').prop('disabled', true);
+
+    }
+
+
+
+    function cspSellerUpdateCommissionStep() {
+
+        var $ = window.jQuery;
+
+        var operator = $.trim($('#drop2').val() || '');
+
+        if (operator) {
+
+            cspSellerShowField($('#comsd'), true);
+
+            cspSellerShowField($('#sellerSaveBtn'), true);
+
+            $('#sellerSaveBtn').prop('disabled', false);
+
+            $('#sellerCommInput').prop('required', true);
+
+        } else {
+
+            $('#sellerCommInput').val('').prop('required', false);
+
+            cspSellerShowField($('#comsd'), false);
+
+            cspSellerShowField($('#sellerSaveBtn'), false);
+
+            $('#sellerSaveBtn').prop('disabled', true);
+
+        }
+
+    }
+
+
+
+    function cspUpdateSellerCount() {
+
+        var table = document.getElementById('dealerSellerSettingTable');
+
+        var badge = document.getElementById('sellerSettingCountBadge');
+
+        if (!table || !badge) return;
+
+        var count = table.querySelectorAll('tbody tr:not(.vm-seller-empty-row)').length;
+
+        badge.innerHTML = '<i class="fas fa-list" aria-hidden="true"></i><span>' + count + ' record' + (count === 1 ? '' : 's') + '</span>';
+
+    }
+
+
+
     function dropdownChanged() {
-        document.getElementById('comsd').style.display = "none";
-        var selectedValue = document.getElementById('myDropdown').value;
-        var optnames1= document.getElementById('optname');
-         $.ajax({
-            url: '@Url.Action("filteroperatorforsell","Home")',
-            type: "POST",
-             data: { type: selectedValue  },
+
+        var $ = window.jQuery;
+
+        var selectedValue = $.trim($('#myDropdown').val() || '');
+
+
+
+        cspSellerResetOperatorSelect();
+
+        $('#sellerCommInput').val('').prop('required', false);
+
+        cspSellerShowField($('#comsd'), false);
+
+        cspSellerShowField($('#sellerSaveBtn'), false);
+
+        $('#sellerSaveBtn').prop('disabled', true);
+
+
+
+        if (!selectedValue) {
+
+            cspSellerShowField($('#optnameWrap'), false);
+
+            return;
+
+        }
+
+
+
+        cspSellerShowField($('#optnameWrap'), true);
+
+
+
+        $.ajax({
+
+            url: '@Url.Action("filteroperatorforsell", "Home")',
+
+            type: 'POST',
+
+            data: { type: selectedValue },
+
             cache: false,
-             success: function (data2) {
-                 optnames1.innerHTML = "";
-              
-                 if (data2.list.length != 0) {
 
-                     var selects = document.createElement("select");
-                     var selectss2 = document.createElement("option");
-                     selectss2.text = "SELECT OPERATOR";
-                     selectss2.value = "";
-                     selects.appendChild(selectss2);
-                     for (var i = 0; i < data2.list.length; i++) {
-                         var selectss = document.createElement("option");
-                         selectss.text = data2.list[i].optname;
-                         selectss.value = data2.list[i].optname;
-                         selects.appendChild(selectss);
-                     }
-                     selects.setAttribute("name", "drop2");
-                     selects.setAttribute("class", "allinput");
-                     optnames1.appendChild(selects);
-                 }
-             }
+            success: function (data2) {
+
+                cspSellerResetOperatorSelect();
+
+
+
+                var list = (data2 && data2.list) ? data2.list : [];
+
+                if (!list.length) {
+
+                    if (window.swal) {
+
+                        swal('No operators', 'No operator found for selected type.', 'warning');
+
+                    }
+
+                    return;
+
+                }
+
+
+
+                for (var i = 0; i < list.length; i++) {
+
+                    var name = cspSellerGetOperatorName(list[i]);
+
+                    if (!name) continue;
+
+                    $('#drop2').append($('<option>', { value: name, text: name }));
+
+                }
+
+            },
+
+            error: function () {
+
+                cspSellerShowField($('#optnameWrap'), false);
+
+                if (window.swal) {
+
+                    swal('Error', 'Unable to load operators. Please try again.', 'error');
+
+                }
+
+            }
+
         });
-    }
-    function dropdown1() {
-        document.getElementById('comsd').style.display = "block";
-    }
-    function OnSuccess1() {
-        document.getElementById('optname').innerHTML = "";
 
-        document.getElementById('comsd').style.display = "none";
-        document.getElementById("myDropdown").innerHTML.reload
-        location.reload();
     }
+
+
+
+    function cspSellerSettingOnSuccess() {
+
+        cspSellerResetForm();
+
+        cspUpdateSellerCount();
+
+        if (window.swal) {
+
+            swal('Saved', 'Operator commission saved successfully.', 'success');
+
+        }
+
+    }
+
+
+
+    function cspSellerSettingOnFailed() {
+
+        if (window.swal) {
+
+            swal('Error', 'Unable to save operator commission. Please try again.', 'error');
+
+        }
+
+    }
+
+
+
+    window.addEventListener('load', function () {
+
+        var $ = window.jQuery;
+
+        if (!$) return;
+
+
+
+        $('#myDropdown').on('change', dropdownChanged);
+
+        $('#drop2').on('change', cspSellerUpdateCommissionStep);
+
+
+
+        $('#dealerSellerSettingForm').on('submit', function (e) {
+
+            var typeVal = $.trim($('#myDropdown').val() || '');
+
+            var operatorVal = $.trim($('#drop2').val() || '');
+
+            var commVal = $.trim($('#sellerCommInput').val() || '');
+
+
+
+            if (!typeVal || !operatorVal || !commVal) {
+
+                e.preventDefault();
+
+                if (window.swal) {
+
+                    swal('Required', 'Please select type, operator and enter commission.', 'warning');
+
+                }
+
+                return false;
+
+            }
+
+        });
+
+
+
+        cspSellerResetForm();
+
+        cspUpdateSellerCount();
+
+    });
+
 </script>
+

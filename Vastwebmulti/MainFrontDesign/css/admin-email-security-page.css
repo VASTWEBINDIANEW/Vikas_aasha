@@ -1,7 +1,7 @@
 /* ============================================================
    admin-email-security-page.css
    Modern UI for ADMIN/Home/Email_Security (matches Api_user shell)
-   v8 — layout row fix + tab hide/show + modal polish
+   v13 — SMSAPI-matched shell + tab/select fixes
    ============================================================ */
 
 @keyframes es-spin { to { transform: rotate(360deg); } }
@@ -151,15 +151,66 @@ body.saas-admin-ui .Email_Security_Page .table-and-remail textarea.form-control 
 }
 
 /* Left tabs (reuse Api_user au-tabs look) */
-body.saas-admin-ui .Email_Security_Page .vm-ft-layout-wrap,
-body.saas-admin-ui .Email_Security_Page .vm-ft-layout {
+body.saas-admin-ui .Email_Security_Page .vm-ft-layout-wrap {
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
+    float: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
+    display: grid !important;
+    grid-template-columns: minmax(280px, 34%) minmax(0, 1fr) !important;
+    grid-template-rows: auto !important;
+    align-items: stretch !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 12px !important;
+    width: 100% !important;
+    float: none !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-layout.vm-ft-layout--full::before,
+body.saas-admin-ui .Email_Security_Page .vm-ft-layout.vm-ft-layout--full::after {
+    display: none !important;
+    content: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-form-col,
+body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .col-md-4.vm-ft-form-col,
+body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .left-table,
+body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-history-col,
+body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .col-md-8.vm-ft-history-col,
+body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .fund-transfer-main-admin.vm-ft-history-col {
+    flex: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    float: none !important;
+    clear: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-form-col .vm-ft-form-card,
+body.saas-admin-ui .Email_Security_Page .vm-ft-history-col .vm-ft-history-panel {
+    flex: 1 1 auto !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
 }
 
 body.saas-admin-ui .Email_Security_Page .vm-ft-form-col {
-    padding-right: 8px !important;
+    padding-right: 0 !important;
 }
 
 body.saas-admin-ui .Email_Security_Page .vm-ft-history-col {
@@ -191,6 +242,7 @@ body.saas-admin-ui .Email_Security_Page .au-tabs {
 body.saas-admin-ui .Email_Security_Page .au-tab-btn {
     flex: 1;
 }
+body.saas-admin-ui .Email_Security_Page .head-sms .au-tab-btn,
 body.saas-admin-ui .Email_Security_Page #top-mail-setting,
 body.saas-admin-ui .Email_Security_Page #top-mail {
     width: 100% !important;
@@ -210,19 +262,44 @@ body.saas-admin-ui .Email_Security_Page #top-mail {
     box-shadow: none !important;
 }
 
+body.saas-admin-ui .Email_Security_Page .head-sms .au-tab-btn:not(.is-active):not(.active) i,
+body.saas-admin-ui .Email_Security_Page #top-mail-setting:not(.is-active):not(.active) i,
+body.saas-admin-ui .Email_Security_Page #top-mail:not(.is-active):not(.active) i {
+    color: #64748b !important;
+}
+
 body.saas-admin-ui .Email_Security_Page #top-mail-setting.active,
-body.saas-admin-ui .Email_Security_Page #top-mail.active {
+body.saas-admin-ui .Email_Security_Page #top-mail.active,
+body.saas-admin-ui .Email_Security_Page #top-mail-setting.is-active,
+body.saas-admin-ui .Email_Security_Page #top-mail.is-active,
+body.saas-admin-ui .Email_Security_Page .head-sms .es-left-tab-btn.is-active,
+body.saas-admin-ui .Email_Security_Page .head-sms .sa-left-tab-btn.is-active,
+body.saas-admin-ui .Email_Security_Page .head-sms .au-tab-btn.is-active {
     background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
     color: #fff !important;
     border-color: #2563eb !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #top-mail-setting.active i,
+body.saas-admin-ui .Email_Security_Page #top-mail.active i,
+body.saas-admin-ui .Email_Security_Page #top-mail-setting.is-active i,
+body.saas-admin-ui .Email_Security_Page #top-mail.is-active i,
+body.saas-admin-ui .Email_Security_Page .head-sms .es-left-tab-btn.is-active i,
+body.saas-admin-ui .Email_Security_Page .head-sms .sa-left-tab-btn.is-active i,
+body.saas-admin-ui .Email_Security_Page .head-sms .au-tab-btn.is-active i {
+    color: #fff !important;
 }
 
 body.saas-admin-ui .Email_Security_Page .es-pane {
     padding: 12px !important;
 }
 
-body.saas-admin-ui .Email_Security_Page .table-and-remail {
-    display: none;
+body.saas-admin-ui .Email_Security_Page .es-left-first .sa-left-tab-pane {
+    display: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-left-first .sa-left-tab-pane.is-active {
+    display: block !important;
 }
 
 body.saas-admin-ui .Email_Security_Page fieldset.es-sender-fieldset {
@@ -618,13 +695,15 @@ body.saas-admin-ui .Email_Security_Page ul.tabs2 li.current2 {
 }
 
 body.saas-admin-ui .Email_Security_Page .tt-right-table .tab-content2,
-body.saas-admin-ui .Email_Security_Page .es-right-tab-body > .tab-content2 {
+body.saas-admin-ui .Email_Security_Page .es-right-tab-body > .tab-content2,
+body.saas-admin-ui .Email_Security_Page .es-right-tab-body > .es-right-tab-pane {
     display: none !important;
     padding: 12px;
 }
 
 body.saas-admin-ui .Email_Security_Page .tt-right-table .tab-content2.current2,
-body.saas-admin-ui .Email_Security_Page .es-right-tab-body > .tab-content2.current2 {
+body.saas-admin-ui .Email_Security_Page .es-right-tab-body > .tab-content2.current2,
+body.saas-admin-ui .Email_Security_Page .es-right-tab-body > .es-right-tab-pane.is-active {
     display: block !important;
 }
 
@@ -1095,21 +1174,34 @@ body.saas-admin-ui .Email_Security_Page #defaultModal button[type="submit"] {
     font-weight: 700 !important;
 }
 
-/* Mobile / tablet */
-@media (max-width: 1199px) {
-    body.saas-admin-ui .Email_Security_Page .vm-ft-form-col,
-    body.saas-admin-ui .Email_Security_Page .vm-ft-history-col {
+/* Tablet+ — keep left/right side-by-side (override fund-transfer mobile stack) */
+@media (min-width: 992px) {
+    body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
+        display: grid !important;
+        grid-template-columns: minmax(280px, 34%) minmax(0, 1fr) !important;
+        flex-direction: row !important;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-form-col,
+    body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-history-col,
+    body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .fund-transfer-main-admin.vm-ft-history-col {
+        flex: none !important;
+        max-width: 100% !important;
         width: 100% !important;
         float: none !important;
-        margin-bottom: 12px !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+        clear: none !important;
+        margin-bottom: 0 !important;
     }
 
-    body.saas-admin-ui .Email_Security_Page .fund-transfer-main-admin.vm-ft-history-col {
-        margin-top: 0 !important;
+    body.saas-admin-ui .Email_Security_Page .vm-ft-form-col .panel,
+    body.saas-admin-ui .Email_Security_Page .vm-ft-history-col .panel {
+        height: 100% !important;
+        min-height: 520px !important;
     }
+}
 
+@media (max-width: 1199px) {
     body.saas-admin-ui .Email_Security_Page .for-mail {
         height: 480px !important;
         max-height: 480px !important;
@@ -1456,6 +1548,52 @@ body.saas-admin-ui .vm-es-otp-btn--primary:hover {
     z-index: 200070 !important;
 }
 
+@media (min-width: 992px) {
+    body.saas-admin-ui section.content.Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
+        display: grid !important;
+        grid-template-columns: minmax(280px, 34%) minmax(0, 1fr) !important;
+        gap: 12px !important;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui section.content.Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .left-table,
+    body.saas-admin-ui section.content.Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-form-col,
+    body.saas-admin-ui section.content.Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .fund-transfer-main-admin,
+    body.saas-admin-ui section.content.Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-history-col {
+        width: 100% !important;
+        max-width: 100% !important;
+        float: none !important;
+        clear: none !important;
+        margin: 0 !important;
+    }
+
+    body.saas-admin-ui section.content.Email_Security_Page.saas-fund-transfer-page .vm-ft-form-col .vm-ft-form-card,
+    body.saas-admin-ui section.content.Email_Security_Page.saas-fund-transfer-page .vm-ft-history-col .vm-ft-history-panel {
+        height: 100% !important;
+        min-height: 100% !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        grid-template-columns: none !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-form-col,
+    body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .col-md-4.vm-ft-form-col,
+    body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .left-table,
+    body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-history-col,
+    body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .col-md-8.vm-ft-history-col,
+    body.saas-admin-ui .Email_Security_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .fund-transfer-main-admin.vm-ft-history-col {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
 @media (max-width: 575px) {
     body.saas-admin-ui .vm-es-otp-overlay {
         padding: 12px;
@@ -1467,5 +1605,233 @@ body.saas-admin-ui .vm-es-otp-btn--primary:hover {
 
     body.saas-admin-ui .vm-es-otp-actions {
         flex-direction: column;
+    }
+}
+
+/* ============================================================
+   SMSAPI — shared Email_Security shell (layout + panels + tabs)
+   ============================================================ */
+
+body.saas-admin-ui .SMSAPI_Page .vm-ft-form-card {
+    background: #fff !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 16px rgba(15, 23, 42, 0.06) !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .vm-ft-history-panel {
+    background: #fff !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 16px rgba(15, 23, 42, 0.06) !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .vm-ft-history-body {
+    overflow: visible !important;
+    height: auto !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page ul.tabs2,
+body.saas-admin-ui .SMSAPI_Page ul.es-right-tabs.sa-sms-right-tabs {
+    display: flex !important;
+    gap: 6px !important;
+    width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 10px 12px 0 !important;
+    background: transparent !important;
+    border-bottom: 1.5px solid #e2e8f0 !important;
+    list-style: none !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page ul.tabs2 li,
+body.saas-admin-ui .SMSAPI_Page ul.es-right-tabs.sa-sms-right-tabs li {
+    flex: 1 !important;
+    float: none !important;
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: 34px !important;
+    padding: 0 10px !important;
+    margin: 0 !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px 8px 0 0 !important;
+    background: #f8fafc !important;
+    color: #64748b !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .SMSAPI_Page ul.tabs2 li i,
+body.saas-admin-ui .SMSAPI_Page ul.es-right-tabs.sa-sms-right-tabs li i {
+    font-size: 0.72rem;
+}
+
+body.saas-admin-ui .SMSAPI_Page .es-right-tab-body {
+    padding: 12px !important;
+}
+
+body.saas-admin-ui .SMSAPI_Page .es-tool-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: 34px !important;
+    padding: 0 14px !important;
+    border-radius: 9px !important;
+    border: none !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    text-decoration: none !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28) !important;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
+        display: grid !important;
+        grid-template-columns: minmax(280px, 34%) minmax(0, 1fr) !important;
+        flex-direction: row !important;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-form-col,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-history-col,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .fund-transfer-main-admin.vm-ft-history-col {
+        flex: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        float: none !important;
+        clear: none !important;
+        margin-bottom: 0 !important;
+    }
+
+    body.saas-admin-ui .SMSAPI_Page .vm-ft-form-col .vm-ft-form-card,
+    body.saas-admin-ui .SMSAPI_Page .vm-ft-history-col .vm-ft-history-panel {
+        height: 100% !important;
+        min-height: 520px !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        grid-template-columns: none !important;
+    }
+
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-form-col,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .col-md-4.vm-ft-form-col,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .left-table,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .vm-ft-history-col,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .col-md-8.vm-ft-history-col,
+    body.saas-admin-ui .SMSAPI_Page.saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full > .fund-transfer-main-admin.vm-ft-history-col {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* ============================================================
+   Email_Security — SMSAPI-matched shared shell
+   ============================================================ */
+
+body.saas-admin-ui .Email_Security_Page .custom-table-responsive,
+body.saas-admin-ui .Email_Security_Page .smsapi-first,
+body.saas-admin-ui .Email_Security_Page .es-left-first {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: transparent !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-form-card .smsapi-first,
+body.saas-admin-ui .Email_Security_Page .vm-ft-form-card .es-left-first {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-x: visible !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 8px 8px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-form-card-header__icon {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .head-sms .au-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 12px 0;
+    border-bottom: 1.5px solid #e2e8f0;
+    margin: 0;
+}
+
+body.saas-admin-ui .Email_Security_Page .head-sms .au-tab-btn {
+    flex: 1;
+}
+
+body.saas-admin-ui .Email_Security_Page ul.es-right-tabs.es-email-right-tabs {
+    display: flex !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px 12px 0 !important;
+    list-style: none !important;
+    border-bottom: 1.5px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page ul.es-right-tabs.es-email-right-tabs li {
+    flex: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: 34px !important;
+    padding: 0 10px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px 8px 0 0 !important;
+    background: #f8fafc !important;
+    color: #64748b !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .Email_Security_Page ul.es-right-tabs.es-email-right-tabs li.current,
+body.saas-admin-ui .Email_Security_Page ul.es-right-tabs.es-email-right-tabs li.current2 {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    border-color: #2563eb !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .select2-container.es-select2-dropdown,
+body.saas-admin-ui .select2-dropdown.es-select2-dropdown {
+    z-index: 200120 !important;
+}
+
+body.saas-admin-ui section.content.Email_Security_Page.email-security-pages .smsapi-first,
+body.saas-admin-ui section.content.Email_Security_Page.email-security-pages .es-left-first {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .Email_Security_Page .vm-ft-form-col .vm-ft-form-card,
+    body.saas-admin-ui .Email_Security_Page .vm-ft-history-col .vm-ft-history-panel {
+        min-height: 520px !important;
     }
 }

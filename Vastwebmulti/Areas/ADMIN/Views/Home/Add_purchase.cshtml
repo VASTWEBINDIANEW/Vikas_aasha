@@ -26,7 +26,7 @@
 
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 
-<link href="~/MainFrontDesign/css/admin-add-purchase-modern.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-add-purchase-modern.css?v=9" rel="stylesheet" />
 
 
 
@@ -375,6 +375,404 @@
 
             });
 
+            apSyncSellerDropdownFromBankTable();
+
+            apBindSellerPartyAutoFill();
+
+        }
+
+
+
+        function apNormalizeSellerKey(value) {
+
+            return String(value == null ? '' : value).replace(/\s+/g, ' ').trim().toLowerCase();
+
+        }
+
+
+
+        var apSellerInfoUrl = '@Url.Action("Showsellinfo", "Home", new { area = "ADMIN" })';
+
+
+
+        function apApplySellerBankFields(accountNo, ifscCode) {
+
+            var accVal = accountNo || '';
+
+            var ifscVal = ifscCode || '';
+
+            var accEl = document.getElementById('saccount');
+
+            var ifscEl = document.getElementById('sifsc');
+
+            if (accEl) {
+
+                accEl.value = accVal;
+
+            }
+
+            if (ifscEl) {
+
+                ifscEl.value = ifscVal;
+
+            }
+
+            var $jq = window.vmAdminJq || window.jQuery;
+
+            if ($jq) {
+
+                $jq('#saccount').val(accVal);
+
+                $jq('#sifsc').val(ifscVal);
+
+            }
+
+        }
+
+
+
+        function apFillSellerBankDetailsFromOption(apiName) {
+
+            var val = String(apiName || '').trim();
+
+            if (!val) {
+
+                apApplySellerBankFields('', '');
+
+                return true;
+
+            }
+
+            var $opt = $('#sellerapi option').filter(function () {
+
+                return String($(this).val()).trim() === val;
+
+            }).first();
+
+            if (!$opt.length) {
+
+                $opt = $('#sellerapi option:selected');
+
+            }
+
+            if ($opt.length && $opt.val()) {
+
+                var accountNo = $.trim($opt.attr('data-account') || '');
+
+                var ifscCode = $.trim($opt.attr('data-ifsc') || '');
+
+                if (accountNo || ifscCode) {
+
+                    apApplySellerBankFields(accountNo, ifscCode);
+
+                    return true;
+
+                }
+
+            }
+
+            return false;
+
+        }
+
+
+
+        function apFillSellerBankDetailsFromDom(apiName) {
+
+            var key = apNormalizeSellerKey(apiName);
+
+            if (!key) {
+
+                return false;
+
+            }
+
+            var accountNo = '';
+
+            var ifscCode = '';
+
+            var $row = $('#apBankTableHost table tbody tr[data-apinm]').filter(function () {
+
+                return apNormalizeSellerKey($(this).attr('data-apinm')) === key;
+
+            }).first();
+
+            if ($row.length) {
+
+                accountNo = $.trim($row.attr('data-account') || '');
+
+                ifscCode = $.trim($row.attr('data-ifsc') || '');
+
+            } else {
+
+                $('#apBankTableHost table tbody tr').each(function () {
+
+                    var $cells = $(this).find('td');
+
+                    if ($cells.length < 5) { return; }
+
+                    if (apNormalizeSellerKey($cells.eq(0).text()) === key) {
+
+                        accountNo = $.trim($cells.eq(3).text());
+
+                        ifscCode = $.trim($cells.eq(4).text());
+
+                        return false;
+
+                    }
+
+                });
+
+            }
+
+            if (accountNo || ifscCode) {
+
+                apApplySellerBankFields(accountNo, ifscCode);
+
+                return true;
+
+            }
+
+            return false;
+
+        }
+
+
+
+        function apFillSellerBankDetails(apiName) {
+
+            var val = String(apiName || '').trim();
+
+            if (!val) {
+
+                apApplySellerBankFields('', '');
+
+                return;
+
+            }
+
+            if (apFillSellerBankDetailsFromDom(val)) {
+
+                return;
+
+            }
+
+            if (apFillSellerBankDetailsFromOption(val)) {
+
+                return;
+
+            }
+
+            $.ajax({
+
+                url: apSellerInfoUrl,
+
+                type: 'POST',
+
+                data: { Apinm: val },
+
+                dataType: 'json',
+
+                cache: false,
+
+                success: function (data2) {
+
+                    if (!data2) {
+
+                        return;
+
+                    }
+
+                    apApplySellerBankFields(
+
+                        data2.AccountNo || data2.accountNo || '',
+
+                        data2.Ifsccode || data2.ifscCode || data2.ifsccode || ''
+
+                    );
+
+                }
+
+            });
+
+        }
+
+
+
+        function apCollectSellerRowsFromBankTable() {
+
+            var rows = [];
+
+            var seen = {};
+
+            $('#apBankTableHost table tbody tr').each(function () {
+
+                if ($(this).hasClass('ap-empty-row')) {
+
+                    return;
+
+                }
+
+                var api = '';
+
+                var accountNo = '';
+
+                var ifscCode = '';
+
+                if ($(this).attr('data-apinm')) {
+
+                    api = $.trim($(this).attr('data-apinm') || '');
+
+                    accountNo = $.trim($(this).attr('data-account') || '');
+
+                    ifscCode = $.trim($(this).attr('data-ifsc') || '');
+
+                } else {
+
+                    var $cells = $(this).find('td');
+
+                    if ($cells.length < 5) {
+
+                        return;
+
+                    }
+
+                    api = $.trim($cells.eq(0).text());
+
+                    accountNo = $.trim($cells.eq(3).text());
+
+                    ifscCode = $.trim($cells.eq(4).text());
+
+                }
+
+                if (!api) {
+
+                    return;
+
+                }
+
+                var key = api.toLowerCase();
+
+                if (seen[key]) {
+
+                    return;
+
+                }
+
+                seen[key] = true;
+
+                rows.push({ api: api, account: accountNo, ifsc: ifscCode });
+
+            });
+
+            rows.sort(function (a, b) {
+
+                return a.api.localeCompare(b.api);
+
+            });
+
+            return rows;
+
+        }
+
+
+
+        function apSyncSellerDropdownFromBankTable() {
+
+            var $sel = $('#sellerapi');
+
+            if (!$sel.length) {
+
+                return;
+
+            }
+
+            var rows = apCollectSellerRowsFromBankTable();
+
+            if (!rows.length) {
+
+                return;
+
+            }
+
+            var selected = $sel.val();
+
+            var $placeholder = $sel.find('option[value=""]').first();
+
+            if ($placeholder.length) {
+
+                $sel.empty().append($placeholder.clone());
+
+            } else {
+
+                $sel.empty().append($('<option value="">Select (seller) Party</option>'));
+
+            }
+
+            for (var i = 0; i < rows.length; i++) {
+
+                var row = rows[i];
+
+                $sel.append(
+
+                    $('<option></option>')
+
+                        .val(row.api)
+
+                        .text(row.api)
+
+                        .attr('data-account', row.account)
+
+                        .attr('data-ifsc', row.ifsc)
+
+                );
+
+            }
+
+            if (selected) {
+
+                var $match = $sel.find('option').filter(function () {
+
+                    return String($(this).val()).trim() === String(selected).trim();
+
+                }).first();
+
+                if ($match.length) {
+
+                    $sel.val($match.val());
+
+                }
+
+            }
+
+        }
+
+
+
+        function apBindSellerPartyAutoFill() {
+
+            $(document).off('change.apSellerBank select2:select.apSellerBank', '#sellerapi');
+
+            $(document).on('change.apSellerBank', '#sellerapi', function () {
+
+                apFillSellerBankDetails($(this).val());
+
+            });
+
+            $(document).on('select2:select.apSellerBank', '#sellerapi', function (e) {
+
+                var selected = $(this).val();
+
+                if (e && e.params && e.params.data) {
+
+                    selected = e.params.data.id || e.params.data.text || selected;
+
+                }
+
+                apFillSellerBankDetails(selected);
+
+            });
+
         }
 
 
@@ -617,11 +1015,29 @@
 
 
 
+        $(document).on('click', '#resetform', function () {
+
+            setTimeout(function () {
+
+                apFillSellerBankDetails('');
+
+            }, 0);
+
+        });
+
+
+
         $(document).ready(function () {
+
+            apSyncSellerDropdownFromBankTable();
 
             refreshAddPurchaseSelect2();
 
+            apBindSellerPartyAutoFill();
+
             apInitDatepickers();
+
+            apFillSellerBankDetails($('#sellerapi').val());
 
 
 
@@ -697,9 +1113,37 @@
 
         $(document).ajaxComplete(function () {
 
+            apSyncSellerDropdownFromBankTable();
+
             refreshAddPurchaseSelect2();
 
+            apBindSellerPartyAutoFill();
+
             apFilterActiveTable($('#txtsearch').val());
+
+            if ($('#sellerapi').length) {
+
+                apFillSellerBankDetails($('#sellerapi').val());
+
+            }
+
+        });
+
+
+
+        $(window).on('load', function () {
+
+            window.setTimeout(function () {
+
+                apSyncSellerDropdownFromBankTable();
+
+                refreshAddPurchaseSelect2();
+
+                apBindSellerPartyAutoFill();
+
+                apFillSellerBankDetails($('#sellerapi').val());
+
+            }, 800);
 
         });
 
@@ -981,9 +1425,491 @@
 
         window.refreshAddPurchaseSelect2 = refreshAddPurchaseSelect2;
 
+        window.apFillSellerBankDetails = apFillSellerBankDetails;
+
+        window.apBindSellerPartyAutoFill = apBindSellerPartyAutoFill;
+
+        window.apSyncSellerDropdownFromBankTable = apSyncSellerDropdownFromBankTable;
 
 
-    })(jQuery);
+
+    })(window.vmAdminJq || window.jQuery);
 
 </script>
+
+
+
+@section PostSelect2Scripts {
+
+    <script>
+
+        (function () {
+
+            'use strict';
+
+            var apSellerInfoUrl = '@Url.Action("Showsellinfo", "Home", new { area = "ADMIN" })';
+
+
+
+            function apNormSellerKey(value) {
+
+                return String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+
+            }
+
+
+
+            function apSetSellerBankFields(accountNo, ifscCode) {
+
+                var accEl = document.getElementById('saccount');
+
+                var ifscEl = document.getElementById('sifsc');
+
+                if (accEl) {
+
+                    accEl.value = accountNo || '';
+
+                }
+
+                if (ifscEl) {
+
+                    ifscEl.value = ifscCode || '';
+
+                }
+
+            }
+
+
+
+            function apReadSellerBankFromTable(apiName) {
+
+                var key = apNormSellerKey(apiName);
+
+                if (!key) {
+
+                    return false;
+
+                }
+
+                var rows = document.querySelectorAll('#apBankTableHost table tbody tr');
+
+                for (var i = 0; i < rows.length; i++) {
+
+                    var row = rows[i];
+
+                    if (row.classList.contains('ap-empty-row')) {
+
+                        continue;
+
+                    }
+
+                    var api = row.getAttribute('data-apinm');
+
+                    var accountNo = row.getAttribute('data-account');
+
+                    var ifscCode = row.getAttribute('data-ifsc');
+
+                    if (!api) {
+
+                        var cells = row.querySelectorAll('td');
+
+                        if (cells.length < 5) {
+
+                            continue;
+
+                        }
+
+                        api = (cells[0].textContent || '').trim();
+
+                        accountNo = (cells[3].textContent || '').trim();
+
+                        ifscCode = (cells[4].textContent || '').trim();
+
+                    } else {
+
+                        api = String(api).trim();
+
+                        accountNo = String(accountNo || '').trim();
+
+                        ifscCode = String(ifscCode || '').trim();
+
+                    }
+
+                    if (apNormSellerKey(api) === key) {
+
+                        apSetSellerBankFields(accountNo, ifscCode);
+
+                        return true;
+
+                    }
+
+                }
+
+                return false;
+
+            }
+
+
+
+            function apReadSellerBankFromOption(apiName) {
+
+                var sel = document.getElementById('sellerapi');
+
+                if (!sel) {
+
+                    return false;
+
+                }
+
+                var key = apNormSellerKey(apiName);
+
+                for (var i = 0; i < sel.options.length; i++) {
+
+                    var opt = sel.options[i];
+
+                    if (apNormSellerKey(opt.value) === key) {
+
+                        var accountNo = String(opt.getAttribute('data-account') || '').trim();
+
+                        var ifscCode = String(opt.getAttribute('data-ifsc') || '').trim();
+
+                        if (accountNo || ifscCode) {
+
+                            apSetSellerBankFields(accountNo, ifscCode);
+
+                            return true;
+
+                        }
+
+                    }
+
+                }
+
+                return false;
+
+            }
+
+
+
+            function apAjaxFillSellerBank(apiName) {
+
+                var $ = window.vmAdminJq || window.jQuery;
+
+                if (!$ || !apiName) {
+
+                    return;
+
+                }
+
+                $.ajax({
+
+                    url: apSellerInfoUrl,
+
+                    type: 'POST',
+
+                    data: { Apinm: apiName },
+
+                    dataType: 'json',
+
+                    cache: false,
+
+                    success: function (data) {
+
+                        if (!data) {
+
+                            return;
+
+                        }
+
+                        apSetSellerBankFields(data.AccountNo || data.accountNo || '', data.Ifsccode || data.ifscCode || data.ifsccode || '');
+
+                    }
+
+                });
+
+            }
+
+
+
+            window.apOnSellerPartyChange = function (el) {
+
+                var val = '';
+
+                if (el && el.value != null) {
+
+                    val = String(el.value).trim();
+
+                } else if (typeof el === 'string') {
+
+                    val = el.trim();
+
+                }
+
+                if (!val) {
+
+                    apSetSellerBankFields('', '');
+
+                    return;
+
+                }
+
+                if (apReadSellerBankFromTable(val)) {
+
+                    return;
+
+                }
+
+                if (apReadSellerBankFromOption(val)) {
+
+                    return;
+
+                }
+
+                apAjaxFillSellerBank(val);
+
+            };
+
+
+
+            window.apFillSellerBankDetails = function (apiName) {
+
+                window.apOnSellerPartyChange(typeof apiName === 'string' ? { value: apiName } : apiName);
+
+            };
+
+
+
+            function apSyncSellerDropdownFromTableVanilla() {
+
+                var sel = document.getElementById('sellerapi');
+
+                if (!sel) {
+
+                    return;
+
+                }
+
+                var rows = document.querySelectorAll('#apBankTableHost table tbody tr');
+
+                var list = [];
+
+                var seen = {};
+
+                for (var i = 0; i < rows.length; i++) {
+
+                    var row = rows[i];
+
+                    if (row.classList.contains('ap-empty-row')) {
+
+                        continue;
+
+                    }
+
+                    var api = row.getAttribute('data-apinm');
+
+                    var accountNo = row.getAttribute('data-account') || '';
+
+                    var ifscCode = row.getAttribute('data-ifsc') || '';
+
+                    if (!api) {
+
+                        var cells = row.querySelectorAll('td');
+
+                        if (cells.length < 5) {
+
+                            continue;
+
+                        }
+
+                        api = (cells[0].textContent || '').trim();
+
+                        accountNo = (cells[3].textContent || '').trim();
+
+                        ifscCode = (cells[4].textContent || '').trim();
+
+                    } else {
+
+                        api = String(api).trim();
+
+                    }
+
+                    if (!api) {
+
+                        continue;
+
+                    }
+
+                    var key = apNormSellerKey(api);
+
+                    if (seen[key]) {
+
+                        continue;
+
+                    }
+
+                    seen[key] = true;
+
+                    list.push({ api: api, account: accountNo, ifsc: ifscCode });
+
+                }
+
+                if (!list.length) {
+
+                    return;
+
+                }
+
+                list.sort(function (a, b) { return a.api.localeCompare(b.api); });
+
+                var current = sel.value;
+
+                var placeholder = sel.querySelector('option[value=""]');
+
+                sel.innerHTML = '';
+
+                if (placeholder) {
+
+                    sel.appendChild(placeholder.cloneNode(true));
+
+                } else {
+
+                    var ph = document.createElement('option');
+
+                    ph.value = '';
+
+                    ph.textContent = 'Select (seller) Party';
+
+                    sel.appendChild(ph);
+
+                }
+
+                for (var j = 0; j < list.length; j++) {
+
+                    var item = list[j];
+
+                    var opt = document.createElement('option');
+
+                    opt.value = item.api;
+
+                    opt.textContent = item.api;
+
+                    opt.setAttribute('data-account', item.account);
+
+                    opt.setAttribute('data-ifsc', item.ifsc);
+
+                    sel.appendChild(opt);
+
+                }
+
+                if (current) {
+
+                    sel.value = current;
+
+                }
+
+            }
+
+
+
+            function apBindSellerPartyEvents() {
+
+                var sel = document.getElementById('sellerapi');
+
+                if (!sel) {
+
+                    return;
+
+                }
+
+                if (!sel.getAttribute('onchange')) {
+
+                    sel.setAttribute('onchange', 'if(window.apOnSellerPartyChange){window.apOnSellerPartyChange(this);}');
+
+                }
+
+                var $ = window.vmAdminJq || window.jQuery;
+
+                if ($) {
+
+                    $(document).off('select2:select.apSellerFinal change.apSellerFinal', '#sellerapi');
+
+                    $(document).on('select2:select.apSellerFinal', '#sellerapi', function (e) {
+
+                        var val = (e.params && e.params.data && (e.params.data.id || e.params.data.text)) || $(this).val();
+
+                        window.apOnSellerPartyChange({ value: val });
+
+                    });
+
+                    $(document).on('change.apSellerFinal', '#sellerapi', function () {
+
+                        window.apOnSellerPartyChange(this);
+
+                    });
+
+                }
+
+            }
+
+
+
+            function apBootSellerPartyPage() {
+
+                apSyncSellerDropdownFromTableVanilla();
+
+                if (typeof window.refreshAddPurchaseSelect2 === 'function') {
+
+                    window.refreshAddPurchaseSelect2();
+
+                } else if (typeof window.vmForceAdminSelect2 === 'function') {
+
+                    window.vmForceAdminSelect2();
+
+                }
+
+                apBindSellerPartyEvents();
+
+                var sel = document.getElementById('sellerapi');
+
+                if (sel && sel.value) {
+
+                    window.apOnSellerPartyChange(sel);
+
+                }
+
+            }
+
+
+
+            window.apSyncSellerDropdownFromBankTable = apSyncSellerDropdownFromTableVanilla;
+
+
+
+            if (document.readyState === 'loading') {
+
+                document.addEventListener('DOMContentLoaded', function () {
+
+                    window.setTimeout(apBootSellerPartyPage, 150);
+
+                });
+
+            } else {
+
+                window.setTimeout(apBootSellerPartyPage, 150);
+
+            }
+
+            window.addEventListener('load', function () {
+
+                window.setTimeout(apBootSellerPartyPage, 400);
+
+                window.setTimeout(apBootSellerPartyPage, 1200);
+
+            });
+
+        })();
+
+    </script>
+
+}
 
