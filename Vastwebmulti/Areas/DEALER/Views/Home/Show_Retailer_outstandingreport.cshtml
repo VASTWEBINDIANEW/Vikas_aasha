@@ -1,154 +1,453 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Show_Retailer_credit_report_by_Dealer_Result>
+@using System.Linq
 @{
-    ViewBag.Title = "Show_Retailer_outstandingreport";
+    ViewBag.Title = "Retailer's Outstanding";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.Show_Retailer_credit_report_by_Dealer_Result>();
+    var totalLiveBalance = reports.Sum(x => x.remain_amount);
+    var totalOutstanding = reports.Sum(x => x.cr);
+    var recordCount = reports.Count();
 }
 
-<style>
-    .retailer-outstandingreport .body-outstandingtable {margin-top: 15px !important;}
-    .retailer-outstandingreport .body-outstandingtable table tr td {white-space: nowrap;}
-    .retailer-outstandingreport .body-outstandingtable .table-responsive {border: 0;}
-    .retailer-outstandingreport .body-outstandingtable table tfoot tr td p {margin: 0;}
-    .retailer-outstandingreport .body-outstandingtable .table-responsive {padding-bottom: 15px;}
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=27" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page');</script>
 
-</style>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-retailer-outstanding-page saas-ecommerce-report-page">
 
-<section class="content">
-    <div class="container-fluid full-dealer-secondanimation">
+    <div class="container-fluid vm-opr-page-shell">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Retailer's Outstanding</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);">Retailer's Outstanding</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Reports</li>
+                    <li>Retailer's Outstanding</li>
+                </ol>
+            </div>
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="">
-                <div class="card retailer-outstandingreport">
-                    <div class="bread-same-all-page bread-page-getway dealer-none-fourclass" style="padding-left:0px;padding-bottom:0;width:100%;float:left;">
-                        <ul style="width:auto;float:left;padding-left:0;">
-                            <li class="smli">
-                                <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                                </a>
-                            </li>
-
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                Retailer's&nbsp;Outstanding
-                            </li>
-                        </ul>
-
-                        <div class="col-md-2 recharge-report-dealer" style="width:auto;float:right;padding-right:0px;">
-                            <div class="form-group" style="margin:0px;float:left;">
-                                <div style="padding-top: 0px; float:right">
-                                    <button class="white-success-button" style="height:32px;border:1px solid #b1a6a638;background:#b1a6a638;float: right;padding: 0px 4px;margin-top:-1px;" onclick="findtotal()">Total</button>
-                                    <div class="web-white-filter fil" style="float: left;margin-right: 5px;margin-top:-1px;">
-                                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                                        <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
+            <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="roRptTotalsPanel" style="display:none;" aria-hidden="true">
+                <div class="vm-dmt-totals-head">
+                    <div class="vm-dmt-totals-head__title">
+                        <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                        <span>Outstanding totals</span>
                     </div>
+                    <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRoRptTotals()" title="Hide totals" aria-label="Hide totals">
+                        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                    <div class="vm-opr-total-card vm-opr-total-card--primary">
+                        <span class="vm-opr-total-card__label">Retailers</span>
+                        <strong class="vm-opr-total-card__value">@recordCount</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--success">
+                        <span class="vm-opr-total-card__label">Live Balance</span>
+                        <strong class="vm-opr-total-card__value">@totalLiveBalance.ToString("N2")</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--pending">
+                        <span class="vm-opr-total-card__label">Current Outstanding</span>
+                        <strong class="vm-opr-total-card__value">@totalOutstanding.ToString("N2")</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="body all-reporttable-css body-outstandingtable" style="margin-top:0;padding:0px;width:100%;float:left;">
-                        <div class="table-responsive" style="position:inherit;">
-                            <table id="" class="table table-bordered " style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>SR.NO</th>
-                                        <th>Email</th>
-                                        <th>Frim Name</th>
-                                        <th>Last&nbsp;Transaction&nbsp;Date</th>
-                                        <th>Last&nbsp;Transaction&nbsp;Type</th>
-                                        <th>Live&nbsp;Balance</th>
-                                        <th>Current&nbsp;Outstanding</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{ int i = 1;}
-                                    @foreach (var item in Model)
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-store" aria-hidden="true"></i>
+                        <span>Retailer outstanding report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-ft-search-wrap vm-ro-rpt-table-search">
+                            <input class="form-control vm-ro-rpt-search-input" type="text" id="roRptSearchInput" placeholder="Search report..." autocomplete="off" onkeyup="roRptSearch()" />
+                        </div>
+                        <span class="vm-radiant-inline-total" title="Total current outstanding">
+                            Outstanding: <strong>&#8377; @totalOutstanding.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-ro-rpt-totals-btn" onclick="toggleRoRptTotals()" title="Show totals" aria-expanded="false" aria-controls="roRptTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerOutstandingReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>SR.NO</th>
+                                    <th>Email</th>
+                                    <th>Firm&nbsp;Name</th>
+                                    <th>Last&nbsp;Transaction&nbsp;Date</th>
+                                    <th>Last&nbsp;Transaction&nbsp;Type</th>
+                                    <th>Live&nbsp;Balance</th>
+                                    <th>Current&nbsp;Outstanding</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (reports.Any())
+                                {
+                                    var sr = 1;
+                                    foreach (var item in reports)
                                     {
+                                        var firmName = string.IsNullOrWhiteSpace(item.Frm_Name) ? (item.RetailerName ?? "—") : item.Frm_Name;
                                         <tr>
-                                            <td>@i</td>
-                                            <td>@item.Email</td>
-                                            <td>
-                                                @if (item.Frm_Name == null)
-                                                {
-                                                    @item.RetailerName
-                                                }
-                                                else
-                                                {
-                                                    @item.Frm_Name
-                                                }
-                                            </td>
-                                            <td>@item.RechargeDate</td>
-                                            <td>@item.bal_type</td>
-                                            <td>@item.remain_amount</td>
-                                            <td>@item.cr</td>
+                                            <td>@sr</td>
+                                            <td>@(string.IsNullOrWhiteSpace(item.Email) ? "—" : item.Email)</td>
+                                            <td>@firmName</td>
+                                            <td>@(item.RechargeDate.HasValue ? item.RechargeDate.Value.ToString("dd-MM-yyyy HH:mm") : "—")</td>
+                                            <td>@(string.IsNullOrWhiteSpace(item.bal_type) ? "—" : item.bal_type)</td>
+                                            <td>@item.remain_amount.ToString("N2")</td>
+                                            <td>@item.cr.ToString("N2")</td>
                                         </tr>
-                                        i++;
+                                        sr++;
                                     }
-                                </tbody>
-                                <tfoot style="background-color:whitesmoke;">
-                                    <tr>
-                                        <td><p style="font-size:17px;">Total</p></td>
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="7" class="vm-opr-table-empty">No retailer outstanding records found.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            @if (reports.Any())
+                            {
+                                <tfoot>
+                                    <tr class="vm-ro-rpt-table-foot">
+                                        <td><strong>Total</strong></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td><p style="font-size:17px;">@Model.Sum(a => a.cr)</p></td>
+                                        <td><strong>@totalLiveBalance.ToString("N2")</strong></td>
+                                        <td><strong>@totalOutstanding.ToString("N2")</strong></td>
                                     </tr>
                                 </tfoot>
-                            </table>
-                        </div>
+                            }
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
-
 </section>
 
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-
-
-
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5',
-                'print'
-            ]
+    function roRptSearch() {
+        var $ = window.jQuery;
+        var value = ($('#roRptSearchInput').val() || '').toLowerCase();
+        $('#retailerOutstandingReport tbody tr').filter(function () {
+            if ($(this).hasClass('vm-opr-table-empty-row')) {
+                return true;
+            }
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
-    });
+    }
+
+    function roRptEsc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function roRptNow() {
+        var d = new Date();
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var h = d.getHours();
+        var ampm = h >= 12 ? 'PM' : 'AM';
+        var hr = h % 12;
+        if (!hr) { hr = 12; }
+        var min = d.getMinutes();
+        return ('0' + d.getDate()).slice(-2) + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + ('0' + hr).slice(-2) + ':' + ('0' + min).slice(-2) + ' ' + ampm;
+    }
+
+    function roRptNum(value) {
+        var n = parseFloat(String(value || '').replace(/,/g, '').replace(/[^\d.-]/g, ''));
+        return isNaN(n) ? 0 : n;
+    }
+
+    function roRptTableRows() {
+        var $ = window.jQuery;
+        var rows = [];
+        $('#retailerOutstandingReport tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-opr-table-empty-row') || !$tr.is(':visible')) {
+                return;
+            }
+            var $cells = $tr.children('td');
+            if ($cells.length < 7) {
+                return;
+            }
+            rows.push({
+                sr: $.trim($cells.eq(0).text()).replace(/\s+/g, ' '),
+                email: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+                firm: $.trim($cells.eq(2).text()).replace(/\s+/g, ' '),
+                lastDate: $.trim($cells.eq(3).text()).replace(/\s+/g, ' '),
+                lastType: $.trim($cells.eq(4).text()).replace(/\s+/g, ' '),
+                liveBal: $.trim($cells.eq(5).text()).replace(/\s+/g, ' '),
+                outstanding: $.trim($cells.eq(6).text()).replace(/\s+/g, ' ')
+            });
+        });
+        return rows;
+    }
+
+    function roRptExportMeta(rows) {
+        var liveBal = 0;
+        var outstanding = 0;
+        for (var i = 0; i < rows.length; i++) {
+            liveBal += roRptNum(rows[i].liveBal);
+            outstanding += roRptNum(rows[i].outstanding);
+        }
+        return {
+            generatedOn: roRptNow(),
+            search: $.trim((window.jQuery ? window.jQuery('#roRptSearchInput').val() : '') || ''),
+            records: rows.length,
+            liveBal: liveBal.toFixed(2),
+            outstanding: outstanding.toFixed(2)
+        };
+    }
+
+    function roRptHeads() {
+        return ['SR.NO', 'Email', 'Firm Name', 'Last Transaction Date', 'Last Transaction Type', 'Live Balance', 'Current Outstanding'];
+    }
+
+    function roRptBuildExcelHtml(rows) {
+        var m = roRptExportMeta(rows);
+        var colCount = 7;
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8" /><title>Retailer Outstanding</title></head><body>';
+        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">';
+        html += '<tr><td colspan="' + colCount + '" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;">Retailer Outstanding Report</td></tr>';
+        html += '<tr><td colspan="' + colCount + '" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;">Dealer reports - retailer outstanding summary</td></tr>';
+        html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Generated On</td><td colspan="2" style="font-weight:bold;">' + roRptEsc(m.generatedOn) + '</td>';
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Records</td><td colspan="3" style="font-weight:bold;">' + m.records + '</td></tr>';
+        if (m.search) {
+            html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Search Filter</td><td colspan="' + (colCount - 1) + '" style="font-weight:bold;">' + roRptEsc(m.search) + '</td></tr>';
+        }
+        html += '<tr><td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">Live Balance Total</td><td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">' + m.liveBal + '</td>';
+        html += '<td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">Outstanding Total</td><td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">' + m.outstanding + '</td>';
+        html += '<td colspan="3" bgcolor="#F8FAFC"></td></tr>';
+        html += '<tr>';
+        var heads = roRptHeads();
+        for (var h = 0; h < heads.length; h++) {
+            html += '<th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">' + roRptEsc(heads[h]) + '</th>';
+        }
+        html += '</tr>';
+        if (!rows.length) {
+            html += '<tr><td colspan="' + colCount + '" bgcolor="#F8FAFC" style="text-align:center;font-weight:bold;color:#64748B;height:48px;">No retailer outstanding records found.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                var rowBg = (i % 2 === 1) ? '#F8FAFC' : '#FFFFFF';
+                html += '<tr>';
+                html += '<td bgcolor="' + rowBg + '">' + roRptEsc(r.sr) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + roRptEsc(r.email) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + roRptEsc(r.firm) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + roRptEsc(r.lastDate) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + roRptEsc(r.lastType) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + roRptEsc(r.liveBal) + '</td>';
+                html += '<td bgcolor="' + rowBg + '">' + roRptEsc(r.outstanding) + '</td>';
+                html += '</tr>';
+            }
+            html += '<tr>';
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">Total</td><td bgcolor="#EFF6FF"></td><td bgcolor="#EFF6FF"></td><td bgcolor="#EFF6FF"></td><td bgcolor="#EFF6FF"></td>';
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">' + m.liveBal + '</td>';
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">' + m.outstanding + '</td>';
+            html += '</tr>';
+        }
+        html += '</table></body></html>';
+        return html;
+    }
+
+    function roRptBuildPdfHtml(rows) {
+        var m = roRptExportMeta(rows);
+        var heads = roRptHeads();
+        var headHtml = '';
+        for (var h = 0; h < heads.length; h++) {
+            headHtml += '<th>' + roRptEsc(heads[h]) + '</th>';
+        }
+        var body = '';
+        if (!rows.length) {
+            body = '<tr><td colspan="7" class="empty">No retailer outstanding records found.</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                body += '<tr>';
+                body += '<td>' + roRptEsc(r.sr) + '</td>';
+                body += '<td>' + roRptEsc(r.email) + '</td>';
+                body += '<td>' + roRptEsc(r.firm) + '</td>';
+                body += '<td>' + roRptEsc(r.lastDate) + '</td>';
+                body += '<td>' + roRptEsc(r.lastType) + '</td>';
+                body += '<td>' + roRptEsc(r.liveBal) + '</td>';
+                body += '<td>' + roRptEsc(r.outstanding) + '</td>';
+                body += '</tr>';
+            }
+            body += '<tr class="foot-row">';
+            body += '<td><strong>Total</strong></td><td></td><td></td><td></td><td></td>';
+            body += '<td><strong>' + roRptEsc(m.liveBal) + '</strong></td>';
+            body += '<td><strong>' + roRptEsc(m.outstanding) + '</strong></td>';
+            body += '</tr>';
+        }
+        var searchRow = m.search
+            ? '<tr><td colspan="3"><span class="meta-label">Search Filter</span><span class="meta-value">' + roRptEsc(m.search) + '</span></td></tr>'
+            : '';
+        return '<!DOCTYPE html><html><head><meta charset="utf-8" /><title>Retailer Outstanding</title><style type="text/css">'
+            + '@@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }'
+            + '* { box-sizing: border-box; } body { margin:0; padding:16px; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#0f172a; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }'
+            + 'table { border-collapse:collapse; } .hero { width:100%; border:1px solid #1d4ed8; } .hero-top { padding:14px 18px; background:#2563eb; color:#fff; }'
+            + '.hero-top h1 { margin:0; font-size:20px; } .hero-top p { margin:4px 0 0; font-size:11px; color:#dbeafe; }'
+            + '.meta { width:100%; background:#f8fafc; } .meta td { padding:8px 12px; border-right:1px solid #e2e8f0; vertical-align:top; }'
+            + '.meta-label { display:block; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748b; margin-bottom:3px; }'
+            + '.meta-value { font-size:12px; font-weight:700; } .cards { width:100%; margin:12px 0; } .cards td { width:33.33%; padding:0 6px 0 0; vertical-align:top; }'
+            + '.card { border:1px solid #e2e8f0; padding:10px 12px; } .card-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; margin-bottom:4px; } .card-value { font-size:16px; font-weight:800; }'
+            + '.card-total { background:#eef2ff; } .card-ok { background:#ecfdf5; } .card-wait { background:#fefce8; }'
+            + '.grid { width:100%; border:1px solid #cbd5e1; } .grid th { padding:9px 7px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; color:#fff; background:#334155; }'
+            + '.grid td { padding:8px 7px; font-size:11px; border-top:1px solid #e2e8f0; vertical-align:top; } .grid tbody tr:nth-child(even):not(.foot-row) td { background:#f8fafc; }'
+            + '.grid tbody tr.foot-row td { background:#eff6ff; border-top:2px solid #93c5fd; font-weight:700; }'
+            + '.empty { padding:36px 16px; text-align:center; font-size:14px; font-weight:700; color:#64748b; background:#f8fafc; }'
+            + '.foot { margin-top:10px; padding-top:8px; border-top:1px dashed #cbd5e1; font-size:10px; color:#94a3b8; text-align:center; }'
+            + '</style></head><body><div class="sheet"><div class="hero"><div class="hero-top"><h1>Retailer Outstanding Report</h1><p>Dealer reports - retailer outstanding summary</p></div>'
+            + '<table class="meta" cellpadding="0" cellspacing="0"><tr>'
+            + '<td style="width:40%;"><span class="meta-label">Generated On</span><span class="meta-value">' + roRptEsc(m.generatedOn) + '</span></td>'
+            + '<td style="width:30%;"><span class="meta-label">Records</span><span class="meta-value">' + m.records + '</span></td>'
+            + '<td style="width:30%;"><span class="meta-label">Outstanding Total</span><span class="meta-value">' + roRptEsc(m.outstanding) + '</span></td>'
+            + '</tr>' + searchRow + '</table></div>'
+            + '<table class="cards" cellpadding="0" cellspacing="0"><tr>'
+            + '<td><div class="card card-total"><span class="card-label">Retailers</span><span class="card-value">' + m.records + '</span></div></td>'
+            + '<td><div class="card card-ok"><span class="card-label">Live Balance Total</span><span class="card-value">' + m.liveBal + '</span></div></td>'
+            + '<td><div class="card card-wait"><span class="card-label">Outstanding Total</span><span class="card-value">' + m.outstanding + '</span></div></td>'
+            + '</tr></table>'
+            + '<table class="grid" cellpadding="0" cellspacing="0"><thead><tr>' + headHtml + '</tr></thead><tbody>' + body + '</tbody></table>'
+            + '<div class="foot">Generated from Dealer panel - Retailer Outstanding Report</div></div></body></html>';
+    }
+
+    function roRptDownloadExcel(html) {
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, 'Retailer_Outstanding_Report.xls');
+            return;
+        }
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'Retailer_Outstanding_Report.xls';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+    }
+
+    function roRptOpenPdf(html) {
+        var w = window.open('', '_blank');
+        if (!w) {
+            return;
+        }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+    }
+
+    function toggleRoRptTotals() {
+        var $ = window.jQuery;
+        var panel = $('#roRptTotalsPanel');
+        if (panel.is(':visible')) {
+            hideRoRptTotals();
+            return;
+        }
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        $('.vm-ro-rpt-totals-btn').attr('aria-expanded', 'true');
+    }
+
+    function hideRoRptTotals() {
+        var $ = window.jQuery;
+        $('#roRptTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-ro-rpt-totals-btn').attr('aria-expanded', 'false');
+    }
+
+    function bootRetailerOutstandingReport() {
+        var $ = window.jQuery;
+        if (!$) {
+            window.setTimeout(bootRetailerOutstandingReport, 50);
+            return;
+        }
+
+        $('#btnExport').off('click.roRptEx').on('click.roRptEx', function () {
+            var rows = roRptTableRows();
+            if (!rows.length) {
+                if (typeof swal === 'function') {
+                    swal('No records to export', '', 'warning');
+                }
+                return;
+            }
+            roRptDownloadExcel(roRptBuildExcelHtml(rows));
+        });
+
+        $('#btnPDF').off('click.roRptPdf').on('click.roRptPdf', function () {
+            var rows = roRptTableRows();
+            if (!rows.length) {
+                if (typeof swal === 'function') {
+                    swal('No records to export', '', 'warning');
+                }
+                return;
+            }
+            roRptOpenPdf(roRptBuildPdfHtml(rows));
+        });
+    }
+
+    if (document.readyState === 'complete') {
+        bootRetailerOutstandingReport();
+    } else {
+        window.addEventListener('load', bootRetailerOutstandingReport);
+    }
 </script>
 
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-retailer-outstanding-page.saas-ecommerce-report-page .vm-ro-rpt-table-search input.vm-ro-rpt-search-input,
+        body.saas-admin-ui section.content.saas-retailer-outstanding-page.saas-ecommerce-report-page #retailerOutstandingReport.vm-opr-data-table thead th,
+        body.saas-admin-ui section.content.saas-retailer-outstanding-page.saas-ecommerce-report-page #retailerOutstandingReport.vm-opr-data-table tbody td,
+        body.saas-admin-ui section.content.saas-retailer-outstanding-page.saas-ecommerce-report-page #retailerOutstandingReport.vm-opr-data-table tfoot td,
+        body.saas-admin-ui section.content.saas-retailer-outstanding-page.saas-ecommerce-report-page .vm-radiant-inline-total,
+        body.saas-admin-ui section.content.saas-retailer-outstanding-page.saas-ecommerce-report-page .saas-acc-btn--excel,
+        body.saas-admin-ui section.content.saas-retailer-outstanding-page.saas-ecommerce-report-page .saas-acc-btn--pdf {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-retailer-outstanding-page.saas-ecommerce-report-page .vm-ro-rpt-table-search {
+            min-width: 200px;
+            max-width: 260px;
+        }
+
+        body.saas-admin-ui section.content.saas-retailer-outstanding-page.saas-ecommerce-report-page .vm-ro-rpt-table-search input.vm-ro-rpt-search-input {
+            height: 38px !important;
+            border-radius: 8px !important;
+            border: 1.5px solid #cbd5e1 !important;
+            background: #fff !important;
+            padding: 0 12px !important;
+            font-weight: 500 !important;
+        }
+    </style>
+}

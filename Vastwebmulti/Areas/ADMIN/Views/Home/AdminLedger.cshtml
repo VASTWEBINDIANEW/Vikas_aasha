@@ -56,7 +56,7 @@
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=44" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=29" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-ledger-modern.css?v=4" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ledger-modern.css?v=7" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-prepaid-card-report-page saas-admin-ledger-page">
@@ -105,7 +105,7 @@
                             new SelectListItem { Text = "Retailer Ledger", Value = "Retailer" },
                             new SelectListItem { Text = "API User Ledger", Value = "API" },
                             new SelectListItem { Text = "White Label Ledger", Value = "Whitelabel" }
-                        }, "Value", "Text", selectedLedgerType), new { @id = "ddlusers", @class = "vm-opr-select vm-dmt-select form-control", onchange = "answers()" })
+                        }, "Value", "Text", selectedLedgerType), new { @id = "ddlusers", @class = "vm-opr-select vm-dmt-select form-control" })
                     </div>
 
                     <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra vm-ledger-field--user" id="allwh" hidden>
@@ -226,7 +226,7 @@
                                     <th>Sr.&nbsp;No</th>
                                     <th>Request&nbsp;Id</th>
                                     <th>Particular&nbsp;Details</th>
-                                    <th>?&nbsp;Amount</th>
+                                    <th>&#8377;&nbsp;Amount</th>
                                     <th>Credit</th>
                                     <th>Debit</th>
                                     <th id="whitelabelpre">Balance</th>
@@ -366,6 +366,42 @@
             }
         }
 
+        function ledgerHasRows() {
+            return $('#mytable tr').length > 0;
+        }
+
+        function isLedgerPostSearch() {
+            return $('#adminLedgerForm').attr('data-date-mode') === 'post';
+        }
+
+        function shouldShowLedgerTable(ledgerType, forceShow) {
+            if (forceShow) {
+                return true;
+            }
+            if (isLedgerPostSearch() && ledgerHasRows()) {
+                return true;
+            }
+            if (ledgerType === 'Admin') {
+                return true;
+            }
+            if (ledgerType === 'Dealer' && $('#alldealer').val() && ledgerHasRows()) {
+                return true;
+            }
+            if (ledgerType === 'Master' && $('#allmaster').val() && ledgerHasRows()) {
+                return true;
+            }
+            if (ledgerType === 'Retailer' && $('#allretailer').val() && ledgerHasRows()) {
+                return true;
+            }
+            if (ledgerType === 'Whitelabel' && $('#allwhitelabel').val() && ledgerHasRows()) {
+                return true;
+            }
+            if (ledgerType === 'API' && $('#allapiuser').val() && ledgerHasRows()) {
+                return true;
+            }
+            return false;
+        }
+
         function toggleLedgerTable(showTable) {
             if (showTable) {
                 $('#mytable').show();
@@ -374,35 +410,30 @@
             }
         }
 
-        window.answers = function (text) {
+        window.answers = function (forceShow) {
             var answer = $('#ddlusers').val();
             hideLedgerFilterExtras();
-            toggleLedgerTable(false);
 
             if (answer === 'Dealer') {
                 showLedgerFilterExtra('#dlm');
                 setWhitelabelColumns(false);
-                if (text === 'pp') { toggleLedgerTable(true); }
             } else if (answer === 'Whitelabel') {
                 showLedgerFilterExtra('#allwh');
                 setWhitelabelColumns(true);
-                if (text === 'pp') { toggleLedgerTable(true); }
             } else if (answer === 'Master') {
                 showLedgerFilterExtra('#allms');
                 setWhitelabelColumns(false);
-                if (text === 'pp') { toggleLedgerTable(true); }
             } else if (answer === 'Admin') {
                 setWhitelabelColumns(false);
-                if (text === 'pp') { toggleLedgerTable(true); }
             } else if (answer === 'Retailer') {
                 showLedgerFilterExtra('#rem');
                 setWhitelabelColumns(false);
-                if (text === 'pp') { toggleLedgerTable(true); }
             } else if (answer === 'API') {
                 showLedgerFilterExtra('#apiid');
                 setWhitelabelColumns(false);
-                if (text === 'pp') { toggleLedgerTable(true); }
             }
+
+            toggleLedgerTable(shouldShowLedgerTable(answer, forceShow === true || forceShow === 'pp'));
         };
 
         function buildAdminLedgerExportUrl(actionName) {
@@ -431,11 +462,23 @@
             applyLedgerSelect2($('#prev_numberOfDays'));
         }
 
+        var ledgerUiBooting = true;
+
         $(document).ready(function () {
             initAdminLedgerSelect2();
             initAdminLedgerDatepickers();
             $('#adminLedgerForm .select2-container').css('width', '100%');
-            answers('pp');
+
+            $('#ddlusers').off('change.adminLedger').on('change.adminLedger', function () {
+                if (ledgerUiBooting) {
+                    return;
+                }
+                answers(false);
+            });
+
+            answers(isLedgerPostSearch() && ledgerHasRows());
+
+            ledgerUiBooting = false;
 
             $('#btnExport').on('click', function () {
                 window.location.href = buildAdminLedgerExportUrl('@Url.Action("ExcellGenerateForAdminLedger", "Home")');

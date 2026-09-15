@@ -224,9 +224,9 @@
 
                     updateOpenBadge(data.openCount);
 
-                    if (typeof window.hideDealerTopbarChatBadge === "function") {
+                    if (typeof window.syncDealerTopbarChatBadge === "function") {
 
-                        window.hideDealerTopbarChatBadge();
+                        window.syncDealerTopbarChatBadge(data.openCount);
 
                     }
 
@@ -328,9 +328,9 @@
 
     function bootDealerComplaintChat() {
 
-        if (typeof window.hideDealerTopbarChatBadge === "function") {
+        if (typeof window.refreshDealerChatBadge === "function") {
 
-            window.hideDealerTopbarChatBadge();
+            window.refreshDealerChatBadge();
 
         }
 

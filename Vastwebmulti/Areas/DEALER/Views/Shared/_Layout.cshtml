@@ -495,11 +495,8 @@
         }
     </script>
 
-    <!-- Dealer topbar badges — Tokens & Chat (dynamic, hide when page seen) -->
+    <!-- Dealer topbar badges — Tokens & Chat (always visible, refresh dynamically) -->
     <script>
-        window.dealerTopbarIsTokenPage = @(Request.Path.IndexOf("tokenPurchaseHistory", StringComparison.OrdinalIgnoreCase) >= 0 ? "true" : "false");
-        window.dealerTopbarIsChatPage = @(Request.Path.IndexOf("Complaint", StringComparison.OrdinalIgnoreCase) >= 0 ? "true" : "false");
-
         window.syncDealerTopbarTokenBadge = function (value) {
             var $badge = window.jQuery ? window.jQuery('#dealerTopbarTokenBadge') : null;
             if (!$badge || !$badge.length) {
@@ -541,7 +538,7 @@
         };
 
         function refreshDealerTokenBadge() {
-            if (!window.jQuery || window.dealerTopbarIsTokenPage) {
+            if (!window.jQuery) {
                 return;
             }
             $.ajax({
@@ -558,7 +555,7 @@
         }
 
         function refreshDealerChatBadge() {
-            if (!window.jQuery || window.dealerTopbarIsChatPage) {
+            if (!window.jQuery) {
                 return;
             }
             $.ajax({
@@ -575,16 +572,8 @@
         }
 
         function bootDealerTopbarBadges() {
-            if (window.dealerTopbarIsTokenPage) {
-                window.hideDealerTopbarTokenBadge();
-            } else {
-                refreshDealerTokenBadge();
-            }
-            if (window.dealerTopbarIsChatPage) {
-                window.hideDealerTopbarChatBadge();
-            } else {
-                refreshDealerChatBadge();
-            }
+            refreshDealerTokenBadge();
+            refreshDealerChatBadge();
         }
 
         if (window.jQuery) {
