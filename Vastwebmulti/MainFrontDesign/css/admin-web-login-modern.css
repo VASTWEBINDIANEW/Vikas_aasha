@@ -1389,39 +1389,177 @@ body.saas-admin-ui .WebLogin_Page .wl-kyc-select__control {
 .WebLogin_Page .wl-history-table-panel { padding: 0; border: none; background: transparent; }
 .WebLogin_Page .wl-history-table-wrap { padding: 0; }
 .WebLogin_Page .wl-history-table-wrap .vm-opr-table-scroll {
-    max-height: 58vh;
+    height: 400px;
+    max-height: 400px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 }
-body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table {
-    width: 100%;
-    border-collapse: collapse;
+body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table,
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table,
+body.saas-admin-ui .WebLogin_Page #WebLoginHistory.vm-opr-data-table,
+body.saas-admin-ui .WebLogin_Page #AttemptBlockhistory.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
     margin: 0 !important;
-    min-width: 720px;
+    table-layout: fixed !important;
+    font-size: .74rem !important;
+    background: #fff !important;
 }
-body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table thead {
-    background: #1e293b;
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table {
+    min-width: 860px !important;
 }
-body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table thead th {
-    color: #fff;
+body.saas-admin-ui .WebLogin_Page #AttemptBlockhistory.vm-opr-data-table {
+    min-width: 640px !important;
+    table-layout: auto !important;
+}
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col .wl-hist-col--sr { width: 4%; }
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col .wl-hist-col--by { width: 6%; }
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col .wl-hist-col--user { width: 14%; }
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col .wl-hist-col--device { width: 22%; }
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col .wl-hist-col--geo { width: 12%; }
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col .wl-hist-col--time { width: 42%; }
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col thead th:last-child,
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col tbody td:last-child {
+    width: 42% !important;
+}
+body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table thead,
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table thead {
+    background: #1e293b !important;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table thead th,
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table thead th {
+    color: #fff !important;
+    background: #1e293b !important;
+    font-size: .68rem !important;
+    font-weight: 700 !important;
+    padding: 9px 10px !important;
+    white-space: normal !important;
+    border: none !important;
+    border-bottom: 1px solid #334155 !important;
+    text-transform: uppercase !important;
+    letter-spacing: .03em !important;
+    vertical-align: middle !important;
+    text-align: left !important;
+    line-height: 1.3 !important;
+    box-shadow: none !important;
+}
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table thead th:nth-child(1),
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table tbody td:nth-child(1),
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table thead th:nth-child(2),
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table tbody td:nth-child(2) {
+    text-align: center !important;
+}
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table thead th:nth-child(3),
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table tbody td:nth-child(3),
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table thead th:nth-child(4),
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table tbody td:nth-child(4),
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table thead th:nth-child(5),
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table tbody td:nth-child(5),
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table thead th:nth-child(6),
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table tbody td:nth-child(6) {
+    width: unset !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table thead th:first-child,
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table tbody td:first-child {
+    width: unset !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table tbody td,
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table tbody td {
+    font-size: .74rem !important;
+    padding: 9px 10px !important;
+    color: #334155 !important;
+    border: none !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    vertical-align: top !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    line-height: 1.45 !important;
+    text-align: left !important;
+}
+body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table tbody tr:nth-child(even),
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table tbody tr:nth-child(even) {
+    background: #f8fafc !important;
+}
+body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table tbody tr:hover td,
+body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table tbody tr:hover td {
+    background: #eff6ff !important;
+}
+.WebLogin_Page .wl-hist-user-role {
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.35;
+    margin-bottom: 2px;
+}
+.WebLogin_Page .wl-hist-user-name {
     font-size: .7rem;
-    font-weight: 600;
-    padding: 8px 10px;
-    white-space: nowrap;
-    border: none;
+    color: #64748b;
+    line-height: 1.35;
+}
+.WebLogin_Page .wl-hist-kv-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.WebLogin_Page .wl-hist-kv-list li {
+    display: grid;
+    grid-template-columns: minmax(44px, auto) minmax(0, 1fr);
+    gap: 6px;
+    align-items: start;
+    margin: 0 0 4px;
+    line-height: 1.4;
+}
+.WebLogin_Page .wl-hist-kv-list li:last-child { margin-bottom: 0; }
+.WebLogin_Page .wl-hist-kv-label {
+    font-size: .64rem;
+    font-weight: 700;
+    color: #64748b;
     text-transform: uppercase;
-    letter-spacing: .03em;
-    vertical-align: middle;
+    letter-spacing: .02em;
 }
-body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table tbody td {
-    font-size: .74rem;
-    padding: 7px 10px;
+.WebLogin_Page .wl-hist-kv-value {
+    font-size: .72rem;
     color: #334155;
-    border-bottom: 1px solid #f1f5f9;
-    vertical-align: top;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
-body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table tbody tr:nth-child(even) { background: #f8fafc; }
-body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table tbody tr:hover td { background: #eff6ff !important; }
+.WebLogin_Page .wl-hist-geo-line {
+    font-size: .72rem;
+    color: #475569;
+    line-height: 1.45;
+    margin-bottom: 2px;
+}
+.WebLogin_Page .wl-hist-geo-line:last-child { margin-bottom: 0; }
+.WebLogin_Page .wl-hist-time {
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.35;
+    margin-bottom: 4px;
+}
+.WebLogin_Page .wl-hist-addr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 4px 6px;
+    line-height: 1.4;
+}
+.WebLogin_Page .wl-hist-city { flex-shrink: 0; }
+.WebLogin_Page .wl-hist-location {
+    font-size: .72rem;
+    color: #475569;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
 body.saas-admin-ui .WebLogin_Page .wl-manage-data-table.vm-opr-data-table thead { background: #1e293b; }
 body.saas-admin-ui .WebLogin_Page .wl-manage-data-table.vm-opr-data-table thead th {
     color: #fff; font-size: .7rem; font-weight: 600; padding: 8px 10px;
@@ -2523,8 +2661,9 @@ body.saas-admin-ui .WebLogin_Page .wl-manage-panel {
         flex-wrap: wrap !important;
         overflow-x: visible !important;
     }
-    .WebLogin_Page .wl-history-table-wrap .vm-opr-table-scroll { max-height: 42vh; }
-    body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table { min-width: 600px; }
+    .WebLogin_Page .wl-history-table-wrap .vm-opr-table-scroll { height: 400px !important; max-height: 400px !important; }
+    body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table { min-width: 760px !important; }
+    body.saas-admin-ui .WebLogin_Page #AttemptBlockhistory.vm-opr-data-table { min-width: 560px !important; }
     .WebLogin_Page #modeldeiv { width: 100% !important; border-radius: 0; }
     body.saas-admin-ui #wlDrawerModal.in .modal-dialog,
     body.saas-admin-ui #wlDrawerModal.show .modal-dialog,

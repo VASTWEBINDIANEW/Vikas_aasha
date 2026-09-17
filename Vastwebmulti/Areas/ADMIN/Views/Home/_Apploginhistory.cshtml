@@ -1,33 +1,38 @@
-@model Vastwebmulti.Areas.ADMIN.Models.BlockUserViewModel
-
-@{ var j = 1;}
-@foreach (var item in Model.Apploginhistory)
-{
-    var badgeClass = item.LoginFrom == "Web" ? "wl-by-badge wl-by-badge--web" : "wl-by-badge wl-by-badge--app";
-    var badgeText = item.LoginFrom == "Web" ? "WEB" : "APP";
-
-    <tr>
-        <td>@j</td>
-        <td><span class="@badgeClass">@badgeText</span></td>
-        <td>
-            <strong>@item.Role</strong><br />
-            <small>@item.firmname</small>
-        </td>
-        <td>
-            @if (!string.IsNullOrEmpty(item.IP_Address)) { <div><small>IP:</small> @item.IP_Address</div> }
-            @if (!string.IsNullOrEmpty(item.browser)) { <div><small>Browser:</small> @item.browser</div> }
-        </td>
-        <td>
-            @if (!string.IsNullOrEmpty(item.latitude)) { <div>@item.latitude</div> }
-            @if (!string.IsNullOrEmpty(item.Logitude)) { <div>@item.Logitude</div> }
-        </td>
-        <td>
-            <strong>@item.LoginTime</strong>
-            @if (!string.IsNullOrEmpty(item.city) || !string.IsNullOrEmpty(item.Location))
-            {
-                <div><span class="wl-by-badge">@item.city</span> @item.Location</div>
-            }
-        </td>
-    </tr>
-    j++;
-}
+@model Vastwebmulti.Areas.ADMIN.Models.BlockUserViewModel
+
+@{ var j = 1;}
+@foreach (var item in Model.Apploginhistory)
+{
+    var badgeClass = item.LoginFrom == "Web" ? "wl-by-badge wl-by-badge--web" : "wl-by-badge wl-by-badge--app";
+    var badgeText = item.LoginFrom == "Web" ? "WEB" : "APP";
+
+    <tr class="wl-hist-row">
+        <td class="wl-hist-cell wl-hist-cell--sr">@j</td>
+        <td class="wl-hist-cell wl-hist-cell--by"><span class="@badgeClass">@badgeText</span></td>
+        <td class="wl-hist-cell wl-hist-cell--user">
+            <div class="wl-hist-user-role">@item.Role</div>
+            <div class="wl-hist-user-name">@item.firmname</div>
+        </td>
+        <td class="wl-hist-cell wl-hist-cell--device">
+            <ul class="wl-hist-kv-list">
+                @if (!string.IsNullOrEmpty(item.IP_Address)) { <li><span class="wl-hist-kv-label">IP</span><span class="wl-hist-kv-value">@item.IP_Address</span></li> }
+                @if (!string.IsNullOrEmpty(item.browser)) { <li><span class="wl-hist-kv-label">Browser</span><span class="wl-hist-kv-value">@item.browser</span></li> }
+            </ul>
+        </td>
+        <td class="wl-hist-cell wl-hist-cell--geo">
+            @if (!string.IsNullOrEmpty(item.latitude)) { <div class="wl-hist-geo-line">@item.latitude</div> }
+            @if (!string.IsNullOrEmpty(item.Logitude)) { <div class="wl-hist-geo-line">@item.Logitude</div> }
+        </td>
+        <td class="wl-hist-cell wl-hist-cell--time">
+            <div class="wl-hist-time">@item.LoginTime</div>
+            @if (!string.IsNullOrEmpty(item.city) || !string.IsNullOrEmpty(item.Location))
+            {
+                <div class="wl-hist-addr">
+                    @if (!string.IsNullOrEmpty(item.city)) { <span class="wl-by-badge wl-hist-city">@item.city</span> }
+                    @if (!string.IsNullOrEmpty(item.Location)) { <span class="wl-hist-location">@item.Location</span> }
+                </div>
+            }
+        </td>
+    </tr>
+    j++;
+}

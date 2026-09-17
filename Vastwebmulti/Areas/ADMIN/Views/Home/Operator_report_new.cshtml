@@ -20,14 +20,14 @@
 }
 
 <link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-operator-report-page.css?v=16" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-page.css?v=17" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=57" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=66" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-operator-report-page">
@@ -138,6 +138,16 @@
 
                     <button id="btntype_OLD" name="btntype" type="submit" value="Search" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search"><i class="fas fa-search" aria-hidden="true"></i><span>Search</span></button>
 
+                    <button type="button" id="vmOprAutoReloadToggle" class="vm-opr-live-pulse is-off" title="Auto reload every 10 seconds" aria-pressed="false" aria-label="Auto reload off">
+                        <span class="vm-opr-live-pulse__switch" aria-hidden="true">
+                            <span class="vm-opr-live-pulse__switch-knob"></span>
+                        </span>
+                        <span class="vm-opr-live-pulse__meta">
+                            <span class="vm-opr-live-pulse__label">Reload</span>
+                            <span class="vm-opr-live-pulse__hint" id="vmOprAutoReloadHint">OFF</span>
+                        </span>
+                    </button>
+
                     <div class="vm-opr-filter-actions saas-acc-export-group saas-pan-export-group">
                         <button type="button" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn" id="btnExport" title="Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
                         <button type="button" class="saas-acc-btn saas-acc-btn--pdf saas-pan-export-btn" id="btnPDF" title="PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
@@ -242,6 +252,11 @@
                 <div class="showreport-class vm-opr-table-wrap">
                     <div class="table-responsive vm-opr-table-scroll">
                         <table id="example" class="table table-bordered table-striped table-hover third-design-table vm-opr-data-table">
+                            <colgroup>
+                                <col class="vm-opr-col-sn" />
+                                <col class="vm-opr-col-sb" />
+                                <col span="14" />
+                            </colgroup>
                             <thead>
                                 <tr>
                                     <th>S.N</th>
@@ -1252,22 +1267,12 @@
                     else {
                         portno = b.portno;
                     }
-                    if (b.rstatus.toUpperCase() == "REQUEST SEND") {
+                    if (b.rstatus.toUpperCase() == "REQUEST SEND" || b.rstatus.toUpperCase() == "REQUEST SENT") {
                         Pcolor = "#ff9600";
-                        StatusImg = "<i style='color: antiquewhite;'><img style='height: 20px;width: 18px;margin:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107' src='../../ashok-images/clkk.png' /></i>";
                     }
-                    if (b.rstatus.toUpperCase() == "REFUND") {
-                        StatusImg = "<img style='height: 20px;width: 18px;margin:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown' />";
-                    }
-                    if (b.rstatus.toUpperCase() == "RESEND") {
-                        StatusImg = "<img style='height: 20px;width: 18px;margin:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:blue' src='../../ashok-images/replyfund.svg' />";
-                    }
-                    if (b.rstatus.toUpperCase() == "SUCCESS") {
-                        StatusImg = "<img style='height: 20px;width: 18px;margin:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green' src='../../ashok-images/correct.svg' />";
-                    }
-                    if (b.rstatus.toUpperCase() == "FAILED") {
-                        StatusImg = "<img style='height: 20px;width: 18px;margin:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red' src='../../ashok-images/closes.svg' />";
-                    }
+                    StatusImg = (typeof window.vmOprBuildStatusBadge === 'function')
+                        ? window.vmOprBuildStatusBadge(b.rstatus, b.idno)
+                        : '';
 
                     if (b.rstatus == "Request Send" || b.rstatus == "Request Sent") {
                         PSF = "<button class='ss' id='" + idshow + "' onclick=btn_showhide('" + i + "') style='margin-left:0px;margin-right: 3px;background:transparent;border:none;color:#c7c2c2;margin-top:0px;' title='Manual Success'><i class='fa fa-check' style='top:1px;border: 1px solid #c7c2c2;padding: 3px;font-size: 10px;'></i></button><button class='ss' id='" + idhide + "' onclick = success('" + b.idno + "') style='display:none; margin-right:4px;background:transparent;border:none;color:red;float:left;' title='Are You Sure?'><i class='fa fa-question-circle-o' style='top:1px;font-size:10px;border:1px solid #c7c2c2;padding:3px;'></i></button><button class='ff' data-toggle='modal' data-target='#defaultModal1' onclick=refundshow('" + b.idno + "','" + encodeURI(portno) + "','" + encodeURI(b.rstatus) + "') style='background:transparent;border:none;color:#c7c2c2;margin-top:-4px;' title='Manual Failed'><i class='fa fa-times' style='top:1px;border: 1px solid #c7c2c2;padding: 3px 4px;font-size: 10px;'></i></button>";
@@ -1290,17 +1295,17 @@
                     var Actionbtn = "<span class='nrch' data-toggle='modal' data-target='#defaultModal222' onclick=ActionBtn('" + b.idno + "') style='color:" + Pcolor + "'; padding-left:15px;'> <i class='fa fa-angle-double-right' aria-hidden='true'></i> </span>";
                     if (b.rstatus.toUpperCase().includes("REFUND") == false && b.rstatus.toUpperCase().includes("RESEND") == false) {
                         mdtblHtml += "<tr style='font-weight: 500; color:" + Pcolor + "'>";
-                        mdtblHtml += "<td> <button class='for-new' style='margin-left:14px; margin-left: 0px; background: transparent; border: none;'>";
-                        mdtblHtml += " <input type='checkbox' id='for1 " + b.idno + "' name='datavalue' value='" + b.idno + "-" + b.rstatus + "-" + rolename + " " + b.Frm_Name + "-" + b.Mobile + "-" + b.operator_Name + "-" + b.amount + "-" + b.Circle + "' class='filled-in chk-col-pink' onchange='functionch()' />";
-                        mdtblHtml += "<label for='for1 " + b.idno + "' style='padding-left: 19px;height: 6px;'></label>";
+                        mdtblHtml += "<td class=\"vm-opr-sb-cell\"><button type=\"button\" class=\"for-new vm-opr-sb-chk-btn\">";
+                        mdtblHtml += "<input type='checkbox' id='for1 " + b.idno + "' name='datavalue' value='" + b.idno + "-" + b.rstatus + "-" + rolename + " " + b.Frm_Name + "-" + b.Mobile + "-" + b.operator_Name + "-" + b.amount + "-" + b.Circle + "' class='filled-in chk-col-pink' onchange='functionch()' />";
+                        mdtblHtml += "<label for='for1 " + b.idno + "' class=\"vm-opr-sb-chk-label\"></label>";
                         mdtblHtml += "</button></td>";
                     }
                     else {
-                        mdtblHtml += "<tr style='font-weight: 500; color:" + Pcolor + "'><td></td>";
+                        mdtblHtml += "<tr style='font-weight: 500; color:" + Pcolor + "'><td class=\"vm-opr-sb-cell\"></td>";
                     }
-                    mdtblHtml += "<td>" + StatusImg + rolename + " > " + b.Frm_Name + "</td>";
-                    mdtblHtml += "<td class='ttup'><p class='" + faicon + "'>" + b.operator_Name + "</p></td>";
-                    mdtblHtml += "<td>" + b.mobile + "</td>";
+                    mdtblHtml += "<td class=\"vm-opr-user-cell\"><div class=\"vm-opr-user-row\"><span class=\"vm-opr-sb-inline\">" + StatusImg + "</span><div class=\"vm-opr-user-stack\"><div class=\"vm-opr-user-line\"><strong class=\"vm-opr-user-role\">" + rolename + "</strong><span class=\"vm-opr-user-sep\" aria-hidden=\"true\"></span><span class=\"vm-opr-user-name\">" + b.Frm_Name + "</span></div></div></div></td>";
+                    mdtblHtml += "<td class='ttup vm-opr-operator-cell'><p class='" + faicon + "'>" + b.operator_Name + "</p></td>";
+                    mdtblHtml += "<td class=\"vm-opr-consumer-cell\"><div class=\"vm-opr-consumer-no\">" + b.mobile + "</div></td>";
                     mdtblHtml += "<td>" + b.amount + "</td>";
                     mdtblHtml += "<td>" + b.user_remain_pre + "</td>";
                     mdtblHtml += "<td>" + b.amount + "</td>";
@@ -1569,19 +1574,76 @@
 </script>
 
 <script type="text/javascript">
-  $(document).ready(function()
-  {
+  (function () {
+      var OPR_AUTO_RELOAD_KEY = 'vmOprAutoReloadSession';
+      var OPR_AUTO_RELOAD_MS = 10000;
+      var oprAutoReloadTimer = null;
 
-        var type = '@ViewBag.type';
-      $('[data-toggle="tooltip"]').tooltip();
+      try {
+          localStorage.removeItem('vmOprAutoReloadEnabled');
+      } catch (e) { }
 
+      window.reloadPageeee = function () {
+          var href = window.location.href.split('#')[0];
+          var sep = href.indexOf('?') >= 0 ? '&' : '?';
+          if ($('#all').length) {
+              $('#all').load(href + sep + 'type=live #all');
+          }
+      };
 
-           var idleInterval = setInterval("reloadPageeee()", 30000);
-    });
-    function reloadPageeee() {
-        $('#all').load(location.href + '?type=live' + '' + " #all");
+      function oprSetAutoReload(enabled) {
+          if (oprAutoReloadTimer) {
+              clearInterval(oprAutoReloadTimer);
+              oprAutoReloadTimer = null;
+          }
 
-    }
+          var $btn = $('#vmOprAutoReloadToggle');
+          if (!$btn.length) {
+              return;
+          }
+
+          if (enabled) {
+              oprAutoReloadTimer = setInterval(function () {
+                  window.location.reload();
+              }, OPR_AUTO_RELOAD_MS);
+              $btn.removeClass('is-off').addClass('is-on')
+                  .attr('aria-pressed', 'true')
+                  .attr('aria-label', 'Auto reload on');
+              $('#vmOprAutoReloadHint').text('10s');
+          } else {
+              $btn.removeClass('is-on').addClass('is-off')
+                  .attr('aria-pressed', 'false')
+                  .attr('aria-label', 'Auto reload off');
+              $('#vmOprAutoReloadHint').text('OFF');
+          }
+
+          try {
+              if (enabled) {
+                  sessionStorage.setItem(OPR_AUTO_RELOAD_KEY, '1');
+              } else {
+                  sessionStorage.removeItem(OPR_AUTO_RELOAD_KEY);
+              }
+          } catch (e) { }
+      }
+
+      window.oprSetAutoReload = oprSetAutoReload;
+
+      $(document).ready(function () {
+          var type = '@ViewBag.type';
+          $('[data-toggle="tooltip"]').tooltip();
+
+          var savedOn = false;
+          try {
+              savedOn = sessionStorage.getItem(OPR_AUTO_RELOAD_KEY) === '1';
+          } catch (e) { }
+
+          oprSetAutoReload(savedOn);
+
+          $('#vmOprAutoReloadToggle').on('click', function () {
+              oprSetAutoReload(!$(this).hasClass('is-on'));
+          });
+      });
+  })();
      var st = "";
      var end = "";
          function Check(selectObject) {
@@ -2128,7 +2190,35 @@ url,
 
 
 @section PostSelect2Scripts {
+<script>
+    (function () {
+        var from = '';
+        var to = '';
+        try {
+            var params = new URLSearchParams(window.location.search);
+            from = params.get('txt_frm_date') || '';
+            to = params.get('txt_to_date') || '';
+        } catch (e) { }
+
+        /* Menu se page khule — URL me date nahi: aaj ki date (server default), purani search clear */
+        if (!from || !to) {
+            try { sessionStorage.removeItem('vmOprReportFiltersSession'); } catch (e) { }
+            return;
+        }
+
+        /* Search ke baad refresh — searched dates restore */
+        var form = document.getElementById('operatorReportForm');
+        var fromEl = document.getElementById('txt_frm_date');
+        var toEl = document.getElementById('txt_to_date');
+        if (fromEl) { fromEl.value = from; }
+        if (toEl) { toEl.value = to; }
+        if (form) {
+            form.setAttribute('data-frm-date', from);
+            form.setAttribute('data-to-date', to);
+        }
+    })();
+</script>
 <script src="~/MainFrontDesign/js/admin-report-datepicker.js"></script>
 <script src="~/MainFrontDesign/js/admin-operator-report-nav.js?v=3"></script>
-<script src="~/MainFrontDesign/js/admin-operator-report.js?v=21"></script>
+<script src="~/MainFrontDesign/js/admin-operator-report.js?v=25"></script>
 }

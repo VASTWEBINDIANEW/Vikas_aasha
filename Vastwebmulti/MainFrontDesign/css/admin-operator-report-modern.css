@@ -10,19 +10,19 @@ body.saas-admin-ui .saas-operator-report-page {
     padding-bottom: 28px !important;
 }
 
-/* Compact left/right gutters */
+/* Page gutters — compact side space, full-width content */
 body.saas-admin-ui section.content.saas-operator-report-page {
     padding-left: 8px !important;
     padding-right: 8px !important;
-    padding-top: 12px !important;
-    padding-bottom: 20px !important;
+    padding-top: 10px !important;
+    padding-bottom: 16px !important;
 }
 
 body.saas-admin-ui .saas-operator-report-page .container-fluid,
 body.saas-admin-ui .saas-operator-report-page .vm-opr-page-shell {
     max-width: 100%;
-    padding-left: 4px !important;
-    padding-right: 4px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
     height: auto !important;
     min-height: inherit !important;
 }
@@ -1015,7 +1015,7 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-consumer-search__btn {
 }
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-table-wrap {
-    padding: 0 10px 12px;
+    padding: 0 8px 12px 8px;
 }
 
 @media (max-width: 991px) {
@@ -2033,8 +2033,8 @@ body.saas-admin-ui .saas-operator-report-page #button_Successful .p_set {
 
     body.saas-admin-ui .saas-operator-report-page .container-fluid,
     body.saas-admin-ui .saas-operator-report-page .vm-opr-page-shell {
-        padding-left: 4px !important;
-        padding-right: 4px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 
     /* Override global .saas-acc-filter-bar column stack */
@@ -2588,69 +2588,130 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-quick-search__btn:hover {
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse {
     display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    min-height: 44px;
-    padding: 6px 14px 6px 10px;
-    margin-right: 2px;
-    border: 1px solid rgba(16, 185, 129, 0.25);
-    border-radius: 12px;
-    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
-    flex-shrink: 0;
-    white-space: nowrap;
-}
-
-body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse__ring {
-    position: relative;
-    display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    gap: 3px;
+    width: auto;
+    min-width: 52px;
+    max-width: none;
+    min-height: 38px;
+    height: 38px;
+    padding: 4px 8px;
+    margin-right: 2px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
     flex-shrink: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse__dot {
+body.saas-admin-ui .saas-operator-report-page .vm-opr-filter-row .vm-opr-live-pulse,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-toolbar-unified .vm-opr-live-pulse {
+    width: auto !important;
+    max-width: none !important;
+    flex: 0 0 auto !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse:hover {
+    border-color: rgba(100, 116, 139, 0.45);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse.is-off {
+    border-color: rgba(148, 163, 184, 0.35);
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse.is-off .vm-opr-live-pulse__label {
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse.is-off .vm-opr-live-pulse__hint {
+    color: #94a3b8;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse.is-off .vm-opr-live-pulse__switch {
+    background: #cbd5e1;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse.is-on {
+    border-color: rgba(16, 185, 129, 0.45);
+    background: linear-gradient(180deg, #f0fdf4 0%, #ecfdf5 100%);
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.12), 0 2px 8px rgba(16, 185, 129, 0.12);
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse.is-on .vm-opr-live-pulse__label {
+    color: #047857;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse__switch {
+    position: relative;
+    display: inline-block;
+    width: 24px;
+    height: 13px;
+    border-radius: 999px;
+    background: #10b981;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse__switch-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background: #10b981;
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55);
-    animation: vmOprLiveRing 1.8s ease-out infinite;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.2);
+    transition: transform 0.2s ease;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse.is-on .vm-opr-live-pulse__switch-knob {
+    transform: translateX(11px);
 }
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse__meta {
     display: flex;
-    flex-direction: column;
-    gap: 1px;
-    line-height: 1.1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    line-height: 1;
+    min-width: 0;
+    max-width: 100%;
+    white-space: nowrap;
 }
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse__label {
-    font-size: 0.74rem;
-    font-weight: 800;
-    color: #065f46;
-    letter-spacing: 0.04em;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #334155;
+    letter-spacing: 0;
+    line-height: 1;
 }
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse__hint {
-    font-size: 0.62rem;
-    font-weight: 600;
-    color: #34d399;
-    letter-spacing: 0.03em;
+    font-size: 0.56rem;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0;
+    line-height: 1;
+    padding: 1px 4px;
+    border-radius: 4px;
+    background: rgba(148, 163, 184, 0.15);
 }
 
-body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse__badge-icon {
-    font-size: 0.82rem;
-    color: #059669;
-    opacity: 0.85;
-}
-
-@keyframes vmOprLiveRing {
-    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55); }
-    70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse.is-on .vm-opr-live-pulse__hint {
+    color: #047857;
+    background: rgba(16, 185, 129, 0.16);
 }
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-utility-strip .for-new-button {
@@ -2859,9 +2920,16 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table tbody td:nth-ch
 }
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:first-child {
-    width: 44px;
-    min-width: 44px;
-    max-width: 44px;
+    width: 42px;
+    min-width: 42px;
+    max-width: 42px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(2) {
+    width: 52px;
+    min-width: 52px;
+    max-width: 52px;
+    text-align: center;
 }
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table tbody tr:nth-child(even) {
@@ -3074,7 +3142,7 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-table-loading {
         flex-shrink: 0 !important;
     }
 
-    body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse {
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-lookup-live-bar .vm-opr-live-pulse {
         display: flex !important;
         width: 100% !important;
         min-height: 38px !important;
@@ -3083,6 +3151,13 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-table-loading {
         justify-content: flex-start !important;
         border-radius: 10px !important;
         flex-shrink: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-filter-row .vm-opr-live-pulse {
+        width: auto !important;
+        max-width: none !important;
+        flex-direction: column !important;
+        flex: 0 0 auto !important;
     }
 
     body.saas-admin-ui .saas-operator-report-page .vm-opr-live-pulse__hint {
@@ -3516,10 +3591,15 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__head {
 }
 
 @media (max-width: 575px) {
+    body.saas-admin-ui section.content.saas-operator-report-page {
+        padding-left: 6px !important;
+        padding-right: 6px !important;
+    }
+
     body.saas-admin-ui .saas-operator-report-page .container-fluid,
     body.saas-admin-ui .saas-operator-report-page .vm-opr-page-shell {
-        padding-left: 8px;
-        padding-right: 8px;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 
     body.saas-admin-ui .saas-operator-report-page .vm-opr-filter-grid {
@@ -4893,10 +4973,12 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__bulk.for-new-
         max-width: 130px;
     }
 
-    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(3) > span[style*="font-size:10px"]:not(:first-child),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(3) .vm-opr-cell-sub,
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(4) .vm-opr-cell-sub,
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(3) > span[style*="font-size:10px"],
     body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(4) > span[style*="font-size:10px"],
-    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(3) > span[style*="font-size:10px"]:not(:first-child),
-    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(4) > span[style*="font-size:10px"] {
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(3) .vm-opr-cell-sub,
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(4) .vm-opr-cell-sub {
         display: block;
         margin-top: 3px;
         font-size: 0.68rem !important;
@@ -4905,17 +4987,212 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-table-panel__bulk.for-new-
     }
 }
 
-/* v=55 — User info: flex p ignores <br>; Refund Against on next line */
-body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(2) p > br + span,
-body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(2) p > br + span {
-    flex: 0 0 100%;
-    width: 100%;
-    display: block;
-    margin-top: 2px;
+/* v=65 — S/B checkbox column containment */
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .vm-opr-sb-cell {
+    width: 52px !important;
+    min-width: 52px !important;
+    max-width: 52px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 6px 2px !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .vm-opr-sb-cell .for-new,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .vm-opr-sb-cell .vm-opr-sb-chk-btn {
+    margin: 0 auto !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .vm-opr-sb-cell .vm-opr-sb-chk-label,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .vm-opr-sb-cell .filled-in.chk-col-pink + label {
+    padding: 0 !important;
+    margin: 0 !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .vm-opr-sb-cell .nrch,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .vm-opr-sb-cell button {
+    float: none !important;
+    margin: 0 auto !important;
+}
+
+/* v=63 — S/B status badges inline in user cell (15 td + ::before = 16 cols) */
+body.saas-admin-ui .saas-operator-report-page .vm-opr-sb-inline {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 1px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-sb-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.14);
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-sb-badge--success {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-sb-badge--failed {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-sb-badge--pending {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-sb-badge--refund {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-sb-badge--resend {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-sb-badge--unknown {
+    background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-sb-view {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    margin-left: 4px;
+    padding: 0;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #fff;
+    color: #475569;
+    font-size: 0.62rem;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-sb-view:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-user-cell {
+    min-width: 0;
+    vertical-align: top !important;
+    padding-left: 8px !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-user-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-user-stack {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-consumer-cell {
+    min-width: 0;
+    vertical-align: top !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-consumer-no {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.35;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-operator-cell {
+    min-width: 0;
+    vertical-align: top !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-user-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px;
+    line-height: 1.35;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-user-role {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-user-sep {
+    display: inline-block;
+    width: 0;
+    overflow: visible;
+    vertical-align: baseline;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-user-sep::before {
+    content: '\00b7';
+    display: inline-block;
+    margin: 0 5px;
+    color: #94a3b8;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-user-name {
+    color: #475569;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-refund-against {
+    margin-top: 3px;
     font-size: 0.68rem !important;
     font-weight: 600 !important;
     color: #64748b;
     line-height: 1.25;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-opr-tag {
+    display: inline-block;
+    margin-right: 4px;
+    padding: 1px 4px;
+    border-radius: 4px;
+    background: #e2e8f0;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #334155;
+    vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-cell-sub {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.68rem !important;
+    color: #64748b;
+    line-height: 1.25;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-user-cell img[src*="ashok-images"] {
+    display: none !important;
 }
 
 /* v=56 — compact all columns, full-width desktop, scroll mobile/tablet */
@@ -4938,16 +5215,23 @@ body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody t
 
     body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(1),
     body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr::before {
-        width: 38px !important;
-        min-width: 38px !important;
-        max-width: 38px !important;
-    }
-
-    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(2),
-    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:first-child {
         width: 42px !important;
         min-width: 42px !important;
         max-width: 42px !important;
+    }
+
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(2),
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:first-child,
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .vm-opr-sb-cell,
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:first-child {
+        width: 52px !important;
+        min-width: 52px !important;
+        max-width: 52px !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        padding: 6px 2px !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
     }
 
     body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(3) { width: 13%; }
@@ -4991,8 +5275,11 @@ body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody t
         min-width: 0 !important;
     }
 
-    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(2) p {
-        min-width: 0;
+    body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(4) .vm-opr-consumer-no,
+    body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody td:nth-child(4) .vm-opr-consumer-no {
+        white-space: nowrap !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
     }
 
     body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:nth-child(5),
@@ -5045,8 +5332,8 @@ body.saas-admin-ui .saas-operator-report-page #example.vm-opr-data-table tbody t
 
 @media (max-width: 991px) {
     body.saas-admin-ui .saas-operator-report-page .vm-opr-table-wrap {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+        padding-left: 6px !important;
+        padding-right: 6px !important;
     }
 
     body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table,

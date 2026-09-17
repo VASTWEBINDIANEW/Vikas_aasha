@@ -47,8 +47,46 @@
         });
     }
 
+    function buildStatusBadge(status, idno) {
+        var s = (status || '').trim().toUpperCase();
+        var title = 'Status';
+        var cls = 'vm-opr-sb-badge';
+        var icon = 'fa-question-circle';
+
+        if (s.indexOf('REFUND') >= 0) {
+            cls += ' vm-opr-sb-badge--refund';
+            icon = 'fa-undo';
+            title = 'Refunded';
+        } else if (s === 'RESEND') {
+            cls += ' vm-opr-sb-badge--resend';
+            icon = 'fa-redo';
+            title = 'Resend';
+        } else if (s === 'FAILED' || s.indexOf('SUCCESS TO FAILED') >= 0) {
+            cls += ' vm-opr-sb-badge--failed';
+            icon = 'fa-times';
+            title = 'Failed';
+        } else if (s === 'SUCCESS' || s.indexOf('FAILED TO SUCCESS') >= 0) {
+            cls += ' vm-opr-sb-badge--success';
+            icon = 'fa-check';
+            title = 'Success';
+        } else if (s === 'PENDING' || s.indexOf('REQUEST') >= 0) {
+            cls += ' vm-opr-sb-badge--pending';
+            icon = 'fa-clock';
+            title = 'Pending';
+        }
+
+        var html = '<span class="' + cls + '" title="' + title + '" role="img" aria-label="' + title + '">' +
+            '<i class="fas ' + icon + '" aria-hidden="true"></i></span>';
+
+        if (s === 'PENDING' && idno) {
+            html += '<button type="button" class="vm-opr-sb-view" onclick="GotoView(\'' + idno + '\')" title="View Status">' +
+                '<i class="fas fa-eye" aria-hidden="true"></i></button>';
+        }
+
+        return html;
+    }
+
     function enhanceMobileTable() {
-        /* Mobile uses same table as desktop with horizontal scroll — no card layout */
         var table = document.getElementById(TABLE_ID);
         if (table) {
             table.classList.remove('vm-opr-mobile-ready');
@@ -344,7 +382,12 @@
         bindUserTypeChange();
         bindSelectSearchFocus();
         initOprSelects();
-        restoreFilterState();
+        if (hasUrlDateFilters()) {
+            restoreSessionFilters();
+        } else {
+            clearStoredSearchFilters();
+            restoreFilterState();
+        }
         applyInitialPortMode();
         initOprSelects();
     }
@@ -376,6 +419,185 @@
         'ddlusers', 'allmaster1', 'alldealer', 'allretailer', 'API', 'Whitelabel',
         'ddl_status', 'lapuno11', 'Operator', 'txt_frm_date', 'txt_to_date', 'txtdemo'
     ];
+    var SESSION_FILTERS_KEY = 'vmOprReportFiltersSession';
+
+    function saveSessionFilters(payload) {
+        if (!payload) {
+            return;
+        }
+        try {
+            var copy = { searched: true, userSearch: true };
+            var i;
+            for (i = 0; i < FILTER_FIELD_NAMES.length; i++) {
+                var key = FILTER_FIELD_NAMES[i];
+                if (payload[key] !== undefined && payload[key] !== null) {
+                    copy[key] = payload[key];
+                }
+            }
+            if (payload.txtmob) {
+                copy.txtmob = payload.txtmob;
+            }
+            sessionStorage.setItem(SESSION_FILTERS_KEY, JSON.stringify(copy));
+        } catch (err) { /* ignore quota / private mode */ }
+    }
+
+    function clearStoredSearchFilters() {
+        try {
+            sessionStorage.removeItem(SESSION_FILTERS_KEY);
+        } catch (err) { /* ignore */ }
+    }
+
+    function loadSessionFilters() {
+        if (!hasUrlDateFilters()) {
+            return null;
+        }
+        try {
+            var raw = sessionStorage.getItem(SESSION_FILTERS_KEY);
+            if (!raw) {
+                return null;
+            }
+            var data = JSON.parse(raw);
+            return data && data.userSearch ? data : null;
+        } catch (err) {
+            return null;
+        }
+    }
+
+    function updateDateInputs(fromVal, toVal) {
+        var $frm = $('#txt_frm_date');
+        var $to = $('#txt_to_date');
+        var $form = $('#operatorReportForm');
+
+        if (fromVal) {
+            $frm.val(fromVal);
+            if ($frm.data('datepicker')) {
+                try {
+                    $frm.datepicker('update', fromVal);
+                } catch (err) {
+                    $frm.datepicker('setDate', fromVal);
+                }
+            }
+            if ($form.length) {
+                $form.attr('data-frm-date', fromVal);
+            }
+        }
+        if (toVal) {
+            $to.val(toVal);
+            if ($to.data('datepicker')) {
+                try {
+                    $to.datepicker('update', toVal);
+                } catch (err) {
+                    $to.datepicker('setDate', toVal);
+                }
+            }
+            if ($form.length) {
+                $form.attr('data-to-date', toVal);
+            }
+        }
+    }
+
+    function readUrlDateFilters() {
+        try {
+            var params = new URLSearchParams(window.location.search);
+            return {
+                txt_frm_date: params.get('txt_frm_date') || '',
+                txt_to_date: params.get('txt_to_date') || ''
+            };
+        } catch (err) {
+            return { txt_frm_date: '', txt_to_date: '' };
+        }
+    }
+
+    function hasUrlDateFilters() {
+        var urlDates = readUrlDateFilters();
+        return !!(urlDates.txt_frm_date && urlDates.txt_to_date);
+    }
+
+    function syncUrlFilters(payload) {
+        if (!payload || !window.history || !window.history.replaceState) {
+            return;
+        }
+        try {
+            var params = new URLSearchParams(window.location.search);
+            if (payload.txt_frm_date) {
+                params.set('txt_frm_date', payload.txt_frm_date);
+            }
+            if (payload.txt_to_date) {
+                params.set('txt_to_date', payload.txt_to_date);
+            }
+            if (payload.ddl_status !== undefined && payload.ddl_status !== null) {
+                params.set('ddl_status', payload.ddl_status);
+            }
+            var qs = params.toString();
+            var nextUrl = window.location.pathname + (qs ? '?' + qs : '') + (window.location.hash || '');
+            history.replaceState(null, '', nextUrl);
+        } catch (err) { /* ignore */ }
+    }
+
+    function finalizeDateRestore() {
+        if (!hasUrlDateFilters()) {
+            return;
+        }
+        var dates = readUrlDateFilters();
+        updateDateInputs(dates.txt_frm_date, dates.txt_to_date);
+    }
+
+    function setFormFieldValue(name, value) {
+        var $el = $('#operatorReportForm').find('[name="' + name + '"]');
+        if (!$el.length) {
+            return;
+        }
+        $el.val(value || '');
+        if ($el.data('select2')) {
+            $el.trigger('change.select2');
+        }
+    }
+
+    function applyFilterPayloadToForm(data) {
+        if (!data || !$) {
+            return false;
+        }
+
+        if (data.ddlusers) {
+            $('#ddlusers').val(data.ddlusers);
+        }
+        if (typeof window.answers === 'function') {
+            window.answers();
+        }
+
+        var i;
+        for (i = 0; i < FILTER_FIELD_NAMES.length; i++) {
+            var name = FILTER_FIELD_NAMES[i];
+            if (name === 'ddlusers' || name === 'txt_frm_date' || name === 'txt_to_date') {
+                continue;
+            }
+            if (data[name] === undefined || data[name] === null) {
+                continue;
+            }
+            setFormFieldValue(name, data[name]);
+        }
+
+        if (data.txtdemo) {
+            $('#txtdemo').val(data.txtdemo);
+        }
+
+        var urlDates = readUrlDateFilters();
+        updateDateInputs(data.txt_frm_date || urlDates.txt_frm_date, data.txt_to_date || urlDates.txt_to_date);
+
+        if (data.txtmob) {
+            $('#txtmob').val(data.txtmob);
+        }
+
+        return true;
+    }
+
+    function restoreSessionFilters() {
+        var data = loadSessionFilters();
+        if (!data) {
+            return false;
+        }
+        return applyFilterPayloadToForm(data);
+    }
 
     function readFormField($form, name) {
         var $el = $form.find('[name="' + name + '"]');
@@ -446,7 +668,8 @@
         }
     }
 
-    function runReportSearch($sourceForm) {
+    function runReportSearch($sourceForm, options) {
+        options = options || {};
         var searchUrl = ($sourceForm && $sourceForm.attr('data-search-url'))
             || $('#operatorReportForm').attr('data-search-url')
             || '';
@@ -457,11 +680,17 @@
 
         $('#loadingdiv').show();
 
+        var payload = collectFilterPayload($sourceForm);
+        if (options.persistFilters) {
+            saveSessionFilters(payload);
+            syncUrlFilters(payload);
+        }
+
         $.ajax({
             url: searchUrl,
             type: 'POST',
             dataType: 'html',
-            data: collectFilterPayload($sourceForm)
+            data: payload
         }).done(function (html) {
             applySearchResult(html);
         }).fail(function () {
@@ -475,10 +704,14 @@
         if (!$form.length || !$form.attr('data-search-url') || !$trow.length) {
             return;
         }
+        if (hasUrlDateFilters()) {
+            runReportSearch($form, { persistFilters: false });
+            return;
+        }
         if ($trow.find('tr').not('.vm-opr-table-empty-row').length > 0) {
             return;
         }
-        runReportSearch($form);
+        runReportSearch($form, { persistFilters: false });
     }
 
     function bindReportSearch() {
@@ -491,13 +724,13 @@
                 return true;
             }
             e.preventDefault();
-            runReportSearch($(this));
+            runReportSearch($(this), { persistFilters: true });
             return false;
         });
 
         $('.vm-opr-consumer-search-form').off('submit.vmOprSearch').on('submit.vmOprSearch', function (e) {
             e.preventDefault();
-            runReportSearch($(this));
+            runReportSearch($(this), { persistFilters: false });
             return false;
         });
 
@@ -507,7 +740,7 @@
                 return true;
             }
             e.preventDefault();
-            runReportSearch($form);
+            runReportSearch($form, { persistFilters: true });
             return false;
         });
     }
@@ -524,7 +757,12 @@
         bindPortChange();
         enhanceMobileTable();
         initSelects();
-        window.setTimeout(maybeLoadInitialRows, 150);
+        window.setTimeout(function () {
+            if (hasUrlDateFilters()) {
+                finalizeDateRestore();
+            }
+            maybeLoadInitialRows();
+        }, 200);
 
         if ($ && typeof MutationObserver !== 'undefined') {
             var tbody = document.querySelector('#' + TABLE_ID + ' tbody');
@@ -538,6 +776,7 @@
     }
 
     window.vmOprEnhanceTable = enhanceMobileTable;
+    window.vmOprBuildStatusBadge = buildStatusBadge;
     window.vmOprGetFilterPayload = function () {
         var payload = collectFilterPayload(null);
         var mob = $.trim($('#txtmob').val() || '');

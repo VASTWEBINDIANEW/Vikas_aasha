@@ -175,9 +175,9 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr::bef
     display: table-cell;
     counter-increment: rowNumber;
     content: counter(rowNumber);
-    width: 44px;
-    min-width: 44px;
-    max-width: 44px;
+    width: 42px;
+    min-width: 42px;
+    max-width: 42px;
     text-align: center;
     border-right: 1px solid #e2e8f0;
     padding: 10px 6px;
@@ -197,26 +197,57 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td
     color: #334155;
 }
 
-/* S/B checkbox column */
-body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:first-child {
+/* S/B checkbox column — fixed width, no bleed into user column */
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table col.vm-opr-col-sn {
+    width: 42px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table col.vm-opr-col-sb {
+    width: 52px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(1) {
+    width: 42px;
+    min-width: 42px;
+    max-width: 42px;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table thead th:nth-child(2) {
     width: 52px;
     min-width: 52px;
+    max-width: 52px;
     text-align: center;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+}
+
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table #trow > tr > td:first-child,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .vm-opr-sb-cell {
+    width: 52px !important;
+    min-width: 52px !important;
+    max-width: 52px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 6px 2px !important;
     background: #fafbfc;
 }
 
-body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .for-new {
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .for-new,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .vm-opr-sb-chk-btn {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 22px;
     height: 22px;
-    margin: 0 !important;
-    padding: 0;
+    margin: 0 auto !important;
+    padding: 0 !important;
     background: transparent !important;
     border: none !important;
     cursor: pointer;
+    float: none !important;
 }
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .filled-in.chk-col-pink {
@@ -231,7 +262,8 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .filled-in.chk-
     z-index: 2;
 }
 
-body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .filled-in.chk-col-pink + label {
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .filled-in.chk-col-pink + label,
+body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .vm-opr-sb-chk-label {
     position: relative;
     display: inline-block;
     width: 18px;
@@ -240,6 +272,7 @@ body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .filled-in.chk-
     margin: 0 !important;
     cursor: pointer;
     z-index: 1;
+    float: none !important;
 }
 
 body.saas-admin-ui .saas-operator-report-page .vm-opr-data-table .filled-in.chk-col-pink + label::before,

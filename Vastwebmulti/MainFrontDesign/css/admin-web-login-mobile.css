@@ -1,4 +1,57 @@
-/* ADMIN WebLogin — tablet & mobile responsive v=1 */
+/* ADMIN WebLogin — tablet & mobile responsive v=10 */
+
+/* ── Tablet + mobile: full-width table + horizontal scroll when needed ── */
+@media (max-width: 1199px) {
+    body.saas-admin-ui .WebLogin_Page .wl-history-main-card,
+    body.saas-admin-ui .WebLogin_Page .wl-history-table-panel,
+    body.saas-admin-ui .WebLogin_Page .wl-history-table-wrap {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-history-table-wrap .vm-opr-table-scroll,
+    body.saas-admin-ui .WebLogin_Page .wl-history-table-wrap .table-responsive {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        height: 400px !important;
+        max-height: 400px !important;
+        overflow-x: auto !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x pan-y;
+        scrollbar-width: thin;
+        scrollbar-color: #64748b #e2e8f0;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table,
+    body.saas-admin-ui .WebLogin_Page #WebLoginHistory.wl-history-table--6col {
+        width: 100% !important;
+        min-width: 860px !important;
+        max-width: none !important;
+        table-layout: fixed !important;
+    }
+
+    body.saas-admin-ui .WebLogin_Page #AttemptBlockhistory.wl-history-table {
+        width: 100% !important;
+        min-width: 640px !important;
+        max-width: none !important;
+        table-layout: fixed !important;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-history-table--6col thead,
+    body.saas-admin-ui .WebLogin_Page .wl-history-table--6col tbody {
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-history-table--6col thead tr,
+    body.saas-admin-ui .WebLogin_Page .wl-history-table--6col tbody tr {
+        width: 100% !important;
+    }
+}
 
 /* ── Tablet landscape / small laptop (768px – 1199px) ── */
 @media (max-width: 1199px) {
@@ -17,7 +70,8 @@
         min-width: 100px !important;
     }
     body.saas-admin-ui .WebLogin_Page .wl-history-table-wrap .vm-opr-table-scroll {
-        max-height: 50vh !important;
+        height: 400px !important;
+        max-height: 400px !important;
     }
 }
 
@@ -380,14 +434,21 @@
     }
 
     /* Tables — horizontal scroll */
-    body.saas-admin-ui .WebLogin_Page .wl-history-table-wrap .vm-opr-table-scroll,
-    body.saas-admin-ui .WebLogin_Page .wl-manage-table-wrap .rc-table-scroll {
-        max-height: 45vh !important;
-        overflow: auto !important;
-        -webkit-overflow-scrolling: touch;
+    body.saas-admin-ui .WebLogin_Page .wl-history-table-wrap .vm-opr-table-scroll {
+        height: 400px !important;
+        max-height: 400px !important;
+        overflow-x: auto !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
-    body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table,
+    body.saas-admin-ui .WebLogin_Page .wl-manage-table-wrap .rc-table-scroll {
+        max-height: 45vh !important;
+        overflow-x: auto !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
     body.saas-admin-ui .WebLogin_Page .wl-manage-data-table.vm-opr-data-table {
         min-width: 580px !important;
     }
@@ -494,8 +555,9 @@
         padding: 2px 8px !important;
     }
 
-    body.saas-admin-ui .WebLogin_Page .wl-history-table.vm-opr-data-table {
-        min-width: 520px !important;
+    body.saas-admin-ui .WebLogin_Page .wl-history-table--6col.vm-opr-data-table,
+    body.saas-admin-ui .WebLogin_Page #WebLoginHistory.wl-history-table--6col {
+        min-width: 860px !important;
     }
 }
 
