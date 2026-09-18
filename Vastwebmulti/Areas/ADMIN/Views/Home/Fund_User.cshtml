@@ -79,7 +79,7 @@
                                     </label>
                                     <div>
                                         <div>
-                                            @Html.DropDownListFor(x => x.MastersID, Model.Masters, "Select Master", new { @class = "for-select2 vm-opr-select vm-dmt-select form-control", required = "required" })
+                                            @Html.DropDownListFor(x => x.MastersID, Model.Masters, "Select Master", new { @class = "for-select2 vm-admin-select-search vm-opr-select vm-dmt-select form-control", required = "required", data_live_search = "true", data_search_placeholder = "Search name, mobile, ID..." })
                                             @*<select onchange="changemaster(this)">
                             <option value="1">Select M/D Firm</option>
                             <option value="2">jhgvchg bvu</option>
@@ -97,7 +97,7 @@
                                     </label>
                                     <div>
                                         <div>
-                                            <select id="dealerids" name="dealerids" required class="for-select2 vm-opr-select vm-dmt-select form-control" onchange="chkmasterbalance(this),changemaster(this)">
+                                            <select id="dealerids" name="dealerids" required class="for-select2 vm-admin-select-search vm-opr-select vm-dmt-select form-control" data-live-search="true" data-search-placeholder="Search name, mobile, ID..." onchange="chkmasterbalance(this),changemaster(this)">
                                                 <option value="">Select Distributor</option>
                                             </select>
                                         </div>
@@ -309,7 +309,7 @@
                                     </label>
                                     <div>
                                         <div>
-                                            @Html.DropDownListFor(x => x.DDDealerid, Model.Dealesrs, "Select Dealesrs", new { @class = "for-select2 vm-opr-select vm-dmt-select form-control", required = "required" })
+                                            @Html.DropDownListFor(x => x.DDDealerid, Model.Dealesrs, "Select Dealesrs", new { @class = "for-select2 vm-admin-select-search vm-opr-select vm-dmt-select form-control", required = "required", data_live_search = "true", data_search_placeholder = "Search name, mobile, ID..." })
 
 
                                         </div>
@@ -324,7 +324,7 @@
                                     </label>
                                     <div>
                                         <div>
-                                            <select id="ddlretailerid" name="ddlretailerid" required class="for-select2 vm-opr-select vm-dmt-select form-control" onchange="chkDealerbalance(this),changemasterd(this)">
+                                            <select id="ddlretailerid" name="ddlretailerid" required class="for-select2 vm-admin-select-search vm-opr-select vm-dmt-select form-control" data-live-search="true" data-search-placeholder="Search name, mobile, ID..." onchange="chkDealerbalance(this),changemasterd(this)">
                                                 <option value="">Select Retailer</option>
                                             </select>
 
@@ -539,7 +539,7 @@
 
                                     </label>
                                     <div>
-                                        @Html.DropDownListFor(x => x.RetailersIDS, Model.Retailerslist, "Select Retailer", new { @class = "for-select2 vm-opr-select vm-dmt-select form-control", required = "required" })
+                                        @Html.DropDownListFor(x => x.RetailersIDS, Model.Retailerslist, "Select Retailer", new { @class = "for-select2 vm-admin-select-search vm-opr-select vm-dmt-select form-control", required = "required", data_live_search = "true", data_search_placeholder = "Search name, mobile, ID..." })
 
                                         @*<input type="text" placeholder="From Retailer Name" />*@
                                     </div>
@@ -550,8 +550,8 @@
                                         To Reatiler Name
                                     </label>
                                     <div>
-                                        <select id="retaileridbyid" name="retaileridbyid" class="for-select2 vm-opr-select vm-dmt-select form-control">
-                                            <option></option>
+                                        <select id="retaileridbyid" name="retaileridbyid" required class="for-select2 vm-admin-select-search vm-opr-select vm-dmt-select form-control" data-live-search="true" data-search-placeholder="Search name, mobile, ID...">
+                                            <option value="">Select Retailer</option>
                                         </select>
 
 
@@ -683,15 +683,15 @@
                             </div>
                             <div class="vm-ft-history-toolbar__filters vm-ft-history-filters-row">
                                 <div class="vm-opr-field vm-dmt-field vm-ft-history-field vm-ft-history-field--user" id="masterdrop">
-                                    @Html.DropDownListFor(x => x.DdlfilMasterID, Model.Masters, "--Select--", new { @id = "SuperstokistID1", @class = "for-select2 vm-opr-select vm-dmt-select form-control", required = "required" })
+                                    @Html.DropDownListFor(x => x.DdlfilMasterID, Model.Masters, "--Select--", new { @id = "SuperstokistID1", @class = "for-select2 vm-admin-select-search vm-opr-select vm-dmt-select form-control", required = "required", data_live_search = "true", data_search_placeholder = "Search name, mobile, ID..." })
                                 </div>
                                 <div class="vm-opr-field vm-dmt-field vm-ft-history-field vm-ft-history-field--user" id="dealerdrop" style="display:none;">
-                                    <select id="ddlDistributor1" name="ddlDistributor1" class="for-select2 vm-opr-select vm-dmt-select form-control">
+                                    <select id="ddlDistributor1" name="ddlDistributor1" class="for-select2 vm-admin-select-search vm-opr-select vm-dmt-select form-control" data-live-search="true" data-search-placeholder="Search name, mobile, ID...">
                                         <option value="">Select DD Name</option>
                                     </select>
                                 </div>
                                 <div class="vm-opr-field vm-dmt-field vm-ft-history-field vm-ft-history-field--user" id="retailerdrop" style="display:none;">
-                                    <select id="RLMID1" name="RLMID1" class="for-select2 vm-opr-select vm-dmt-select form-control">
+                                    <select id="RLMID1" name="RLMID1" class="for-select2 vm-admin-select-search vm-opr-select vm-dmt-select form-control" data-live-search="true" data-search-placeholder="Search name, mobile, ID...">
                                         <option value="">Select Retailer Name</option>
                                     </select>
                                 </div>
@@ -1468,7 +1468,11 @@ window.open(
     ravi(document).ready(function () {
         if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
     });
-    ravi(document).ajaxComplete(function () {
+    ravi(document).ajaxComplete(function (e, xhr, settings) {
+        var url = (settings && settings.url) ? String(settings.url) : '';
+        if (/BindDealerByID|BindRetailerByID|GetRetailerByID/i.test(url)) {
+            return;
+        }
         if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); }
     });
 
@@ -2785,44 +2789,58 @@ $('#btnRetailerInform').click(function () {
 
 <script>
 
-         ravi('#RetailersIDS').change(function () {
-
-                            // alert('Value:' + ' ' + $('#State1').val())
-
-
-                var stid = $('#RetailersIDS').val()
-                 GetRetailerListByID(stid)
-
-
-
-
-      });
+        function rebuildFundUserSelectOptions($select, items, placeholder) {
+            var $ = window.jQuery;
+            if (!$ || !$select || !$select.length) {
+                return;
+            }
+            var html = '<option value="">' + (placeholder || 'Select') + '</option>';
+            var list = items || [];
+            var x;
+            for (x = 0; x < list.length; x++) {
+                var val = list[x].Value != null ? list[x].Value : list[x].value;
+                var txt = list[x].Text != null ? list[x].Text : list[x].text;
+                if (val == null || txt == null) {
+                    continue;
+                }
+                html += '<option value="' + String(val).replace(/"/g, '&quot;') + '">' + String(txt).replace(/</g, '&lt;') + '</option>';
+            }
+            if (window.setAdminSelect2Html) {
+                window.setAdminSelect2Html($select, html, '');
+            } else {
+                if (typeof window.destroyFundUserSelect2 === 'function') {
+                    window.destroyFundUserSelect2($select);
+                }
+                $select.html(html);
+                if (typeof window.refreshFundTransferSelect2 === 'function') {
+                    window.refreshFundTransferSelect2($select);
+                }
+            }
+        }
 
         function GetRetailerListByID(id) {
-                $("#retaileridbyid").empty();
-        var procemessage = "<option value='0'> Please wait...</option>";
-        $("#retaileridbyid").html(procemessage).show();
-        var url = '@Url.Action("GetRetailerByID", "Home")'
-        $.ajax({
-            url: url,
-            data: { retID: id },
-            cache: false,
-            type: "POST",
-            success: function (data) {
-
-                $("#retaileridbyid").html("");
-
-                for (var x = 0; x < data.Retailer.length; x++) {
-                    $("#retaileridbyid").append($('<option></option>').val(data.Retailer[x].Value).html(data.Retailer[x].Text));
-                }
-
-
-            },
-            error: function (reponse) {
-                alert("error : " + reponse);
+            var $ = window.jQuery;
+            if (!id) {
+                rebuildFundUserSelectOptions($('#retaileridbyid'), [], 'Select Retailer');
+                return;
             }
-        });
-    }
+            rebuildFundUserSelectOptions($('#retaileridbyid'), [], 'Please wait...');
+            var url = '@Url.Action("GetRetailerByID", "Home")';
+            $.ajax({
+                url: url,
+                data: { retID: id },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var retailers = (data && data.Retailer) ? data.Retailer : [];
+                    rebuildFundUserSelectOptions($('#retaileridbyid'), retailers, 'Select Retailer');
+                },
+                error: function (reponse) {
+                    alert("error : " + reponse);
+                    rebuildFundUserSelectOptions($('#retaileridbyid'), [], 'Select Retailer');
+                }
+            });
+        }
 
 
 
@@ -2832,36 +2850,22 @@ $('#btnRetailerInform').click(function () {
 
 <script>
 
-      ravi('#DDDealerid').change(function () {
-
-                            // alert('Value:' + ' ' + $('#State1').val())
-                            var stid = $('#DDDealerid').val()
-
-                            GetRetailerList(stid)
-      });
-
-
-
-
-
-
-
      function GetRetailerList(id) {
-        var procemessage = "<option value='0'> Please wait...</option>";
-        $("#ddlretailerid").html(procemessage).show();
-        var url = '@Url.Action("BindRetailerByID", "Home")'
+        var $ = window.jQuery;
+        if (!id) {
+            rebuildFundUserSelectOptions($('#ddlretailerid'), [], 'Select Retailer');
+            return;
+        }
+        rebuildFundUserSelectOptions($('#ddlretailerid'), [], 'Please wait...');
+        var url = '@Url.Action("BindRetailerByID", "Home")';
         $.ajax({
             url: url,
             data: { did: id },
             cache: false,
             type: "POST",
             success: function (data) {
-
-                $("#ddlretailerid").html("");
-                  $("#ddlretailerid").append($('<option></option>').val('').html('Select Dealer'));
-                for (var x = 0; x < data.dealer.length; x++) {
-                    $("#ddlretailerid").append($('<option></option>').val(data.dealer[x].Value).html(data.dealer[x].Text));
-                }
+                var retailers = (data && data.dealer) ? data.dealer : [];
+                rebuildFundUserSelectOptions($('#ddlretailerid'), retailers, 'Select Retailer');
                  $("#dealerbank").html("");
                   $("#dealerbank").append($('<option></option>').val('').html('Select Bank'));
                 for (var x = 0; x < data.bnkinfo.length; x++) {
@@ -2876,42 +2880,27 @@ $('#btnRetailerInform').click(function () {
             },
             error: function (reponse) {
                 alert("error : " + reponse);
+                rebuildFundUserSelectOptions($('#ddlretailerid'), [], 'Select Retailer');
             }
         });
     }
 
-
-
-
-
-    $(function () {
-        ravi('#MastersID').change(function () {
-
-            // alert('Value:' + ' ' + $('#State1').val())
-            var stid = $('#MastersID').val()
-
-            GetDistrict(stid)
-        });
-
-
-    });
-
      function GetDistrict(id) {
-        var procemessage = "<option value='0'> Please wait...</option>";
-        $("#dealerids").html(procemessage).show();
-        var url = '@Url.Action("BindDealerByID", "Home")'
+        var $ = window.jQuery;
+        if (!id) {
+            rebuildFundUserSelectOptions($('#dealerids'), [], 'Select Distributor');
+            return;
+        }
+        rebuildFundUserSelectOptions($('#dealerids'), [], 'Please wait...');
+        var url = '@Url.Action("BindDealerByID", "Home")';
         $.ajax({
             url: url,
             data: { ssid: id },
             cache: false,
             type: "POST",
             success: function (data) {
-
-                $("#dealerids").html("");
-                  $("#dealerids").append($('<option></option>').val('').html('Select Dealer'));
-                for (var x = 0; x < data.dealer.length; x++) {
-                    $("#dealerids").append($('<option></option>').val(data.dealer[x].Value).html(data.dealer[x].Text));
-                }
+                var dealers = (data && data.dealer) ? data.dealer : [];
+                rebuildFundUserSelectOptions($('#dealerids'), dealers, 'Select Distributor');
                  $("#mdbank").html("");
                   $("#mdbank").append($('<option></option>').val('').html('Select Bank'));
                 for (var x = 0; x < data.bnkinfo.length; x++) {
@@ -2926,10 +2915,15 @@ $('#btnRetailerInform').click(function () {
             },
             error: function (reponse) {
                 alert("error : " + reponse);
+                rebuildFundUserSelectOptions($('#dealerids'), [], 'Select Distributor');
             }
         });
     }
 
+    window.rebuildFundUserSelectOptions = rebuildFundUserSelectOptions;
+    window.GetDistrict = GetDistrict;
+    window.GetRetailerList = GetRetailerList;
+    window.GetRetailerListByID = GetRetailerListByID;
 
     $('#mdbank').change(function () {
 
@@ -3428,26 +3422,116 @@ $('#btnRetailerInform').click(function () {
         $('#' + tabID).addClass('active in');
     }
 
+    function destroyFundUserSelect2($el) {
+        if (!$el || !$el.length) {
+            return;
+        }
+        if ($el.hasClass('select2-hidden-accessible')) {
+            try {
+                $el.select2('destroy');
+            } catch (e) { /* ignore stale instances */ }
+        }
+        $el.next('.select2-container').remove();
+    }
+
+    function isFundUserSelectVisible($el) {
+        var $historyWrap = $el.closest('#masterdrop, #dealerdrop, #retailerdrop');
+        if ($historyWrap.length) {
+            return $historyWrap.is(':visible');
+        }
+        var $tabPane = $el.closest('.tab-pane');
+        if ($tabPane.length) {
+            return $tabPane.hasClass('active') && $tabPane.is(':visible');
+        }
+        return $el.is(':visible');
+    }
+
     function refreshFundTransferSelect2($scope) {
         if (!window.jQuery || !$.fn.select2) {
             return;
         }
-        var $targets = $scope && $scope.length ? $scope.find('.for-select2') : $('.saas-fund-transfer-page .for-select2');
+
+        var $targets;
+        if ($scope && $scope.length) {
+            $targets = $scope.is('select') ? $scope : $scope.find('select.for-select2, select.vm-admin-select-search');
+        } else {
+            $targets = $('.saas-fund-user-page .tab-pane.active select.for-select2, .saas-fund-user-page .tab-pane.active select.vm-admin-select-search, .saas-fund-user-page .vm-ft-history-toolbar select.for-select2');
+        }
+
         $targets.each(function () {
             var $el = $(this);
-            if ($el.hasClass('select2-hidden-accessible')) {
-                $el.select2('destroy');
+            if (!$el.hasClass('for-select2') && !$el.hasClass('vm-admin-select-search')) {
+                return;
             }
-            $el.select2(window.getAdminSelect2Options ? window.getAdminSelect2Options($el) : {
-                width: '100%',
-                dropdownAutoWidth: false
-            });
+            if (!isFundUserSelectVisible($el)) {
+                return;
+            }
+            if (window.forceAdminSelect2) {
+                window.forceAdminSelect2($el, null, true);
+            } else {
+                destroyFundUserSelect2($el);
+                $el.select2(window.getAdminSelect2Options ? window.getAdminSelect2Options($el) : {
+                    width: '100%',
+                    dropdownAutoWidth: false,
+                    minimumResultsForSearch: 0
+                });
+                if (window.forceAdminSelect2SearchAlways) {
+                    window.forceAdminSelect2SearchAlways($el);
+                }
+            }
         });
     }
 
+    window.refreshFundTransferSelect2 = refreshFundTransferSelect2;
+    window.destroyFundUserSelect2 = destroyFundUserSelect2;
+
+    function bindFundUserCascadeSelects() {
+        var $ = window.jQuery;
+        if (!$) {
+            return;
+        }
+
+        $(document)
+            .off('change.fundUserCascade select2:select.fundUserCascade', '#MastersID')
+            .on('change.fundUserCascade select2:select.fundUserCascade', '#MastersID', function () {
+                if (typeof window.GetDistrict === 'function') {
+                    window.GetDistrict($('#MastersID').val());
+                }
+            });
+
+        $(document)
+            .off('change.fundUserCascade select2:select.fundUserCascade', '#DDDealerid')
+            .on('change.fundUserCascade select2:select.fundUserCascade', '#DDDealerid', function () {
+                if (typeof window.GetRetailerList === 'function') {
+                    window.GetRetailerList($('#DDDealerid').val());
+                }
+            });
+
+        $(document)
+            .off('change.fundUserCascade select2:select.fundUserCascade', '#RetailersIDS')
+            .on('change.fundUserCascade select2:select.fundUserCascade', '#RetailersIDS', function () {
+                if (typeof window.GetRetailerListByID === 'function') {
+                    window.GetRetailerListByID($('#RetailersIDS').val());
+                }
+            });
+    }
+
+    window.bindFundUserCascadeSelects = bindFundUserCascadeSelects;
+
+    function bootFundUserPageSelect2() {
+        if (!window.jQuery || !$.fn.select2) {
+            window.setTimeout(bootFundUserPageSelect2, 50);
+            return;
+        }
+        bindFundUserCascadeSelects();
+        refreshFundTransferSelect2();
+    }
+
+    window.bootFundUserPageSelect2 = bootFundUserPageSelect2;
+
     $(document).ready(function () {
         activateLeftFundTab('home');
-        refreshFundTransferSelect2();
+        bootFundUserPageSelect2();
 
         $(document).on('click', '#tblshowMasterD tr[data-target]', function (e) {
             var target = $(this).attr('data-target');
@@ -3468,6 +3552,12 @@ $('#btnRetailerInform').click(function () {
         $('#tabs').attr('role', 'tablist');
         $('#tabs li a').attr('role', 'tab');
     });
+
+    $(window).on('load', function () {
+        window.setTimeout(function () {
+            bootFundUserPageSelect2();
+        }, 100);
+    });
 </script>
 
 <script>
@@ -3478,6 +3568,9 @@ $('#btnRetailerInform').click(function () {
         var $li = $(this).parent('li');
 
         activateLeftFundTab(tabID);
+        window.setTimeout(function () {
+            refreshFundTransferSelect2($('#' + tabID));
+        }, 0);
 
         $('#retailerdatafrom').hide();
         $('#btnddbackshow').trigger('click');

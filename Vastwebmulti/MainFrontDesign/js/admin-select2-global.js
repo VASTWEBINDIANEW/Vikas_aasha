@@ -17,7 +17,7 @@
     var bootTimer = null;
 
     function isFundTransferPage() {
-        return /Fund_transfer|FundTransferDealer|MDTODealer/i.test(window.location.pathname || '');
+        return /Fund_transfer|FundTransferDealer|Fund_User|MDTODealer/i.test(window.location.pathname || '');
     }
 
     function hasSelect2() {

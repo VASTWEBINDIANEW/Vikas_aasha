@@ -1,51 +1,16 @@
-﻿
-
-<style>
-    .slab-setting-menu {
-        float: left;
-        padding: 0px;
-    }
-
-        .slab-setting-menu li {
-            list-style: none;
-            float: left;
-            border: 1px solid #bbb;
-            margin-right: 3px;
-        }
-
-            .slab-setting-menu li a {
-                color: #555 !important;
-                padding: 5px 6px;
-                display: block;
-            }
-
-                .slab-setting-menu li a.activee {
-                    color: #fff !important;
-                }
-</style>
-
-<ul class="slab-setting-menu" style="margin:0;">
-    <li><a href="~/DEALER/Home/usedTokens">Used Token</a></li>
-    <li><a href="~/DEALER/Home/TokenPurchase">Purchase Token</a></li>
-
-</ul>
+﻿<nav class="vm-opr-nav--page" aria-label="Token pages">
+    <a class="vm-opr-nav__link" href="@Url.Action("usedTokens", "Home")">Used Token</a>
+    <a class="vm-opr-nav__link" href="@Url.Action("TokenPurchase", "Home")">Purchase Token</a>
+</nav>
 <script type="text/javascript">
-
-
-
     $(document).ready(function () {
-        var current = location.pathname;
-        $('.slab-setting-menu li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('activee');
-
+        var path = (location.pathname || '').toLowerCase();
+        $('.vm-opr-nav--page .vm-opr-nav__link').each(function () {
+            var href = (this.getAttribute('href') || '').toLowerCase();
+            var segment = href.substring(href.lastIndexOf('/'));
+            if (segment && path.indexOf(segment) !== -1) {
+                $(this).addClass('is-active');
             }
-        })
+        });
     });
-
 </script>
-
-
-
-

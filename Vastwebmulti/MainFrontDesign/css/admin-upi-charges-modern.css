@@ -87,12 +87,39 @@ body.saas-admin-ui .saas-upi-charges-report-page .vm-upi-filter-row--one-line .s
     right: 6px !important;
 }
 
+body.saas-admin-ui .saas-upi-charges-report-page .vm-upi-charges-main-card,
+body.saas-admin-ui .saas-upi-charges-report-page .vm-upi-charges-table-panel,
+body.saas-admin-ui .saas-upi-charges-report-page .vm-opr-table-wrap,
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesExportWrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesExportWrap.vm-opr-table-scroll {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+}
+
 body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table {
-    min-width: 1320px !important;
+    width: 100% !important;
+    min-width: 1280px !important;
+    max-width: none !important;
+    table-layout: fixed !important;
     border-collapse: separate !important;
     border-spacing: 0 !important;
     background: #fff !important;
 }
+
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table col.vm-upi-col-sr { width: 56px; }
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table col.vm-upi-col-status { width: 108px; }
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table col.vm-upi-col-role { width: 88px; }
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table col.vm-upi-col-user { width: 12%; }
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table col.vm-upi-col-payer { width: 10%; }
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table col.vm-upi-col-num { width: 92px; }
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table col.vm-upi-col-rrn { width: 14%; }
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table col.vm-upi-col-time { width: 150px; }
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table col.vm-upi-col-action { width: 88px; }
 
 body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table thead {
     position: sticky;
@@ -116,8 +143,42 @@ body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-ta
     box-shadow: none !important;
 }
 
-body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table thead th:first-child {
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table thead th:first-child,
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table thead th.vm-upi-sr-col {
     border-left: 1px solid #e2e8f0 !important;
+    width: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table thead th.vm-upi-status-col {
+    width: 108px !important;
+    min-width: 108px !important;
+    max-width: 108px !important;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table thead th.vm-upi-role-col {
+    width: 88px !important;
+    min-width: 88px !important;
+    max-width: 88px !important;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table thead th.vm-upi-rrn-col,
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table thead th.vm-upi-time-col,
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table thead th.vm-upi-action-col {
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table thead th.vm-upi-time-col {
+    width: 150px !important;
+    min-width: 150px !important;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table thead th.vm-upi-action-col {
+    width: 88px !important;
+    min-width: 88px !important;
+    max-width: 88px !important;
 }
 
 body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table tbody td {
@@ -133,12 +194,15 @@ body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-ta
     line-height: 1.35;
 }
 
-body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table tbody td:first-child {
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table tbody td:first-child,
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table tbody td.vm-dmt-sr-cell {
     border-left: 1px solid #eef2f6 !important;
     color: #64748b;
     font-weight: 700;
-    width: 56px;
-    min-width: 56px;
+    width: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+    white-space: nowrap !important;
 }
 
 body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table tbody td.vm-upi-user-cell-wrap,
@@ -235,6 +299,64 @@ body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-ta
 body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table tbody td.vm-upi-num-cell {
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table tbody td.vm-upi-rrn-cell,
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table tbody td.vm-upi-txn-cell {
+    text-align: left !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-variant-numeric: tabular-nums;
+    max-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table tbody td.vm-upi-rrn-cell {
+    font-size: 0.76rem !important;
+}
+
+/* Block operator-report column squeeze leaking via shared saas-operator-report-page class */
+body.saas-admin-ui .saas-upi-charges-report-page.saas-operator-report-page #upiChargesTable.vm-opr-data-table thead th:nth-child(1),
+body.saas-admin-ui .saas-upi-charges-report-page.saas-operator-report-page #upiChargesTable.vm-opr-data-table tbody td:nth-child(1) {
+    width: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page.saas-operator-report-page #upiChargesTable.vm-opr-data-table thead th:nth-child(2),
+body.saas-admin-ui .saas-upi-charges-report-page.saas-operator-report-page #upiChargesTable.vm-opr-data-table tbody td:nth-child(2) {
+    width: 108px !important;
+    min-width: 108px !important;
+    max-width: 108px !important;
+    padding: 11px 8px !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page.saas-operator-report-page #upiChargesTable.vm-opr-data-table thead th:nth-child(n+3):nth-child(-n+10),
+body.saas-admin-ui .saas-upi-charges-report-page.saas-operator-report-page #upiChargesTable.vm-opr-data-table tbody td:nth-child(n+3):nth-child(-n+10) {
+    max-width: none !important;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page.saas-operator-report-page #upiChargesTable.vm-opr-data-table thead th:nth-child(11),
+body.saas-admin-ui .saas-upi-charges-report-page.saas-operator-report-page #upiChargesTable.vm-opr-data-table thead th:nth-child(12) {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-upi-charges-report-page.saas-operator-report-page #upiChargesTable.vm-opr-data-table thead th:nth-child(13),
+body.saas-admin-ui .saas-upi-charges-report-page.saas-operator-report-page #upiChargesTable.vm-opr-data-table tbody td:nth-child(13) {
+    width: 88px !important;
+    min-width: 88px !important;
+    max-width: 88px !important;
+    white-space: nowrap !important;
+}
+
+@media (max-width: 1400px) {
+    body.saas-admin-ui .saas-upi-charges-report-page #upiChargesTable.vm-opr-data-table {
+        min-width: 1280px !important;
+    }
 }
 
 body.saas-admin-ui .saas-upi-charges-report-page .vm-upi-user-cell strong {

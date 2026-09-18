@@ -41,51 +41,14 @@
                             <p>
                                 @try
                                 {
-                                    if (@TempData["showmassage"] != "yes1")
+                                    if (item.SentMsg.ToUpper().Contains(".CO") || item.SentMsg.ToUpper().Contains(".NET") || item.SentMsg.ToUpper().Contains(".IN"))
                                     {
-                                        if (item.SentMsg.ToUpper().Contains(".CO") || item.SentMsg.ToUpper().Contains(".NET") || item.SentMsg.ToUpper().Contains(".IN"))
-                                        {
-                                            var msg = item.SentMsg.ToUpper().Replace("WWW.", "").Replace("HTTPS://", "").Replace("HTTP://", "");
-                                            msg = "http://" + msg;
-                                            <a href="@msg" target="_blank">@msg</a>
-                                        }
-                                        else if (item.SentMsg.ToUpper().Contains("YOUR NEW PASSWORD IS"))
-                                        {
-                                            <span>Your New Password is ******@item.SentMsg[27]@item.SentMsg[28]</span>
-                                        }
-                                        else if (item.SentMsg.ToUpper().Contains("EMAIL SHOW PASSCODE IS"))
-                                        {
-                                            <span>Email Show Passcode is **@item.SentMsg[item.SentMsg.Length - 2]@item.SentMsg[item.SentMsg.Length - 1]</span>
-                                        }
-                                        else if (item.SentMsg.ToUpper().Contains("YOUR TRANSACTION PASSWORD IS"))
-                                        {
-                                            <span>Your Transaction Password Is ****@item.SentMsg[34]@item.SentMsg[35]</span>
-                                        }
-                                        else if (item.SentMsg.ToUpper().Contains("YOUR SECURITY PASSWORD IS"))
-                                        {
-                                            <span>Your Security Password Is ****@item.SentMsg[31]@item.SentMsg[32]</span>
-                                        }
-                                        else if (item.SentMsg.ToUpper().Contains("YOUR PASSCODE VALID FOR"))
-                                        {
-                                            <span>Your Passcode ****@item.SentMsg[19]@item.SentMsg[20] Your Passcode valid for @item.SentMsg[item.SentMsg.Length - 21]@item.SentMsg[item.SentMsg.Length - 20]@item.SentMsg[item.SentMsg.Length - 19]@item.SentMsg[item.SentMsg.Length - 18]@item.SentMsg[item.SentMsg.Length - 17]@item.SentMsg[item.SentMsg.Length - 16]@item.SentMsg[item.SentMsg.Length - 15]@item.SentMsg[item.SentMsg.Length - 14]@item.SentMsg[item.SentMsg.Length - 13]@item.SentMsg[item.SentMsg.Length - 12]@item.SentMsg[item.SentMsg.Length - 11]@item.SentMsg[item.SentMsg.Length - 10]@item.SentMsg[item.SentMsg.Length - 9]@item.SentMsg[item.SentMsg.Length - 8]@item.SentMsg[item.SentMsg.Length - 7]@item.SentMsg[item.SentMsg.Length - 6]@item.SentMsg[item.SentMsg.Length - 5]@item.SentMsg[item.SentMsg.Length - 4]@item.SentMsg[item.SentMsg.Length - 3]@item.SentMsg[item.SentMsg.Length - 2]@item.SentMsg[item.SentMsg.Length - 1]</span>
-                                        }
-                                        else if (item.SentMsg.ToUpper().Contains("YOUR NEW TRANSACTION PASSWORD IS"))
-                                        {
-                                            <span>Your New Transaction Password Is ****@item.SentMsg[38]@item.SentMsg[39]</span>
-                                        }
-                                        else if (item.SentMsg.ToUpper().Contains("THE OTP FOR YOUR IP ADDRESS"))
-                                        {
-                                            <span>****@item.SentMsg[4]@item.SentMsg[5] is the OTP For Your ip Address @item.SentMsg[item.SentMsg.Length - 14]@item.SentMsg[item.SentMsg.Length - 13]@item.SentMsg[item.SentMsg.Length - 12]@item.SentMsg[item.SentMsg.Length - 11]@item.SentMsg[item.SentMsg.Length - 10]@item.SentMsg[item.SentMsg.Length - 9]@item.SentMsg[item.SentMsg.Length - 8]@item.SentMsg[item.SentMsg.Length - 7]@item.SentMsg[item.SentMsg.Length - 6]@item.SentMsg[item.SentMsg.Length - 5]@item.SentMsg[item.SentMsg.Length - 4]@item.SentMsg[item.SentMsg.Length - 3]@item.SentMsg[item.SentMsg.Length - 2]@item.SentMsg[item.SentMsg.Length - 1]</span>
-                                        }
-                                        else
-                                        {
-                                            @item.SentMsg
-                                        }
+                                        var msg = item.SentMsg.ToUpper().Replace("WWW.", "").Replace("HTTPS://", "").Replace("HTTP://", "");
+                                        msg = "http://" + msg;
+                                        <a href="@msg" target="_blank">@msg</a>
                                     }
                                     else
                                     {
-                                        var a = Convert.ToString(TempData["showmassage"]);
-                                        TempData["1234"] = a;
                                         @item.SentMsg
                                     }
                                 }

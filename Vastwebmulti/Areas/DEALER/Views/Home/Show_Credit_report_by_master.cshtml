@@ -1,132 +1,981 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.select_Dealer_credit_report_by_master_Result>
+
+@using System.Linq
+
 @{
-    ViewBag.Title = "Show_Credit_report_by_master";
+
+    ViewBag.Title = "My Credit Report By Master";
+
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+
+
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.select_Dealer_credit_report_by_master_Result>();
+
+    var totalLiveBalance = reports.Sum(x => x.dealer_postbal);
+
+    var totalOutstanding = reports.Sum(x => x.cr);
+
+    var recordCount = reports.Count();
+
 }
 
-<style>
-    .showcreditreport-master .table-responsive table tr td{white-space:nowrap;}
-    .showcreditreport-master .table-responsive table tfoot tr td p{margin-bottom:0px !important;}
 
-    @@media screen and (max-width:768px){
-        .table-responsive{border:0;padding-bottom:15px;}
-    }
-</style>
 
-<section class="content">
-    <div class="container-fluid full-dealer-secondanimation">
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Show Credit Report By Master</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);">Show Credit Report By Master</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 0;">
-                <div class="card">
-                    <div class="bread-same-all-page dealer-none-fourclass" style="padding-left: 0px; padding-bottom: 0; width: 100%; float: left; ">
-                        <ul style="width:auto;float:left;padding-left:0;">
-                            <li class="smli">
-                                <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                                </a>
-                            </li>
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
 
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                My&nbsp;Credit&nbsp;Report&nbsp;By Master
-                            </li>
-                        </ul>
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
 
-                        <div class="col-md-2 recharge-report-dealer" style="width:auto;float:right;padding-right:0px;">
-                            <div class="form-group" style="margin:0px;float:left;">
-                                <div style="padding-top: 0px; float:right">
-                                    <button class="white-success-button" style="height:32px;border:1px solid #b1a6a638;background:#b1a6a638;float: right;padding: 0px 4px;margin-top:-1px;" onclick="findtotal()">Total</button>
-                                    <div class="web-white-filter fil" style="float: left;margin-right: 5px;margin-top:-1px;">
-                                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                                        <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                                    </div>
-                                </div>
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
 
-                            </div>
-                        </div>
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
 
-                    </div>
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
 
-                    <div class="body all-reporttable-css showcreditreport-master" style="margin-top:0px;padding:0px;width:100%;float:left;margin-top:15px;">
-                        <div class="table-responsive" style="position:inherit;">
-                            <table class="table table-bordered table-striped" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>SR.NO</th>
-                                        <th>Email</th>
-                                        <th>Name</th>
-                                        <th>Last&nbsp;Transaction&nbsp;Date</th>
-                                        <th>Last&nbsp;Transaction&nbsp;Type</th>
-                                        <th>Live&nbsp;Balance</th>
-                                        <th>Current&nbsp;Outstanding</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{ int i = 1;}
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>@i</td>
-                                            <td>@item.masterEmail</td>
-                                            <td>@item.SuperstokistName</td>
-                                            <td>@item.date_dlm</td>
-                                            <td>@item.bal_type</td>
-                                            <td>@item.dealer_postbal</td>
-                                            <td>@item.cr</td>
-                                        </tr>
-                                        i++;
-                                    }
-                                </tbody>
-                                <tfoot style="background-color:whitesmoke;">
-                                    <tr>
-                                        <td><p style="font-size:17px;">Total</p></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><p style="font-size:17px;">@Model.Sum(a => a.cr)</p></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=28" rel="stylesheet" />
+
+<script>document.body.classList.add('saas-sell-rch-dp-page');</script>
+
+
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-credit-report-master-page saas-receive-fund-admin-page saas-ecommerce-report-page">
+
+
+
+    <div class="container-fluid vm-opr-page-shell">
+
+
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
+
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+
+                    <li>Reports</li>
+
+                    <li>My Credit Report By Master</li>
+
+                </ol>
+
             </div>
+
+
+
+            <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="crMasterTotalsPanel" style="display:none;" aria-hidden="true">
+
+                <div class="vm-dmt-totals-head">
+
+                    <div class="vm-dmt-totals-head__title">
+
+                        <i class="fas fa-chart-pie" aria-hidden="true"></i>
+
+                        <span>Credit totals</span>
+
+                    </div>
+
+                    <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideCrMasterTotals()" title="Hide totals" aria-label="Hide totals">
+
+                        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+
+                    </button>
+
+                </div>
+
+                <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+
+                    <div class="vm-opr-total-card vm-opr-total-card--primary">
+
+                        <span class="vm-opr-total-card__label">Records</span>
+
+                        <strong class="vm-opr-total-card__value">@recordCount</strong>
+
+                    </div>
+
+                    <div class="vm-opr-total-card vm-opr-total-card--success">
+
+                        <span class="vm-opr-total-card__label">Live Balance</span>
+
+                        <strong class="vm-opr-total-card__value">@totalLiveBalance.ToString("N2")</strong>
+
+                    </div>
+
+                    <div class="vm-opr-total-card vm-opr-total-card--pending">
+
+                        <span class="vm-opr-total-card__label">Current Outstanding</span>
+
+                        <strong class="vm-opr-total-card__value">@totalOutstanding.ToString("N2")</strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
+
+
+
+        <div class="vm-opr-main-card">
+
+            <div class="vm-opr-table-panel">
+
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+
+                    <div class="vm-opr-table-panel__title">
+
+                        <i class="fas fa-user-tie" aria-hidden="true"></i>
+
+                        <span>My credit report by master</span>
+
+                    </div>
+
+                    <div class="vm-dmt-table-panel__right">
+
+                        <div class="vm-ft-search-wrap vm-cr-master-table-search">
+
+                            <input class="form-control vm-cr-master-search-input" type="text" id="crMasterSearchInput" placeholder="Search report..." autocomplete="off" onkeyup="crMasterSearch()" />
+
+                        </div>
+
+                        <span class="vm-radiant-inline-total" title="Total current outstanding">
+
+                            Outstanding: <strong>&#8377; @totalOutstanding.ToString("N2")</strong>
+
+                        </span>
+
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-totals-btn vm-cr-master-totals-btn" onclick="toggleCrMasterTotals()" title="Show totals" aria-expanded="false" aria-controls="crMasterTotalsPanel">
+
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+
+                            </button>
+
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+
+                            </button>
+
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="vm-opr-table-wrap">
+
+                    <div class="table-responsive vm-opr-table-scroll">
+
+                        <table id="dealerCreditMasterReport" class="table vm-opr-data-table" cellspacing="0">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>SR.NO</th>
+
+                                    <th>Email</th>
+
+                                    <th>Name</th>
+
+                                    <th>Last&nbsp;Transaction&nbsp;Date</th>
+
+                                    <th>Last&nbsp;Transaction&nbsp;Type</th>
+
+                                    <th>Live&nbsp;Balance</th>
+
+                                    <th>Current&nbsp;Outstanding</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @if (reports.Any())
+
+                                {
+
+                                    var sr = 1;
+
+                                    foreach (var item in reports)
+
+                                    {
+
+                                        <tr>
+
+                                            <td>@sr</td>
+
+                                            <td>@(string.IsNullOrWhiteSpace(item.masterEmail) ? "—" : item.masterEmail)</td>
+
+                                            <td>@(string.IsNullOrWhiteSpace(item.SuperstokistName) ? "—" : item.SuperstokistName)</td>
+
+                                            <td>@(item.date_dlm.HasValue ? item.date_dlm.Value.ToString("dd-MM-yyyy HH:mm") : "—")</td>
+
+                                            <td>@(string.IsNullOrWhiteSpace(item.bal_type) ? "—" : item.bal_type)</td>
+
+                                            <td>@item.dealer_postbal.ToString("N2")</td>
+
+                                            <td>@item.cr.ToString("N2")</td>
+
+                                        </tr>
+
+                                        sr++;
+
+                                    }
+
+                                }
+
+                                else
+
+                                {
+
+                                    <tr class="vm-opr-table-empty-row">
+
+                                        <td colspan="7" class="vm-opr-table-empty">No credit records found.</td>
+
+                                    </tr>
+
+                                }
+
+                            </tbody>
+
+                            @if (reports.Any())
+
+                            {
+
+                                <tfoot>
+
+                                    <tr class="vm-cr-master-table-foot">
+
+                                        <td><strong>Total</strong></td>
+
+                                        <td></td>
+
+                                        <td></td>
+
+                                        <td></td>
+
+                                        <td></td>
+
+                                        <td><strong>@totalLiveBalance.ToString("N2")</strong></td>
+
+                                        <td><strong>@totalOutstanding.ToString("N2")</strong></td>
+
+                                    </tr>
+
+                                </tfoot>
+
+                            }
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
 
     </div>
 
 </section>
 
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
+
+
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+
+<script>
+
+    function crMasterSearch() {
+
+        var $ = window.jQuery;
+
+        var value = ($('#crMasterSearchInput').val() || '').toLowerCase();
+
+        $('#dealerCreditMasterReport tbody tr').filter(function () {
+
+            if ($(this).hasClass('vm-opr-table-empty-row')) {
+
+                return true;
+
+            }
+
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+
+        });
+
+    }
 
 
 
+    function crMasterEsc(value) {
+
+        return String(value == null ? '' : value)
+
+            .replace(/&/g, '&amp;')
+
+            .replace(/</g, '&lt;')
+
+            .replace(/>/g, '&gt;')
+
+            .replace(/"/g, '&quot;');
+
+    }
+
+
+
+    function crMasterNow() {
+
+        var d = new Date();
+
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        var h = d.getHours();
+
+        var ampm = h >= 12 ? 'PM' : 'AM';
+
+        var hr = h % 12;
+
+        if (!hr) { hr = 12; }
+
+        var min = d.getMinutes();
+
+        return ('0' + d.getDate()).slice(-2) + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + ('0' + hr).slice(-2) + ':' + ('0' + min).slice(-2) + ' ' + ampm;
+
+    }
+
+
+
+    function crMasterNum(value) {
+
+        var n = parseFloat(String(value || '').replace(/,/g, '').replace(/[^\d.-]/g, ''));
+
+        return isNaN(n) ? 0 : n;
+
+    }
+
+
+
+    function crMasterTableRows() {
+
+        var $ = window.jQuery;
+
+        var rows = [];
+
+        $('#dealerCreditMasterReport tbody tr').each(function () {
+
+            var $tr = $(this);
+
+            if ($tr.hasClass('vm-opr-table-empty-row') || !$tr.is(':visible')) {
+
+                return;
+
+            }
+
+            var $cells = $tr.children('td');
+
+            if ($cells.length < 7) {
+
+                return;
+
+            }
+
+            rows.push({
+
+                sr: $.trim($cells.eq(0).text()).replace(/\s+/g, ' '),
+
+                email: $.trim($cells.eq(1).text()).replace(/\s+/g, ' '),
+
+                name: $.trim($cells.eq(2).text()).replace(/\s+/g, ' '),
+
+                lastDate: $.trim($cells.eq(3).text()).replace(/\s+/g, ' '),
+
+                lastType: $.trim($cells.eq(4).text()).replace(/\s+/g, ' '),
+
+                liveBal: $.trim($cells.eq(5).text()).replace(/\s+/g, ' '),
+
+                outstanding: $.trim($cells.eq(6).text()).replace(/\s+/g, ' ')
+
+            });
+
+        });
+
+        return rows;
+
+    }
+
+
+
+    function crMasterFormatMoney(value) {
+
+        var n = crMasterNum(value);
+
+        return '\u20B9 ' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    }
+
+
+
+    function crMasterExportMeta(rows) {
+
+        var liveBal = 0;
+
+        var outstanding = 0;
+
+        for (var i = 0; i < rows.length; i++) {
+
+            liveBal += crMasterNum(rows[i].liveBal);
+
+            outstanding += crMasterNum(rows[i].outstanding);
+
+        }
+
+        return {
+
+            generatedOn: crMasterNow(),
+
+            search: $.trim((window.jQuery ? window.jQuery('#crMasterSearchInput').val() : '') || ''),
+
+            records: rows.length,
+
+            liveBal: crMasterFormatMoney(liveBal),
+
+            outstanding: crMasterFormatMoney(outstanding)
+
+        };
+
+    }
+
+
+
+    function crMasterHeads() {
+
+        return ['SR.NO', 'Email', 'Name', 'Last Transaction Date', 'Last Transaction Type', 'Live Balance', 'Current Outstanding'];
+
+    }
+
+
+
+    function crMasterBuildExcelHtml(rows) {
+
+        var m = crMasterExportMeta(rows);
+
+        var colCount = 7;
+
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8" /><title>My Credit Report By Master</title></head><body>';
+
+        html += '<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;">';
+
+        html += '<tr><td colspan="' + colCount + '" bgcolor="#2563EB" style="color:#FFFFFF;font-size:16pt;font-weight:bold;">My Credit Report By Master</td></tr>';
+
+        html += '<tr><td colspan="' + colCount + '" bgcolor="#1D4ED8" style="color:#DBEAFE;font-size:10pt;">Dealer reports - credit from master</td></tr>';
+
+        html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Generated On</td><td colspan="2" style="font-weight:bold;">' + crMasterEsc(m.generatedOn) + '</td>';
+
+        html += '<td bgcolor="#F1F5F9" style="font-weight:bold;">Records</td><td colspan="3" style="font-weight:bold;">' + m.records + '</td></tr>';
+
+        if (m.search) {
+
+            html += '<tr><td bgcolor="#F1F5F9" style="font-weight:bold;">Search Filter</td><td colspan="' + (colCount - 1) + '" style="font-weight:bold;">' + crMasterEsc(m.search) + '</td></tr>';
+
+        }
+
+        html += '<tr><td bgcolor="#EEF2FF" style="font-weight:bold;color:#1D4ED8;">Records</td><td bgcolor="#EEF2FF" style="font-weight:bold;color:#1D4ED8;">' + m.records + '</td>';
+
+        html += '<td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">Live Balance Total</td><td bgcolor="#ECFDF5" style="font-weight:bold;color:#047857;">' + m.liveBal + '</td>';
+
+        html += '<td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">Outstanding Total</td><td bgcolor="#FEFCE8" style="font-weight:bold;color:#854D0E;">' + m.outstanding + '</td>';
+
+        html += '<td bgcolor="#F8FAFC"></td></tr>';
+
+        html += '<tr>';
+
+        var heads = crMasterHeads();
+
+        for (var h = 0; h < heads.length; h++) {
+
+            html += '<th bgcolor="#334155" style="color:#FFFFFF;font-weight:bold;">' + crMasterEsc(heads[h]) + '</th>';
+
+        }
+
+        html += '</tr>';
+
+        if (!rows.length) {
+
+            html += '<tr><td colspan="' + colCount + '" bgcolor="#F8FAFC" style="text-align:center;font-weight:bold;color:#64748B;height:48px;">No credit records found.</td></tr>';
+
+        } else {
+
+            for (var i = 0; i < rows.length; i++) {
+
+                var r = rows[i];
+
+                var rowBg = (i % 2 === 1) ? '#F8FAFC' : '#FFFFFF';
+
+                html += '<tr>';
+
+                html += '<td bgcolor="' + rowBg + '">' + crMasterEsc(r.sr) + '</td>';
+
+                html += '<td bgcolor="' + rowBg + '">' + crMasterEsc(r.email) + '</td>';
+
+                html += '<td bgcolor="' + rowBg + '">' + crMasterEsc(r.name) + '</td>';
+
+                html += '<td bgcolor="' + rowBg + '">' + crMasterEsc(r.lastDate) + '</td>';
+
+                html += '<td bgcolor="' + rowBg + '">' + crMasterEsc(r.lastType) + '</td>';
+
+                html += '<td bgcolor="' + rowBg + '" style="text-align:right;font-weight:600;">' + crMasterEsc(crMasterFormatMoney(r.liveBal)) + '</td>';
+
+                html += '<td bgcolor="' + rowBg + '" style="text-align:right;font-weight:600;">' + crMasterEsc(crMasterFormatMoney(r.outstanding)) + '</td>';
+
+                html += '</tr>';
+
+            }
+
+            html += '<tr>';
+
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;">Total</td><td bgcolor="#EFF6FF"></td><td bgcolor="#EFF6FF"></td><td bgcolor="#EFF6FF"></td><td bgcolor="#EFF6FF"></td>';
+
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;text-align:right;">' + m.liveBal + '</td>';
+
+            html += '<td bgcolor="#EFF6FF" style="font-weight:bold;text-align:right;">' + m.outstanding + '</td>';
+
+            html += '</tr>';
+
+        }
+
+        html += '<tr><td colspan="' + colCount + '" bgcolor="#F8FAFC" style="text-align:center;font-size:9pt;color:#94A3B8;padding:10px;">Generated from Dealer panel - My Credit Report By Master | ' + crMasterEsc(m.generatedOn) + '</td></tr>';
+
+        html += '</table></body></html>';
+
+        return html;
+
+    }
+
+
+
+    function crMasterBuildPdfHtml(rows) {
+
+        var m = crMasterExportMeta(rows);
+
+        var heads = crMasterHeads();
+
+        var headHtml = '';
+
+        for (var h = 0; h < heads.length; h++) {
+
+            var thClass = (h >= 5) ? ' class="num"' : '';
+
+            headHtml += '<th' + thClass + '>' + crMasterEsc(heads[h]) + '</th>';
+
+        }
+
+        var body = '';
+
+        if (!rows.length) {
+
+            body = '<tr><td colspan="7" class="empty">No credit records found.</td></tr>';
+
+        } else {
+
+            for (var i = 0; i < rows.length; i++) {
+
+                var r = rows[i];
+
+                body += '<tr>';
+
+                body += '<td>' + crMasterEsc(r.sr) + '</td>';
+
+                body += '<td>' + crMasterEsc(r.email) + '</td>';
+
+                body += '<td>' + crMasterEsc(r.name) + '</td>';
+
+                body += '<td>' + crMasterEsc(r.lastDate) + '</td>';
+
+                body += '<td>' + crMasterEsc(r.lastType) + '</td>';
+
+                body += '<td class="num">' + crMasterEsc(crMasterFormatMoney(r.liveBal)) + '</td>';
+
+                body += '<td class="num">' + crMasterEsc(crMasterFormatMoney(r.outstanding)) + '</td>';
+
+                body += '</tr>';
+
+            }
+
+            body += '<tr class="foot-row">';
+
+            body += '<td><strong>Total</strong></td><td></td><td></td><td></td><td></td>';
+
+            body += '<td class="num"><strong>' + crMasterEsc(m.liveBal) + '</strong></td>';
+
+            body += '<td class="num"><strong>' + crMasterEsc(m.outstanding) + '</strong></td>';
+
+            body += '</tr>';
+
+        }
+
+        var searchRow = m.search
+
+            ? '<tr><td colspan="3"><span class="meta-label">Search Filter</span><span class="meta-value">' + crMasterEsc(m.search) + '</span></td></tr>'
+
+            : '';
+
+        return '<!DOCTYPE html><html><head><meta charset="utf-8" /><title>My Credit Report By Master</title><style type="text/css">'
+
+            + '@@page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }'
+
+            + '* { box-sizing: border-box; }'
+
+            + 'html, body { width: 100%; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #0f172a; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }'
+
+            + 'body { padding: 16px; }'
+
+            + '.sheet { width: 100%; max-width: 100%; }'
+
+            + 'table { page-break-inside: auto; border-collapse: collapse; width: 100%; }'
+
+            + 'tr { page-break-inside: avoid; page-break-after: auto; }'
+
+            + 'thead { display: table-header-group; }'
+
+            + '.hero { width: 100%; border: 1px solid #1d4ed8; overflow: hidden; margin-bottom: 12px; }'
+
+            + '.hero-top { padding: 14px 18px; background: #2563eb; color: #fff; }'
+
+            + '.hero-top h1 { margin: 0; font-size: 20px; font-weight: 700; }'
+
+            + '.hero-top p { margin: 4px 0 0; font-size: 11px; color: #dbeafe; }'
+
+            + '.meta { width: 100%; background: #f8fafc; border-top: 1px solid #bfdbfe; }'
+
+            + '.meta td { padding: 8px 12px; border-right: 1px solid #e2e8f0; vertical-align: top; }'
+
+            + '.meta td:last-child { border-right: none; }'
+
+            + '.meta-label { display: block; font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #64748b; margin-bottom: 3px; }'
+
+            + '.meta-value { font-size: 12px; font-weight: 700; color: #0f172a; }'
+
+            + '.cards { width: 100%; margin: 0 0 12px 0; table-layout: fixed; }'
+
+            + '.cards td { width: 33.33%; padding: 0 6px 0 0; vertical-align: top; }'
+
+            + '.cards td:last-child { padding-right: 0; }'
+
+            + '.card { border: 1px solid #e2e8f0; padding: 10px 12px; min-height: 58px; }'
+
+            + '.card-label { display: block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }'
+
+            + '.card-value { font-size: 16px; font-weight: 800; }'
+
+            + '.card-total { background: #eef2ff; border-color: #c7d2fe; }'
+
+            + '.card-total .card-label, .card-total .card-value { color: #1d4ed8; }'
+
+            + '.card-ok { background: #ecfdf5; border-color: #a7f3d0; }'
+
+            + '.card-ok .card-label, .card-ok .card-value { color: #047857; }'
+
+            + '.card-wait { background: #fefce8; border-color: #fde68a; }'
+
+            + '.card-wait .card-label, .card-wait .card-value { color: #854d0e; }'
+
+            + '.grid { width: 100%; border: 1px solid #cbd5e1; table-layout: auto; }'
+
+            + '.grid th { padding: 9px 7px; text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #fff; background: #334155; border-right: 1px solid #1e293b; white-space: nowrap; }'
+
+            + '.grid th.num { text-align: right; }'
+
+            + '.grid td { padding: 8px 7px; font-size: 11px; color: #1e293b; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; vertical-align: middle; }'
+
+            + '.grid tbody tr:nth-child(even):not(.foot-row) td { background: #f8fafc; }'
+
+            + '.grid tbody tr.foot-row td { background: #eff6ff !important; border-top: 2px solid #93c5fd; font-weight: 700; color: #1d4ed8; }'
+
+            + '.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }'
+
+            + '.empty { padding: 36px 16px; text-align: center; font-size: 14px; font-weight: 700; color: #64748b; background: #f8fafc; }'
+
+            + '.foot { margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 10px; color: #94a3b8; text-align: center; }'
+
+            + '</style></head><body>'
+
+            + '<div class="sheet">'
+
+            + '<div class="hero"><div class="hero-top"><h1>My Credit Report By Master</h1><p>Dealer reports - credit from master</p></div>'
+
+            + '<table class="meta" cellpadding="0" cellspacing="0"><tr>'
+
+            + '<td style="width:34%;"><span class="meta-label">Generated On</span><span class="meta-value">' + crMasterEsc(m.generatedOn) + '</span></td>'
+
+            + '<td style="width:33%;"><span class="meta-label">Records</span><span class="meta-value">' + m.records + '</span></td>'
+
+            + '<td style="width:33%;"><span class="meta-label">Outstanding Total</span><span class="meta-value">' + crMasterEsc(m.outstanding) + '</span></td>'
+
+            + '</tr>' + searchRow + '</table></div>'
+
+            + '<table class="cards" cellpadding="0" cellspacing="0"><tr>'
+
+            + '<td><div class="card card-total"><span class="card-label">Records</span><span class="card-value">' + m.records + '</span></div></td>'
+
+            + '<td><div class="card card-ok"><span class="card-label">Live Balance Total</span><span class="card-value">' + crMasterEsc(m.liveBal) + '</span></div></td>'
+
+            + '<td><div class="card card-wait"><span class="card-label">Outstanding Total</span><span class="card-value">' + crMasterEsc(m.outstanding) + '</span></div></td>'
+
+            + '</tr></table>'
+
+            + '<table class="grid" cellpadding="0" cellspacing="0"><thead><tr>' + headHtml + '</tr></thead><tbody>' + body + '</tbody></table>'
+
+            + '<div class="foot">Generated from Dealer panel - My Credit Report By Master</div>'
+
+            + '</div>'
+
+            + '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},300);};<\/script>'
+
+            + '</body></html>';
+
+    }
+
+
+
+    function crMasterDownloadExcel(html) {
+
+        var blob = new Blob(['\ufeff', html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+
+            window.navigator.msSaveOrOpenBlob(blob, 'My_Credit_Report_By_Master.xls');
+
+            return;
+
+        }
+
+        var url = URL.createObjectURL(blob);
+
+        var a = document.createElement('a');
+
+        a.href = url;
+
+        a.download = 'My_Credit_Report_By_Master.xls';
+
+        document.body.appendChild(a);
+
+        a.click();
+
+        document.body.removeChild(a);
+
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+
+    }
+
+
+
+    function crMasterOpenPdf(html) {
+
+        var w = window.open('', '_blank');
+
+        if (!w) {
+
+            return;
+
+        }
+
+        w.document.open();
+
+        w.document.write(html);
+
+        w.document.close();
+
+        w.focus();
+
+    }
+
+
+
+    function toggleCrMasterTotals() {
+
+        var $ = window.jQuery;
+
+        var panel = $('#crMasterTotalsPanel');
+
+        if (panel.is(':visible')) {
+
+            hideCrMasterTotals();
+
+            return;
+
+        }
+
+        panel.slideDown(180).attr('aria-hidden', 'false');
+
+        $('.vm-cr-master-totals-btn').attr('aria-expanded', 'true');
+
+    }
+
+
+
+    function hideCrMasterTotals() {
+
+        var $ = window.jQuery;
+
+        $('#crMasterTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+
+        $('.vm-cr-master-totals-btn').attr('aria-expanded', 'false');
+
+    }
+
+
+
+    function bootCreditReportByMaster() {
+
+        var $ = window.jQuery;
+
+        if (!$) {
+
+            window.setTimeout(bootCreditReportByMaster, 50);
+
+            return;
+
+        }
+
+
+
+        $('#btnExport').off('click.crMasterEx').on('click.crMasterEx', function () {
+
+            var rows = crMasterTableRows();
+
+            if (!rows.length) {
+
+                if (typeof swal === 'function') {
+
+                    swal('No records to export', '', 'warning');
+
+                }
+
+                return;
+
+            }
+
+            crMasterDownloadExcel(crMasterBuildExcelHtml(rows));
+
+        });
+
+
+
+        $('#btnPDF').off('click.crMasterPdf').on('click.crMasterPdf', function () {
+
+            var rows = crMasterTableRows();
+
+            if (!rows.length) {
+
+                if (typeof swal === 'function') {
+
+                    swal('No records to export', '', 'warning');
+
+                }
+
+                return;
+
+            }
+
+            crMasterOpenPdf(crMasterBuildPdfHtml(rows));
+
+        });
+
+    }
+
+
+
+    if (document.readyState === 'complete') {
+
+        bootCreditReportByMaster();
+
+    } else {
+
+        window.addEventListener('load', bootCreditReportByMaster);
+
+    }
+
+</script>
+
+
+
+@section LateCss {
+
+    <style>
+
+        body.saas-admin-ui section.content.saas-credit-report-master-page.saas-ecommerce-report-page .vm-cr-master-table-search input.vm-cr-master-search-input,
+
+        body.saas-admin-ui section.content.saas-credit-report-master-page.saas-ecommerce-report-page #dealerCreditMasterReport.vm-opr-data-table thead th,
+
+        body.saas-admin-ui section.content.saas-credit-report-master-page.saas-ecommerce-report-page #dealerCreditMasterReport.vm-opr-data-table tbody td,
+
+        body.saas-admin-ui section.content.saas-credit-report-master-page.saas-ecommerce-report-page #dealerCreditMasterReport.vm-opr-data-table tfoot td,
+
+        body.saas-admin-ui section.content.saas-credit-report-master-page.saas-ecommerce-report-page .vm-radiant-inline-total,
+
+        body.saas-admin-ui section.content.saas-credit-report-master-page.saas-ecommerce-report-page .saas-acc-btn--excel,
+
+        body.saas-admin-ui section.content.saas-credit-report-master-page.saas-ecommerce-report-page .saas-acc-btn--pdf {
+
+            font-size: 14px !important;
+
+            font-weight: 600 !important;
+
+        }
+
+
+
+        body.saas-admin-ui section.content.saas-credit-report-master-page.saas-ecommerce-report-page .vm-cr-master-table-search {
+
+            min-width: 200px;
+
+            max-width: 260px;
+
+        }
+
+
+
+        body.saas-admin-ui section.content.saas-credit-report-master-page.saas-ecommerce-report-page .vm-cr-master-table-search input.vm-cr-master-search-input {
+
+            height: 38px !important;
+
+            border-radius: 8px !important;
+
+            border: 1.5px solid #cbd5e1 !important;
+
+            background: #fff !important;
+
+            padding: 0 12px !important;
+
+            font-weight: 500 !important;
+
+        }
+
+    </style>
+
+}
 
 

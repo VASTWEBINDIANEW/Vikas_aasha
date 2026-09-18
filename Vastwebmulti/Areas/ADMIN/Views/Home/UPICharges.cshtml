@@ -34,7 +34,7 @@
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-cms-report-status.css?v=2" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-upi-charges-modern.css?v=4" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-upi-charges-modern.css?v=5" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
@@ -212,22 +212,37 @@
 
                 <div class="vm-opr-table-wrap">
                     <div class="table-responsive vm-opr-table-scroll" id="upiChargesExportWrap">
-                        <table id="upiChargesTable" class="table vm-opr-data-table" cellspacing="0">
+                        <table id="upiChargesTable" class="table vm-opr-data-table vm-upi-charges-table" cellspacing="0">
+                            <colgroup>
+                                <col class="vm-upi-col-sr" />
+                                <col class="vm-upi-col-status" />
+                                <col class="vm-upi-col-role" />
+                                <col class="vm-upi-col-user" />
+                                <col class="vm-upi-col-payer" />
+                                <col class="vm-upi-col-num" />
+                                <col class="vm-upi-col-num" />
+                                <col class="vm-upi-col-num" />
+                                <col class="vm-upi-col-num" />
+                                <col class="vm-upi-col-num" />
+                                <col class="vm-upi-col-rrn" />
+                                <col class="vm-upi-col-time" />
+                                <col class="vm-upi-col-action" />
+                            </colgroup>
                             <thead>
                                 <tr>
-                                    <th>S&nbsp;No</th>
+                                    <th class="vm-upi-sr-col">S.No</th>
                                     <th class="vm-upi-status-col">Status</th>
-                                    <th>Role</th>
-                                    <th>User</th>
-                                    <th>Payer&nbsp;Name</th>
-                                    <th>Remain&nbsp;Pre</th>
-                                    <th>Amount</th>
-                                    <th>Charges</th>
-                                    <th>Net&nbsp;Pay</th>
-                                    <th>Remain&nbsp;Post</th>
-                                    <th>Bank&nbsp;RRN</th>
-                                    <th>Transaction&nbsp;Time</th>
-                                    <th>Action</th>
+                                    <th class="vm-upi-role-col">Role</th>
+                                    <th class="vm-upi-user-col">User</th>
+                                    <th class="vm-upi-payer-col">Payer&nbsp;Name</th>
+                                    <th class="vm-upi-num-col">Remain&nbsp;Pre</th>
+                                    <th class="vm-upi-num-col">Amount</th>
+                                    <th class="vm-upi-num-col">Charges</th>
+                                    <th class="vm-upi-num-col">Net&nbsp;Pay</th>
+                                    <th class="vm-upi-num-col">Remain&nbsp;Post</th>
+                                    <th class="vm-upi-rrn-col">Bank&nbsp;RRN</th>
+                                    <th class="vm-upi-time-col">Transaction&nbsp;Time</th>
+                                    <th class="vm-upi-action-col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -289,8 +304,8 @@
                                             <td class="vm-upi-num-cell">@item.charge</td>
                                             <td class="vm-upi-num-cell">@item.finalpay</td>
                                             <td class="vm-upi-num-cell">@item.remainpost</td>
-                                            <td>@bankRrn</td>
-                                            <td>@txnTime</td>
+                                            <td class="vm-upi-rrn-cell">@bankRrn</td>
+                                            <td class="vm-upi-txn-cell">@txnTime</td>
                                             <td class="vm-dmt-action-cell">
                                                 @if (isPending)
                                                 {
