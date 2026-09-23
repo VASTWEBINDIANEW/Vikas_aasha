@@ -7816,6 +7816,7 @@
       <Parameter Name="Status" Mode="InOut" Type="String" />
       <Parameter Name="Message" Mode="InOut" Type="String" />
     </FunctionImport>
+    <EntitySet Name="AEPSMOVEinfoes" EntityType="VastwebmultiModel.AEPSMOVEinfo" />
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -34544,4 +34545,19 @@
     <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
     <Property Type="String" Name="Message" Nullable="true" MaxLength="128" />
   </ComplexType>
+  <EntityType Name="AEPSMOVEinfo">
+    <Key>
+      <PropertyRef Name="Idno" />
+    </Key>
+    <Property Name="Idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ApiName1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ApiName2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Status1" Type="Boolean" />
+    <Property Name="Status2" Type="Boolean" />
+    <Property Name="UPIApiName1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UPIApiName2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UPIStatus1" Type="Boolean" />
+    <Property Name="UPIStatus2" Type="Boolean" />
+  </EntityType>
 </Schema>

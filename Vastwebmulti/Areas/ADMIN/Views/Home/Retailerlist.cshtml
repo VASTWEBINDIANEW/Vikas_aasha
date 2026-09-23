@@ -18,7 +18,7 @@
 <link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=24" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=25" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=89" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=100" rel="stylesheet" />
 
 <style>
     body.stop-scrolling { overflow: inherit; overflow-x: hidden; }
@@ -739,6 +739,9 @@
         if (typeof vmRlBindTableScroll === 'function') vmRlBindTableScroll();
         if (typeof vmRlInitHeightSync === 'function') vmRlInitHeightSync();
         if (typeof vmRlFixHScroll === 'function') vmRlFixHScroll();
+        if (typeof vmRlInitModals === 'function') {
+            vmRlInitModals();
+        }
     }
 
     function vmRlFixHScroll() {
@@ -797,7 +800,8 @@
         }
     }
 
-    var vmRlDocModalSelector = '#panviewdoc,#aadharviewdoc,#ShopwithSalfieviewdoc,#VideoKYCdocshowviewdoc,#gstviewdoc,#frmagrviewdoc,#otpmodal,#otpmodaldocument';
+    var vmRlDocModalSelector = '#panviewdoc,#aadharviewdoc,#ShopwithSalfieviewdoc,#VideoKYCdocshowviewdoc,#gstviewdoc,#frmagrviewdoc';
+    var vmRlOtpModalSelector = '#otpmodal,#otpmodaldocument';
 
     function vmRlIsModalVisible($modal) {
         return $modal.length && ($modal.hasClass('in') || $modal.hasClass('show') || $modal.css('display') === 'block');
@@ -845,11 +849,20 @@
     }
 
     function vmRlClearAllModalUi() {
-        vmRlHideModalEl(vmRlEnsureDetailModal());
+        if (typeof window.vmRlStopKycSelectGuard === 'function') {
+            window.vmRlStopKycSelectGuard();
+        }
+        var $detail = vmRlEnsureDetailModal();
+        vmRlHideModalEl($detail);
+        $detail.css('pointer-events', '');
+        $detail.find('.modal-dialog, .modal-content').css('pointer-events', '');
         $(vmRlDocModalSelector).each(function () {
             vmRlHideModalEl($(this));
         });
-        $('body').removeClass('modal-open').css({ overflow: '', paddingRight: '' });
+        $(vmRlOtpModalSelector).each(function () {
+            vmRlHideModalEl($(this));
+        });
+        $('body').removeClass('modal-open vm-rl-otp-stack-open').css({ overflow: '', paddingRight: '' });
         $('.modal-backdrop').remove();
     }
 
@@ -857,7 +870,10 @@
         var $m = vmRlEnsureDetailModal();
         if (!$m.length) return null;
 
-        $('body').addClass('modal-open').css('overflow', 'hidden');
+        $('body').removeClass('vm-rl-otp-stack-open').addClass('modal-open').css('overflow', 'hidden');
+        if (typeof vmRlRestoreDetailModalPointerEvents === 'function') {
+            vmRlRestoreDetailModalPointerEvents();
+        }
         $m.addClass('vm-rl-detail-open');
         vmRlApplyModalVisible($m, 100050);
         vmRlEnsureBackdrop(100040);
@@ -870,9 +886,67 @@
         var docsOpen = $(vmRlDocModalSelector).filter(function () {
             return vmRlIsModalVisible($(this));
         }).length;
-        if (!docsOpen) {
-            $('body').removeClass('modal-open').css({ overflow: '', paddingRight: '' });
+        var otpOpen = $(vmRlOtpModalSelector).filter(function () {
+            return vmRlIsModalVisible($(this));
+        }).length;
+        if (!docsOpen && !otpOpen) {
+            $('body').removeClass('modal-open vm-rl-otp-stack-open').css({ overflow: '', paddingRight: '' });
             $('.modal-backdrop').remove();
+        }
+    }
+
+    function vmRlBlockDetailModalPointerEvents() {
+        var $detail = vmRlEnsureDetailModal();
+        if (!$detail.hasClass('vm-rl-detail-open')) return;
+        vmRlApplyModalVisible($detail, 100050);
+        $detail.css('pointer-events', 'none');
+        $detail.find('.modal-dialog, .modal-content').css('pointer-events', 'none');
+    }
+
+    function vmRlRestoreDetailModalPointerEvents() {
+        var $detail = vmRlEnsureDetailModal();
+        $detail.css('pointer-events', '');
+        $detail.find('.modal-dialog, .modal-content').css('pointer-events', '');
+    }
+
+    function vmRlShowOtpModal(selector) {
+        var $otp = $(selector);
+        if (!$otp.length) return null;
+        if (!$otp.parent().is('body')) {
+            $otp.appendTo('body');
+        }
+
+        $('body').addClass('vm-rl-otp-stack-open modal-open').css('overflow', 'hidden');
+        vmRlBlockDetailModalPointerEvents();
+        vmRlApplyModalVisible($otp, 100080);
+        vmRlEnsureBackdrop(100075);
+
+        window.setTimeout(function () {
+            var $input = $otp.find('.vm-rl-otp-input').first();
+            if ($input.length) {
+                $input.trigger('focus');
+            }
+        }, 60);
+
+        return $otp;
+    }
+
+    function vmRlHideOtpModal(selector) {
+        vmRlHideModalEl($(selector));
+        var otpStillOpen = $(vmRlOtpModalSelector).filter(function () {
+            return vmRlIsModalVisible($(this));
+        }).length;
+        if (!otpStillOpen) {
+            $('body').removeClass('vm-rl-otp-stack-open');
+            vmRlRestoreDetailModalPointerEvents();
+        }
+
+        if (vmRlEnsureDetailModal().hasClass('vm-rl-detail-open')) {
+            vmRlApplyModalVisible(vmRlEnsureDetailModal(), 100050);
+            vmRlEnsureBackdrop(100040);
+            $('body').addClass('modal-open').css('overflow', 'hidden');
+        } else {
+            vmRlClearAllModalUi();
         }
     }
 
@@ -882,7 +956,10 @@
         if (!$doc.parent().is('body')) {
             $doc.appendTo('body');
         }
-        vmRlApplyModalVisible(vmRlEnsureDetailModal(), 100050);
+
+        if (vmRlEnsureDetailModal().hasClass('vm-rl-detail-open')) {
+            vmRlApplyModalVisible(vmRlEnsureDetailModal(), 100050);
+        }
         vmRlApplyModalVisible($doc, 100060);
         $('body').addClass('modal-open').css('overflow', 'hidden');
         vmRlEnsureBackdrop(100040);
@@ -891,6 +968,7 @@
 
     function vmRlHideDocModal(selector) {
         vmRlHideModalEl($(selector));
+
         if (vmRlEnsureDetailModal().hasClass('vm-rl-detail-open')) {
             vmRlApplyModalVisible(vmRlEnsureDetailModal(), 100050);
             vmRlEnsureBackdrop(100040);
@@ -926,24 +1004,58 @@
         }
     }
 
+    window.vmRlOpenKycModal = function (retailerId) {
+        if (!retailerId) {
+            return false;
+        }
+        try {
+            if (typeof vmRlMoveModalsToBody === 'function') {
+                vmRlMoveModalsToBody();
+            }
+            if (typeof mdActionBtn === 'function') {
+                mdActionBtn(retailerId);
+                return false;
+            }
+            if (typeof vmRlShowDetailModal === 'function') {
+                vmRlShowDetailModal();
+            }
+        } catch (err) {
+            console.error('vmRlOpenKycModal failed:', err);
+        }
+        return false;
+    };
+
     window.vmRlEnsureDetailModal = vmRlEnsureDetailModal;
     window.vmRlShowDetailModal = vmRlShowDetailModal;
     window.vmRlHideDetailModal = vmRlHideDetailModal;
     window.vmRlShowDocModal = vmRlShowDocModal;
     window.vmRlHideDocModal = vmRlHideDocModal;
+    window.vmRlShowOtpModal = vmRlShowOtpModal;
+    window.vmRlHideOtpModal = vmRlHideOtpModal;
     window.vmRlCloseDetailModalAndRefresh = vmRlCloseDetailModalAndRefresh;
     window.vmRlSyncKycModalStack = vmRlSyncKycModalStack;
 
     function vmRlInitModals() {
+        var $ = (typeof vmRl$ === 'function') ? vmRl$() : (window.vmAdminJq || window.jQuery);
+        if (!$) {
+            window.setTimeout(vmRlInitModals, 50);
+            return;
+        }
+
         vmRlMoveModalsToBody();
 
-        $(document).off('click.vmRlKyc', '#mdList td.vm-rl-kyc-cell')
-            .on('click.vmRlKyc', '#mdList td.vm-rl-kyc-cell', function (e) {
+        $(document).off('click.vmRlKyc', '#mdList td.vm-rl-kyc-cell, #mdList td.vm-rl-kyc-cell *')
+            .on('click.vmRlKyc', '#mdList td.vm-rl-kyc-cell, #mdList td.vm-rl-kyc-cell *', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                var retailerId = $(this).attr('data-retailer-id');
-                if (!retailerId) return;
-                if (typeof mdActionBtn === 'function') {
+                var $cell = $(this).closest('td.vm-rl-kyc-cell');
+                var retailerId = $cell.attr('data-retailer-id');
+                if (!retailerId) {
+                    return;
+                }
+                if (typeof window.vmRlOpenKycModal === 'function') {
+                    window.vmRlOpenKycModal(retailerId);
+                } else if (typeof mdActionBtn === 'function') {
                     mdActionBtn(retailerId);
                 } else if (typeof vmRlShowDetailModal === 'function') {
                     vmRlShowDetailModal();
@@ -958,12 +1070,33 @@
             });
 
         $(document).off('click.vmRl', '#defaultModal222 button.btn[value="Edit"]')
-            .on('click.vmRl', '#defaultModal222 button.btn[value="Edit"]', function () {
-                var $m = $('#defaultModal222');
-                $m.find('.first-form').hide();
-                $m.find('.second-form').show();
-                $m.find('.modal-footer button.one, .first-form button.one').hide();
-                $m.find('.modal-footer button.One2, .second-form button.One2').show();
+            .on('click.vmRl', '#defaultModal222 button.btn[value="Edit"]', function (e) {
+                if (typeof window.vmRlOpenKycEditForm === 'function') {
+                    window.vmRlOpenKycEditForm(e);
+                }
+            });
+
+        $(document).off('click.vmRlKycApprove', '#defaultModal222 .vm-rl-doc-btn--approve')
+            .on('click.vmRlKycApprove', '#defaultModal222 .vm-rl-doc-btn--approve', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var docType = $(this).data('kyc-type');
+                if (docType && typeof Approved === 'function') {
+                    Approved(docType);
+                }
+            });
+
+        $(document).off('click.vmRlKycReject', '#defaultModal222 .vm-rl-doc-btn--reject')
+            .on('click.vmRlKycReject', '#defaultModal222 .vm-rl-doc-btn--reject', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var docType = $(this).data('kyc-type');
+                if (!docType) return;
+                if ($(this).data('kyc-delete') === 'otp' && typeof DeleteuserDucument === 'function') {
+                    DeleteuserDucument(docType);
+                } else if (typeof Rejected === 'function') {
+                    Rejected(docType);
+                }
             });
 
         $(document).off('click.vmRlDetailClose', '#defaultModal222 .vm-ml-side-close, #defaultModal222 [data-dismiss="modal"]')
@@ -983,6 +1116,16 @@
                 }
             });
 
+        $(document).off('click.vmRlOtpClose', vmRlOtpModalSelector + ' [data-dismiss="modal"], ' + vmRlOtpModalSelector + ' .saas-admin-modal-close')
+            .on('click.vmRlOtpClose', vmRlOtpModalSelector + ' [data-dismiss="modal"], ' + vmRlOtpModalSelector + ' .saas-admin-modal-close', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var $otpModal = $(this).closest('.modal');
+                if ($otpModal.length) {
+                    vmRlHideOtpModal('#' + $otpModal.attr('id'));
+                }
+            });
+
         $(document).off('click.vmRlDocOpen', '[data-target="#panviewdoc"],[data-target="#aadharviewdoc"],[data-target="#ShopwithSalfieviewdoc"],[data-target="#VideoKYCdocshowviewdoc"],[data-target="#gstviewdoc"],[data-target="#frmagrviewdoc"], .vm-rl-doc-btn--view[data-target]')
             .on('click.vmRlDocOpen', '[data-target="#panviewdoc"],[data-target="#aadharviewdoc"],[data-target="#ShopwithSalfieviewdoc"],[data-target="#VideoKYCdocshowviewdoc"],[data-target="#gstviewdoc"],[data-target="#frmagrviewdoc"], .vm-rl-doc-btn--view[data-target]', function (e) {
                 var target = $(this).attr('data-target');
@@ -994,6 +1137,11 @@
 
         $(document).off('click.vmRlBackdrop', '.modal-backdrop.vm-rl-modal-backdrop')
             .on('click.vmRlBackdrop', '.modal-backdrop.vm-rl-modal-backdrop', function () {
+                var $openOtp = $(vmRlOtpModalSelector).filter(function () { return vmRlIsModalVisible($(this)); }).last();
+                if ($openOtp.length) {
+                    vmRlHideOtpModal('#' + $openOtp.attr('id'));
+                    return;
+                }
                 var $openDoc = $(vmRlDocModalSelector).filter(function () { return vmRlIsModalVisible($(this)); }).last();
                 if ($openDoc.length) {
                     vmRlHideDocModal('#' + $openDoc.attr('id'));
@@ -1004,8 +1152,24 @@
                 }
             });
 
+        $(document).off('click.vmRlOtpBackdrop', vmRlOtpModalSelector)
+            .on('click.vmRlOtpBackdrop', vmRlOtpModalSelector, function (e) {
+                if (e.target !== this) return;
+                vmRlHideOtpModal('#' + this.id);
+            });
+
+        $(document).off('mousedown.vmRlOtpGuard click.vmRlOtpGuard', vmRlOtpModalSelector + ' .modal-dialog, ' + vmRlOtpModalSelector + ' .modal-content, #Deleteotp, #Deletedocumentotp')
+            .on('mousedown.vmRlOtpGuard click.vmRlOtpGuard', vmRlOtpModalSelector + ' .modal-dialog, ' + vmRlOtpModalSelector + ' .modal-content, #Deleteotp, #Deletedocumentotp', function (e) {
+                e.stopPropagation();
+            });
+
         $(document).off('keydown.vmRlModalEsc').on('keydown.vmRlModalEsc', function (e) {
             if (e.key !== 'Escape') return;
+            var $openOtp = $(vmRlOtpModalSelector).filter(function () { return vmRlIsModalVisible($(this)); }).last();
+            if ($openOtp.length) {
+                vmRlHideOtpModal('#' + $openOtp.attr('id'));
+                return;
+            }
             var $openDoc = $(vmRlDocModalSelector).filter(function () { return vmRlIsModalVisible($(this)); }).last();
             if ($openDoc.length) {
                 vmRlHideDocModal('#' + $openDoc.attr('id'));
@@ -1016,10 +1180,6 @@
             }
         });
     }
-
-    $(document).ready(function () {
-        vmRlInitModals();
-    });
 </script>
 
 <!--Add New Master Distributor  modal-->
@@ -1661,6 +1821,24 @@ window.open(
         attempt();
     }
 
+    (function vmRlBootPageModals() {
+        function boot() {
+            var $ = window.vmAdminJq || window.jQuery;
+            if (!$ || typeof vmRlInitModals !== 'function') {
+                window.setTimeout(boot, 50);
+                return;
+            }
+            vmRlInitModals();
+            window.__vmRlModalsInited = true;
+        }
+
+        if (document.readyState === 'complete') {
+            boot();
+        } else {
+            window.addEventListener('load', boot);
+        }
+    })();
+
     function vmRlDestroySelect2OnEl(el) {
         var $ = vmRl$();
         if (!$ || !el) {
@@ -1681,6 +1859,321 @@ window.open(
         $el.next('.select2-container').remove();
         $el.closest('.custom-district').find('.select2-container').remove();
     }
+
+    var vmRlKycSelectSelector = '#defaultModal222 #StateEdit, #defaultModal222 #DistrictEdit';
+    var vmRlKycDropdownClass = 'vm-rl-kyc-modal-dropdown';
+    var vmRlKycDropdownZ = 100200;
+    var vmRlKycSelectGuardTimer = null;
+
+    function vmRlGetNativeSelect2($) {
+        if (!$ || !$.fn || !$.fn.select2) {
+            return null;
+        }
+        if ($.fn.select2.__vmAdminNative) {
+            return $.fn.select2.__vmAdminNative;
+        }
+        return $.fn.select2;
+    }
+
+    function vmRlGetKycDropdownParent($) {
+        var $dialog = $('#defaultModal222 .modal-dialog').first();
+        return $dialog.length ? $dialog : $(document.body);
+    }
+
+    function vmRlGetKycSelect2Options($el) {
+        var $ = vmRl$();
+        return {
+            width: '100%',
+            dropdownParent: vmRlGetKycDropdownParent($),
+            minimumResultsForSearch: 0,
+            allowClear: false,
+            dropdownCssClass: vmRlKycDropdownClass + ' vm-admin-select2-dropdown vm-admin-select2-searchable',
+            containerCssClass: 'vm-select-ui vm-rl-kyc-modal-select-ui',
+            language: {
+                noResults: function () { return 'No match found'; },
+                searching: function () { return 'Searching...'; },
+                inputTooShort: function () { return 'Type to search...'; }
+            }
+        };
+    }
+
+    function vmRlFixKycModalDropdown($select) {
+        var $ = vmRl$();
+        if (!$ || !$select || !$select.length) {
+            return;
+        }
+        var inst = $select.data('select2');
+        var $dropdown = inst && inst.$dropdown ? inst.$dropdown : $('.' + vmRlKycDropdownClass).last();
+        var $parent = vmRlGetKycDropdownParent($);
+        var ph = $select.attr('data-search-placeholder') ||
+            $select.attr('data_search_placeholder') ||
+            'Search...';
+
+        if (!$dropdown || !$dropdown.length) {
+            return;
+        }
+
+        if ($parent.length && !$dropdown.parent().is($parent)) {
+            $dropdown.appendTo($parent);
+        }
+
+        $dropdown.addClass(vmRlKycDropdownClass + ' vm-admin-select2-searchable').css({
+            zIndex: vmRlKycDropdownZ,
+            display: 'block',
+            visibility: 'visible',
+            opacity: 1,
+            pointerEvents: 'auto',
+            position: 'absolute'
+        });
+
+        $dropdown.find('.select2-results, .select2-results__options').css({
+            display: 'block',
+            maxHeight: '260px',
+            overflowY: 'auto'
+        });
+
+        $dropdown.find('.select2-search--dropdown').removeClass('select2-search--hide').css({
+            display: 'block',
+            visibility: 'visible',
+            opacity: 1,
+            minHeight: '44px',
+            padding: '8px 10px',
+            pointerEvents: 'auto'
+        });
+
+        $dropdown.find('.select2-search__field').attr('placeholder', ph).prop('readonly', false).prop('disabled', false).css({
+            display: 'block',
+            visibility: 'visible',
+            width: '100%',
+            minHeight: '34px',
+            pointerEvents: 'auto'
+        });
+
+        if (typeof window.forceAdminSelect2SearchAlways === 'function') {
+            window.forceAdminSelect2SearchAlways($select);
+        }
+
+        $select.next('.select2-container').css('z-index', vmRlKycDropdownZ - 1);
+        $('#defaultModal222').addClass('vm-rl-kyc-select-open');
+    }
+
+    function vmRlPatchKycSelect2Search($el) {
+        var inst = $el.data('select2');
+        if (!inst) {
+            return;
+        }
+        try {
+            if (inst.options && typeof inst.options.set === 'function') {
+                inst.options.set('minimumResultsForSearch', 0);
+            }
+        } catch (ignoreOpt) { }
+        if (inst.dropdown) {
+            inst.dropdown.showSearch = function () {
+                return true;
+            };
+        }
+    }
+
+    function vmRlInitKycModalSelectOnEl(el) {
+        var $ = vmRl$();
+        var $el;
+        var opts;
+        var s2;
+        var inst;
+
+        if (!$ || !el) {
+            return false;
+        }
+
+        $el = $(el);
+        if (!$el.length || $el.prop('disabled') || $el.find('option').length < 1) {
+            return false;
+        }
+
+        vmRlDestroySelect2OnEl(el);
+        opts = vmRlGetKycSelect2Options($el);
+        s2 = vmRlGetNativeSelect2($);
+        if (!s2) {
+            return false;
+        }
+
+        try {
+            s2.call($el, opts);
+        } catch (ignoreInit) {
+            return false;
+        }
+
+        vmRlPatchKycSelect2Search($el);
+
+        if (typeof window.bindAdminSelect2SearchBehavior === 'function') {
+            window.bindAdminSelect2SearchBehavior($el);
+        }
+        if (typeof window.forceAdminSelect2SearchAlways === 'function') {
+            window.forceAdminSelect2SearchAlways($el);
+        }
+
+        inst = $el.data('select2');
+        if (inst && inst.$dropdown && inst.$dropdown.length) {
+            inst.$dropdown.addClass(vmRlKycDropdownClass + ' vm-admin-select2-searchable');
+        }
+
+        $el.next('.select2-container')
+            .off('mousedown.vmRlKycOpen click.vmRlKycOpen')
+            .on('mousedown.vmRlKycOpen click.vmRlKycOpen', '.select2-selection', function (e) {
+                e.stopPropagation();
+                window.setTimeout(function () {
+                    try {
+                        if (!$el.data('select2')) {
+                            vmRlInitKycModalSelectOnEl(el);
+                        }
+                        $el.select2('open');
+                    } catch (ignoreOpen) { }
+                    vmRlFixKycModalDropdown($el);
+                }, 0);
+            });
+
+        return $el.hasClass('select2-hidden-accessible') && $el.next('.select2-container').length > 0;
+    }
+
+    function vmRlInitKycModalSelects() {
+        var $ = vmRl$();
+        var ok = true;
+
+        if (!$ || !$.fn || !$.fn.select2) {
+            return false;
+        }
+
+        $(vmRlKycSelectSelector).each(function () {
+            if (!vmRlInitKycModalSelectOnEl(this)) {
+                ok = false;
+            }
+        });
+
+        return ok;
+    }
+
+    function vmRlScheduleKycModalSelects() {
+        [0, 60, 180, 400, 800, 1200, 2000].forEach(function (delay) {
+            window.setTimeout(function () {
+                if (!$('#defaultModal222 .second-form').is(':visible')) {
+                    return;
+                }
+                vmRlInitKycModalSelects();
+            }, delay);
+        });
+        vmRlStartKycSelectGuard();
+    }
+
+    function vmRlStopKycSelectGuard() {
+        if (vmRlKycSelectGuardTimer) {
+            window.clearInterval(vmRlKycSelectGuardTimer);
+            vmRlKycSelectGuardTimer = null;
+        }
+    }
+
+    function vmRlStartKycSelectGuard() {
+        vmRlStopKycSelectGuard();
+        var ticks = 0;
+        vmRlKycSelectGuardTimer = window.setInterval(function () {
+            ticks += 1;
+            if (!$('#defaultModal222 .second-form').is(':visible')) {
+                vmRlStopKycSelectGuard();
+                return;
+            }
+            ['StateEdit', 'DistrictEdit'].forEach(function (id) {
+                var el = document.getElementById(id);
+                if (!el || el.disabled) {
+                    return;
+                }
+                if (!el.classList.contains('select2-hidden-accessible')) {
+                    vmRlInitKycModalSelectOnEl(el);
+                }
+            });
+            if (ticks >= 30) {
+                vmRlStopKycSelectGuard();
+            }
+        }, 400);
+    }
+
+    window.vmRlOpenKycEditForm = function (evt) {
+        var $ = window.vmAdminJq || window.jQuery || window.ravi;
+        if (evt && evt.preventDefault) {
+            evt.preventDefault();
+        }
+        if (!$) {
+            return false;
+        }
+        var $m = $('#defaultModal222');
+        $m.find('.first-form').hide();
+        $m.find('.second-form').show();
+        $m.find('.modal-footer button.one, .first-form button.one').hide();
+        $m.find('.modal-footer button.One2, .second-form button.One2').show();
+        $('#StateEdit, #DistrictEdit').prop('readonly', false).prop('disabled', false).removeAttr('readonly');
+        if (typeof vmRlScheduleKycModalSelects === 'function') {
+            vmRlScheduleKycModalSelects();
+        } else if (typeof vmRlInitKycModalSelects === 'function') {
+            vmRlInitKycModalSelects();
+        }
+        return false;
+    };
+
+    window.vmRlInitKycModalSelects = vmRlInitKycModalSelects;
+    window.vmRlInitKycModalSelectOnEl = vmRlInitKycModalSelectOnEl;
+    window.vmRlScheduleKycModalSelects = vmRlScheduleKycModalSelects;
+    window.vmRlStartKycSelectGuard = vmRlStartKycSelectGuard;
+    window.vmRlStopKycSelectGuard = vmRlStopKycSelectGuard;
+    window.vmRlInitDetailKycSelects = vmRlScheduleKycModalSelects;
+    window.vmRlInitDetailKycDistrictSelect = function () {
+        var el = document.getElementById('DistrictEdit');
+        if (!el) {
+            return false;
+        }
+        vmRlDestroySelect2OnEl(el);
+        return vmRlInitKycModalSelectOnEl(el);
+    };
+
+    window.vmRlReloadKycDistrictSelect = function (stateId, selectedDistrict) {
+        var $ = vmRl$();
+        var el = document.getElementById('DistrictEdit');
+        var $district;
+
+        if (!$ || !el) {
+            return;
+        }
+
+        $district = $(el);
+        vmRlDestroySelect2OnEl(el);
+        $district.prop('disabled', false).prop('readonly', false).removeAttr('readonly');
+        $district.html('<option value="">Loading districts...</option>');
+
+        $.ajax({
+            url: window.vmRlDistrictUrl,
+            data: { Id: stateId },
+            cache: false,
+            type: 'POST',
+            success: function (data3) {
+                var html = '<option value="">Select district</option>';
+                var i;
+                if ($.isArray(data3)) {
+                    for (i = 0; i < data3.length; i++) {
+                        html += '<option value="' + data3[i].Value + '">' + data3[i].Text + '</option>';
+                    }
+                }
+                $district.html(html);
+                if (selectedDistrict !== undefined && selectedDistrict !== null && selectedDistrict !== '') {
+                    $district.val(String(selectedDistrict));
+                }
+                vmRlInitKycModalSelectOnEl(el);
+                if (selectedDistrict !== undefined && selectedDistrict !== null && selectedDistrict !== '') {
+                    $district.val(String(selectedDistrict)).trigger('change.select2');
+                }
+            },
+            error: function () {
+                $district.html('<option value="">Select district</option>');
+                vmRlInitKycModalSelectOnEl(el);
+            }
+        });
+    };
 
     window.vmRlDistrictUrl = "@Url.Action("DistrictList", "Home", new { area = "ADMIN" })";
 
@@ -1744,9 +2237,30 @@ window.open(
     }
 
     vmRlWhenReady(function () {
+        var $ = vmRl$();
         window.setTimeout(function () {
             vmRlMoveFormToDrawer();
+            $(vmRlKycSelectSelector).each(function () {
+                vmRlDestroySelect2OnEl(this);
+            });
         }, 100);
+
+        $(document).off('select2:open.vmRlKycPage select2:opening.vmRlKycPage', vmRlKycSelectSelector)
+            .on('select2:opening.vmRlKycPage', vmRlKycSelectSelector, function () {
+                $('#defaultModal222').addClass('vm-rl-kyc-select-open');
+            })
+            .on('select2:open.vmRlKycPage', vmRlKycSelectSelector, function () {
+                var $sel = $(this);
+                vmRlFixKycModalDropdown($sel);
+                window.setTimeout(function () { vmRlFixKycModalDropdown($sel); }, 0);
+                window.setTimeout(function () { vmRlFixKycModalDropdown($sel); }, 40);
+                window.setTimeout(function () { vmRlFixKycModalDropdown($sel); }, 120);
+            });
+
+        $(document).off('select2:close.vmRlKycPage', vmRlKycSelectSelector)
+            .on('select2:close.vmRlKycPage', vmRlKycSelectSelector, function () {
+                $('#defaultModal222').removeClass('vm-rl-kyc-select-open');
+            });
     });
 
     vmRlWhenReady(function () {
@@ -1762,6 +2276,9 @@ window.open(
             var drawer = document.getElementById('vmRlCreateModal');
             if (drawer && drawer.classList.contains('is-open')) {
                 vmRlRefreshAllSelect2();
+            }
+            if ($('#defaultModal222 .second-form').is(':visible') && typeof vmRlScheduleKycModalSelects === 'function') {
+                vmRlScheduleKycModalSelects();
             }
         }, 120);
         });
@@ -2271,9 +2788,13 @@ function () {
         pageindex = 2;
         NoMoredata = false;
         inProgress = false;
-        vmRlFixHScroll();
-        vmRlBindTableScroll();
-        vmRlSyncPanelHeight();
+        if (typeof vmRlAfterTableUpdate === 'function') {
+            vmRlAfterTableUpdate();
+        } else {
+            vmRlFixHScroll();
+            vmRlBindTableScroll();
+            vmRlSyncPanelHeight();
+        }
     }
 </script>
 

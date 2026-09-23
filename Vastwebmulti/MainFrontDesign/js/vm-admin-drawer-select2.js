@@ -6,8 +6,10 @@
 
     var RL_DRAWER = '#vmRlCreateModal';
     var RL_SELECTS = '#DealerID, #vmRlCreateState, #vmRlCreateDistrict';
-    var MODAL_ROOTS = '.vm-csp-modal, #myModal2, #myModal3';
-    var MODAL_SELECTS = 'select.for-select2, select.vm-admin-select-search, select.vm-csp-modal-select, select.vm-rl-select-search';
+    var RL_DETAIL_MODAL = '#defaultModal222';
+    var RL_DETAIL_SELECTS = '#StateEdit, #DistrictEdit';
+    var MODAL_ROOTS = '.vm-csp-modal, #myModal2, #myModal3, #defaultModal222';
+    var MODAL_SELECTS = 'select.for-select2, select.vm-admin-select-search, select.vm-csp-modal-select, select.vm-rl-select-search, select.vm-ml-edit-select';
 
     function get$() {
         return window.vmAdminJq || window.jQuery;
@@ -26,6 +28,14 @@
         return $ && $.fn ? $.fn.select2 : null;
     }
 
+    function isDetailKycSelect($el) {
+        if (!$el || !$el.length) {
+            return false;
+        }
+        var id = ($el.attr('id') || '').toLowerCase();
+        return id === 'stateedit' || id === 'districtedit';
+    }
+
     function getDropdownParent($el) {
         var $ = get$();
         var $drawer;
@@ -33,6 +43,10 @@
 
         if (!$) {
             return null;
+        }
+
+        if (isDetailKycSelect($el)) {
+            return $(document.body);
         }
 
         $drawer = $el.closest('.vm-rl-create-drawer');
@@ -50,6 +64,13 @@
         }
 
         return $(document.body);
+    }
+
+    function getDropdownZIndex($el) {
+        if (isDetailKycSelect($el)) {
+            return 100120;
+        }
+        return 100020;
     }
 
     function patchSelect2Search($el) {
@@ -93,13 +114,18 @@
             $el.attr('data_search_placeholder') ||
             'Search name, mobile, ID...';
 
+        var dropdownCssClass = 'vm-select-dropdown vm-admin-select2-dropdown vm-admin-select2-searchable vm-rl-drawer-select2-dropdown';
+        if (isDetailKycSelect($el)) {
+            dropdownCssClass += ' vm-rl-detail-kyc-select2-dropdown';
+        }
+
         return {
             width: '100%',
             minimumResultsForSearch: 0,
             allowClear: false,
             dropdownAutoWidth: false,
             dropdownParent: getDropdownParent($el),
-            dropdownCssClass: 'vm-select-dropdown vm-admin-select2-dropdown vm-admin-select2-searchable vm-rl-drawer-select2-dropdown',
+            dropdownCssClass: dropdownCssClass,
             containerCssClass: 'vm-select-ui',
             language: {
                 noResults: function () { return 'No match found'; },
@@ -135,8 +161,11 @@
 
             if ($dropdown && $dropdown.length) {
                 $dropdown.addClass('vm-rl-drawer-select2-dropdown vm-select-dropdown vm-admin-select2-searchable');
+                if (isDetailKycSelect($el)) {
+                    $dropdown.addClass('vm-rl-detail-kyc-select2-dropdown');
+                }
                 $dropdown.css({
-                    zIndex: 100020,
+                    zIndex: getDropdownZIndex($el),
                     display: 'block',
                     visibility: 'visible',
                     opacity: 1,
@@ -240,6 +269,42 @@
         });
     }
 
+    function bootRetailerDetailKycSelects() {
+        var $ = get$();
+        var $targets;
+        var extraOptions;
+
+        if (!$) {
+            return false;
+        }
+
+        $targets = $(RL_DETAIL_SELECTS);
+        if (!$targets.length) {
+            return false;
+        }
+
+        extraOptions = {
+            width: '100%',
+            dropdownParent: $(document.body),
+            minimumResultsForSearch: 0,
+            dropdownCssClass: 'vm-select-dropdown vm-admin-select2-dropdown vm-admin-select2-searchable vm-rl-detail-kyc-select2-dropdown'
+        };
+
+        if (typeof window.forceAdminSelect2 === 'function') {
+            window.forceAdminSelect2($targets, extraOptions, true);
+        } else {
+            $targets.each(function () {
+                initSelectEl(this);
+            });
+        }
+
+        if (typeof window.syncOpenSelect2ZIndex === 'function') {
+            window.syncOpenSelect2ZIndex();
+        }
+
+        return true;
+    }
+
     function bootModal(root) {
         var $ = get$();
         var $root;
@@ -290,6 +355,40 @@
         return true;
     };
     window.vmRlInitDrawerSelects = onRetailerDrawerOpen;
+    window.vmRlInitDetailKycSelects = function () {
+        bootRetailerDetailKycSelects();
+        window.setTimeout(bootRetailerDetailKycSelects, 80);
+        window.setTimeout(bootRetailerDetailKycSelects, 260);
+        return true;
+    };
+
+    window.vmRlInitDetailKycDistrictSelect = function () {
+        var $ = get$();
+        var extraOptions;
+
+        if (!$ || !$('#DistrictEdit').length) {
+            return false;
+        }
+
+        extraOptions = {
+            width: '100%',
+            dropdownParent: $(document.body),
+            minimumResultsForSearch: 0,
+            dropdownCssClass: 'vm-select-dropdown vm-admin-select2-dropdown vm-admin-select2-searchable vm-rl-detail-kyc-select2-dropdown'
+        };
+
+        if (typeof window.forceAdminSelect2 === 'function') {
+            window.forceAdminSelect2($('#DistrictEdit'), extraOptions, true);
+        } else {
+            initSelectEl(document.getElementById('DistrictEdit'));
+        }
+
+        if (typeof window.syncOpenSelect2ZIndex === 'function') {
+            window.syncOpenSelect2ZIndex();
+        }
+
+        return true;
+    };
     window.vmBootAdminDrawerSelect2 = function (scope) {
         var $ = get$();
         if (!scope || scope === RL_DRAWER || scope === '.vm-rl-create-drawer') {
@@ -322,8 +421,8 @@
             return;
         }
 
-        $(document).off('select2:open.vmAdminDrawerS2Global', RL_SELECTS)
-            .on('select2:open.vmAdminDrawerS2Global', RL_SELECTS, function () {
+        $(document).off('select2:open.vmAdminDrawerS2Global', RL_SELECTS + ', ' + RL_DETAIL_SELECTS)
+            .on('select2:open.vmAdminDrawerS2Global', RL_SELECTS + ', ' + RL_DETAIL_SELECTS, function () {
                 fixOpenDropdown($(this));
             });
 

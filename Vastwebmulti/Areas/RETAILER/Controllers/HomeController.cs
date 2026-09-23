@@ -34165,25 +34165,61 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var upiapi1sts = respchknew.Content.ADDINFO.ustatus1;
                 var upiapi2sts = respchknew.Content.ADDINFO.ustatus2;
 
-                var checkekycn = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
-                if (checkekycn == null)
+                string api1local = "";string api2local = "";bool? api1stslocal = true; bool? api2stslocal = true;
+                string upiapi1local = "";string upiapi2local = ""; bool? upiapi1stslocal = true; bool? upiapi2stslocal = true;
+
+                var apiinfochk = db.AEPSMOVEinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
+                if(apiinfochk!=null)
                 {
-                    ViewBag.reqn = "REQUIREDOTP";
-                }
-                else
-                {
-                    var sts = checkekycn.isvalid;
-                    if (sts == false)
+                    api1local = apiinfochk.ApiName1;
+                    api2local = apiinfochk.ApiName2;
+                    api1stslocal = apiinfochk.Status1;
+                    api2stslocal = apiinfochk.Status2;
+
+                    upiapi1local = apiinfochk.UPIApiName1;
+                    upiapi2local = apiinfochk.UPIApiName2;
+                    upiapi1stslocal = apiinfochk.UPIStatus1;
+                    upiapi2stslocal = apiinfochk.UPIStatus2;
+
+                    if(apiinfochk.Status1==true)
                     {
-                        ViewBag.reqn = "REQUIREDSCAN";
+                        ViewBag.aepsenabled = "Green";
+                    }
+                    else if(apiinfochk.Status2==true)
+                    {
+                        ViewBag.aepsenabled = "Yellow";
+                    }
+
+                    if (apiinfochk.UPIStatus1 == true)
+                    {
+                        ViewBag.UPIaepsenabled = "Green";
+                    }
+                    else if (apiinfochk.UPIStatus2 == true)
+                    {
+                        ViewBag.UPIaepsenabled = "Yellow";
                     }
                 }
+
+
+                //var checkekycn = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                //if (checkekycn == null)
+                //{
+                //    ViewBag.reqn = "REQUIREDOTP";
+                //}
+                //else
+                //{
+                //    var sts = checkekycn.isvalid;
+                //    if (sts == false)
+                //    {
+                //        ViewBag.reqn = "REQUIREDSCAN";
+                //    }
+                //}
 
 
                 if (info == "A2")
                 {
                     ViewBag.aepsapinm = "A2";
-                    if (api2 == "Fingpay" && api2sts == true)
+                    if ((api2 == "Fingpay" && api2sts == true)&& (api2local == "Fingpay" && api2stslocal == true))
                     {
                         ViewBag.aepsapinm = "Fingpay";
                         //////////////////////Check E KYC///////////////////////////
@@ -34248,10 +34284,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         ViewBag.aepsapinm = "NO";
                     }
                 }
-                if (info == "A1")
+                if (info == "A1" || string.IsNullOrEmpty(info))
                 {
                     ViewBag.aepsapinm = "A1";
-                    if (api1 == "Nifi" && api1sts == true)
+                    if ((api1 == "Nifi" && api1sts == true)&& (api1local == "Nifi" && api1stslocal == true))
                     {
                         ViewBag.aepsapinm = "Nifi";
                         var check = db.Nifipaymerchantinfoes.Where(aa => aa.Retailerid == userid).SingleOrDefault();
@@ -34304,7 +34340,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                         }
                     }
-                    else if (api1 == "chagans" && api1sts == true)
+                    else if ((api1 == "chagans" && api1sts == true)&& (api1local == "chagans" && api1stslocal == true))
                     {
 
                         var Requestinfo = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
@@ -34358,7 +34394,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 if (info == "A1UPI")
                 {
                     ViewBag.aepsapinm = "A1UPI";
-                    if (upiapi1 == "Nifi" && upiapi1sts == true)
+                    if ((upiapi1 == "Nifi" && upiapi1sts == true)&& (upiapi1local == "Nifi" && upiapi1stslocal == true))
                     {
                         ViewBag.aepsapinm = "Nifi";
                         var check = db.Nifipaymerchantinfoes.Where(aa => aa.Retailerid == userid).SingleOrDefault();
@@ -34411,7 +34447,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                         }
                     }
-                    else if (upiapi1 == "chagans" && upiapi1sts == true)
+                    else if ((upiapi1 == "chagans" && upiapi1sts == true)&& (upiapi1local == "chagans" && upiapi1stslocal == true))
                     {
 
                         var Requestinfo = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
@@ -34465,7 +34501,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 if (info == "A2UPI")
                 {
                     ViewBag.aepsapinm = "A2UPI";
-                    if (upiapi2 == "Fingpay" && upiapi2sts == true)
+                    if ((upiapi2 == "Fingpay" && upiapi2sts == true)&& (upiapi2local == "Fingpay" && upiapi2stslocal == true))
                     {
                         ViewBag.aepsapinm = "Fingpay";
                         //////////////////////Check E KYC///////////////////////////
@@ -34531,191 +34567,191 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     }
                 }
 
-                if (string.IsNullOrEmpty(info))
-                {
-                    if (api1 == "Nifi" && api1sts == true)
-                    {
-                        ViewBag.aepsapinm = "Nifi";
-                        var check = db.Nifipaymerchantinfoes.Where(aa => aa.Retailerid == userid).SingleOrDefault();
-                        if (check == null)
-                        {
-                            ViewBag.req = "REQUIREDOTP";
-                        }
-                        else
-                        {
-                            if (check.status == "MerchantCreate")
-                            {
-                                ViewBag.req = "REQUIREDOTP";
-                            }
-                            else if (check.status == "OTPVerify")
-                            {
-                                ViewBag.req = "REQUIREDSCAN";
-                            }
-                            else
-                            {
-                                var twofacheck = db.Aeps_2Fa_Status_nifi.Where(aa => aa.userid == userid).SingleOrDefault();
-                                if (twofacheck == null)
-                                {
-                                    Aeps_2Fa_Status_nifi item = new Aeps_2Fa_Status_nifi();
-                                    item.userid = userid;
-                                    item.status = false;
-                                    item.Aepsmerchantid = check.Merchantid;
-                                    item.insertdate = DateTime.Now;
-                                    db.Aeps_2Fa_Status_nifi.Add(item);
-                                    db.SaveChanges();
-                                    ViewBag.req = "2FAREQUIRED";
-                                }
-                                else
-                                {
-                                    var insertdate = Convert.ToDateTime(twofacheck.insertdate).Date;
-                                    var currentdate = DateTime.Now.Date;
-                                    if (insertdate == currentdate)
-                                    {
-                                        if (twofacheck.status == false)
-                                        {
-                                            ViewBag.req = "2FAREQUIRED";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        twofacheck.status = false;
-                                        db.SaveChanges();
-                                        ViewBag.req = "2FAREQUIRED";
-                                    }
-                                }
-                            }
-                        }
+                //if (string.IsNullOrEmpty(info))
+                //{
+                //    if ((api1 == "Nifi" && api1sts == true)&& (api1local == "Nifi" && api1stslocal == true))
+                //    {
+                //        ViewBag.aepsapinm = "Nifi";
+                //        var check = db.Nifipaymerchantinfoes.Where(aa => aa.Retailerid == userid).SingleOrDefault();
+                //        if (check == null)
+                //        {
+                //            ViewBag.req = "REQUIREDOTP";
+                //        }
+                //        else
+                //        {
+                //            if (check.status == "MerchantCreate")
+                //            {
+                //                ViewBag.req = "REQUIREDOTP";
+                //            }
+                //            else if (check.status == "OTPVerify")
+                //            {
+                //                ViewBag.req = "REQUIREDSCAN";
+                //            }
+                //            else
+                //            {
+                //                var twofacheck = db.Aeps_2Fa_Status_nifi.Where(aa => aa.userid == userid).SingleOrDefault();
+                //                if (twofacheck == null)
+                //                {
+                //                    Aeps_2Fa_Status_nifi item = new Aeps_2Fa_Status_nifi();
+                //                    item.userid = userid;
+                //                    item.status = false;
+                //                    item.Aepsmerchantid = check.Merchantid;
+                //                    item.insertdate = DateTime.Now;
+                //                    db.Aeps_2Fa_Status_nifi.Add(item);
+                //                    db.SaveChanges();
+                //                    ViewBag.req = "2FAREQUIRED";
+                //                }
+                //                else
+                //                {
+                //                    var insertdate = Convert.ToDateTime(twofacheck.insertdate).Date;
+                //                    var currentdate = DateTime.Now.Date;
+                //                    if (insertdate == currentdate)
+                //                    {
+                //                        if (twofacheck.status == false)
+                //                        {
+                //                            ViewBag.req = "2FAREQUIRED";
+                //                        }
+                //                    }
+                //                    else
+                //                    {
+                //                        twofacheck.status = false;
+                //                        db.SaveChanges();
+                //                        ViewBag.req = "2FAREQUIRED";
+                //                    }
+                //                }
+                //            }
+                //        }
 
-                    }
-                    else if (api1 == "chagans" && api1sts == true)
-                    {
-                        ViewBag.aepsapinm = "chagans";
-                        var check = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
-                        if (check == null)
-                        {
-                            ViewBag.req = "REQUIREDEKYC";
-                        }
-                        else if (check.kycStatus == "PENDING")
-                        {
-                            ViewBag.req = "REQUIREDSCAN";
-                        }
-                        else if (check.kycStatus == "APPROVED")
-                        {
-                            string twofastatus = check.twofastatus;
-                            DateTime? twofatime = check.twofatime;
+                //    }
+                //    else if ((api1 == "chagans" && api1sts == true)&& (api1local == "chagans" && api1stslocal == true))
+                //    {
+                //        ViewBag.aepsapinm = "chagans";
+                //        var check = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
+                //        if (check == null)
+                //        {
+                //            ViewBag.req = "REQUIREDEKYC";
+                //        }
+                //        else if (check.kycStatus == "PENDING")
+                //        {
+                //            ViewBag.req = "REQUIREDSCAN";
+                //        }
+                //        else if (check.kycStatus == "APPROVED")
+                //        {
+                //            string twofastatus = check.twofastatus;
+                //            DateTime? twofatime = check.twofatime;
 
-                            if (string.IsNullOrEmpty(twofastatus)
-                                || twofastatus == "Pending"
-                                || (twofastatus == "Success"
-                                    && twofatime.HasValue
-                                    && twofatime.Value.Date < DateTime.Today))
-                            {
-                                ViewBag.req = "2FAREQUIRED";
-                            }
-                            else
-                            {
-                                ViewBag.req = "DONE";
-                            }
-                        }
-                        else if (check.kycStatus == "APPROVAL-PENDING")
-                        {
-                            ViewBag.req = "APPROVAL-PENDING";
-                        }
-                    }
-                    else if (upiapi1 == "Nifi" && upiapi1sts == true)
-                    {
-                        ViewBag.aepsapinm = "Nifi";
-                        var check = db.Nifipaymerchantinfoes.Where(aa => aa.Retailerid == userid).SingleOrDefault();
-                        if (check == null)
-                        {
-                            ViewBag.req = "REQUIREDOTP";
-                        }
-                        else
-                        {
-                            if (check.status == "MerchantCreate")
-                            {
-                                ViewBag.req = "REQUIREDOTP";
-                            }
-                            else if (check.status == "OTPVerify")
-                            {
-                                ViewBag.req = "REQUIREDSCAN";
-                            }
-                            else
-                            {
-                                var twofacheck = db.Aeps_2Fa_Status_nifi.Where(aa => aa.userid == userid).SingleOrDefault();
-                                if (twofacheck == null)
-                                {
-                                    Aeps_2Fa_Status_nifi item = new Aeps_2Fa_Status_nifi();
-                                    item.userid = userid;
-                                    item.status = false;
-                                    item.Aepsmerchantid = check.Merchantid;
-                                    item.insertdate = DateTime.Now;
-                                    db.Aeps_2Fa_Status_nifi.Add(item);
-                                    db.SaveChanges();
-                                    ViewBag.req = "2FAREQUIRED";
-                                }
-                                else
-                                {
-                                    var insertdate = Convert.ToDateTime(twofacheck.insertdate).Date;
-                                    var currentdate = DateTime.Now.Date;
-                                    if (insertdate == currentdate)
-                                    {
-                                        if (twofacheck.status == false)
-                                        {
-                                            ViewBag.req = "2FAREQUIRED";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        twofacheck.status = false;
-                                        db.SaveChanges();
-                                        ViewBag.req = "2FAREQUIRED";
-                                    }
-                                }
-                            }
-                        }
+                //            if (string.IsNullOrEmpty(twofastatus)
+                //                || twofastatus == "Pending"
+                //                || (twofastatus == "Success"
+                //                    && twofatime.HasValue
+                //                    && twofatime.Value.Date < DateTime.Today))
+                //            {
+                //                ViewBag.req = "2FAREQUIRED";
+                //            }
+                //            else
+                //            {
+                //                ViewBag.req = "DONE";
+                //            }
+                //        }
+                //        else if (check.kycStatus == "APPROVAL-PENDING")
+                //        {
+                //            ViewBag.req = "APPROVAL-PENDING";
+                //        }
+                //    }
+                //    else if ((upiapi1 == "Nifi" && upiapi1sts == true)&& (upiapi1local == "Nifi" && upiapi1stslocal == true))
+                //    {
+                //        ViewBag.aepsapinm = "Nifi";
+                //        var check = db.Nifipaymerchantinfoes.Where(aa => aa.Retailerid == userid).SingleOrDefault();
+                //        if (check == null)
+                //        {
+                //            ViewBag.req = "REQUIREDOTP";
+                //        }
+                //        else
+                //        {
+                //            if (check.status == "MerchantCreate")
+                //            {
+                //                ViewBag.req = "REQUIREDOTP";
+                //            }
+                //            else if (check.status == "OTPVerify")
+                //            {
+                //                ViewBag.req = "REQUIREDSCAN";
+                //            }
+                //            else
+                //            {
+                //                var twofacheck = db.Aeps_2Fa_Status_nifi.Where(aa => aa.userid == userid).SingleOrDefault();
+                //                if (twofacheck == null)
+                //                {
+                //                    Aeps_2Fa_Status_nifi item = new Aeps_2Fa_Status_nifi();
+                //                    item.userid = userid;
+                //                    item.status = false;
+                //                    item.Aepsmerchantid = check.Merchantid;
+                //                    item.insertdate = DateTime.Now;
+                //                    db.Aeps_2Fa_Status_nifi.Add(item);
+                //                    db.SaveChanges();
+                //                    ViewBag.req = "2FAREQUIRED";
+                //                }
+                //                else
+                //                {
+                //                    var insertdate = Convert.ToDateTime(twofacheck.insertdate).Date;
+                //                    var currentdate = DateTime.Now.Date;
+                //                    if (insertdate == currentdate)
+                //                    {
+                //                        if (twofacheck.status == false)
+                //                        {
+                //                            ViewBag.req = "2FAREQUIRED";
+                //                        }
+                //                    }
+                //                    else
+                //                    {
+                //                        twofacheck.status = false;
+                //                        db.SaveChanges();
+                //                        ViewBag.req = "2FAREQUIRED";
+                //                    }
+                //                }
+                //            }
+                //        }
 
-                    }
-                    else if (upiapi1 == "chagans" && upiapi1sts == true)
-                    {
-                        ViewBag.aepsapinm = "chagans";
-                        var check = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
-                        if (check == null)
-                        {
-                            ViewBag.req = "REQUIREDEKYC";
-                        }
-                        else if (check.kycStatus == "PENDING")
-                        {
-                            ViewBag.req = "REQUIREDSCAN";
-                        }
-                        else if (check.kycStatus == "APPROVED")
-                        {
-                            string twofastatus = check.twofastatus;
-                            DateTime? twofatime = check.twofatime;
+                //    }
+                //    else if ((upiapi1 == "chagans" && upiapi1sts == true)&& (upiapi1local == "chagans" && upiapi1stslocal == true))
+                //    {
+                //        ViewBag.aepsapinm = "chagans";
+                //        var check = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
+                //        if (check == null)
+                //        {
+                //            ViewBag.req = "REQUIREDEKYC";
+                //        }
+                //        else if (check.kycStatus == "PENDING")
+                //        {
+                //            ViewBag.req = "REQUIREDSCAN";
+                //        }
+                //        else if (check.kycStatus == "APPROVED")
+                //        {
+                //            string twofastatus = check.twofastatus;
+                //            DateTime? twofatime = check.twofatime;
 
-                            if (string.IsNullOrEmpty(twofastatus)
-                                || twofastatus == "Pending"
-                                || (twofastatus == "Success"
-                                    && twofatime.HasValue
-                                    && twofatime.Value.Date < DateTime.Today))
-                            {
-                                ViewBag.req = "2FAREQUIRED";
-                            }
-                            else
-                            {
-                                ViewBag.req = "DONE";
-                            }
-                        }
-                        else if (check.kycStatus == "APPROVAL-PENDING")
-                        {
-                            ViewBag.req = "APPROVAL-PENDING";
-                        }
-                    }
-                    else
-                    {
-                        ViewBag.aepsapinm = "NO";
-                    }
-                }
+                //            if (string.IsNullOrEmpty(twofastatus)
+                //                || twofastatus == "Pending"
+                //                || (twofastatus == "Success"
+                //                    && twofatime.HasValue
+                //                    && twofatime.Value.Date < DateTime.Today))
+                //            {
+                //                ViewBag.req = "2FAREQUIRED";
+                //            }
+                //            else
+                //            {
+                //                ViewBag.req = "DONE";
+                //            }
+                //        }
+                //        else if (check.kycStatus == "APPROVAL-PENDING")
+                //        {
+                //            ViewBag.req = "APPROVAL-PENDING";
+                //        }
+                //    }
+                //    else
+                //    {
+                //        ViewBag.aepsapinm = "NO";
+                //    }
+                //}
 
 
 

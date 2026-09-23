@@ -925,6 +925,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Aeps_comm_userwise_UPI> Aeps_comm_userwise_UPI { get; set; }
         public virtual DbSet<Aeps_Common_Comm_UPI> Aeps_Common_Comm_UPI { get; set; }
         public virtual DbSet<AepsUPIHistory> AepsUPIHistories { get; set; }
+        public virtual DbSet<AEPSMOVEinfo> AEPSMOVEinfoes { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {

@@ -668,18 +668,21 @@
         var $modal = $('.modal.in, .modal.show').filter(function () {
             return $(this).css('display') === 'block';
         }).last();
+        var dropZ;
 
         if (!$modal.length) {
             return;
         }
 
         var modalZ = parseInt($modal.css('z-index'), 10) || 11000;
-        var dropZ = modalZ + 60;
+        dropZ = modalZ + 60;
 
         $('.select2-container--open').css('z-index', dropZ);
         $('body > .select2-container.select2-container--open').css('z-index', dropZ);
         $('.select2-dropdown').css('z-index', dropZ + 1);
     }
+
+    window.syncOpenSelect2ZIndex = syncOpenSelect2ZIndex;
 
     function forceSelect2SearchAlways($select) {
         var inst;
@@ -897,17 +900,21 @@
             forceSelect2SearchAlways($select);
             bindAdminSelect2SearchBehavior($select);
             ensureSelect2SearchVisible($select, placeholder);
+            syncOpenSelect2ZIndex();
             window.setTimeout(function () {
                 forceSelect2SearchAlways($select);
                 ensureSelect2SearchVisible($select, placeholder);
+                syncOpenSelect2ZIndex();
             }, 0);
             window.setTimeout(function () {
                 forceSelect2SearchAlways($select);
                 ensureSelect2SearchVisible($select, placeholder);
+                syncOpenSelect2ZIndex();
             }, 50);
             window.setTimeout(function () {
                 forceSelect2SearchAlways($select);
                 ensureSelect2SearchVisible($select, placeholder);
+                syncOpenSelect2ZIndex();
             }, 120);
         });
 

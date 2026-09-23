@@ -1,0 +1,17 @@
+﻿@model Vastwebmulti.Models.Operater_Commission
+@{
+    Layout = null;
+}
+@if (Model != null && Model.Money2 != null)
+{
+    foreach (var item in Model.Money2)
+    {
+        <tr>
+            <td>Verify: @item.Verifycomm</td>
+            <td>1000: @item.comm_1000</td>
+            <td>5000: @item.comm_5000</td>
+            <td>10000: @item.comm_10000</td>
+            <td>GST: @item.gst</td>
+        </tr>
+    }
+}

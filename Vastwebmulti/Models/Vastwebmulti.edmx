@@ -735,6 +735,21 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.AEPS_Merchants' does not hav
           <Property Name="twofastatus" Type="varchar" MaxLength="50" />
           <Property Name="twofatime" Type="datetime" />
         </EntityType>
+        <EntityType Name="AEPSMOVEinfo">
+          <Key>
+            <PropertyRef Name="Idno" />
+          </Key>
+          <Property Name="Idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Userid" Type="varchar" MaxLength="50" />
+          <Property Name="ApiName1" Type="varchar" MaxLength="50" />
+          <Property Name="ApiName2" Type="varchar" MaxLength="50" />
+          <Property Name="Status1" Type="bit" />
+          <Property Name="Status2" Type="bit" />
+          <Property Name="UPIApiName1" Type="varchar" MaxLength="50" />
+          <Property Name="UPIApiName2" Type="varchar" MaxLength="50" />
+          <Property Name="UPIStatus1" Type="bit" />
+          <Property Name="UPIStatus2" Type="bit" />
+        </EntityType>
         <EntityType Name="AepsMposSettlementHistory">
           <Key>
             <PropertyRef Name="Idno" />
@@ -22727,6 +22742,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <EntitySet Name="AEPS_MPOS_Wallet_Settings" EntityType="Self.AEPS_MPOS_Wallet_Settings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AEPS_TXN_Details" EntityType="Self.AEPS_TXN_Details" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AEPSCHMerchantinfo" EntityType="Self.AEPSCHMerchantinfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AEPSMOVEinfo" EntityType="Self.AEPSMOVEinfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AepsMposSettlementHistory" EntityType="Self.AepsMposSettlementHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AepsUPIHistories" EntityType="Self.AepsUPIHistories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AepsVideoKyc" EntityType="Self.AepsVideoKyc" Schema="dbo" store:Type="Tables" />
@@ -31691,6 +31707,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
             <Parameter Name="Status" Mode="InOut" Type="String" />
             <Parameter Name="Message" Mode="InOut" Type="String" />
           </FunctionImport>
+          <EntitySet Name="AEPSMOVEinfoes" EntityType="VastwebmultiModel.AEPSMOVEinfo" />
           </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -58436,6 +58453,21 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Message" Nullable="true" MaxLength="128" />
         </ComplexType>
+        <EntityType Name="AEPSMOVEinfo">
+          <Key>
+            <PropertyRef Name="Idno" />
+          </Key>
+          <Property Name="Idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApiName1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApiName2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Status1" Type="Boolean" />
+          <Property Name="Status2" Type="Boolean" />
+          <Property Name="UPIApiName1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UPIApiName2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UPIStatus1" Type="Boolean" />
+          <Property Name="UPIStatus2" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -88393,6 +88425,22 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="AEPSMOVEinfoes">
+            <EntityTypeMapping TypeName="VastwebmultiModel.AEPSMOVEinfo">
+              <MappingFragment StoreEntitySet="AEPSMOVEinfo">
+                <ScalarProperty Name="UPIStatus2" ColumnName="UPIStatus2" />
+                <ScalarProperty Name="UPIStatus1" ColumnName="UPIStatus1" />
+                <ScalarProperty Name="UPIApiName2" ColumnName="UPIApiName2" />
+                <ScalarProperty Name="UPIApiName1" ColumnName="UPIApiName1" />
+                <ScalarProperty Name="Status2" ColumnName="Status2" />
+                <ScalarProperty Name="Status1" ColumnName="Status1" />
+                <ScalarProperty Name="ApiName2" ColumnName="ApiName2" />
+                <ScalarProperty Name="ApiName1" ColumnName="ApiName1" />
+                <ScalarProperty Name="Userid" ColumnName="Userid" />
+                <ScalarProperty Name="Idno" ColumnName="Idno" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

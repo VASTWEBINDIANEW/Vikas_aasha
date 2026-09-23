@@ -129455,76 +129455,196 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             }
 
         }
-        public ActionResult RadiantPrepay()
+        private List<RadiantPrepayReportVM> QueryRadiantPrepayResults(DateTime fromdate, DateTime todate, string allretailer, string status)
         {
-            var fromdate = DateTime.Now.Date;
-            var todate = fromdate.AddDays(1);
+            var query = db.RadiantPrepayTransfers.Where(x => x.Insertdate >= fromdate && x.Insertdate < todate);
+
+            if (!string.IsNullOrWhiteSpace(allretailer))
+            {
+                query = query.Where(x => x.Userid.Contains(allretailer));
+            }
+
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                query = query.Where(x => x.sts.Contains(status));
+            }
+
+            return (
+                from rpt in query
+                join rem in db.Retailer_Details
+                    on rpt.Userid equals rem.RetailerId.ToString()
+                select new RadiantPrepayReportVM
+                {
+                    Firmname = rem.Frm_Name,
+                    UserId = rpt.Userid,
+                    CEID = rpt.CEID,
+                    Amount = rpt.Amount,
+                    RemainPre = rpt.RemainPre,
+                    RemainPost = rpt.RemainPost,
+                    InsertDate = rpt.Insertdate,
+                    UpdateDate = rpt.Updatedate,
+                    Status = rpt.sts,
+                    AdminRemainPre = rpt.Adminremainpre,
+                    AdminRemainPost = rpt.Adminremainpost,
+                    RequestID = rpt.RequestID,
+                    Mobile = rem.Mobile
+                }
+            ).OrderByDescending(aa => aa.InsertDate).ToList();
+        }
+
+        private void ApplyRadiantPrepayTotals(List<RadiantPrepayReportVM> results)
+        {
+            ViewBag.total = results.Sum(aa => aa.Amount ?? 0m);
+            ViewBag.totalSuccess = results.Where(aa => aa.Status == "Success").Sum(aa => aa.Amount ?? 0m);
+            ViewBag.totalFailed = results.Where(aa => aa.Status == "Failed").Sum(aa => aa.Amount ?? 0m);
+            ViewBag.totalPending = results.Where(aa => aa.Status == "Pending").Sum(aa => aa.Amount ?? 0m);
+        }
+
+        private void ParseRadiantPrepayDates(string txt_frm_date, string txt_to_date, out DateTime fromdate, out DateTime todate)
+        {
+            DateTime frm;
+            DateTime to;
+
+            if (!string.IsNullOrWhiteSpace(txt_frm_date) && DateTime.TryParse(txt_frm_date, out frm))
+            {
+                fromdate = frm.Date;
+            }
+            else
+            {
+                fromdate = DateTime.Now.Date;
+            }
+
+            if (!string.IsNullOrWhiteSpace(txt_to_date) && DateTime.TryParse(txt_to_date, out to))
+            {
+                todate = to.Date.AddDays(1);
+            }
+            else
+            {
+                todate = fromdate.AddDays(1);
+            }
+        }
+
+        public ActionResult RadiantPrepay(string export, string txt_frm_date, string txt_to_date, string Status, string allretailer)
+        {
+            if (!string.IsNullOrWhiteSpace(export))
+            {
+                switch (export.Trim().ToLowerInvariant())
+                {
+                    case "excel":
+                        return ExcelRadiantPrepayReport(txt_frm_date, txt_to_date, Status, allretailer);
+                    case "pdf":
+                        return PDFRadiantPrepayReport(txt_frm_date, txt_to_date, Status, allretailer);
+                    case "total":
+                        return TotalRadiantPrepayReport(txt_frm_date, txt_to_date, Status, allretailer);
+                }
+            }
+
+            DateTime fromdate;
+            DateTime todate;
+            ParseRadiantPrepayDates(txt_frm_date, txt_to_date, out fromdate, out todate);
             ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null);
 
-            var results = (
-    from rpt in db.RadiantPrepayTransfers
-        .Where(x => x.Insertdate >= fromdate && x.Insertdate < todate)
-
-    join rem in db.Retailer_Details
-        on rpt.Userid equals rem.RetailerId.ToString()
-
-    select new RadiantPrepayReportVM
-    {
-        Firmname = rem.Frm_Name,
-        UserId = rpt.Userid,
-        CEID = rpt.CEID,
-        Amount = rpt.Amount,
-        RemainPre = rpt.RemainPre,
-        RemainPost = rpt.RemainPost,
-        InsertDate = rpt.Insertdate,
-        UpdateDate = rpt.Updatedate,
-        Status = rpt.sts,
-        AdminRemainPre = rpt.Adminremainpre,
-        AdminRemainPost = rpt.Adminremainpost,
-        RequestID = rpt.RequestID,
-        Mobile = rem.Mobile
-    }
-).OrderByDescending(aa => aa.InsertDate).ToList();
-            var total = results.Sum(aa => aa.Amount);
-            ViewBag.total = total;
+            var results = QueryRadiantPrepayResults(fromdate, todate, allretailer, Status);
+            ApplyRadiantPrepayTotals(results);
 
             return View(results);
         }
+
         [HttpPost]
         public ActionResult RadiantPrepay(string allretailer, DateTime txt_frm_date, DateTime txt_to_date, string Status)
         {
             ViewBag.chk = "post";
             var fromdate = txt_frm_date;
             var todate = txt_to_date.AddDays(1);
-            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null);
-            var results = (
-                     from rpt in db.RadiantPrepayTransfers
-                         .Where(x => x.Insertdate >= fromdate && x.Insertdate < todate && x.Userid.Contains(allretailer) && x.sts.Contains(Status))
+            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", allretailer);
 
-                     join rem in db.Retailer_Details
-                         on rpt.Userid equals rem.RetailerId.ToString()
-
-                     select new RadiantPrepayReportVM
-                     {
-                         Firmname = rem.Frm_Name,
-                         UserId = rpt.Userid,
-                         CEID = rpt.CEID,
-                         Amount = rpt.Amount,
-                         RemainPre = rpt.RemainPre,
-                         RemainPost = rpt.RemainPost,
-                         InsertDate = rpt.Insertdate,
-                         UpdateDate = rpt.Updatedate,
-                         Status = rpt.sts,
-                         AdminRemainPre = rpt.Adminremainpre,
-                         AdminRemainPost = rpt.Adminremainpost,
-                         RequestID = rpt.RequestID,
-                         Mobile = rem.Mobile
-                     }
-                 ).OrderByDescending(aa => aa.InsertDate).ToList();
-            var total = results.Sum(aa => aa.Amount);
-            ViewBag.total = total;
+            var results = QueryRadiantPrepayResults(fromdate, todate, allretailer, Status);
+            ApplyRadiantPrepayTotals(results);
 
             return View(results);
+        }
+
+        public ActionResult ExcelRadiantPrepayReport(string txt_frm_date, string txt_to_date, string Status, string allretailer)
+        {
+            DateTime fromdate;
+            DateTime todate;
+            ParseRadiantPrepayDates(txt_frm_date, txt_to_date, out fromdate, out todate);
+            var results = QueryRadiantPrepayResults(fromdate, todate, allretailer, Status);
+
+            var dataTbl = new DataTable();
+            dataTbl.Columns.Add("Firm Name", typeof(string));
+            dataTbl.Columns.Add("RCEID", typeof(string));
+            dataTbl.Columns.Add("Amount", typeof(string));
+            dataTbl.Columns.Add("Remain Pre", typeof(string));
+            dataTbl.Columns.Add("Remain Post", typeof(string));
+            dataTbl.Columns.Add("Request ID", typeof(string));
+            dataTbl.Columns.Add("Insert Date", typeof(string));
+            dataTbl.Columns.Add("Update Date", typeof(string));
+            dataTbl.Columns.Add("Status", typeof(string));
+
+            decimal total = 0m;
+            foreach (var item in results)
+            {
+                total += item.Amount ?? 0m;
+                dataTbl.Rows.Add(
+                    item.Firmname,
+                    item.CEID,
+                    item.Amount.HasValue ? Math.Round(item.Amount.Value, 2).ToString() : "0",
+                    item.RemainPre.HasValue ? Math.Round(item.RemainPre.Value, 2).ToString() : "0",
+                    item.RemainPost.HasValue ? Math.Round(item.RemainPost.Value, 2).ToString() : "0",
+                    item.RequestID,
+                    item.InsertDate.HasValue ? item.InsertDate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "",
+                    item.UpdateDate.HasValue ? item.UpdateDate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "",
+                    item.Status
+                );
+            }
+            dataTbl.Rows.Add("Total", "", total.ToString("N2"), "", "", "", "", "", "");
+
+            var grid = new GridView();
+            grid.DataSource = dataTbl;
+            grid.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=Radiant_Prepay_Report.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            var sw = new StringWriter();
+            var htw = new HtmlTextWriter(sw);
+            grid.RenderControl(htw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+            return View();
+        }
+
+        public ActionResult PDFRadiantPrepayReport(string txt_frm_date, string txt_to_date, string Status, string allretailer)
+        {
+            DateTime fromdate;
+            DateTime todate;
+            ParseRadiantPrepayDates(txt_frm_date, txt_to_date, out fromdate, out todate);
+            var results = QueryRadiantPrepayResults(fromdate, todate, allretailer, Status);
+            return new ViewAsPdf("PDFRadiantPrepayReport", results)
+            {
+                FileName = "Radiant_Prepay_Report.pdf",
+                PageSize = Rotativa.Options.Size.A4,
+                PageOrientation = Rotativa.Options.Orientation.Landscape
+            };
+        }
+
+        public ActionResult TotalRadiantPrepayReport(string txt_frm_date, string txt_to_date, string Status, string allretailer)
+        {
+            DateTime fromdate;
+            DateTime todate;
+            ParseRadiantPrepayDates(txt_frm_date, txt_to_date, out fromdate, out todate);
+            var results = QueryRadiantPrepayResults(fromdate, todate, allretailer, Status);
+
+            return Json(new
+            {
+                total = results.Sum(aa => aa.Amount ?? 0m),
+                success = results.Where(aa => aa.Status == "Success").Sum(aa => aa.Amount ?? 0m),
+                failed = results.Where(aa => aa.Status == "Failed").Sum(aa => aa.Amount ?? 0m),
+                pending = results.Where(aa => aa.Status == "Pending").Sum(aa => aa.Amount ?? 0m)
+            }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult UpdatePrepayStatus(string id, string status)
@@ -129773,6 +129893,272 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             }
 
         }
+        public ActionResult AepsMoveSetting()
+        {
+            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name");
+
+            var results = (from upload in db.AEPSMOVEinfoes
+                           join remid in db.Retailer_Details.Where(aa=>aa.Status=="Y") on upload.Userid equals remid.RetailerId.ToString()
+                           select new AepsMoveSettinginfo
+                           {
+                               Idno = upload.Idno,
+                               Userid = upload.Userid,
+                               ApiName1 = upload.ApiName1,
+                               ApiName2 = upload.ApiName2,
+                               UPIApiName1 = upload.UPIApiName1,
+                               UPIApiName2 = upload.UPIApiName2,
+                               Status1 = upload.Status1,
+                               Status2 = upload.Status2,
+                               UPIStatus1 = upload.UPIStatus1,
+                               UPIStatus2 = upload.UPIStatus2,
+                               FirmName = remid.Frm_Name
+                           }).ToList();
+            return View(results);
+        }
+        [HttpPost]
+        public ActionResult AepsMoveSetting(string allretailer="")
+        {
+            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name");
+
+            var results = (from upload in db.AEPSMOVEinfoes
+                           join remid in db.Retailer_Details.Where(aa => aa.Status == "Y" && aa.RetailerId.Contains(allretailer)) on upload.Userid equals remid.RetailerId.ToString()
+                           select new AepsMoveSettinginfo
+                           {
+                               Idno = upload.Idno,
+                               Userid = upload.Userid,
+                               ApiName1 = upload.ApiName1,
+                               ApiName2 = upload.ApiName2,
+                               UPIApiName1 = upload.UPIApiName1,
+                               UPIApiName2 = upload.UPIApiName2,
+                               Status1 = upload.Status1,
+                               Status2 = upload.Status2,
+                               UPIStatus1 = upload.UPIStatus1,
+                               UPIStatus2 = upload.UPIStatus2,
+                               FirmName = remid.Frm_Name
+                           }).ToList();
+            return View(results);
+        }
+        [HttpPost]
+        public JsonResult ChangeAepsApiStatus(int userId, string api, bool status)
+        {
+            try
+            {
+                var item = db.AEPSMOVEinfoes
+                             .SingleOrDefault(x => x.Idno == userId);
+
+                if (item == null)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Retailer not found."
+                    });
+                }
+
+                api = api?.ToUpper();
+
+                switch (api)
+                {
+                    case "AEPS1":
+                        item.Status1 = status;
+                        if (status)
+                        {
+                            item.Status2 = false;
+                        }
+                        break;
+
+                    case "AEPS2":
+                        item.Status2 = status;
+                        if (status)
+                        {
+                            item.Status1 = false;
+                        }
+                        break;
+
+                    case "UPI1":
+                        item.UPIStatus1 = status;
+                        if (status)
+                        {
+                            item.UPIStatus2 = false;
+                        }
+                        break;
+
+                    case "UPI2":
+                        item.UPIStatus2 = status;
+                        if (status)
+                        {
+                            item.UPIStatus1 = false;
+                        }
+                        break;
+
+                    default:
+                        return Json(new
+                        {
+                            success = false,
+                            message = "Invalid API."
+                        });
+                }
+
+                db.SaveChanges();
+
+                return Json(new
+                {
+                    success = true,
+                    message = status
+                        ? api + " activated successfully."
+                        : api + " deactivated successfully.",
+                    api = api,
+                    status = status,
+                    aeps1 = item.Status1,
+                    aeps2 = item.Status2,
+                    upi1 = item.UPIStatus1,
+                    upi2 = item.UPIStatus2
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
+        [HttpPost]
+        public JsonResult ChangeAepsApiStatusAll(string api, bool status)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(api))
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "API is required."
+                    });
+                }
+
+                api = api.ToUpper();
+
+                var list = db.AEPSMOVEinfoes.ToList();
+
+                if (list.Count == 0)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "No users found."
+                    });
+                }
+
+                int updatedCount = 0;
+
+                foreach (var item in list)
+                {
+                    switch (api)
+                    {
+                        case "AEPS1":
+                            if (item.Status1 != status)
+                            {
+                                item.Status1 = status;
+                                updatedCount++;
+                            }
+                            if (status==true && item.Status2==true)
+                            {
+                                item.Status2 = false;
+                                updatedCount++;
+                            }
+                            break;
+
+                        case "AEPS2":
+                            if (item.Status2 != status)
+                            {
+                                item.Status2 = status;
+                                updatedCount++;
+                            }
+                            if (status==true && item.Status1==true)
+                            {
+                                item.Status1 = false;
+                                updatedCount++;
+                            }
+                            break;
+
+                        case "UPI1":
+                            if (item.UPIStatus1 != status)
+                            {
+                                item.UPIStatus1 = status;
+                                updatedCount++;
+                            }
+                            if (status==true && item.UPIStatus2==true)
+                            {
+                                item.UPIStatus2 = false;
+                                updatedCount++;
+                            }
+                            break;
+
+                        case "UPI2":
+                            if (item.UPIStatus2 != status)
+                            {
+                                item.UPIStatus2 = status;
+                                updatedCount++;
+                            }
+                            if (status==true && item.UPIStatus1==true)
+                            {
+                                item.UPIStatus1 = false;
+                                updatedCount++;
+                            }
+                            break;
+
+                        default:
+                            return Json(new
+                            {
+                                success = false,
+                                message = "Invalid API."
+                            });
+                    }
+                }
+
+                db.SaveChanges();
+
+                string apiName = "";
+
+                switch (api)
+                {
+                    case "AEPS1":
+                        apiName = "AEPS API 1";
+                        break;
+                    case "AEPS2":
+                        apiName = "AEPS API 2";
+                        break;
+                    case "UPI1":
+                        apiName = "UPI API 1";
+                        break;
+                    case "UPI2":
+                        apiName = "UPI API 2";
+                        break;
+                }
+
+                return Json(new
+                {
+                    success = true,
+                    message = status
+                        ? apiName + " activated for all retailers. Other API in the same group has been deactivated."
+                        : apiName + " deactivated for all retailers.",
+                    updatedCount = updatedCount,
+                    api = api,
+                    status = status
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
+
         public class Insertnewloi
         {
             public int state1 { get; set; }

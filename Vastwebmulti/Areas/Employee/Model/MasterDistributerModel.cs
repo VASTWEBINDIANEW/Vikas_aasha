@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -135,4 +134,5 @@ namespace Vastwebmulti.Areas.Employee.Model
         public IEnumerable<Vastwebmulti.Models.Dealer_retailer_Result> Select_Retailer_list { set; get; }
         public IEnumerable<Vastwebmulti.Models.Select_super_Permissionwise_total_Result> _Select_super_permission { set; get; }
     }
+}
 }

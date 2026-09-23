@@ -931,13 +931,17 @@ body.saas-admin-ui .saas-dealer-ledger-page .vm-dealer-ledger-total-chip {
     }
 }
 
-/* DEALER Used Tokens — Flight Report shell */
+/* DEALER Used Tokens / Token Purchase — Flight Report shell */
 body.saas-admin-ui .saas-dealer-used-tokens-page .page-title-box-fourde-dealer,
-body.saas-admin-ui .saas-dealer-used-tokens-page .nill-legacy-header-wrap {
+body.saas-admin-ui .saas-dealer-used-tokens-page .nill-legacy-header-wrap,
+body.saas-admin-ui .saas-dealer-token-purchase-page .page-title-box-fourde-dealer,
+body.saas-admin-ui .saas-dealer-token-purchase-page .nill-legacy-header-wrap,
+body.saas-admin-ui .saas-dealer-token-purchase-page .content-tokenpurchase {
     display: none !important;
 }
 
-body.saas-admin-ui .saas-dealer-used-tokens-page .vm-opr-table-panel__head {
+body.saas-admin-ui .saas-dealer-used-tokens-page .vm-opr-table-panel__head,
+body.saas-admin-ui .saas-dealer-token-purchase-page .vm-opr-table-panel__head {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: center !important;
@@ -945,7 +949,8 @@ body.saas-admin-ui .saas-dealer-used-tokens-page .vm-opr-table-panel__head {
     gap: 8px !important;
 }
 
-body.saas-admin-ui .saas-dealer-used-tokens-page .vm-flight-table-head-right {
+body.saas-admin-ui .saas-dealer-used-tokens-page .vm-flight-table-head-right,
+body.saas-admin-ui .saas-dealer-token-purchase-page .vm-flight-table-head-right {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: center !important;
@@ -954,7 +959,8 @@ body.saas-admin-ui .saas-dealer-used-tokens-page .vm-flight-table-head-right {
     margin-left: auto;
 }
 
-body.saas-admin-ui .saas-dealer-used-tokens-page .vm-flight-inline-total {
+body.saas-admin-ui .saas-dealer-used-tokens-page .vm-flight-inline-total,
+body.saas-admin-ui .saas-dealer-token-purchase-page .vm-flight-inline-total {
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
@@ -967,21 +973,24 @@ body.saas-admin-ui .saas-dealer-used-tokens-page .vm-flight-inline-total {
     font-weight: 700;
 }
 
-body.saas-admin-ui .saas-dealer-used-tokens-page .saas-acc-export-group {
+body.saas-admin-ui .saas-dealer-used-tokens-page .saas-acc-export-group,
+body.saas-admin-ui .saas-dealer-token-purchase-page .saas-acc-export-group {
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 6px;
 }
 
-body.saas-admin-ui .saas-dealer-used-tokens-page .saas-acc-btn {
+body.saas-admin-ui .saas-dealer-used-tokens-page .saas-acc-btn,
+body.saas-admin-ui .saas-dealer-token-purchase-page .saas-acc-btn {
     height: 36px !important;
     min-height: 36px !important;
     font-size: 12px !important;
     white-space: nowrap !important;
 }
 
-body.saas-admin-ui .saas-dealer-used-tokens-page #usedTokensReport.vm-flight-data-table {
+body.saas-admin-ui .saas-dealer-used-tokens-page #usedTokensReport.vm-flight-data-table,
+body.saas-admin-ui .saas-dealer-token-purchase-page #tokenPurchaseReport.vm-flight-data-table {
     width: 100% !important;
     min-width: 100% !important;
     table-layout: auto !important;
@@ -989,18 +998,23 @@ body.saas-admin-ui .saas-dealer-used-tokens-page #usedTokensReport.vm-flight-dat
 
 body.saas-admin-ui .saas-dealer-used-tokens-page #usedTokensReport.vm-flight-data-table thead th,
 body.saas-admin-ui .saas-dealer-used-tokens-page #usedTokensReport.vm-flight-data-table tbody td,
-body.saas-admin-ui .saas-dealer-used-tokens-page #usedTokensReport.vm-flight-data-table tfoot td {
+body.saas-admin-ui .saas-dealer-used-tokens-page #usedTokensReport.vm-flight-data-table tfoot td,
+body.saas-admin-ui .saas-dealer-token-purchase-page #tokenPurchaseReport.vm-flight-data-table thead th,
+body.saas-admin-ui .saas-dealer-token-purchase-page #tokenPurchaseReport.vm-flight-data-table tbody td,
+body.saas-admin-ui .saas-dealer-token-purchase-page #tokenPurchaseReport.vm-flight-data-table tfoot td {
     white-space: nowrap !important;
     font-size: 12px !important;
     vertical-align: middle !important;
 }
 
-body.saas-admin-ui .saas-dealer-used-tokens-page #usedTokensReport.vm-flight-data-table tbody td.vm-opr-table-empty {
+body.saas-admin-ui .saas-dealer-used-tokens-page #usedTokensReport.vm-flight-data-table tbody td.vm-opr-table-empty,
+body.saas-admin-ui .saas-dealer-token-purchase-page #tokenPurchaseReport.vm-flight-data-table tbody td.vm-opr-table-empty {
     white-space: normal !important;
     text-align: center !important;
 }
 
-body.saas-admin-ui .saas-dealer-used-tokens-page .vm-ut-hist-table-foot td {
+body.saas-admin-ui .saas-dealer-used-tokens-page .vm-ut-hist-table-foot td,
+body.saas-admin-ui .saas-dealer-token-purchase-page .vm-ut-hist-table-foot td {
     background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%) !important;
     font-weight: 700 !important;
     color: #1e3a8a !important;
@@ -1008,7 +1022,169 @@ body.saas-admin-ui .saas-dealer-used-tokens-page .vm-ut-hist-table-foot td {
 }
 
 @media (max-width: 991px) {
-    body.saas-admin-ui .saas-dealer-used-tokens-page .vm-flight-table-head-right {
+    body.saas-admin-ui .saas-dealer-used-tokens-page .vm-flight-table-head-right,
+    body.saas-admin-ui .saas-dealer-token-purchase-page .vm-flight-table-head-right {
+        width: 100% !important;
+    }
+}
+
+body.saas-admin-ui .saas-dealer-token-purchase-page,
+body.saas-admin-ui .saas-dealer-token-purchase-page .saas-acc-breadcrumb,
+body.saas-admin-ui .saas-dealer-token-purchase-page .saas-acc-breadcrumb a,
+body.saas-admin-ui .saas-dealer-token-purchase-page .vm-opr-nav__link,
+body.saas-admin-ui .saas-dealer-token-purchase-page .vm-opr-table-panel__title,
+body.saas-admin-ui .saas-dealer-token-purchase-page .vm-flight-inline-total,
+body.saas-admin-ui .saas-dealer-token-purchase-page .saas-acc-btn,
+body.saas-admin-ui .saas-dealer-token-purchase-page .saas-acc-btn span,
+body.saas-admin-ui .saas-dealer-token-purchase-page #tokenPurchaseReport.vm-flight-data-table thead th,
+body.saas-admin-ui .saas-dealer-token-purchase-page #tokenPurchaseReport.vm-flight-data-table tbody td,
+body.saas-admin-ui .saas-dealer-token-purchase-page #tokenPurchaseReport.vm-flight-data-table tfoot td {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-dealer-token-purchase-page .vm-token-purchase-price-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-dealer-token-purchase-page .vm-token-purchase-price-badge strong {
+    color: #991b1b;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-modal-dialog {
+    max-width: 480px;
+    width: calc(100% - 24px);
+    margin: 1rem auto;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .saas-admin-modal-title,
+body.saas-admin-ui .vm-token-purchase-modal .saas-admin-modal-subtitle,
+body.saas-admin-ui .vm-token-purchase-modal .saas-admin-modal-btn,
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-counter__label {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .saas-admin-modal-title {
+    font-weight: 800 !important;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .saas-admin-modal-subtitle {
+    font-weight: 500 !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-modal-body {
+    padding: 22px !important;
+    background: #f1f5f9 !important;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-counter-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 18px;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-counter__label {
+    color: #1e3a8a;
+    margin: 0;
+    text-align: center;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-counter__controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-counter__btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #334155;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-counter__btn:hover:not(:disabled) {
+    background: #f8fafc;
+    border-color: #94a3b8;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-counter__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-counter__value {
+    min-width: 56px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1d4ed8;
+    line-height: 1;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-modal-footer {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 14px 22px !important;
+    background: #fff !important;
+    border-top: 1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-modal-footer .saas-admin-modal-btn {
+    min-height: 42px;
+    padding: 0 18px;
+    float: none !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .saas-admin-modal-btn--primary {
+    background: linear-gradient(135deg, #1e40af, #2563eb) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+}
+
+body.saas-admin-ui .vm-token-purchase-modal .saas-admin-modal-btn--primary:hover {
+    background: linear-gradient(135deg, #1e3a8a, #1d4ed8) !important;
+}
+
+@media (max-width: 520px) {
+    body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-modal-footer {
+        flex-direction: column-reverse;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .vm-token-purchase-modal .vm-token-purchase-modal-footer .saas-admin-modal-btn {
         width: 100% !important;
     }
 }

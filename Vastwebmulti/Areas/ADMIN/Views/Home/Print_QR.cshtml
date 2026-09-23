@@ -1,133 +1,302 @@
+@using System
+@using System.Linq
 @model Vastwebmulti.Areas.ADMIN.Models.QRCODE_Details
 @{
     Layout = null;
-    var l0ogoimg = Model.logoimage;
+    var qrList = (Model?.QRDetails ?? Enumerable.Empty<Vastwebmulti.Areas.ADMIN.Models.details>()).ToList();
+
+    Func<string, string> resolveImagePath = path =>
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return "";
+        }
+        path = path.Trim();
+        if (path.StartsWith("data:", StringComparison.OrdinalIgnoreCase) ||
+            path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+            path.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+            path.StartsWith("//", StringComparison.Ordinal))
+        {
+            return path;
+        }
+        return Url.Content("~" + path.TrimStart('~', '/'));
+    };
+
+    var logoPath = Model != null && !string.IsNullOrWhiteSpace(Model.logoimage)
+        ? resolveImagePath(Model.logoimage)
+        : "";
 }
-<html>
+
+@helper RenderQrCard(Vastwebmulti.Areas.ADMIN.Models.details item, string logo, string qrImage)
+{
+    <article class="pq-card">
+        <div class="pq-card__body">
+            <div class="pq-card__brands">
+                <div class="pq-card__brand">
+                    <img src="@Url.Content("~/AdminDesign/images/bhim-upi.png")" alt="BHIM UPI" />
+                </div>
+                @if (!string.IsNullOrWhiteSpace(logo))
+                {
+                    <div class="pq-card__brand">
+                        <img src="@logo" alt="Logo" />
+                    </div>
+                }
+            </div>
+
+            <div class="pq-meta-line">
+                <span class="pq-meta-item" title="@item.firmname">
+                    <img src="@Url.Content("~/AdminDesign/images/retail.svg")" alt="" />
+                    <span>@item.firmname</span>
+                </span>
+                <span class="pq-meta-item" title="@item.MerchantVPA">
+                    <img src="@Url.Content("~/AdminDesign/images/qr-codes.svg")" alt="" />
+                    <span>@item.MerchantVPA</span>
+                </span>
+                <span class="pq-meta-item" title="@item.Mobile">
+                    <img src="@Url.Content("~/AdminDesign/images/call.svg")" alt="" />
+                    <span>@item.Mobile</span>
+                </span>
+            </div>
+
+            <div class="pq-card__qr">
+                <p class="pq-card__qr-title">Accepted Here All UPI Payments</p>
+                <div class="pq-card__qr-image">
+                    <img src="@qrImage" alt="QR code for @item.firmname" />
+                </div>
+            </div>
+        </div>
+    </article>
+}
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <style type="text/css">
-        .print-qr-top {
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Print QR Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        :root {
+            --pq-border: #0f172a;
+            --pq-muted: #64748b;
+            --pq-bg: #f1f5f9;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--pq-bg);
+            color: #0f172a;
+        }
+
+        .pq-wrap {
+            padding: 16px;
             width: 100%;
-            float: left;
-            margin-bottom: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
-        .print-qr-top-in {
-            width: 49%;
-            float: left;
-            margin-right: 1%;
-            margin-bottom: 3%;
-        }
-
-            .print-qr-top-in:nth-child(2n) {
-                margin-right: 0px
-            }
-
-        .print-qr {
-            border: 4px solid #000;
-            padding: 22px;
-            padding-top: 5px;
-        }
-
-        .print-qr, .print-qr-first {
+        .pq-table {
             width: 100%;
-            float: left;
+            border-collapse: separate;
+            border-spacing: 12px 12px;
+            table-layout: fixed;
         }
 
-        .print-qr-first-left {
-            width: 45%;
-            float: left;
+        .pq-cell {
+            width: 50%;
+            vertical-align: top;
+            padding: 0;
         }
 
-            .print-qr-first-left img {
-                max-width: 100%;
-            }
+        .pq-card {
+            width: 100%;
+            border: 2px solid var(--pq-border);
+            border-radius: 12px;
+            background: #fff;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
 
-        .print-qr-first-right {
-            width: 45%;
-            float: left;
-            margin-left: 10%;
+        .pq-card__body {
+            padding: 12px 12px 10px;
+        }
+
+        .pq-card__brands {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+            min-height: 42px;
+        }
+
+        .pq-card__brand {
+            flex: 1 1 0;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pq-card__brand img {
+            max-width: 100%;
+            max-height: 40px;
+            object-fit: contain;
+        }
+
+        .pq-meta-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 8px;
+            padding: 6px 8px;
+            border: 1px solid #dbe2ea;
+            border-radius: 7px;
+            background: #f8fafc;
+            font-size: 0.68rem;
+            font-weight: 700;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .pq-meta-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 0;
+            flex: 1 1 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .pq-meta-item img {
+            width: 14px;
+            height: 14px;
+            flex: 0 0 14px;
+            object-fit: contain;
+        }
+
+        .pq-meta-item span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .pq-card__qr {
+            border: 2px solid #94a3b8;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .pq-card__qr-title {
+            margin: 0;
+            padding: 7px 8px;
             text-align: center;
+            font-size: 0.74rem;
+            font-weight: 700;
+            background: #e2e8f0;
+            color: #0f172a;
         }
 
-            .print-qr-first-right img {
-                max-width: 100%;
-            }
-
-        .print-qr-third {
-            width: 100%;
-            float: left;
-            margin: 10px 0px;
+        .pq-card__qr-image {
+            padding: 8px;
+            text-align: center;
+            background: #fff;
         }
 
-            .print-qr-third span {
-                border-bottom: 1px solid #ddd;
-                padding-bottom: 3px;
-                padding-top: 3px;
-            }
-
-        .print-qr-second {
-            width: 100%;
-            float: left;
-            border: 2px solid #a4a0a0;
+        .pq-card__qr-image img {
+            display: block;
+            margin: 0 auto;
+            width: auto;
+            max-width: 100%;
+            max-height: 160px;
+            height: auto;
+            object-fit: contain;
         }
 
-            .print-qr-second p {
-                width: 100%;
-                float: left;
-                font-size: 16px;
-                text-align: center;
-                margin: 0px;
-                background: #dbdbdb;
-                color: #000;
-            }
+        .pq-empty {
+            min-height: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+            color: var(--pq-muted);
+            font-weight: 600;
+        }
 
-            .print-qr-second img {
-                max-width: 100%;
+        @@page {
+            size: A4 portrait;
+            margin: 8mm;
+        }
+
+        @@media print {
+            html, body { background: #fff; }
+            .pq-wrap {
+                padding: 0;
+                max-width: none;
             }
+            .pq-table {
+                width: 100% !important;
+                border-spacing: 8px 8px !important;
+            }
+            .pq-cell {
+                width: 50% !important;
+            }
+            .pq-card {
+                border-width: 2px;
+                box-shadow: none;
+            }
+            .pq-card__qr-image img {
+                max-height: 140px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="print-qr-top">
-        @foreach (var item in Model.QRDetails)
+    <div class="pq-wrap">
+        @if (qrList.Any())
         {
-            <div class="print-qr-top-in">
-
-                <div class="print-qr">
-                    <div class="print-qr-first">
-                        <div class="print-qr-first-left">
-                            <img src="~/AdminDesign/images/bhim-upi.png" />
-                        </div>
-                        <div class="print-qr-first-right">
-                            
-                            <img src="@Url.Content("~/"+ Model.logoimage )"    />
-                       
-
-                            @*<img src="~/Outside_logo/ab08fc1a-2d8e-48b6-b521-6344043d564b_24onlinelogo.png" />*@
-                        </div>
-                    </div>
-                    <div class="print-qr-third">
-                        <span style="width:10%;float:left;height:27px;"><img src="~/AdminDesign/images/retail.svg" style="width:18px;" /></span>
-                        <span style="width:90%;float:right;text-align:right;height:27px;">@item.firmname</span>
-                        <span style="width:10%;float:left;height:27px;"><img src="~/AdminDesign/images/qr-codes.svg" style="width:18px;" /></span>
-                        <span style="width:90%;float:right;text-align:right;height:27px;">@item.MerchantVPA</span>
-                        <span style="width:5%;float:left;height:27px;text-align:left;"><img src="~/AdminDesign/images/call.svg" style="width:100%;" /></span>
-                        <span style="width:95%;float:right;text-align:right;height:27px;">@item.Mobile</span>
-
-                    </div>
-                    <div class="print-qr-second">
-                        <p>Accepted Here All UPI Payments</p>
-                        <img src='@item.QRCODE' />
-                    </div>
-                </div>
+            <table class="pq-table" role="presentation">
+                @for (var i = 0; i < qrList.Count; i += 2)
+                {
+                    <tr>
+                        <td class="pq-cell">
+                            @RenderQrCard(qrList[i], logoPath, resolveImagePath(qrList[i].QRCODE))
+                        </td>
+                        <td class="pq-cell">
+                            @if (i + 1 < qrList.Count)
+                            {
+                                @RenderQrCard(qrList[i + 1], logoPath, resolveImagePath(qrList[i + 1].QRCODE))
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <div class="pq-empty">
+                <i class="fas fa-qrcode" aria-hidden="true"></i>
+                <span>No QR code selected for print.</span>
             </div>
         }
     </div>
 
+    <script>
+        window.addEventListener('load', function () {
+            window.setTimeout(function () {
+                window.print();
+            }, 500);
+        });
+    </script>
 </body>
 </html>

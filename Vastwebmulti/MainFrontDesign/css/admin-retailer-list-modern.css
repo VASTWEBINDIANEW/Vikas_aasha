@@ -2694,11 +2694,14 @@ body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .form-group.spspl 
     color: #1e3a8a !important;
 }
 
-body.saas-admin-ui .vm-rl-doc-modal,
+body.saas-admin-ui .vm-rl-doc-modal {
+    z-index: 100060 !important;
+}
+
 body.saas-admin-ui .vm-rl-otp-modal,
 body.saas-admin-ui #otpmodal,
 body.saas-admin-ui #otpmodaldocument {
-    z-index: 10630 !important;
+    z-index: 100080 !important;
 }
 
 /* ================================================================
@@ -3796,8 +3799,15 @@ body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__actions {
     align-items: center !important;
 }
 
-body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__actions > div {
-    display: contents !important;
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__actions > div,
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__actions > .vm-rl-doc-approve-wrap {
+    display: inline-flex !important;
+    align-items: center !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-approve-wrap.vm-rl-doc-hidden {
+    display: none !important;
 }
 
 /* Doc action buttons */
@@ -3837,6 +3847,35 @@ body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-btn--approve {
     background: linear-gradient(135deg, #16a34a, #22c55e) !important;
     color: #fff !important;
     box-shadow: 0 2px 6px rgba(22,163,74,.28) !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-btn--reject,
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .vm-rl-docs-grid,
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .vm-rl-doc-card__actions {
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-kyc-alert {
+    margin-top: 10px !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-kyc-alert--error {
+    color: #b91c1c !important;
+    background: #fef2f2 !important;
+    border: 1px solid #fecaca !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-kyc-alert--success {
+    color: #166534 !important;
+    background: #f0fdf4 !important;
+    border: 1px solid #bbf7d0 !important;
 }
 
 /* Not found badge */
@@ -5484,7 +5523,7 @@ body.saas-admin-ui.vm-rl-modal-open .retailerList_Page #RetailerFilterDealerID +
     z-index: 100 !important;
 }
 
-body.saas-admin-ui.vm-rl-modal-open .retailerList_Page .select2-dropdown:not(.vm-rl-drawer-select2-dropdown) {
+body.saas-admin-ui.vm-rl-modal-open .retailerList_Page .select2-dropdown:not(.vm-rl-drawer-select2-dropdown):not(.vm-rl-kyc-modal-dropdown) {
     z-index: 101 !important;
 }
 
@@ -5815,6 +5854,14 @@ body.saas-admin-ui .retailerList_Page #mdList td.vm-rl-kyc-cell {
     pointer-events: auto !important;
 }
 
+body.saas-admin-ui .retailerList_Page #mdList td.vm-rl-kyc-cell .vm-rl-kyc-cell__inner,
+body.saas-admin-ui .retailerList_Page #mdList td.vm-rl-kyc-cell .vm-ml-ev-cell__inner,
+body.saas-admin-ui .retailerList_Page #mdList td.vm-rl-kyc-cell .vm-ml-ev-arrow,
+body.saas-admin-ui .retailerList_Page #mdList td.vm-rl-kyc-cell .vm-ml-status-badge {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
 /* ================================================================
    v=89 — retailer modals: full right drawer + centered doc popups
    ================================================================ */
@@ -5929,4 +5976,325 @@ body.saas-admin-ui #otpmodaldocument.show .modal-dialog {
 body.saas-admin-ui .modal-backdrop.vm-rl-modal-backdrop.in,
 body.saas-admin-ui .modal-backdrop.vm-rl-modal-backdrop.show {
     z-index: 100040 !important;
+}
+
+/* ================================================================
+   v=90 — OTP delete modal: stay open on input focus/click
+   ================================================================ */
+body.saas-admin-ui.vm-rl-otp-stack-open #defaultModal222.vm-ml-detail-modal--retailer,
+body.saas-admin-ui.vm-rl-otp-stack-open #defaultModal222.vm-ml-detail-modal--retailer .modal-dialog,
+body.saas-admin-ui.vm-rl-otp-stack-open #defaultModal222.vm-ml-detail-modal--retailer .modal-content {
+    pointer-events: none !important;
+}
+
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodal,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodaldocument,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodal.in,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodal.show,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodaldocument.in,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodaldocument.show {
+    z-index: 100070 !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodal.in .modal-dialog,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodal.show .modal-dialog,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodaldocument.in .modal-dialog,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodaldocument.show .modal-dialog,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodal .modal-content,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodaldocument .modal-content,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodal .vm-rl-otp-input,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodaldocument .vm-rl-otp-input {
+    pointer-events: auto !important;
+    z-index: 100071 !important;
+}
+
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodal.in .modal-dialog,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodal.show .modal-dialog,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodaldocument.in .modal-dialog,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodaldocument.show .modal-dialog {
+    left: auto !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    transform: none !important;
+    width: min(420px, 96vw) !important;
+    max-width: 420px !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodal .modal-content,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodaldocument .modal-content {
+    min-height: 100dvh !important;
+    border-radius: 14px 0 0 14px !important;
+}
+
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodal .vm-rl-otp-input,
+body.saas-admin-ui.vm-rl-otp-stack-open #otpmodaldocument .vm-rl-otp-input {
+    position: relative !important;
+    z-index: 100072 !important;
+}
+
+/* ================================================================
+   v=91 — OTP modal dedicated stack (no click-through to detail drawer)
+   ================================================================ */
+body.vm-rl-otp-stack-open #defaultModal222.vm-ml-detail-modal--retailer,
+body.vm-rl-otp-stack-open #defaultModal222.vm-ml-detail-modal--retailer .modal-dialog,
+body.vm-rl-otp-stack-open #defaultModal222.vm-ml-detail-modal--retailer .modal-content {
+    pointer-events: none !important;
+}
+
+body.vm-rl-otp-stack-open #otpmodal.in,
+body.vm-rl-otp-stack-open #otpmodal.show,
+body.vm-rl-otp-stack-open #otpmodaldocument.in,
+body.vm-rl-otp-stack-open #otpmodaldocument.show {
+    z-index: 100080 !important;
+    pointer-events: auto !important;
+}
+
+body.vm-rl-otp-stack-open #otpmodal.in .modal-dialog,
+body.vm-rl-otp-stack-open #otpmodal.show .modal-dialog,
+body.vm-rl-otp-stack-open #otpmodaldocument.in .modal-dialog,
+body.vm-rl-otp-stack-open #otpmodaldocument.show .modal-dialog {
+    left: auto !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    transform: none !important;
+    width: min(420px, 96vw) !important;
+    max-width: 420px !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    pointer-events: auto !important;
+    z-index: 100081 !important;
+}
+
+body.vm-rl-otp-stack-open #otpmodal .modal-content,
+body.vm-rl-otp-stack-open #otpmodaldocument .modal-content,
+body.vm-rl-otp-stack-open #otpmodal .vm-rl-otp-input,
+body.vm-rl-otp-stack-open #otpmodaldocument .vm-rl-otp-input,
+body.vm-rl-otp-stack-open #otpmodal button,
+body.vm-rl-otp-stack-open #otpmodaldocument button {
+    pointer-events: auto !important;
+}
+
+/* ================================================================
+   v=92 — KYC approve/reject buttons always clickable in edit drawer
+   ================================================================ */
+body.saas-admin-ui #defaultModal222.vm-ml-detail-modal--retailer.vm-rl-detail-open .second-form,
+body.saas-admin-ui #defaultModal222.vm-ml-detail-modal--retailer.vm-rl-detail-open .second-form .vm-rl-doc-btn,
+body.saas-admin-ui #defaultModal222.vm-ml-detail-modal--retailer.vm-rl-detail-open .second-form .vm-rl-doc-approve-wrap,
+body.saas-admin-ui #defaultModal222.vm-ml-detail-modal--retailer.vm-rl-detail-open .second-form .vm-rl-doc-card__actions {
+    pointer-events: auto !important;
+}
+
+/* ================================================================
+   v=93 — KYC edit modal State/District select2 (no layout break)
+   ================================================================ */
+body.saas-admin-ui #defaultModal222 .custom-district::after,
+body.saas-admin-ui #defaultModal222 .vm-ml-select-wrap::after {
+    display: none !important;
+    content: none !important;
+}
+
+body.saas-admin-ui #defaultModal222 .vm-ml-select-wrap.custom-district,
+body.saas-admin-ui #defaultModal222 .second-form .form-group .custom-district {
+    width: 100% !important;
+    overflow: visible !important;
+    position: relative !important;
+}
+
+body.saas-admin-ui #defaultModal222 .select2-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui #defaultModal222 .select2-container--default .select2-selection--single {
+    height: 38px !important;
+    min-height: 38px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 7px !important;
+    background: #fff !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui #defaultModal222 .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 10px !important;
+    color: #334155 !important;
+    font-size: 0.82rem !important;
+}
+
+body.saas-admin-ui #defaultModal222 .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    right: 6px !important;
+}
+
+body.saas-admin-ui .vm-rl-detail-kyc-select2-dropdown,
+body.saas-admin-ui.modal-open .select2-dropdown.vm-rl-detail-kyc-select2-dropdown {
+    border: 1px solid #dbe2ea !important;
+    border-radius: 9px !important;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12) !important;
+    z-index: 100121 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .vm-rl-detail-kyc-select2-dropdown .select2-results,
+body.saas-admin-ui .vm-rl-detail-kyc-select2-dropdown .select2-results__options {
+    display: block !important;
+    max-height: 240px !important;
+    overflow-y: auto !important;
+}
+
+body.saas-admin-ui .vm-rl-detail-kyc-select2-dropdown .select2-search--dropdown .select2-search__field,
+body.saas-admin-ui #defaultModal222 .select2-search--dropdown .select2-search__field {
+    border: 1px solid #dbe2ea !important;
+    border-radius: 8px !important;
+    padding: 6px 8px !important;
+}
+
+body.saas-admin-ui #defaultModal222.vm-rl-detail-open .second-form .vm-rl-edit-row,
+body.saas-admin-ui #defaultModal222.vm-rl-detail-open .second-form .form-group {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui #defaultModal222.vm-admin-select2-open,
+body.saas-admin-ui #defaultModal222.vm-admin-select2-open .modal-dialog,
+body.saas-admin-ui #defaultModal222.vm-admin-select2-open .modal-content,
+body.saas-admin-ui #defaultModal222.vm-admin-select2-open .vm-ml-modal-body,
+body.saas-admin-ui #defaultModal222.vm-admin-select2-open .second-form,
+body.saas-admin-ui #defaultModal222.vm-admin-select2-open .vm-ml-modal-grid {
+    overflow: visible !important;
+}
+
+/* v=95 — KYC modal State/District dropdown above detail drawer (z-index 100050) */
+body.saas-admin-ui .select2-dropdown.vm-rl-kyc-modal-dropdown,
+html body.saas-admin-ui.modal-open .select2-dropdown.vm-rl-kyc-modal-dropdown,
+body.saas-admin-ui.vm-rl-modal-open .select2-dropdown.vm-rl-kyc-modal-dropdown,
+body.saas-admin-ui > .select2-dropdown.vm-rl-kyc-modal-dropdown {
+    z-index: 100200 !important;
+    position: absolute !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 9px !important;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12) !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .select2-dropdown.vm-rl-kyc-modal-dropdown .select2-results,
+body.saas-admin-ui .select2-dropdown.vm-rl-kyc-modal-dropdown .select2-results__options {
+    display: block !important;
+    max-height: 260px !important;
+    overflow-y: auto !important;
+}
+
+body.saas-admin-ui .select2-dropdown.vm-rl-kyc-modal-dropdown .select2-search--dropdown,
+body.saas-admin-ui .select2-dropdown.vm-rl-kyc-modal-dropdown .select2-search--dropdown.select2-search--hide {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 44px !important;
+    padding: 8px 10px !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .select2-dropdown.vm-rl-kyc-modal-dropdown .select2-search__field {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-height: 34px !important;
+    padding: 6px 10px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 8px !important;
+    pointer-events: auto !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .modal-dialog,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .modal-content,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .vm-ml-modal-body,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .second-form,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .vm-ml-modal-grid,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .vm-rl-edit-row,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .form-group,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .vm-ml-select-wrap,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .custom-district {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui #defaultModal222 #StateEdit + .select2-container.select2-container--open,
+body.saas-admin-ui #defaultModal222 #DistrictEdit + .select2-container.select2-container--open {
+    z-index: 100199 !important;
+}
+
+body.saas-admin-ui #defaultModal222 .vm-rl-kyc-page-select.select2-hidden-accessible {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    clip: rect(0, 0, 0, 0) !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+body.saas-admin-ui #defaultModal222 .vm-rl-kyc-modal-select-ui.select2-container {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 12 !important;
+}
+
+body.saas-admin-ui #defaultModal222 .vm-rl-kyc-modal-select-ui .select2-selection--single {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui #defaultModal222 .modal-dialog > .select2-dropdown.vm-rl-kyc-modal-dropdown,
+html body.saas-admin-ui.modal-open #defaultModal222 .modal-dialog > .select2-dropdown.vm-rl-kyc-modal-dropdown,
+html body.saas-admin-ui.modal-open .select2-dropdown.vm-rl-kyc-modal-dropdown {
+    z-index: 100210 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .vm-ml-side-modal-content,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .vm-ml-modal-body,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .vm-ml-modal-content-wrap,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .second-form,
+body.saas-admin-ui #defaultModal222.vm-rl-kyc-select-open .vm-ml-select-wrap {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui #defaultModal222 .vm-rl-kyc-modal-select-ui .select2-selection--single {
+    height: 38px !important;
+    min-height: 38px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 7px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui #defaultModal222 .vm-rl-kyc-modal-select-ui .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 10px !important;
+    color: #334155 !important;
+    font-size: 0.82rem !important;
+}
+
+body.saas-admin-ui #defaultModal222 .vm-rl-kyc-modal-select-ui .select2-selection__arrow {
+    height: 36px !important;
+    right: 6px !important;
 }

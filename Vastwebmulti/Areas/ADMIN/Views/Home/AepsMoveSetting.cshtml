@@ -1,0 +1,407 @@
+﻿@model IEnumerable<Vastwebmulti.Areas.ADMIN.Models.AepsMoveSettinginfo>
+@using System.Linq
+@{
+    ViewBag.Title = "AEPS & UPI Move";
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var rows = Model ?? Enumerable.Empty<Vastwebmulti.Areas.ADMIN.Models.AepsMoveSettinginfo>();
+}
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-hold-lean-report-modern.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-aeps-move-setting-modern.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-aeps-move-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        @using (Html.BeginForm("AepsMoveSetting", "Home", FormMethod.Post, new { id = "aepsMoveFilterForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Services</li>
+                        <li>AEPS &amp; UPI Move</li>
+                    </ol>
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
+
+                        <div class="vm-opr-field vm-dmt-field vm-radiant-field--retailer vm-aeps-move-field--retailer">
+                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control", @title = "Retailer" })
+                        </div>
+
+                        <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                            <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-aeps-move-bulk-panel">
+            <div class="vm-aeps-move-bulk-head">
+                <i class="fas fa-cogs" aria-hidden="true"></i>
+                <div>
+                    <strong>API Status Management</strong>
+                    <small>Only one AEPS API and one UPI API can be active at a time</small>
+                </div>
+            </div>
+
+            <div class="vm-aeps-move-api-groups">
+
+                <div class="vm-aeps-move-api-group">
+                    <div class="vm-aeps-move-api-group-head">
+                        <span class="vm-aeps-move-api-group-icon">A</span>
+                        <div>
+                            <strong>AEPS</strong>
+                            <small>Select one active API</small>
+                        </div>
+                    </div>
+                    <div class="vm-aeps-move-api-group-actions">
+                        <div class="vm-aeps-move-bulk-item">
+                            <span>Green Line</span>
+                            <button type="button" class="vm-aeps-move-bulk-btn vm-aeps-move-bulk-btn--on bulk-status" data-api="AEPS1" data-status="true">Activate All</button>
+                            <button type="button" class="vm-aeps-move-bulk-btn vm-aeps-move-bulk-btn--off bulk-status" data-api="AEPS1" data-status="false">Deactivate All</button>
+                        </div>
+                        <div class="vm-aeps-move-bulk-item">
+                            <span>Yellow Line</span>
+                            <button type="button" class="vm-aeps-move-bulk-btn vm-aeps-move-bulk-btn--on bulk-status" data-api="AEPS2" data-status="true">Activate All</button>
+                            <button type="button" class="vm-aeps-move-bulk-btn vm-aeps-move-bulk-btn--off bulk-status" data-api="AEPS2" data-status="false">Deactivate All</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-aeps-move-api-group vm-aeps-move-api-group--upi">
+                    <div class="vm-aeps-move-api-group-head">
+                        <span class="vm-aeps-move-api-group-icon">U</span>
+                        <div>
+                            <strong>UPI</strong>
+                            <small>Select one active API</small>
+                        </div>
+                    </div>
+                    <div class="vm-aeps-move-api-group-actions">
+                        <div class="vm-aeps-move-bulk-item">
+                            <span>Green Line</span>
+                            <button type="button" class="vm-aeps-move-bulk-btn vm-aeps-move-bulk-btn--on bulk-status" data-api="UPI1" data-status="true">Activate All</button>
+                            <button type="button" class="vm-aeps-move-bulk-btn vm-aeps-move-bulk-btn--off bulk-status" data-api="UPI1" data-status="false">Deactivate All</button>
+                        </div>
+                        <div class="vm-aeps-move-bulk-item">
+                            <span>Yellow Line</span>
+                            <button type="button" class="vm-aeps-move-bulk-btn vm-aeps-move-bulk-btn--on bulk-status" data-api="UPI2" data-status="true">Activate All</button>
+                            <button type="button" class="vm-aeps-move-bulk-btn vm-aeps-move-bulk-btn--off bulk-status" data-api="UPI2" data-status="false">Deactivate All</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                        <span>AEPS &amp; UPI move settings</span>
+                    </div>
+                    <label class="vm-api-operator-table-search" for="aepsMoveSearch">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="text" id="aepsMoveSearch" placeholder="Search retailer..." autocomplete="off" />
+                    </label>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="aepsMoveTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr class="vm-aeps-move-main-header">
+                                    <th rowspan="2" class="vm-aeps-move-col-retailer">Retailer</th>
+                                    <th colspan="2" class="vm-aeps-move-aeps-header">
+                                        <div class="vm-aeps-move-header-stack">
+                                            <div class="vm-aeps-move-group-title">
+                                                <span class="vm-aeps-move-group-icon">A</span>
+                                                <span>AEPS</span>
+                                            </div>
+                                            <small>Only one API can be active</small>
+                                        </div>
+                                    </th>
+                                    <th colspan="2" class="vm-aeps-move-upi-header">
+                                        <div class="vm-aeps-move-header-stack">
+                                            <div class="vm-aeps-move-group-title">
+                                                <span class="vm-aeps-move-group-icon">U</span>
+                                                <span>UPI</span>
+                                            </div>
+                                            <small>Only one API can be active</small>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr class="vm-aeps-move-sub-header">
+                                    <th class="vm-aeps-move-aeps-col">Green Line</th>
+                                    <th class="vm-aeps-move-aeps-col">Yellow Line</th>
+                                    <th class="vm-aeps-move-upi-col">Green Line</th>
+                                    <th class="vm-aeps-move-upi-col">Yellow Line</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in rows)
+                                {
+                                    var initial = !string.IsNullOrEmpty(item.FirmName) ? item.FirmName.Substring(0, 1).ToUpper() : "?";
+                                    <tr data-user-id="@item.Idno" data-retailer="@(item.FirmName ?? "")">
+                                        <td class="vm-aeps-move-retailer-cell">
+                                            <div class="vm-aeps-move-retailer">
+                                                <span class="vm-aeps-move-retailer-avatar">@initial</span>
+                                                <div>
+                                                    <div class="vm-aeps-move-retailer-name" title="@(item.FirmName ?? "")">@item.FirmName</div>
+                                                    <small class="vm-aeps-move-retailer-label">Retailer</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="vm-aeps-move-aeps-cell">
+                                            <button type="button"
+                                                    class="vm-aeps-move-status-btn status-btn @(item.Status1 == true ? "active" : "inactive")"
+                                                    data-api="AEPS1"
+                                                    data-user-id="@item.Idno"
+                                                    data-status="@item.Status1">
+                                                <span class="vm-aeps-move-status-dot"></span>
+                                                <span class="status-text">@(item.Status1 == true ? "Active" : "Inactive")</span>
+                                            </button>
+                                        </td>
+                                        <td class="vm-aeps-move-aeps-cell">
+                                            <button type="button"
+                                                    class="vm-aeps-move-status-btn status-btn @(item.Status2 == true ? "active" : "inactive")"
+                                                    data-api="AEPS2"
+                                                    data-user-id="@item.Idno"
+                                                    data-status="@item.Status2">
+                                                <span class="vm-aeps-move-status-dot"></span>
+                                                <span class="status-text">@(item.Status2 == true ? "Active" : "Inactive")</span>
+                                            </button>
+                                        </td>
+                                        <td class="vm-aeps-move-upi-cell">
+                                            <button type="button"
+                                                    class="vm-aeps-move-status-btn status-btn @(item.UPIStatus1 == true ? "active" : "inactive")"
+                                                    data-api="UPI1"
+                                                    data-user-id="@item.Idno"
+                                                    data-status="@item.UPIStatus1">
+                                                <span class="vm-aeps-move-status-dot"></span>
+                                                <span class="status-text">@(item.UPIStatus1 == true ? "Active" : "Inactive")</span>
+                                            </button>
+                                        </td>
+                                        <td class="vm-aeps-move-upi-cell">
+                                            <button type="button"
+                                                    class="vm-aeps-move-status-btn status-btn @(item.UPIStatus2 == true ? "active" : "inactive")"
+                                                    data-api="UPI2"
+                                                    data-user-id="@item.Idno"
+                                                    data-status="@item.UPIStatus2">
+                                                <span class="vm-aeps-move-status-dot"></span>
+                                                <span class="status-text">@(item.UPIStatus2 == true ? "Active" : "Inactive")</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<script>
+    (function () {
+        function getOppositeApi(api) {
+            switch (api) {
+                case "AEPS1": return "AEPS2";
+                case "AEPS2": return "AEPS1";
+                case "UPI1": return "UPI2";
+                case "UPI2": return "UPI1";
+                default: return "";
+            }
+        }
+
+        function getApiDisplayName(api) {
+            switch (api) {
+                case "AEPS1": return "AEPS Green Line";
+                case "AEPS2": return "AEPS Yellow Line";
+                case "UPI1": return "UPI Green Line";
+                case "UPI2": return "UPI Yellow Line";
+                default: return api;
+            }
+        }
+
+        function updateStatusButton(userId, api, status) {
+            var btn = $(".status-btn[data-user-id='" + userId + "'][data-api='" + api + "']");
+            if (btn.length === 0) return;
+
+            btn.attr("data-status", status);
+            btn.data("status", status);
+
+            if (status) {
+                btn.removeClass("inactive").addClass("active");
+                btn.find(".status-text").text("Active");
+            } else {
+                btn.removeClass("active").addClass("inactive");
+                btn.find(".status-text").text("Inactive");
+            }
+        }
+
+        function updateBulkButtons(api, status) {
+            $(".status-btn[data-api='" + api + "']").each(function () {
+                updateStatusButton($(this).data("user-id"), api, status);
+            });
+        }
+
+        function applyAepsMoveSearch() {
+            var q = ($("#aepsMoveSearch").val() || "").trim().toLowerCase();
+            $("#aepsMoveTable tbody tr").each(function () {
+                var text = ($(this).data("retailer") || $(this).text() || "").toString().toLowerCase();
+                $(this).toggle(!q || text.indexOf(q) > -1);
+            });
+        }
+
+        function bootAepsMovePage() {
+            var $ = window.jQuery;
+            if (!$) {
+                window.setTimeout(bootAepsMovePage, 50);
+                return;
+            }
+
+            if ($.fn.select2) {
+                $("#allretailer").select2({
+                    width: "100%",
+                    minimumResultsForSearch: 6
+                });
+            }
+
+            $("#aepsMoveSearch").off("keyup.aepsMove").on("keyup.aepsMove", applyAepsMoveSearch);
+
+            $(document).off("click.aepsMoveStatus", ".status-btn").on("click.aepsMoveStatus", ".status-btn", function () {
+                var button = $(this);
+                var userId = button.data("user-id");
+                var api = button.data("api");
+                var currentStatus = button.attr("data-status") === "True" || button.attr("data-status") === "true";
+                var newStatus = !currentStatus;
+                var statusText = newStatus ? "Active" : "Inactive";
+                var groupMessage = "";
+
+                if (newStatus) {
+                    if (api === "AEPS1" || api === "AEPS2") {
+                        groupMessage = "This will automatically deactivate the other AEPS API.";
+                    } else if (api === "UPI1" || api === "UPI2") {
+                        groupMessage = "This will automatically deactivate the other UPI API.";
+                    }
+                }
+
+                swal({
+                    title: "Change API Status?",
+                    text: "Change " + getApiDisplayName(api) + " to " + statusText + "?" + (groupMessage ? "\n\n" + groupMessage : ""),
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, Change",
+                    cancelButtonText: "Cancel"
+                }, function (isConfirm) {
+                    if (!isConfirm) return;
+
+                    button.prop("disabled", true);
+
+                    $.ajax({
+                        url: "@Url.Action("ChangeAepsApiStatus", "Home")",
+                        type: "POST",
+                        data: { userId: userId, api: api, status: newStatus },
+                        success: function (response) {
+                            if (response.success) {
+                                updateStatusButton(userId, "AEPS1", response.aeps1);
+                                updateStatusButton(userId, "AEPS2", response.aeps2);
+                                updateStatusButton(userId, "UPI1", response.upi1);
+                                updateStatusButton(userId, "UPI2", response.upi2);
+                                swal("Updated!", response.message, "success");
+                            } else {
+                                swal("Error", response.message || "Unable to change status.", "error");
+                            }
+                        },
+                        error: function () {
+                            swal("Error", "Something went wrong while updating status.", "error");
+                        },
+                        complete: function () {
+                            button.prop("disabled", false);
+                        }
+                    });
+                });
+            });
+
+            $(document).off("click.aepsMoveBulk", ".bulk-status").on("click.aepsMoveBulk", ".bulk-status", function () {
+                var button = $(this);
+                var api = button.data("api");
+                var status = button.data("status") === true || button.data("status") === "true";
+                var apiName = getApiDisplayName(api);
+                var message = apiName + " will be changed to " + (status ? "Active" : "Inactive") + " for ALL retailers.";
+
+                if (status) {
+                    if (api === "AEPS1" || api === "AEPS2") {
+                        message += "\n\nThe other AEPS API will automatically be deactivated.";
+                    }
+                    if (api === "UPI1" || api === "UPI2") {
+                        message += "\n\nThe other UPI API will automatically be deactivated.";
+                    }
+                }
+
+                swal({
+                    title: "Update All Retailers?",
+                    text: message,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, Update All",
+                    cancelButtonText: "Cancel"
+                }, function (isConfirm) {
+                    if (!isConfirm) return;
+
+                    button.prop("disabled", true);
+
+                    $.ajax({
+                        url: "@Url.Action("ChangeAepsApiStatusAll", "Home")",
+                        type: "POST",
+                        data: { api: api, status: status },
+                        success: function (response) {
+                            if (response.success) {
+                                updateBulkButtons(api, status);
+                                if (status) {
+                                    updateBulkButtons(getOppositeApi(api), false);
+                                }
+                                swal("Updated!", response.message, "success");
+                            } else {
+                                swal("Error", response.message || "Unable to update status.", "error");
+                            }
+                        },
+                        error: function () {
+                            swal("Error", "Something went wrong.", "error");
+                        },
+                        complete: function () {
+                            button.prop("disabled", false);
+                        }
+                    });
+                });
+            });
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", bootAepsMovePage);
+        } else {
+            bootAepsMovePage();
+        }
+    })();
+</script>

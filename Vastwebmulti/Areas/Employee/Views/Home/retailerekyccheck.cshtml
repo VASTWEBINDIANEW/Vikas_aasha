@@ -1,0 +1,153 @@
+﻿@model IEnumerable<Vastwebmulti.Models.retailer_Ekycreport_Result>
+@using System.Linq
+@{
+    ViewBag.Title = "Retailer e-KYC";
+    Layout = "~/Areas/Employee/Views/Shared/_Layout.cshtml";
+
+    var reports    = Model ?? Enumerable.Empty<Vastwebmulti.Models.retailer_Ekycreport_Result>();
+    var rowCount   = reports.Count();
+    var verCount   = reports.Count(r => r.ekycstatus == true);
+    var unverCount = reports.Count(r => r.ekycstatus == false);
+    var unregCount = rowCount - verCount - unverCount;
+}
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=61" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=40" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-ekyc-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="vm-ekyc-topbar">
+
+            <ol class="vm-ekyc-breadcrumb">
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                <li>User's &amp; Account</li>
+                <li>Retailer e-KYC</li>
+            </ol>
+
+            <div class="vm-ekyc-actions-row">
+                <div class="vm-ekyc-search-wrap">
+                    <i class="fas fa-search vm-ekyc-search-icon" aria-hidden="true"></i>
+                    <input id="ekycSearchInput" type="text" class="vm-ekyc-search-input"
+                           placeholder="Search firm, mobile, email..." autocomplete="off" />
+                </div>
+                <button type="button" id="btnExport" class="vm-ekyc-export-btn vm-ekyc-export-btn--excel" title="Export Excel">
+                    <i class="fas fa-file-excel" aria-hidden="true"></i><span>Excel</span>
+                </button>
+                <button type="button" id="btnPDF" class="vm-ekyc-export-btn vm-ekyc-export-btn--pdf" title="Export PDF">
+                    <i class="fas fa-file-pdf" aria-hidden="true"></i><span>PDF</span>
+                </button>
+            </div>
+
+        </div>
+
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card vm-ekyc-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel vm-ekyc-table-panel">
+
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-fingerprint" aria-hidden="true"></i>
+                        <span>Retailer e-KYC Report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="ekycTotalCount">@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total vm-ekyc-verified-badge" title="Verified">
+                            Verified: <strong id="ekycVerCount">@verCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total vm-ekyc-unverified-badge" title="Unverified">
+                            Unverified: <strong id="ekycUnverCount">@unverCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total vm-ekyc-unreg-badge" title="Unregistered">
+                            Unreg: <strong id="ekycUnregCount">@unregCount</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap vm-ekyc-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="ekycTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>SR</th>
+                                    <th>Status</th>
+                                    <th>Firm Name</th>
+                                    <th>Email ID</th>
+                                    <th>Mobile No</th>
+                                    <th>Aadhaar No</th>
+                                    <th>PAN Card</th>
+                                    <th>Merchant ID</th>
+                                    <th>e-KYC Mobile</th>
+                                    <th>e-KYC Aadhaar</th>
+                                    <th>In Date</th>
+                                    <th>Update Date</th>
+                                    <th>Device Info</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ekycTbody">
+                                @{int i = 1;}
+                                @foreach (var item in reports)
+                                {
+                                    string sts      = item.ekycstatus == true  ? "verified"
+                                                    : item.ekycstatus == false ? "unverified"
+                                                    : "unregistered";
+                                    string pillCls  = sts == "verified"   ? "vm-ekyc-pill--verified"
+                                                    : sts == "unverified" ? "vm-ekyc-pill--unverified"
+                                                    : "vm-ekyc-pill--unreg";
+                                    string pillIcon = sts == "verified"   ? "fa-check-circle"
+                                                    : sts == "unverified" ? "fa-times-circle"
+                                                    : "fa-question-circle";
+                                    <tr class="vm-ekyc-row">
+                                        <td class="vm-ekyc-sr">@i</td>
+                                        <td><span class="vm-ekyc-pill @pillCls"><i class="fas @pillIcon" aria-hidden="true"></i> @sts</span></td>
+                                        <td class="vm-ekyc-firm">@item.frm_name</td>
+                                        <td class="vm-ekyc-email">@item.email</td>
+                                        <td class="vm-ekyc-mobile">@item.mobile</td>
+                                        <td>@item.AadharCard</td>
+                                        <td>@item.Pancard</td>
+                                        <td>@item.AepsMerchandId</td>
+                                        <td>@item.ekycmobile</td>
+                                        <td>@item.ekycadhaar</td>
+                                        <td class="vm-ekyc-date">@item.insertdate</td>
+                                        <td class="vm-ekyc-date">@item.updatedate</td>
+                                        <td>@item.devicename @item.devicesrno</td>
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    /* ===== Live search filter ===== */
+    document.getElementById('ekycSearchInput').addEventListener('keyup', function () {
+        var val = this.value.toLowerCase();
+        var rows = document.querySelectorAll('#ekycTbody tr.vm-ekyc-row');
+        rows.forEach(function (row) {
+            row.style.display = row.textContent.toLowerCase().indexOf(val) > -1 ? '' : 'none';
+        });
+    });
+
+    /* ===== Export ===== */
+    document.getElementById('btnExport').addEventListener('click', function () {
+        location.href = '@Url.Action("Excel_retailerekyccheck", "Home")';
+    });
+    document.getElementById('btnPDF').addEventListener('click', function () {
+        window.open('@Url.Action("PDF_retailerekyccheck", "Home")', '_blank');
+    });
+</script>
+

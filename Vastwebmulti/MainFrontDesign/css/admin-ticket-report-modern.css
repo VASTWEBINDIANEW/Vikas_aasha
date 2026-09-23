@@ -1372,7 +1372,9 @@ body.saas-admin-ui .saas-radiant-prepay-page .vm-opr-total-card--primary .vm-opr
 
 body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table {
     width: 100% !important;
-    min-width: 1500px;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
     font-size: 0.8rem !important;
     margin: 0 !important;
     border-collapse: separate !important;
@@ -1389,27 +1391,45 @@ body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-ta
 }
 
 body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th {
-    padding: 11px 10px !important;
+    padding: 7px 4px !important;
     border: none !important;
     border-bottom: 2px solid #dbe4f0 !important;
     border-right: 1px solid #e8edf4 !important;
     background: linear-gradient(180deg, #f8fafc, #eef2f7) !important;
     color: #334155 !important;
-    font-size: 0.72rem !important;
+    font-size: 0.62rem !important;
     font-weight: 700 !important;
-    white-space: nowrap !important;
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.15 !important;
+    letter-spacing: 0.02em !important;
     text-align: center !important;
+    vertical-align: middle !important;
 }
 
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(1) { width: 13%; }
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(2) { width: 7%; }
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(3) { width: 7%; }
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(4),
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(5) { width: 8%; }
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(6) { width: 12%; }
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(7),
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(8) { width: 11%; }
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(9) { width: 9%; }
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(10) { width: 14%; }
+
 body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table tbody td {
-    font-size: 0.78rem !important;
-    padding: 10px 10px !important;
+    font-size: 0.74rem !important;
+    padding: 8px 5px !important;
     vertical-align: middle !important;
     border: none !important;
     border-bottom: 1px solid #eef2f7 !important;
     border-right: 1px solid #f1f5f9 !important;
     color: #334155 !important;
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table tbody tr:nth-child(even) {
@@ -1427,14 +1447,28 @@ body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-ta
 
 body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport .vm-radiant-firm-cell {
     text-align: left !important;
-    max-width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal !important;
+    word-break: break-word;
+    line-height: 1.3 !important;
 }
 
 body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport .vm-radiant-request-cell {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.74rem;
+    font-size: 0.7rem;
+    word-break: break-all;
+}
+
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport .vm-dmt-amt-cell {
+    white-space: nowrap !important;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.72rem !important;
+}
+
+body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport .vm-ticket-time-cell {
+    white-space: normal !important;
+    word-break: break-word;
+    font-size: 0.68rem !important;
+    line-height: 1.25 !important;
 }
 
 body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport .vm-radiant-status-cell {
@@ -1564,8 +1598,29 @@ body.saas-admin-ui .saas-radiant-prepay-page .vm-opr-table-scroll {
     }
 
     body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table {
-        width: auto !important;
-        min-width: 1320px !important;
+        width: max-content !important;
+        min-width: 1180px !important;
+        max-width: none !important;
+        table-layout: auto !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th {
+        min-width: 72px !important;
+        padding: 8px 6px !important;
+        font-size: 0.6rem !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(1) {
+        min-width: 100px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(6) {
+        min-width: 96px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(7),
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(8) {
+        min-width: 108px !important;
     }
 }
 
@@ -5252,4 +5307,444 @@ body.saas-admin-ui .saas-unloadlimit-page .vm-ul-input {
     body.saas-admin-ui .saas-unloadlimit-page .vm-ul-edit-wrap { flex-wrap: nowrap !important; }
     body.saas-admin-ui .saas-unloadlimit-page .vm-dmt-table-panel__right { flex-wrap: wrap !important; gap: 5px !important; }
     body.saas-admin-ui .saas-unloadlimit-page .vm-opr-table-panel__head { flex-wrap: wrap !important; gap: 8px !important; }
+}
+
+/* ================================================================
+   Print QR Code — same shell as Prepaid Card Report (v=49)
+   ================================================================ */
+body.saas-admin-ui .saas-print-qr-page {
+    --print-qr-filter-retailer-width: 260px;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-filter-row > .vm-print-qr-field--retailer {
+    flex: 0 0 var(--print-qr-filter-retailer-width) !important;
+    width: var(--print-qr-filter-retailer-width) !important;
+    min-width: var(--print-qr-filter-retailer-width) !important;
+    max-width: var(--print-qr-filter-retailer-width) !important;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-opr-table-panel__title i.fa-qrcode {
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-breadcrumb {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-role-tabs {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 2px 0 !important;
+    scrollbar-width: thin;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-filter-row--inline {
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-role-tab {
+    border: 1px solid #dbe2ea;
+    background: #fff;
+    color: #475569;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    white-space: nowrap !important;
+    flex: 0 0 auto !important;
+    transition: background .15s, color .15s, border-color .15s, box-shadow .15s;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-filter-row--inline {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+    margin: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-filter-row--inline > .vm-print-qr-field--retailer {
+    flex: 0 0 220px !important;
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-filter-row--inline .vm-dmt-filter-search-group {
+    flex: 0 0 auto !important;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-role-tab:hover {
+    border-color: #93c5fd;
+    color: #1d4ed8;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-role-tab.is-active {
+    border-color: transparent;
+    color: #fff;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-selected-badge strong {
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-action-btn--print {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+    border-color: #059669 !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-action-btn--delete {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    border-color: #dc2626 !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-grid-wrap {
+    padding: 14px;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card {
+    position: relative;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card:hover {
+    border-color: #bfdbfe;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__check {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__check-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #cbd5e1;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__checkbox:checked + .vm-print-qr-card__check-label {
+    border-color: #2563eb;
+    background: #2563eb;
+    box-shadow: inset 0 0 0 2px #fff;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__body {
+    padding: 14px 12px 12px;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__brands {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__brand {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__brand img {
+    max-width: 100%;
+    max-height: 42px;
+    object-fit: contain;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__meta--line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 10px;
+    padding: 6px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    flex: 1 1 0;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #334155;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__meta-item img {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+    object-fit: contain;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__meta-item span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__qr {
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__qr-title {
+    margin: 0;
+    padding: 7px 8px;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #0f172a;
+    background: #e2e8f0;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__qr-image {
+    padding: 8px;
+    text-align: center;
+    background: #fff;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__qr-image img {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    object-fit: contain;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 220px;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px dashed #dbe2ea;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .saas-print-qr-page .vm-print-qr-empty i {
+    font-size: 2rem;
+    color: #94a3b8;
+}
+
+@media (max-width: 1399px) {
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line {
+        flex-wrap: wrap !important;
+        align-items: stretch !important;
+        overflow-x: visible !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-breadcrumb {
+        order: 1 !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        border-right: none !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        padding: 0 0 6px !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-role-tabs {
+        order: 2 !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: visible !important;
+        padding: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-role-tab {
+        width: 100% !important;
+        flex: 1 1 auto !important;
+        white-space: normal !important;
+        text-align: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        min-height: 36px !important;
+        padding: 8px 10px !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-role-tab:last-child:nth-child(odd) {
+        grid-column: 1 / -1 !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-filter-row--inline {
+        order: 3 !important;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        flex-wrap: nowrap !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-filter-row--inline > .vm-print-qr-field--retailer {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        grid-column: 1 !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-filter-row--inline .vm-dmt-filter-search-group {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        max-width: none !important;
+        margin-left: 0 !important;
+        flex-wrap: nowrap !important;
+        grid-column: 2 !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-filter-row--inline .vm-opr-toolbar-search,
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-filter-row--inline .saas-acc-btn--search {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        min-width: 96px !important;
+        height: 40px !important;
+        justify-content: center !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-field--retailer .select2-container,
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-field--retailer select {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-dmt-table-panel__right {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-breadcrumb li:first-child {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-breadcrumb li:first-child + li::before {
+        content: none !important;
+        margin: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-role-tab {
+        font-size: 0.68rem !important;
+        min-height: 34px !important;
+        padding: 7px 8px !important;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-toolbar-head--one-line .vm-print-qr-filter-row--inline {
+        grid-template-columns: minmax(0, 1fr) minmax(88px, auto) !important;
+        gap: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-filter-row--inline .vm-opr-toolbar-search span {
+        display: inline !important;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__meta--line {
+        flex-wrap: wrap;
+        white-space: normal;
+    }
+
+    body.saas-admin-ui .saas-print-qr-page .vm-print-qr-card__meta-item {
+        flex: 1 1 100%;
+    }
 }

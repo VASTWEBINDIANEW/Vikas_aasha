@@ -174,7 +174,7 @@
                     </span>
                 </li>*@
 
-                <li class="tab-link-new fullbodydycolorbg" data-tab="tab-3" onclick="AEPSUPI()" style="">
+                <li id="tabaepsUPI" class="tab-link-new fullbodydycolorbg" data-tab="tab-3" onclick="AEPSUPI()" style="">
                     <strong class="img-none" style="display: none; ">
                         <img src="~/images/mpos1.png" />
                     </strong>
@@ -235,9 +235,9 @@
                 </div>
             </div>
             <div id="tab-2" class="tab-content tab-content2 col-md-12" style="padding: 25px 10px; position:initial;">
-                <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabs" style="display: flex; padding: 0px;">
+                <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabsAEPS" style="display: none; padding: 0px;">
                     <li id="tab1info" class="tab-link hovof" data-tab="tab-1" style="width: 50%; border-right: 1px solid #fff; text-align: center; background: #c1c1c1;">
-                        <a style="cursor:pointer;background-color:green !important;" data-toggle="tab" onclick="AEPSinfo('A1');">
+                        <a id="greenaeps" style="cursor:pointer;background-color:green !important;" data-toggle="tab" onclick="AEPSinfo('A1');">
 
                             Green Line AEPS
                         </a>
@@ -317,7 +317,7 @@
 
             <div id="tab-3" class="tab-content">
 
-                <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabs" style="display: flex; padding: 0px;">
+                <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabsAEPSUPI" style="display: none; padding: 0px;">
                     <li id="tab1infoUPI" class="tab-link hovof" data-tab="tab-1" style="width: 50%; border-right: 1px solid #fff; text-align: center; background: #c1c1c1;">
                         <a style="cursor:pointer;background-color:green !important;" data-toggle="tab" onclick="AEPSinfo('A1UPI');">
 
@@ -864,8 +864,9 @@
 <script>
     AEPSinfo = (info) => {
         const url = new URL(window.location.href);
-        url.searchParams.set('info', info); // add or update ?info=value
-        window.location.href = url.toString();   // reload with updated URL
+        url.searchParams.set('info', info);
+
+        window.location.href = url.toString();
     }
     // === Run on Page Load ===
     //window.onload = function () {
@@ -874,9 +875,16 @@
     //    alert(info)
     //};
     $(document).ready(function () {
+          @*var infochk = '@ViewBag.aepsenabled';
+        if (infochk == "Green") {
+            AEPSinfo('A1');
+        }
+        else if (infochk == "Yellow") {
+            AEPSinfo('A2');
+        }*@
         const urlParams = new URLSearchParams(window.location.search);
         const info = urlParams.get('info');
-       
+
         if (info != null)
         {
             if (info == "A1UPI" || info =="A2UPI") {
@@ -896,6 +904,13 @@
             $("#tab" + ("1info") + " a")
                 .prepend('<i class="fa fa-check"></i> ');
         }
+        if (info == "A1" || info == "A2") {
+            $('#tabaeps').click();
+        }
+        else if (info == "A2UPI" || info == "A1UPI") {
+            $('#tabaepsUPI').click();
+        }
+
         //if (info == "A1") {
         //    $("#tab2info").removeClass("active"); // remove active from all
         //    $("#tab1info").addClass("active");   // add active to clicked one
@@ -906,9 +921,68 @@
         //}
         //else {
         //    $("#tab2info").removeClass("active"); // remove active from all
-        //    $("#tab1info").addClass("active"); 
+        //    $("#tab1info").addClass("active");
         //}
 
     });
 
+</script>
+<script>
+    function AEPS() {
+        var info = new URLSearchParams(window.location.search).get('info');
+        if (info == "A1UPI" || info == "A2UPI" || info == "") {
+            var aepsenabled = '@ViewBag.aepsenabled';
+            if (aepsenabled == "Green") {
+                AEPSinfo('A1')
+            }
+            else if (aepsenabled == "Yellow") {
+                AEPSinfo('A2')
+            }
+        }
+        else {
+            if (info == null) {
+                var aepsenabled = '@ViewBag.aepsenabled';
+                if (aepsenabled == "Green") {
+                    AEPSinfo('A1')
+                }
+                else if (aepsenabled == "Yellow") {
+                    AEPSinfo('A2')
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function AEPSUPI() {
+        var info = new URLSearchParams(window.location.search).get('info');
+        if (info == "A1" || info == "A2" || info == "") {
+            var aepsenabled = '@ViewBag.UPIaepsenabled';
+            if (aepsenabled == "Green") {
+                AEPSinfo('A1UPI')
+            }
+            else if (aepsenabled == "Yellow") {
+                AEPSinfo('A2UPI')
+            }
+        }
+        else {
+      if (info == null) {
+                var aepsenabled = '@ViewBag.UPIaepsenabled';
+                if (aepsenabled == "Green") {
+                    AEPSinfo('A1UPI')
+                }
+                else if (aepsenabled == "Yellow") {
+                    AEPSinfo('A2UPI')
+                }
+            }
+        }
+    }
+</script>
+<script>
+    function DMT() {
+        const url = new URL(window.location.href);
+        url.searchParams.set('info', "");
+
+        window.location.href = url.toString();
+    }
 </script>

@@ -15,10 +15,10 @@
     var reports = Model ?? Enumerable.Empty<Vastwebmulti.Areas.ADMIN.Models.RadiantPrepayReportVM>();
     var rowCount = reports.Count();
 
-    var totalAmount = ViewBag.total != null ? Convert.ToDecimal(ViewBag.total) : 0m;
-    var totalSuccess = ViewBag.totalSuccess != null ? Convert.ToDecimal(ViewBag.totalSuccess) : 0m;
-    var totalFailed = ViewBag.totalFailed != null ? Convert.ToDecimal(ViewBag.totalFailed) : 0m;
-    var totalPending = ViewBag.totalPending != null ? Convert.ToDecimal(ViewBag.totalPending) : 0m;
+    var totalAmount = ViewBag.total != null ? Convert.ToDecimal(ViewBag.total) : reports.Sum(x => x.Amount ?? 0m);
+    var totalSuccess = ViewBag.totalSuccess != null ? Convert.ToDecimal(ViewBag.totalSuccess) : reports.Where(x => x.Status == "Success").Sum(x => x.Amount ?? 0m);
+    var totalFailed = ViewBag.totalFailed != null ? Convert.ToDecimal(ViewBag.totalFailed) : reports.Where(x => x.Status == "Failed").Sum(x => x.Amount ?? 0m);
+    var totalPending = ViewBag.totalPending != null ? Convert.ToDecimal(ViewBag.totalPending) : reports.Where(x => x.Status == "Pending").Sum(x => x.Amount ?? 0m);
 }
 
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
@@ -28,8 +28,8 @@
 <link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=16" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <script src="~/MainFrontDesign/js/admin-financial-report.js?v=18"></script>
@@ -159,14 +159,14 @@
                         <table id="radiantPrepayReport" class="table vm-opr-data-table" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Firm&nbsp;Name</th>
+                                    <th>Firm<br>Name</th>
                                     <th>RCEID</th>
-                                    <th>Amount&nbsp;&#8377;</th>
-                                    <th>Remain&nbsp;Pre&nbsp;&#8377;</th>
-                                    <th>Remain&nbsp;Post&nbsp;&#8377;</th>
-                                    <th>Request&nbsp;ID</th>
-                                    <th>Insert&nbsp;Date</th>
-                                    <th>Update&nbsp;Date</th>
+                                    <th>Amount<br>&#8377;</th>
+                                    <th>Remain<br>Pre&nbsp;&#8377;</th>
+                                    <th>Remain<br>Post&nbsp;&#8377;</th>
+                                    <th>Request<br>ID</th>
+                                    <th>Insert<br>Date</th>
+                                    <th>Update<br>Date</th>
                                     <th>Status</th>
                                     <th>#</th>
                                 </tr>
@@ -219,6 +219,31 @@
         frame.src = url;
     }
 
+    function collectRadiantPrepayTotalsFromTable() {
+        var total = 0;
+        var success = 0;
+        var failed = 0;
+        var pending = 0;
+
+        $('#radiantPrepayReportRows tr.vm-dmt-row').each(function () {
+            var amount = parseFloat($(this).attr('data-amount'));
+            if (isNaN(amount)) {
+                amount = 0;
+            }
+            var status = ($(this).attr('data-status') || '').toString();
+            total += amount;
+            if (status === 'Success') {
+                success += amount;
+            } else if (status === 'Failed') {
+                failed += amount;
+            } else if (status === 'Pending') {
+                pending += amount;
+            }
+        });
+
+        return { total: total, success: success, failed: failed, pending: pending };
+    }
+
     function applyRadiantTotalsToPanel(data) {
         if (!data) {
             return;
@@ -239,16 +264,27 @@
         }
 
         $('#loadermoney').show();
-        $.get(window.radiantPrepayBaseUrl + '?export=total&' + buildRadiantPrepayExportQuery())
+        $.ajax({
+            url: window.radiantPrepayBaseUrl,
+            type: 'GET',
+            dataType: 'json',
+            cache: false,
+            data: $.extend({ export: 'total' }, {
+                txt_frm_date: $('#txt_frm_date').val() || '',
+                txt_to_date: $('#txt_to_date').val() || '',
+                Status: $('#Status').val() || '',
+                allretailer: $('#allretailer').val() || ''
+            })
+        })
             .done(function (data) {
                 applyRadiantTotalsToPanel(data);
                 panel.slideDown(180).attr('aria-hidden', 'false');
                 btn.attr('aria-expanded', 'true');
             })
             .fail(function () {
-                if (typeof swal === 'function') {
-                    swal('Oops!', 'Unable to load Radiant prepay totals.', 'error');
-                }
+                applyRadiantTotalsToPanel(collectRadiantPrepayTotalsFromTable());
+                panel.slideDown(180).attr('aria-hidden', 'false');
+                btn.attr('aria-expanded', 'true');
             })
             .always(function () {
                 $('#loadermoney').hide();
@@ -300,7 +336,7 @@
                             .addClass('vm-dmt-status--' + tone)
                             .find('i').attr('class', 'fa ' + icon);
                         row.find('.vm-radiant-status-text').text(status);
-                        row.find('.btn-status').prop('disabled', true).addClass('is-disabled');
+                        row.find('.vm-dmt-action-bar').empty();
 
                         if (typeof swal === 'function') {
                             swal('Updated', 'Status updated successfully.', 'success');
