@@ -18,7 +18,7 @@
 <link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=24" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=25" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=100" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=101" rel="stylesheet" />
 
 <style>
     body.stop-scrolling { overflow: inherit; overflow-x: hidden; }
@@ -783,7 +783,7 @@
         $m.find('.modal-footer button.One2, .second-form button.One2').hide();
         $('#error').text('');
         $('#loadredmodel').hide();
-        $('#userinfodiv').css({ visibility: 'visible', opacity: 1 }).show();
+        $('#userinfodiv').removeClass('vm-rl-modal-busy').css({ visibility: 'visible', opacity: 1 }).show();
     }
 
     function vmRlEnsureDetailModal() {
@@ -1067,6 +1067,14 @@
                 if (e.key !== 'Enter' && e.key !== ' ') return;
                 e.preventDefault();
                 $(this).trigger('click');
+            });
+
+        $(document).off('mouseenter.vmRlPrefetch touchstart.vmRlPrefetch', '#mdList td.vm-rl-kyc-cell')
+            .on('mouseenter.vmRlPrefetch touchstart.vmRlPrefetch', '#mdList td.vm-rl-kyc-cell', function () {
+                var retailerId = $(this).attr('data-retailer-id');
+                if (retailerId && typeof window.vmRlPrefetchRetailerDetail === 'function') {
+                    window.vmRlPrefetchRetailerDetail(retailerId);
+                }
             });
 
         $(document).off('click.vmRl', '#defaultModal222 button.btn[value="Edit"]')
@@ -2109,6 +2117,9 @@ window.open(
         $m.find('.modal-footer button.one, .first-form button.one').hide();
         $m.find('.modal-footer button.One2, .second-form button.One2').show();
         $('#StateEdit, #DistrictEdit').prop('readonly', false).prop('disabled', false).removeAttr('readonly');
+        if (typeof window.vmRlHydrateKycEditDropdowns === 'function') {
+            window.vmRlHydrateKycEditDropdowns();
+        }
         if (typeof vmRlScheduleKycModalSelects === 'function') {
             vmRlScheduleKycModalSelects();
         } else if (typeof vmRlInitKycModalSelects === 'function') {

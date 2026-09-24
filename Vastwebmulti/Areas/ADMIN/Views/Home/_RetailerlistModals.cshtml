@@ -1084,38 +1084,69 @@
         }
     }
 
-    function mdActionBtn(RetailerId) {
+    window.vmRlRetailerDetailCache = window.vmRlRetailerDetailCache || {};
+
+    function vmRlPrimeDetailHero(retailerId) {
         var $ = window.vmAdminJq || window.jQuery || window.ravi;
-        if (!$) {
-            console.error('mdActionBtn: jQuery not available');
+        if (!$ || !retailerId) {
             return;
         }
+        var $cell = $('td.vm-rl-kyc-cell[data-retailer-id="' + retailerId + '"]');
+        if (!$cell.length) {
+            return;
+        }
+        var name = $cell.attr('data-retailer-name') || '';
+        var firm = $cell.attr('data-firm-name') || '';
+        var join = $cell.attr('data-join-label') || '';
+        if (name) {
+            $('#Names').text(name);
+        }
+        if (firm) {
+            $('#FirmName').text(firm);
+        }
+        if (join) {
+            $('#RegisteredDate').text(join);
+        }
+    }
 
-        if (typeof vmRlResetDetailModal === 'function') vmRlResetDetailModal();
-
-        vmRlClearDocImages();
-
-        $('#deletedusernotshowbtn').show();
-        $('#loadredmodel').show();
-        $('#userinfodiv').css({ visibility: 'hidden', opacity: 0 });
-
-        if (typeof vmRlShowDetailModal === 'function') {
-            vmRlShowDetailModal();
-        } else {
-            vmRlMoveModalsToBody();
-            $('#defaultModal222').addClass('in show vm-rl-detail-open').css({ display: 'block', opacity: 1, visibility: 'visible' }).attr('aria-hidden', 'false');
-            $('body').addClass('modal-open');
-            if (!$('.modal-backdrop').length) {
-                $('<div class="modal-backdrop fade in show vm-rl-modal-backdrop"></div>').appendTo('body');
+    function vmRlHydrateKycEditDropdowns() {
+        var boot = window.vmRlPendingKycFormBootstrap;
+        var $rl = window.ravi || window.jQuery || window.vmAdminJq;
+        if (!boot || !$rl) {
+            return;
+        }
+        if (typeof vmRlDestroySelect2OnEl === 'function') {
+            vmRlDestroySelect2OnEl(document.getElementById('StateEdit'));
+        }
+        $rl('#StateEdit').html('');
+        var options = '<option value="">Select</option>';
+        var i;
+        if ($rl.isArray(boot.stateOptions)) {
+            for (i = 0; i < boot.stateOptions.length; i++) {
+                if (boot.stateOptions[i].Selected === true) {
+                    options += '<option selected value="' + boot.stateOptions[i].Value + '">' + boot.stateOptions[i].Text + '</option>';
+                } else {
+                    options += '<option value="' + boot.stateOptions[i].Value + '">' + boot.stateOptions[i].Text + '</option>';
+                }
             }
         }
+        $rl('#StateEdit').append(options);
+        if (boot.stateValue) {
+            $rl('#StateEdit').val(boot.stateValue);
+        }
+        if (typeof vmRlReloadKycDistrictSelect === 'function') {
+            vmRlReloadKycDistrictSelect(boot.stateId, boot.districtId);
+        } else if (typeof GetDistrict11 === 'function') {
+            GetDistrict11(boot.stateId);
+            var objSelect11 = document.getElementById('DistrictEdit');
+            if (typeof binddistmdAction === 'function') {
+                binddistmdAction(boot.stateId, boot.districtId, objSelect11);
+            }
+        }
+    }
+    window.vmRlHydrateKycEditDropdowns = vmRlHydrateKycEditDropdowns;
 
-        $.ajax({
-            url: '@Url.Action("RetailerByIdSearch","Home")',
-            type: "POST",
-            data: { RetailerId: RetailerId },
-            cache: false,
-            success: function (data2) {
+    function vmRlHandleRetailerDetailSuccess(data2) {
                 var $rl = window.ravi || window.jQuery;
                 try {
                 if (!data2 || !data2.list || !data2.list.length) {
@@ -1361,40 +1392,20 @@
                 }
 
 
-               $rl("#StateEdit").val(data2.list[0].state);
-
-
-                if (typeof vmRlDestroySelect2OnEl === 'function') {
-                    vmRlDestroySelect2OnEl(document.getElementById('StateEdit'));
-                }
-                $rl('#StateEdit').html('');
-                var options = '';
-                options += '<option value="">Select</option>';
-                var se;
-                for (var i = 0; i < data2.state.length; i++) {
-                    if (data2.state[i].Selected == true) {
-                        options += '<option selected  value="' + data2.state[i].Value + '">' + data2.state[i].Text + '</option>';
-                    }
-                    else {
-                         options += '<option  value="' + data2.state[i].Value + '">' + data2.state[i].Text + '</option>';
-                    }
-
-                }
-              $rl('#StateEdit').append(options);
-                if (typeof vmRlReloadKycDistrictSelect === 'function') {
-                    vmRlReloadKycDistrictSelect(data2.list[0].State, data2.list[0].District);
-                } else {
-                    GetDistrict11(data2.list[0].State);
-                    var objSelect11 = document.getElementById("DistrictEdit");
-                    binddistmdAction(data2.list[0].State, data2.list[0].District, objSelect11);
-                }
+                window.vmRlPendingKycFormBootstrap = {
+                    stateId: data2.list[0].State,
+                    districtId: data2.list[0].District,
+                    stateValue: data2.list[0].state,
+                    stateOptions: data2.state
+                };
+                $rl('#StateEdit').val(data2.list[0].state);
                 $("#PinEdit").parent().next(".alert").remove();
                 } catch (err) {
                     console.error('Retailer detail load failed:', err);
                     $('#error').text('Unable to load full retailer details. Please try again.');
                 } finally {
                     $('#loadredmodel').hide();
-                    $('#userinfodiv').css({ visibility: 'visible', opacity: 1 }).show();
+                    $('#userinfodiv').removeClass('vm-rl-modal-busy');
                     if (typeof vmRlShowDetailModal === 'function') {
                         vmRlShowDetailModal();
                     }
@@ -1410,17 +1421,95 @@
                         }
                     }, 120);
                 }
-          },
-          error: function () {
-              $('#loadredmodel').hide();
-              $('#userinfodiv').css({ visibility: 'visible', opacity: 1 }).show();
-              $('#error').text('Unable to load retailer details. Please try again.');
-              if (typeof vmRlShowDetailModal === 'function') {
-                  vmRlShowDetailModal();
-              }
-          }
+    }
+
+    function mdActionBtn(RetailerId) {
+        var $ = window.vmAdminJq || window.jQuery || window.ravi;
+        if (!$) {
+            console.error('mdActionBtn: jQuery not available');
+            return;
+        }
+
+        if (typeof vmRlResetDetailModal === 'function') {
+            vmRlResetDetailModal();
+        }
+
+        vmRlClearDocImages();
+
+        $('#deletedusernotshowbtn').show();
+        vmRlPrimeDetailHero(RetailerId);
+        $('#loadredmodel').show();
+        $('#userinfodiv').addClass('vm-rl-modal-busy');
+
+        if (typeof vmRlShowDetailModal === 'function') {
+            vmRlShowDetailModal();
+        } else {
+            vmRlMoveModalsToBody();
+            $('#defaultModal222').addClass('in show vm-rl-detail-open').css({ display: 'block', opacity: 1, visibility: 'visible' }).attr('aria-hidden', 'false');
+            $('body').addClass('modal-open');
+            if (!$('.modal-backdrop').length) {
+                $('<div class="modal-backdrop fade in show vm-rl-modal-backdrop"></div>').appendTo('body');
+            }
+        }
+
+        var cached = window.vmRlRetailerDetailCache[RetailerId];
+        if (cached && (Date.now() - cached.ts < 120000)) {
+            vmRlHandleRetailerDetailSuccess(cached.data);
+            return;
+        }
+
+        if (window.vmRlDetailXhr && window.vmRlDetailXhr.readyState !== 4) {
+            try {
+                window.vmRlDetailXhr.abort();
+            } catch (abortErr) { }
+        }
+
+        window.vmRlDetailXhr = $.ajax({
+            url: '@Url.Action("RetailerByIdSearch","Home")',
+            type: "POST",
+            data: { RetailerId: RetailerId },
+            cache: false,
+            success: function (data2) {
+                window.vmRlRetailerDetailCache[RetailerId] = { ts: Date.now(), data: data2 };
+                vmRlHandleRetailerDetailSuccess(data2);
+            },
+            error: function () {
+                $('#loadredmodel').hide();
+                $('#userinfodiv').removeClass('vm-rl-modal-busy');
+                $('#error').text('Unable to load retailer details. Please try again.');
+                if (typeof vmRlShowDetailModal === 'function') {
+                    vmRlShowDetailModal();
+                }
+            }
         });
     }
+
+    window.vmRlPrefetchRetailerDetail = function (retailerId) {
+        var $ = window.vmAdminJq || window.jQuery || window.ravi;
+        if (!$ || !retailerId) {
+            return;
+        }
+        if (window.vmRlRetailerDetailCache[retailerId] && (Date.now() - window.vmRlRetailerDetailCache[retailerId].ts < 120000)) {
+            return;
+        }
+        window.vmRlPrefetchInflight = window.vmRlPrefetchInflight || {};
+        if (window.vmRlPrefetchInflight[retailerId]) {
+            return;
+        }
+        window.vmRlPrefetchInflight[retailerId] = true;
+        $.ajax({
+            url: '@Url.Action("RetailerByIdSearch","Home")',
+            type: 'POST',
+            data: { RetailerId: retailerId },
+            cache: false,
+            success: function (data2) {
+                window.vmRlRetailerDetailCache[retailerId] = { ts: Date.now(), data: data2 };
+            },
+            complete: function () {
+                delete window.vmRlPrefetchInflight[retailerId];
+            }
+        });
+    };
 
     window.mdActionBtn = mdActionBtn;
     function converttoDate(str) {

@@ -30981,19 +30981,8 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             var check = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerId && aa.ISDeleteuser == false).SingleOrDefault();
             string userid = User.Identity.GetUserId();
             var msg = "";
-            string chkstats = "OK";
-            var ekycstschk = db.ekycChecks.Where(x => x.userid == RetailerId).SingleOrDefault();
-            if (ekycstschk != null)
+            if (check != null)
             {
-                if (ekycstschk.isvalid == true)
-                {
-                    chkstats = "NOTOK";
-                }
-            }
-            if (chkstats == "OK")
-            {
-                if (check != null)
-                {
                     var statusSendSmsuserdelete = db.SMSSendAlls.Where(a => a.ServiceName == "DeleteUserOTP").SingleOrDefault();
                     var statusSendEmailuserdelete = db.EmailSendAlls.Where(a => a.ServiceName == "DeleteUserOTP1").SingleOrDefault().Status;
 
@@ -31031,21 +31020,11 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                     return Json(msg, JsonRequestBehavior.AllowGet);
 
-                }
-                else
-                {
-
-                    msg = "Failed";
-
-                    return Json(msg, JsonRequestBehavior.AllowGet);
-                }
             }
-            else
-            {
-                msg = "Failed Due to Ekyc Exists";
 
-                return Json(msg, JsonRequestBehavior.AllowGet);
-            }
+            msg = "Failed";
+
+            return Json(msg, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<ActionResult> ConfirmDeleteRetailerOTP(string RetailerIddelete, string Deleteotp)
@@ -31055,81 +31034,59 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             {
 
                 var chk = await db.MobileOtps.Where(aa => aa.Otp == Deleteotp).Take(1).OrderByDescending(aa => aa.Date).SingleOrDefaultAsync();
-                string chkstats = "OK";
                 if (chk != null)
                 {
-                    var ekycstschk = await db.ekycChecks.Where(x => x.userid == RetailerIddelete).SingleOrDefaultAsync();
-                    if (ekycstschk != null)
+                    //  db.delete_Retailer(RetailerIddelete);
+
+                    System.Data.Entity.Core.Objects.ObjectParameter output = new
+                           System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+                    var msgres = db.Retailer_delete_Only_change_Status(RetailerIddelete, output).SingleOrDefault().msg;
+
+
+
+                    if (msgres.ToUpper() == "SUCCESS")
                     {
-                        if (ekycstschk.isvalid == true)
+                        //for logout from all devices web
+                        UserManager.UpdateSecurityStamp(RetailerIddelete);
+
+                        var retailersss = await db.Retailer_Details.Where(x => x.RetailerId == RetailerIddelete).SingleOrDefaultAsync();
+
+                        string path = Server.MapPath("~/" + retailersss.videokycpath);
+
+
+                        //   System.IO.DirectoryInfo di = new DirectoryInfo(path);
+
+                        if (System.IO.File.Exists(path))
                         {
-                            chkstats = "NOTOK";
+                            System.IO.File.Delete(path);
+                            retailersss.videokycpath = null;
+                            db.SaveChanges();
                         }
-                    }
-                    if (chkstats == "OK")
-                    {
-                        //  db.delete_Retailer(RetailerIddelete);
-
-                        System.Data.Entity.Core.Objects.ObjectParameter output = new
-                               System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-
-                        var msgres = db.Retailer_delete_Only_change_Status(RetailerIddelete, output).SingleOrDefault().msg;
-
-
-
-                        if (msgres.ToUpper() == "SUCCESS")
-                        {
-                            //for logout from all devices web
-                            UserManager.UpdateSecurityStamp(RetailerIddelete);
-
-                            var retailersss = await db.Retailer_Details.Where(x => x.RetailerId == RetailerIddelete).SingleOrDefaultAsync();
-
-                            string path = Server.MapPath("~/" + retailersss.videokycpath);
-
-
-                            //   System.IO.DirectoryInfo di = new DirectoryInfo(path);
-
-                            if (System.IO.File.Exists(path))
-                            {
-                                System.IO.File.Delete(path);
-                                retailersss.videokycpath = null;
-                                db.SaveChanges();
-                            }
-
-                        }
-                        viewmodel.select_retailer_details_paging = db.Select_Retailer_Details_all_paging(1, 500, "ADMIN").ToList();
-                        viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
-                        viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
-                                                                 join tbl1 in db.Service_BlockUserwise
-                                                                 on tbl.idno equals tbl1.Show_Service_name_id
-                                                                 select new Service_BlockUserwisecls
-                                                                 {
-                                                                     idno = tbl.idno,
-                                                                     servicename = tbl.servicename,
-                                                                     serviceidno = tbl1.Show_Service_name_id,
-                                                                     remid = tbl1.remid,
-                                                                     servicestatus = tbl1.status,
-                                                                     basedupdate_id = tbl1.idno
-
-
-
-                                                                 };
-
-                        return PartialView("_Retailerlist", viewmodel);
-                    }
-                    else
-                    {
-
-                        throw new HttpException(404, "Product not found");
 
                     }
+                    viewmodel.select_retailer_details_paging = db.Select_Retailer_Details_all_paging(1, 500, "ADMIN").ToList();
+                    viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
+                    viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
+                                                             join tbl1 in db.Service_BlockUserwise
+                                                             on tbl.idno equals tbl1.Show_Service_name_id
+                                                             select new Service_BlockUserwisecls
+                                                             {
+                                                                 idno = tbl.idno,
+                                                                 servicename = tbl.servicename,
+                                                                 serviceidno = tbl1.Show_Service_name_id,
+                                                                 remid = tbl1.remid,
+                                                                 servicestatus = tbl1.status,
+                                                                 basedupdate_id = tbl1.idno
 
 
+
+                                                             };
+
+                    return PartialView("_Retailerlist", viewmodel);
                 }
-                else
-                {
-                    throw new HttpException(404, "Product not found");
-                }
+
+                throw new HttpException(404, "Product not found");
 
 
             }
