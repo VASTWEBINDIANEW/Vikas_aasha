@@ -5186,7 +5186,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 ad.mobile = string.IsNullOrWhiteSpace(txtmobile) ? ad.mobile : txtmobile;
                 ad.Aadhar = txtaadhaarcard;
                 ad.pencardno = txtpancard;
-                //  ad.Gstno = txtgst;
+                ad.Gstno = string.IsNullOrWhiteSpace(txtgst) ? ad.Gstno : txtgst.Trim();
                 ad.tanno = txtTAN;
                 ad.registrationno = txtregistration;
                 db.SaveChanges();

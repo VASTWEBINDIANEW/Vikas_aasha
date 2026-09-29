@@ -1,223 +1,306 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Login_info>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "WebLogin";
+    ViewBag.Title = "Web Login";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var rows = Model ?? Enumerable.Empty<Vastwebmulti.Models.Login_info>();
+    var rowList = rows.ToList();
 }
-<style>
-    .dropdown-menu {margin-top: 75px !important;}
-     .slab-setting-menu li a.activee {background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;}
-     .dropdown-menu tr td.active::before{display:none;}
 
-    .slab-setting-menu {
-        margin: 0;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=47" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page', 'saas-dealer-weblogin-page');</script>
 
-     @@media screen and (max-width:768px){
-         .webloginclass-responsive .table-responsive{z-index:9;position:relative !important;}
-         .content.webloginclass-responsive .table-responsive {padding-bottom: 15px;}
-     }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-sell-recharge-report-page saas-ecommerce-report-page saas-dealer-weblogin-page">
 
-     @@media screen and (max-width:420px){
-        .weblogin-dealerclass {padding: 0 15px !important;}
-        .recharge-report-dealer input {font-size: 10px;}
-        .weblogin-dealerclass .col-md-10 {width: 80% !important;}
-        .weblogin-dealerclass .col-md-2 {width: 20% !important;}
-        .weblogin-dealerclass .col-md-2 button {padding-left: 0px;padding-right: 0;}
-        .webloginclass-responsive .col-md-6.weblogin-webfaild ul li a {font-size:11px;}
-     }
+    <div class="container-fluid vm-opr-page-shell">
 
-</style>
-<section class="content webloginclass-responsive">
-    <div class="container-fluid full-dealer-secondanimation" style=" padding-top: 8px;">
+        @{
+            var webLoginFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "dealerWebLoginForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("WebLogin", "Home", FormMethod.Post, webLoginFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>Login Info</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account Active&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Web Login</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card page-header-third">
-                    <div class="row">
-                        <div class="col-md-6 weblogin-webfaild" style="width:auto;float:left;">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Account Active</li>
+                        <li>Web Login</li>
+                    </ol>
 
-                            @Html.Partial("_webpartial")
-                        </div>
-                        <div class="col-md-2 recharge-report-dealer" style="width:auto;float:right;padding-left:5px;">
-                            <div class="form-group" style="margin-bottom:0px;width:100%;float:left;">
-                                <div style="padding-top:0px;float:right">
-                                    
-                                    <div class="web-white-filter fil" style="float: left;margin-right: 0px;margin-top:0px;">
-                                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                                        <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                                    </div>
-                                </div>
+                    <nav class="vm-dr-weblogin-nav" aria-label="Web login type">
+                        <a class="vm-dr-weblogin-nav__link is-active" href="@Url.Action("WebLogin", "Home")">
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
+                            <span>Web Success Login</span>
+                        </a>
+                        <a class="vm-dr-weblogin-nav__link" href="@Url.Action("WebLoginFailed", "Home")">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                            <span>Web Failed Login</span>
+                        </a>
+                    </nav>
 
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
                             </div>
-                        </div>
-                        <div class="col-md-4 weblogin-dealerclass" style="float:right;padding:0px;width:auto;">
-                            @using (Html.BeginForm("WebLogin", "Home", FormMethod.Post))
-                            {
-                                <div class="row" style="margin:0px">
-
-                                    <div class="col-md-10" style="padding:0px;">
-                                        <div class="form-group for-web-date" style="margin-bottom:0px;">
-                                            <div class="input-daterange input-group">
-                                                <div class="all-report-inputclass all-report-inputclass-left">
-                                                    <div class="custom-date-icon" style="height: 32px;">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                    </div>
-                                                    <div class="custom-date-icon" style="height: 32px;">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                                </div>
-                                                
-                                                <div class="all-report-inputclass all-report-inputclass-right">
-                                                    <div class="custom-date-icon" style="height: 32px;">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                                </div>
-
-                                            </div>
-                                            <!-- /.input group -->
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2" style="padding:0px 5px;padding-right:0px;">
-                                        <center>
-                                            <button type="submit" class="btn  waves-effect" style="height:32px;width:100%;">
-
-                                                <span style="color:black;">Search</span>
-                                            </button>
-                                        </center>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                        <div class="col-md-2 pdf-totalbuttonclass">
-
-                            <div class="web-white-filter" style="float:right;">
-                                <table class="dataTable js-exportable ">
-                                    <thead>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
                             </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
+
                     </div>
 
                 </div>
+
             </div>
-        </div>
+        }
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card all-reporttable-css">
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                        <span>Web success login</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-ft-search-wrap vm-sell-rch-table-search">
+                            <input class="form-control vm-sell-rch-search-input" type="text" id="dealerWebLoginSearch" placeholder="Search login records..." autocomplete="off" />
+                        </div>
+                        <span class="vm-radiant-inline-total" title="Records in current view">
+                            Records: <strong id="dealerWebLoginCount">@rowList.Count</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-
-
-                    <div class="body" style="padding:0px;">
-                        <div class="table-responsive tableseconddes-dealer  page-header-third" style="position:inherit;">
-                            <table class="table table-bordered example-second third-design-table" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Sr.&nbsp;No.</th>
-                                        <th>Registered&nbsp;User&nbsp;Id</th>
-                                        <th>IP&nbsp;Address</th>
-                                        <th>Browser</th>
-                                        <th>Lattitude</th>
-                                        <th>Longitude</th>
-                                        <th>Current&nbsp;Login&nbsp;Details</th>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="dealerWebLoginTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.&nbsp;No.</th>
+                                    <th>Registered&nbsp;User&nbsp;Id</th>
+                                    <th>IP&nbsp;Address</th>
+                                    <th>Browser</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                    <th>Current&nbsp;Login&nbsp;Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!rowList.Any())
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="7">No login records found for the selected date range.</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @{ var i = 1;}
-                                    @foreach (var item in Model)
+                                }
+                                else
+                                {
+                                    var i = 1;
+                                    foreach (var item in rowList)
                                     {
-                                        <tr role="row" class="odd">
+                                        <tr>
                                             <td>@i</td>
-                                            <td>@item.UserId</td>
-                                            <td>@item.IP_Address</td>
-                                            <td>@item.browser</td>
-                                            <td>@item.Latitude</td>
-                                            <td>@item.Logitude</td>
-                                            <td>@item.CurrentLoginTime</td>
+                                            <td>@(item.UserId ?? "—")</td>
+                                            <td>@(item.IP_Address ?? "—")</td>
+                                            <td>@(item.browser ?? "—")</td>
+                                            <td>@(item.Latitude ?? "—")</td>
+                                            <td>@(item.Logitude ?? "—")</td>
+                                            <td>@(item.CurrentLoginTime.HasValue ? item.CurrentLoginTime.Value.ToString("dd-MM-yyyy HH:mm:ss") : "—")</td>
                                         </tr>
                                         i++;
                                     }
-                                </tbody>
-                            </table>
-                        </div>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
 
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
+<script src="~/MainFrontDesign/js/dealer-weblogin-export.js?v=1"></script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
+    function dealerWebLoginSearch() {
+        var $ = window.jQuery;
+        if (!$) { return; }
+        var value = ($('#dealerWebLoginSearch').val() || '').toLowerCase();
+        var visible = 0;
+        $('#dealerWebLoginTable tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-opr-table-empty-row')) {
+                $tr.toggle(!value);
+                if (!value) { visible = 0; }
+                return;
+            }
+            var show = $tr.text().toLowerCase().indexOf(value) > -1;
+            $tr.toggle(show);
+            if (show) { visible++; }
         });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+        $('#dealerWebLoginCount').text(visible);
+    }
+
+    function dealerWebLoginEsc(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function dealerWebLoginTableRows() {
+        var $ = window.jQuery;
+        var rows = [];
+        $('#dealerWebLoginTable tbody tr').each(function () {
+            var $tr = $(this);
+            if ($tr.hasClass('vm-opr-table-empty-row') || !$tr.is(':visible')) {
+                return;
+            }
+            var $cells = $tr.children('td');
+            if ($cells.length < 7) {
+                return;
+            }
+            rows.push({
+                sr: $.trim($cells.eq(0).text()),
+                userId: $.trim($cells.eq(1).text()),
+                ip: $.trim($cells.eq(2).text()),
+                browser: $.trim($cells.eq(3).text()),
+                lat: $.trim($cells.eq(4).text()),
+                lng: $.trim($cells.eq(5).text()),
+                loginTime: $.trim($cells.eq(6).text())
+            });
+        });
+        return rows;
+    }
+
+    function dealerWebLoginExportHeads() {
+        return ['Sr. No.', 'Registered User Id', 'IP Address', 'Browser', 'Latitude', 'Longitude', 'Current Login Details'];
+    }
+
+    function dealerWebLoginBodyRows(rows) {
+        var out = [];
+        for (var i = 0; i < rows.length; i++) {
+            var r = rows[i];
+            out.push([r.sr, r.userId, r.ip, r.browser, r.lat, r.lng, r.loginTime]);
         }
-    });
-</script>
+        return out;
+    }
 
-<script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5',
-                'print'
-            ]
+    function dealerWebLoginRunExport(kind) {
+        var exp = window.vmDealerWebLoginExport;
+        if (!exp) {
+            return;
+        }
+        var rows = dealerWebLoginTableRows();
+        if (!rows.length) {
+            exp.warn('No records to export');
+            return;
+        }
+        var opts = {
+            theme: 'success',
+            title: 'Web Success Login',
+            heads: dealerWebLoginExportHeads(),
+            bodyRows: dealerWebLoginBodyRows(rows),
+            meta: exp.collectMeta('txt_frm_date', 'txt_to_date', 'dealerWebLoginSearch', rows)
+        };
+        if (kind === 'excel') {
+            exp.downloadExcel(exp.buildExcel(opts), 'Web_Success_Login.xls');
+            return;
+        }
+        exp.openPdf(exp.buildPdf(opts));
+    }
+
+    function bootDealerWebLoginPage() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn || !$.fn.datepicker) {
+            window.setTimeout(bootDealerWebLoginPage, 50);
+            return;
+        }
+
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#dealerWebLoginForm');
+        } else {
+            $('#txt_frm_date, #txt_to_date').datepicker({
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                autoclose: true,
+                orientation: 'bottom auto',
+                container: 'body'
+            });
+            if ($('#dealerWebLoginForm').attr('data-date-mode') !== 'post') {
+                $('#txt_frm_date').datepicker('setDate', new Date());
+                $('#txt_to_date').datepicker('setDate', new Date());
+            }
+        }
+
+        function pinWebLoginDatepicker(e) {
+            if (typeof window.repositionAdminDatepickerForMobile === 'function') {
+                window.repositionAdminDatepickerForMobile(e && e.target ? e.target : this);
+            }
+        }
+
+        $(document).off('show.webLoginDp shown.webLoginDp').on('show.webLoginDp shown.webLoginDp', '#txt_frm_date, #txt_to_date', pinWebLoginDatepicker);
+        $(window).off('resize.webLoginDp orientationchange.webLoginDp').on('resize.webLoginDp orientationchange.webLoginDp', pinWebLoginDatepicker);
+
+        $('#dealerWebLoginSearch').off('input.webLogin keyup.webLogin').on('input.webLogin keyup.webLogin', dealerWebLoginSearch);
+
+        $('#btnExport').off('click.webLoginEx').on('click.webLoginEx', function () {
+            dealerWebLoginRunExport('excel');
         });
-    });
-</script>
 
-
-<script>
-    $(document).ready(function () {
-        $('.second-design-dealer .example-second').DataTable({
-            paging: false
+        $('#btnPDF').off('click.webLoginPdf').on('click.webLoginPdf', function () {
+            dealerWebLoginRunExport('pdf');
         });
-    });
+    }
+
+    if (document.readyState === 'complete') {
+        bootDealerWebLoginPage();
+    } else {
+        window.addEventListener('load', bootDealerWebLoginPage);
+    }
 </script>

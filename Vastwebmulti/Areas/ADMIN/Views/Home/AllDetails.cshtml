@@ -18,6 +18,62 @@
 <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<style>
+    .saas-alldetails-page #example tbody tr.saas-acc-empty-row td.saas-acc-empty {
+        text-align: center !important;
+        padding: 36px 16px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        color: #64748b !important;
+        background: #f8fafc !important;
+    }
+
+    /* Table card full-width cover — side space khatm */
+    section.content.saas-alldetails-page {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    section.content.saas-alldetails-page > .container-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .saas-alldetails-page .saas-acc-toolbar,
+    .saas-alldetails-page .saas-acc-table-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Table full-width stretch — columns poori chaudai cover karein */
+    .saas-alldetails-page #showreport {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .saas-alldetails-page table#example {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* Head note kate nahi — wrap hokar andar rahe */
+    .saas-alldetails-page .saas-acc-table-card-head {
+        flex-wrap: wrap !important;
+        gap: 6px 12px !important;
+        overflow: hidden !important;
+    }
+
+    .saas-alldetails-page .saas-acc-table-card-head span {
+        white-space: normal !important;
+        text-align: right !important;
+    }
+</style>
 
 <section class="content tmw-Alldetails fourdesign-section-admin saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-alldetails-page">
     <div class="container-fluid">
@@ -88,7 +144,7 @@
                         </tr>
                     </thead>
                     <tbody id="trow" class="alin">
-                        @{ Html.RenderAction("AllDetails_paging", "Home", new { Model = Model }); }
+                        @{ Html.RenderAction("AllDetails_paging", "Home", new { txt_frm_date = Request["txt_frm_date"], txt_to_date = Request["txt_to_date"] }); }
                     </tbody>
                 </table>
                 <div id="loadingdiv" class="saas-acc-infinite-loader" style="display:none;">
@@ -129,9 +185,19 @@
 <script>
     var txt_frm_date = $('#txt_frm_date').val();
     var txt_to_date = $('#txt_to_date').val();
-    var pageindex = 1;
+    // Page-1 rows pehle se tbody me hain (RenderAction), isliye scroll page-2 se shuru
+    var pageindex = 2;
     var NoMoredata = false;
     var inProgress = false;
+
+    function allDetailsSeenOrderIds() {
+        var seen = {};
+        $('#trow tr').each(function () {
+            var id = $.trim($(this).find('td.col-order').first().text());
+            if (id) { seen[id] = 1; }
+        });
+        return seen;
+    }
 
     $(window).scroll(function () {
         var $table = $('#example');
@@ -146,7 +212,25 @@
                 function (data) {
                     pageindex = pageindex + 1;
                     NoMoredata = data.NoMoredata;
-                    $("#trow").append(data.HTMLString);
+                    var seen = allDetailsSeenOrderIds();
+                    var $tmp = $('<div>').append($.parseHTML(data.HTMLString || ''));
+                    var $rows = $tmp.find('tr');
+                    // Sirf empty-state row aayi aur table me pehle se rows hain to skip
+                    if ($rows.length && $rows.not('.saas-acc-empty-row').length === 0 && $('#trow tr').not('.saas-acc-empty-row').length > 0) {
+                        NoMoredata = true;
+                    } else {
+                        $rows.each(function () {
+                            var $tr = $(this);
+                            if ($tr.hasClass('saas-acc-empty-row')) { return; }
+                            var id = $.trim($tr.find('td.col-order').first().text());
+                            if (id && seen[id]) { $tr.remove(); }
+                            else if (id) { seen[id] = 1; }
+                        });
+                        if ($tmp.find('tr').not('.saas-acc-empty-row').length) {
+                            $('#trow .saas-acc-empty-row').remove();
+                        }
+                        $("#trow").append($tmp.html());
+                    }
                     $("#loadingdiv").hide();
                     inProgress = false;
                 });

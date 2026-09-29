@@ -69,14 +69,24 @@
                                     @Html.DropDownList("dealerid", new SelectList(ViewBag.dealerid, "Value", "Text"), "Select Dealer Id", new { @class = "form-control", @required = "required" })
                                 </div>
 
-                                <!-- Distributor detail info card -->
+                                <!-- Distributor detail info card (latest design) -->
                                 <div class="distributor-detail su-detail-card" style="display:none;">
-                                    <div class="su-detail-row"><i class="fas fa-user su-detail-icon"></i><span class="su-detail-label">Name</span><span id="DISNAME" class="su-detail-value"></span></div>
-                                    <div class="su-detail-row"><i class="fas fa-store su-detail-icon"></i><span class="su-detail-label">Firm</span><span id="DISfrmname" class="su-detail-value"></span></div>
-                                    <div class="su-detail-row"><i class="fas fa-mobile-alt su-detail-icon"></i><span class="su-detail-label">Mobile</span><span id="DISmobile" class="su-detail-value"></span></div>
-                                    <div class="su-detail-row"><i class="fas fa-envelope su-detail-icon"></i><span class="su-detail-label">Email</span><span id="DISEMAIL" class="su-detail-value"></span></div>
-                                    <div class="su-detail-row"><i class="fas fa-map-marker-alt su-detail-icon"></i><span class="su-detail-label">Address</span><span id="DISADDRESS" class="su-detail-value"></span></div>
-                                    <div class="su-detail-row"><i class="fas fa-sitemap su-detail-icon"></i><span class="su-detail-label">Current M/D</span><span id="DISCRNTMD" class="su-detail-value"></span></div>
+                                    <div class="su-detail-head">
+                                        <span class="su-avatar" id="DISAVATAR">?</span>
+                                        <span class="su-head-text">
+                                            <span class="su-head-name" id="DISHEADNAME"></span>
+                                            <span class="su-head-firm" id="DISHEADFIRM"></span>
+                                        </span>
+                                        <span class="su-verified"><i class="fas fa-check-circle"></i> Selected</span>
+                                    </div>
+                                    <div class="su-detail-body">
+                                        <div class="su-detail-row"><span class="su-ic su-ic-user"><i class="fas fa-user"></i></span><span class="su-tx"><span class="su-detail-label">Name</span><span id="DISNAME" class="su-detail-value"></span></span></div>
+                                        <div class="su-detail-row"><span class="su-ic su-ic-firm"><i class="fas fa-store"></i></span><span class="su-tx"><span class="su-detail-label">Firm</span><span id="DISfrmname" class="su-detail-value"></span></span></div>
+                                        <div class="su-detail-row"><span class="su-ic su-ic-mobile"><i class="fas fa-mobile-alt"></i></span><span class="su-tx"><span class="su-detail-label">Mobile</span><span id="DISmobile" class="su-detail-value"></span></span></div>
+                                        <div class="su-detail-row"><span class="su-ic su-ic-email"><i class="fas fa-envelope"></i></span><span class="su-tx"><span class="su-detail-label">Email</span><span id="DISEMAIL" class="su-detail-value"></span></span></div>
+                                        <div class="su-detail-row"><span class="su-ic su-ic-addr"><i class="fas fa-map-marker-alt"></i></span><span class="su-tx"><span class="su-detail-label">Address</span><span id="DISADDRESS" class="su-detail-value"></span></span></div>
+                                        <div class="su-detail-row"><span class="su-ic su-ic-md"><i class="fas fa-sitemap"></i></span><span class="su-tx"><span class="su-detail-label">Current M/D</span><span id="DISCRNTMD" class="su-detail-value"></span></span></div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -105,14 +115,24 @@
                                     @Html.DropDownList("retailerid", new SelectList(ViewBag.Retailerids, "Value", "Text"), "Select Retailer Id", new { @class = "form-control", @required = "required" })
                                 </div>
 
-                                <!-- Retailer detail info card -->
+                                <!-- Retailer detail info card (latest design) -->
                                 <div class="distributor-details su-detail-card" style="display:none;">
-                                    <div class="su-detail-row"><i class="fas fa-user su-detail-icon"></i><span class="su-detail-label">Name</span><span id="RETNAME" class="su-detail-value"></span></div>
-                                    <div class="su-detail-row"><i class="fas fa-store su-detail-icon"></i><span class="su-detail-label">Firm</span><span id="RETfrmname" class="su-detail-value"></span></div>
-                                    <div class="su-detail-row"><i class="fas fa-mobile-alt su-detail-icon"></i><span class="su-detail-label">Mobile</span><span id="RETmobile" class="su-detail-value"></span></div>
-                                    <div class="su-detail-row"><i class="fas fa-envelope su-detail-icon"></i><span class="su-detail-label">Email</span><span id="RETEMAIL" class="su-detail-value"></span></div>
-                                    <div class="su-detail-row"><i class="fas fa-map-marker-alt su-detail-icon"></i><span class="su-detail-label">Address</span><span id="RETADDRESS" class="su-detail-value"></span></div>
-                                    <div class="su-detail-row"><i class="fas fa-building su-detail-icon"></i><span class="su-detail-label">Distributor</span><span id="RETCRNTMD" class="su-detail-value"></span></div>
+                                    <div class="su-detail-head su-detail-head-green">
+                                        <span class="su-avatar" id="RETAVATAR">?</span>
+                                        <span class="su-head-text">
+                                            <span class="su-head-name" id="RETHEADNAME"></span>
+                                            <span class="su-head-firm" id="RETHEADFIRM"></span>
+                                        </span>
+                                        <span class="su-verified"><i class="fas fa-check-circle"></i> Selected</span>
+                                    </div>
+                                    <div class="su-detail-body">
+                                        <div class="su-detail-row"><span class="su-ic su-ic-user"><i class="fas fa-user"></i></span><span class="su-tx"><span class="su-detail-label">Name</span><span id="RETNAME" class="su-detail-value"></span></span></div>
+                                        <div class="su-detail-row"><span class="su-ic su-ic-firm"><i class="fas fa-store"></i></span><span class="su-tx"><span class="su-detail-label">Firm</span><span id="RETfrmname" class="su-detail-value"></span></span></div>
+                                        <div class="su-detail-row"><span class="su-ic su-ic-mobile"><i class="fas fa-mobile-alt"></i></span><span class="su-tx"><span class="su-detail-label">Mobile</span><span id="RETmobile" class="su-detail-value"></span></span></div>
+                                        <div class="su-detail-row"><span class="su-ic su-ic-email"><i class="fas fa-envelope"></i></span><span class="su-tx"><span class="su-detail-label">Email</span><span id="RETEMAIL" class="su-detail-value"></span></span></div>
+                                        <div class="su-detail-row"><span class="su-ic su-ic-addr"><i class="fas fa-map-marker-alt"></i></span><span class="su-tx"><span class="su-detail-label">Address</span><span id="RETADDRESS" class="su-detail-value"></span></span></div>
+                                        <div class="su-detail-row"><span class="su-ic su-ic-md"><i class="fas fa-building"></i></span><span class="su-tx"><span class="su-detail-label">Distributor</span><span id="RETCRNTMD" class="su-detail-value"></span></span></div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -210,27 +230,60 @@
         right: 6px !important;
     }
 
-    /* -- Detail info card inside form -- */
+    /* -- Detail info card (latest design: gradient head + avatar + icon rows) -- */
     .su-detail-card {
-        background: #f0f9ff;
-        border: 1px solid #bae6fd;
-        border-radius: 10px;
-        padding: 10px 12px;
-        margin: 4px 0 12px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 6px 0 12px;
+        box-shadow: 0 4px 14px rgba(15,23,42,.08);
+        animation: suPop .25s ease;
     }
+    @@keyframes suPop {
+        from { opacity: 0; transform: translateY(-5px); }
+        to { opacity: 1; transform: none; }
+    }
+    .su-detail-head {
+        display: flex; align-items: center; gap: 10px;
+        background: linear-gradient(135deg,#2563eb,#1d4ed8 60%,#1e3a8a);
+        padding: 10px 12px; color: #fff;
+    }
+    .su-detail-head-green { background: linear-gradient(135deg,#059669,#047857 60%,#065f46); }
+    .su-avatar {
+        width: 38px; height: 38px; border-radius: 50%; flex: 0 0 auto;
+        background: rgba(255,255,255,.22); border: 2px solid rgba(255,255,255,.75);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 17px; text-transform: uppercase;
+    }
+    .su-head-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+    .su-head-name { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .su-head-firm { font-size: 11.5px; opacity: .92; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .su-verified { font-size: 10.5px; background: rgba(255,255,255,.22); padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+    .su-verified i { margin-right: 2px; }
+    .su-detail-body { padding: 4px 12px 8px; }
     .su-detail-row {
-        display: flex;
-        align-items: flex-start;
-        gap: 6px;
-        padding: 3px 0;
-        font-size: 0.76rem;
-        color: #0c4a6e;
-        border-bottom: 1px solid #e0f2fe;
+        display: flex; align-items: center; gap: 10px;
+        padding: 7px 0; font-size: 13px; color: #334155;
+        border-bottom: 1px dashed #eef2f7;
     }
     .su-detail-row:last-child { border-bottom: none; }
-    .su-detail-icon  { color: #0891b2; font-size: .65rem; margin-top: 3px; flex-shrink: 0; width: 12px; }
-    .su-detail-label { color: #64748b; min-width: 72px; font-size: .72rem; }
-    .su-detail-value { font-weight: 600; color: #0c4a6e; word-break: break-word; }
+    .su-detail-icon { display: none; }
+    .su-ic {
+        width: 28px; height: 28px; border-radius: 8px; flex: 0 0 auto;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 12px; color: #fff;
+    }
+    .su-ic-user   { background: linear-gradient(135deg,#3b82f6,#1d4ed8); }
+    .su-ic-firm   { background: linear-gradient(135deg,#8b5cf6,#6d28d9); }
+    .su-ic-mobile { background: linear-gradient(135deg,#10b981,#047857); }
+    .su-ic-email  { background: linear-gradient(135deg,#f59e0b,#b45309); }
+    .su-ic-addr   { background: linear-gradient(135deg,#ef4444,#b91c1c); }
+    .su-ic-md     { background: linear-gradient(135deg,#06b6d4,#0e7490); }
+    .su-tx { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+    .su-detail-label { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: #94a3b8; font-weight: 600; }
+    .su-detail-label::after { content: none; }
+    .su-detail-value { color: #0f172a; font-weight: 600; font-size: 13px; word-break: break-word; }
 
     /* -- Switch Users table scroll -- */
     .Switch_Users_Page #dlmd { overflow-x: auto; overflow-y: auto; max-height: 72vh; }
@@ -274,15 +327,113 @@
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
 <script>
-    var ravi = $.noConflict();
+    var ravi = window.jQuery;
+    try {
+        if (window.$ && window.$.noConflict) { ravi = window.$.noConflict(); }
+        if (!ravi) { ravi = window.jQuery; }
+    } catch (e) {
+        ravi = window.jQuery;
+    }
+
+    /* Layout me 2 jQuery hain (head 1.10.2 + bottom AdminDesign wali). select2 bottom
+       wali par register hota hai — isliye select2 init + saare handlers HAMESHA
+       current window.jQuery (suJq) par lagenge, warna select2 ka change event
+       handlers ko sunai hi nahi deta (alag jQuery instance = alag event cache). */
+    function suJq() {
+        return window.jQuery || window.$ || ravi;
+    }
 
     /* -- Select2 init -- */
     ravi(document).ready(function () {
         if (window.bootAdminSelect2) { window.bootAdminSelect2(); }
+        suBootPage();
     });
-    $(document).ajaxComplete(function () {
+    // NOTE: upar $.noConflict() hai, isliye yahan $ nahi — ravi use karo,
+    // warna ye line throw karke neeche ke saare handlers (detail card + Move User) dead ho jate hain
+    ravi(document).ajaxComplete(function () {
         if (window.bootAdminSelect2) { window.setTimeout(window.bootAdminSelect2, 120); }
+        suBootPage();
     });
+
+    function suBootPage() {
+        suInitSelect2();
+        suBindHandlers();
+    }
+
+    /* -- Searchable dropdowns (explicit, retry-safe) -- */
+    function suInitSelect2() {
+        var $j = suJq();
+        if (!$j || !$j.fn || !$j.fn.select2) {
+            window.setTimeout(suInitSelect2, 150);
+            return;
+        }
+        ['#dealerid', '#masterid', '#retailerid', '#dealerdetailsid'].forEach(function (sel) {
+            var $el = $j(sel);
+            if (!$el.length || $el.hasClass('select2-hidden-accessible')) { return; }
+            try {
+                var ph = $el.find('option[value=""]').first().text() || 'Select';
+                $el.select2({ width: '100%', minimumResultsForSearch: 0, allowClear: false, placeholder: ph });
+            } catch (e) { }
+        });
+    }
+
+    function suSwal(title, text, type) {
+        if (typeof swal === 'function') {
+            swal(title, text, type || 'info');
+        } else {
+            window.alert(String(title) + '\n' + String(text));
+        }
+    }
+
+    function suConfirmMove(text, cb) {
+        if (typeof swal === 'function') {
+            swal({
+                title: 'Are you sure?',
+                text: text,
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#10b981',
+                confirmButtonText: 'Yes, Move User!',
+                cancelButtonText: 'Cancel',
+                closeOnConfirm: true,
+                closeOnCancel: true
+            }, function (isConfirm) {
+                if (isConfirm) { cb(); }
+            });
+        } else if (window.confirm('Are you sure?\n' + text)) {
+            cb();
+        }
+    }
+
+    /* -- Server JSON response check (Success / error + msg) -- */
+    function suHandleSwitchResponse(data, okMsg) {
+        var res = data;
+        if (typeof res === 'string') {
+            try { res = JSON.parse(res); } catch (e) { res = null; }
+        }
+        if (res && res.Success === 'Success') {
+            suSwal('Moved!', res.msg || okMsg, 'success');
+            /* success alert dikhane ke baad page refresh — nayi history + fresh dropdowns */
+            window.setTimeout(function () { window.location.reload(); }, 1200);
+            return true;
+        }
+        var msg = (res && res.msg) || 'Move failed. Please try again.';
+        suSwal('Error!', msg, 'error');
+        return false;
+    }
+
+    function suReloadHistory(utype) {
+        ravi.ajax({
+            url: '@Url.Action("ChangeTabtype", "Home")',
+            data: { Utype: utype },
+            cache: false,
+            success: function (data) {
+                ravi('#dlmd').html(data);
+                pageindex = 2;
+                NoMoredata = false;
+            }
+        });
+    }
 
     /* -- Tab switching -- */
     function switchSUTab(panelId, ajaxUrl, btn) {
@@ -301,7 +452,12 @@
         /* load matching history into right panel */
         ravi.ajax({
             url: ajaxUrl,
-            success: function (data) { ravi('#dlmd').html(data); }
+            cache: false,
+            success: function (data) {
+                ravi('#dlmd').html(data);
+                pageindex = 2;
+                NoMoredata = false;
+            }
         });
     }
 
@@ -313,33 +469,99 @@
         });
     }
 
-    /* -- Infinite scroll -- */
-    var pageindex  = 1;
+    /* -- Infinite scroll (append rows, no duplicates, no replace) -- */
+    var pageindex  = 2;
     var NoMoredata = false;
     var inProgress = false;
-    ravi(window).scroll(function () {
-        if (ravi(window).scrollTop() > Number(ravi("#tbldata").height()) / 4 && !NoMoredata && !inProgress) {
+    function suAppendHistoryRows(html) {
+        var $tmp = ravi('<div>').append(ravi.parseHTML(html || ''));
+        var $rows = $tmp.find('tbody tr');
+        if (!$rows.length) { return; }
+        var seen = {};
+        ravi('#tbldata tbody tr').each(function () {
+            seen[ravi.trim(ravi(this).text()).replace(/\s+/g, ' ')] = 1;
+        });
+        $rows.each(function () {
+            var $tr = ravi(this);
+            var t = $tr.text();
+            // empty-state rows kabhi append nahi (initial page me pehle se hain)
+            if (t.indexOf('No distributor switch records') > -1 || t.indexOf('No retailer switch records') > -1) {
+                $tr.remove();
+                return;
+            }
+            var sig = ravi.trim(t).replace(/\s+/g, ' ');
+            if (seen[sig]) { $tr.remove(); }
+            else { seen[sig] = 1; }
+        });
+        var $fresh = $tmp.find('tbody tr');
+        if ($fresh.length) { ravi('#tbldata tbody').append($fresh); }
+    }
+    /* change/submit/reset bindings suJq instance par (select2 wali jQuery) —
+       suBindHandlers() ready + ajaxComplete se call hota hai, off-first hai */
+    function suBindHandlers() {
+        var $j = suJq();
+        if (!$j) { return; }
+        /* doosri jQuery instance par lage purane handlers hatao (nahi to
+           submit/double-POST aur double-AJAX hoga — dono instances sunte hain) */
+        if (typeof ravi !== 'undefined' && ravi && ravi !== $j) {
+            ravi(document).off('change.suDistDetail', '#dealerid');
+            ravi(document).off('change.suRetDetail', '#retailerid');
+            ravi(document).off('reset.suReset', '#frmdealtomd, #frmretdeal');
+            ravi(document).off('submit.suDistMove', '#frmdealtomd');
+            ravi(document).off('submit.suRetMove', '#frmretdeal');
+        }
+        suBindDetailHandlers($j);
+        suBindMoveHandlers($j);
+    }
+
+    function suBindDetailHandlers($j) {
+        $j(document).off('change.suDistDetail', '#dealerid').on('change.suDistDetail', '#dealerid', suOnDistributorChange);
+        $j(document).off('change.suRetDetail', '#retailerid').on('change.suRetDetail', '#retailerid', suOnRetailerChange);
+    }
+
+    function suBindMoveHandlers($j) {
+        $j(document).off('reset.suReset', '#frmdealtomd, #frmretdeal').on('reset.suReset', '#frmdealtomd, #frmretdeal', suOnFormReset);
+        $j(document).off('submit.suDistMove', '#frmdealtomd').on('submit.suDistMove', '#frmdealtomd', suOnDistributorMove);
+        $j(document).off('submit.suRetMove', '#frmretdeal').on('submit.suRetMove', '#frmretdeal', suOnRetailerMove);
+    }
+
+    function suOnWindowScroll() {
+        var $tbl = ravi('#tbldata');
+        if (!$tbl.length) { return; }
+        if (ravi(window).scrollTop() > Number($tbl.height()) / 4 && !NoMoredata && !inProgress) {
             inProgress = true;
             ravi("#loadingdiv").show();
-            ravi.post(ravi('#tbldata').attr('data-hrefscroll'),
+            ravi.post($tbl.attr('data-hrefscroll'),
                 { pageindex: pageindex },
                 function (data) {
                     pageindex++;
                     NoMoredata = data.NoMoredata;
-                    ravi("#dlmd").empty().append(data.HTMLString);
+                    suAppendHistoryRows(data.HTMLString);
+                    ravi("#loadingdiv").hide();
+                    inProgress = false;
+                }).fail(function () {
                     ravi("#loadingdiv").hide();
                     inProgress = false;
                 });
         }
-    });
+    }
+    ravi(window).off('scroll.suScroll').on('scroll.suScroll', suOnWindowScroll);
 
-    /* -- Fetch distributor details on change -- */
-    ravi("#dealerid").on("change", function () {
+    /* -- Fetch distributor details on change (suJq instance par bound: select2 ke events pakde jaate hain) -- */
+    function suOnDistributorChange() {
         var id = ravi(this).val();
+        if (window.console && console.info) { console.info('[SwitchUsers] distributor change:', id); }
+        if (!id) {
+            ravi('.distributor-detail').hide();
+            return;
+        }
         ravi.ajax({
             url: "@Url.Action("FetchDetails","Home")",
             data: { id: id },
+            dataType: 'json',
+            cache: false,
             success: function (data) {
+                if (window.console && console.info) { console.info('[SwitchUsers] FetchDetails rows:', data ? data.length : data); }
                 if (data != null && data.length > 0) {
                     ravi('#DISNAME').text(data[0].Name);
                     ravi('#DISfrmname').text(data[0].farmname);
@@ -347,21 +569,36 @@
                     ravi('#DISEMAIL').text(data[0].EMAIL);
                     ravi('#DISADDRESS').text(data[0].ADDRESS);
                     ravi('#DISCRNTMD').text(data[0].MDNAME);
+                    ravi('#DISAVATAR').text((data[0].Name || '?').charAt(0));
+                    ravi('#DISHEADNAME').text(data[0].Name);
+                    ravi('#DISHEADFIRM').text(data[0].farmname);
                     ravi('.distributor-detail').show();
                 } else {
                     ravi('.distributor-detail').hide();
                 }
+            },
+            error: function (xhr, st) {
+                if (window.console && console.warn) { console.warn('[SwitchUsers] FetchDetails failed:', xhr.status, st); }
+                ravi('.distributor-detail').hide();
             }
         });
-    });
+    }
 
-    /* -- Fetch retailer details on change -- */
-    ravi("#retailerid").on("change", function () {
+    /* -- Fetch retailer details on change (suJq instance par bound) -- */
+    function suOnRetailerChange() {
         var id = ravi(this).val();
+        if (window.console && console.info) { console.info('[SwitchUsers] retailer change:', id); }
+        if (!id) {
+            ravi('.distributor-details').hide();
+            return;
+        }
         ravi.ajax({
             url: "@Url.Action("FetchRetailerDetails","Home")",
             data: { id: id },
+            dataType: 'json',
+            cache: false,
             success: function (data) {
+                if (window.console && console.info) { console.info('[SwitchUsers] FetchRetailerDetails rows:', data ? data.length : data); }
                 if (data != null && data.length > 0) {
                     ravi('#RETNAME').text(data[0].Name);
                     ravi('#RETfrmname').text(data[0].farmname);
@@ -369,57 +606,111 @@
                     ravi('#RETEMAIL').text(data[0].EMAIL);
                     ravi('#RETADDRESS').text(data[0].ADDRESS);
                     ravi('#RETCRNTMD').text(data[0].DealerNAME);
+                    ravi('#RETAVATAR').text((data[0].Name || '?').charAt(0));
+                    ravi('#RETHEADNAME').text(data[0].Name);
+                    ravi('#RETHEADFIRM').text(data[0].farmname);
                     ravi('.distributor-details').show();
                 } else {
                     ravi('.distributor-details').hide();
                 }
-            }
-        });
-    });
-
-    /* -- Form: Distributor ? M/D switch -- */
-    ravi('#frmdealtomd').submit(function (e) {
-        e.preventDefault();
-        ravi.ajax({
-            type: 'POST',
-            url: '@Url.Action("DealerMD_switch","Home")',
-            data: { dealerid: ravi('#dealerid').val(), masterid: ravi('#masterid').val() },
-            success: function () {
-                ravi('#dealerid').val('');
-                ravi('#masterid').val('');
-                ravi('.distributor-detail').hide();
-                ravi.ajax({
-                    url: "@Url.Action("ChangeTabtype","Home",new { Utype="dealer"})",
-                    success: function (data) {
-                        ravi('#dlmd').html(data);
-                        ravi("#dealerid").select2().select2("val", null);
-                        ravi("#masterid").select2().select2("val", null);
-                    }
-                });
-            }
-        });
-    });
-
-    /* -- Form: Retailer ? Distributor switch -- */
-    ravi('#frmretdeal').submit(function (e) {
-        e.preventDefault();
-        ravi.ajax({
-            type: 'POST',
-            url: '@Url.Action("dealer_retailer_Switch","Home")',
-            data: { remid: ravi('#retailerid').val(), dlmid: ravi('#dealerdetailsid').val() },
-            success: function () {
-                ravi('#retailerid').val('');
-                ravi('#dealerdetailsid').val('');
+            },
+            error: function (xhr, st) {
+                if (window.console && console.warn) { console.warn('[SwitchUsers] FetchRetailerDetails failed:', xhr.status, st); }
                 ravi('.distributor-details').hide();
-                ravi.ajax({
-                    url: "@Url.Action("ChangeTabtype","Home",new { Utype="Retailer"})",
-                    success: function (data) {
-                        ravi('#dlmd').html(data);
-                        ravi("#retailerid").select2().select2("val", null);
-                        ravi("#dealerdetailsid").select2().select2("val", null);
-                    }
-                });
             }
         });
-    });
+    }
+
+    /* -- Cancel (reset): selects + detail cards bhi clear -- */
+    function suOnFormReset() {
+        var frm = this;
+        window.setTimeout(function () {
+            (suJq() || ravi)(frm).find('select').val('').trigger('change');
+            ravi('.distributor-detail, .distributor-details').hide();
+        }, 0);
+    }
+
+    /* -- Form: Distributor ? M/D switch (sweet alert + checked ajax) -- */
+    function suOnDistributorMove(e) {
+        e.preventDefault();
+        var dealerid = ravi('#dealerid').val();
+        var masterid = ravi('#masterid').val();
+        if (!dealerid) {
+            suSwal('Oops!', 'Please select a distributor.', 'error');
+            return;
+        }
+        if (!masterid) {
+            suSwal('Oops!', 'Please select new M/D.', 'error');
+            return;
+        }
+        var $btn = ravi(this).find('.ne-btn-submit');
+        suConfirmMove('You want to move this distributor to the selected M/D!', function () {
+            /* Yes click par turant feedback — pata chale request chal padi */
+            var suOldHtml = $btn.html();
+            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Moving...');
+            ravi.ajax({
+                type: 'POST',
+                url: '@Url.Action("DealerMD_switch","Home")',
+                data: { dealerid: dealerid, masterid: masterid },
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    if (suHandleSwitchResponse(data, 'Distributor moved successfully.')) {
+                        ravi('#frmdealtomd')[0].reset();
+                        (suJq() || ravi)('#dealerid, #masterid').val('').trigger('change');
+                        ravi('.distributor-detail').hide();
+                        suReloadHistory('dealer');
+                    }
+                },
+                error: function (xhr) {
+                    suSwal('Error!', xhr.status === 0 ? 'Network error. Please try again.' : 'Server error. Please try again.', 'error');
+                },
+                complete: function () {
+                    $btn.prop('disabled', false).html(suOldHtml);
+                }
+            });
+        });
+    }
+
+    /* -- Form: Retailer ? Distributor switch (sweet alert + checked ajax) -- */
+    function suOnRetailerMove(e) {
+        e.preventDefault();
+        var remid = ravi('#retailerid').val();
+        var dlmid = ravi('#dealerdetailsid').val();
+        if (!remid) {
+            suSwal('Oops!', 'Please select a retailer.', 'error');
+            return;
+        }
+        if (!dlmid) {
+            suSwal('Oops!', 'Please select new distributor.', 'error');
+            return;
+        }
+        var $btn = ravi(this).find('.ne-btn-submit');
+        suConfirmMove('You want to move this retailer to the selected distributor!', function () {
+            /* Yes click par turant feedback — pata chale request chal padi */
+            var suOldHtml = $btn.html();
+            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Moving...');
+            ravi.ajax({
+                type: 'POST',
+                url: '@Url.Action("dealer_retailer_Switch","Home")',
+                data: { remid: remid, dlmid: dlmid },
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    if (suHandleSwitchResponse(data, 'Retailer moved successfully.')) {
+                        ravi('#frmretdeal')[0].reset();
+                        (suJq() || ravi)('#retailerid, #dealerdetailsid').val('').trigger('change');
+                        ravi('.distributor-details').hide();
+                        suReloadHistory('Retailer');
+                    }
+                },
+                error: function (xhr) {
+                    suSwal('Error!', xhr.status === 0 ? 'Network error. Please try again.' : 'Server error. Please try again.', 'error');
+                },
+                complete: function () {
+                    $btn.prop('disabled', false).html(suOldHtml);
+                }
+            });
+        });
+    }
 </script>

@@ -2291,17 +2291,25 @@
 
 <script>
 
+    function saasProfProfileLabelFromForm(formId, serverVal) {
+        var fromForm = ($('#' + formId).val() || '').trim();
+        if (fromForm) return fromForm;
+        var fromServer = serverVal == null ? '' : String(serverVal).trim();
+        return fromServer ? fromServer : 'Data Not Found !';
+    }
+
     function UpdateProfilesOnsucc(data) {
         if (!data) return;
+        var serverGst = data.Gstno != null ? data.Gstno : data.gstno;
         $('#hdid1').val(data.ID);
         $('#lbladminname').text(data.Name || 'Data Not Found !');
         $('#lbladminemail').text(data.email || 'Data Not Found !');
         $('#lbladminmobile').text(data.mobile || 'Data Not Found !');
         $('#lbladminaadhar').text(typeof saasProfMaskAadhar === 'function' ? saasProfMaskAadhar(data.Aadhar) : (data.Aadhar || 'Data Not Found !'));
-        $('#lbladminpencard').text(data.pencardno || 'Data Not Found !');
-        $('#lbladmingst').text(data.Gstno || 'Data Not Found !');
-        $('#lbladmintan').text(data.tanno || 'Data Not Found !');
-        $('#lbladminregistration').text(data.registrationno || 'Data Not Found !');
+        $('#lbladminpencard').text(data.pencardno && String(data.pencardno).trim() ? data.pencardno : 'Data Not Found !');
+        $('#lbladmingst').text(saasProfProfileLabelFromForm('txtgst', serverGst));
+        $('#lbladmintan').text(data.tanno && String(data.tanno).trim() ? data.tanno : 'Data Not Found !');
+        $('#lbladminregistration').text(data.registrationno && String(data.registrationno).trim() ? data.registrationno : 'Data Not Found !');
         if (data.Date) {
             var launchText = typeof saasProfFormatLaunchDate === 'function' ? saasProfFormatLaunchDate(data.Date) : data.Date;
             $('#lblLaunchDateDisplay').text(launchText);

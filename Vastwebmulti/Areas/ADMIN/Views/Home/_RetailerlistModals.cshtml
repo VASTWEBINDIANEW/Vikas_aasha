@@ -482,7 +482,7 @@
                 <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body saas-admin-modal-body vm-rl-otp-modal__body">
-                @using (Ajax.BeginForm("ConfirmDeleteRetailerOTP", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "Retailertablelist", OnSuccess = "OnSuccessconfirm", OnFailure = "OnFailureotperror" }))
+                @using (Ajax.BeginForm("ConfirmDeleteRetailerOTP", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "Retailertablelist", OnSuccess = "OnSuccessconfirm", OnFailure = "OnFailureotperror" }, new { id = "vmRlDeleteOtpForm" }))
                 {
                     @Html.Hidden("RetailerIddelete")
                     <div class="row">
@@ -496,7 +496,7 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12 vm-rl-otp-actions">
                             <span id="otpwrong" class="vm-rl-otp-error"></span>
-                            <button type="submit" value="SaveChange" class="btn vm-ml-modal-btn vm-ml-modal-btn--danger vm-rl-otp-submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><i class="fas fa-trash-alt" aria-hidden="true"></i> Delete User</button>
+                            <button type="button" value="SaveChange" class="btn vm-ml-modal-btn vm-ml-modal-btn--danger vm-rl-otp-submit" onclick="return vmRlDeleteUserConfirm();"><i class="fas fa-trash-alt" aria-hidden="true"></i> Delete User</button>
                         </div>
                     </div>
 
@@ -597,7 +597,15 @@
         if (typeof vmRlShowOtpModal === 'function') { vmRlShowOtpModal('#otpmodal'); }
         else if (typeof vmRlShowDocModal === 'function') { vmRlShowDocModal('#otpmodal'); }
         else { $('#otpmodal').modal('show'); }
-        $('#otpwrong').text("OTP Mismatch , Please enter Correct OTP");
+        var msg = "OTP Mismatch , Please enter Correct OTP";
+        if (data) {
+            try {
+                var t = data.responseText || "";
+                var parsed = JSON.parse(t);
+                if (typeof parsed === "string" && parsed.trim()) { msg = parsed; }
+            } catch (e) { }
+        }
+        $('#otpwrong').text(msg);
         window.setTimeout(function () { $('#Deleteotp').trigger('focus'); }, 80);
     }
 
@@ -696,7 +704,178 @@
             }
         });
     }
+
+    // OTP Delete — sweet alert + manual ajax (view-only fix):
+    // 1) OTP trim, 2) RetailerId re-sync, 3) swal confirm,
+    // 4) ajax check + response verify (user gaya ya nahi), 5) swal result
+    function vmRlDeleteSwal(title, text, type) {
+        if (typeof swal === 'function') {
+            swal(title, text, type || 'info');
+            return true;
+        }
+        try {
+            if (String(type) === 'success') { window.alert(String(title) + '\n' + String(text)); }
+            else if (window.confirm(String(title) + '\n' + String(text))) { return true; }
+        } catch (e) { }
+        return false;
+    }
+
+    function vmRlDeleteUserConfirm() {
+        var $ = window.jQuery;
+        if (!$) { return false; }
+        if ($('#vmRlDeleteOtpForm').data('vmRlSubmitting')) { return false; }
+
+        var otp = $.trim($('#Deleteotp').val() || '');
+        $('#Deleteotp').val(otp);
+        if (!otp) {
+            $('#otpwrong').text('Please enter OTP');
+            window.setTimeout(function () { $('#Deleteotp').trigger('focus'); }, 80);
+            return false;
+        }
+
+        var rid = $.trim($('#RetailerIddelete').val() || $('#RetailerId').val() || $('#RetailerIdshow').val() || '');
+        if (!rid) {
+            $('#otpwrong').text('Retailer details are still loading. Please wait and try again.');
+            return false;
+        }
+        $('#RetailerIddelete').val(rid);
+
+        if (typeof swal === 'function') {
+            swal({
+                title: 'Are you sure?',
+                text: 'You want to delete this user!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: 'Yes, Delete User!',
+                cancelButtonText: 'Cancel',
+                closeOnConfirm: true,
+                closeOnCancel: true
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    vmRlSendDeleteOtp(rid, otp);
+                }
+            });
+        } else if (window.confirm('Are you sure? You want to delete this user!')) {
+            vmRlSendDeleteOtp(rid, otp);
+        }
+        return false;
+    }
+
+    function vmRlSendDeleteOtp(rid, otp) {
+        var $ = window.jQuery;
+        if (!$) { return false; }
+        var $form = $('#vmRlDeleteOtpForm');
+        if (!$form.length || $form.data('vmRlSubmitting')) { return false; }
+        var postUrl = $form.attr('action') || '';
+        if (window.console && console.info) {
+            console.info('[RetailerDelete] POST', postUrl, 'RetailerIddelete=' + rid);
+        }
+
+        $form.data('vmRlSubmitting', true);
+        var $btn = $form.find('.vm-rl-otp-submit');
+        var btnOld = $btn.html();
+        $btn.prop('disabled', true).html("<i class='fa fa-spinner fa-spin' aria-hidden='true'></i> Deleting...");
+        $.ajax({
+            url: postUrl,
+            type: 'POST',
+            data: { RetailerIddelete: rid, Deleteotp: otp },
+            cache: false,
+            timeout: 60000
+        }).done(function (data, textStatus, xhr) {
+            if (window.console && console.info) {
+                console.info('[RetailerDelete] response', xhr.status, typeof data, (typeof data === 'string' ? data.length : ''));
+            }
+            if (typeof data !== 'string' || !data) {
+                vmRlDeleteFailed('User could not be deleted. Please try again.');
+                return;
+            }
+            $('#Retailertablelist').html(data);
+            var stillThere = false;
+            try {
+                var $tmp = $('<div>').append($.parseHTML(data));
+                if ($tmp.find('[data-retailer-id="' + rid + '"]').length) { stillThere = true; }
+                else if (data.indexOf(rid) > -1) { stillThere = true; }
+            } catch (err) { }
+            if (stillThere) {
+                vmRlDeleteFailed('User could not be deleted. Please try again.');
+                return;
+            }
+            vmRlDeleteSucceeded();
+        }).fail(function (xhr, textStatus) {
+            if (window.console && console.warn) {
+                console.warn('[RetailerDelete] ajax failed', xhr.status, textStatus);
+            }
+            var msg = 'OTP Mismatch , Please enter Correct OTP';
+            try {
+                var p = JSON.parse(xhr.responseText || '');
+                if (typeof p === 'string' && p.trim()) { msg = p; }
+            } catch (err) { }
+            if (xhr.status === 0) { msg = 'Network error. Please check connection and try again.'; }
+            else if (xhr.status >= 500) { msg = 'Server error. Please try again.'; }
+            vmRlDeleteFailed(msg);
+        }).always(function () {
+            $form.data('vmRlSubmitting', false);
+            $btn.prop('disabled', false).html(btnOld);
+        });
+        return false;
+    }
+
+    function vmRlDeleteFailed(msg) {
+        $('#otpwrong').text(msg);
+        if (typeof vmRlShowOtpModal === 'function') { vmRlShowOtpModal('#otpmodal'); }
+        else if (window.jQuery && window.jQuery.fn && window.jQuery.fn.modal) { $('#otpmodal').modal('show'); }
+        vmRlDeleteSwal('Error!', msg, 'error');
+        window.setTimeout(function () { $('#Deleteotp').trigger('focus'); }, 80);
+    }
+
+    function vmRlDeleteSucceeded() {
+        try {
+            if (typeof vmRlHideOtpModal === 'function') { vmRlHideOtpModal('#otpmodal'); }
+            else if (typeof vmRlHideDocModal === 'function') { vmRlHideDocModal('#otpmodal'); }
+            else if (window.jQuery && window.jQuery.fn && window.jQuery.fn.modal) { $('#otpmodal').modal('hide'); }
+            else { $('#otpmodal').hide(); }
+        } catch (e) { }
+        try { window.vmRlSkipModalRefresh = true; } catch (e) { }
+        try {
+            if (typeof vmRlCloseDetailModalAndRefresh === 'function') { vmRlCloseDetailModalAndRefresh(); }
+            else if (typeof vmRlCloseDetailModal === 'function') { vmRlCloseDetailModal(); }
+        } catch (e) { }
+        vmRlDeleteSwal('Deleted!', 'User has been deleted.', 'success');
+    }
+
+    function vmRlInitDeleteOtpForm() {
+        var $ = window.jQuery;
+        if (!$) { window.setTimeout(vmRlInitDeleteOtpForm, 50); return; }
+        var $form = $('#vmRlDeleteOtpForm');
+        if (!$form.length) { window.setTimeout(vmRlInitDeleteOtpForm, 100); return; }
+        // unobtrusive-ajax wale attrs hatao taaki double-post na ho — submit manual hoga
+        $form.removeAttr('data-ajax data-ajax-method data-ajax-mode data-ajax-update data-ajax-success data-ajax-failure data-ajax-begin data-ajax-complete');
+        $form.off('submit.vmRlDeleteOtp').on('submit.vmRlDeleteOtp', function (e) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            return vmRlDeleteUserConfirm();
+        });
+    }
+
+    if (document.readyState === 'complete') {
+        vmRlInitDeleteOtpForm();
+    } else if (window.addEventListener) {
+        window.addEventListener('load', vmRlInitDeleteOtpForm);
+    } else {
+        window.setTimeout(vmRlInitDeleteOtpForm, 200);
+    }
 </script>
+<style>
+    /* Sweet alert hamesha sabse upar (OTP/detail modal ke upar) */
+    .sweet-overlay {
+        z-index: 200000 !important;
+    }
+
+    .sweet-alert {
+        z-index: 200001 !important;
+    }
+</style>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
     function DeleteuserDucument(val) {
         var RetailerId = $('#RetailerIddeletedocument').val() || $('#RetailerId').val();

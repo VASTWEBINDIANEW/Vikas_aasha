@@ -1,130 +1,366 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.bank_info>
+@using System.Linq
 @{
-    ViewBag.Title = "Bank_Details";
+    ViewBag.Title = "Bank Details";
     Layout = "~/Areas/DEALER/Views/Shared/_Layout.cshtml";
+
+    var bankList = (Model ?? Enumerable.Empty<Vastwebmulti.Models.bank_info>()).ToList();
+    var bankCount = bankList.Count;
 }
 
-<style>
-    @@media screen and (max-width:990px){
-        .bank-detailspage .col-md-6{width:50%;float:left;}
-    }
-    @@media screen and (max-width:768px){
-        .bank-detailspage .col-md-6{width:100%;}
-    }
-    @@media screen and (max-width:420px){
-        .bank-detailspage table tr th{padding:10px 5px;font-size:12px !important;}
-        .bank-detailspage .col-md-12 .card .form-group {margin-bottom: 0;}
-        .bank-detailspage table tr th:first-child {width: 46% !important;}
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=24" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page', 'saas-dealer-bank-details-page');</script>
 
-    }
-</style>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-dealer-daybook-page saas-dealer-bank-details-page saas-ecommerce-report-page">
 
+    <div class="container-fluid vm-opr-page-shell">
 
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-<section class="content bank-detailspage">
-    <div class="container-fluid full-dealer-secondanimation">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-dealer">
-            <h3>All Bank Information</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account Active&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Bank Details</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Account Active</li>
+                    <li>Bank Details</li>
+                </ol>
 
-        <div class="bankdeatils-dealer-third">
-            <div class="row clearfix">
-                <div class="col-md-12 dealer-none-fourclass">
-                    <div class="card" style="margin-bottom: 0px; ">
-                        <div class="form-group" style="margin-top: 2px;">
-                            <ol style="margin-left:0px;padding:0px;">
-                                <li class="active" style="color:#555; font-size:20px;font-weight:700;">All Bank Information</li>
-                            </ol>
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
+
+                    <div class="vm-dmt-filter-search-group">
+                        <div class="vm-ft-search-wrap vm-bank-details-table-search">
+                            <input class="form-control vm-bank-details-search-input" type="text" id="bankDetailsSearchInput" placeholder="Search banks..." autocomplete="off" />
                         </div>
-
+                        <span class="vm-radiant-record-badge" title="Total banks">
+                            Banks: <strong id="bankDetailsRecordCount">@bankCount</strong>
+                        </span>
                     </div>
-                </div>
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card all-bank-details">
-                        <div>
-                            <div class="row">
-                                @foreach (var item in Model)
-                                {
-                                    <div class="col-md-6 dealerbank-second">
-                                        <table border="1" style="margin-top:5px; margin-bottom:5px; float:left;border:10px solid #e4e1e1;">
-                                            <tr>
-                                                <th style="width:220px; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black; position:initial;border:1px solid #dddddd;background-color:whitesmoke;">
-                                                    Bank Name
-                                                </th>
-                                                <th style="width:320px;  font-size:14px;  font-family:Arial; font-weight:bold; text-align:center; color:#585858;border:1px solid #dddddd;">
-                                                    @Html.DisplayFor(modelItem => item.banknm)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th style="width:220px;background-color:whitesmoke;   height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid #dddddd;">
-                                                    Branch Name
-                                                </th>
-                                                <th style="width:160px;  font-size:14px;  font-family:Arial; font-weight:bold; text-align:center; color:#585858;border:1px solid #dddddd;">
-                                                    @Html.DisplayFor(modelItem => item.branch_nm)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th style="width:220px;background-color:whitesmoke;  height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid #dddddd;">
-                                                    IFSC CODE
-                                                </th>
-                                                <th style="width:160px;  font-size:14px;  font-family:Arial; font-weight:bold; text-align:center; color:#585858;border:1px solid #dddddd;">
-                                                    @Html.DisplayFor(modelItem => item.ifsccode)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th style="width:220px;background-color:whitesmoke; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid #dddddd;">
-                                                    Account Number
-                                                </th>
-                                                <th style="width:160px;  font-size:14px;  font-family:Arial; font-weight:bold; text-align:center; color:#585858;border:1px solid #dddddd;">
-                                                    @Html.DisplayFor(modelItem => item.acno)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th style="width:220px; height: 42px;background-color:whitesmoke; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid #dddddd;">
-                                                    Account Type
-                                                </th>
-                                                <th style="width:160px;  font-size:14px;  font-family:Arial; font-weight:bold; text-align:center; color:#585858;border:1px solid #dddddd;">
-                                                    @Html.DisplayFor(modelItem => item.actype)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th style="width:220px; height: 42px;background-color:whitesmoke; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black; position:initial;border:1px solid #dddddd;">
-                                                    Account Holder Name
-                                                </th>
-                                                <th style="width:160px;  font-size:14px;  font-family:Arial; font-weight:bold; text-align:center; color:#585858;border:1px solid #dddddd;">
-                                                    @Html.DisplayFor(modelItem => item.holdername)
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th style="width:220px; background-color:whitesmoke; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid #dddddd;">
-                                                    Branch Address
-                                                </th>
-                                                <th style="width:160px;  font-size:14px;  font-family:Arial; font-weight:bold; text-align:center; color:#585858;border:1px solid #dddddd;">
-                                                    @Html.DisplayFor(modelItem => item.address)
-                                                </th>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-
+                </div>
 
             </div>
+
         </div>
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-building-columns" aria-hidden="true"></i>
+                        <span>All bank information</span>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap vm-bank-details-wrap">
+                    @if (!bankList.Any())
+                    {
+                        <div class="vm-opr-table-empty vm-bank-details-empty">No bank information found.</div>
+                    }
+                    else
+                    {
+                        <div class="vm-bank-details-grid" id="bankDetailsGrid">
+                            @foreach (var item in bankList)
+                            {
+                                var bankName = string.IsNullOrWhiteSpace(item.banknm) ? "—" : item.banknm.Trim();
+                                <div class="vm-bank-details-card" data-search="@(bankName + " " + item.branch_nm + " " + item.ifsccode + " " + item.acno + " " + item.actype + " " + item.holdername + " " + item.address)">
+                                    <div class="vm-bank-details-card__head">
+                                        <span class="vm-bank-details-card__icon"><i class="fas fa-landmark" aria-hidden="true"></i></span>
+                                        <div class="vm-bank-details-card__head-text">
+                                            <strong class="vm-bank-details-card__name">@bankName</strong>
+                                            <span class="vm-bank-details-card__branch">@(string.IsNullOrWhiteSpace(item.branch_nm) ? "—" : item.branch_nm)</span>
+                                        </div>
+                                    </div>
+                                    <div class="vm-bank-details-card__rows">
+                                        <div class="vm-bank-details-row">
+                                            <span class="vm-bank-details-row__label">IFSC Code</span>
+                                            <span class="vm-bank-details-row__value">
+                                                @(string.IsNullOrWhiteSpace(item.ifsccode) ? "—" : item.ifsccode)
+                                                @if (!string.IsNullOrWhiteSpace(item.ifsccode))
+                                                {
+                                                    <button type="button" class="vm-bank-details-copy-btn" data-copy="@item.ifsccode.Trim()" title="Copy IFSC">
+                                                        <i class="far fa-copy" aria-hidden="true"></i>
+                                                    </button>
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="vm-bank-details-row">
+                                            <span class="vm-bank-details-row__label">Account Number</span>
+                                            <span class="vm-bank-details-row__value">
+                                                @(string.IsNullOrWhiteSpace(item.acno) ? "—" : item.acno)
+                                                @if (!string.IsNullOrWhiteSpace(item.acno))
+                                                {
+                                                    <button type="button" class="vm-bank-details-copy-btn" data-copy="@item.acno.Trim()" title="Copy account number">
+                                                        <i class="far fa-copy" aria-hidden="true"></i>
+                                                    </button>
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="vm-bank-details-row">
+                                            <span class="vm-bank-details-row__label">Account Type</span>
+                                            <span class="vm-bank-details-row__value">@(string.IsNullOrWhiteSpace(item.actype) ? "—" : item.actype)</span>
+                                        </div>
+                                        <div class="vm-bank-details-row">
+                                            <span class="vm-bank-details-row__label">Account Holder</span>
+                                            <span class="vm-bank-details-row__value">@(string.IsNullOrWhiteSpace(item.holdername) ? "—" : item.holdername)</span>
+                                        </div>
+                                        <div class="vm-bank-details-row vm-bank-details-row--full">
+                                            <span class="vm-bank-details-row__label">Branch Address</span>
+                                            <span class="vm-bank-details-row__value">@(string.IsNullOrWhiteSpace(item.address) ? "—" : item.address)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="vm-opr-table-empty vm-bank-details-empty" id="bankDetailsNoMatch" style="display:none;">No banks match your search.</div>
+                    }
+                </div>
+            </div>
+        </div>
+
     </div>
-
-
 </section>
 
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<script>
+    function bankDetailsFilter() {
+        var $ = window.jQuery;
+        if (!$) { return; }
+        var value = ($('#bankDetailsSearchInput').val() || '').toLowerCase().trim();
+        var visible = 0;
+        $('#bankDetailsGrid .vm-bank-details-card').each(function () {
+            var $card = $(this);
+            var show = !value || (($card.attr('data-search') || '').toLowerCase().indexOf(value) > -1);
+            $card.toggle(show);
+            if (show) { visible++; }
+        });
+        $('#bankDetailsRecordCount').text(visible);
+        $('#bankDetailsNoMatch').toggle(visible === 0);
+    }
+
+    function bankDetailsCopy(text, btn) {
+        function done() {
+            if (btn) {
+                var $btn = window.jQuery ? window.jQuery(btn) : null;
+                if ($btn && $btn.length) {
+                    var old = $btn.html();
+                    $btn.html('<i class="fas fa-check" aria-hidden="true"></i>');
+                    window.setTimeout(function () { $btn.html(old); }, 1200);
+                }
+            }
+            if (typeof swal === 'function') {
+                swal('Copied!', text, 'success');
+            }
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(); });
+        } else {
+            fallbackCopy();
+        }
+        function fallbackCopy() {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch (e) { }
+            document.body.removeChild(ta);
+            done();
+        }
+    }
+
+    function bootDealerBankDetailsPage() {
+        var $ = window.jQuery;
+        if (!$) {
+            window.setTimeout(bootDealerBankDetailsPage, 50);
+            return;
+        }
+        $('#bankDetailsSearchInput').off('input.bankDetails keyup.bankDetails').on('input.bankDetails keyup.bankDetails', bankDetailsFilter);
+        $(document).off('click.bankDetailsCopy').on('click.bankDetailsCopy', '.vm-bank-details-copy-btn', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            bankDetailsCopy($(this).attr('data-copy') || '', this);
+        });
+    }
+
+    if (document.readyState === 'complete') {
+        bootDealerBankDetailsPage();
+    } else {
+        window.addEventListener('load', bootDealerBankDetailsPage);
+    }
+</script>
+
+@section LateCss {
+    <style>
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-radiant-breadcrumb,
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-radiant-breadcrumb a,
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-opr-table-panel__title,
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-opr-table-panel__title span,
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-radiant-record-badge,
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-bank-details-table-search input.vm-bank-details-search-input,
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-bank-details-card__name,
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-bank-details-card__branch,
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-bank-details-row__label,
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-bank-details-row__value {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-bank-details-table-search {
+            min-width: 200px;
+            max-width: 260px;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page.saas-ecommerce-report-page .vm-bank-details-table-search input.vm-bank-details-search-input {
+            height: 38px !important;
+            border-radius: 8px !important;
+            border: 1.5px solid #cbd5e1 !important;
+            background: #fff !important;
+            padding: 0 12px !important;
+            font-weight: 500 !important;
+        }
+
+        /* Bank cards grid */
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-wrap {
+            padding: 16px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 16px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-card {
+            border: 1px solid #dbe4f0 !important;
+            border-radius: 12px !important;
+            background: #fff !important;
+            overflow: hidden !important;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-card__head {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            padding: 14px 16px !important;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+            color: #fff !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-card__icon {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 42px !important;
+            height: 42px !important;
+            border-radius: 10px !important;
+            background: rgba(255, 255, 255, 0.18) !important;
+            font-size: 18px !important;
+            flex: 0 0 auto !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-card__head-text {
+            display: flex !important;
+            flex-direction: column !important;
+            min-width: 0 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-card__name {
+            color: #fff !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-card__branch {
+            color: #dbeafe !important;
+            font-weight: 500 !important;
+            font-size: 13px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-card__rows {
+            padding: 8px 16px 14px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-row {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 12px !important;
+            padding: 9px 0 !important;
+            border-bottom: 1px dashed #e2e8f0 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-row:last-child {
+            border-bottom: 0 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-row__label {
+            color: #64748b !important;
+            flex: 0 0 auto !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-row__value {
+            color: #0f172a !important;
+            text-align: right !important;
+            word-break: break-word !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-row--full {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-row--full .vm-bank-details-row__value {
+            text-align: left !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-copy-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 7px !important;
+            border: 1px solid #cbd5e1 !important;
+            background: #f1f5f9 !important;
+            color: #475569 !important;
+            cursor: pointer !important;
+            font-size: 12px !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-copy-btn:hover {
+            background: #e0e7ff !important;
+            border-color: #a5b4fc !important;
+            color: #3730a3 !important;
+        }
+
+        body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-empty {
+            padding: 36px 16px !important;
+            text-align: center !important;
+        }
+
+        @@media (max-width: 991px) {
+            body.saas-admin-ui section.content.saas-dealer-bank-details-page .vm-bank-details-grid {
+                grid-template-columns: minmax(0, 1fr) !important;
+            }
+        }
+    </style>
+}

@@ -1,4 +1,5 @@
 @model List<Vastwebmulti.Models.show_all_account_Result>
+@using System.Linq
 @{
     Layout = null;
 }
@@ -6,21 +7,31 @@
 @{
     var db = new Vastwebmulti.Models.VastwebmultiEntities();
     var virtualAmount = db.Remain_Admin_balance.FirstOrDefault()?.VirtualAmount;
+    var list = Model ?? new List<Vastwebmulti.Models.show_all_account_Result>();
 }
-@foreach (var item in Model)
+@if (!list.Any())
 {
-    var isMismatch = item.total != virtualAmount;
-    <tr class="@(isMismatch ? "saas-acc-row-mismatch" : "")">
-        <td class="col-order" data-label="Order Id">@item.id</td>
-        <td class="col-details" data-label="Transaction">@Html.DisplayFor(modelItem => item.details)</td>
-        <td class="col-bal" data-label="Admin Bal">@Html.DisplayFor(modelItem => item.totaladmin)</td>
-        <td class="col-bal" data-label="M/D Bal">@Html.DisplayFor(modelItem => item.totalsuper)</td>
-        <td class="col-bal" data-label="Distributor Bal">@Html.DisplayFor(modelItem => item.totaldlm)</td>
-        <td class="col-bal" data-label="Retailer Bal">@Html.DisplayFor(modelItem => item.totalrem)</td>
-        <td class="col-bal" data-label="POS Bal">@item.posremain</td>
-        <td class="col-bal" data-label="API Bal">@Html.DisplayFor(modelItem => item.totalapi)</td>
-        <td class="col-bal" data-label="W/L Bal">@Html.DisplayFor(modelItem => item.totalwhitelabel)</td>
-        <td class="col-total col-bal" data-label="Total">@Html.DisplayFor(modelItem => item.total)</td>
-        <td data-label="Date &amp; Time">@String.Format("{0:dd-MM-yyyy HH:mm}", item.tdate)</td>
+    <tr class="saas-acc-empty-row">
+        <td colspan="11" class="saas-acc-empty">No records found for selected dates.</td>
     </tr>
+}
+else
+{
+    foreach (var item in list)
+    {
+        var isMismatch = item.total != virtualAmount;
+        <tr class="@(isMismatch ? "saas-acc-row-mismatch" : "")">
+            <td class="col-order" data-label="Order Id">@item.id</td>
+            <td class="col-details" data-label="Transaction">@Html.DisplayFor(modelItem => item.details)</td>
+            <td class="col-bal" data-label="Admin Bal">@Html.DisplayFor(modelItem => item.totaladmin)</td>
+            <td class="col-bal" data-label="M/D Bal">@Html.DisplayFor(modelItem => item.totalsuper)</td>
+            <td class="col-bal" data-label="Distributor Bal">@Html.DisplayFor(modelItem => item.totaldlm)</td>
+            <td class="col-bal" data-label="Retailer Bal">@Html.DisplayFor(modelItem => item.totalrem)</td>
+            <td class="col-bal" data-label="POS Bal">@item.posremain</td>
+            <td class="col-bal" data-label="API Bal">@Html.DisplayFor(modelItem => item.totalapi)</td>
+            <td class="col-bal" data-label="W/L Bal">@Html.DisplayFor(modelItem => item.totalwhitelabel)</td>
+            <td class="col-total col-bal" data-label="Total">@Html.DisplayFor(modelItem => item.total)</td>
+            <td data-label="Date &amp; Time">@String.Format("{0:dd-MM-yyyy HH:mm}", item.tdate)</td>
+        </tr>
+    }
 }

@@ -26,7 +26,7 @@
 
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 
-<link href="~/MainFrontDesign/css/admin-add-purchase-modern.css?v=9" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-add-purchase-modern.css?v=10" rel="stylesheet" />
 
 
 
@@ -391,6 +391,98 @@
 
 
 
+        function apUniqueSellerCandidates(primaryVal, $select) {
+
+            var list = [];
+
+            function add(v) {
+
+                v = String(v == null ? '' : v).replace(/\s+/g, ' ').trim();
+
+                if (!v || /^select\s*\(seller\)/i.test(v)) {
+
+                    return;
+
+                }
+
+                if (list.indexOf(v) === -1) {
+
+                    list.push(v);
+
+                }
+
+            }
+
+            add(primaryVal);
+
+            var $sel = ($select && $select.length) ? $select : $('#sellerapi');
+
+            if ($sel.length) {
+
+                var $picked = $sel.find('option:selected');
+
+                if ($picked.length) {
+
+                    add($picked.val());
+
+                    add($picked.text());
+
+                }
+
+                if (primaryVal) {
+
+                    var pk = apNormalizeSellerKey(primaryVal);
+
+                    $sel.find('option').each(function () {
+
+                        var ov = apNormalizeSellerKey($(this).val());
+
+                        var ot = apNormalizeSellerKey($(this).text());
+
+                        if (ov === pk || ot === pk) {
+
+                            add($(this).val());
+
+                            add($(this).text());
+
+                        }
+
+                    });
+
+                }
+
+            }
+
+            return list;
+
+        }
+
+
+
+        function apTryFillSellerBankForCandidates(candidates) {
+
+            for (var i = 0; i < candidates.length; i++) {
+
+                if (apFillSellerBankDetailsFromDom(candidates[i])) {
+
+                    return true;
+
+                }
+
+                if (apFillSellerBankDetailsFromOption(candidates[i])) {
+
+                    return true;
+
+                }
+
+            }
+
+            return false;
+
+        }
+
+
+
         var apSellerInfoUrl = '@Url.Action("Showsellinfo", "Home", new { area = "ADMIN" })';
 
 
@@ -443,9 +535,11 @@
 
             }
 
+            var key = apNormalizeSellerKey(val);
+
             var $opt = $('#sellerapi option').filter(function () {
 
-                return String($(this).val()).trim() === val;
+                return apNormalizeSellerKey($(this).val()) === key || apNormalizeSellerKey($(this).text()) === key;
 
             }).first();
 
@@ -539,9 +633,17 @@
 
 
 
-        function apFillSellerBankDetails(apiName) {
+        function apFillSellerBankDetails(apiName, $select) {
 
-            var val = String(apiName || '').trim();
+            var $sel = ($select && $select.length) ? $select : $('#sellerapi');
+
+            var val = String(apiName == null ? '' : apiName).trim();
+
+            if (!val && $sel.length) {
+
+                val = String($sel.val() || '').trim();
+
+            }
 
             if (!val) {
 
@@ -551,17 +653,15 @@
 
             }
 
-            if (apFillSellerBankDetailsFromDom(val)) {
+            var candidates = apUniqueSellerCandidates(val, $sel);
+
+            if (apTryFillSellerBankForCandidates(candidates)) {
 
                 return;
 
             }
 
-            if (apFillSellerBankDetailsFromOption(val)) {
-
-                return;
-
-            }
+            var ajaxName = candidates[0] || val;
 
             $.ajax({
 
@@ -569,7 +669,7 @@
 
                 type: 'POST',
 
-                data: { Apinm: val },
+                data: { Apinm: ajaxName },
 
                 dataType: 'json',
 
@@ -697,6 +797,16 @@
 
             var selected = $sel.val();
 
+            var selectedText = '';
+
+            var $prevOpt = $sel.find('option:selected');
+
+            if ($prevOpt.length) {
+
+                selectedText = String($prevOpt.text() || '').trim();
+
+            }
+
             var $placeholder = $sel.find('option[value=""]').first();
 
             if ($placeholder.length) {
@@ -729,11 +839,31 @@
 
             }
 
-            if (selected) {
+            if (selected || selectedText) {
+
+                var normSelected = apNormalizeSellerKey(selected);
+
+                var normText = apNormalizeSellerKey(selectedText);
 
                 var $match = $sel.find('option').filter(function () {
 
-                    return String($(this).val()).trim() === String(selected).trim();
+                    var v = apNormalizeSellerKey($(this).val());
+
+                    var t = apNormalizeSellerKey($(this).text());
+
+                    if (normSelected && (v === normSelected || t === normSelected)) {
+
+                        return true;
+
+                    }
+
+                    if (normText && (v === normText || t === normText)) {
+
+                        return true;
+
+                    }
+
+                    return false;
 
                 }).first();
 
@@ -742,6 +872,12 @@
                     $sel.val($match.val());
 
                 }
+
+            }
+
+            if ($sel.val()) {
+
+                apFillSellerBankDetails($sel.val(), $sel);
 
             }
 
@@ -755,7 +891,7 @@
 
             $(document).on('change.apSellerBank', '#sellerapi', function () {
 
-                apFillSellerBankDetails($(this).val());
+                apFillSellerBankDetails($(this).val(), $(this));
 
             });
 
@@ -769,7 +905,7 @@
 
                 }
 
-                apFillSellerBankDetails(selected);
+                apFillSellerBankDetails(selected, $(this));
 
             });
 
@@ -1080,6 +1216,40 @@
                 apFilterActiveTable($(this).val());
 
             });
+
+
+
+            var apBankHost = document.getElementById('apBankTableHost');
+
+            if (apBankHost && window.MutationObserver) {
+
+                var apBankSyncTimer = null;
+
+                new MutationObserver(function () {
+
+                    if (apBankSyncTimer) {
+
+                        window.clearTimeout(apBankSyncTimer);
+
+                    }
+
+                    apBankSyncTimer = window.setTimeout(function () {
+
+                        apSyncSellerDropdownFromBankTable();
+
+                        var $seller = $('#sellerapi');
+
+                        if ($seller.length && $seller.val()) {
+
+                            apFillSellerBankDetails($seller.val(), $seller);
+
+                        }
+
+                    }, 80);
+
+                }).observe(apBankHost, { childList: true, subtree: true });
+
+            }
 
         });
 
@@ -1425,6 +1595,8 @@
 
         window.refreshAddPurchaseSelect2 = refreshAddPurchaseSelect2;
 
+        window.apFillSellerBankDetailsJq = apFillSellerBankDetails;
+
         window.apFillSellerBankDetails = apFillSellerBankDetails;
 
         window.apBindSellerPartyAutoFill = apBindSellerPartyAutoFill;
@@ -1567,7 +1739,7 @@
 
                     var opt = sel.options[i];
 
-                    if (apNormSellerKey(opt.value) === key) {
+                    if (apNormSellerKey(opt.value) === key || apNormSellerKey(opt.text) === key) {
 
                         var accountNo = String(opt.getAttribute('data-account') || '').trim();
 
@@ -1586,6 +1758,66 @@
                 }
 
                 return false;
+
+            }
+
+
+
+            function apSellerCandidatesFromEl(el, val) {
+
+                var list = [];
+
+                function add(v) {
+
+                    v = String(v == null ? '' : v).replace(/\s+/g, ' ').trim();
+
+                    if (!v || /^select\s*\(seller\)/i.test(v)) {
+
+                        return;
+
+                    }
+
+                    if (list.indexOf(v) === -1) {
+
+                        list.push(v);
+
+                    }
+
+                }
+
+                add(val);
+
+                var sel = (el && el.options) ? el : document.getElementById('sellerapi');
+
+                if (sel && sel.selectedIndex >= 0) {
+
+                    add(sel.options[sel.selectedIndex].value);
+
+                    add(sel.options[sel.selectedIndex].text);
+
+                }
+
+                if (val && sel) {
+
+                    var pk = apNormSellerKey(val);
+
+                    for (var o = 0; o < sel.options.length; o++) {
+
+                        var opt = sel.options[o];
+
+                        if (apNormSellerKey(opt.value) === pk || apNormSellerKey(opt.text) === pk) {
+
+                            add(opt.value);
+
+                            add(opt.text);
+
+                        }
+
+                    }
+
+                }
+
+                return list;
 
             }
 
@@ -1653,27 +1885,57 @@
 
                 }
 
-                if (apReadSellerBankFromTable(val)) {
+                var candidates = apSellerCandidatesFromEl(el, val);
 
-                    return;
+                for (var c = 0; c < candidates.length; c++) {
+
+                    if (apReadSellerBankFromTable(candidates[c])) {
+
+                        return;
+
+                    }
+
+                    if (apReadSellerBankFromOption(candidates[c])) {
+
+                        return;
+
+                    }
 
                 }
 
-                if (apReadSellerBankFromOption(val)) {
-
-                    return;
-
-                }
-
-                apAjaxFillSellerBank(val);
+                apAjaxFillSellerBank(candidates[0] || val);
 
             };
 
 
 
-            window.apFillSellerBankDetails = function (apiName) {
+            window.apFillSellerBankDetails = function (apiName, $select) {
 
-                window.apOnSellerPartyChange(typeof apiName === 'string' ? { value: apiName } : apiName);
+                if (typeof window.apFillSellerBankDetailsJq === 'function') {
+
+                    window.apFillSellerBankDetailsJq(apiName, $select);
+
+                    return;
+
+                }
+
+                var sel = document.getElementById('sellerapi');
+
+                if ($select && $select.length && $select[0]) {
+
+                    sel = $select[0];
+
+                }
+
+                if (sel) {
+
+                    window.apOnSellerPartyChange(sel);
+
+                } else if (apiName) {
+
+                    window.apOnSellerPartyChange({ value: String(apiName).trim() });
+
+                }
 
             };
 
@@ -1763,6 +2025,14 @@
 
                 var current = sel.value;
 
+                var currentText = '';
+
+                if (sel.selectedIndex >= 0 && sel.options[sel.selectedIndex]) {
+
+                    currentText = String(sel.options[sel.selectedIndex].text || '').trim();
+
+                }
+
                 var placeholder = sel.querySelector('option[value=""]');
 
                 sel.innerHTML = '';
@@ -1801,9 +2071,35 @@
 
                 }
 
-                if (current) {
+                if (current || currentText) {
 
-                    sel.value = current;
+                    var normCurrent = apNormSellerKey(current);
+
+                    var normText = apNormSellerKey(currentText);
+
+                    for (var m = 0; m < sel.options.length; m++) {
+
+                        var o = sel.options[m];
+
+                        var ov = apNormSellerKey(o.value);
+
+                        var ot = apNormSellerKey(o.text);
+
+                        if ((normCurrent && (ov === normCurrent || ot === normCurrent)) || (normText && (ov === normText || ot === normText))) {
+
+                            sel.selectedIndex = m;
+
+                            break;
+
+                        }
+
+                    }
+
+                }
+
+                if (sel.value) {
+
+                    window.apOnSellerPartyChange(sel);
 
                 }
 
@@ -1833,11 +2129,9 @@
 
                     $(document).off('select2:select.apSellerFinal change.apSellerFinal', '#sellerapi');
 
-                    $(document).on('select2:select.apSellerFinal', '#sellerapi', function (e) {
+                    $(document).on('select2:select.apSellerFinal', '#sellerapi', function () {
 
-                        var val = (e.params && e.params.data && (e.params.data.id || e.params.data.text)) || $(this).val();
-
-                        window.apOnSellerPartyChange({ value: val });
+                        window.apOnSellerPartyChange(this);
 
                     });
 
