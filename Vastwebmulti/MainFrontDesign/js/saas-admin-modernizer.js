@@ -522,7 +522,7 @@
         });
 
         Array.prototype.forEach.call(scope.querySelectorAll("input:not([type]), input[type='text'], input[type='password'], input[type='email'], input[type='number'], input[type='tel'], input[type='date'], input[type='search'], select, textarea"), function (field) {
-            if (!field.classList.contains("form-control") && !field.closest(".bootstrap-select")) {
+            if (!field.classList.contains("form-control") && !field.classList.contains("vm-loan-date-new") && !field.closest(".bootstrap-select")) {
                 field.classList.add("form-control");
             }
         });

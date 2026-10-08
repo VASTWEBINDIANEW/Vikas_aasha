@@ -4565,6 +4565,102 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.LapuDetails' does not have a
           <Property Name="comm" Type="decimal" Precision="18" Scale="4" />
           <Property Name="gst" Type="decimal" Precision="18" Scale="4" />
         </EntityType>
+        <EntityType Name="LoanApplication">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Retailerid" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApplicationNo" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LoanTypeId" Type="int" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Mobile" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="150" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="Gender" Type="varchar" MaxLength="20" />
+          <Property Name="PAN" Type="varchar" MaxLength="10" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+          <Property Name="City" Type="nvarchar" MaxLength="100" />
+          <Property Name="State" Type="nvarchar" MaxLength="100" />
+          <Property Name="Pincode" Type="varchar" MaxLength="10" />
+          <Property Name="EmploymentType" Type="varchar" MaxLength="50" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="200" />
+          <Property Name="WorkExperienceYears" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="MonthlyIncome" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OtherMonthlyIncome" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ExistingEMI" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ExistingLoans" Type="int" />
+          <Property Name="LoanAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TenureMonths" Type="int" />
+          <Property Name="LoanPurpose" Type="nvarchar" MaxLength="200" />
+          <Property Name="Status" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="AssignedTo" Type="bigint" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="1000" />
+          <Property Name="RejectionReason" Type="nvarchar" MaxLength="1000" />
+          <Property Name="ApprovedAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ApprovedTenureMonths" Type="int" />
+          <Property Name="ApprovedDate" Type="datetime" />
+          <Property Name="RejectedDate" Type="datetime" />
+          <Property Name="DisbursedDate" Type="datetime" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="CaseType" Type="varchar" MaxLength="20" />
+          <Property Name="RefinanceType" Type="varchar" MaxLength="30" />
+          <Property Name="CIBILScore" Type="int" />
+          <Property Name="NetMonthlyIncome" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ABB" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ITRIncome" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Last3MonthsBounceCount" Type="int" />
+          <Property Name="BankStatementMonths" Type="int" />
+          <Property Name="InterestRate" Type="decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <EntityType Name="LoanDocument">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoanApplicationId" Type="bigint" Nullable="false" />
+          <Property Name="DocumentType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="255" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="500" />
+          <Property Name="VerificationStatus" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="VerificationRemarks" Type="nvarchar" MaxLength="500" />
+          <Property Name="UploadedDate" Type="datetime" Nullable="false" />
+          <Property Name="VerifiedDate" Type="datetime" />
+          <Property Name="UploadedBy" Type="bigint" />
+          <Property Name="VerifiedBy" Type="bigint" />
+        </EntityType>
+        <EntityType Name="LoanExistingDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoanApplicationId" Type="bigint" Nullable="false" />
+          <Property Name="FinanceCompany" Type="varchar" MaxLength="200" />
+          <Property Name="LoanAccountNo" Type="varchar" MaxLength="100" />
+          <Property Name="CurrentOutstanding" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="EMIAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalEMI" Type="int" />
+          <Property Name="PaidEMI" Type="int" />
+          <Property Name="LastEMIPaidDate" Type="date" />
+          <Property Name="LoanClosureDate" Type="date" />
+          <Property Name="Last3MonthsBounceCount" Type="int" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LoanFollowUp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoanApplicationId" Type="bigint" Nullable="false" />
+          <Property Name="FollowUpDate" Type="datetime" Nullable="false" />
+          <Property Name="FollowUpType" Type="varchar" MaxLength="30" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="1000" />
+          <Property Name="NextFollowUpDate" Type="datetime" />
+          <Property Name="FollowUpStatus" Type="varchar" MaxLength="30" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="loanlimit">
           <Key>
             <PropertyRef Name="idno" />
@@ -4574,6 +4670,16 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.LapuDetails' does not have a
           <Property Name="charge" Type="decimal" Precision="18" Scale="4" />
           <Property Name="fullorpartialpayment" Type="bit" />
           <Property Name="status" Type="bit" />
+        </EntityType>
+        <EntityType Name="LoanNote">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoanApplicationId" Type="bigint" Nullable="false" />
+          <Property Name="Note" Type="nvarchar" MaxLength="2000" Nullable="false" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="loanpermission">
           <Key>
@@ -4598,6 +4704,58 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.LapuDetails' does not have a
           <Property Name="remainpayment" Type="decimal" Precision="18" Scale="4" />
           <Property Name="loanstatus" Type="varchar" MaxLength="100" />
           <Property Name="status" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="LoanStatusHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoanApplicationId" Type="bigint" Nullable="false" />
+          <Property Name="OldStatus" Type="varchar" MaxLength="30" />
+          <Property Name="NewStatus" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="1000" />
+          <Property Name="ChangedBy" Type="bigint" />
+          <Property Name="ChangedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LoanType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LoanVehicle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoanApplicationId" Type="bigint" Nullable="false" />
+          <Property Name="VehicleType" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Manufacturer" Type="nvarchar" MaxLength="100" />
+          <Property Name="Model" Type="nvarchar" MaxLength="100" />
+          <Property Name="Variant" Type="nvarchar" MaxLength="150" />
+          <Property Name="RegistrationNo" Type="varchar" MaxLength="30" />
+          <Property Name="ManufacturingYear" Type="int" />
+          <Property Name="RegistrationYear" Type="int" />
+          <Property Name="FuelType" Type="varchar" MaxLength="30" />
+          <Property Name="Transmission" Type="varchar" MaxLength="30" />
+          <Property Name="OwnerNumber" Type="varchar" MaxLength="50" />
+          <Property Name="OnRoadPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="EstimatedCarValue" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DownPayment" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DealerName" Type="nvarchar" MaxLength="200" />
+          <Property Name="DealerMobile" Type="varchar" MaxLength="15" />
+          <Property Name="DealerLocation" Type="nvarchar" MaxLength="300" />
+          <Property Name="SellerName" Type="nvarchar" MaxLength="200" />
+          <Property Name="SellerMobile" Type="varchar" MaxLength="15" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ManufacturingMonth" Type="int" />
+          <Property Name="RegistrationDate" Type="date" />
+          <Property Name="KMDriven" Type="int" />
+          <Property Name="MarketValue" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Location_key">
           <Key>
@@ -16005,6 +16163,102 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_LoanApplication_LoanType">
+          <End Role="LoanType" Type="Self.LoanType" Multiplicity="1" />
+          <End Role="LoanApplication" Type="Self.LoanApplication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanApplication">
+              <PropertyRef Name="LoanTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanApplication_Retailer">
+          <End Role="Retailer_Details" Type="Self.Retailer_Details" Multiplicity="1" />
+          <End Role="LoanApplication" Type="Self.LoanApplication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Retailer_Details">
+              <PropertyRef Name="RetailerId" />
+            </Principal>
+            <Dependent Role="LoanApplication">
+              <PropertyRef Name="Retailerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanDocument_LoanApplication">
+          <End Role="LoanApplication" Type="Self.LoanApplication" Multiplicity="1" />
+          <End Role="LoanDocument" Type="Self.LoanDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanDocument">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanExistingDetails_LoanApplication">
+          <End Role="LoanApplication" Type="Self.LoanApplication" Multiplicity="1" />
+          <End Role="LoanExistingDetails" Type="Self.LoanExistingDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanExistingDetails">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanFollowUp_LoanApplication">
+          <End Role="LoanApplication" Type="Self.LoanApplication" Multiplicity="1" />
+          <End Role="LoanFollowUp" Type="Self.LoanFollowUp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanFollowUp">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanNote_LoanApplication">
+          <End Role="LoanApplication" Type="Self.LoanApplication" Multiplicity="1" />
+          <End Role="LoanNote" Type="Self.LoanNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanNote">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanStatusHistory_LoanApplication">
+          <End Role="LoanApplication" Type="Self.LoanApplication" Multiplicity="1" />
+          <End Role="LoanStatusHistory" Type="Self.LoanStatusHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanStatusHistory">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanVehicle_LoanApplication">
+          <End Role="LoanApplication" Type="Self.LoanApplication" Multiplicity="1" />
+          <End Role="LoanVehicle" Type="Self.LoanVehicle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanVehicle">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OptID">
           <End Role="DthOperators" Type="Self.DthOperators" Multiplicity="1" />
           <End Role="DthOperatorsSetTopBoxMapping" Type="Self.DthOperatorsSetTopBoxMapping" Multiplicity="*" />
@@ -22998,9 +23252,17 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <EntitySet Name="Loan_master_comm" EntityType="Self.Loan_master_comm" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Loan_retailer_comm" EntityType="Self.Loan_retailer_comm" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Loan_whitelabel_comm" EntityType="Self.Loan_whitelabel_comm" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanApplication" EntityType="Self.LoanApplication" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanDocument" EntityType="Self.LoanDocument" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanExistingDetails" EntityType="Self.LoanExistingDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanFollowUp" EntityType="Self.LoanFollowUp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="loanlimit" EntityType="Self.loanlimit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanNote" EntityType="Self.LoanNote" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="loanpermission" EntityType="Self.loanpermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="loanrequest" EntityType="Self.loanrequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanStatusHistory" EntityType="Self.LoanStatusHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanType" EntityType="Self.LoanType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanVehicle" EntityType="Self.LoanVehicle" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location_key" EntityType="Self.Location_key" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Login_info" EntityType="Self.Login_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Login_setting_email_phone" EntityType="Self.Login_setting_email_phone" Schema="dbo" store:Type="Tables" />
@@ -23839,6 +24101,38 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <AssociationSet Name="FK_DthOptAndBoxMappingID" Association="Self.FK_DthOptAndBoxMappingID">
             <End Role="DthOperatorsSetTopBoxMapping" EntitySet="DthOperatorsSetTopBoxMapping" />
             <End Role="DthPlanAndSpecification" EntitySet="DthPlanAndSpecification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanApplication_LoanType" Association="Self.FK_LoanApplication_LoanType">
+            <End Role="LoanType" EntitySet="LoanType" />
+            <End Role="LoanApplication" EntitySet="LoanApplication" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanApplication_Retailer" Association="Self.FK_LoanApplication_Retailer">
+            <End Role="Retailer_Details" EntitySet="Retailer_Details" />
+            <End Role="LoanApplication" EntitySet="LoanApplication" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanDocument_LoanApplication" Association="Self.FK_LoanDocument_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplication" />
+            <End Role="LoanDocument" EntitySet="LoanDocument" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanExistingDetails_LoanApplication" Association="Self.FK_LoanExistingDetails_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplication" />
+            <End Role="LoanExistingDetails" EntitySet="LoanExistingDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanFollowUp_LoanApplication" Association="Self.FK_LoanFollowUp_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplication" />
+            <End Role="LoanFollowUp" EntitySet="LoanFollowUp" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanNote_LoanApplication" Association="Self.FK_LoanNote_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplication" />
+            <End Role="LoanNote" EntitySet="LoanNote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanStatusHistory_LoanApplication" Association="Self.FK_LoanStatusHistory_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplication" />
+            <End Role="LoanStatusHistory" EntitySet="LoanStatusHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanVehicle_LoanApplication" Association="Self.FK_LoanVehicle_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplication" />
+            <End Role="LoanVehicle" EntitySet="LoanVehicle" />
           </AssociationSet>
           <AssociationSet Name="FK_OptID" Association="Self.FK_OptID">
             <End Role="DthOperators" EntitySet="DthOperators" />
@@ -31708,6 +32002,46 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
             <Parameter Name="Message" Mode="InOut" Type="String" />
           </FunctionImport>
           <EntitySet Name="AEPSMOVEinfoes" EntityType="VastwebmultiModel.AEPSMOVEinfo" />
+          <EntitySet Name="LoanApplications" EntityType="VastwebmultiModel.LoanApplication" />
+          <EntitySet Name="LoanFollowUps" EntityType="VastwebmultiModel.LoanFollowUp" />
+          <EntitySet Name="LoanNotes" EntityType="VastwebmultiModel.LoanNote" />
+          <EntitySet Name="LoanStatusHistories" EntityType="VastwebmultiModel.LoanStatusHistory" />
+          <EntitySet Name="LoanTypes" EntityType="VastwebmultiModel.LoanType" />
+          <AssociationSet Name="FK_LoanApplication_LoanType" Association="VastwebmultiModel.FK_LoanApplication_LoanType">
+            <End Role="LoanType" EntitySet="LoanTypes" />
+            <End Role="LoanApplication" EntitySet="LoanApplications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanApplication_Retailer" Association="VastwebmultiModel.FK_LoanApplication_Retailer">
+            <End Role="Retailer_Details" EntitySet="Retailer_Details" />
+            <End Role="LoanApplication" EntitySet="LoanApplications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanFollowUp_LoanApplication" Association="VastwebmultiModel.FK_LoanFollowUp_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplications" />
+            <End Role="LoanFollowUp" EntitySet="LoanFollowUps" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanNote_LoanApplication" Association="VastwebmultiModel.FK_LoanNote_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplications" />
+            <End Role="LoanNote" EntitySet="LoanNotes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoanStatusHistory_LoanApplication" Association="VastwebmultiModel.FK_LoanStatusHistory_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplications" />
+            <End Role="LoanStatusHistory" EntitySet="LoanStatusHistories" />
+          </AssociationSet>
+          <EntitySet Name="LoanVehicles" EntityType="VastwebmultiModel.LoanVehicle" />
+          <AssociationSet Name="FK_LoanVehicle_LoanApplication" Association="VastwebmultiModel.FK_LoanVehicle_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplications" />
+            <End Role="LoanVehicle" EntitySet="LoanVehicles" />
+          </AssociationSet>
+          <EntitySet Name="LoanDocuments" EntityType="VastwebmultiModel.LoanDocument" />
+          <AssociationSet Name="FK_LoanDocument_LoanApplication" Association="VastwebmultiModel.FK_LoanDocument_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplications" />
+            <End Role="LoanDocument" EntitySet="LoanDocuments" />
+          </AssociationSet>
+          <EntitySet Name="LoanExistingDetails" EntityType="VastwebmultiModel.LoanExistingDetail" />
+          <AssociationSet Name="FK_LoanExistingDetails_LoanApplication" Association="VastwebmultiModel.FK_LoanExistingDetails_LoanApplication">
+            <End Role="LoanApplication" EntitySet="LoanApplications" />
+            <End Role="LoanExistingDetail" EntitySet="LoanExistingDetails" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -55363,6 +55697,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <Property Name="pincode4" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="KYCType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="LoanApplications" Relationship="VastwebmultiModel.FK_LoanApplication_Retailer" FromRole="Retailer_Details" ToRole="LoanApplication" />
         </EntityType>
         <Association Name="FK__AEPS_Merc__UserI__46D346CA">
           <End Type="VastwebmultiModel.Retailer_Details" Role="Retailer_Details" Multiplicity="1" />
@@ -58468,6 +58803,275 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <Property Name="UPIStatus1" Type="Boolean" />
           <Property Name="UPIStatus2" Type="Boolean" />
         </EntityType>
+        <EntityType Name="LoanApplication">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Retailerid" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApplicationNo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LoanTypeId" Type="Int32" Nullable="false" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Gender" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PAN" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Pincode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="EmploymentType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="WorkExperienceYears" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="MonthlyIncome" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OtherMonthlyIncome" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ExistingEMI" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ExistingLoans" Type="Int32" />
+          <Property Name="LoanAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="TenureMonths" Type="Int32" />
+          <Property Name="LoanPurpose" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="AssignedTo" Type="Int64" />
+          <Property Name="Remarks" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="RejectionReason" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovedAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ApprovedTenureMonths" Type="Int32" />
+          <Property Name="ApprovedDate" Type="DateTime" Precision="3" />
+          <Property Name="RejectedDate" Type="DateTime" Precision="3" />
+          <Property Name="DisbursedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="LoanType" Relationship="VastwebmultiModel.FK_LoanApplication_LoanType" FromRole="LoanApplication" ToRole="LoanType" />
+          <NavigationProperty Name="Retailer_Details" Relationship="VastwebmultiModel.FK_LoanApplication_Retailer" FromRole="LoanApplication" ToRole="Retailer_Details" />
+          <NavigationProperty Name="LoanFollowUps" Relationship="VastwebmultiModel.FK_LoanFollowUp_LoanApplication" FromRole="LoanApplication" ToRole="LoanFollowUp" />
+          <NavigationProperty Name="LoanNotes" Relationship="VastwebmultiModel.FK_LoanNote_LoanApplication" FromRole="LoanApplication" ToRole="LoanNote" />
+          <NavigationProperty Name="LoanStatusHistories" Relationship="VastwebmultiModel.FK_LoanStatusHistory_LoanApplication" FromRole="LoanApplication" ToRole="LoanStatusHistory" />
+          <NavigationProperty Name="LoanVehicles" Relationship="VastwebmultiModel.FK_LoanVehicle_LoanApplication" FromRole="LoanApplication" ToRole="LoanVehicle" />
+          <NavigationProperty Name="LoanDocuments" Relationship="VastwebmultiModel.FK_LoanDocument_LoanApplication" FromRole="LoanApplication" ToRole="LoanDocument" />
+          <Property Name="CaseType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RefinanceType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CIBILScore" Type="Int32" />
+          <Property Name="NetMonthlyIncome" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ABB" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ITRIncome" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Last3MonthsBounceCount" Type="Int32" />
+          <Property Name="BankStatementMonths" Type="Int32" />
+          <Property Name="InterestRate" Type="Decimal" Precision="5" Scale="2" />
+          <NavigationProperty Name="LoanExistingDetails" Relationship="VastwebmultiModel.FK_LoanExistingDetails_LoanApplication" FromRole="LoanApplication" ToRole="LoanExistingDetail" />
+        </EntityType>
+        <EntityType Name="LoanFollowUp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoanApplicationId" Type="Int64" Nullable="false" />
+          <Property Name="FollowUpDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FollowUpType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="NextFollowUpDate" Type="DateTime" Precision="3" />
+          <Property Name="FollowUpStatus" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="LoanApplication" Relationship="VastwebmultiModel.FK_LoanFollowUp_LoanApplication" FromRole="LoanFollowUp" ToRole="LoanApplication" />
+        </EntityType>
+        <EntityType Name="LoanNote">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoanApplicationId" Type="Int64" Nullable="false" />
+          <Property Name="Note" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="LoanApplication" Relationship="VastwebmultiModel.FK_LoanNote_LoanApplication" FromRole="LoanNote" ToRole="LoanApplication" />
+        </EntityType>
+        <EntityType Name="LoanStatusHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoanApplicationId" Type="Int64" Nullable="false" />
+          <Property Name="OldStatus" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="NewStatus" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ChangedBy" Type="Int64" />
+          <Property Name="ChangedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="LoanApplication" Relationship="VastwebmultiModel.FK_LoanStatusHistory_LoanApplication" FromRole="LoanStatusHistory" ToRole="LoanApplication" />
+        </EntityType>
+        <EntityType Name="LoanType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="LoanApplications" Relationship="VastwebmultiModel.FK_LoanApplication_LoanType" FromRole="LoanType" ToRole="LoanApplication" />
+        </EntityType>
+        <Association Name="FK_LoanApplication_LoanType">
+          <End Type="VastwebmultiModel.LoanType" Role="LoanType" Multiplicity="1" />
+          <End Type="VastwebmultiModel.LoanApplication" Role="LoanApplication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanApplication">
+              <PropertyRef Name="LoanTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanApplication_Retailer">
+          <End Type="VastwebmultiModel.Retailer_Details" Role="Retailer_Details" Multiplicity="1" />
+          <End Type="VastwebmultiModel.LoanApplication" Role="LoanApplication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Retailer_Details">
+              <PropertyRef Name="RetailerId" />
+            </Principal>
+            <Dependent Role="LoanApplication">
+              <PropertyRef Name="Retailerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanFollowUp_LoanApplication">
+          <End Type="VastwebmultiModel.LoanApplication" Role="LoanApplication" Multiplicity="1" />
+          <End Type="VastwebmultiModel.LoanFollowUp" Role="LoanFollowUp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanFollowUp">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanNote_LoanApplication">
+          <End Type="VastwebmultiModel.LoanApplication" Role="LoanApplication" Multiplicity="1" />
+          <End Type="VastwebmultiModel.LoanNote" Role="LoanNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanNote">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoanStatusHistory_LoanApplication">
+          <End Type="VastwebmultiModel.LoanApplication" Role="LoanApplication" Multiplicity="1" />
+          <End Type="VastwebmultiModel.LoanStatusHistory" Role="LoanStatusHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanStatusHistory">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="LoanVehicle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoanApplicationId" Type="Int64" Nullable="false" />
+          <Property Name="VehicleType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Manufacturer" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Variant" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ManufacturingYear" Type="Int32" />
+          <Property Name="RegistrationYear" Type="Int32" />
+          <Property Name="FuelType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Transmission" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="OwnerNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OnRoadPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EstimatedCarValue" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DownPayment" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DealerName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DealerMobile" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="DealerLocation" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="SellerName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SellerMobile" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="LoanApplication" Relationship="VastwebmultiModel.FK_LoanVehicle_LoanApplication" FromRole="LoanVehicle" ToRole="LoanApplication" />
+          <Property Name="ManufacturingMonth" Type="Int32" />
+          <Property Name="RegistrationDate" Type="DateTime" Precision="0" />
+          <Property Name="KMDriven" Type="Int32" />
+          <Property Name="MarketValue" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <Association Name="FK_LoanVehicle_LoanApplication">
+          <End Type="VastwebmultiModel.LoanApplication" Role="LoanApplication" Multiplicity="1" />
+          <End Type="VastwebmultiModel.LoanVehicle" Role="LoanVehicle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanVehicle">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="LoanDocument">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoanApplicationId" Type="Int64" Nullable="false" />
+          <Property Name="DocumentType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FileName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FilePath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="VerificationStatus" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="VerificationRemarks" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="UploadedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="VerifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="UploadedBy" Type="Int64" />
+          <Property Name="VerifiedBy" Type="Int64" />
+          <NavigationProperty Name="LoanApplication" Relationship="VastwebmultiModel.FK_LoanDocument_LoanApplication" FromRole="LoanDocument" ToRole="LoanApplication" />
+        </EntityType>
+        <Association Name="FK_LoanDocument_LoanApplication">
+          <End Type="VastwebmultiModel.LoanApplication" Role="LoanApplication" Multiplicity="1" />
+          <End Type="VastwebmultiModel.LoanDocument" Role="LoanDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanDocument">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="LoanExistingDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoanApplicationId" Type="Int64" Nullable="false" />
+          <Property Name="FinanceCompany" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="LoanAccountNo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CurrentOutstanding" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EMIAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalEMI" Type="Int32" />
+          <Property Name="PaidEMI" Type="Int32" />
+          <Property Name="LastEMIPaidDate" Type="DateTime" Precision="0" />
+          <Property Name="LoanClosureDate" Type="DateTime" Precision="0" />
+          <Property Name="Last3MonthsBounceCount" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="LoanApplication" Relationship="VastwebmultiModel.FK_LoanExistingDetails_LoanApplication" FromRole="LoanExistingDetail" ToRole="LoanApplication" />
+        </EntityType>
+        <Association Name="FK_LoanExistingDetails_LoanApplication">
+          <End Type="VastwebmultiModel.LoanApplication" Role="LoanApplication" Multiplicity="1" />
+          <End Type="VastwebmultiModel.LoanExistingDetail" Role="LoanExistingDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanApplication">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LoanExistingDetail">
+              <PropertyRef Name="LoanApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -88438,6 +89042,172 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
                 <ScalarProperty Name="ApiName1" ColumnName="ApiName1" />
                 <ScalarProperty Name="Userid" ColumnName="Userid" />
                 <ScalarProperty Name="Idno" ColumnName="Idno" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanApplications">
+            <EntityTypeMapping TypeName="VastwebmultiModel.LoanApplication">
+              <MappingFragment StoreEntitySet="LoanApplication">
+                <ScalarProperty Name="InterestRate" ColumnName="InterestRate" />
+                <ScalarProperty Name="BankStatementMonths" ColumnName="BankStatementMonths" />
+                <ScalarProperty Name="Last3MonthsBounceCount" ColumnName="Last3MonthsBounceCount" />
+                <ScalarProperty Name="ITRIncome" ColumnName="ITRIncome" />
+                <ScalarProperty Name="ABB" ColumnName="ABB" />
+                <ScalarProperty Name="NetMonthlyIncome" ColumnName="NetMonthlyIncome" />
+                <ScalarProperty Name="CIBILScore" ColumnName="CIBILScore" />
+                <ScalarProperty Name="RefinanceType" ColumnName="RefinanceType" />
+                <ScalarProperty Name="CaseType" ColumnName="CaseType" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="DisbursedDate" ColumnName="DisbursedDate" />
+                <ScalarProperty Name="RejectedDate" ColumnName="RejectedDate" />
+                <ScalarProperty Name="ApprovedDate" ColumnName="ApprovedDate" />
+                <ScalarProperty Name="ApprovedTenureMonths" ColumnName="ApprovedTenureMonths" />
+                <ScalarProperty Name="ApprovedAmount" ColumnName="ApprovedAmount" />
+                <ScalarProperty Name="RejectionReason" ColumnName="RejectionReason" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="LoanPurpose" ColumnName="LoanPurpose" />
+                <ScalarProperty Name="TenureMonths" ColumnName="TenureMonths" />
+                <ScalarProperty Name="LoanAmount" ColumnName="LoanAmount" />
+                <ScalarProperty Name="ExistingLoans" ColumnName="ExistingLoans" />
+                <ScalarProperty Name="ExistingEMI" ColumnName="ExistingEMI" />
+                <ScalarProperty Name="OtherMonthlyIncome" ColumnName="OtherMonthlyIncome" />
+                <ScalarProperty Name="MonthlyIncome" ColumnName="MonthlyIncome" />
+                <ScalarProperty Name="WorkExperienceYears" ColumnName="WorkExperienceYears" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="EmploymentType" ColumnName="EmploymentType" />
+                <ScalarProperty Name="Pincode" ColumnName="Pincode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PAN" ColumnName="PAN" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="LoanTypeId" ColumnName="LoanTypeId" />
+                <ScalarProperty Name="ApplicationNo" ColumnName="ApplicationNo" />
+                <ScalarProperty Name="Retailerid" ColumnName="Retailerid" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanFollowUps">
+            <EntityTypeMapping TypeName="VastwebmultiModel.LoanFollowUp">
+              <MappingFragment StoreEntitySet="LoanFollowUp">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="FollowUpStatus" ColumnName="FollowUpStatus" />
+                <ScalarProperty Name="NextFollowUpDate" ColumnName="NextFollowUpDate" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="FollowUpType" ColumnName="FollowUpType" />
+                <ScalarProperty Name="FollowUpDate" ColumnName="FollowUpDate" />
+                <ScalarProperty Name="LoanApplicationId" ColumnName="LoanApplicationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanNotes">
+            <EntityTypeMapping TypeName="VastwebmultiModel.LoanNote">
+              <MappingFragment StoreEntitySet="LoanNote">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="LoanApplicationId" ColumnName="LoanApplicationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanStatusHistories">
+            <EntityTypeMapping TypeName="VastwebmultiModel.LoanStatusHistory">
+              <MappingFragment StoreEntitySet="LoanStatusHistory">
+                <ScalarProperty Name="ChangedDate" ColumnName="ChangedDate" />
+                <ScalarProperty Name="ChangedBy" ColumnName="ChangedBy" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="NewStatus" ColumnName="NewStatus" />
+                <ScalarProperty Name="OldStatus" ColumnName="OldStatus" />
+                <ScalarProperty Name="LoanApplicationId" ColumnName="LoanApplicationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanTypes">
+            <EntityTypeMapping TypeName="VastwebmultiModel.LoanType">
+              <MappingFragment StoreEntitySet="LoanType">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanVehicles">
+            <EntityTypeMapping TypeName="VastwebmultiModel.LoanVehicle">
+              <MappingFragment StoreEntitySet="LoanVehicle">
+                <ScalarProperty Name="MarketValue" ColumnName="MarketValue" />
+                <ScalarProperty Name="KMDriven" ColumnName="KMDriven" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+                <ScalarProperty Name="ManufacturingMonth" ColumnName="ManufacturingMonth" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="SellerMobile" ColumnName="SellerMobile" />
+                <ScalarProperty Name="SellerName" ColumnName="SellerName" />
+                <ScalarProperty Name="DealerLocation" ColumnName="DealerLocation" />
+                <ScalarProperty Name="DealerMobile" ColumnName="DealerMobile" />
+                <ScalarProperty Name="DealerName" ColumnName="DealerName" />
+                <ScalarProperty Name="DownPayment" ColumnName="DownPayment" />
+                <ScalarProperty Name="EstimatedCarValue" ColumnName="EstimatedCarValue" />
+                <ScalarProperty Name="OnRoadPrice" ColumnName="OnRoadPrice" />
+                <ScalarProperty Name="OwnerNumber" ColumnName="OwnerNumber" />
+                <ScalarProperty Name="Transmission" ColumnName="Transmission" />
+                <ScalarProperty Name="FuelType" ColumnName="FuelType" />
+                <ScalarProperty Name="RegistrationYear" ColumnName="RegistrationYear" />
+                <ScalarProperty Name="ManufacturingYear" ColumnName="ManufacturingYear" />
+                <ScalarProperty Name="RegistrationNo" ColumnName="RegistrationNo" />
+                <ScalarProperty Name="Variant" ColumnName="Variant" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+                <ScalarProperty Name="LoanApplicationId" ColumnName="LoanApplicationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanDocuments">
+            <EntityTypeMapping TypeName="VastwebmultiModel.LoanDocument">
+              <MappingFragment StoreEntitySet="LoanDocument">
+                <ScalarProperty Name="VerifiedBy" ColumnName="VerifiedBy" />
+                <ScalarProperty Name="UploadedBy" ColumnName="UploadedBy" />
+                <ScalarProperty Name="VerifiedDate" ColumnName="VerifiedDate" />
+                <ScalarProperty Name="UploadedDate" ColumnName="UploadedDate" />
+                <ScalarProperty Name="VerificationRemarks" ColumnName="VerificationRemarks" />
+                <ScalarProperty Name="VerificationStatus" ColumnName="VerificationStatus" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+                <ScalarProperty Name="LoanApplicationId" ColumnName="LoanApplicationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanExistingDetails">
+            <EntityTypeMapping TypeName="VastwebmultiModel.LoanExistingDetail">
+              <MappingFragment StoreEntitySet="LoanExistingDetails">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Last3MonthsBounceCount" ColumnName="Last3MonthsBounceCount" />
+                <ScalarProperty Name="LoanClosureDate" ColumnName="LoanClosureDate" />
+                <ScalarProperty Name="LastEMIPaidDate" ColumnName="LastEMIPaidDate" />
+                <ScalarProperty Name="PaidEMI" ColumnName="PaidEMI" />
+                <ScalarProperty Name="TotalEMI" ColumnName="TotalEMI" />
+                <ScalarProperty Name="EMIAmount" ColumnName="EMIAmount" />
+                <ScalarProperty Name="CurrentOutstanding" ColumnName="CurrentOutstanding" />
+                <ScalarProperty Name="LoanAccountNo" ColumnName="LoanAccountNo" />
+                <ScalarProperty Name="FinanceCompany" ColumnName="FinanceCompany" />
+                <ScalarProperty Name="LoanApplicationId" ColumnName="LoanApplicationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

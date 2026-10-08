@@ -1,0 +1,448 @@
+﻿@model Vastwebmulti.Areas.ADMIN.Models.AdminLoanReportFilterVM
+@{
+    ViewBag.Title = "Loan Report";
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var statuses = new[]
+    {
+        "NEW", "UNDER_PROCESS", "DOCUMENT_REQUIRED", "VERIFICATION",
+        "ON_HOLD", "APPROVED", "REJECTED", "DISBURSED", "CANCELLED"
+    };
+    var retailerList = Model.Retailers ?? new List<SelectListItem>();
+    var retailerNames = retailerList.Where(x => x != null && x.Value != null).ToDictionary(x => x.Value, x => x.Text);
+    var results = Model.Results ?? new List<Vastwebmulti.Areas.RETAILER.Models.LoanApplicationVm>();
+    var rowCount = results.Count;
+
+    decimal totalAmount = results.Any() ? results.Sum(i => i.LoanAmount) : 0m;
+    decimal approvedAmount = results.Where(i => string.Equals(i.Status, "APPROVED", StringComparison.OrdinalIgnoreCase)).Sum(i => i.LoanAmount);
+    decimal disbursedAmount = results.Where(i => string.Equals(i.Status, "DISBURSED", StringComparison.OrdinalIgnoreCase)).Sum(i => i.LoanAmount);
+    int pendingCount = results.Count(i => !string.Equals(i.Status, "APPROVED", StringComparison.OrdinalIgnoreCase)
+        && !string.Equals(i.Status, "DISBURSED", StringComparison.OrdinalIgnoreCase)
+        && !string.Equals(i.Status, "REJECTED", StringComparison.OrdinalIgnoreCase)
+        && !string.Equals(i.Status, "CANCELLED", StringComparison.OrdinalIgnoreCase));
+
+    var frmDate = (Model.FromDate ?? "").Trim();
+    var toDate = (Model.ToDate ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); Model.FromDate = frmDate; }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); Model.ToDate = toDate; }
+    var dateMode = "get";
+}
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<style>
+    /* Loan report - full-cover compact table, zero gap */
+    .saas-loan-report-page .vm-opr-page-shell { max-width: 100% !important; padding-left: 10px !important; padding-right: 10px !important; }
+    .saas-loan-report-page .vm-opr-main-card,
+    .saas-loan-report-page .vm-opr-table-panel,
+    .saas-loan-report-page .vm-opr-table-wrap,
+    .saas-loan-report-page .vm-opr-table-scroll,
+    .saas-loan-report-page .table-responsive { max-width: 100% !important; min-width: 0 !important; }
+    .saas-loan-report-page .vm-opr-table-scroll { overflow-x: hidden !important; padding-bottom: 0 !important; }
+    .saas-loan-report-page #loanReportTable { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; margin: 0 !important; border-collapse: collapse !important; }
+    .saas-loan-report-page #loanReportTable thead th,
+    .saas-loan-report-page #loanReportTable tbody td { padding: 8px 6px !important; font-size: 12px !important; vertical-align: middle !important; overflow: hidden; }
+    .saas-loan-report-page #loanReportTable thead th { white-space: nowrap !important; text-align: center !important; overflow: hidden; text-overflow: ellipsis; }
+    .saas-loan-report-page #loanReportTable tbody td { text-align: center !important; white-space: normal !important; word-break: break-word; overflow-wrap: anywhere; }
+    /* all 10 columns equal space - 10% each */
+    .saas-loan-report-page #loanReportTable thead th:nth-child(1),
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(1),
+    .saas-loan-report-page #loanReportTable thead th:nth-child(2),
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(2),
+    .saas-loan-report-page #loanReportTable thead th:nth-child(3),
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(3),
+    .saas-loan-report-page #loanReportTable thead th:nth-child(4),
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(4),
+    .saas-loan-report-page #loanReportTable thead th:nth-child(5),
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(5),
+    .saas-loan-report-page #loanReportTable thead th:nth-child(6),
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(6),
+    .saas-loan-report-page #loanReportTable thead th:nth-child(7),
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(7),
+    .saas-loan-report-page #loanReportTable thead th:nth-child(8),
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(8),
+    .saas-loan-report-page #loanReportTable thead th:nth-child(9),
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(9),
+    .saas-loan-report-page #loanReportTable thead th:nth-child(10),
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(10) { width: 10% !important; min-width: 0 !important; max-width: 10% !important; }
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(2) { font-weight: 700; color: #1d4ed8; word-break: break-all; }
+    .saas-loan-report-page #loanReportTable tbody td:nth-child(7) { font-weight: 700; }
+    /* latest status pill - no image cut issue */
+    .saas-loan-report-page .vm-loan-status { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px 3px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 800; letter-spacing: .02em; line-height: 1.5; white-space: nowrap; border: 1px solid transparent; }
+    .saas-loan-report-page .vm-loan-status .vm-loan-dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; background: currentColor; }
+    .saas-loan-report-page .vm-loan-status.is-new { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+    .saas-loan-report-page .vm-loan-status.is-process { background: #e0edff; color: #1d4ed8; border-color: #bfdbfe; }
+    .saas-loan-report-page .vm-loan-status.is-approved { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+    .saas-loan-report-page .vm-loan-status.is-disbursed { background: #d1fae5; color: #047857; border-color: #a7f3d0; }
+    .saas-loan-report-page .vm-loan-status.is-rejected { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
+    .saas-loan-report-page .vm-loan-status.is-hold { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+    /* filter bar font 14px - All Retailers / Status / Loan Types / From / To / Search / Reset */
+    .saas-loan-report-page .saas-acc-filter-bar .vm-opr-select,
+    .saas-loan-report-page .saas-acc-filter-bar .form-control,
+    .saas-loan-report-page .saas-acc-filter-bar .vm-loan-simple-date,
+    .saas-loan-report-page .saas-acc-filter-bar .saas-acc-btn,
+    .saas-loan-report-page .saas-acc-filter-bar .saas-acc-btn span,
+    .saas-loan-report-page #loanReportForm .select2-container .select2-selection__rendered { font-size: 14px !important; }
+    /* Loan date input - compact width (jitni date), sirf andar right native calendar, bahar koi icon nahi */
+    .saas-loan-report-page #loanReportForm .vm-loan-simple-group { display: inline-flex !important; align-items: center !important; gap: 6px !important; flex-wrap: nowrap !important; }
+    .saas-loan-report-page #loanReportForm .vm-loan-simple-wrap { display: inline-flex !important; flex: 0 0 auto !important; width: auto !important; margin: 0 !important; padding: 0 !important; vertical-align: middle !important; }
+    body.saas-admin-ui .saas-loan-report-page .vm-dmt-filter-row--ticket input.vm-loan-simple-date,
+    body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"] { display: inline-block !important; width: fit-content !important; min-width: 0 !important; max-width: none !important; height: 38px !important; min-height: 38px !important; max-height: 38px !important; margin: 0 !important; padding: 6px 2px 6px 8px !important; font-size: 14px !important; font-weight: 600 !important; line-height: 24px !important; color: #334155 !important; background: #fff !important; background-image: none !important; border: 1px solid #d7dee8 !important; border-radius: 8px !important; box-shadow: none !important; box-sizing: border-box !important; cursor: pointer !important; appearance: none !important; -webkit-appearance: none !important; }
+    body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"]::-webkit-datetime-edit { padding: 0 !important; margin: 0 !important; min-width: 0 !important; }
+    body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"]::-webkit-datetime-edit-fields-wrapper { padding: 0 !important; margin: 0 !important; }
+    body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"]::-webkit-datetime-edit-text { padding: 0 1px !important; }
+    body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"]::-webkit-datetime-edit-month-field,
+    body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"]::-webkit-datetime-edit-day-field,
+    body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"]::-webkit-datetime-edit-year-field { padding: 0 1px !important; margin: 0 !important; min-width: 0 !important; }
+    body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"]:focus { border-color: #2563eb !important; outline: 0 !important; box-shadow: 0 0 0 3px rgba(37,99,235,.15) !important; }
+    body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"]::-webkit-calendar-picker-indicator { opacity: 1 !important; display: inline-block !important; flex-shrink: 0 !important; width: 14px !important; height: 14px !important; margin: 0 !important; padding: 0 !important; cursor: pointer !important; position: static !important; }
+    body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"]::-webkit-inner-spin-button,
+    body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"]::-webkit-clear-button { display: none !important; -webkit-appearance: none !important; appearance: none !important; }
+    @@media (max-width: 991px) {
+        body.saas-admin-ui .saas-loan-report-page .vm-opr-page-shell { padding-left: 8px !important; padding-right: 8px !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-opr-toolbar-unified { padding: 6px 8px 8px !important; margin-bottom: 12px !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-ecomm-toolbar-one-line,
+        body.saas-admin-ui .saas-loan-report-page .vm-dmt-toolbar-head--one-line { flex-wrap: wrap !important; align-items: stretch !important; overflow: visible !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-dmt-breadcrumb { flex: 1 1 100% !important; width: 100% !important; border-right: none !important; padding-right: 0 !important; border-bottom: 1px solid #e2e8f0 !important; padding-bottom: 6px !important; margin-bottom: 2px !important; flex-wrap: wrap !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-ecomm-filter-row--one-line,
+        body.saas-admin-ui .saas-loan-report-page .vm-dmt-filter-row--one-line { flex: 1 1 100% !important; width: 100% !important; flex-wrap: wrap !important; overflow-x: visible !important; overflow-y: visible !important; justify-content: flex-start !important; margin-left: 0 !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-ecomm-filter-row--one-line > .vm-opr-field,
+        body.saas-admin-ui .saas-loan-report-page .vm-ecomm-filter-row--one-line > .vm-dmt-field { flex: 1 1 calc(50% - 4px) !important; width: auto !important; min-width: calc(50% - 4px) !important; max-width: calc(50% - 4px) !important; margin: 0 !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-ecomm-filter-row--one-line > .vm-opr-field .select2-container,
+        body.saas-admin-ui .saas-loan-report-page .vm-ecomm-filter-row--one-line > .vm-dmt-field .select2-container,
+        body.saas-admin-ui .saas-loan-report-page .vm-ecomm-filter-row--one-line > .vm-opr-field select,
+        body.saas-admin-ui .saas-loan-report-page .vm-ecomm-filter-row--one-line > .vm-dmt-field select { width: 100% !important; max-width: 100% !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-dmt-filter-search-group { flex: 1 1 100% !important; width: 100% !important; flex-wrap: wrap !important; justify-content: flex-start !important; margin-left: 0 !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-loan-report-page #loanReportForm .vm-loan-simple-group,
+        .saas-loan-report-page #loanReportForm .vm-loan-simple-group { display: flex !important; flex-direction: column !important; flex-wrap: nowrap !important; align-items: stretch !important; flex: 1 1 100% !important; width: 100% !important; max-width: 100% !important; margin-left: 0 !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-loan-report-page #loanReportForm .vm-loan-simple-wrap,
+        .saas-loan-report-page #loanReportForm .vm-loan-simple-wrap { display: block !important; flex: 1 1 100% !important; width: 100% !important; min-width: 100% !important; max-width: 100% !important; }
+        body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"],
+        .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"] { display: block !important; width: 100% !important; min-width: 0 !important; max-width: 100% !important; box-sizing: border-box !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-dmt-filter-search-group .saas-acc-btn,
+        body.saas-admin-ui .saas-loan-report-page .vm-dmt-filter-search-group .vm-opr-toolbar-search { flex: 1 1 100% !important; width: 100% !important; min-width: 100% !important; max-width: 100% !important; justify-content: center !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-loan-report-main-card { margin-top: 10px !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-security-report-table-head,
+        body.saas-admin-ui .saas-loan-report-page .vm-dmt-table-panel__head { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-dmt-table-panel__right { width: 100% !important; justify-content: flex-start !important; flex-wrap: wrap !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-radiant-record-badge,
+        body.saas-admin-ui .saas-loan-report-page .vm-radiant-inline-total { flex: 1 1 auto !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-opr-totals-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+        .saas-loan-report-page .vm-opr-table-scroll { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+        .saas-loan-report-page #loanReportTable { min-width: 980px !important; width: max-content !important; table-layout: auto !important; }
+        .saas-loan-report-page #loanReportTable thead th,
+        .saas-loan-report-page #loanReportTable tbody td { width: auto !important; min-width: 0 !important; max-width: none !important; }
+    }
+    @@media (max-width: 767px) {
+        body.saas-admin-ui .saas-loan-report-page .vm-dmt-filter-search-group { flex: 1 1 100% !important; width: 100% !important; align-items: stretch !important; }
+        body.saas-admin-ui .saas-loan-report-page #loanReportForm .vm-loan-simple-group { display: flex !important; flex-direction: column !important; flex-wrap: nowrap !important; align-items: stretch !important; width: 100% !important; max-width: 100% !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-loan-report-page #loanReportForm .vm-loan-simple-wrap { display: block !important; flex: 1 1 100% !important; width: 100% !important; min-width: 100% !important; max-width: 100% !important; }
+        body.saas-admin-ui .saas-loan-report-page #loanReportForm input.vm-loan-simple-date[type="date"] { display: block !important; width: 100% !important; min-width: 0 !important; max-width: 100% !important; height: 44px !important; min-height: 44px !important; max-height: 44px !important; font-size: 16px !important; }
+        .vm-loan-simple-wrap {
+            width: 49%;
+        }
+            .vm-loan-simple-wrap #txt_frm_date, .vm-loan-simple-wrap #txt_to_date {
+                width: 100% !important;
+            }
+        
+        
+        }
+    @@media (max-width: 575px) {
+        body.saas-admin-ui .saas-loan-report-page .vm-ecomm-filter-row--one-line > .vm-opr-field,
+        body.saas-admin-ui .saas-loan-report-page .vm-ecomm-filter-row--one-line > .vm-dmt-field,
+        body.saas-admin-ui .saas-loan-report-page .vm-dmt-filter-search-group .saas-acc-btn,
+        body.saas-admin-ui .saas-loan-report-page .vm-dmt-filter-search-group .vm-opr-toolbar-search { flex: 1 1 100% !important; width: 100% !important; min-width: 100% !important; max-width: 100% !important; }
+        body.saas-admin-ui .saas-loan-report-page .vm-opr-totals-grid { grid-template-columns: minmax(0, 1fr) !important; }
+    }
+
+    @@media (max-width: 450px) {
+        .vm-loan-simple-wrap {
+            width: 48%;
+        }
+    }
+</style>
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-loan-report-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        @{
+            var loanFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "loanReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("Index", "AdminLoan", new { area = "ADMIN" }, FormMethod.Get, loanFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Report's</li>
+                        <li>Loan Report</li>
+                    </ol>
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
+
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownListFor(m => m.RetailerId, retailerList, "All Retailers", new { @id = "ddlRetailer", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownListFor(m => m.Status, new SelectList(statuses), "All Status", new { @id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownListFor(m => m.LoanTypeId, new SelectList(Model.LoanTypes ?? new List<Vastwebmulti.Areas.RETAILER.Models.LoanTypeVm>(), "Id", "Name"), "All Loan Types", new { @id = "ddlLoanType", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-dmt-filter-search-group vm-loan-simple-group">
+                            <div class="vm-loan-simple-wrap">
+                                <input type="date" id="txt_frm_date" name="FromDate" value="@frmDate" class="vm-loan-simple-date" required="required" autocomplete="off" title="From date" />
+                            </div>
+                            <div class="vm-loan-simple-wrap">
+                                <input type="date" id="txt_to_date" name="ToDate" value="@toDate" class="vm-loan-simple-date" required="required" autocomplete="off" title="To date" />
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                            <a href="@Url.Action("Index", "AdminLoan", new { area = "ADMIN" })" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Reset" style="background:#64748b;border-color:#64748b;text-decoration:none;">
+                                <i class="fas fa-undo" aria-hidden="true"></i><span>Reset</span>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="loanReportTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Loan report totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideLoanReportTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Amount</span>
+                            <strong class="vm-opr-total-card__value">@totalAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Approved</span>
+                            <strong class="vm-opr-total-card__value">@approvedAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Disbursed</span>
+                            <strong class="vm-opr-total-card__value">@disbursedAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value">@pendingCount</strong>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card vm-security-report-main-card vm-loan-report-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-money-check-alt" aria-hidden="true"></i>
+                        <span>Loan report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total amount for current filter">
+                            Total: <strong>&#8377; @totalAmount.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-loan-totals-btn" onclick="findLoanTotal()" title="Show totals" aria-expanded="false" aria-controls="loanReportTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="loanReportTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Application&nbsp;No</th>
+                                    <th>Retailer</th>
+                                    <th>Loan&nbsp;Type</th>
+                                    <th>Applicant</th>
+                                    <th>Mobile</th>
+                                    <th>Amount&nbsp;&#8377;</th>
+                                    <th>Tenure</th>
+                                    <th>Applied&nbsp;On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (results.Any())
+                                {
+                                    foreach (var item in results)
+                                    {
+                                        string rName;
+                                        var statusUpper = (item.Status ?? "").ToUpper();
+                                        var statusCls = "is-hold";
+                                        if (statusUpper == "APPROVED") { statusCls = "is-approved"; }
+                                        else if (statusUpper == "DISBURSED") { statusCls = "is-disbursed"; }
+                                        else if (statusUpper == "REJECTED" || statusUpper == "CANCELLED") { statusCls = "is-rejected"; }
+                                        else if (statusUpper == "NEW") { statusCls = "is-new"; }
+                                        else if (statusUpper == "UNDER_PROCESS" || statusUpper == "VERIFICATION" || statusUpper == "DOCUMENT_REQUIRED" || statusUpper == "ON_HOLD") { statusCls = "is-process"; }
+                                        var statusText = (item.Status ?? "-").Replace("_", " ");
+                                        <tr>
+                                            <td>
+                                                <span class="vm-loan-status @statusCls"><span class="vm-loan-dot"></span>@statusText</span>
+                                            </td>
+                                            <td>@item.ApplicationNo</td>
+                                            <td>@(retailerNames.TryGetValue(item.RetailerId ?? "", out rName) ? rName : "-")</td>
+                                            <td>@item.LoanTypeName</td>
+                                            <td>@item.FullName</td>
+                                            <td>@item.Mobile</td>
+                                            <td>@item.LoanAmount.ToString("N2")</td>
+                                            <td>@(item.TenureMonths.HasValue ? item.TenureMonths + " mo" : "-")</td>
+                                            <td>@item.CreatedDate.ToString("dd MMM yyyy")</td>
+                                            <td>
+                                                <a href="@Url.Action("Details", "AdminLoan", new { area = "ADMIN", id = item.Id })" title="View Details" style="color:#ffc107;background:transparent;border:none;">
+                                                    <img src="~/ashok-images/rightaeps.svg" style="border: 1px solid var(--border-color);padding: 3px 3px;font-size: 10px;height:20px !important;" />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="10" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-money-check-alt" aria-hidden="true"></i>
+                                            <span>Loan applications not found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+
+<script>
+    function hideLoanReportTotals() {
+        var $panel = $('#loanReportTotalsPanel');
+        var $btn = $('.vm-loan-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
+
+    function findLoanTotal() {
+        var $panel = $('#loanReportTotalsPanel');
+        var $btn = $('.vm-loan-totals-btn');
+        if ($panel.is(':visible')) {
+            hideLoanReportTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
+
+    function destroyLoanSelect2($el) {
+        if ($el && $el.length && $el.data('select2')) {
+            $el.select2('destroy');
+        }
+    }
+
+    function applyLoanSelect2($el) {
+        if (!$el || !$el.length || !$.fn.select2) {
+            return;
+        }
+        destroyLoanSelect2($el);
+        $el.select2({
+            width: '100%',
+            minimumResultsForSearch: 6
+        });
+    }
+
+    function initLoanReportSelect2() {
+        applyLoanSelect2($('#ddlRetailer'));
+        applyLoanSelect2($('#ddl_status'));
+        applyLoanSelect2($('#ddlLoanType'));
+    }
+
+    /* Loan date - sirf native input type=date, bootstrap datepicker/select style bilkul nahi */
+    function initLoanSimpleDates() {
+        try {
+            var frm = document.querySelector('#loanReportForm #txt_frm_date');
+            var to = document.querySelector('#loanReportForm #txt_to_date');
+            if (!frm || !to) { return; }
+            var jq = window.jQuery;
+            if (jq && jq.fn && jq.fn.datepicker) {
+                jq([frm, to]).each(function () {
+                    var $el = jq(this);
+                    if ($el.data('datepicker')) {
+                        try { $el.datepicker('destroy'); } catch (e) {}
+                    }
+                    $el.prop('readonly', false).removeClass('form-control saas-acc-dp-input');
+                });
+            }
+            var openNative = function () { try { if (this.showPicker) { this.showPicker(); } } catch (e) {} };
+            if (!frm.getAttribute('data-vm-loan-date')) {
+                frm.setAttribute('data-vm-loan-date', '1');
+                frm.addEventListener('click', openNative);
+            }
+            if (!to.getAttribute('data-vm-loan-date')) {
+                to.setAttribute('data-vm-loan-date', '1');
+                to.addEventListener('click', openNative);
+            }
+            var enforce = function () { if (frm.value && to.value && to.value < frm.value) { to.value = frm.value; } };
+            frm.onchange = enforce;
+            to.onchange = enforce;
+        } catch (e) {}
+    }
+
+    function loanReportBoot() {
+        try { initLoanReportSelect2(); } catch (e) {}
+        try { initLoanSimpleDates(); } catch (e) {}
+        try {
+            var jq = window.jQuery;
+            if (jq) { jq('#loanReportForm .select2-container').css('width', '100%'); }
+        } catch (e) {}
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loanReportBoot);
+    } else {
+        loanReportBoot();
+    }
+    if (window.addEventListener) {
+        window.addEventListener('load', function () { try { loanReportBoot(); } catch (e) {} try { initLoanSimpleDates(); } catch (e2) {} });
+    }
+</script>

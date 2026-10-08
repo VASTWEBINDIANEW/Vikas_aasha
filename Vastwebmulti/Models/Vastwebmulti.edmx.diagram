@@ -931,6 +931,22 @@
         <EntityTypeShape EntityType="VastwebmultiModel.Aeps_Common_Comm_UPI" Width="1.5" PointX="7.375" PointY="97.75" />
         <EntityTypeShape EntityType="VastwebmultiModel.AepsUPIHistory" Width="1.5" PointX="97.375" PointY="15.75" />
         <EntityTypeShape EntityType="VastwebmultiModel.AEPSMOVEinfo" Width="1.5" PointX="67.375" PointY="71.75" />
+        <EntityTypeShape EntityType="VastwebmultiModel.LoanApplication" Width="1.5" PointX="10" PointY="98.5" />
+        <EntityTypeShape EntityType="VastwebmultiModel.LoanFollowUp" Width="1.5" PointX="12.25" PointY="124.375" />
+        <EntityTypeShape EntityType="VastwebmultiModel.LoanNote" Width="1.5" PointX="12.25" PointY="115.375" />
+        <EntityTypeShape EntityType="VastwebmultiModel.LoanStatusHistory" Width="1.5" PointX="12.25" PointY="128" />
+        <EntityTypeShape EntityType="VastwebmultiModel.LoanType" Width="1.5" PointX="7.75" PointY="106.875" />
+        <AssociationConnector Association="VastwebmultiModel.FK_LoanApplication_LoanType" />
+        <AssociationConnector Association="VastwebmultiModel.FK_LoanApplication_Retailer" />
+        <AssociationConnector Association="VastwebmultiModel.FK_LoanFollowUp_LoanApplication" />
+        <AssociationConnector Association="VastwebmultiModel.FK_LoanNote_LoanApplication" />
+        <AssociationConnector Association="VastwebmultiModel.FK_LoanStatusHistory_LoanApplication" />
+        <EntityTypeShape EntityType="VastwebmultiModel.LoanVehicle" Width="1.5" PointX="12.25" PointY="118.375" />
+        <AssociationConnector Association="VastwebmultiModel.FK_LoanVehicle_LoanApplication" />
+        <EntityTypeShape EntityType="VastwebmultiModel.LoanDocument" Width="1.5" PointX="12.25" PointY="131.375" />
+        <AssociationConnector Association="VastwebmultiModel.FK_LoanDocument_LoanApplication" />
+        <EntityTypeShape EntityType="VastwebmultiModel.LoanExistingDetail" Width="1.5" PointX="12.25" PointY="136.25" />
+        <AssociationConnector Association="VastwebmultiModel.FK_LoanExistingDetails_LoanApplication" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

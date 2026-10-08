@@ -236,13 +236,18 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         public ActionResult VideoKYCstatus()
         {
             var videokycsetting = db.AAdharPanEKYC_Verify.Single();
-            if(!videokycsetting.VideoKycStatus)
-            {
-              //  return RedirectToAction("Dashboard", "Home");
 
+            if (!videokycsetting.VideoKycStatus)
+            {
+                // Direct browser se aaya hai -> Dashboard pe bhejo
+                if (!ControllerContext.IsChildAction)
+                {
+                    return RedirectToAction("Dashboard", "Home");
+                }
+
+                // Kisi page ke andar @Html.Action se call hua hai -> kuch render mat karo
                 return Content(string.Empty);
             }
-
 
             return PartialView("KYCVIDEODEMO");
         }
@@ -677,10 +682,16 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 db.Printer_paperSize_Changes.Add(ff);
                 db.SaveChanges();
             }
-            var allkycchk = db.Retailer_Details.Where(x => x.RetailerId == userid && x.PSAStatus == "Y" && x.AadhaarStatus == "Y" && x.ShopwithSalfieStatus == "Y" && x.videokycstatus == "N" && (x.videokycpath == null || x.videokycpath != null)).SingleOrDefault();
-            if (allkycchk != null)
+            // Admin ka global Video KYC toggle
+            bool videoKycOn = db.AAdharPanEKYC_Verify.Single().VideoKycStatus;
+
+            if (videoKycOn)
             {
-                return RedirectToAction("VideoKYCstatus");
+                var allkycchk = db.Retailer_Details.Where(x => x.RetailerId == userid && x.PSAStatus == "Y" && x.AadhaarStatus == "Y" && x.ShopwithSalfieStatus == "Y" && x.videokycstatus == "N").SingleOrDefault();
+                if (allkycchk != null)
+                {
+                    return RedirectToAction("VideoKYCstatus");
+                }
             }
             ViewBag.show = "Today";
             var entry = db.Slab_Flight.FirstOrDefault(a => a.UserId == userid);

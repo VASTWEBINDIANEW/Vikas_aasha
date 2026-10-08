@@ -28,6 +28,7 @@ using System.Web.UI.WebControls;
 using Vastwebmulti.Areas.ADMIN.Controllers;
 using Vastwebmulti.Areas.ADMIN.Models;
 using Vastwebmulti.Areas.Employee.Model;
+using MasterDistributerModel = Vastwebmulti.Areas.ADMIN.Models.MasterDistributerModel;
 using Vastwebmulti.Areas.Employee.ViewModel;
 using Vastwebmulti.Areas.RETAILER.Models;
 using Vastwebmulti.Areas.RETAILER.ViewModels;

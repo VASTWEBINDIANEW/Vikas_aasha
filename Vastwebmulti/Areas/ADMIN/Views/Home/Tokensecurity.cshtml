@@ -1,285 +1,318 @@
 @model IEnumerable<Vastwebmulti.Models.Bestoffer>
+@using System.Linq
 @{
     ViewBag.Title = "Tokensecurity";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var tokenRows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.Bestoffer>();
+    var rowIndex = 0;
 }
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=28" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-operator-modern.css?v=19" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-    .form-control-label{text-align:left;}
-    .form-control-label label sup{color:red;}
-    .form-control-label label{margin: 0px;
-border: 1px solid #dddddd;border-right: 0px;
-height: 34px;
-padding: 8px 0px;width: 100%;
-text-align: left;
-padding-left: 5px;font-size:12px;background:#f5f5f5;}
-    .form-group{margin-bottom:0px;}
-    .bread-same-all-page li{margin-bottom:6px;}
+    /* R Offer table: Sr.No chhota + table full width cover */
+    #tokenSecTable { width: 100% !important; }
+    #tokenSecTable th:first-child,
+    #tokenSecTable td:first-child { text-align: center; }
+    #tokenSecTable th { white-space: nowrap !important; }
+    #tokenSecTable td { vertical-align: middle; }
+    #tokenSecTable .vm-api-nm-name-cell { width: 140px !important; min-width: 140px !important; max-width: 140px !important; white-space: nowrap !important; word-break: normal !important; overflow: hidden !important; text-overflow: ellipsis !important; font-size: .72rem; }
+    #tokenSecTable .vm-api-nm-url-text { white-space: normal !important; word-break: normal !important; overflow-wrap: break-word !important; }
+    #tokenSecTable .vm-api-nm-url-wrap { width: auto !important; display: inline-flex !important; }
+    #tokenSecTable .vm-api-nm-action-cell { white-space: nowrap; text-align: center; width: 80px !important; min-width: 80px !important; max-width: 80px !important; }
 </style>
-<section class="content">
-    <div class="container-fluid">
-        <div class="bread-same-all-page">
-            <ul style="margin:0px;">
-                <li class="smli">
-                    <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                    </a>
-                </li>
-                <li class="fullbodydycolorbg tmw-total-color-one">
-                    <a href="@Url.Action("Dashboard", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                        Basic&nbsp;Setting
-                    </a>&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                </li>
-                <li class="fullbodydycolorbg tmw-total-color-one">
-                    Set Plan API
-                </li>
-            </ul>
 
-        </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card" style="margin-bottom:15px;">
-                    <div class="row">
-                        <div class="col-xs-10">
-                            @Html.Partial("_menuapinm")
-                        </div>
-                        <div class="col-xs-2">
-                            <button type="button" class="btn fullbodydycolorbg  waves-effect" style="float:right; margin-top:4px;border:1px solid #c7c2c2;" data-toggle="modal" data-target="#defaultModal">
-                                <i class="fa fa-plus" style="top:1px;font-size:15px;color:#fff;"></i>
-                                <span style="top:0px;color:#fff;">Add New</span>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-api-operator-page saas-api-nm-page saas-token-sec-page">
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+            <div class="saas-acc-toolbar-top vm-api-operator-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-api-operator-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li><a href="@Url.Action("Dashboard", "Home")#setting">Basic Setting</a></li>
+                    <li>R Offer</li>
+                </ol>
+                <div class="vm-dmt-fin-nav-row vm-api-operator-nav-wrap">
+                    @Html.Partial("_menuapinm")
+                </div>
+            </div>
+
+            <div class="vm-rpt-filters-panel vm-api-operator-filter-panel vm-api-nm-actions-panel">
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-api-operator-filter-row vm-rpt-filters-panel__bar">
+                    <div class="vm-api-operator-filter-group vm-api-nm-actions-group">
+                        @if (tokenRows.Any())
+                        {
+                            <button type="button" class="saas-acc-btn saas-acc-btn--search vm-api-nm-add-btn" disabled="disabled" title="Only one token allowed — please use Edit to update" style="opacity:.55;cursor:not-allowed;">
+                                <i class="fas fa-plus" aria-hidden="true"></i><span>Add New</span>
                             </button>
-                        </div>
-
+                        }
+                        else
+                        {
+                            <button type="button" class="saas-acc-btn saas-acc-btn--search vm-api-nm-add-btn" data-toggle="modal" data-target="#tokenSecAddModal" title="Add New Token">
+                                <i class="fas fa-plus" aria-hidden="true"></i><span>Add New</span>
+                            </button>
+                        }
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-responsive" style="position:inherit;">
-                                <table class="table table-bordered">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
+                </div>
+            </div>
+        </div>
 
-                                            <th>Token Number</th>
-                                            <th>User-Id / Email-Id</th>
-                                            <th>Edit</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{ var i = 1;}
-                                        @if (Model.Count() > 0)
-                                        {
-                                            foreach (var item in Model)
-                                            {
-                                                <tr>
-
-                                                    <td>@item.token</td>
-                                                    <td>@item.Emailid</td>
-                                                    <td>
-                                                        <a class="btn btn-default" href="#" onclick="Edititem('@item.idno')" style="border:1px solid #c7c2c2;padding:1px 11px 1px 11px;line-height: 20px;height: 25px;">
-                                                            Edit
-                                                        </a>
-                                                    </td>
-
-                                                </tr>
-                                                i++;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <tr>
-                                                <td></td>
-                                                <td><p style="font-size:22px;margin-top:-5px;color:#e0dddd;font-weight:700;">No Data Found !</p></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        }
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-gift" aria-hidden="true"></i>
+                        <span>R Offer token configuration</span>
+                    </div>
+                    <label class="vm-api-operator-table-search" for="tokenSecSearch">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input type="text" id="tokenSecSearch" placeholder="Search token..." autocomplete="off" />
+                    </label>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="tokenSecTable" class="table vm-opr-data-table vm-api-nm-data-table" cellspacing="0">
+                            <colgroup>
+                                <col style="width:50px;" />
+                                <col style="width:140px;" />
+                                <col style="width:34%;" />
+                                <col style="width:80px;" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Sr.No</th>
+                                    <th>Token Number</th>
+                                    <th>User-Id / Email-Id</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in tokenRows)
+                                {
+                                    rowIndex++;
+                                    var copyInputId = "tokenSecUrlCopy" + rowIndex;
+                                    <tr>
+                                        <td>@rowIndex</td>
+                                        <td class="vm-api-nm-name-cell" title="@item.token">@item.token</td>
+                                        <td class="vm-api-nm-url-cell">
+                                            <div class="vm-api-nm-url-wrap">
+                                                <span class="vm-api-nm-url-text" title="@(item.Emailid ?? "")">@(item.Emailid ?? "")</span>
+                                                <input type="hidden" id="@copyInputId" value="@(item.token ?? "")" />
+                                                <button type="button"
+                                                        class="vm-api-nm-copy-btn"
+                                                        data-copy-target="@copyInputId"
+                                                        title="Copy Token">
+                                                    <i class="fas fa-copy" aria-hidden="true"></i>
+                                                    <span>Copy</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="vm-api-nm-action-cell">
+                                            <div class="vm-api-nm-action-group">
+                                                <button type="button"
+                                                        class="vm-api-operator-edit-btn"
+                                                        onclick="Edititem('@item.idno')">
+                                                    <i class="fas fa-edit" aria-hidden="true"></i> Edit
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                                @if (!tokenRows.Any())
+                                {
+                                    <tr>
+                                        <td colspan="4" style="text-align:center;font-size:22px;color:#e0dddd;font-weight:700;">No Data Found !</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </section>
-<!--Add NEW Offer api Modal-->
-<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="margin:0px;float:right;min-width:50%;margin-top:63px;">
+
+<!-- Add Token Modal -->
+<div class="modal fade saas-admin-modal vm-sm-modal vm-api-operator-modal vm-api-nm-modal" id="tokenSecAddModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered saas-admin-modal-dialog vm-sm-modal-dialog" role="document">
         <div class="modal-content">
-           
-            @using (Html.BeginForm("Tokensecurity", "Home", FormMethod.Post))
+            @using (Html.BeginForm("Tokensecurity", "Home", FormMethod.Post, new { id = "tokenSecAddForm" }))
             {
-                <div class="modal-body" style="margin-top:0px;padding:5px;">
-                    <div class="body">
-                        <form>
+                <div class="modal-header saas-admin-modal-header accent-sky">
+                    <div class="saas-admin-modal-head-main">
+                        <div class="saas-admin-modal-icon"><i class="fas fa-plus" aria-hidden="true"></i></div>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Add New Token</h4>
+                            <p class="saas-admin-modal-subtitle">Configure R Offer token and user email</p>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
 
-                            <div class="row clearfix">
-                                <div class="col-md-5" style="padding-right: 0px;">
-                                    <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 form-control-label" style="padding-right:0px;">
-                                            <label for="email_address_2">Token&nbsp;Number<sup>*</sup></label>
-                                        </div>
-                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7" style="padding-left:0px;">
-                                            <div class="form-group">
-                                                <div class="" style="border:1px solid #dddddd;">
-                                                    <input type="text" id="tokenno" name="tokenno" class="form-control" placeholder="Enter Token Number" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                                <div class="col-md-4" style="padding-right: 0px;">
-                                    <div class="row clearfix">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 form-control-label" style="padding-right:0px;">
-                                            <label for="email_address_2">Email-Id<sup>*</sup></label>
-                                        </div>
-                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7" style="padding-left:0px;">
-                                            <div class="form-group">
-                                                <div class="" style="border:1px solid #dddddd;">
-                                                    <input type="text" id="emailid" name="emailid" class="form-control" placeholder="Enter Email Id" />
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn register fullbodydycolorbg waves-effect" disabled style=" height:34px;">
-                                        <span style="color:#fff;">Save Change</span>
-                                    </button>
-                                </div>
-                                <div class="col-md-1">
-                                    <button type="button" class="btn bg-grey waves-effect" style="height:34px;color:#000;" data-dismiss="modal">
-                                        &#10005;
-                                    </button>
-                                </div>
-                                    </div>
-                                   
-
-</form>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body">
+                    <div class="vm-sm-modal-panel vm-api-operator-form-grid">
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="tokenno">Token Number</label>
+                            <input type="text" id="tokenno" name="tokenno" class="form-control" placeholder="Enter Token Number" />
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="emailid">Email-Id</label>
+                            <input type="text" id="emailid" name="emailid" class="form-control" placeholder="Enter Email Id" />
+                        </div>
                     </div>
                 </div>
-            }
 
+                <div class="modal-footer saas-admin-modal-footer vm-sm-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                        <i class="fas fa-times" aria-hidden="true"></i> Cancel
+                    </button>
+                    <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success register" disabled="disabled">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save Change
+                    </button>
+                </div>
+            }
         </div>
     </div>
 </div>
 
-<!--Edit Offer api Modal-->
-<div class="modal fade" id="defaultModal1" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="margin:0px;float:right;min-width:50%;margin-top:63px;">
+<!-- Edit Token Modal -->
+<div class="modal fade saas-admin-modal vm-sm-modal vm-api-operator-modal vm-api-nm-modal" id="tokenSecEditModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered saas-admin-modal-dialog vm-sm-modal-dialog" role="document">
         <div class="modal-content">
-            
-            @using (Html.BeginForm("Update_offerapitoken", "Home", FormMethod.Post))
+            @using (Html.BeginForm("Update_offerapitoken", "Home", FormMethod.Post, new { id = "tokenSecEditForm" }))
             {
-                <div class="modal-body" style="margin-top:0px;padding:5px;">
-                    <div class="body">
-                        <form>
+                <div class="modal-header saas-admin-modal-header accent-emerald">
+                    <div class="saas-admin-modal-head-main">
+                        <div class="saas-admin-modal-icon"><i class="fas fa-edit" aria-hidden="true"></i></div>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Edit Token</h4>
+                            <p class="saas-admin-modal-subtitle">Update R Offer token and user email</p>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
 
-                            <div class="row clearfix">
-                                <input type="text" id="txtidno" name="txtidno" style="display:none;" />
-                                <div class="col-md-5" style="padding-right: 0px;">
-                                    <div class="row">
-                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-control-label" style="padding-right:0px;">
-                                            <label for="email_address_2">Token&nbsp;Number</label>
-                                        </div>
-                                        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7" style="padding-left:0px;">
-                                            <div class="form-group">
-                                                <div class="" style="border:1px solid #dddddd;">
-                                                    <input type="text" id="edittokennumber" name="edittokennumber" class="form-control" placeholder="Enter Token Number" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4" style="padding-right: 0px;">
-                                    <div class="row clearfix">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 form-control-label" style="padding-right:0px;">
-                                            <label for="email_address_2">Email-Id</label>
-                                        </div>
-                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7" style="padding-left:0px;">
-                                            <div class="form-group">
-                                                <div class="" style="border:1px solid #dddddd;">
-                                                    <input type="text" id="editemailid" name="editemailid" class="form-control" placeholder="Enter Token Number" />
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn fullbodydycolorbg waves-effect" style="  height:34px;">
-                                        <span style="color:#fff;">Save Change</span>
-                                    </button>
-                                </div>
-                                <div class="col-md-1">
-                                    <button type="button" class="btn bg-grey waves-effect" style="height:34px;color:#000;" data-dismiss="modal">
-                                        &#10005;
-                                    </button>
-                                </div>
-                            </div>
-                               
-
-                             
-</form>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-sm-modal-body">
+                    <input type="text" id="txtidno" name="txtidno" style="display:none;" />
+                    <div class="vm-sm-modal-panel vm-api-operator-form-grid">
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="edittokennumber">Token Number</label>
+                            <input type="text" id="edittokennumber" name="edittokennumber" class="form-control" placeholder="Enter Token Number" />
+                        </div>
+                        <div class="vm-sm-modal-field vm-sm-modal-field--full">
+                            <label for="editemailid">Email-Id</label>
+                            <input type="text" id="editemailid" name="editemailid" class="form-control" placeholder="Enter Email Id" />
+                        </div>
                     </div>
                 </div>
-            }
 
+                <div class="modal-footer saas-admin-modal-footer vm-sm-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                        <i class="fas fa-times" aria-hidden="true"></i> Cancel
+                    </button>
+                    <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save Change
+                    </button>
+                </div>
+            }
         </div>
     </div>
 </div>
 
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
 <script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
+<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="~/AdminDesign/js/demo.js"></script>
+<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
 <script>
-    window.onload=function()
-    {
+    window.onload = function () {
         var sucs = '@ViewData["Success"]';
         var error = '@ViewData["error"]';
-        if(sucs != "")
-        {
+        if (sucs != "") {
             swal("Data Insert!", sucs, "success");
         }
-         if(error !=null)
-        {
+        if (error != null && error != "") {
             swal("Oops !!", error, "error");
         }
     }
-</script>
-<script>
-    function Edititem (idno)
-    {
 
-        var url = '@Url.Action("Editofferapitoken","Home")'
+    $(document).ready(function () {
+        $('#tokenSecSearch').on('keyup', function () {
+            var q = $(this).val().toLowerCase();
+            $('#tokenSecTable tbody tr').each(function () {
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(text.indexOf(q) > -1);
+            });
+        });
+    });
+
+    function Edititem(idno) {
+        var url = '@Url.Action("Editofferapitoken", "Home")'
         $.ajax({
             url: url,
             data: { idno: idno },
             cache: false,
             type: "POST",
             success: function (data) {
-       
                 $("#txtidno").val(idno);
                 $("#edittokennumber").val(data[0].token);
                 $("#editemailid").val(data[0].Emailid);
-                $('#defaultModal1').modal('show');
+                $('#tokenSecEditModal').modal('show');
             },
             error: function (reponse) {
                 alert("error : " + reponse);
             }
         });
     }
+
+    $(document).on('click', '.vm-api-nm-copy-btn', function () {
+        var targetId = $(this).data('copy-target');
+        var $input = $('#' + targetId);
+        var text = $input.val() || '';
+
+        if (!text) {
+            return;
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function () {
+                swal('Copied!', 'Token copied to clipboard.', 'success');
+            }).catch(function () {
+                copyTokenTextFallback(text);
+            });
+        } else {
+            copyTokenTextFallback(text);
+        }
+    });
+
+    function copyTokenTextFallback(text) {
+        var $temp = $('<textarea readonly></textarea>').val(text).css({
+            position: 'fixed',
+            left: '-9999px',
+            top: '0'
+        }).appendTo('body');
+        $temp[0].select();
+        try {
+            document.execCommand('copy');
+            swal('Copied!', 'Token copied to clipboard.', 'success');
+        } catch (e) {
+            swal('Error', 'Unable to copy token.', 'error');
+        }
+        $temp.remove();
+    }
 </script>
 <script>
-$(' #emailid').bind('keyup', function() {
-    $('.register').removeAttr('disabled');
-});
-
-
+    $('#emailid').bind('keyup', function () {
+        $('.register').removeAttr('disabled');
+    });
 </script>

@@ -1,0 +1,65 @@
+﻿@model System.Tuple<Vastwebmulti.Areas.RETAILER.Models.DocumentTypeDef, Vastwebmulti.Areas.RETAILER.Models.LoanDocumentVm>
+@{
+    var doc = Model.Item1;
+    var uploaded = Model.Item2;
+    var isImage = uploaded != null && (uploaded.FilePath.ToLower().EndsWith(".jpg") || uploaded.FilePath.ToLower().EndsWith(".jpeg") || uploaded.FilePath.ToLower().EndsWith(".png"));
+    var viewUrl = uploaded != null ? Url.Action("ViewDocument", "Loan", new { area = "RETAILER", id = uploaded.Id }) : null;
+}
+
+<div class="doc-row @(uploaded != null ? "has-file" : "")">
+    <div class="doc-thumb @(uploaded != null ? "uploaded" : "")">
+        @if (uploaded != null && isImage)
+        {
+            <img src="@viewUrl" alt="@doc.Label" />
+        }
+        else if (uploaded != null)
+        {
+            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+        }
+        else
+        {
+            <i class="fa fa-file-o" aria-hidden="true"></i>
+        }
+    </div>
+
+    <div class="doc-info">
+        <div class="doc-label">
+            @doc.Label
+            @if (doc.Required)
+            {
+                <span class="required-mark">*</span>
+            }
+        </div>
+
+        @if (uploaded != null)
+        {
+            <div class="doc-meta">
+                <a href="@viewUrl" target="_blank">@uploaded.FileName</a>
+                &nbsp;&bull;&nbsp; @uploaded.UploadedDate.ToString("dd MMM yyyy, hh:mm tt")
+            </div>
+            if (uploaded.VerificationStatus == "REJECTED" && !string.IsNullOrEmpty(uploaded.VerificationRemarks))
+            {
+                <div class="doc-verification-remarks"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> @uploaded.VerificationRemarks</div>
+            }
+        }
+        else
+        {
+            <div class="doc-meta">Not uploaded yet</div>
+        }
+
+        <div class="doc-file-chosen"></div>
+    </div>
+
+    @if (uploaded != null)
+    {
+        <span class="doc-status-badge doc-status-@uploaded.VerificationStatus.ToLower()">@uploaded.VerificationStatus</span>
+    }
+
+    <div class="doc-action">
+        <div class="doc-file-btn @(uploaded != null ? "replace" : "")">
+            <i class="fa @(uploaded != null ? "fa-refresh" : "fa-upload")" aria-hidden="true"></i>
+            @(uploaded != null ? "Replace" : "Upload")
+            <input type="file" name="@doc.Code" class="doc-file-input" accept=".pdf,.jpg,.jpeg,.png" />
+        </div>
+    </div>
+</div>

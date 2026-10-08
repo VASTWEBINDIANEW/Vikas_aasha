@@ -1,0 +1,704 @@
+﻿@model Vastwebmulti.Areas.RETAILER.Models.LoanApplicationDetailsVm
+@{
+    ViewBag.Title = "Loan Application Details";
+    Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+    var a = Model.Application;
+}
+
+<style>
+    .loan-details-page {
+        --loan-primary: var(--main-bg-lcolor, #2867c9);
+        --loan-ink: #1e293b;
+        --loan-muted: #64748b;
+        --loan-line: #e2e8f0;
+        --loan-soft: #f8fafc;
+        padding: 26px 20px 42px;
+    }
+
+        .loan-details-page *, .loan-details-page *:before, .loan-details-page *:after {
+            box-sizing: border-box;
+        }
+
+    .loan-hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+    }
+
+    .loan-kicker {
+        color: var(--loan-primary);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+    }
+
+    .loan-hero h3 {
+        color: var(--loan-ink);
+        font-size: 22px;
+        font-weight: 700;
+        margin: 5px 0 0;
+    }
+
+    .loan-breadcrumb {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 7px;
+        color: var(--loan-muted);
+        font-size: 13px;
+        margin: 8px 0 0;
+        padding: 0;
+        list-style: none;
+    }
+
+        .loan-breadcrumb a {
+            color: var(--loan-muted);
+            text-decoration: none;
+        }
+
+            .loan-breadcrumb a:hover {
+                color: var(--loan-primary);
+            }
+
+        .loan-breadcrumb .current {
+            color: var(--loan-ink);
+            font-weight: 600;
+        }
+
+    .loan-header-actions {
+        align-items: center;
+        display: flex;
+        gap: 10px;
+    }
+
+    .loan-back-btn {
+        align-items: center;
+        background: #fff;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        color: #475569;
+        display: inline-flex;
+        font-size: 13px;
+        font-weight: 700;
+        gap: 8px;
+        padding: 10px 18px;
+        text-decoration: none;
+    }
+
+        .loan-back-btn:hover {
+            color: var(--loan-primary);
+            border-color: var(--loan-primary);
+        }
+
+    .loan-shell {
+        max-width: 1180px;
+        margin: 0 auto;
+    }
+
+    /* ---- Document required action banner ---- */
+    .loan-action-banner {
+        align-items: center;
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-radius: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding: 18px 22px;
+    }
+
+    .loan-action-banner-text {
+        align-items: flex-start;
+        display: flex;
+        gap: 12px;
+    }
+
+        .loan-action-banner-text i {
+            color: #b45309;
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .loan-action-banner-text strong {
+            color: #92400e;
+            font-size: 14px;
+        }
+
+        .loan-action-banner-text p {
+            color: #78350f;
+            font-size: 12.5px;
+            margin: 4px 0 0;
+        }
+
+    .loan-action-btn {
+        align-items: center;
+        background: #b45309;
+        border-radius: 8px;
+        color: #fff;
+        display: inline-flex;
+        flex-shrink: 0;
+        font-size: 13px;
+        font-weight: 700;
+        gap: 8px;
+        padding: 10px 18px;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+        .loan-action-btn:hover {
+            color: #fff;
+            opacity: .9;
+        }
+
+    .loan-summary-card {
+        background: #fff;
+        border: 1px solid var(--loan-line);
+        border-radius: 12px;
+        box-shadow: 0 8px 28px rgba(15, 23, 42, .07);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 20px;
+        padding: 22px 26px;
+    }
+
+    .loan-summary-left h4 {
+        color: var(--loan-ink);
+        font-size: 19px;
+        font-weight: 700;
+        margin: 0 0 4px;
+    }
+
+    .loan-summary-left .app-no {
+        color: var(--loan-primary);
+        font-weight: 700;
+    }
+
+    .loan-summary-left p {
+        color: var(--loan-muted);
+        font-size: 13px;
+        margin: 4px 0 0;
+    }
+
+    .loan-summary-right {
+        text-align: right;
+    }
+
+    .loan-summary-amount {
+        color: var(--loan-ink);
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .loan-status-badge {
+        border-radius: 20px;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .02em;
+        margin-top: 6px;
+        padding: 5px 14px;
+        text-transform: uppercase;
+    }
+
+    .status-new {
+        background: #e0edff;
+        color: #1d4ed8;
+    }
+
+    .status-under_process {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .status-document_required {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .status-verification {
+        background: #ede9fe;
+        color: #6d28d9;
+    }
+
+    .status-on_hold {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .status-approved {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .status-rejected {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .status-disbursed {
+        background: #d1fae5;
+        color: #047857;
+    }
+
+    .status-cancelled {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    .loan-details-grid {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: 2fr 1fr;
+    }
+
+    .loan-card {
+        background: #fff;
+        border: 1px solid var(--loan-line);
+        border-radius: 12px;
+        box-shadow: 0 8px 28px rgba(15, 23, 42, .06);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .loan-card-heading {
+        align-items: center;
+        border-bottom: 1px solid var(--loan-line);
+        display: flex;
+        gap: 10px;
+        padding: 16px 22px;
+    }
+
+        .loan-card-heading .icon {
+            align-items: center;
+            background: #e8f0fd;
+            border-radius: 8px;
+            color: var(--loan-primary);
+            display: flex;
+            font-size: 14px;
+            height: 32px;
+            justify-content: center;
+            width: 32px;
+        }
+
+        .loan-card-heading h4 {
+            color: var(--loan-ink);
+            font-size: 15px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+    .loan-card-body {
+        padding: 20px 22px;
+    }
+
+    .loan-info-grid {
+        display: grid;
+        gap: 16px 20px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .loan-info-item label {
+        color: var(--loan-muted);
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .03em;
+        margin: 0 0 4px;
+        text-transform: uppercase;
+    }
+
+    .loan-info-item div {
+        color: var(--loan-ink);
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .loan-rejection-note {
+        background: #fef2f2;
+        border-left: 3px solid #dc2626;
+        border-radius: 0 6px 6px 0;
+        color: #991b1b;
+        font-size: 13px;
+        margin-top: 18px;
+        padding: 12px 14px;
+    }
+
+    /* Timeline */
+    .loan-timeline {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        .loan-timeline li {
+            border-left: 2px solid var(--loan-line);
+            padding: 0 0 20px 20px;
+            position: relative;
+        }
+
+            .loan-timeline li:last-child {
+                border-left-color: transparent;
+                padding-bottom: 0;
+            }
+
+            .loan-timeline li:before {
+                background: var(--loan-primary);
+                border-radius: 50%;
+                content: "";
+                height: 10px;
+                left: -6px;
+                position: absolute;
+                top: 3px;
+                width: 10px;
+            }
+
+        .loan-timeline .tl-status {
+            color: var(--loan-ink);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .loan-timeline .tl-date {
+            color: var(--loan-muted);
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .loan-timeline .tl-remarks {
+            color: #475569;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+    .loan-empty-mini {
+        color: var(--loan-muted);
+        font-size: 13px;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    @@media (max-width: 900px) {
+        .loan-details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .loan-summary-right {
+            text-align: left;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .loan-info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .loan-action-banner {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .loan-action-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .loan-header-actions {
+            width: 100%;
+        }
+
+            .loan-header-actions .loan-back-btn {
+                flex: 1;
+                justify-content: center;
+            }
+    }
+</style>
+
+<section class="content loan-details-page">
+    <div class="loan-shell">
+        <div class="loan-hero">
+            <div>
+                <div class="loan-kicker">Loan centre</div>
+                <h3>Application Details</h3>
+                <ul class="loan-breadcrumb" aria-label="Breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")">Home</a></li>
+                    <li><i class="fa fa-angle-right" aria-hidden="true"></i></li>
+                    <li><a href="@Url.Action("Index", "Loan")">Loan Applications</a></li>
+                    <li><i class="fa fa-angle-right" aria-hidden="true"></i></li>
+                    <li class="current">@a.ApplicationNo</li>
+                </ul>
+            </div>
+       
+            <div class="loan-header-actions">
+                @if (a.Status != "NEW" && a.State != "UNDER PROCESS")
+                {
+                    <a href="@Url.Action("UploadDocuments", "Loan", new { area = "RETAILER", id = a.Id })" class="loan-back-btn">
+                        <i class="fa fa-file-text-o" aria-hidden="true"></i> View / Upload Documents
+                    </a>
+                }
+                    <a href="@Url.Action("Index", "Loan")" class="loan-back-btn">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to list
+                    </a>
+                </div>
+            
+        </div>
+
+        @if (a.Status == "DOCUMENT_REQUIRED")
+        {
+            <div class="loan-action-banner">
+                <div class="loan-action-banner-text">
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    <div>
+                        <strong>Documents required</strong>
+                        <p>This application is on hold pending document verification. Please upload the required documents to proceed.</p>
+                    </div>
+                </div>
+                <a href="@Url.Action("UploadDocuments", "Loan", new { area = "RETAILER", id = a.Id })" class="loan-action-btn">
+                    <i class="fa fa-upload" aria-hidden="true"></i> Upload Documents
+                </a>
+            </div>
+        }
+
+        <div class="loan-summary-card">
+            <div class="loan-summary-left">
+                <h4>@a.FullName</h4>
+                <p><span class="app-no">@a.ApplicationNo</span> &nbsp;&bull;&nbsp; @a.LoanTypeName</p>
+                <p>Applied on @a.CreatedDate.ToString("dd MMM yyyy, hh:mm tt")</p>
+            </div>
+            <div class="loan-summary-right">
+                <div class="loan-summary-amount">₹@a.LoanAmount.ToString("N2")</div>
+                <div><span class="loan-status-badge status-@a.Status.ToLower()">@a.Status.Replace("_", " ")</span></div>
+            </div>
+        </div>
+
+        <div class="loan-details-grid">
+            <div>
+                <div class="loan-card">
+                    <div class="loan-card-heading">
+                        <div class="icon"><i class="fa fa-user" aria-hidden="true"></i></div>
+                        <h4>Applicant Details</h4>
+                    </div>
+                    <div class="loan-card-body">
+                        <div class="loan-info-grid">
+                            <div class="loan-info-item"><label>Full Name</label><div>@a.FullName</div></div>
+                            <div class="loan-info-item"><label>Mobile</label><div>@a.Mobile</div></div>
+                            <div class="loan-info-item"><label>Email</label><div>@(a.Email ?? "-")</div></div>
+                            <div class="loan-info-item"><label>Date of Birth</label><div>@(a.DOB.HasValue ? a.DOB.Value.ToString("dd MMM yyyy") : "-")</div></div>
+                            <div class="loan-info-item"><label>Gender</label><div>@(a.Gender ?? "-")</div></div>
+                            <div class="loan-info-item"><label>PAN</label><div>@(a.PAN ?? "-")</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loan-card">
+                    <div class="loan-card-heading">
+                        <div class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></div>
+                        <h4>Address</h4>
+                    </div>
+                    <div class="loan-card-body">
+                        <div class="loan-info-grid">
+                            <div class="loan-info-item" style="grid-column:1/-1;"><label>Address</label><div>@(a.Address ?? "-")</div></div>
+                            <div class="loan-info-item"><label>City</label><div>@(a.City ?? "-")</div></div>
+                            <div class="loan-info-item"><label>State</label><div>@(a.State ?? "-")</div></div>
+                            <div class="loan-info-item"><label>Pincode</label><div>@(a.Pincode ?? "-")</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loan-card">
+                    <div class="loan-card-heading">
+                        <div class="icon"><i class="fa fa-briefcase" aria-hidden="true"></i></div>
+                        <h4>Employment &amp; Income</h4>
+                    </div>
+                    <div class="loan-card-body">
+                        <div class="loan-info-grid">
+                            <div class="loan-info-item"><label>Employment Type</label><div>@(a.EmploymentType ?? "-")</div></div>
+                            <div class="loan-info-item"><label>Company Name</label><div>@(a.CompanyName ?? "-")</div></div>
+                            <div class="loan-info-item"><label>Work Experience</label><div>@(a.WorkExperienceYears.HasValue ? a.WorkExperienceYears + " yrs" : "-")</div></div>
+                            <div class="loan-info-item"><label>Monthly Income</label><div>@(a.MonthlyIncome.HasValue ? "₹" + a.MonthlyIncome.Value.ToString("N2") : "-")</div></div>
+                            <div class="loan-info-item"><label>Other Monthly Income</label><div>@(a.OtherMonthlyIncome.HasValue ? "₹" + a.OtherMonthlyIncome.Value.ToString("N2") : "-")</div></div>
+                            <div class="loan-info-item"><label>Existing EMI</label><div>@(a.ExistingEMI.HasValue ? "₹" + a.ExistingEMI.Value.ToString("N2") : "-")</div></div>
+                            <div class="loan-info-item"><label>Existing Loans</label><div>@(a.ExistingLoans.HasValue ? a.ExistingLoans.ToString() : "-")</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loan-card">
+                    <div class="loan-card-heading">
+                        <div class="icon"><i class="fa fa-money" aria-hidden="true"></i></div>
+                        <h4>Loan Requirement</h4>
+                    </div>
+                    <div class="loan-card-body">
+                        <div class="loan-info-grid">
+                            <div class="loan-info-item"><label>Requested Amount</label><div>₹@a.LoanAmount.ToString("N2")</div></div>
+                            <div class="loan-info-item"><label>Requested Tenure</label><div>@(a.TenureMonths.HasValue ? a.TenureMonths + " months" : "-")</div></div>
+                            <div class="loan-info-item" style="grid-column:1/-1;"><label>Purpose</label><div>@(a.LoanPurpose ?? "-")</div></div>
+
+                            @if (a.ApprovedAmount.HasValue)
+                            {
+                                <div class="loan-info-item"><label>Approved Amount</label><div>₹@a.ApprovedAmount.Value.ToString("N2")</div></div>
+                            }
+                            @if (a.ApprovedTenureMonths.HasValue)
+                            {
+                                <div class="loan-info-item"><label>Approved Tenure</label><div>@a.ApprovedTenureMonths months</div></div>
+                            }
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(a.RejectionReason))
+                        {
+                            <div class="loan-rejection-note">
+                                <strong>Rejection Reason:</strong> @a.RejectionReason
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                @if (Model.Vehicle != null)
+                {
+                    var v = Model.Vehicle;
+                    <div class="loan-card">
+                        <div class="loan-card-heading">
+                            <div class="icon"><i class="fa fa-car" aria-hidden="true"></i></div>
+                            <h4>Vehicle Details</h4>
+                        </div>
+                        <div class="loan-card-body">
+                            <div class="loan-info-grid">
+                                <div class="loan-info-item"><label>Manufacturer</label><div>@(v.Manufacturer ?? "-")</div></div>
+                                <div class="loan-info-item"><label>Model</label><div>@(v.Model ?? "-")</div></div>
+                                <div class="loan-info-item"><label>Variant</label><div>@(v.Variant ?? "-")</div></div>
+                                <div class="loan-info-item"><label>Fuel Type</label><div>@(v.FuelType ?? "-")</div></div>
+                                <div class="loan-info-item"><label>Transmission</label><div>@(v.Transmission ?? "-")</div></div>
+
+                                @if (v.VehicleType == "USED")
+                                {
+                                    <div class="loan-info-item"><label>Registration No</label><div>@(v.RegistrationNo ?? "-")</div></div>
+                                    <div class="loan-info-item">
+                                        <label>Manufacturing Month/Year</label>
+                                        <div>
+                                            @(v.ManufacturingMonth.HasValue ? v.ManufacturingMonth.ToString() : "-")
+                                            / @(v.ManufacturingYear.HasValue ? v.ManufacturingYear.ToString() : "-")
+                                        </div>
+                                    </div>
+                                    <div class="loan-info-item"><label>Registration Date</label><div>@(v.RegistrationDate.HasValue ? v.RegistrationDate.Value.ToString("dd MMM yyyy") : "-")</div></div>
+                                    <div class="loan-info-item"><label>Owner Number</label><div>@(v.OwnerNumber ?? "-")</div></div>
+                                    <div class="loan-info-item"><label>KM Driven</label><div>@(v.KMDriven.HasValue ? v.KMDriven.Value.ToString("N0") + " km" : "-")</div></div>
+                                    <div class="loan-info-item"><label>Current Market Value</label><div>@(v.MarketValue.HasValue ? "₹" + v.MarketValue.Value.ToString("N2") : "-")</div></div>
+                                }
+                                else
+                                {
+                                    <div class="loan-info-item"><label>Manufacturing Year</label><div>@(v.ManufacturingYear.HasValue ? v.ManufacturingYear.ToString() : "-")</div></div>
+                                    <div class="loan-info-item"><label>On-Road Price</label><div>@(v.OnRoadPrice.HasValue ? "₹" + v.OnRoadPrice.Value.ToString("N2") : "-")</div></div>
+                                    <div class="loan-info-item"><label>Down Payment</label><div>@(v.DownPayment.HasValue ? "₹" + v.DownPayment.Value.ToString("N2") : "-")</div></div>
+                                    <div class="loan-info-item"><label>Dealer Name</label><div>@(v.DealerName ?? "-")</div></div>
+                                    <div class="loan-info-item"><label>Dealer Mobile</label><div>@(v.DealerMobile ?? "-")</div></div>
+                                    <div class="loan-info-item" style="grid-column:1/-1;"><label>Dealer Location</label><div>@(v.DealerLocation ?? "-")</div></div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.Vehicle != null && Model.Vehicle.VehicleType == "USED")
+                {
+                    <div class="loan-card">
+                        <div class="loan-card-heading">
+                            <div class="icon"><i class="fa fa-calculator" aria-hidden="true"></i></div>
+                            <h4>Case &amp; Eligibility</h4>
+                        </div>
+                        <div class="loan-card-body">
+                            <div class="loan-info-grid">
+                                <div class="loan-info-item"><label>Case Type</label><div>@(a.CaseType ?? "-")</div></div>
+                                @if (a.CaseType == "REFINANCE")
+                                {
+                                    <div class="loan-info-item"><label>Refinance Type</label><div>@(a.RefinanceType?.Replace("_", " ") ?? "-")</div></div>
+                                }
+                                <div class="loan-info-item"><label>CIBIL Score</label><div>@(a.CIBILScore.HasValue ? a.CIBILScore.ToString() : "-")</div></div>
+                                <div class="loan-info-item"><label>Net Monthly Income</label><div>@(a.NetMonthlyIncome.HasValue ? "₹" + a.NetMonthlyIncome.Value.ToString("N2") : "-")</div></div>
+                                <div class="loan-info-item"><label>Average Bank Balance</label><div>@(a.ABB.HasValue ? "₹" + a.ABB.Value.ToString("N2") : "-")</div></div>
+                                <div class="loan-info-item"><label>Annual ITR Income</label><div>@(a.ITRIncome.HasValue ? "₹" + a.ITRIncome.Value.ToString("N2") : "-")</div></div>
+                                <div class="loan-info-item"><label>EMI Bounce (Last 3M)</label><div>@a.Last3MonthsBounceCount</div></div>
+                                <div class="loan-info-item"><label>Bank Statement Period</label><div>@(a.BankStatementMonths.HasValue ? a.BankStatementMonths + " months" : "-")</div></div>
+                                <div class="loan-info-item"><label>Interest Rate</label><div>@(a.InterestRate.HasValue ? a.InterestRate.Value.ToString("N2") + "%" : "-")</div></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.ExistingLoan != null)
+                {
+                    var e = Model.ExistingLoan;
+                    <div class="loan-card">
+                        <div class="loan-card-heading">
+                            <div class="icon"><i class="fa fa-refresh" aria-hidden="true"></i></div>
+                            <h4>Existing Loan Details</h4>
+                        </div>
+                        <div class="loan-card-body">
+                            <div class="loan-info-grid">
+                                <div class="loan-info-item"><label>Finance Company</label><div>@(e.FinanceCompany ?? "-")</div></div>
+                                <div class="loan-info-item"><label>Loan Account No</label><div>@(e.LoanAccountNo ?? "-")</div></div>
+
+                                @if (a.RefinanceType == "CLOSE_BT")
+                                {
+                                    <div class="loan-info-item"><label>Loan Closure Date</label><div>@(e.LoanClosureDate.HasValue ? e.LoanClosureDate.Value.ToString("dd MMM yyyy") : "-")</div></div>
+                                }
+                                else
+                                {
+                                    <div class="loan-info-item"><label>Current Outstanding</label><div>@(e.CurrentOutstanding.HasValue ? "₹" + e.CurrentOutstanding.Value.ToString("N2") : "-")</div></div>
+                                    <div class="loan-info-item"><label>Current EMI</label><div>@(e.EMIAmount.HasValue ? "₹" + e.EMIAmount.Value.ToString("N2") : "-")</div></div>
+                                }
+
+                                @if (a.RefinanceType == "BT_TOPUP")
+                                {
+                                    <div class="loan-info-item"><label>Total Loan EMI</label><div>@(e.TotalEMI.HasValue ? e.TotalEMI.ToString() : "-")</div></div>
+                                    <div class="loan-info-item"><label>EMI Paid</label><div>@(e.PaidEMI.HasValue ? e.PaidEMI.ToString() : "-")</div></div>
+                                    <div class="loan-info-item"><label>Last EMI Paid Date</label><div>@(e.LastEMIPaidDate.HasValue ? e.LastEMIPaidDate.Value.ToString("dd MMM yyyy") : "-")</div></div>
+                                }
+
+                                <div class="loan-info-item"><label>EMI Bounce (Last 3M)</label><div>@e.Last3MonthsBounceCount</div></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div>
+                <div class="loan-card">
+                    <div class="loan-card-heading">
+                        <div class="icon"><i class="fa fa-history" aria-hidden="true"></i></div>
+                        <h4>Status History</h4>
+                    </div>
+                    <div class="loan-card-body">
+                        @if (Model.StatusHistory != null && Model.StatusHistory.Any())
+                        {
+                            <ul class="loan-timeline">
+                                @foreach (var h in Model.StatusHistory)
+                                {
+                                    <li>
+                                        <div class="tl-status">
+                                            @(string.IsNullOrEmpty(h.OldStatus) ? "" : h.OldStatus.Replace("_", " ") + " → ")@h.NewStatus.Replace("_", " ")
+                                        </div>
+                                        <div class="tl-date">@h.ChangedDate.ToString("dd MMM yyyy, hh:mm tt")</div>
+                                        @if (!string.IsNullOrEmpty(h.Remarks))
+                                        {
+                                            <div class="tl-remarks">@h.Remarks</div>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <div class="loan-empty-mini">No status changes yet.</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1523,44 +1523,139 @@
     margin: 0 !important;
 }
 
+/* Button-style loading state: Sign In dabane par button ki jagah ye aata hai,
+   isliye bilkul button jaisa (48px, 12px radius, same gradient) + loader feel */
 .vm-login-page .loadingio-spinner-gear-94vo528ab8,
 .vm-public-login .loadingio-spinner-gear-94vo528ab8 {
     width: 100%;
-    height: 36px;
+    height: 48px;
+    min-height: 48px;
     overflow: hidden;
-    border: 2px solid color-mix(in srgb, var(--main-bg-lcolor, #2563eb) 55%, transparent);
-    text-align: center;
     position: relative;
     border-radius: 12px;
+    border: none;
+    padding: 0;
+    background: linear-gradient(135deg, var(--main-bg-lcolor, #2563eb), var(--main-bg-rcolor, #4f46e5));
+    box-shadow: 0 8px 22px rgba(37, 99, 235, .35);
+    text-align: center;
+    animation: vm-login-btn-glow 1.6s ease-in-out infinite;
+    cursor: wait;
+}
+
+@keyframes vm-login-btn-glow {
+    0%, 100% { box-shadow: 0 8px 22px rgba(37, 99, 235, .35); filter: brightness(1); }
+    50% { box-shadow: 0 8px 30px rgba(79, 70, 229, .55); filter: brightness(1.12); }
+}
+
+/* shine sweep across the button */
+.vm-login-page .loadingio-spinner-gear-94vo528ab8::after,
+.vm-public-login .loadingio-spinner-gear-94vo528ab8::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 45%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .5), transparent);
+    animation: vm-login-loader-shine 1.4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 3;
+}
+
+@keyframes vm-login-loader-shine {
+    0% { left: -45%; }
+    100% { left: 100%; }
 }
 
 .vm-login-page .loader,
 .vm-public-login .loader {
-    color: #64748b;
-    font-family: var(--vm-login-font);
-    height: 24px;
-    overflow-x: hidden;
-    position: absolute;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 48px;
+    margin: 0;
+    padding: 0 8px 4px;
+    overflow: hidden;
     text-align: center;
-    width: 98%;
-    margin: 2px 1%;
+    color: #fff;
+    font-family: var(--vm-login-font);
+    font-size: .9rem;
+    font-weight: 800;
+    letter-spacing: .03em;
+    text-transform: none;
 }
 
+/* white comet ring spinner */
 .vm-login-page .loader:before,
 .vm-public-login .loader:before {
-    animation: vm-login-loader-slide 3s alternate infinite linear;
-    background-image: linear-gradient(to right, var(--main-bg-lcolor, #2563eb), var(--main-bg-rcolor, #4f46e5));
     content: "";
-    height: 100%;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
+    position: static;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent 8%, rgba(255, 255, 255, .55) 45%, #fff);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 2.5px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 2.5px));
+    animation: vm-login-ring-spin .7s linear infinite;
 }
 
-@keyframes vm-login-loader-slide {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+@keyframes vm-login-ring-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* white bold text */
+.vm-login-page .vm-load-text,
+.vm-public-login .vm-load-text {
+    background: none;
+    -webkit-text-fill-color: #fff;
+    color: #fff;
+}
+
+/* sliding light bar at the bottom of the button */
+.vm-login-page .loader:after,
+.vm-public-login .loader:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 40%;
+    border-radius: 0 3px 3px 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .9), #22d3ee);
+    animation: vm-login-bar-slide 1.2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes vm-login-bar-slide {
+    0% { left: -40%; }
+    100% { left: 100%; }
+}
+
+/* bouncing ellipsis dots after the text */
+.vm-login-page .vm-load-text .vm-dots i,
+.vm-public-login .vm-load-text .vm-dots i {
+    display: inline-block;
+    font-style: normal;
+    animation: vm-login-dot-bounce 1.2s ease-in-out infinite;
+}
+
+.vm-login-page .vm-load-text .vm-dots i:nth-child(2),
+.vm-public-login .vm-load-text .vm-dots i:nth-child(2) {
+    animation-delay: .15s;
+}
+
+.vm-login-page .vm-load-text .vm-dots i:nth-child(3),
+.vm-public-login .vm-load-text .vm-dots i:nth-child(3) {
+    animation-delay: .3s;
+}
+
+@keyframes vm-login-dot-bounce {
+    0%, 60%, 100% { transform: none; opacity: .4; }
+    30% { transform: translateY(-3px); opacity: 1; }
 }
 
 .vm-login-page .text-danger,

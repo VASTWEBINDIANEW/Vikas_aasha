@@ -926,6 +926,14 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Aeps_Common_Comm_UPI> Aeps_Common_Comm_UPI { get; set; }
         public virtual DbSet<AepsUPIHistory> AepsUPIHistories { get; set; }
         public virtual DbSet<AEPSMOVEinfo> AEPSMOVEinfoes { get; set; }
+        public virtual DbSet<LoanApplication> LoanApplications { get; set; }
+        public virtual DbSet<LoanFollowUp> LoanFollowUps { get; set; }
+        public virtual DbSet<LoanNote> LoanNotes { get; set; }
+        public virtual DbSet<LoanStatusHistory> LoanStatusHistories { get; set; }
+        public virtual DbSet<LoanType> LoanTypes { get; set; }
+        public virtual DbSet<LoanVehicle> LoanVehicles { get; set; }
+        public virtual DbSet<LoanDocument> LoanDocuments { get; set; }
+        public virtual DbSet<LoanExistingDetail> LoanExistingDetails { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {

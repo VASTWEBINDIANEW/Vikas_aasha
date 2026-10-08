@@ -1,0 +1,382 @@
+﻿@model Vastwebmulti.Areas.RETAILER.Models.LoanApplicationDetailsVm
+@{
+    ViewBag.Title = "Loan Application Details";
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var a = Model.Application;
+    var docs = ViewBag.Documents as IEnumerable<Vastwebmulti.Areas.RETAILER.Models.LoanDocumentVm>;
+    var statusUpper = ((a != null && a.Status != null) ? a.Status : "").ToUpper();
+    var statusCls = "is-hold";
+    if (statusUpper == "APPROVED") { statusCls = "is-approved"; }
+    else if (statusUpper == "DISBURSED") { statusCls = "is-disbursed"; }
+    else if (statusUpper == "REJECTED" || statusUpper == "CANCELLED") { statusCls = "is-rejected"; }
+    else if (statusUpper == "NEW") { statusCls = "is-new"; }
+    else if (statusUpper == "UNDER_PROCESS" || statusUpper == "VERIFICATION" || statusUpper == "DOCUMENT_REQUIRED" || statusUpper == "ON_HOLD") { statusCls = "is-process"; }
+    var statusText = ((a != null && a.Status != null) ? a.Status : "-").Replace("_", " ");
+    var applicantInitial = (!string.IsNullOrEmpty(a.FullName) ? a.FullName.Trim().Substring(0, 1).ToUpper() : "L");
+}
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<style>
+    /* Loan details PRO - latest design, same family as Loan report (Index) */
+    .saas-loan-details-page .vm-opr-page-shell { max-width: 100% !important; padding-left: 10px !important; padding-right: 10px !important; }
+    .saas-loan-details-page .vm-loan-status { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px 3px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 800; letter-spacing: .02em; line-height: 1.5; white-space: nowrap; border: 1px solid transparent; }
+    .saas-loan-details-page .vm-loan-status .vm-loan-dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; background: currentColor; }
+    .saas-loan-details-page .vm-loan-status.is-new { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+    .saas-loan-details-page .vm-loan-status.is-process { background: #e0edff; color: #1d4ed8; border-color: #bfdbfe; }
+    .saas-loan-details-page .vm-loan-status.is-approved { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+    .saas-loan-details-page .vm-loan-status.is-disbursed { background: #d1fae5; color: #047857; border-color: #a7f3d0; }
+    .saas-loan-details-page .vm-loan-status.is-rejected { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
+    .saas-loan-details-page .vm-loan-status.is-hold { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+    /* hero */
+    .saas-loan-details-page .vm-loan-hero { position: relative; overflow: hidden; border-radius: 14px; background: linear-gradient(120deg,#1e3a8a 0%,#2867c9 55%,#0ea5e9 100%); color: #fff; padding: 22px 24px; margin-bottom: 16px; box-shadow: 0 12px 32px rgba(30,58,138,.28); }
+    .saas-loan-details-page .vm-loan-hero:before { content: ""; position: absolute; right: -70px; top: -70px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,.10); }
+    .saas-loan-details-page .vm-loan-hero:after { content: ""; position: absolute; right: 40px; bottom: -90px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,.07); }
+    .saas-loan-details-page .vm-loan-hero__in { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .saas-loan-details-page .vm-loan-id { display: flex; align-items: center; gap: 14px; }
+    .saas-loan-details-page .vm-loan-avatar { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,.18); border: 2px solid rgba(255,255,255,.55); display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; flex: 0 0 auto; }
+    .saas-loan-details-page .vm-loan-hero h3 { margin: 0; font-size: 21px; font-weight: 800; color: #fff !important; }
+    .saas-loan-details-page .vm-loan-hero .sub { margin: 5px 0 0; font-size: 13px; color: rgba(255,255,255,.88); }
+    .saas-loan-details-page .vm-loan-hero .sub b { color: #fff; }
+    .saas-loan-details-page .vm-loan-hero__right { text-align: right; }
+    .saas-loan-details-page .vm-loan-hero__amt { font-size: 28px; font-weight: 800; line-height: 1.1; }
+    .saas-loan-details-page .vm-loan-hero__amt small { display: block; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.75); margin-bottom: 4px; }
+    .saas-loan-details-page .vm-loan-hero .vm-loan-status { background: rgba(255,255,255,.16) !important; color: #fff !important; border-color: rgba(255,255,255,.45) !important; margin-top: 8px; }
+    /* stat cards (reserved) */
+    /* cards grid */
+    .saas-loan-details-page .vm-loan-grid { display: grid; gap: 16px; grid-template-columns: minmax(0,2fr) minmax(0,1fr); align-items: start; }
+    .saas-loan-details-page .vm-loan-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 8px 28px rgba(15,23,42,.06); margin-bottom: 16px; overflow: hidden; }
+    .saas-loan-details-page .vm-loan-card__head { align-items: center; border-bottom: 2px solid #dbe4f0; display: flex; gap: 10px; padding: 13px 18px; background: linear-gradient(180deg,#f8fafc,#f1f5f9); }
+    .saas-loan-details-page .vm-loan-card__head .icon { align-items: center; background: #e8f0fd; border-radius: 8px; color: #1d4ed8; display: inline-flex; font-size: 14px; height: 32px; justify-content: center; width: 32px; flex: 0 0 auto; }
+    .saas-loan-details-page .vm-loan-card__head h4 { color: #1e293b; font-size: 14px; font-weight: 700; margin: 0; }
+    .saas-loan-details-page .vm-loan-card__body { padding: 16px 18px; }
+    .saas-loan-details-page .vm-loan-info { display: grid; gap: 12px 16px; grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .saas-loan-details-page .vm-loan-info label { color: #64748b; display: block; font-size: 11px; font-weight: 700; letter-spacing: .03em; margin: 0 0 4px; text-transform: uppercase; }
+    .saas-loan-details-page .vm-loan-info div.val { color: #1d4ed8; font-size: 14px; font-weight: 700; word-break: break-word; }
+    .saas-loan-details-page .vm-loan-note { background: #fef2f2; border-left: 3px solid #dc2626; border-radius: 0 6px 6px 0; color: #991b1b; font-size: 13px; margin-top: 14px; padding: 10px 12px; }
+    /* stat cards (reserved) */
+    .saas-loan-details-page .vm-loan-banner { align-items: center; background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; display: flex; gap: 12px; margin-bottom: 16px; padding: 14px 18px; }
+    .saas-loan-details-page .vm-loan-banner i { color: #b45309; font-size: 20px; }
+    .saas-loan-details-page .vm-loan-banner strong { color: #92400e; font-size: 14px; }
+    .saas-loan-details-page .vm-loan-banner p { color: #78350f; font-size: 12.5px; margin: 4px 0 0; }
+    .saas-loan-details-page .vm-loan-timeline { list-style: none; margin: 0; padding: 0; }
+    .saas-loan-details-page .vm-loan-timeline li { border-left: 2px solid #e2e8f0; padding: 0 0 16px 16px; position: relative; }
+    .saas-loan-details-page .vm-loan-timeline li:last-child { border-left-color: transparent; padding-bottom: 0; }
+    .saas-loan-details-page .vm-loan-timeline li:before { background: #1d4ed8; border-radius: 50%; content: ""; height: 10px; left: -6px; position: absolute; top: 3px; width: 10px; }
+    .saas-loan-details-page .vm-loan-timeline .tl-status { color: #1e293b; font-size: 13px; font-weight: 700; }
+    .saas-loan-details-page .vm-loan-timeline .tl-date { color: #64748b; font-size: 11px; margin-top: 2px; }
+    .saas-loan-details-page .vm-loan-timeline .tl-remarks { color: #475569; font-size: 12px; margin-top: 5px; word-break: break-all; }
+    .saas-loan-details-page .vm-loan-timeline .tl-remarks a { color: #1d4ed8; font-weight: 600; text-decoration: none; }
+    .saas-loan-details-page .vm-loan-timeline .tl-remarks a:hover { text-decoration: underline; }
+    .saas-loan-details-page .vm-loan-empty { color: #64748b; font-size: 13px; padding: 10px 0; text-align: center; }
+    .saas-loan-details-page .saas-acc-btn--back { background: #64748b; border-color: #64748b; text-decoration: none; }
+    @@media (max-width: 991px) {
+        .saas-loan-details-page .vm-loan-grid { grid-template-columns: minmax(0,1fr); }
+        .saas-loan-details-page .vm-loan-hero__right { text-align: left; }
+        .saas-loan-details-page .vm-loan-info { grid-template-columns: minmax(0,1fr); }
+    }
+</style>
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-loan-report-page saas-loan-details-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Report's</li>
+                    <li><a href="@Url.Action("Index", "AdminLoan", new { area = "ADMIN" })">Loan Report</a></li>
+                    <li>@a.ApplicationNo</li>
+                </ol>
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
+                    <div class="vm-dmt-filter-search-group">
+                        <span class="vm-loan-status @statusCls"><span class="vm-loan-dot"></span>@statusText</span>
+                        <a href="@Url.Action("Index", "AdminLoan", new { area = "ADMIN" })" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn saas-acc-btn--back" title="Back to list">
+                            <i class="fas fa-arrow-left" aria-hidden="true"></i><span>Back</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="vm-loan-hero">
+            <div class="vm-loan-hero__in">
+                <div class="vm-loan-id">
+                    <div class="vm-loan-avatar">@applicantInitial</div>
+                    <div>
+                        <h3>@a.FullName</h3>
+                        <p class="sub"><b>@a.LoanTypeName</b> &nbsp;&bull;&nbsp; Applied @a.CreatedDate.ToString("dd MMM yyyy")</p>
+                    </div>
+                </div>
+                <div class="vm-loan-hero__right">
+                    <div class="vm-loan-hero__amt"><small>Requested Amount</small>&#8377;@a.LoanAmount.ToString("N2")</div>
+                    <div><span class="vm-loan-status @statusCls"><span class="vm-loan-dot"></span>@statusText</span></div>
+                </div>
+            </div>
+        </div>
+
+        @if (a.Status == "DOCUMENT_REQUIRED")
+        {
+            <div class="vm-loan-banner">
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                <div>
+                    <strong>Documents required</strong>
+                    <p>Waiting for the retailer to upload the required documents.</p>
+                </div>
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(a.RejectionReason))
+        {
+            <div class="vm-loan-banner" style="background:#fef2f2;border-color:#fecaca;">
+                <i class="fa fa-times-circle" aria-hidden="true" style="color:#dc2626;"></i>
+                <div>
+                    <strong style="color:#991b1b;">Rejection Reason</strong>
+                    <p style="color:#991b1b;">@a.RejectionReason</p>
+                </div>
+            </div>
+        }
+
+        <div class="vm-loan-grid">
+            <div>
+                <div class="vm-loan-card">
+                    <div class="vm-loan-card__head">
+                        <div class="icon"><i class="fa fa-user" aria-hidden="true"></i></div>
+                        <h4>Applicant Details</h4>
+                    </div>
+                    <div class="vm-loan-card__body">
+                        <div class="vm-loan-info">
+                            <div><label>Full Name</label><div class="val">@a.FullName</div></div>
+                            <div><label>Mobile</label><div class="val">@a.Mobile</div></div>
+                            <div><label>Email</label><div class="val">@(a.Email ?? "-")</div></div>
+                            <div><label>Date of Birth</label><div class="val">@(a.DOB.HasValue ? a.DOB.Value.ToString("dd MMM yyyy") : "-")</div></div>
+                            <div><label>Gender</label><div class="val">@(a.Gender ?? "-")</div></div>
+                            <div><label>PAN</label><div class="val">@(a.PAN ?? "-")</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-loan-card">
+                    <div class="vm-loan-card__head">
+                        <div class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></div>
+                        <h4>Address</h4>
+                    </div>
+                    <div class="vm-loan-card__body">
+                        <div class="vm-loan-info">
+                            <div style="grid-column:1/-1;"><label>Address</label><div class="val">@(a.Address ?? "-")</div></div>
+                            <div><label>City</label><div class="val">@(a.City ?? "-")</div></div>
+                            <div><label>State</label><div class="val">@(a.State ?? "-")</div></div>
+                            <div><label>Pincode</label><div class="val">@(a.Pincode ?? "-")</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-loan-card">
+                    <div class="vm-loan-card__head">
+                        <div class="icon"><i class="fa fa-briefcase" aria-hidden="true"></i></div>
+                        <h4>Employment &amp; Income</h4>
+                    </div>
+                    <div class="vm-loan-card__body">
+                        <div class="vm-loan-info">
+                            <div><label>Employment Type</label><div class="val">@(a.EmploymentType ?? "-")</div></div>
+                            <div><label>Company Name</label><div class="val">@(a.CompanyName ?? "-")</div></div>
+                            <div><label>Work Experience</label><div class="val">@(a.WorkExperienceYears.HasValue ? a.WorkExperienceYears + " yrs" : "-")</div></div>
+                            <div><label>Monthly Income</label><div class="val">@(a.MonthlyIncome.HasValue ? "₹" + a.MonthlyIncome.Value.ToString("N2") : "-")</div></div>
+                            <div><label>Other Monthly Income</label><div class="val">@(a.OtherMonthlyIncome.HasValue ? "₹" + a.OtherMonthlyIncome.Value.ToString("N2") : "-")</div></div>
+                            <div><label>Existing EMI</label><div class="val">@(a.ExistingEMI.HasValue ? "₹" + a.ExistingEMI.Value.ToString("N2") : "-")</div></div>
+                            <div><label>Existing Loans</label><div class="val">@(a.ExistingLoans.HasValue ? a.ExistingLoans.ToString() : "-")</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-loan-card">
+                    <div class="vm-loan-card__head">
+                        <div class="icon"><i class="fa fa-money" aria-hidden="true"></i></div>
+                        <h4>Loan Requirement</h4>
+                    </div>
+                    <div class="vm-loan-card__body">
+                        <div class="vm-loan-info">
+                            <div><label>Requested Amount</label><div class="val">₹@a.LoanAmount.ToString("N2")</div></div>
+                            <div><label>Requested Tenure</label><div class="val">@(a.TenureMonths.HasValue ? a.TenureMonths + " months" : "-")</div></div>
+                            <div style="grid-column:1/-1;"><label>Purpose</label><div class="val">@(a.LoanPurpose ?? "-")</div></div>
+                            @if (a.ApprovedAmount.HasValue)
+                            {
+                                <div><label>Approved Amount</label><div class="val">₹@a.ApprovedAmount.Value.ToString("N2")</div></div>
+                            }
+                            @if (a.ApprovedTenureMonths.HasValue)
+                            {
+                                <div><label>Approved Tenure</label><div class="val">@a.ApprovedTenureMonths months</div></div>
+                            }
+                            @if (a.InterestRate.HasValue)
+                            {
+                                <div><label>Interest Rate</label><div class="val">@a.InterestRate.Value.ToString("N2")%</div></div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.Vehicle != null)
+                {
+                    var v = Model.Vehicle;
+                    <div class="vm-loan-card">
+                        <div class="vm-loan-card__head">
+                            <div class="icon"><i class="fa fa-car" aria-hidden="true"></i></div>
+                            <h4>Vehicle Details</h4>
+                        </div>
+                        <div class="vm-loan-card__body">
+                            <div class="vm-loan-info">
+                                <div><label>Manufacturer</label><div class="val">@(v.Manufacturer ?? "-")</div></div>
+                                <div><label>Model</label><div class="val">@(v.Model ?? "-")</div></div>
+                                <div><label>Variant</label><div class="val">@(v.Variant ?? "-")</div></div>
+                                <div><label>Fuel Type</label><div class="val">@(v.FuelType ?? "-")</div></div>
+                                <div><label>Transmission</label><div class="val">@(v.Transmission ?? "-")</div></div>
+                                @if (v.VehicleType == "USED")
+                                {
+                                    <div><label>Registration No</label><div class="val">@(v.RegistrationNo ?? "-")</div></div>
+                                    <div><label>Manufacturing Month/Year</label><div class="val">@(v.ManufacturingMonth.HasValue ? v.ManufacturingMonth.ToString() : "-") / @(v.ManufacturingYear.HasValue ? v.ManufacturingYear.ToString() : "-")</div></div>
+                                    <div><label>Registration Date</label><div class="val">@(v.RegistrationDate.HasValue ? v.RegistrationDate.Value.ToString("dd MMM yyyy") : "-")</div></div>
+                                    <div><label>Owner Number</label><div class="val">@(v.OwnerNumber ?? "-")</div></div>
+                                    <div><label>KM Driven</label><div class="val">@(v.KMDriven.HasValue ? v.KMDriven.Value.ToString("N0") + " km" : "-")</div></div>
+                                    <div><label>Current Market Value</label><div class="val">@(v.MarketValue.HasValue ? "₹" + v.MarketValue.Value.ToString("N2") : "-")</div></div>
+                                }
+                                else
+                                {
+                                    <div><label>Manufacturing Year</label><div class="val">@(v.ManufacturingYear.HasValue ? v.ManufacturingYear.ToString() : "-")</div></div>
+                                    <div><label>On-Road Price</label><div class="val">@(v.OnRoadPrice.HasValue ? "₹" + v.OnRoadPrice.Value.ToString("N2") : "-")</div></div>
+                                    <div><label>Down Payment</label><div class="val">@(v.DownPayment.HasValue ? "₹" + v.DownPayment.Value.ToString("N2") : "-")</div></div>
+                                    <div><label>Dealer Name</label><div class="val">@(v.DealerName ?? "-")</div></div>
+                                    <div><label>Dealer Mobile</label><div class="val">@(v.DealerMobile ?? "-")</div></div>
+                                    <div style="grid-column:1/-1;"><label>Dealer Location</label><div class="val">@(v.DealerLocation ?? "-")</div></div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.Vehicle != null && Model.Vehicle.VehicleType == "USED")
+                {
+                    <div class="vm-loan-card">
+                        <div class="vm-loan-card__head">
+                            <div class="icon"><i class="fa fa-calculator" aria-hidden="true"></i></div>
+                            <h4>Case &amp; Eligibility</h4>
+                        </div>
+                        <div class="vm-loan-card__body">
+                            <div class="vm-loan-info">
+                                <div><label>Case Type</label><div class="val">@(a.CaseType ?? "-")</div></div>
+                                @if (a.CaseType == "REFINANCE")
+                                {
+                                    <div><label>Refinance Type</label><div class="val">@(a.RefinanceType != null ? a.RefinanceType.Replace("_", " ") : "-")</div></div>
+                                }
+                                <div><label>CIBIL Score</label><div class="val">@(a.CIBILScore.HasValue ? a.CIBILScore.ToString() : "-")</div></div>
+                                <div><label>Net Monthly Income</label><div class="val">@(a.NetMonthlyIncome.HasValue ? "₹" + a.NetMonthlyIncome.Value.ToString("N2") : "-")</div></div>
+                                <div><label>Average Bank Balance</label><div class="val">@(a.ABB.HasValue ? "₹" + a.ABB.Value.ToString("N2") : "-")</div></div>
+                                <div><label>Annual ITR Income</label><div class="val">@(a.ITRIncome.HasValue ? "₹" + a.ITRIncome.Value.ToString("N2") : "-")</div></div>
+                                <div><label>EMI Bounce (Last 3M)</label><div class="val">@a.Last3MonthsBounceCount</div></div>
+                                <div><label>Bank Statement Period</label><div class="val">@(a.BankStatementMonths.HasValue ? a.BankStatementMonths + " months" : "-")</div></div>
+                                <div><label>Interest Rate</label><div class="val">@(a.InterestRate.HasValue ? a.InterestRate.Value.ToString("N2") + "%" : "-")</div></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.ExistingLoan != null)
+                {
+                    var e = Model.ExistingLoan;
+                    <div class="vm-loan-card">
+                        <div class="vm-loan-card__head">
+                            <div class="icon"><i class="fa fa-refresh" aria-hidden="true"></i></div>
+                            <h4>Existing Loan Details</h4>
+                        </div>
+                        <div class="vm-loan-card__body">
+                            <div class="vm-loan-info">
+                                <div><label>Finance Company</label><div class="val">@(e.FinanceCompany ?? "-")</div></div>
+                                <div><label>Loan Account No</label><div class="val">@(e.LoanAccountNo ?? "-")</div></div>
+                                @if (a.RefinanceType == "CLOSE_BT")
+                                {
+                                    <div><label>Loan Closure Date</label><div class="val">@(e.LoanClosureDate.HasValue ? e.LoanClosureDate.Value.ToString("dd MMM yyyy") : "-")</div></div>
+                                }
+                                else
+                                {
+                                    <div><label>Current Outstanding</label><div class="val">@(e.CurrentOutstanding.HasValue ? "₹" + e.CurrentOutstanding.Value.ToString("N2") : "-")</div></div>
+                                    <div><label>Current EMI</label><div class="val">@(e.EMIAmount.HasValue ? "₹" + e.EMIAmount.Value.ToString("N2") : "-")</div></div>
+                                }
+                                @if (a.RefinanceType == "BT_TOPUP")
+                                {
+                                    <div><label>Total Loan EMI</label><div class="val">@(e.TotalEMI.HasValue ? e.TotalEMI.ToString() : "-")</div></div>
+                                    <div><label>EMI Paid</label><div class="val">@(e.PaidEMI.HasValue ? e.PaidEMI.ToString() : "-")</div></div>
+                                    <div><label>Last EMI Paid Date</label><div class="val">@(e.LastEMIPaidDate.HasValue ? e.LastEMIPaidDate.Value.ToString("dd MMM yyyy") : "-")</div></div>
+                                }
+                                <div><label>EMI Bounce (Last 3M)</label><div class="val">@e.Last3MonthsBounceCount</div></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div>
+                <div class="vm-loan-card">
+                    <div class="vm-loan-card__head">
+                        <div class="icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+                        <h4>Documents</h4>
+                    </div>
+                    <div class="vm-loan-card__body">
+                        @if (docs != null && docs.Any())
+                        {
+                            <ul class="vm-loan-timeline">
+                                @foreach (var d in docs)
+                                {
+                                    <li>
+                                        <div class="tl-status">@d.DocumentType.Replace("_", " ")</div>
+                                        <div class="tl-remarks">
+                                            <a href="@Url.Action("ViewDocument", "AdminLoan", new { area = "ADMIN", id = d.Id })" target="_blank">@d.FileName</a>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <div class="vm-loan-empty">No documents uploaded.</div>
+                        }
+                    </div>
+                </div>
+
+                <div class="vm-loan-card">
+                    <div class="vm-loan-card__head">
+                        <div class="icon"><i class="fa fa-history" aria-hidden="true"></i></div>
+                        <h4>Status History</h4>
+                    </div>
+                    <div class="vm-loan-card__body">
+                        @if (Model.StatusHistory != null && Model.StatusHistory.Any())
+                        {
+                            <ul class="vm-loan-timeline">
+                                @foreach (var h in Model.StatusHistory)
+                                {
+                                    <li>
+                                        <div class="tl-status">@(string.IsNullOrEmpty(h.OldStatus) ? "" : h.OldStatus.Replace("_", " ") + " → ")@h.NewStatus.Replace("_", " ")</div>
+                                        <div class="tl-date">@h.ChangedDate.ToString("dd MMM yyyy, hh:mm tt")</div>
+                                        @if (!string.IsNullOrEmpty(h.Remarks))
+                                        {
+                                            <div class="tl-remarks">@h.Remarks</div>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <div class="vm-loan-empty">No status changes yet.</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

@@ -5492,6 +5492,17 @@ namespace Vastwebmulti.Controllers
                         };
                         return Json(data, JsonRequestBehavior.AllowGet);
                     }
+                    else if(Type== "LOAN")
+                    {
+                        var repo = new LoanRepository();
+                        var updated = repo.UpdateStatusByApplicationNo(Reqid, Status, MSG);
+                    }
+                    else if(Type=="LOANDOC")
+                    {
+                        var repo = new LoanRepository();
+                        long Reqidno = long.Parse(Reqid);
+                        var updated = repo.UpdateDocumentVerification(Reqidno, Status, MSG);
+                    }
                 }
                 catch
                 {

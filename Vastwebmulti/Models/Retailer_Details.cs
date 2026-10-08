@@ -18,6 +18,7 @@ namespace Vastwebmulti.Models
         public Retailer_Details()
         {
             this.VastBazaarRetailerOutlets = new HashSet<VastBazaarRetailerOutlet>();
+            this.LoanApplications = new HashSet<LoanApplication>();
         }
     
         public string DealerId { get; set; }
@@ -121,5 +122,7 @@ namespace Vastwebmulti.Models
         public virtual UserLocation UserLocation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VastBazaarRetailerOutlet> VastBazaarRetailerOutlets { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LoanApplication> LoanApplications { get; set; }
     }
 }

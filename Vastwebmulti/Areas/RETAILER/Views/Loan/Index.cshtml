@@ -1,0 +1,448 @@
+﻿@model Vastwebmulti.Areas.RETAILER.Models.LoanReportFilterVM
+@{
+    ViewBag.Title = "My Loan Applications";
+    Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var statuses = new[]
+    {
+        "NEW", "UNDER_PROCESS", "DOCUMENT_REQUIRED", "VERIFICATION",
+        "ON_HOLD", "APPROVED", "REJECTED", "DISBURSED", "CANCELLED"
+    };
+}
+
+<style>
+    .loan-upload-link {
+        color: #b45309 !important;
+        font-weight: 700;
+    }
+
+        .loan-upload-link:before {
+            content: "\f0ee"; /* fa-upload */
+            font-family: FontAwesome;
+            margin-right: 4px;
+        }
+    .loan-report-page {
+        --loan-primary: var(--main-bg-lcolor, #2867c9);
+        --loan-ink: #1e293b;
+        --loan-muted: #64748b;
+        --loan-line: #e2e8f0;
+        --loan-soft: #f8fafc;
+        padding: 26px 20px 42px;
+    }
+
+        .loan-report-page *, .loan-report-page *:before, .loan-report-page *:after {
+            box-sizing: border-box;
+        }
+
+    .loan-hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+    }
+
+    .loan-kicker {
+        color: var(--loan-primary);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+    }
+
+    .loan-hero h3 {
+        color: var(--loan-ink);
+        font-size: 25px;
+        font-weight: 700;
+        margin: 5px 0 0;
+    }
+
+    .loan-breadcrumb {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 7px;
+        color: var(--loan-muted);
+        font-size: 13px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+        .loan-breadcrumb a {
+            color: var(--loan-muted);
+            text-decoration: none;
+        }
+
+            .loan-breadcrumb a:hover {
+                color: var(--loan-primary);
+            }
+
+        .loan-breadcrumb .current {
+            color: var(--loan-ink);
+            font-weight: 600;
+        }
+
+    .loan-new-btn {
+        align-items: center;
+        background: var(--loan-primary);
+        border-radius: 8px;
+        color: #fff;
+        display: inline-flex;
+        font-size: 13px;
+        font-weight: 700;
+        gap: 8px;
+        padding: 10px 18px;
+        text-decoration: none;
+        transition: opacity .15s ease;
+    }
+
+        .loan-new-btn:hover {
+            color: #fff;
+            opacity: .9;
+        }
+
+    .loan-shell {
+        max-width: 1280px;
+        margin: 0 auto;
+    }
+
+    .loan-alert {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        border-radius: 8px;
+        color: #047857;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 18px;
+        padding: 12px 16px;
+    }
+
+    .loan-filter-card {
+        background: #fff;
+        border: 1px solid var(--loan-line);
+        border-radius: 12px;
+        box-shadow: 0 8px 28px rgba(15, 23, 42, .06);
+        margin-bottom: 20px;
+        padding: 20px 22px;
+    }
+
+    .loan-filter-grid {
+        align-items: end;
+        display: grid;
+        gap: 14px 16px;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+    }
+
+    .loan-filter-field label {
+        color: #334155;
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        margin: 0 0 6px;
+    }
+
+    .loan-filter-field .form-control {
+        border: 1px solid #cbd5e1;
+        border-radius: 7px;
+        font-size: 13px;
+        height: 38px;
+        padding: 7px 10px;
+        width: 100%;
+    }
+
+        .loan-filter-field .form-control:focus {
+            border-color: var(--loan-primary);
+            box-shadow: 0 0 0 3px rgba(40, 103, 201, .12);
+            outline: 0;
+        }
+
+    .loan-filter-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+        .loan-filter-actions .btn {
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 700;
+            height: 38px;
+            padding: 0 16px;
+            white-space: nowrap;
+        }
+
+        .loan-filter-actions .btn-primary {
+            background: var(--loan-primary);
+            border-color: var(--loan-primary);
+        }
+
+        .loan-filter-actions .btn-default {
+            background: #fff;
+            border-color: #cbd5e1;
+            color: #475569;
+        }
+
+    .loan-table-card {
+        background: #fff;
+        border: 1px solid var(--loan-line);
+        border-radius: 12px;
+        box-shadow: 0 8px 28px rgba(15, 23, 42, .06);
+        overflow: hidden;
+    }
+
+    .loan-table-wrap {
+        overflow-x: auto;
+    }
+
+    table.loan-table {
+        border-collapse: collapse;
+        min-width: 900px;
+        width: 100%;
+    }
+
+        table.loan-table thead th {
+            background: var(--loan-soft);
+            border-bottom: 1px solid var(--loan-line);
+            color: #475569;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            padding: 13px 16px;
+            text-align: left;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        table.loan-table tbody td {
+            border-bottom: 1px solid var(--loan-line);
+            color: var(--loan-ink);
+            font-size: 13px;
+            padding: 13px 16px;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        table.loan-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        table.loan-table tbody tr:hover {
+            background: #fafcff;
+        }
+
+    .loan-app-no {
+        color: var(--loan-primary);
+        font-weight: 700;
+    }
+
+    .loan-status-badge {
+        border-radius: 20px;
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .02em;
+        padding: 4px 12px;
+        text-transform: uppercase;
+    }
+
+    .status-new {
+        background: #e0edff;
+        color: #1d4ed8;
+    }
+
+    .status-under_process {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .status-document_required {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .status-verification {
+        background: #ede9fe;
+        color: #6d28d9;
+    }
+
+    .status-on_hold {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .status-approved {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .status-rejected {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .status-disbursed {
+        background: #d1fae5;
+        color: #047857;
+    }
+
+    .status-cancelled {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    .loan-view-link {
+        color: var(--loan-primary);
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+        .loan-view-link:hover {
+            text-decoration: underline;
+        }
+
+    .loan-empty {
+        color: var(--loan-muted);
+        font-size: 13px;
+        padding: 50px 20px;
+        text-align: center;
+    }
+
+        .loan-empty i {
+            color: #cbd5e1;
+            display: block;
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+    @@media (max-width: 900px) {
+        .loan-filter-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .loan-filter-actions {
+            grid-column: 1 / -1;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .loan-filter-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="content loan-report-page">
+    <div class="loan-shell">
+        <div class="loan-hero">
+            <div>
+                <div class="loan-kicker">Loan centre</div>
+                <h3>My Loan Applications</h3>
+                <ul class="loan-breadcrumb" aria-label="Breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")">Home</a></li>
+                    <li><i class="fa fa-angle-right" aria-hidden="true"></i></li>
+                    <li class="current">Loan Applications</li>
+                </ul>
+            </div>
+            <a href="@Url.Action("Create", "Loan")" class="loan-new-btn">
+                <i class="fa fa-plus" aria-hidden="true"></i> Request New Loan
+            </a>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="loan-alert"><i class="fa fa-check-circle" aria-hidden="true"></i> @TempData["Success"]</div>
+        }
+
+        <div class="loan-filter-card">
+            @using (Html.BeginForm("Index", "Loan", new { area = "RETAILER" }, FormMethod.Get))
+            {
+            <div class="loan-filter-grid">
+                <div class="loan-filter-field">
+                    <label>Status</label>
+                    @Html.DropDownListFor(m => m.Status, new SelectList(statuses), "All Status", new { @class = "form-control" })
+                </div>
+                <div class="loan-filter-field">
+                    <label>Loan Type</label>
+                    @Html.DropDownListFor(m => m.LoanTypeId, new SelectList(Model.LoanTypes, "Id", "Name"), "All Loan Types", new { @class = "form-control" })
+                </div>
+                <div class="loan-filter-field">
+                    <label>From Date</label>
+                    @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control", type = "date" })
+                </div>
+                <div class="loan-filter-field">
+                    <label>To Date</label>
+                    @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", type = "date" })
+                </div>
+                <div class="loan-filter-actions">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
+                    <a href="@Url.Action("Index", "Loan")" class="btn btn-default">Reset</a>
+                </div>
+            </div>
+            }
+        </div>
+
+        <div class="loan-table-card">
+            @if (Model.Results != null && Model.Results.Any())
+            {
+                <div class="loan-table-wrap">
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Application No</th>
+                                <th>Loan Type</th>
+                                <th>Applicant</th>
+                                <th>Mobile</th>
+                                <th>Amount</th>
+                                <th>Tenure</th>
+                                <th>Status</th>
+                                <th>Applied On</th>
+                                <th></th>
+                             
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Results)
+                            {
+                                <tr>
+                                    <td class="loan-app-no">@item.ApplicationNo</td>
+                                    <td>@item.LoanTypeName</td>
+                                    <td>@item.FullName</td>
+                                    <td>@item.Mobile</td>
+                                    <td>₹@item.LoanAmount.ToString("N2")</td>
+                                    <td>@(item.TenureMonths.HasValue ? item.TenureMonths + " mo" : "-")</td>
+                                    <td>
+                                        <span class="loan-status-badge status-@item.Status.ToLower()">@item.Status.Replace("_", " ")</span>
+                                    </td>
+                                    <td>@item.CreatedDate.ToString("dd MMM yyyy")</td>
+                                   
+                                    <td>
+                                        @Html.ActionLink("View Details", "Details", "Loan", new { area = "RETAILER", id = item.Id }, new { @class = "loan-view-link" })
+
+                                        @if (item.Status == "DOCUMENT_REQUIRED")
+                                        {
+                                    <text> &nbsp;|&nbsp; </text>
+                                                            @Html.ActionLink("Upload Documents", "UploadDocuments", "Loan", new { area = "RETAILER", id = item.Id }, new { @class = "loan-view-link loan-upload-link" })}
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="loan-empty">
+                    <i class="fa fa-inbox" aria-hidden="true"></i>
+                    No loan applications found for the selected filters.
+                    <div style="margin-top:14px;">
+                        <a href="@Url.Action("Create", "Loan")" class="loan-new-btn">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Request New Loan
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

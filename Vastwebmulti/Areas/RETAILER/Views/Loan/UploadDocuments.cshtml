@@ -1,0 +1,551 @@
+﻿@model Vastwebmulti.Areas.RETAILER.Models.LoanDocumentUploadVm
+@{
+    ViewBag.Title = "Upload Documents";
+    Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var allDocs = new List<Vastwebmulti.Areas.RETAILER.Models.DocumentTypeDef>();
+    allDocs.AddRange(Model.IdentityDocs);
+    allDocs.AddRange(Model.FinancialDocs);
+    allDocs.AddRange(Model.VehicleDocs);
+
+    var totalRequired = allDocs.Count(d => d.Required);
+    var totalUploaded = allDocs.Count(d => d.Required && Model.UploadedDocuments.ContainsKey(d.Code));
+    var progressPct = totalRequired > 0 ? (int)((totalUploaded * 100.0) / totalRequired) : 0;
+}
+
+<style>
+    .docup-page {
+        --primary: #2867c9;
+        --ink: #1e293b;
+        --muted: #64748b;
+        --line: #e2e8f0;
+        --soft: #f8fafc;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 26px 20px 44px;
+    }
+
+        .docup-page *, .docup-page *:before, .docup-page *:after {
+            box-sizing: border-box;
+        }
+
+    .docup-hero {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 20px;
+    }
+
+    .docup-kicker {
+        color: var(--primary);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+    }
+
+    .docup-hero h3 {
+        color: var(--ink);
+        font-size: 22px;
+        font-weight: 700;
+        margin: 5px 0 4px;
+    }
+
+    .docup-hero p {
+        color: var(--muted);
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .docup-back-btn {
+        align-items: center;
+        background: #fff;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        color: #475569;
+        display: inline-flex;
+        flex-shrink: 0;
+        font-size: 13px;
+        font-weight: 700;
+        gap: 8px;
+        padding: 10px 18px;
+        text-decoration: none;
+    }
+
+        .docup-back-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+    .docup-alert {
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 18px;
+        padding: 12px 16px;
+    }
+
+    .docup-alert-success {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #047857;
+    }
+
+    .docup-alert-error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+    }
+
+    .docup-progress-card {
+        background: linear-gradient(135deg, #f8fbff, #f3f7fc);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        margin-bottom: 22px;
+        padding: 20px 24px;
+    }
+
+    .docup-progress-top {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .docup-progress-label {
+        color: var(--ink);
+        font-size: 13.5px;
+        font-weight: 700;
+    }
+
+    .docup-progress-count {
+        color: var(--primary);
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .docup-progress-track {
+        background: #dbe6f7;
+        border-radius: 10px;
+        height: 9px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .docup-progress-fill {
+        background: linear-gradient(90deg, #2867c9, #4f8ef0);
+        border-radius: 10px;
+        height: 100%;
+        transition: width .3s ease;
+    }
+
+    .docup-progress-note {
+        align-items: center;
+        color: var(--muted);
+        display: flex;
+        font-size: 12px;
+        gap: 6px;
+        margin-top: 10px;
+    }
+
+        .docup-progress-note.complete {
+            color: #047857;
+            font-weight: 600;
+        }
+
+    .docup-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, .05);
+        margin-bottom: 18px;
+        overflow: hidden;
+    }
+
+    .docup-card-heading {
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+        color: var(--ink);
+        display: flex;
+        font-size: 15px;
+        font-weight: 700;
+        gap: 10px;
+        padding: 15px 20px;
+    }
+
+        .docup-card-heading .icon {
+            align-items: center;
+            background: #e8f0fd;
+            border-radius: 8px;
+            color: var(--primary);
+            display: flex;
+            flex-shrink: 0;
+            font-size: 14px;
+            height: 32px;
+            justify-content: center;
+            width: 32px;
+        }
+
+    .docup-card-body {
+        padding: 18px 20px;
+    }
+
+    .doc-row {
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        display: flex;
+        gap: 14px;
+        margin-bottom: 12px;
+        padding: 14px 16px;
+        transition: border-color .15s ease, background .15s ease;
+    }
+
+        .doc-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .doc-row.has-file {
+            background: #f7fbf8;
+            border-color: #bbf0cc;
+        }
+
+    .doc-thumb {
+        align-items: center;
+        background: #eef2f7;
+        border-radius: 8px;
+        color: var(--muted);
+        display: flex;
+        flex-shrink: 0;
+        font-size: 17px;
+        height: 44px;
+        justify-content: center;
+        overflow: hidden;
+        width: 44px;
+    }
+
+        .doc-thumb img {
+            height: 100%;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .doc-thumb.uploaded {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+    .doc-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .doc-label {
+        align-items: center;
+        color: var(--ink);
+        display: flex;
+        font-size: 13.5px;
+        font-weight: 700;
+        gap: 6px;
+    }
+
+        .doc-label .required-mark {
+            color: #dc2626;
+        }
+
+    .doc-meta {
+        color: var(--muted);
+        font-size: 11.5px;
+        margin-top: 3px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+        .doc-meta a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .doc-meta a:hover {
+                text-decoration: underline;
+            }
+
+    .doc-verification-remarks {
+        color: #b91c1c;
+        font-size: 11.5px;
+        margin-top: 3px;
+    }
+
+    .doc-status-badge {
+        border-radius: 16px;
+        flex-shrink: 0;
+        font-size: 10.5px;
+        font-weight: 700;
+        padding: 4px 11px;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .doc-status-pending {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .doc-status-verified,
+    .doc-status-approved {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .doc-status-rejected {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .doc-action {
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    .doc-file-btn {
+        align-items: center;
+        background: #fff;
+        border: 1.5px dashed #cbd5e1;
+        border-radius: 8px;
+        color: #475569;
+        cursor: pointer;
+        display: inline-flex;
+        font-size: 12px;
+        font-weight: 700;
+        gap: 6px;
+        padding: 8px 14px;
+        transition: border-color .15s ease, color .15s ease;
+        white-space: nowrap;
+    }
+
+        .doc-file-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .doc-file-btn.replace {
+            border-style: solid;
+        }
+
+    .doc-file-input {
+        cursor: pointer;
+        height: 100%;
+        left: 0;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+
+    .doc-file-chosen {
+        color: var(--primary);
+        display: none;
+        font-size: 11px;
+        font-weight: 700;
+        margin-top: 5px;
+    }
+
+    .docup-submit-bar {
+        align-items: center;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 8px;
+    }
+
+        .docup-submit-bar .btn {
+            align-items: center;
+            border-radius: 8px;
+            display: inline-flex;
+            font-size: 13.5px;
+            font-weight: 700;
+            gap: 8px;
+            padding: 11px 22px;
+            text-decoration: none;
+        }
+
+    .btn-primary {
+        background: var(--primary);
+        border: 0;
+        color: #fff;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            opacity: .9;
+        }
+
+    .btn-default {
+        background: #fff;
+        border: 1px solid #cbd5e1;
+        color: #475569;
+    }
+
+        .btn-default:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+    .docup-note {
+        align-items: flex-start;
+        background: #eff6ff;
+        border-radius: 8px;
+        color: #1e40af;
+        display: flex;
+        font-size: 12px;
+        gap: 8px;
+        margin-bottom: 18px;
+        padding: 11px 14px;
+    }
+
+        .docup-note i {
+            margin-top: 1px;
+        }
+
+    @@media (max-width: 600px) {
+        .doc-row {
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .doc-action {
+            margin-left: 58px;
+            width: calc(100% - 58px);
+        }
+
+        .doc-file-btn {
+            justify-content: center;
+            width: 100%;
+        }
+
+        .docup-submit-bar {
+            flex-direction: column-reverse;
+        }
+
+            .docup-submit-bar .btn {
+                justify-content: center;
+                width: 100%;
+            }
+    }
+</style>
+
+<section class="content docup-page">
+    <div class="docup-hero">
+        <div>
+            <div class="docup-kicker">Loan centre</div>
+            <h3>Upload Documents</h3>
+            <p>@Model.ApplicationNo &nbsp;&bull;&nbsp; Accepted formats: PDF, JPG, PNG (max 5 MB each)</p>
+        </div>
+        <a href="@Url.Action("Details", "Loan", new { area = "RETAILER", id = Model.LoanApplicationId })" class="docup-back-btn">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to application
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="docup-alert docup-alert-success"><i class="fa fa-check-circle" aria-hidden="true"></i> @TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="docup-alert docup-alert-error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> @TempData["Error"]</div>
+    }
+
+    <div class="docup-progress-card">
+        <div class="docup-progress-top">
+            <span class="docup-progress-label">Document completion</span>
+            <span class="docup-progress-count">@totalUploaded of @totalRequired required uploaded</span>
+        </div>
+        <div class="docup-progress-track">
+            <div class="docup-progress-fill" style="width:@(progressPct)%;"></div>
+        </div>
+        @if (progressPct == 100)
+        {
+            <div class="docup-progress-note complete"><i class="fa fa-check-circle" aria-hidden="true"></i> All required documents uploaded.</div>
+        }
+        else
+        {
+            <div class="docup-progress-note"><i class="fa fa-info-circle" aria-hidden="true"></i> Upload all required documents (marked *) to proceed.</div>
+        }
+    </div>
+
+    @if (Model.Status != "DOCUMENT_REQUIRED")
+    {
+        <div class="docup-note">
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+            <div>Current application status is <strong>@Model.Status.Replace("_", " ")</strong>. You can still view or replace uploaded documents below.</div>
+        </div>
+    }
+
+    @using (Html.BeginForm("UploadDocuments", "Loan", new { area = "RETAILER", id = Model.LoanApplicationId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="docup-card">
+            <div class="docup-card-heading"><div class="icon"><i class="fa fa-id-card-o" aria-hidden="true"></i></div> Identity Documents</div>
+            <div class="docup-card-body">
+                @foreach (var doc in Model.IdentityDocs)
+                {
+                    Html.RenderPartial("_DocumentRow", System.Tuple.Create(doc, Model.UploadedDocuments.ContainsKey(doc.Code) ? Model.UploadedDocuments[doc.Code] : null));
+                }
+            </div>
+        </div>
+
+        <div class="docup-card">
+            <div class="docup-card-heading"><div class="icon"><i class="fa fa-university" aria-hidden="true"></i></div> Financial Documents</div>
+            <div class="docup-card-body">
+                @foreach (var doc in Model.FinancialDocs)
+                {
+                    Html.RenderPartial("_DocumentRow", System.Tuple.Create(doc, Model.UploadedDocuments.ContainsKey(doc.Code) ? Model.UploadedDocuments[doc.Code] : null));
+                }
+            </div>
+        </div>
+
+        if (Model.VehicleDocs != null && Model.VehicleDocs.Any())
+        {
+            <div class="docup-card">
+                <div class="docup-card-heading">
+                    <div class="icon"><i class="fa fa-car" aria-hidden="true"></i></div>
+                    Vehicle Documents (@(Model.VehicleType == "NEW" ? "New Car" : "Used Car"))
+                </div>
+                <div class="docup-card-body">
+                    @foreach (var doc in Model.VehicleDocs)
+                    {
+                        Html.RenderPartial("_DocumentRow", System.Tuple.Create(doc, Model.UploadedDocuments.ContainsKey(doc.Code) ? Model.UploadedDocuments[doc.Code] : null));
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="docup-submit-bar">
+            <a href="@Url.Action("Details", "Loan", new { area = "RETAILER", id = Model.LoanApplicationId })" class="btn btn-default">Cancel</a>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-upload" aria-hidden="true"></i> Upload Documents</button>
+        </div>
+    }
+</section>
+
+<script>
+    // Vanilla JS — no jQuery dependency, works regardless of script load order
+    document.addEventListener('change', function (e) {
+        if (!e.target.classList || !e.target.classList.contains('doc-file-input')) return;
+
+        var row = e.target.closest('.doc-row');
+        if (!row) return;
+
+        var chosenEl = row.querySelector('.doc-file-chosen');
+        if (!chosenEl) return;
+
+        var fileName = (e.target.files && e.target.files.length) ? e.target.files[0].name : '';
+
+        chosenEl.textContent = fileName;
+        chosenEl.style.display = fileName ? 'block' : 'none';
+    });
+</script>

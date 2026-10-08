@@ -143,10 +143,10 @@
                     <strong class="img-none" style="display:none;"><img style="height: 65px;" src="~/images/transfer.svg" /></strong><img class="hover-display-none" src="~/images/transfer-money.png" />
                     @if (ViewBag.openapi == "VASTWEB")
                     {
-            <span class="aeps-aadharclassdiv" style="padding-left: 0; position: relative; font-size:11px;">To&nbsp;Bank/AC<sup class="aadharpaysup" style="display: block; margin: 4px 0;animation: none;font-size: 9px;position:static;">To&nbsp;Wallet</sup></span> }
-        else
-        {
-            <span class="aeps-aadharclassdiv" style="padding-left: 0; position: relative; font-size:9px !important;">Domestic Money<sup class="aadharpaysup" style="display: block; margin: 4px 0;animation: none;font-size: 9px;position:static;">Transfer </sup></span>}
+                        <span class="aeps-aadharclassdiv" style="padding-left: 0; position: relative; font-size:11px;">To&nbsp;Bank/AC<sup class="aadharpaysup" style="display: block; margin: 4px 0;animation: none;font-size: 9px;position:static;">To&nbsp;Wallet</sup></span> }
+                    else
+                    {
+                        <span class="aeps-aadharclassdiv" style="padding-left: 0; position: relative; font-size:9px !important;">Domestic Money<sup class="aadharpaysup" style="display: block; margin: 4px 0;animation: none;font-size: 9px;position:static;">Transfer </sup></span>}
                 </li>
                 <li id="tabaeps" class="tab-link-new fullbodydycolorbg" data-tab="tab-2" onclick="AEPS()" style="">
                     <strong class="img-none" style="display:none;">
@@ -162,25 +162,25 @@
                 </li>
 
                 @*<li class="tab-link-new fullbodydycolorbg" data-tab="tab-3" onclick="MPOS()" style="">
-                    <strong class="img-none" style="display: none; ">
-                        <img src="~/images/mpos1.png" />
-                    </strong>
-                    <img class="hover-display-none" src="~/images/mposicon.png" />
-                    <span style="padding-left:0;">
-                        M - Pos
-                        <sup class="aadharpaysup" style="display: block; margin: 4px 0;font-size: 10px;position:static;animation: none;">
-                            ME30S
-                        </sup>
-                    </span>
-                </li>*@
+                        <strong class="img-none" style="display: none; ">
+                            <img src="~/images/mpos1.png" />
+                        </strong>
+                        <img class="hover-display-none" src="~/images/mposicon.png" />
+                        <span style="padding-left:0;">
+                            M - Pos
+                            <sup class="aadharpaysup" style="display: block; margin: 4px 0;font-size: 10px;position:static;animation: none;">
+                                ME30S
+                            </sup>
+                        </span>
+                    </li>*@
 
-                <li id="tabaepsUPI" class="tab-link-new fullbodydycolorbg" data-tab="tab-3" onclick="AEPSUPI()" style="">
+                <li class="tab-link-new fullbodydycolorbg" data-tab="tab-3" onclick="AEPSUPI()" style="">
                     <strong class="img-none" style="display: none; ">
                         <img src="~/images/mpos1.png" />
                     </strong>
                     <img class="hover-display-none" src="~/images/mposicon.png" />
                     <span style="padding-left:0;">
-                       AEPS
+                        AEPS
                         <sup class="aadharpaysup" style="display: block; margin: 4px 0;font-size: 10px;position:static;animation: none;">
                             UPI
                         </sup>
@@ -217,27 +217,27 @@
 
             </ul>
             @*@if (ViewBag.chkcharge == "REQUIREDOTP" || ViewBag.chkcharge == "REQUIREDSCAN")
-            {
-        <div id="tab-1234" class="tab-content current">
-            @Html.Partial("_EKYC")
-        </div>
-            }
-            else
-            {*@
+                    {
+                <div id="tab-1234" class="tab-content current">
+                    @Html.Partial("_EKYC")
+                </div>
+                    }
+                    else
+                    {*@
             <div id="tab-1" class="tab-content current">
                 <div id="reload">
                     @if (ViewBag.chkcharge == "DONE")
                     {
-        @Html.Partial("_Moneytransfer") }
+                        @Html.Partial("_Moneytransfer") }
                     else
                     {
-        @Html.Partial("_Money_Transfer_Purchase")}
+                        @Html.Partial("_Money_Transfer_Purchase")}
                 </div>
             </div>
             <div id="tab-2" class="tab-content tab-content2 col-md-12" style="padding: 25px 10px; position:initial;">
-                <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabsAEPS" style="display: none; padding: 0px;">
+                <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabs" style="display: flex; padding: 0px;">
                     <li id="tab1info" class="tab-link hovof" data-tab="tab-1" style="width: 50%; border-right: 1px solid #fff; text-align: center; background: #c1c1c1;">
-                        <a id="greenaeps" style="cursor:pointer;background-color:green !important;" data-toggle="tab" onclick="AEPSinfo('A1');">
+                        <a style="cursor:pointer;background-color:green !important;" data-toggle="tab" onclick="AEPSinfo('A1');">
 
                             Green Line AEPS
                         </a>
@@ -263,61 +263,61 @@
                 <div class="width100 float-left tab-pane fade in active" style="width: 100%; text-align: center; margin-top: 2%;">
                     @if (ViewBag.aepsapinm == "NO")
                     {
-        <label>No API open </label> }
+                        <label>No API open </label> }
                     else
                     {
-        <input id="checkapi" type="hidden" value="@ViewBag.aepsapinm" /> 
-        if (ViewBag.req == "REQUIREDOTP" || ViewBag.req == "REQUIREDSCAN")
+                        <input id="checkapi" type="hidden" value="@ViewBag.aepsapinm" />
+                        if (ViewBag.req == "REQUIREDOTP" || ViewBag.req == "REQUIREDSCAN")
                         {
-        @Html.Partial("_EKYC")
+                            @Html.Partial("_EKYC")
                         }
                         else if (ViewBag.req == "REQUIREDEKYC")
                         {
-        @Html.Partial("_EKYC_NEW") }
+                            @Html.Partial("_EKYC_NEW") }
                         else if (ViewBag.req == "2FAREQUIRED")
                         {
-        @Html.Partial("_2FA") }
+                            @Html.Partial("_2FA") }
                         else if (ViewBag.req == "APPROVAL-PENDING")
                         {
-        @Html.Partial("_EKYC_Update") }
+                            @Html.Partial("_EKYC_Update") }
                         else if (ViewBag.daily2fa_AEPS == false)
                         {
-        @Html.Partial("_2FA") }
+                            @Html.Partial("_2FA") }
                         else
                         {
-        @Html.Partial("_Aeps")}
+                            @Html.Partial("_Aeps")}
                     }
                     @*}
-                else if (ViewBag.aepsapinm == "Nifi")
-                {
-                    if (ViewBag.req == "REQUIREDOTP" || ViewBag.req == "REQUIREDSCAN")
-                    {
-                        @Html.Partial("_EKYC_1")
-                    }
-                    else if (ViewBag.req == "2FAREQUIRED")
-                    {
-                        @Html.Partial("_2FA_1")
-                    }
-                    else if (ViewBag.daily2fa_AEPS == false)
-                    {
-                        @Html.Partial("_2FA_1")
-                    }
-                    else
-                    {
-                        @Html.Partial("_Aeps_1")
-                    }
-                }
-                else
-                {
-                    <label>No API open </label>
-                }*@
+                        else if (ViewBag.aepsapinm == "Nifi")
+                        {
+                            if (ViewBag.req == "REQUIREDOTP" || ViewBag.req == "REQUIREDSCAN")
+                            {
+                                @Html.Partial("_EKYC_1")
+                            }
+                            else if (ViewBag.req == "2FAREQUIRED")
+                            {
+                                @Html.Partial("_2FA_1")
+                            }
+                            else if (ViewBag.daily2fa_AEPS == false)
+                            {
+                                @Html.Partial("_2FA_1")
+                            }
+                            else
+                            {
+                                @Html.Partial("_Aeps_1")
+                            }
+                        }
+                        else
+                        {
+                            <label>No API open </label>
+                        }*@
 
                 </div>
             </div>
 
             <div id="tab-3" class="tab-content">
 
-                <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabsAEPSUPI" style="display: none; padding: 0px;">
+                <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabs" style="display: flex; padding: 0px;">
                     <li id="tab1infoUPI" class="tab-link hovof" data-tab="tab-1" style="width: 50%; border-right: 1px solid #fff; text-align: center; background: #c1c1c1;">
                         <a style="cursor:pointer;background-color:green !important;" data-toggle="tab" onclick="AEPSinfo('A1UPI');">
 
@@ -346,48 +346,48 @@
                 <div class="width100 float-left tab-pane fade in active" style="width: 100%; text-align: center; margin-top: 2%;">
                     @if (ViewBag.aepsapinm == "NO")
                     {
-                <label>No API open </label> }
-            else
-            {
-                <input id="checkapi" type="hidden" value="@ViewBag.aepsapinm" /> 
-                if (ViewBag.req == "REQUIREDOTP" || ViewBag.req == "REQUIREDSCAN")
-                {
-                    @Html.Partial("_EKYC") 
-                }
-                else if (ViewBag.req == "REQUIREDEKYC")
-                {
-                    @Html.Partial("_EKYC_NEW") 
-                }
-                else if (ViewBag.req == "APPROVAL-PENDING")
-                {
-                   @Html.Partial("_EKYC_Update") 
-                }
-                else
-                {
-                    if (ViewBag.aepsapinm == "chagans")
-                    {
-                      @Html.Partial("_Aeps_UPI_Chagan")
-                    }
+                        <label>No API open </label> }
                     else
                     {
-                       @Html.Partial("_Aeps_UPI")
+                        <input id="checkapi" type="hidden" value="@ViewBag.aepsapinm" />
+                        if (ViewBag.req == "REQUIREDOTP" || ViewBag.req == "REQUIREDSCAN")
+                        {
+                            @Html.Partial("_EKYC")
+                        }
+                        else if (ViewBag.req == "REQUIREDEKYC")
+                        {
+                            @Html.Partial("_EKYC_NEW")
+                        }
+                        else if (ViewBag.req == "APPROVAL-PENDING")
+                        {
+                            @Html.Partial("_EKYC_Update")
+                        }
+                        else
+                        {
+                            if (ViewBag.aepsapinm == "chagans")
+                            {
+                                @Html.Partial("_Aeps_UPI_Chagan")
+                            }
+                            else
+                            {
+                                @Html.Partial("_Aeps_UPI")
+                            }
+                        }
                     }
-                }
-            }
                 </div>
 
 
 
 
                 @*@if (ViewBag.reqn == "REQUIREDOTP" || ViewBag.reqn == "REQUIREDSCAN")
-        {
-              @Html.Partial("_EKYC_UPI")
-        }
-                else
-                {*@
+                    {
+                          @Html.Partial("_EKYC_UPI")
+                    }
+                            else
+                            {*@
                 @*@Html.Partial("_Aeps_UPI")*@
                 @*@Html.Partial("_Aeps_UPI_Chagan")
-        }*@
+                    }*@
 
             </div>
 
@@ -864,9 +864,8 @@
 <script>
     AEPSinfo = (info) => {
         const url = new URL(window.location.href);
-        url.searchParams.set('info', info);
-
-        window.location.href = url.toString();
+        url.searchParams.set('info', info); // add or update ?info=value
+        window.location.href = url.toString();   // reload with updated URL
     }
     // === Run on Page Load ===
     //window.onload = function () {
@@ -875,19 +874,11 @@
     //    alert(info)
     //};
     $(document).ready(function () {
-          @*var infochk = '@ViewBag.aepsenabled';
-        if (infochk == "Green") {
-            AEPSinfo('A1');
-        }
-        else if (infochk == "Yellow") {
-            AEPSinfo('A2');
-        }*@
         const urlParams = new URLSearchParams(window.location.search);
         const info = urlParams.get('info');
 
-        if (info != null)
-        {
-            if (info == "A1UPI" || info =="A2UPI") {
+        if (info != null) {
+            if (info == "A1UPI" || info == "A2UPI") {
                 $("#tab" + (info === "A1UPI" ? "1infoUPI" : "2infoUPI") + " a")
                     .prepend('<i class="fa fa-check"></i> ');
             }
@@ -904,13 +895,6 @@
             $("#tab" + ("1info") + " a")
                 .prepend('<i class="fa fa-check"></i> ');
         }
-        if (info == "A1" || info == "A2") {
-            $('#tabaeps').click();
-        }
-        else if (info == "A2UPI" || info == "A1UPI") {
-            $('#tabaepsUPI').click();
-        }
-
         //if (info == "A1") {
         //    $("#tab2info").removeClass("active"); // remove active from all
         //    $("#tab1info").addClass("active");   // add active to clicked one
@@ -926,63 +910,4 @@
 
     });
 
-</script>
-<script>
-    function AEPS() {
-        var info = new URLSearchParams(window.location.search).get('info');
-        if (info == "A1UPI" || info == "A2UPI" || info == "") {
-            var aepsenabled = '@ViewBag.aepsenabled';
-            if (aepsenabled == "Green") {
-                AEPSinfo('A1')
-            }
-            else if (aepsenabled == "Yellow") {
-                AEPSinfo('A2')
-            }
-        }
-        else {
-            if (info == null) {
-                var aepsenabled = '@ViewBag.aepsenabled';
-                if (aepsenabled == "Green") {
-                    AEPSinfo('A1')
-                }
-                else if (aepsenabled == "Yellow") {
-                    AEPSinfo('A2')
-                }
-            }
-        }
-    }
-</script>
-
-<script>
-    function AEPSUPI() {
-        var info = new URLSearchParams(window.location.search).get('info');
-        if (info == "A1" || info == "A2" || info == "") {
-            var aepsenabled = '@ViewBag.UPIaepsenabled';
-            if (aepsenabled == "Green") {
-                AEPSinfo('A1UPI')
-            }
-            else if (aepsenabled == "Yellow") {
-                AEPSinfo('A2UPI')
-            }
-        }
-        else {
-      if (info == null) {
-                var aepsenabled = '@ViewBag.UPIaepsenabled';
-                if (aepsenabled == "Green") {
-                    AEPSinfo('A1UPI')
-                }
-                else if (aepsenabled == "Yellow") {
-                    AEPSinfo('A2UPI')
-                }
-            }
-        }
-    }
-</script>
-<script>
-    function DMT() {
-        const url = new URL(window.location.href);
-        url.searchParams.set('info', "");
-
-        window.location.href = url.toString();
-    }
 </script>
