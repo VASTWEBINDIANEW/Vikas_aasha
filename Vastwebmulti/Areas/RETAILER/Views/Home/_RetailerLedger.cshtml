@@ -2,32 +2,48 @@
 @{
     Layout = null;
 }
-
-<style>
-    /*.credit-row {
-        background-color: red;
-        color: #fff;
-    }
-    .debit-row {
-        background-color: green;
-        color: #fff;
-    }
-*/
-</style>
-
-@{ int i = 1; }
-@foreach (var item in Model)
+@if (Model != null && Model.Count > 0)
 {
-    <tr class="@(item.Credit > 0 ? "credit-row" : "") @(item.Debit > 0 ? "debit-row" : "")">
-        @*<td>@i</td>*@
-        <td>@Html.DisplayFor(modelItem => item.Particulars)</td>
-        <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-        <td>@Html.DisplayFor(modelItem => item.Credit)</td>
-        <td>@Html.DisplayFor(modelItem => item.Debit)</td>
-        <td>@Html.DisplayFor(modelItem => item.UserRemainAmount)</td>
-        <td>@Html.DisplayFor(modelItem => item.Date)</td>
-    </tr>
-    i++;
+    foreach (var item in Model)
+    {
+        decimal cr = 0m, dr = 0m;
+        try { cr = Convert.ToDecimal(item.Credit); } catch { }
+        try { dr = Convert.ToDecimal(item.Debit); } catch { }
+        var tone = cr > 0 ? "vm-ledger-row--credit" : (dr > 0 ? "vm-ledger-row--debit" : "");
+        <tr class="vm-dmt-row vm-ledger-row @tone" data-credit="@cr" data-debit="@dr">
+            <td><span class="vm-dmt-consumer-text" title="@item.Particulars">@item.Particulars</span></td>
+            <td><span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @item.Amount</span></td>
+            <td>
+                @if (cr > 0)
+                {
+                    <span class="vm-ledger-cd vm-ledger-cd--cr"><i class="fa fa-arrow-up" aria-hidden="true"></i>@item.Credit</span>
+                }
+                else
+                {
+                    <span class="vm-dmt-amount-text">@item.Credit</span>
+                }
+            </td>
+            <td>
+                @if (dr > 0)
+                {
+                    <span class="vm-ledger-cd vm-ledger-cd--dr"><i class="fa fa-arrow-down" aria-hidden="true"></i>@item.Debit</span>
+                }
+                else
+                {
+                    <span class="vm-dmt-amount-text">@item.Debit</span>
+                }
+            </td>
+            <td><span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @item.UserRemainAmount</span></td>
+            <td class="vm-ticket-time-cell"><span class="vm-dmt-refno-text">@item.Date</span></td>
+        </tr>
+    }
 }
-
-
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="6" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-book" aria-hidden="true"></i>
+            <span>No ledger records found.</span>
+        </td>
+    </tr>
+}

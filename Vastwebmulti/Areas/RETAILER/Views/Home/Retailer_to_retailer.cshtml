@@ -1,354 +1,671 @@
-﻿@model IEnumerable<Vastwebmulti.Models.show_rem_to_rem_bal_Result>
+﻿@model List<Vastwebmulti.Models.show_rem_to_rem_bal_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "Retailer_to_retailer";
+    ViewBag.Title = "Retailer To Retailer";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? new List<Vastwebmulti.Models.show_rem_to_rem_bal_Result>();
+    var rowCount = reports.Count;
+    decimal totalTransfer = reports.Sum(m => m.value ?? 0m);
+
+    var retailerList = ViewBag.retailerid as SelectList;
 }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-    .dropdown-menu {
-        margin-top: 81px !important;
+    /* Transfer card: title upar, form neeche — koi data card se bahar nahi jayega */
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-transfer-card {
+        margin-bottom: 18px !important;
     }
-
-    .btn-group, .btn-group-vertical {
-        box-shadow: none;
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-transfer-card .vm-opr-table-panel {
+        display: block !important;
+        border: 1px solid #e5e9f2 !important;
+        border-radius: 18px !important;
+        overflow: hidden !important;
+        background: #fff !important;
+        box-shadow: 0 8px 24px rgba(15,23,42,.07) !important;
     }
-
-    .ppp {
-        margin-top: -20px !important;
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-transfer-card .vm-opr-table-panel__head {
+        border: none !important;
+        border-bottom: 1.5px solid #eef1f6 !important;
+        padding: 14px 16px !important;
+        margin: 0 !important;
     }
-
-    .form-inline .bootstrap-select.btn-group, .form-horizontal .bootstrap-select.btn-group, .form-group .bootstrap-select.btn-group {
-        height: 29px;
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-transfer-card .vm-opr-table-panel__title {
+        color: #0f172a !important;
+        font-size: 17px !important;
+        font-weight: 800 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        line-height: 1.3 !important;
+        white-space: nowrap !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-transfer-card .vm-opr-table-panel__title > i {
+        display: inline-flex !important;
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        border-radius: 11px !important;
+        background: linear-gradient(135deg,#eef2ff,#e0e7ff) !important;
+        border: 1px solid #c7d2fe !important;
+        color: #4f46e5 !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 15px !important;
+        margin: 0 !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-transfer-card form {
+        display: block !important;
+        max-width: 100% !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 12px !important;
+        padding: 16px !important;
+        align-items: center !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid .vm-opr-field {
+        flex: 1 1 200px !important;
+        min-width: 0 !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid .vm-rem2rem-actions {
+        flex: 0 0 auto !important;
+        display: flex !important;
+        gap: 10px !important;
+        align-items: center !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid .vm-opr-field .form-control {
+        height: 38px !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid textarea.vm-opr-select.form-control {
+        height: 38px !important;
+        resize: none !important;
+    }
+    /* Amount ke shabd : khaali ho to jagah hi na le */
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-words {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        color: #1a56db !important;
+        display: none !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-words.show {
+        display: block !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-lookup {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-lookup table {
+        width: 100% !important;
+        max-width: 560px !important;
+        font-size: 13px !important;
+        border: none !important;
+        border-collapse: collapse !important;
+        background: #f8fafc !important;
+        border-radius: 12px !important;
+        overflow: hidden !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-lookup table td {
+        padding: 8px 12px !important;
+        border: none !important;
+        border-bottom: 1px dashed #e2e8f0 !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-lookup table tr:last-child td {
+        border-bottom: none !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-lookup table td:first-child label {
+        margin: 0 !important;
+        font-weight: 800 !important;
+        font-size: 10.5px !important;
+        text-transform: uppercase !important;
+        letter-spacing: .5px !important;
+        color: #64748b !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-lookup table td:last-child label {
+        margin: 0 !important;
+        font-weight: 700 !important;
+        color: #0f172a !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid .vm-rem2rem-actions .saas-acc-btn {
+        min-height: 38px !important;
+    }
+    /* Text/textarea inputs : select wala chevron hatao, background safed */
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid input.vm-dmt-select[type="text"],
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid textarea.vm-dmt-select {
+        background-image: none !important;
+        background-color: #fff !important;
+        cursor: text !important;
+        padding-right: 12px !important;
+        border: 1px solid #dbe2ec !important;
+        color: #0f172a !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid input.vm-dmt-select[type="text"]:focus,
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid textarea.vm-dmt-select:focus {
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3px rgba(37,99,235,.15) !important;
+        outline: none !important;
+    }
+    /* Buttons : Cancel ghost + Next blue, barabar height me */
+    /* NOTE: :not([style*="none"]) taaki Next/Transfer ka JS show-hide na toote */
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-actions .new-nextbutton:not([style*="none"]),
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-actions .noneandshow:not([style*="none"]) {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-actions .saas-acc-btn {
+        min-height: 40px !important;
+        padding: 0 22px !important;
+        border-radius: 10px !important;
+        font-size: 13.5px !important;
+        font-weight: 800 !important;
+        border: 1px solid #dbe2ec !important;
+        background: #fff !important;
+        color: #475569 !important;
+        cursor: pointer !important;
+        transition: all .15s ease !important;
+        white-space: nowrap !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-actions .saas-acc-btn:hover {
+        border-color: #94a3b8 !important;
+        color: #0f172a !important;
+        box-shadow: 0 4px 12px rgba(15,23,42,.12) !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-actions .saas-acc-btn--search {
+        border: none !important;
+        background: linear-gradient(135deg,#2563eb,#1d4ed8) !important;
+        color: #fff !important;
+        box-shadow: 0 6px 16px rgba(37,99,235,.35) !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-actions .saas-acc-btn--search:hover {
+        background: linear-gradient(135deg,#1d4ed8,#1e40af) !important;
+        color: #fff !important;
+        box-shadow: 0 8px 20px rgba(37,99,235,.45) !important;
+        transform: translateY(-1px) !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-actions .saas-acc-btn:disabled {
+        opacity: .55 !important;
+        cursor: not-allowed !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+    /* Lookup hint : khaali ho to jagah na le */
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-hint {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        font-size: 12.5px !important;
+        font-weight: 700 !important;
+    }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-hint:empty { display: none !important; }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-hint.err { color: #dc2626 !important; }
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-hint.ok { color: #15803d !important; }
+    /* Galat/khaali entry : red border + shake */
+    body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-input-error {
+        border-color: #ef4444 !important;
+        box-shadow: 0 0 0 3px rgba(239,68,68,.15) !important;
+        animation: vmRem2RemShake .3s ease !important;
+    }
+    @@keyframes vmRem2RemShake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+    /* Desktop (>=1024px): fit-to-width, no scroll, tight columns */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
+        }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody tr,
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody td,
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot td {
+            display: table-cell !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead th:nth-child(1),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody td:nth-child(1),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot td:nth-child(1) { width: 13% !important; }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead th:nth-child(2),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody td:nth-child(2),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot td:nth-child(2) { width: 12% !important; }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody td:nth-child(3),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot td:nth-child(3) { width: 13% !important; }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead th:nth-child(4),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody td:nth-child(4),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot td:nth-child(4) { width: 13% !important; }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead th:nth-child(5),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody td:nth-child(5),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot td:nth-child(5) { width: 12% !important; }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead th:nth-child(6),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody td:nth-child(6),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot td:nth-child(6) { width: 12% !important; }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead th:nth-child(7),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody td:nth-child(7),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot td:nth-child(7) { width: 12% !important; }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead th:nth-child(8),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody td:nth-child(8),
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot td:nth-child(8) { width: 13% !important; }
+    }
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table {
+            width: max-content !important;
+            min-width: 900px !important;
+            max-width: none !important;
+            table-layout: auto !important;
+        }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody tr,
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tbody td,
+        body.saas-admin-ui .saas-retailer-rem2rem-page #retailerRem2RemReport.vm-opr-data-table tfoot td {
+            display: table-cell !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+        }
+        body.saas-admin-ui .saas-retailer-rem2rem-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
+        }
+        /* Mobile + tablet: transfer form stacks */
+        body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid .vm-opr-field {
+            flex: 1 1 100% !important;
+        }
+        body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rem2rem-form-grid .vm-rem2rem-actions {
+            flex: 1 1 100% !important;
+        }
+        /* Mobile + tablet: filter dropdowns full width */
+        body.saas-admin-ui .saas-retailer-rem2rem-page .vm-opr-filter-row > .vm-opr-field,
+        body.saas-admin-ui .saas-retailer-rem2rem-page .vm-rpt-filters-panel__bar > .vm-opr-field {
+            flex: 1 1 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            width: 100% !important;
+        }
+        body.saas-admin-ui .saas-retailer-rem2rem-page .vm-opr-filter-row > .vm-opr-field .vm-opr-select,
+        body.saas-admin-ui .saas-retailer-rem2rem-page .vm-opr-filter-row > .vm-opr-field .select2,
+        body.saas-admin-ui .saas-retailer-rem2rem-page .vm-opr-filter-row > .vm-opr-field .select2-container {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
     }
 </style>
-<section class="content" style="margin:90px 0px 0px 0px;">
-    <div>
-    <div class="container-fluid retailer-page">
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="col-md-7 retailer-content" style="">
-                        @using (Html.BeginForm("rem_rem_fund_transfer", "Home", FormMethod.Post))
-                        {
-                        <div class="">
-                            <div class="top-retailer">
-                                <h2>Fund Transfor To Retailer <i class="fa fa-exchange" style="top:1px;font-size:18px;"></i> Retailer</h2>
-                            </div>
-                            <div class="col-md-3 retailer-first">
-                                <div class="fullclassdata">
-                                    <div class="form-group" style="margin-top:4px;margin-left:10px;">
-                                        <p class="satefontsize">User Email / Mobile</p>
-                                        <input class="form-control" id="RetailerId" name="RetailerId" placeholder="Enter Email ID / Mobile No"  minlength="6" required="required" style="padding-top:4px;height:30px;" type="text">
-                                        
-                                    </div>
-                                    <div class="col-md-12 show-data">
-                                        <div class="row" id="retailerinform" style="display:none;">
-                                            <div class="nameshow">
-                                                <table border="1">
-                                                    <tr>
-                                                        <td><label>Firm Name :</label></td>
-                                                        <td><label id="lblfrmname"></label></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><label>Retailer Name:&nbsp;</label></td>
-                                                        <td> <label id="lblreatilername"></label></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><label>Email:&nbsp;</label></td>
-                                                        <td><label id="lblemail"></label></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><label>Mobile:&nbsp;</label> </td>
-                                                        <td><label id="lblmobile"></label></td>
-                                                    </tr>
-                                                </table>
-                                                
-                                            </div>
 
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="new-nextbutton">
-                                        <button>Cancel</button>
-                                        <button class="fullbodydycolorbg shownoneclass" disabled="disabled">Next <span></span></button>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-retailer-ecomm-transaction-page saas-retailer-rem2rem-page">
 
-                                    </div>
-                                </div>
+    <div class="container-fluid vm-opr-page-shell">
 
-                            </div>
-                        </div>
-                        <div class="noneandshow" style="display:none;">
-                            <div class="col-md-3 retailer-decond">
-                                <div class="form-group" style="margin-top:4px;margin-left:10px;">
-                                    <p class="satefontsize">Amount</p>
-                                    @Html.TextBox("txtbal", "", new { @class = "form-control", placeholder = "Enter Amount", required = "required", @onkeyup = "word.innerHTML=convertNumberToWords(this.value)", onkeypress = "return isNumber(event)", @style = " height:29px;" })
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-                                </div>
-                                <div class="show-word">
-                                    <h2 id="word" style="color:black; font-size:16px;padding-top:9px; padding-left:22px; font-family:initial;"></h2>
-                                </div>
-                            </div>
-                            <div class="col-md-4 retailer-three">
-                                <div class="form-group" style="margin-top:4px;margin-left:10px;">
-                                    <p class="satefontsize">Commente</p>
-                                    <textarea id="comment" name="comment" class="form-control" placeholder="Enter Comment" style="height:29px;"></textarea>
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
 
-                                </div>
-                            </div>
-                            <div class="col-md-2 retailer-four">
-                                <div class="form-group">
-                                    <button>Cancel</button>
-                                    <button type="submit" id="submit" class="btn  waves-effect fullbodydycolorbg" style="">
-                                        <i class="fa fa-exchange" style="top:1px;font-size:18px;"></i>
-                                        <span style="color:#555;">Transfer</span>
-                                    </button>
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Reports</li>
+                    <li>Fund Transfer To Retailer</li>
+                </ol>
 
-
-                                </div>
-                            </div>
-                        </div>
-                        }
-                        <div class="col-md-12">
-                            <div class="row" id="retailerinform" style="display:none; margin-bottom: 74px;">
-                               
-                                    <label>Firm Name</label>    <label id="lblfrmname"></label><br />
-
-                                    <label>Retailer Name</label>    <label id="lblreatilername"></label><br />
-
-                                    <label>Email</label>    <label id="lblemail"></label><br />
-
-                                   
-                                        <label>Mobile</label>    <label id="lblmobile"></label>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        @using (Html.BeginForm("Retailer_to_retailer", "Home", FormMethod.Post))
-                        {
-                            <div class="">
-
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-4 retailerclass-first">
-                                            
-
-                                            <div class="form-group" style="margin-top:4px;margin-left:10px;">
-                                                <div class="" style="">
-                                                    
-                                                    @Html.DropDownList("RetailerID", ViewBag.retailerid as SelectList, "Select Retailer", new { @class = "selectpicker form-control", data_live_search = "true", required = "required" })
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 retailerclass-second">
-                                            <div class="form-group" style="margin-bottom:0px;margin-left:-10px;width:108%;">
-                                                <div class="input-daterange input-group">
-                                                    <div class="datesate datesates">
-                                                        <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                                    </div>
-                                                    <span class="input-group-addon" style="display:none;">
-                                                        <i class="fa fa-exchange"></i>
-                                                    </span>
-                                                    <div class="datesate datesatese">
-                                                        <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                                    </div>
-                                                </div>
-                                                <!-- /.input group -->
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 retailerclass-three">
-                                            <center>
-                                                <button type="submit" class="btn bg-grey waves-effect" style="">
-                                                    <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                                    <span style="top:-2px;color:black;">Search</span>
-                                                </button>
-                                            </center>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        }
-
-                        <div class="row clearfix">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="">
-                                <div class="card" style="background: #f5f5f5;">
-                                    
-                                    <div class="row">
-                                        <div class="body" style="padding-left: 16px;padding-right: 15px;">
-                                            <div class="table-responsive retailer-responsive" style="position:inherit;margin-top:-37px;">
-                                                <table id="example" class="table table-bordered" style="width:100%;">
-                                                    <thead style="background-color:whitesmoke;">
-                                                        <tr>
-                                                            <th>Retailer&nbsp;ID</th>
-                                                            <th>Transfer&nbsp;Amt</th>
-                                                            <th>Retailer&nbsp;Old&nbsp;Bal</th>
-                                                            <th>Retailer&nbsp;New&nbsp;Bal</th>
-                                                            <th>Your&nbsp;Old&nbsp;Bal</th>
-                                                            <th>Your&nbsp;New&nbsp;Bal</th>
-                                                            <th>Comment</th>
-                                                            <th>Date</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach (var item in Model)
-                                                        {
-
-                                                            <tr style="background:no-repeat;">
-                                                                <td>@Html.DisplayFor(modelItem => item.rem_to)</td>
-                                                                <td> @Html.DisplayFor(modelItem => item.value)</td>
-                                                                <td>@Html.DisplayFor(modelItem => item.rem_to_old_bal)</td>
-                                                                <td>@Html.DisplayFor(modelItem => item.rem_to_new)</td>
-                                                                <td>@Html.DisplayFor(modelItem => item.rem_from_old_bal)</td>
-                                                                <td>@Html.DisplayFor(modelItem => item.rem_from_new)</td>
-                                                                <td>@Html.DisplayFor(modelItem => item.comment)</td>
-                                                                <td>@Html.DisplayFor(modelItem => item.tran_date)</td>
-                                                            </tr>
-
-                                                        }
-                                                    </tbody>
-                                                    <tfoot style="background-color:whitesmoke;">
-                                                        <tr>
-                                                            <td style="font-size:17px;">Total</td>
-                                                            <td style="font-size:17px;">@Model.Sum(m => m.value)</td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                    
-                    
             </div>
 
-        </div>      
-        
-        
-    </div> 
+        </div>
 
+        <div class="vm-opr-main-card vm-rem2rem-transfer-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                        <span>Fund transfer to retailer <i class="fa fa-exchange" aria-hidden="true"></i> retailer</span>
+                    </div>
+                </div>
+
+                @using (Html.BeginForm("rem_rem_fund_transfer", "Home", FormMethod.Post))
+                {
+                    <div class="vm-rem2rem-form-grid">
+                        <div class="vm-opr-field vm-dmt-field">
+                            <input class="vm-opr-select vm-dmt-select form-control" id="RetailerId" name="RetailerId" placeholder="User Email / Mobile No" minlength="6" required="required" type="text" autocomplete="off" />
+                        </div>
+                        <div class="vm-rem2rem-hint" id="rem2remHint"></div>
+                        <div class="vm-opr-field vm-dmt-field noneandshow" style="display:none;">
+                            @Html.TextBox("txtbal", "", new { @class = "vm-opr-select vm-dmt-select form-control", placeholder = "Enter Amount", required = "required", @onkeyup = "rem2remWordShow(this)", onkeypress = "return isNumber(event)", autocomplete = "off" })
+                        </div>
+                        <div class="vm-opr-field vm-dmt-field noneandshow" style="display:none;">
+                            <textarea id="comment" name="comment" class="vm-opr-select vm-dmt-select form-control" placeholder="Enter Comment"></textarea>
+                        </div>
+                        <div class="vm-rem2rem-words" id="rem2remWords">
+                            <span id="word"></span>
+                        </div>
+                        <div class="vm-rem2rem-lookup" id="rem2remLookup" style="display:none;">
+                            <div class="row" id="retailerinform" style="display:none;">
+                                <div class="nameshow">
+                                    <table border="1">
+                                        <tr>
+                                            <td><label>Firm Name :</label></td>
+                                            <td><label id="lblfrmname"></label></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Retailer Name:&nbsp;</label></td>
+                                            <td><label id="lblreatilername"></label></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Email:&nbsp;</label></td>
+                                            <td><label id="lblemail"></label></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Mobile:&nbsp;</label> </td>
+                                            <td><label id="lblmobile"></label></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vm-rem2rem-actions">
+                            <div class="new-nextbutton">
+                                <button type="button" class="saas-acc-btn" onclick="resetRem2RemForm()">Cancel</button>
+                                <button type="button" class="saas-acc-btn saas-acc-btn--search shownoneclass" disabled="disabled">Next</button>
+                            </div>
+                            <div class="noneandshow" style="display:none;">
+                                <button type="button" class="saas-acc-btn" onclick="resetRem2RemForm()">Cancel</button>
+                                <button type="submit" id="submit" class="saas-acc-btn saas-acc-btn--search">
+                                    <i class="fa fa-exchange" aria-hidden="true"></i>
+                                    <span>Transfer</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @{
+            var remFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerRem2RemForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_rem2rem_frm_date" },
+                { "data-report-to", "#retailer_rem2rem_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("Retailer_to_retailer", "Home", FormMethod.Post, remFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
+
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("RetailerID", retailerList, "Select Retailer", new { @id = "RetailerID", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_rem2rem_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_rem2rem_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerRem2RemTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Transfer totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerRem2RemTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total transfer</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totalTransfer.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Records</span>
+                            <strong class="vm-opr-total-card__value">@rowCount</strong>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-list" aria-hidden="true"></i>
+                        <span>Retailer transfer history</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total transfer amount">
+                            Total: <strong>&#8377; @totalTransfer.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-ecomm-totals-btn" onclick="showRetailerRem2RemTotals()" title="Show totals" aria-expanded="false" aria-controls="retailerRem2RemTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportRetailerRem2Rem" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFRetailerRem2Rem" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerRem2RemReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Retailer&nbsp;id</th>
+                                    <th>Transfer&nbsp;amt&nbsp;&#8377;</th>
+                                    <th>Retailer&nbsp;old&nbsp;bal</th>
+                                    <th>Retailer&nbsp;new&nbsp;bal</th>
+                                    <th>Your&nbsp;old&nbsp;bal</th>
+                                    <th>Your&nbsp;new&nbsp;bal</th>
+                                    <th>Comment</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="retailerRem2RemRows">
+                                @if (reports.Count > 0)
+                                {
+                                    foreach (var item in reports)
+                                    {
+                                        <tr class="vm-dmt-row">
+                                            <td>
+                                                <span class="vm-dmt-refno-text">@item.rem_to</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.value ?? 0m, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.rem_to_old_bal ?? 0m, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.rem_to_new ?? 0m, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.rem_from_old_bal ?? 0m, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.rem_from_new ?? 0m, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-consumer-text">@item.comment</span>
+                                            </td>
+                                            <td class="vm-ticket-time-cell">
+                                                <span class="vm-dmt-refno-text">@(item.tran_date.HasValue ? String.Format("{0:dd-MMM-yyyy HH:mm:ss}", item.tran_date.Value) : "—")</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="8" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                                            <span>No retailer transfer records found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            @if (reports.Count > 0)
+                            {
+                                <tfoot>
+                                    <tr class="vm-dmt-row vm-dmt-total-row">
+                                        <td>
+                                            <span class="vm-dmt-amount-text"><strong>Total</strong></span>
+                                        </td>
+                                        <td>
+                                            <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> <strong>@totalTransfer.ToString("N2")</strong></span>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<!--Add State dropdown list-->
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+@section PostVmScripts {
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
+    function hideRetailerRem2RemTotals() {
+        var $panel = jQuery('#retailerRem2RemTotalsPanel');
+        var $btn = jQuery('.saas-retailer-rem2rem-page .vm-ecomm-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
+
+    function showRetailerRem2RemTotals() {
+        var $panel = jQuery('#retailerRem2RemTotalsPanel');
+        var $btn = jQuery('.saas-retailer-rem2rem-page .vm-ecomm-totals-btn');
+        if ($panel.is(':visible')) {
+            hideRetailerRem2RemTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
+
+    function downloadRetailerRem2RemExcel() {
+        var table = document.getElementById('retailerRem2RemReport');
+        if (!table || !table.tBodies || !table.tBodies[0] || table.tBodies[0].rows.length === 0) {
+            alert('No records to export.');
+            return;
+        }
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>' + table.outerHTML + '</body></html>';
+        var blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'Retailer_to_retailer.xls';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 100);
+    }
+
+    /* Amount ke shabd dikhao; khaali ho to line hi chhupao */
+    function rem2remWordShow(el) {
+        var w = '';
+        try { w = convertNumberToWords(el.value); } catch (e) { w = ''; }
+        jQuery('#word').html(w);
+        if (w && jQuery.trim(w) !== '') {
+            jQuery('#rem2remWords').addClass('show');
+        } else {
+            jQuery('#rem2remWords').removeClass('show');
+        }
+    }
+
+    /* Cancel : form wapas shuru wali haalat me */
+    function resetRem2RemForm() {
+        jQuery('#RetailerId').val('').removeClass('vm-rem2rem-input-error').attr('data-valid', '0');
+        jQuery('#txtbal').val('');
+        jQuery('#comment').val('');
+        jQuery('#word').html('');
+        jQuery('#rem2remWords').removeClass('show');
+        jQuery('#retailerinform').hide();
+        jQuery('#rem2remLookup').hide();
+        jQuery('.new-nextbutton').css('display', '');
+        jQuery('.saas-retailer-rem2rem-page .noneandshow').css('display', 'none');
+        jQuery('.new-nextbutton button.shownoneclass').prop('disabled', true);
+        rem2remHint('', true);
+    }
+
     function isNumber(evt) {
         var iKeyCode = (evt.which) ? evt.which : evt.keyCode
         if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
             return false;
         return true;
     }
-    $("#RetailerId").blur(function (event) {
-        //  var character = String.fromCharCode(event.keyCode);
-        var mobemail = $("#RetailerId").val()
-        
-       
-           
-            //   alert(mobemail.val())
-            $.ajax({
-                url: "@Url.Action("CheckRetailerEmailMobile")",
-                data: { emailmobile:mobemail},
-                success: function (data) {
-                    if (data != '') {
-                        $('#retailerinform').show();
-                        $('#lblfrmname').text(data.Frm_Name);
-                          $('#lblreatilername').text(data.RetailerName);
-                        $('#lblemail').text(data.Email);
-                        $('#lblmobile').text(data.Mobile)
-                         $('#submit').removeAttr('disabled');
-                    }
-                    else {
-                        $('#retailerinform').hide();
-                         $('#submit').attr('disabled', 'disabled');
-                    }
-                  
-                    
-                }
 
-
-
-            })
-       
-       
-});
-</script>
-<!--Calendar Javascript-->
-<script>
-    $(document).ready(function () {
-
-        var succ = '@ViewData["success"]';
-        var error = '@ViewData["error"]';
-        if (succ != null && succ != "")
-        {
-            swal("Good job!", succ,"success");
-        }
-        if (error != null && error != "")
-        {
-            swal("Oops!", error, "error");
-        }
-
-    });
-</script>
-
-
-<script>
-    $(document).ready(function()
-    {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5',
-                'print'
-            ]
-        });
-    });
-</script>
-<script>
     function convertNumberToWords(amount) {
         var words = new Array();
         words[0] = '';
@@ -390,7 +707,7 @@
         if (typeof number === 'number' && isFinite(number)) {
             number = number.toString(10);
         } else {
-            return words_string= '';
+            return words_string = '';
         }
         if (n_length <= 9) {
             var n_array = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -438,35 +755,200 @@
         }
         return words_string;
     }
-</script>
 
-<script>
-    $('.shownoneclass').click(function () {
-        $('.new-nextbutton').css("display", "none");
-        $('.noneandshow').css("display", "block");
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
-     $('.new-nextbutton button.shownoneclass').prop('disabled', true);
-     $('.fullclassdata input#RetailerId').keyup(function() {
-        if($(this).val() != '') {
-           $('.new-nextbutton button.shownoneclass').prop('disabled', false);
-        }
-     });
- });
-</script>
-<script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('.report-list-change li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('active');
-
-
+    function initRetailerRem2RemSelect2() {
+        var $scope = jQuery('.saas-retailer-rem2rem-page');
+        $scope.find('#RetailerID').each(function () {
+            var $el = jQuery(this);
+            if (!$el.length || !jQuery.fn.select2) {
+                return;
             }
-        })
+            if ($el.hasClass('select2-hidden-accessible')) {
+                try { $el.select2('destroy'); } catch (e) { }
+            }
+            var opts = {
+                width: '100%',
+                dropdownParent: jQuery(document.body),
+                minimumResultsForSearch: 0,
+                dropdownCssClass: 'vm-admin-select2-dropdown vm-admin-select2-searchable'
+            };
+            if (typeof window.forceAdminSelect2 === 'function') {
+                window.forceAdminSelect2($el, opts, true);
+            } else if (typeof window.applyAdminSelect2 === 'function') {
+                window.applyAdminSelect2($el, opts, true);
+            } else {
+                $el.select2(opts);
+            }
+        });
+    }
+
+    function initRetailerRem2RemDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerRem2RemDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerRem2RemForm',
+                '#retailer_rem2rem_frm_date',
+                '#retailer_rem2rem_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerRem2RemSelect2();
+        initRetailerRem2RemDatepickers();
+        window.setTimeout(initRetailerRem2RemDatepickers, 150);
+        jQuery('#btnExportRetailerRem2Rem').on('click', function (e) {
+            e.preventDefault();
+            downloadRetailerRem2RemExcel();
+        });
+        jQuery('#btnPDFRetailerRem2Rem').on('click', function () {
+            window.print();
+        });
+    });
+
+    /* Server double-JSON string bhejta hai + keys chhote akshar me — sab sambhalo */
+    function normRem2RemData(data) {
+        if (typeof data === 'string') {
+            data = jQuery.trim(data);
+            if (data === '') { return null; }
+            try { data = jQuery.parseJSON(data); } catch (e) { return null; }
+            if (typeof data === 'string') {
+                try { data = jQuery.parseJSON(data); } catch (e) { return null; }
+            }
+        }
+        if (!data || typeof data !== 'object') { return null; }
+        var get = function () {
+            for (var i = 0; i < arguments.length; i++) {
+                var want = (arguments[i] + '').toLowerCase();
+                for (var p in data) {
+                    if (data.hasOwnProperty(p) && (p + '').toLowerCase() === want && data[p] !== null && data[p] !== undefined && jQuery.trim(data[p] + '') !== '') {
+                        return data[p];
+                    }
+                }
+            }
+            return '';
+        };
+        var info = {
+            frm: get('frm_name', 'frmname', 'firmname', 'firm_name'),
+            name: get('retailername', 'retailer_name', 'dealername', 'name'),
+            email: get('email'),
+            mobile: get('mobile', 'mobileno', 'mobile_no')
+        };
+        if (info.frm === '' && info.name === '' && info.email === '' && info.mobile === '') { return null; }
+        return info;
+    }
+
+    function rem2remHint(msg, ok) {
+        var $h = jQuery('#rem2remHint');
+        $h.removeClass('ok err').html(msg || '');
+        if (msg) { $h.addClass(ok ? 'ok' : 'err'); }
+    }
+
+    /* Retailer lookup : ek hi jagah se, blur + Next dono yahi use karenge */
+    function checkRem2RemRetailer(mobemail, onOk, onFail) {
+        mobemail = jQuery.trim(mobemail || '');
+        if (mobemail === '') {
+            rem2remLookupFail();
+            if (typeof onFail === 'function') { onFail(); }
+            return;
+        }
+        rem2remHint('Checking retailer…', true);
+        jQuery.ajax({
+            url: '@Url.Action("CheckRetailerEmailMobile")',
+            type: 'GET',
+            dataType: 'json',
+            cache: false,
+            data: { emailmobile: mobemail },
+            success: function (data) {
+                var info = normRem2RemData(data);
+                if (info) {
+                    jQuery('#retailerinform').show();
+                    jQuery('#rem2remLookup').show();
+                    jQuery('#lblfrmname').text(info.frm);
+                    jQuery('#lblreatilername').text(info.name);
+                    jQuery('#lblemail').text(info.email);
+                    jQuery('#lblmobile').text(info.mobile);
+                    jQuery('#submit').removeAttr('disabled');
+                    jQuery('#RetailerId').removeClass('vm-rem2rem-input-error').attr('data-valid', '1');
+                    rem2remHint('Retailer verified : ' + (info.name || info.email || info.mobile), true);
+                    if (typeof onOk === 'function') { onOk(); }
+                }
+                else {
+                    rem2remLookupFail('No retailer found for "' + mobemail + '".');
+                    if (typeof onFail === 'function') { onFail(); }
+                }
+            },
+            error: function () {
+                rem2remLookupFail('Server se jawab nahi mila, dobara try karo.');
+                if (typeof onFail === 'function') { onFail(); }
+            }
+        });
+    }
+
+    function rem2remLookupFail(msg) {
+        jQuery('#retailerinform').hide();
+        jQuery('#rem2remLookup').hide();
+        jQuery('#submit').attr('disabled', 'disabled');
+        jQuery('#RetailerId').attr('data-valid', '0');
+        rem2remHint(msg || '', false);
+    }
+
+    /* Next : verify ho tabhi step-2 (Amount/Comment) khule */
+    function goRem2RemNext() {
+        var val = jQuery('#RetailerId').val();
+        if (jQuery.trim(val || '') === '') {
+            jQuery('#RetailerId').addClass('vm-rem2rem-input-error').focus();
+            return;
+        }
+        checkRem2RemRetailer(val, function () {
+            jQuery('.new-nextbutton').css('display', 'none');
+            jQuery('.saas-retailer-rem2rem-page .vm-rem2rem-form-grid .noneandshow').css('display', 'block');
+            jQuery('#txtbal').focus();
+        }, function () {
+            jQuery('#RetailerId').addClass('vm-rem2rem-input-error').focus();
+        });
+    }
+
+    jQuery('#RetailerId').on('blur', function () {
+        checkRem2RemRetailer(jQuery(this).val());
+    });
+
+    jQuery(function () {
+        var succ = '@ViewData["success"]';
+        var error = '@ViewData["error"]';
+        if (succ != null && succ != '') {
+            swal('Good job!', succ, 'success');
+        }
+        if (error != null && error != '') {
+            swal('Oops!', error, 'error');
+        }
+    });
+
+    jQuery('.shownoneclass').on('click', function () {
+        goRem2RemNext();
+    });
+
+    jQuery(function () {
+        jQuery('.new-nextbutton button.shownoneclass').prop('disabled', true);
+        /* input event : typing + paste dono pakdega */
+        jQuery('.vm-rem2rem-form-grid input#RetailerId').on('input', function () {
+            var has = jQuery.trim(jQuery(this).val() || '') !== '';
+            jQuery(this).removeClass('vm-rem2rem-input-error').attr('data-valid', '0');
+            jQuery('.new-nextbutton button.shownoneclass').prop('disabled', !has);
+            rem2remHint('', true);
+            if (!has) { rem2remLookupFail(); }
+        });
+        /* Enter dabane par bhi Next jaisa kaam kare */
+        jQuery('.vm-rem2rem-form-grid input#RetailerId').on('keydown', function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                goRem2RemNext();
+            }
+        });
     });
 </script>
+}

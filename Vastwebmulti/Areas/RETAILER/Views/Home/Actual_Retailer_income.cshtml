@@ -1,324 +1,329 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.show_all_user_income_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
     ViewBag.Title = "Actual_Retailer_income";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.show_all_user_income_Result>();
+    var rowCount = reports.Count;
+    decimal totalIncome = 0m;
+    try { totalIncome = reports.Sum(m => Convert.ToDecimal(m.Amount)); } catch { totalIncome = 0m; }
 }
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-
-    /* new css  */
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
-    }
-
-    .table {
-        margin-bottom: 0px;
-    }
-
-    .col-md-1customerightsearch, .col-md-2.customerightdate {
-        float: left;
-    }
-
-        .col-md-1customerightsearch button {
-            height: 32px !important;
+    /* Income counts : success/pending/failed colors */
+    body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport tbody tr:hover { background: #f6f9ff !important; }
+    body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport tfoot tr.vm-dmt-total-row { background: #eef2ff !important; }
+    body.saas-admin-ui .saas-retailer-income-page .vm-inc-count { display: inline-block !important; font-weight: 800 !important; font-size: 13px !important; font-variant-numeric: tabular-nums !important; }
+    body.saas-admin-ui .saas-retailer-income-page .vm-inc-count--ok { color: #15803d !important; }
+    body.saas-admin-ui .saas-retailer-income-page .vm-inc-count--wait { color: #a16207 !important; }
+    body.saas-admin-ui .saas-retailer-income-page .vm-inc-count--bad { color: #c62828 !important; }
+    /* Desktop (>=1024px): fit-to-width, no scroll, tight columns */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
         }
-
-    .datesates {
-        padding-right: 0px;
-    }
-    .col-md-4.dispute-date.dayend-date {
-        width: 40%;
-        float: left;
-    }
-    .input-daterange input {
-        text-align: end;
-    }
-    /* new css  */
-
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    @@media only screen and (max-width:1169px){
-        .actual-clearfix .col-lg-12.col-md-12.col-sm-12.col-xs-12 {
-            padding-left: 15px;
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tbody tr,
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tfoot tr {
+            display: table-row !important;
         }
-        .col-md-12.resp_set {
-            padding-left: 15px !important;
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tbody td,
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tfoot td {
+            display: table-cell !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
         }
-
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table thead th:nth-child(1),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tbody td:nth-child(1),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tfoot td:nth-child(1) { width: 8% !important; }
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table thead th:nth-child(2),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tbody td:nth-child(2),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tfoot td:nth-child(2) { width: 28% !important; }
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tbody td:nth-child(3),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tfoot td:nth-child(3) { width: 16% !important; }
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table thead th:nth-child(4),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tbody td:nth-child(4),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tfoot td:nth-child(4) { width: 16% !important; }
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table thead th:nth-child(5),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tbody td:nth-child(5),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tfoot td:nth-child(5) { width: 16% !important; }
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table thead th:nth-child(6),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tbody td:nth-child(6),
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tfoot td:nth-child(6) { width: 16% !important; }
     }
-    @@media screen and (max-width:767px) {
-        .customeright {
-            width: 50%;
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table {
+            width: max-content !important;
+            min-width: 720px !important;
+            max-width: none !important;
+            table-layout: auto !important;
         }
-        .table-responsive.tablethirddesign-new {
-            border: 1px solid var(--border-color);
-            border-top: 0;
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tbody tr,
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tfoot tr {
+            display: table-row !important;
         }
-    }
-
-    @@media screen and (max-width:766px){
-        .col-md-3.buttonPdf.buttonPdfdispute {
-            display: block;
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tbody td,
+        body.saas-admin-ui .saas-retailer-income-page #retailerIncomeReport.vm-opr-data-table tfoot td {
+            display: table-cell !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
         }
-    }
-    @@media screen and (max-width:580px){
-        .col-md-4.rewdfgt {
-            padding:0px;
-        }
-        .col-md-4.rewdfgt .row {
-    margin: 0;
-}
-        .col-md-2.despute-search.dayend-search {
-            width: auto;
-        }
-            .col-md-2.despute-search.dayend-search button {
-                padding: 0 10px;
-            }
-        .dispute-date.dayend-date {
-            width: 33%;
+        body.saas-admin-ui .saas-retailer-income-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
         }
     }
-
-    @@media only screen and (max-width:480px){
-        .customeright {
-            width: 100%;
-            margin: 0px;
-            padding-bottom: 4px;
-        }
-        .col-md-2.despute-search.dayend-search {
-            width: 39%;
-            margin: 0; 
-        }
-        .col-md-4.dispute-date.dayend-date {
-            width: 61%;
-            float: left;
-        }
-        #txt_frm_date {
-            text-align: center;
-        }
-
-
-    }
-
-
 </style>
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="">
-    <div class="container-fluid" style="height:100vh;">
-        <!--Four-Design-Page-Header-Start-->
 
-        <div class="page-title-box-fourde">
-            <h3>My Earn</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">My Account 1&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">My Earn</a></li>
-            </ul>
-        </div>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-retailer-ecomm-transaction-page saas-retailer-income-page">
 
-        <!--Four-Design-Page-Header-End-->
-        <div class="row clearfix">
-            <div class="col-md-12 resp_set" style="padding-left: 11px;">
+    <div class="container-fluid vm-opr-page-shell">
 
-                <div class="page-header-third">
-                    <div class="bread-same-all-page" style="width:auto;float:left;">
-                        <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                            <ul style="margin:0;">
-                                <li class="smli">
-                                    <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                                    </a>
-                                </li>
+        @{
+            var incomeFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerIncomeForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_income_frm_date" },
+                { "data-report-to", "#retailer_income_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("Actual_Retailer_income", "Home", FormMethod.Post, incomeFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-                                <li class="fullbodydycolorbg tmw-total-color-one">
-                                    My Earn (Day Income)
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
 
-                                </li>
-                            </ul>
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>My Account</li>
+                        <li>My Earn (Day Income)</li>
+                    </ol>
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_income_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_income_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
 
                     </div>
+
                 </div>
 
-                
-            </div>
-        </div>
-
-        <div class="row clearfix actual-clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="">
-                <div class="page-header-third">
-                    <div class="card class-back-tra-fourdesign" style="width:100%;float:left;">
-
-
-                        @using (Html.BeginForm("Actual_Retailer_income", "Home", FormMethod.Post))
-                        {
-
-                            <div class="customeright rightcustomeclass" style="float: left; width: 32%;">
-
-
-                                <div class="col-md-4 dispute-date dayend-date" style="float: left; width: 60%; ">
-                                    <div class="form-group" style="margin-bottom:0px;">
-                                        <div class="input-daterange input-group" style="display: flex;">
-                                            <div class="datesate datesates focused" style="width:50%;">
-                                                <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                            </div>
-                                            <span class="input-group-addon" style="display:none;">
-                                                <i class="fa fa-exchange" style="padding-top:8px;"></i>
-                                            </span>
-                                            <div class="datesate datesatese">
-                                                <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-                                </div>
-                                <div class="col-md-2 despute-search dayend-search" style="float:left;">
-                                    <center>
-                                        <button type="submit" class="btn bg-grey waves-effect retailer-search-second" style="margin-top: 4px; margin-left: -3px; height:34px;border:1px solid #c7c2c2;">
-                                            <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                            <span style="top:-2px;color:black;">Search</span>
-                                        </button>
-                                    </center>
-                                </div>
-                            </div>
-                            
-
-                            <div class="col-md-3 buttonPdf buttonPdfdispute retailer-pdf-second" style="text-align:right;float:right;">
-
-                                <button style="color:#555;" id="btnPDF">PDF</button>
-                                <button style="color:#555;" id="btnExport">Export</button>
-
-                            </div>
-
-                        }
-                    </div>
-                    <div class="card class-back-tra-fourdesign"  style="width:100%;float:left;padding-top:4px;">
-                        
-
-                        <div class="body" style="padding-top: 0; padding-right: 0px;">
-                            <div class="table-responsive dayend-responsive tablethirddesign-new" style="position:inherit;">
-                                <table class="table table-bordered table-striped table-hover" style="width:100%;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>Sr.&nbsp;No</th>
-                                            <th>Type</th>
-                                            <th>Total&nbsp;Success</th>
-                                            <th>Total&nbsp;Pending</th>
-                                            <th>Total&nbsp;Failed</th>
-                                            <th>Income</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{int i = 1;}
-                                        @foreach (var item in Model)
-                                        {
-                                            <tr>
-                                                <td>@i</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Type)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.TotalSuccess)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.TotalPending)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.TotalFailed)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                                            </tr>
-                                            i++;
-                                        }
-                                    </tbody>
-                                    <tfoot style="background-color:whitesmoke;">
-                                        <tr>
-                                            <td><p style="font-size:17px;">Total</p></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td><p style="font-size:18px;">@Model.Sum(a => a.Amount)</p></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerIncomeTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Income totals</span>
                         </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerIncomeTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Total income</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totalIncome.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Records</span>
+                            <strong class="vm-opr-total-card__value">@rowCount</strong>
+                        </div>
+                    </div>
+                </div>
 
+            </div>
+        }
 
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        <span>My earn (day income)</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total income">
+                            Total: <strong>&#8377; @totalIncome.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-ecomm-totals-btn" onclick="showRetailerIncomeTotals()" title="Show totals" aria-expanded="false" aria-controls="retailerIncomeTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportRetailerIncome" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFRetailerIncome" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerIncomeReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No</th>
+                                    <th>Type</th>
+                                    <th>Total Success</th>
+                                    <th>Total Pending</th>
+                                    <th>Total Failed</th>
+                                    <th>Income &#8377;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (reports.Count > 0)
+                                {
+                                    int i = 1;
+                                    foreach (var item in reports)
+                                    {
+                                        <tr class="vm-dmt-row">
+                                            <td><span class="vm-dmt-refno-text">@i</span></td>
+                                            <td><span class="vm-dmt-consumer-text" title="@item.Type">@item.Type</span></td>
+                                            <td><span class="vm-inc-count vm-inc-count--ok">@item.TotalSuccess</span></td>
+                                            <td><span class="vm-inc-count vm-inc-count--wait">@item.TotalPending</span></td>
+                                            <td><span class="vm-inc-count vm-inc-count--bad">@item.TotalFailed</span></td>
+                                            <td><span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @item.Amount</span></td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="6" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-coins" aria-hidden="true"></i>
+                                            <span>No income records found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            @if (reports.Count > 0)
+                            {
+                                <tfoot>
+                                    <tr class="vm-dmt-row vm-dmt-total-row">
+                                        <td><span class="vm-dmt-amount-text"><strong>Total</strong></span></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><span class="vm-dmt-amount-text"><strong>&#8377; @totalIncome.ToString("N2")</strong></span></td>
+                                    </tr>
+                                </tfoot>
+                            }
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-
+@section PostVmScripts {
 <script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
 <script>
-$(document).ready(function(){
+    function hideRetailerIncomeTotals() {
+        var $panel = jQuery('#retailerIncomeTotalsPanel');
+        var $btn = jQuery('.saas-retailer-income-page .vm-ecomm-totals-btn');
+        $panel.hide().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'false');
+    }
 
-     $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true,
-                orientation: "bottom auto",
+    function showRetailerIncomeTotals() {
+        var $panel = jQuery('#retailerIncomeTotalsPanel');
+        var $btn = jQuery('.saas-retailer-income-page .vm-ecomm-totals-btn');
+        if ($panel.is(':visible')) {
+            hideRetailerIncomeTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
 
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-            }
+    function retailerIncomeDates() {
+        return {
+            txt_frm_date: jQuery('#retailer_income_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_income_to_date').val() || ''
+        };
+    }
+
+    function initRetailerIncomeDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerIncomeDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerIncomeForm',
+                '#retailer_income_frm_date',
+                '#retailer_income_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerIncomeDatepickers();
+        window.setTimeout(initRetailerIncomeDatepickers, 150);
+        jQuery('#btnExportRetailerIncome').on('click', function (e) {
+            e.preventDefault();
+            var d = retailerIncomeDates();
+            location.href = '@Url.Action("Excel_Actual_Retailer_income", "Home")?txt_frm_date=' + encodeURIComponent(d.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(d.txt_to_date);
+        });
+        jQuery('#btnPDFRetailerIncome').on('click', function () {
+            var d = retailerIncomeDates();
+            window.open('@Url.Action("PDF_Actual_Retailer_income", "Home")?txt_frm_date=' + encodeURIComponent(d.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(d.txt_to_date), '_blank');
+        });
     });
 </script>
-
-<script>
-    $(".input-daterange").click(function () {
-        $(".datepicker").addClass('datepickerdmt');
-    });
-
-
-</script>
-
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("Excel_Actual_Retailer_income", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        location.href = url;
-});
-</script>
-<script>
-    $("#btnPDF").click(function () {
-     var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("PDF_Actual_Retailer_income", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
-    });
-</script>
+}

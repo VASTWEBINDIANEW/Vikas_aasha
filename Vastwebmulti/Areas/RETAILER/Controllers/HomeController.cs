@@ -236,18 +236,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         public ActionResult VideoKYCstatus()
         {
             var videokycsetting = db.AAdharPanEKYC_Verify.Single();
-
             if (!videokycsetting.VideoKycStatus)
             {
-                // Direct browser se aaya hai -> Dashboard pe bhejo
-                if (!ControllerContext.IsChildAction)
-                {
-                    return RedirectToAction("Dashboard", "Home");
-                }
+                return RedirectToAction("Dashboard", "Home");
 
-                // Kisi page ke andar @Html.Action se call hua hai -> kuch render mat karo
-                return Content(string.Empty);
+                //return Content(string.Empty);
             }
+
+
 
             return PartialView("KYCVIDEODEMO");
         }
@@ -682,17 +678,21 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 db.Printer_paperSize_Changes.Add(ff);
                 db.SaveChanges();
             }
-            // Admin ka global Video KYC toggle
-            bool videoKycOn = db.AAdharPanEKYC_Verify.Single().VideoKycStatus;
-
-            if (videoKycOn)
+            var chkvideokyc = db.AAdharPanEKYC_Verify.Where(X => X.VideoKycStatus == true).SingleOrDefault();
+            if (chkvideokyc != null)
             {
-                var allkycchk = db.Retailer_Details.Where(x => x.RetailerId == userid && x.PSAStatus == "Y" && x.AadhaarStatus == "Y" && x.ShopwithSalfieStatus == "Y" && x.videokycstatus == "N").SingleOrDefault();
-                if (allkycchk != null)
+                var videokycchk = db.Retailer_Details.Where(x => x.RetailerId == userid && x.PSAStatus == "Y" && x.AadhaarStatus == "Y" && x.ShopwithSalfieStatus == "Y" && x.videokycstatus == "N").SingleOrDefault();
+                if (videokycchk != null)
                 {
                     return RedirectToAction("VideoKYCstatus");
                 }
             }
+            //var allkycchk = db.Retailer_Details.Where(x => x.RetailerId == userid && x.PSAStatus == "Y" && x.AadhaarStatus == "Y" && x.ShopwithSalfieStatus == "Y" && x.videokycstatus == "N" && (x.videokycpath == null || x.videokycpath != null)).SingleOrDefault();
+            //if (allkycchk != null)
+            //{
+            //    return RedirectToAction("VideoKYCstatus");
+            //}
+
             ViewBag.show = "Today";
             var entry = db.Slab_Flight.FirstOrDefault(a => a.UserId == userid);
             ViewBag.markup = entry.RetailerMarkupCharge;
@@ -705,8 +705,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var news = (from pp in db.Message_top where (pp.users == "Retailer" || pp.users == "All") where pp.status == "Y" select pp).ToList();
             ViewBag.newsdata = news;
             //Upcomming Holiday
-            //List<show_upcomming_holiday_Result> li = new List<show_upcomming_holiday_Result>();
-            var li = db.tbl_Holiday.ToList();
+            var holidayFrom = DateTime.Today;
+            var li = db.tbl_Holiday
+                .Where(h => h.HolidayDate != null && h.HolidayDate >= holidayFrom)
+                .OrderBy(h => h.HolidayDate)
+                .ToList();
             ViewBag.showholiday = li;
             ViewBag.msg = TempData["msg"];
             TempData.Remove("msg");
@@ -11335,13 +11338,69 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var permonth = db.transtion_limit.SingleOrDefault().Permonth;
             ViewBag.permonth = permonth;
             ViewBag.perlimit = perlimit;
-            var commslab = db.paytm_imps_common_comm
-                         .Where(x => x.usertype == "Retailer")
-                         .ToList();
-            DMT2SlabModel model = new DMT2SlabModel();
-            model.common = commslab;
-            model.UserId = new List<SelectListItem>() { new SelectListItem { Text = "No data", Value = "No Data" } };
-            return View(model);
+            var userid = User.Identity.GetUserId();
+            Operater_Commission sb = new Operater_Commission();
+            sb.Money2 = (from cust in db.paytm_imps_retailer_comm
+                         where cust.userid == userid
+                         select new money2_comm
+                         {
+                             Verifycomm = cust.verify_comm,
+                             comm_1000 = cust.comm_1000,
+                             comm_2000 = cust.comm_2000,
+                             comm_3000 = cust.comm_3000,
+                             comm_4000 = cust.comm_4000,
+                             comm_5000 = cust.comm_5000,
+                             comm_6000 = cust.comm_6000,
+                             comm_7000 = cust.comm_7000,
+                             comm_8000 = cust.comm_8000,
+                             comm_9000 = cust.comm_9000,
+                             comm_10000 = cust.comm_10000,
+                             comm_11000 = cust.comm_11000,
+                             comm_12000 = cust.comm_12000,
+                             comm_13000 = cust.comm_13000,
+                             comm_14000 = cust.comm_14000,
+                             comm_15000 = cust.comm_15000,
+                             comm_16000 = cust.comm_16000,
+                             comm_17000 = cust.comm_17000,
+                             comm_18000 = cust.comm_18000,
+                             comm_19000 = cust.comm_19000,
+                             comm_20000 = cust.comm_20000,
+                             comm_21000 = cust.comm_21000,
+                             comm_22000 = cust.comm_22000,
+                             comm_23000 = cust.comm_23000,
+                             comm_24000 = cust.comm_24000,
+                             comm_25000 = cust.comm_25000,
+                             comm_26000 = cust.comm_26000,
+                             per_26000 = cust.per_26000,
+                             Type_1000 = cust.Type_1000,
+                             Type_2000 = cust.Type_2000,
+                             Type_3000 = cust.Type_3000,
+                             Type_4000 = cust.Type_4000,
+                             Type_5000 = cust.Type_5000,
+                             Type_6000 = cust.Type_6000,
+                             Type_7000 = cust.Type_7000,
+                             Type_8000 = cust.Type_8000,
+                             Type_9000 = cust.Type_9000,
+                             Type_10000 = cust.Type_10000,
+                             Type_11000 = cust.Type_11000,
+                             Type_12000 = cust.Type_12000,
+                             Type_13000 = cust.Type_13000,
+                             Type_14000 = cust.Type_14000,
+                             Type_15000 = cust.Type_15000,
+                             Type_16000 = cust.Type_16000,
+                             Type_17000 = cust.Type_17000,
+                             Type_18000 = cust.Type_18000,
+                             Type_19000 = cust.Type_19000,
+                             Type_20000 = cust.Type_20000,
+                             Type_21000 = cust.Type_21000,
+                             Type_22000 = cust.Type_22000,
+                             Type_23000 = cust.Type_23000,
+                             Type_24000 = cust.Type_24000,
+                             Type_25000 = cust.Type_25000,
+                             Type_26000 = cust.Type_26000
+                         }).ToList();
+            ViewBag.RetailerMoney2Slab = sb;
+            return View("Money_Transfer_Slab_DMT2", sb);
 
         }
         public ActionResult Money_Transfer_Slab_DMT1()
@@ -34205,9 +34264,21 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     {
                         ViewBag.UPIaepsenabled = "Green";
                     }
-                    else if (apiinfochk.UPIStatus2 == true)
+                    else                     if (apiinfochk.UPIStatus2 == true)
                     {
                         ViewBag.UPIaepsenabled = "Yellow";
+                    }
+                }
+
+                if (string.IsNullOrEmpty(info))
+                {
+                    if (apiinfochk != null && apiinfochk.Status2 == true)
+                    {
+                        info = "A2";
+                    }
+                    else if (apiinfochk != null && apiinfochk.Status1 == true)
+                    {
+                        info = "A1";
                     }
                 }
 
@@ -34295,7 +34366,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         ViewBag.aepsapinm = "NO";
                     }
                 }
-                if (info == "A1" || string.IsNullOrEmpty(info))
+                if (info == "A1")
                 {
                     ViewBag.aepsapinm = "A1";
                     if ((api1 == "Nifi" && api1sts == true)&& (api1local == "Nifi" && api1stslocal == true))
@@ -34575,6 +34646,60 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     else
                     {
                         ViewBag.aepsapinm = "NO";
+                    }
+                }
+
+                var aepsApiResolved = ViewBag.aepsapinm as string;
+                if (string.IsNullOrEmpty(aepsApiResolved) || aepsApiResolved == "NO")
+                {
+                    if (money2)
+                    {
+                        ViewBag.aepsapinm = "Fingpay";
+                        var isvalidLegacy = true;
+                        var checkekycLegacy = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                        if (checkekycLegacy == null)
+                        {
+                            isvalidLegacy = false;
+                            ViewBag.req = "REQUIREDOTP";
+                        }
+                        else if (checkekycLegacy.isvalid == false)
+                        {
+                            isvalidLegacy = false;
+                            ViewBag.req = "REQUIREDSCAN";
+                        }
+                        if (isvalidLegacy)
+                        {
+                            var twofacheckLegacy = db.Aeps_2Fa_Status.Where(aa => aa.userid == userid).SingleOrDefault();
+                            if (twofacheckLegacy == null)
+                            {
+                                Aeps_2Fa_Status item = new Aeps_2Fa_Status();
+                                item.userid = userid;
+                                item.Status = false;
+                                item.AepsMerchantId = ChkKYC.AepsMerchandId;
+                                item.InsertDate = DateTime.Now;
+                                db.Aeps_2Fa_Status.Add(item);
+                                db.SaveChanges();
+                                ViewBag.req = "2FAREQUIRED";
+                            }
+                            else
+                            {
+                                var insertdateLegacy = Convert.ToDateTime(twofacheckLegacy.InsertDate).Date;
+                                var currentdateLegacy = DateTime.Now.Date;
+                                if (insertdateLegacy == currentdateLegacy)
+                                {
+                                    if (twofacheckLegacy.Status == false)
+                                    {
+                                        ViewBag.req = "2FAREQUIRED";
+                                    }
+                                }
+                                else
+                                {
+                                    twofacheckLegacy.Status = false;
+                                    db.SaveChanges();
+                                    ViewBag.req = "2FAREQUIRED";
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -58903,7 +59028,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             //return View();
             return RedirectToAction("BookingDetails");
         }
-        #endregion
+        #endregion  
         #region Hotel
         public ActionResult Hotel_Report()
         {

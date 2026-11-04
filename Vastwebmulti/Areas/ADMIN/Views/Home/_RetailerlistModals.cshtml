@@ -563,19 +563,31 @@
 
 <script>
 
-    function OnSuccessconfirm(data) {
-        $('#Retailertablelist').html(data);
-        if (typeof vmRlHideOtpModal === 'function') { vmRlHideOtpModal('#otpmodal'); }
-        else if (typeof vmRlHideDocModal === 'function') { vmRlHideDocModal('#otpmodal'); }
-        else { $('#otpmodal').hide(); }
-        vmRlSkipModalRefresh = true;
-        if (typeof vmRlCloseDetailModalAndRefresh === 'function') {
-            vmRlCloseDetailModalAndRefresh();
-        } else {
-            vmRlCloseDetailModal();
+    function vmRlAfterRetailerDeleted() {
+        try {
+            if (typeof vmRlHideOtpModal === 'function') { vmRlHideOtpModal('#otpmodal'); }
+            else if (typeof vmRlHideDocModal === 'function') { vmRlHideDocModal('#otpmodal'); }
+            else if (window.jQuery && window.jQuery.fn && window.jQuery.fn.modal) { $('#otpmodal').modal('hide'); }
+            else { $('#otpmodal').hide(); }
+        } catch (e) { }
+        try {
+            if (typeof vmRlClearAllModalUi === 'function') { vmRlClearAllModalUi(); }
+            if (typeof vmRlResetDetailModal === 'function') { vmRlResetDetailModal(); }
+        } catch (e2) { }
+        window.vmRlSkipModalRefresh = false;
+        if (typeof ToastrMessage === 'function') { ToastrMessage(); }
+        if (typeof toastr !== 'undefined') {
+            toastr.success('Account deleted successfully');
         }
-        ToastrMessage();
-        toastr.success("Account Deleted Successfully");
+        window.setTimeout(function () {
+            window.location.reload();
+        }, 350);
+    }
+    window.vmRlAfterRetailerDeleted = vmRlAfterRetailerDeleted;
+
+    function OnSuccessconfirm(data) {
+        if (data) { $('#Retailertablelist').html(data); }
+        vmRlAfterRetailerDeleted();
     }
 
     function OnSuccessconfirmdocument(data) {
@@ -666,6 +678,70 @@
         }
 </script>
 <script>
+    function vmRlNormalizeDeleteOtpResponse(response) {
+        var r = response;
+        if (r != null && typeof r === 'object' && r.message != null) {
+            r = r.message;
+        }
+        return $.trim(String(r || '').replace(/^"|"$/g, ''));
+    }
+
+    function vmRlOnDeleteOtpSent() {
+        $('#error').text('');
+        $('#otpwrong').text('');
+        window.setTimeout(function () { $('#Deleteotp').trigger('focus'); }, 80);
+    }
+
+    // Prefer DeleteRetailer (SMS template "Retailer Delete OTP …" + MobileOtps). If eKYC blocks, fallback to DeleteRetailerSendOTP + Delete_Retailer.
+    window.vmRlDeleteUsesLegacyOtp = false;
+
+    function vmRlRequestRetailerDeleteOtpLegacy() {
+        $.ajax({
+            url: '@Url.Action("DeleteRetailerSendOTP", "Home")',
+            type: 'POST',
+            cache: false,
+            dataType: 'json',
+            success: function (response) {
+                var msg = vmRlNormalizeDeleteOtpResponse(response);
+                if (msg.toLowerCase() === 'success') {
+                    window.vmRlDeleteUsesLegacyOtp = true;
+                    vmRlOnDeleteOtpSent();
+                    return;
+                }
+                $('#otpwrong').text(msg || 'Unable to send OTP. Please try again.');
+            },
+            error: function () {
+                $('#otpwrong').text('Unable to send OTP. Please try again.');
+            }
+        });
+    }
+
+    function vmRlRequestRetailerDeleteOtp(RetailerId) {
+        $.ajax({
+            url: '@Url.Action("DeleteRetailer", "Home")',
+            type: 'POST',
+            data: { RetailerId: RetailerId },
+            cache: false,
+            success: function (response) {
+                var msg = vmRlNormalizeDeleteOtpResponse(response);
+                if (msg.toLowerCase() === 'success') {
+                    window.vmRlDeleteUsesLegacyOtp = false;
+                    vmRlOnDeleteOtpSent();
+                    return;
+                }
+                if (/ekyc/i.test(msg) || msg.toLowerCase() === 'failed') {
+                    vmRlRequestRetailerDeleteOtpLegacy();
+                    return;
+                }
+                $('#error').text(msg);
+                $('#otpwrong').text(msg);
+            },
+            error: function () {
+                vmRlRequestRetailerDeleteOtpLegacy();
+            }
+        });
+    }
+
     function Deleteuser() {
         var RetailerId = $('#RetailerId').val();
         if (!RetailerId) {
@@ -676,6 +752,8 @@
         $('#RetailerIddelete').val(RetailerId);
         $('#Deleteotp').val('');
         $('#otpwrong').text('');
+        $('#error').text('');
+        window.vmRlDeleteUsesLegacyOtp = false;
 
         if (typeof vmRlShowOtpModal === 'function') {
             vmRlShowOtpModal('#otpmodal');
@@ -685,24 +763,7 @@
             $('#otpmodal').modal({ backdrop: 'static', keyboard: false, show: true });
         }
 
-        $.ajax({
-            url: '@Url.Action("DeleteRetailer","Home")',
-            type: 'POST',
-            data: { RetailerId: RetailerId },
-            cache: false,
-            success: function (response) {
-                if (response == "success") {
-                    $('#otpwrong').text('');
-                    window.setTimeout(function () { $('#Deleteotp').trigger('focus'); }, 80);
-                } else {
-                    $('#error').text(response);
-                    $('#otpwrong').text(response);
-                }
-            },
-            error: function () {
-                $('#otpwrong').text('Unable to send OTP. Please try again.');
-            }
-        });
+        vmRlRequestRetailerDeleteOtp(RetailerId);
     }
 
     // OTP Delete — sweet alert + manual ajax (view-only fix):
@@ -767,15 +828,51 @@
         if (!$) { return false; }
         var $form = $('#vmRlDeleteOtpForm');
         if (!$form.length || $form.data('vmRlSubmitting')) { return false; }
-        var postUrl = $form.attr('action') || '';
-        if (window.console && console.info) {
-            console.info('[RetailerDelete] POST', postUrl, 'RetailerIddelete=' + rid);
-        }
 
         $form.data('vmRlSubmitting', true);
         var $btn = $form.find('.vm-rl-otp-submit');
         var btnOld = $btn.html();
         $btn.prop('disabled', true).html("<i class='fa fa-spinner fa-spin' aria-hidden='true'></i> Deleting...");
+
+        function vmRlFinishSubmit() {
+            $form.data('vmRlSubmitting', false);
+            $btn.prop('disabled', false).html(btnOld);
+        }
+
+        if (window.vmRlDeleteUsesLegacyOtp !== false) {
+            var otpNum = parseInt(otp, 10);
+            if (isNaN(otpNum)) {
+                vmRlFinishSubmit();
+                vmRlDeleteFailed('Please enter valid OTP');
+                return false;
+            }
+            $.ajax({
+                url: '@Url.Action("Delete_Retailer", "Home")',
+                type: 'POST',
+                data: { RetailerId: rid, OTP: otpNum },
+                cache: false,
+                dataType: 'json',
+                timeout: 60000
+            }).done(function (result) {
+                var msg = vmRlNormalizeDeleteOtpResponse(result);
+                if (msg === 'Success' || msg.toLowerCase() === 'success') {
+                    vmRlAfterRetailerDeleted();
+                    return;
+                }
+                if (msg === 'OTPWrong') {
+                    vmRlDeleteFailed('OTP Mismatch, Please enter Correct OTP');
+                    return;
+                }
+                vmRlDeleteFailed(msg || 'User could not be deleted. Please try again.');
+            }).fail(function (xhr) {
+                var failMsg = 'User could not be deleted. Please try again.';
+                if (xhr && xhr.status === 0) { failMsg = 'Network error. Please check connection and try again.'; }
+                vmRlDeleteFailed(failMsg);
+            }).always(vmRlFinishSubmit);
+            return false;
+        }
+
+        var postUrl = $form.attr('action') || '';
         $.ajax({
             url: postUrl,
             type: 'POST',
@@ -783,9 +880,6 @@
             cache: false,
             timeout: 60000
         }).done(function (data, textStatus, xhr) {
-            if (window.console && console.info) {
-                console.info('[RetailerDelete] response', xhr.status, typeof data, (typeof data === 'string' ? data.length : ''));
-            }
             if (typeof data !== 'string' || !data) {
                 vmRlDeleteFailed('User could not be deleted. Please try again.');
                 return;
@@ -801,11 +895,8 @@
                 vmRlDeleteFailed('User could not be deleted. Please try again.');
                 return;
             }
-            vmRlDeleteSucceeded();
-        }).fail(function (xhr, textStatus) {
-            if (window.console && console.warn) {
-                console.warn('[RetailerDelete] ajax failed', xhr.status, textStatus);
-            }
+            vmRlAfterRetailerDeleted();
+        }).fail(function (xhr) {
             var msg = 'OTP Mismatch , Please enter Correct OTP';
             try {
                 var p = JSON.parse(xhr.responseText || '');
@@ -814,10 +905,7 @@
             if (xhr.status === 0) { msg = 'Network error. Please check connection and try again.'; }
             else if (xhr.status >= 500) { msg = 'Server error. Please try again.'; }
             vmRlDeleteFailed(msg);
-        }).always(function () {
-            $form.data('vmRlSubmitting', false);
-            $btn.prop('disabled', false).html(btnOld);
-        });
+        }).always(vmRlFinishSubmit);
         return false;
     }
 
@@ -830,18 +918,7 @@
     }
 
     function vmRlDeleteSucceeded() {
-        try {
-            if (typeof vmRlHideOtpModal === 'function') { vmRlHideOtpModal('#otpmodal'); }
-            else if (typeof vmRlHideDocModal === 'function') { vmRlHideDocModal('#otpmodal'); }
-            else if (window.jQuery && window.jQuery.fn && window.jQuery.fn.modal) { $('#otpmodal').modal('hide'); }
-            else { $('#otpmodal').hide(); }
-        } catch (e) { }
-        try { window.vmRlSkipModalRefresh = true; } catch (e) { }
-        try {
-            if (typeof vmRlCloseDetailModalAndRefresh === 'function') { vmRlCloseDetailModalAndRefresh(); }
-            else if (typeof vmRlCloseDetailModal === 'function') { vmRlCloseDetailModal(); }
-        } catch (e) { }
-        vmRlDeleteSwal('Deleted!', 'User has been deleted.', 'success');
+        vmRlAfterRetailerDeleted();
     }
 
     function vmRlInitDeleteOtpForm() {

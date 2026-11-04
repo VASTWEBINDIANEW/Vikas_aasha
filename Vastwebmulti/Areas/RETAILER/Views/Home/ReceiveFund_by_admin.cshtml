@@ -1,253 +1,443 @@
-﻿@model IEnumerable<Vastwebmulti.Models.Retailer_total_fund_recive_by_admin_Result>
+﻿@model List<Vastwebmulti.Models.Retailer_total_fund_recive_by_admin_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "ReceiveFund_by_admin";
+    ViewBag.Title = "Fund Receive From Admin History";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? new List<Vastwebmulti.Models.Retailer_total_fund_recive_by_admin_Result>();
+    var rowCount = reports.Count;
+
+    decimal totTransfer = reports.Sum(m => m.Balance ?? 0m);
+    decimal totPre = reports.Sum(m => m.remain_pre_amount ?? 0m);
+    decimal totPost = reports.Sum(m => m.remain_amount ?? 0m);
+    decimal totCr = reports.Sum(m => m.cr ?? 0m);
+    decimal totOldCr = reports.Sum(m => m.oldcrbalance ?? 0m);
+    decimal totNet = reports.Sum(m => m.TotalBal ?? 0m);
 }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-    .dropdown-menu {
-        margin-top: 81px !important;
+    /* Admin-info dropdown in table */
+    body.saas-admin-ui .saas-retailer-recvadmin-page .vm-admin-info-btn {
+        background: #eef4ff !important;
+        border: 1px solid #c9dcff !important;
+        color: #1a56db !important;
+        font-weight: 600 !important;
+        font-size: 12.5px !important;
+        border-radius: 8px !important;
+        padding: 5px 10px !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
     }
-
-    .btn-group, .btn-group-vertical {
-        box-shadow: none;
+    body.saas-admin-ui .saas-retailer-recvadmin-page .vm-admin-info-btn .caret {
+        margin-left: 6px !important;
     }
-
-    .ppp {
-        margin-top: -20px !important;
+    body.saas-admin-ui .saas-retailer-recvadmin-page .vm-admin-info-menu {
+        min-width: 220px !important;
+        padding: 6px !important;
     }
-
-    .form-inline .bootstrap-select.btn-group, .form-horizontal .bootstrap-select.btn-group, .form-group .bootstrap-select.btn-group {
-        height: 29px;
+    body.saas-admin-ui .saas-retailer-recvadmin-page .vm-admin-info-menu li a {
+        white-space: normal !important;
+        line-height: 1.4 !important;
+        padding: 8px 10px !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+    body.saas-admin-ui .saas-retailer-recvadmin-page .vm-admin-info-menu li:last-child a {
+        border-bottom: none !important;
+    }
+    body.saas-admin-ui .saas-retailer-recvadmin-page .vm-admin-info-menu li a p {
+        margin: 2px 0 0 0 !important;
+        font-size: 11px !important;
+        color: #64748b !important;
+    }
+    /* Desktop (>=1024px): fit-to-width, no scroll, tight columns */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
+        }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody tr,
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody td,
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot td {
+            display: table-cell !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead th:nth-child(1),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody td:nth-child(1),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot td:nth-child(1) { width: 16% !important; }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead th:nth-child(2),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody td:nth-child(2),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot td:nth-child(2) { width: 11% !important; }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody td:nth-child(3),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot td:nth-child(3) { width: 9% !important; }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead th:nth-child(4),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody td:nth-child(4),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot td:nth-child(4) { width: 11% !important; }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead th:nth-child(5),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody td:nth-child(5),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot td:nth-child(5) { width: 11% !important; }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead th:nth-child(6),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody td:nth-child(6),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot td:nth-child(6) { width: 10% !important; }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead th:nth-child(7),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody td:nth-child(7),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot td:nth-child(7) { width: 10% !important; }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead th:nth-child(8),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody td:nth-child(8),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot td:nth-child(8) { width: 10% !important; }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead th:nth-child(9),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody td:nth-child(9),
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot td:nth-child(9) { width: 12% !important; }
+    }
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table {
+            width: max-content !important;
+            min-width: 1000px !important;
+            max-width: none !important;
+            table-layout: auto !important;
+        }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody tr,
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tbody td,
+        body.saas-admin-ui .saas-retailer-recvadmin-page #retailerRecvAdminReport.vm-opr-data-table tfoot td {
+            display: table-cell !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+        }
+        body.saas-admin-ui .saas-retailer-recvadmin-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
+        }
     }
 </style>
-<section class="content" style="margin:90px 0px 0px 0px; overflow-x:hidden;">
-    <div class="container-fluid giftcardpage">
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="giftcardcontent receive-content">
-                        @using (Html.BeginForm("ReceiveFund_by_admin", "Home", FormMethod.Post))
-                        {
 
-                            <div class="col-md-7" style="display:none;">
-                                <div class="form-group" style="margin-top: 2px;">
-                                    <ol class="breadcrumb breadcrumb-col-blue-grey" style="margin-left:-12px;">
-                                        <li class="active" style="color:#a79f9f; font-size:15px;font-weight:700;">Fund Receive From Admin History</li>
-                                    </ol>
-                                </div>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-retailer-ecomm-transaction-page saas-retailer-recvadmin-page">
 
+    <div class="container-fluid vm-opr-page-shell">
+
+        @{
+            var recvFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerRecvAdminForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_recvadmin_frm_date" },
+                { "data-report-to", "#retailer_recvadmin_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("ReceiveFund_by_admin", "Home", FormMethod.Post, recvFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Reports</li>
+                        <li>Fund Receive From Admin History</li>
+                    </ol>
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_recvadmin_frm_date", placeholder = "From", title = "From date" })
                             </div>
-
-                            <div class="col-md-2 giftsecond">
-                                <select>
-                                    <option>All Status</option>
-                                    <option>SUCCESS</option>
-                                    <option>PENDING</option>
-                                    <option>FAILED</option>
-                                </select>
-
-
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_recvadmin_to_date", placeholder = "To", title = "To date" })
                             </div>
-
-                            <div class="col-md-2 giftthree">
-                                <select>
-                                    <option>Receive Category</option>
-                                    <option>Receive Category</option>
-                                    <option>Receive Category</option>
-                                    <option>Receive Category</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2 giftfirst">
-                                <select>
-                                    <option>Select Receive Card Operator</option>
-                                    <option>Select Receive Card Operator</option>
-
-                                </select>
-                            </div>
-
-
-                            <div class="col-md-3 giftfor">
-                                <div class="form-group" style="margin-bottom:0px;width:100%;">
-                                    <div class="input-daterange input-group">
-                                        <div class="datesate datesates">
-                                            <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                        </div>
-                                        <span class="input-group-addon" style="display:none;">
-                                            <i class="fa fa-exchange"></i>
-                                        </span>
-                                        <div class="datesate datesatese">
-                                            <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                        </div>
-                                    </div>
-                                    <!-- /.input group -->
-                                </div>
-                            </div>
-                            <div class="col-md-1 giftfive">
-                                <center>
-                                    <button type="submit" class="btn bg-grey waves-effect" style="margin-top: 4px; height:32px;">
-                                        <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;font-size: 13px;"></i>
-                                        <span style="top:-2px;color:black;">Search</span>
-                                    </button>
-                                </center>
-                            </div>
-
-                        }
-                    </div>
-
-                    <div class="col-md-6 giftcard-button receiverbutton">
-                        <div class="form-group" style="">
-                            <div style="padding-top: 26px;  margin-left: 45%; ">
-
-                                <button type="button" class="btn btn-danger waves-effect" style="margin-top:2px;" title="Total  Failed"><i style="font-size:15px;top:1px;" class="fa fa-times-circle-o" aria-hidden="true"></i>&nbsp;PDF&nbsp;@ViewData["Totalf"]</button>
-                                <button type="button" class="btn btn-warning waves-effect" style="margin-top:2px;" title="Total  Pending"><i style="font-size:15px;top:1px;" class="fa fa-question-circle-o" aria-hidden="true"></i>&nbsp;Export&nbsp;@ViewData["Totalp"]</button>
-                                <button type="button" class="btn btn-success waves-effect" style="margin-top:2px;" title="Total  Success"><i style="font-size:15px;top:1px;" class="fa fa-check-circle-o" aria-hidden="true"></i>&nbsp;Total&nbsp;@ViewData["Totals"]</button>
-
-                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
+
                     </div>
 
                 </div>
-            </div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:-39px;">
-                <div class="card">
-                    <div class="">
-                        <h2 style="color:black; font-size:16px;padding-top:9px; padding-left:22px;"></h2>
-                    </div>
-                    <div class="body" style="padding:7px;padding-left: 0;">
-                        <div class="table-responsive receive-responsive" style="position:inherit;margin-top:-24px;">
-                            <table id="example" class="table table-bordered " style="width:100%;background: #f5f5f5;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Admin&nbsp;Info</th>
-                                        <th>Total&nbsp;Transfer</th>
-                                        <th>Type</th>
-                                        <th>Remain&nbsp;Pre</th>
-                                        <th>Remain&nbsp;Post</th>
-                                        <th>Current&nbsp;Credit</th>
-                                        <th>Old&nbsp;Credit</th>
-                                        <th>Net&nbsp;Amt</th>
-                                        <th>Date</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerRecvAdminTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Receive totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerRecvAdminTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total transfer</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totTransfer.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Net amount</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totNet.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Current credit</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totCr.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Old credit</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totOldCr.ToString("N2")</strong>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
+                        <span>Fund receive from admin history</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total transfer amount">
+                            Total: <strong>&#8377; @totTransfer.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-ecomm-totals-btn" onclick="showRetailerRecvAdminTotals()" title="Show totals" aria-expanded="false" aria-controls="retailerRecvAdminTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportRetailerRecvAdmin" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFRetailerRecvAdmin" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerRecvAdminReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Admin&nbsp;info</th>
+                                    <th>Total&nbsp;transfer&nbsp;&#8377;</th>
+                                    <th>Type</th>
+                                    <th>Remain&nbsp;pre&nbsp;&#8377;</th>
+                                    <th>Remain&nbsp;post&nbsp;&#8377;</th>
+                                    <th>Current&nbsp;credit&nbsp;&#8377;</th>
+                                    <th>Old&nbsp;credit&nbsp;&#8377;</th>
+                                    <th>Net&nbsp;amt&nbsp;&#8377;</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="retailerRecvAdminRows">
+                                @if (reports.Count > 0)
+                                {
+                                    foreach (var item in reports)
                                     {
-                                        <tr style="background:no-repeat;">
+                                        <tr class="vm-dmt-row">
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                    <div class="btn-group" role="group">
-                                                        <button type="button" class="btn btn-default waves-effect dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Click to All information">
-                                                            @item.email
-                                                        </button>
-                                                        <ul class="dropdown-menu ppp">
-                                                            <li>
-                                                                <a href="javascript:void(0);" class="waves-effect waves-block" style="border-bottom:1px solid #f1efef;line-height:11px;">
-                                                                    @item.Name
-                                                                    <p style="font-size: 11px;margin-left: 0px;margin-top: 6px;">Name</p>
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript:void(0);" class="waves-effect waves-block" style="border-bottom:1px solid #f1efef;line-height:11px;">
-                                                                    @item.comment
-                                                                    <p style="font-size: 11px;margin-left: 0px;margin-top: 6px;">Comment</p>
-                                                                </a>
-                                                            </li>
-
-                                                        </ul>
-
-                                                    </div>
+                                                    <button type="button" class="vm-admin-info-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Click to see all information">
+                                                        @item.email <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu vm-admin-info-menu">
+                                                        <li>
+                                                            <a href="javascript:void(0);">
+                                                                @item.Name
+                                                                <p>Name</p>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:void(0);">
+                                                                @item.comment
+                                                                <p>Comment</p>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
-
                                             </td>
-                                            <td><p style="margin-top:6px;">@item.Balance</p></td>
-                                            <td><p style="margin-top:6px;">@item.bal_type</p></td>
-                                            <td><p style="margin-top:6px;">@item.remain_pre_amount</p></td>
-                                            <td><p style="margin-top:6px;">@item.remain_amount</p></td>
-                                            <td><p style="margin-top:6px;">@item.cr</p></td>
-                                            <td><p style="margin-top:6px;">@item.oldcrbalance</p></td>
-                                            <td><p style="margin-top:6px;">@item.TotalBal</p></td>
-                                            <td><p style="margin-top:6px;">@item.RechargeDate</p></td>
-
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.Balance ?? 0m, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-refno-text">@item.bal_type</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.remain_pre_amount ?? 0m, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.remain_amount ?? 0m, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.cr ?? 0m, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.oldcrbalance ?? 0m, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.TotalBal ?? 0m, 2)</span>
+                                            </td>
+                                            <td class="vm-ticket-time-cell">
+                                                <span class="vm-dmt-refno-text">@(item.RechargeDate.HasValue ? String.Format("{0:dd-MMM-yyyy HH:mm:ss}", item.RechargeDate.Value) : "—")</span>
+                                            </td>
                                         </tr>
                                     }
-                                </tbody>
-                                <tfoot style="background-color:whitesmoke;">
-                                    <tr>
-                                        <td>Total</td>
-                                        <td>@Model.Sum(m => m.Balance)</td>
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="9" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
+                                            <span>No fund receive records found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            @if (reports.Count > 0)
+                            {
+                                <tfoot>
+                                    <tr class="vm-dmt-row vm-dmt-total-row">
+                                        <td>
+                                            <span class="vm-dmt-amount-text"><strong>Total</strong></span>
+                                        </td>
+                                        <td>
+                                            <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> <strong>@totTransfer.ToString("N2")</strong></span>
+                                        </td>
                                         <td></td>
-                                        <td>@Model.Sum(m => m.remain_pre_amount)</td>
-                                        <td>@Model.Sum(m => m.remain_amount)</td>
-                                        <td>@Model.Sum(m => m.cr)</td>
-                                        <td>@Model.Sum(m => m.oldcrbalance)</td>
-                                        <td>@Model.Sum(m => m.TotalBal)</td>
+                                        <td>
+                                            <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> <strong>@totPre.ToString("N2")</strong></span>
+                                        </td>
+                                        <td>
+                                            <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> <strong>@totPost.ToString("N2")</strong></span>
+                                        </td>
+                                        <td>
+                                            <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> <strong>@totCr.ToString("N2")</strong></span>
+                                        </td>
+                                        <td>
+                                            <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> <strong>@totOldCr.ToString("N2")</strong></span>
+                                        </td>
+                                        <td>
+                                            <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> <strong>@totNet.ToString("N2")</strong></span>
+                                        </td>
                                         <td></td>
-
                                     </tr>
                                 </tfoot>
-                            </table>
-                        </div>
+                            }
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
-
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-
+@section PostVmScripts {
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
+    function hideRetailerRecvAdminTotals() {
+        var $panel = jQuery('#retailerRecvAdminTotalsPanel');
+        var $btn = jQuery('.saas-retailer-recvadmin-page .vm-ecomm-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
 
-    $(document).ready(function()
-    {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+    function showRetailerRecvAdminTotals() {
+        var $panel = jQuery('#retailerRecvAdminTotalsPanel');
+        var $btn = jQuery('.saas-retailer-recvadmin-page .vm-ecomm-totals-btn');
+        if ($panel.is(':visible')) {
+            hideRetailerRecvAdminTotals();
+            return;
         }
-    });
-</script>
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
 
-<script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5',
-                'print'
-            ]
+    function downloadRetailerRecvAdminExcel() {
+        var table = document.getElementById('retailerRecvAdminReport');
+        if (!table || !table.tBodies || !table.tBodies[0] || table.tBodies[0].rows.length === 0) {
+            alert('No records to export.');
+            return;
+        }
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>' + table.outerHTML + '</body></html>';
+        var blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'ReceiveFund_by_admin.xls';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 100);
+    }
+
+    function initRetailerRecvAdminDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerRecvAdminDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerRecvAdminForm',
+                '#retailer_recvadmin_frm_date',
+                '#retailer_recvadmin_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerRecvAdminDatepickers();
+        window.setTimeout(initRetailerRecvAdminDatepickers, 150);
+        jQuery('#btnExportRetailerRecvAdmin').on('click', function (e) {
+            e.preventDefault();
+            downloadRetailerRecvAdminExcel();
+        });
+        jQuery('#btnPDFRetailerRecvAdmin').on('click', function () {
+            window.print();
         });
     });
 </script>
-
-<!--My Script-->
-<script>
-    $(".input-daterange").click(function () {
-        $(".datepicker").addClass('datepickerpurchasess');
-    });
-</script>
+}

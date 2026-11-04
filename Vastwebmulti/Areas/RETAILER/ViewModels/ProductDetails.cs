@@ -10,6 +10,7 @@ namespace Vastwebmulti.Areas.RETAILER.ViewModels
     {
         public List<proc_ProductList_Result> lstProducts { get; set; }
         public string CataTitle { get; set; }
+        public string SortBy { get; set; }
         public int itemsInCart { get; set; }
     }
     public class ProductVM

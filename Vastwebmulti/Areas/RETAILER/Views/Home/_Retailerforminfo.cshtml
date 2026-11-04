@@ -1,55 +1,69 @@
-﻿
-@model Vastwebmulti.Areas.RETAILER.Models.Servicefee
-
+﻿@model Vastwebmulti.Areas.RETAILER.Models.Servicefee
 <style>
-    .wallet-bank-input input[readonly="readonly"] {
-        background: transparent;
-        border: 0px;
+    /* Retailer form info table — premium (modal ke andar) */
+    .vm-rform-info { width: 100% !important; border-collapse: collapse !important; margin: 0 !important; font-size: 13px !important; }
+    .vm-rform-info thead th {
+        background: #f1f5f9 !important; color: #475569 !important;
+        font-size: 10.5px !important; font-weight: 800 !important; text-transform: uppercase !important; letter-spacing: .5px !important;
+        padding: 9px 10px !important; text-align: left !important; border: none !important; white-space: nowrap !important;
     }
-    
+    .vm-rform-info thead th:first-child { border-radius: 10px 0 0 10px !important; }
+    .vm-rform-info thead th:last-child { border-radius: 0 10px 10px 0 !important; text-align: right !important; }
+    .vm-rform-info tbody td { padding: 10px !important; border: none !important; border-bottom: 1px dashed #e5e9f2 !important; color: #0f172a !important; font-weight: 600 !important; vertical-align: middle !important; }
+    .vm-rform-info tbody tr:last-child td { border-bottom: none !important; }
+    .vm-rform-info tbody tr:hover td { background: #f8fafc !important; }
+    .vm-rform-info tbody td:last-child { text-align: right !important; }
+    .vm-rform-edit {
+        display: inline-flex !important; align-items: center !important; gap: 6px !important;
+        min-height: 32px !important; padding: 0 16px !important; border-radius: 9px !important;
+        border: 1px solid #c7d2fe !important; background: #eef2ff !important; color: #4f46e5 !important;
+        font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important; transition: all .15s ease !important;
+    }
+    .vm-rform-edit:hover { background: #4f46e5 !important; border-color: #4f46e5 !important; color: #fff !important; box-shadow: 0 4px 12px rgba(79,70,229,.4) !important; }
+    .vm-rform-info-empty { padding: 20px 10px !important; text-align: center !important; color: #94a3b8 !important; font-weight: 700 !important; }
 </style>
-
-
-<!-- Modal -->
 <div class="col-md-12" id="axy" style="padding:0;">
     <div class="table-responsive" style="position:inherit;">
         <div class="" style="width: 100%; height: auto; overflow-y: auto;" id="retailermanualformadd">
-            <table class="table table-bordered " style="width:100%;">
-                <thead style="background-color:whitesmoke;">
-                    <tr>
-
-                        <th>Name</th>
-                        <th>Value</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="Outerother_links">
-                 
-                    @foreach (var item in Model.AddForm_information)
-                    {
-                        <tr class="hidelink">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-           
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Value)
-                            </td>
-
-                            <td>
-                                <button type="button" onclick="retailerform('@item.id')" id="retailerform1" class="btn waves-effect shownextrow switch-edit-button swichedit-second" value="Edit">
-                                    <p>Edit</p>
-                                </button>
-                               
-                            </td>
+            @if (Model != null && Model.AddForm_information != null && Model.AddForm_information.Count > 0)
+            {
+                <table class="table vm-rform-info" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th>Action</th>
                         </tr>
-
-                    }
-
-
-
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody id="Outerother_links">
+                        @foreach (var item in Model.AddForm_information)
+                        {
+                            <tr class="hidelink" data-serviceid="@Convert.ToString(item.serviceid)">
+                                <td><span class="vm-rform-val" title="@item.Name">@Html.DisplayFor(modelItem => item.Name)</span></td>
+                                <td>
+                                    @if (string.IsNullOrWhiteSpace(Convert.ToString(item.Value)))
+                                    {
+                                        <span class="vm-rform-val vm-rform-val--empty">—</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="vm-rform-val" title="@item.Value">@Html.DisplayFor(modelItem => item.Value)</span>
+                                    }
+                                </td>
+                                <td>
+                                    <button type="button" onclick="retailerform('@item.id')" id="retailerform1" class="vm-rform-edit" value="Edit">
+                                        <i class="fas fa-pen" aria-hidden="true"></i><span>Edit</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="vm-rform-info-empty">No entries yet — upar text likhkar Save dabao.</div>
+            }
         </div>
     </div>
 </div>

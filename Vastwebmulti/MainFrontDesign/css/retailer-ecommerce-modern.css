@@ -1,0 +1,1627 @@
+/* ============================================================
+   RETAILER • ECommerce Index
+   Extends section.vm-rmt-page — pair with retailer-money-transfer-modern.css
+   ============================================================ */
+
+body.saas-admin-ui section.vm-ecomm-page{
+  --vm-ecomm-panel-h:650px;
+  --vm-ecomm-sidebar-h:650px;
+  --vm-ecomm-main-min:650px;
+  gap:14px !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page #full.vm-rmt-left-panel{
+  flex:0 1 calc(28% - 7px) !important;
+  max-width:28% !important;
+  width:calc(28% - 7px) !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-rmt-report-panel.vm-ecomm-main{
+  flex:0 1 calc(72% - 7px) !important;
+  max-width:72% !important;
+  width:calc(72% - 7px) !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-expired{
+  flex:1 1 100% !important;
+  max-width:100% !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-sidebar-head{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  padding:14px 14px 10px !important;
+  margin:0 !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  border-bottom:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-sidebar-head .material-icons{
+  font-size:22px !important;
+  color:#2563eb !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page #full.vm-rmt-left-panel{
+  height:var(--vm-ecomm-panel-h) !important;
+  min-height:var(--vm-ecomm-sidebar-h) !important;
+  max-height:var(--vm-ecomm-sidebar-h) !important;
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-sidebar-shell{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow-y:auto !important;
+  -webkit-overflow-scrolling:touch !important;
+  padding:12px !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__all{
+  width:100% !important;
+  min-height:44px !important;
+  margin:0 0 10px !important;
+  padding:0 14px !important;
+  border:1px solid #bfdbfe !important;
+  border-radius:12px !important;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8) !important;
+  color:#fff !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  cursor:pointer !important;
+  box-shadow:0 6px 16px -6px rgba(37,99,235,.55) !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  transition:transform .12s ease,box-shadow .12s ease !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__all:hover{
+  transform:translateY(-1px) !important;
+  box-shadow:0 10px 22px -8px rgba(37,99,235,.6) !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__all.is-active{
+  outline:2px solid #93c5fd !important;
+  outline-offset:2px !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__filter-wrap{
+  display:flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  margin:0 0 10px !important;
+  padding:0 10px !important;
+  min-height:38px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  background:#f8fafc !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__filter-wrap .material-icons{
+  font-size:18px !important;
+  color:#94a3b8 !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__filter{
+  flex:1 1 auto !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  min-height:34px !important;
+  padding:0 !important;
+  font-size:12px !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-accordion__item{
+  margin:0 0 8px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  overflow:hidden !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-accordion__head{
+  width:100% !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  padding:10px 10px !important;
+  margin:0 !important;
+  border:0 !important;
+  background:#f8fafc !important;
+  cursor:pointer !important;
+  text-align:left !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-accordion__head-text{
+  flex:1 1 auto !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-accordion__count{
+  font-size:10px !important;
+  font-weight:800 !important;
+  color:#2563eb !important;
+  background:#eff6ff !important;
+  border-radius:999px !important;
+  padding:2px 8px !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-accordion__chev{
+  font-size:20px !important;
+  color:#64748b !important;
+  transition:transform .15s ease !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-accordion__head[aria-expanded="true"] .vm-ecomm-accordion__chev{
+  transform:rotate(180deg) !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-accordion__body{
+  padding:6px 8px 8px !important;
+  border-top:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-sub-link.is-active{
+  background:#dbeafe !important;
+  border-color:#93c5fd !important;
+  color:#1d4ed8 !important;
+  font-weight:800 !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-sidebar-empty{
+  text-align:center !important;
+  padding:28px 16px !important;
+  border:1px dashed #cbd5e1 !important;
+  border-radius:12px !important;
+  background:#f8fafc !important;
+  margin-top:8px !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-sidebar-empty .material-icons{
+  font-size:40px !important;
+  color:#94a3b8 !important;
+  margin-bottom:8px !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-sidebar-empty p{
+  margin:0 0 6px !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  color:#334155 !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-sidebar-empty span{
+  font-size:11px !important;
+  color:#64748b !important;
+  line-height:1.4 !important;
+  display:block !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__group{
+  margin:0 0 14px !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__cat{
+  margin:0 0 6px !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+  letter-spacing:.06em !important;
+  text-transform:uppercase !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__subs{
+  margin:0 !important;
+  padding:0 !important;
+  list-style:none !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__subs li{
+  margin:0 0 4px !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__subs a{
+  display:block !important;
+  padding:8px 10px !important;
+  border-radius:8px !important;
+  font-size:12px !important;
+  font-weight:600 !important;
+  color:#0f172a !important;
+  text-decoration:none !important;
+  background:#f8fafc !important;
+  border:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-categories__subs a:hover{
+  background:#eff6ff !important;
+  border-color:#bfdbfe !important;
+  color:#1d4ed8 !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-rmt-report-panel.vm-ecomm-main{
+  min-width:0 !important;
+  height:var(--vm-ecomm-panel-h) !important;
+  min-height:var(--vm-ecomm-main-min) !important;
+  max-height:var(--vm-ecomm-main-min) !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-rmt-report-panel.vm-ecomm-main .vm-rmt-report-shell{
+  height:100% !important;
+  min-height:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page #lstProducts{
+  width:100% !important;
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  height:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-list-root{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  height:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+body.saas-admin-ui .vm-ecomm-main-card{
+  background:#fff !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:16px !important;
+  box-shadow:0 14px 40px -20px rgba(30,64,175,.22) !important;
+  flex:1 1 auto !important;
+  min-height:100% !important;
+  height:100% !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+body.saas-admin-ui .vm-ecomm-main-card .vm-ecomm-products-head,
+body.saas-admin-ui .vm-ecomm-main-card .vm-ecomm-product-grid,
+body.saas-admin-ui .vm-ecomm-main-card .vm-ecomm-empty{
+  flex:0 0 auto !important;
+}
+
+body.saas-admin-ui .vm-ecomm-main-card .vm-ecomm-empty{
+  flex:1 1 auto !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+body.saas-admin-ui .vm-ecomm-toolbar{
+  position:relative !important;
+  z-index:20 !important;
+  overflow:visible !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort.dropdown.open{
+  z-index:30 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-toolbar{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  gap:10px !important;
+  padding:14px 16px !important;
+  margin:0 !important;
+  background:linear-gradient(180deg,#f8fafc 0%,#fff 100%) !important;
+  border:0 !important;
+  border-bottom:1px solid #e2e8f0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui .vm-ecomm-toolbar__search{
+  flex:1 1 220px !important;
+  min-width:0 !important;
+  margin:0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-toolbar__search .input-group{
+  display:flex !important;
+  width:100% !important;
+  margin:0 !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  overflow:hidden !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui .vm-ecomm-toolbar__search #txtSearch{
+  flex:1 1 auto !important;
+  min-height:40px !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:8px 12px !important;
+  font-size:14px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-toolbar__search #btnSearchSubmit{
+  min-height:40px !important;
+  min-width:44px !important;
+  margin:0 !important;
+  border:0 !important;
+  border-left:1px solid #e2e8f0 !important;
+  border-radius:0 !important;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8) !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui .vm-ecomm-toolbar__search #btnSearchSubmit .material-icons{
+  color:#fff !important;
+}
+
+body.saas-admin-ui .vm-ecomm-toolbar__actions{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  gap:8px !important;
+  flex:0 0 auto !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-pill{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-height:40px !important;
+  padding:0 12px !important;
+  border-radius:10px !important;
+  border:1px solid #fecaca !important;
+  background:#fef2f2 !important;
+  color:#b91c1c !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  cursor:pointer !important;
+  text-decoration:none !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-pill__count{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:22px !important;
+  height:22px !important;
+  padding:0 6px !important;
+  border-radius:999px !important;
+  background:#dc2626 !important;
+  color:#fff !important;
+  font-size:11px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-btn-ghost{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  min-height:40px !important;
+  padding:0 12px !important;
+  border-radius:10px !important;
+  border:1px solid #e2e8f0 !important;
+  background:#fff !important;
+  color:#334155 !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  cursor:pointer !important;
+  text-decoration:none !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort{
+  position:relative !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort__btn{
+  padding-right:12px !important;
+  gap:6px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort__btn .material-icons{
+  font-size:20px !important;
+  color:#2563eb !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort__btn.dropdown-toggle::after{
+  content:"" !important;
+  display:inline-block !important;
+  width:0 !important;
+  height:0 !important;
+  margin-left:2px !important;
+  vertical-align:middle !important;
+  border-top:5px solid #64748b !important;
+  border-right:4px solid transparent !important;
+  border-left:4px solid transparent !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu{
+  z-index:2050 !important;
+  display:none;
+  min-width:268px !important;
+  max-width:min(288px,calc(100vw - 24px)) !important;
+  margin-top:8px !important;
+  padding:8px !important;
+  border-radius:14px !important;
+  border:1px solid #e2e8f0 !important;
+  background:#fff !important;
+  box-shadow:0 18px 40px -14px rgba(15,23,42,.28),0 0 0 1px rgba(255,255,255,.6) inset !important;
+  list-style:none !important;
+  float:none !important;
+}
+
+/* Filter at toolbar right — open panel to the left so it stays in viewport */
+body.saas-admin-ui .vm-ecomm-sort .vm-ecomm-sort-menu--left{
+  right:0 !important;
+  left:auto !important;
+  margin-right:0 !important;
+  transform-origin:top right !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort.open > .vm-ecomm-sort-menu,
+body.saas-admin-ui .vm-ecomm-sort.dropdown.open > .dropdown-menu{
+  display:block !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__head{
+  padding:4px 10px 6px !important;
+  margin:0 !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+  letter-spacing:.06em !important;
+  text-transform:uppercase !important;
+  color:#64748b !important;
+  pointer-events:none !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__divider{
+  height:1px !important;
+  margin:4px 6px 8px !important;
+  background:#e2e8f0 !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu > li{
+  margin:0 0 4px !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu > li:last-child{
+  margin-bottom:0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__link{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  padding:10px 10px !important;
+  border-radius:10px !important;
+  border:1px solid transparent !important;
+  text-decoration:none !important;
+  color:#0f172a !important;
+  background:transparent !important;
+  transition:background .12s ease,border-color .12s ease,box-shadow .12s ease !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__icon{
+  flex:0 0 36px !important;
+  width:36px !important;
+  height:36px !important;
+  border-radius:10px !important;
+  background:#f1f5f9 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__icon .material-icons{
+  font-size:20px !important;
+  color:#475569 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__text{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:2px !important;
+  line-height:1.25 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__text strong{
+  font-size:13px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__text small{
+  font-size:11px !important;
+  font-weight:500 !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__check{
+  flex:0 0 auto !important;
+  font-size:18px !important;
+  color:transparent !important;
+  transition:color .12s ease !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__link:hover{
+  background:#f8fafc !important;
+  border-color:#e2e8f0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__link:hover .vm-ecomm-sort-menu__icon{
+  background:#eff6ff !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu__link:hover .vm-ecomm-sort-menu__icon .material-icons{
+  color:#2563eb !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu > li.active .vm-ecomm-sort-menu__link{
+  background:linear-gradient(135deg,#eff6ff,#dbeafe) !important;
+  border-color:#bfdbfe !important;
+  box-shadow:0 6px 16px -12px rgba(37,99,235,.55) !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu > li.active .vm-ecomm-sort-menu__icon{
+  background:#2563eb !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu > li.active .vm-ecomm-sort-menu__icon .material-icons{
+  color:#fff !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu > li.active .vm-ecomm-sort-menu__text strong{
+  color:#1d4ed8 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-sort-menu > li.active .vm-ecomm-sort-menu__check{
+  color:#2563eb !important;
+}
+
+body.saas-admin-ui .vm-ecomm-products-head{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  padding:14px 16px 10px !important;
+  margin:0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-products-card__title{
+  margin:0 0 4px !important;
+  font-size:18px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui .vm-ecomm-products-head__hint{
+  margin:0 !important;
+  font-size:12px !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui .vm-ecomm-products-head__badge{
+  flex:0 0 auto !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+  color:#1d4ed8 !important;
+  background:#eff6ff !important;
+  border:1px solid #bfdbfe !important;
+  border-radius:999px !important;
+  padding:6px 12px !important;
+  white-space:nowrap !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card__desc{
+  min-height:30px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card__pricing{
+  margin:8px 0 10px !important;
+  padding:8px !important;
+  border-radius:8px !important;
+  background:#f8fafc !important;
+  border:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card__mrp{
+  font-size:10px !important;
+  color:#94a3b8 !important;
+  text-decoration:line-through !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card__mrp span{
+  text-decoration:none !important;
+  font-weight:700 !important;
+  margin-right:4px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card__price{
+  font-size:15px !important;
+  color:#0f172a !important;
+  margin:2px 0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card__price small{
+  font-size:10px !important;
+  color:#64748b !important;
+  font-weight:600 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card__total{
+  margin:0 !important;
+  font-size:11px !important;
+  color:#16a34a !important;
+  font-weight:700 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-empty{
+  text-align:center !important;
+  padding:48px 24px 56px !important;
+  margin:0 16px 24px !important;
+  border:1px dashed #cbd5e1 !important;
+  border-radius:14px !important;
+  background:linear-gradient(180deg,#f8fafc,#fff) !important;
+}
+
+body.saas-admin-ui .vm-ecomm-empty__icon{
+  width:72px !important;
+  height:72px !important;
+  margin:0 auto 14px !important;
+  border-radius:50% !important;
+  background:#eff6ff !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+body.saas-admin-ui .vm-ecomm-empty__icon .material-icons{
+  font-size:36px !important;
+  color:#2563eb !important;
+}
+
+body.saas-admin-ui .vm-ecomm-empty h3{
+  margin:0 0 8px !important;
+  font-size:18px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui .vm-ecomm-empty p{
+  margin:0 auto 16px !important;
+  max-width:360px !important;
+  font-size:13px !important;
+  color:#64748b !important;
+  line-height:1.5 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-empty__btn{
+  min-height:40px !important;
+  padding:0 18px !important;
+  border:0 !important;
+  border-radius:10px !important;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8) !important;
+  color:#fff !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  cursor:pointer !important;
+  box-shadow:0 8px 20px -10px rgba(37,99,235,.65) !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-decoration:none !important;
+  line-height:1.2 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-grid{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:12px !important;
+  margin:0 !important;
+  padding:0 16px 18px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-grid > .col-sm-6,
+body.saas-admin-ui .vm-ecomm-product-grid > [class*="col-"]{
+  width:100% !important;
+  max-width:100% !important;
+  padding:0 !important;
+  float:none !important;
+  margin:0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card{
+  height:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  overflow:hidden !important;
+  background:#fff !important;
+  box-shadow:0 4px 14px -10px rgba(15,23,42,.2) !important;
+  transition:transform .15s ease,box-shadow .15s ease !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card:hover{
+  transform:translateY(-2px) !important;
+  box-shadow:0 10px 24px -12px rgba(37,99,235,.28) !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card .thumbnail{
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  height:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card img.object-fit_scale-down{
+  width:100% !important;
+  height:140px !important;
+  object-fit:contain !important;
+  background:#f8fafc !important;
+  padding:8px !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card .caption{
+  flex:1 1 auto !important;
+  display:flex !important;
+  flex-direction:column !important;
+  padding:10px 10px 12px !important;
+  text-align:left !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card .caption h3{
+  margin:0 0 6px !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  line-height:1.3 !important;
+  display:-webkit-box !important;
+  -webkit-line-clamp:2 !important;
+  -webkit-box-orient:vertical !important;
+  overflow:hidden !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card .caption p{
+  margin:0 0 4px !important;
+  font-size:11px !important;
+  color:#64748b !important;
+  line-height:1.35 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-product-card .vm-ecomm-add-cart{
+  margin-top:auto !important;
+  width:100% !important;
+  min-height:36px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  border:0 !important;
+  border-radius:9px !important;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8) !important;
+  color:#fff !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  text-decoration:none !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-expired{
+  width:100% !important;
+  max-width:520px !important;
+  margin:24px auto !important;
+  padding:28px 22px !important;
+  text-align:center !important;
+  background:#fff !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:16px !important;
+  box-shadow:0 12px 32px -18px rgba(30,64,175,.2) !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-expired img{
+  width:72px !important;
+  height:auto !important;
+  margin:0 auto 12px !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-expired .bodycolormy{
+  display:block !important;
+  font-size:20px !important;
+  font-weight:800 !important;
+  margin:0 0 10px !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-page #secpurECOMM{
+  max-width:420px !important;
+  margin:20px auto !important;
+  padding:18px !important;
+  border-radius:14px !important;
+  border:1px solid #e2e8f0 !important;
+  background:#fff !important;
+}
+
+/* Ajax form sits outside section.vm-ecomm-page — hide submit globally on Index */
+body.saas-admin-ui #lstProductsSubmit,
+body.saas-admin-ui .vm-ecomm-ajax-submit{
+  display:none !important;
+  visibility:hidden !important;
+  position:absolute !important;
+  left:-9999px !important;
+  width:1px !important;
+  height:1px !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:0 !important;
+  opacity:0 !important;
+  overflow:hidden !important;
+  clip:rect(0,0,0,0) !important;
+  pointer-events:none !important;
+}
+
+body.saas-admin-ui form:has(#lstProductsSubmit){
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  width:0 !important;
+  height:0 !important;
+  overflow:hidden !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+}
+
+@media screen and (max-width:1199px){
+  body.saas-admin-ui section.vm-ecomm-page{
+    --vm-ecomm-panel-h:auto;
+    --vm-ecomm-sidebar-h:auto;
+    --vm-ecomm-main-min:auto;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page #full.vm-rmt-left-panel,
+  body.saas-admin-ui section.vm-ecomm-page .vm-rmt-report-panel.vm-ecomm-main{
+    flex:1 1 100% !important;
+    max-width:100% !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page .vm-rmt-report-panel.vm-ecomm-main .vm-rmt-report-shell,
+  body.saas-admin-ui section.vm-ecomm-page #lstProducts,
+  body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-list-root,
+  body.saas-admin-ui .vm-ecomm-main-card{
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    display:block !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-main-card .vm-ecomm-empty{
+    display:block !important;
+    flex:none !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-product-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  /* Index: toolbar — no flex-grow on search (was stretching empty gap on mobile/tablet) */
+  body.saas-admin-ui section.vm-ecomm-page:not(.vm-ecomm-cart-page) .vm-ecomm-main-card .vm-ecomm-toolbar{
+    flex:0 0 auto !important;
+    flex-direction:column !important;
+    align-items:stretch !important;
+    align-content:flex-start !important;
+    gap:8px !important;
+    padding:10px 12px !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page:not(.vm-ecomm-cart-page) .vm-ecomm-toolbar__search{
+    flex:0 0 auto !important;
+    width:100% !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page:not(.vm-ecomm-cart-page) .vm-ecomm-toolbar__actions{
+    flex:0 0 auto !important;
+    width:100% !important;
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:8px !important;
+    justify-content:stretch !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page:not(.vm-ecomm-cart-page) .vm-ecomm-toolbar__actions .vm-ecomm-cart-pill,
+  body.saas-admin-ui section.vm-ecomm-page:not(.vm-ecomm-cart-page) .vm-ecomm-toolbar__actions .vm-ecomm-btn-ghost,
+  body.saas-admin-ui section.vm-ecomm-page:not(.vm-ecomm-cart-page) .vm-ecomm-toolbar__actions .vm-ecomm-sort{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    justify-content:center !important;
+    box-sizing:border-box !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page:not(.vm-ecomm-cart-page) .vm-ecomm-toolbar__actions .vm-ecomm-sort__btn{
+    width:100% !important;
+    justify-content:center !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page:not(.vm-ecomm-cart-page) .vm-ecomm-main-card .vm-ecomm-empty{
+    min-height:200px !important;
+    padding:32px 16px 40px !important;
+    margin:0 12px 16px !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page:not(.vm-ecomm-cart-page) .vm-ecomm-products-head{
+    padding:10px 12px 8px !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page{
+    gap:10px !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page #full.vm-rmt-left-panel{
+    min-height:0 !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page .vm-ecomm-sidebar-empty{
+    padding:24px 16px !important;
+  }
+}
+
+@media screen and (max-width:767px){
+  body.saas-admin-ui section.vm-ecomm-page:not(.vm-ecomm-cart-page) .vm-ecomm-toolbar{
+    padding:8px 10px !important;
+    gap:6px !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page:not(.vm-ecomm-cart-page) .vm-ecomm-toolbar__actions{
+    gap:6px !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-product-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    padding:0 10px 14px !important;
+  }
+}
+
+@media screen and (max-width:479px){
+  body.saas-admin-ui .vm-ecomm-product-grid{
+    grid-template-columns:1fr !important;
+  }
+}
+
+/* —— Shopping cart (viewCart) —— */
+body.saas-admin-ui section.content.vm-rmt-page.vm-ecomm-page.vm-ecomm-cart-page{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  width:auto !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  overflow-x:hidden !important;
+  background:var(--vm-rmt-bg,#eef2f7) !important;
+  float:none !important;
+}
+
+@media screen and (min-width:1200px){
+  body.saas-admin-ui section.content.vm-rmt-page.vm-ecomm-page.vm-ecomm-cart-page{
+    margin-left:var(--admin-sidebar-width,252px) !important;
+    margin-top:var(--admin-header-height,58px) !important;
+    padding:16px 18px 24px !important;
+  }
+}
+
+/* Beat Index 72% + RMT 65% rules on .vm-rmt-report-panel / .vm-ecomm-main */
+body.saas-admin-ui section.vm-ecomm-page.vm-ecomm-cart-page .vm-rmt-report-panel.vm-ecomm-main.vm-ecomm-cart-panel--full,
+body.saas-admin-ui section.vm-ecomm-cart-page .vm-rmt-report-panel.vm-ecomm-cart-panel--full{
+  flex:1 1 100% !important;
+  max-width:100% !important;
+  width:100% !important;
+  min-width:0 !important;
+  height:auto !important;
+  min-height:var(--vm-ecomm-main-min,650px) !important;
+  max-height:none !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-cart-page .vm-rmt-report-shell,
+body.saas-admin-ui section.vm-ecomm-cart-page .vm-ecomm-cart-main-card{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-cart-page .vm-ecomm-cart-main-card{
+  min-height:var(--vm-ecomm-main-min,650px) !important;
+  height:auto !important;
+  overflow-x:hidden !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-cart-page .vm-ecomm-cart-toolbar{
+  min-width:0 !important;
+  max-width:100% !important;
+  overflow:visible !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-cart-page .vm-ecomm-cart-toolbar .vm-ecomm-toolbar__actions{
+  min-width:0 !important;
+  max-width:100% !important;
+  flex:1 1 auto !important;
+  justify-content:flex-end !important;
+  flex-wrap:wrap !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-cart-page .vm-ecomm-cart-shell--in-card{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+body.saas-admin-ui section.vm-ecomm-cart-page .vm-ecomm-cart-empty-in-card{
+  flex:1 1 auto !important;
+  margin:0 16px 20px !important;
+  min-height:320px !important;
+  border:1px dashed #cbd5e1 !important;
+  border-radius:14px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-toolbar{
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  padding:12px 16px !important;
+  border-bottom:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-toolbar__crumb{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  gap:6px !important;
+  margin:0 !important;
+  font-size:12px !important;
+  font-weight:600 !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-toolbar__crumb a{
+  color:#2563eb !important;
+  font-weight:800 !important;
+  text-decoration:none !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-toolbar__crumb a:hover{
+  text-decoration:underline !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-toolbar__sep{
+  color:#94a3b8 !important;
+  font-weight:700 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-toolbar__current{
+  color:#0f172a !important;
+  font-weight:800 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-pill--here{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  padding:8px 12px !important;
+  border-radius:999px !important;
+  background:#eff6ff !important;
+  border:1px solid #93c5fd !important;
+  color:#1d4ed8 !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  cursor:default !important;
+  box-shadow:0 4px 12px -8px rgba(37,99,235,.45) !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-page-head .vm-ecomm-products-card__title{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-page-head__icon{
+  font-size:22px !important;
+  color:#2563eb !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-layout{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:flex-start !important;
+  gap:14px !important;
+  padding:0 16px 16px !important;
+  flex:1 1 auto !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-main{
+  flex:1 1 calc(65% - 7px) !important;
+  min-width:0 !important;
+  max-width:calc(65% - 7px) !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-summary{
+  flex:0 1 calc(35% - 7px) !important;
+  min-width:260px !important;
+  max-width:calc(35% - 7px) !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-card,
+body.saas-admin-ui .vm-ecomm-cart-summary__card{
+  background:#fff !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:16px !important;
+  box-shadow:0 14px 40px -20px rgba(30,64,175,.22) !important;
+  overflow:hidden !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-card__head{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  padding:14px 16px !important;
+  border-bottom:1px solid #e2e8f0 !important;
+  background:linear-gradient(180deg,#f8fafc 0%,#fff 100%) !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-card__head h2{
+  margin:0 !important;
+  font-size:16px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-card__count{
+  font-size:12px !important;
+  font-weight:700 !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-items{
+  padding:12px 16px 8px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item{
+  display:flex !important;
+  gap:12px !important;
+  padding:12px 0 !important;
+  border-bottom:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item:last-child{
+  border-bottom:0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__img{
+  flex:0 0 80px !important;
+  width:80px !important;
+  height:80px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  overflow:hidden !important;
+  background:#f8fafc !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__img img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__body{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__top{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__title{
+  margin:0 0 4px !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  line-height:1.35 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__remove{
+  border:0 !important;
+  background:#fef2f2 !important;
+  color:#dc2626 !important;
+  width:36px !important;
+  height:36px !important;
+  border-radius:10px !important;
+  cursor:pointer !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 auto !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__seller,
+body.saas-admin-ui .vm-ecomm-cart-item__min{
+  margin:0 0 4px !important;
+  font-size:11px !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__price{
+  margin:0 0 6px !important;
+  font-size:14px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__price strong{
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__mrp{
+  margin-left:8px !important;
+  text-decoration:line-through !important;
+  color:#94a3b8 !important;
+  font-size:12px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__qty{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  gap:10px !important;
+  margin-top:8px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__qty-label{
+  font-size:12px !important;
+  font-weight:700 !important;
+  color:#475569 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-qty-stepper{
+  display:inline-flex !important;
+  align-items:center !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  overflow:hidden !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui .vm-ecomm-qty-stepper__btn{
+  width:36px !important;
+  height:36px !important;
+  border:0 !important;
+  background:#f8fafc !important;
+  color:#334155 !important;
+  cursor:pointer !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-qty-stepper__btn .material-icons{
+  font-size:18px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-qty-stepper__input{
+  width:52px !important;
+  min-height:36px !important;
+  border:0 !important;
+  border-left:1px solid #e2e8f0 !important;
+  border-right:1px solid #e2e8f0 !important;
+  text-align:center !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  padding:0 4px !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-item__line-total{
+  font-size:12px !important;
+  font-weight:700 !important;
+  color:#16a34a !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-actions{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  padding:14px 16px 16px !important;
+  border-top:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-actions__continue{
+  min-height:44px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-pay-btn{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  min-height:44px !important;
+  padding:0 18px !important;
+  border:0 !important;
+  border-radius:12px !important;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8) !important;
+  color:#fff !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  cursor:pointer !important;
+  box-shadow:0 10px 24px -12px rgba(37,99,235,.65) !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-pay-btn--block{
+  width:100% !important;
+  margin-top:12px !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-summary__card{
+  padding:16px !important;
+  position:sticky !important;
+  top:calc(var(--admin-header-height, 58px) + 12px) !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-summary__title{
+  margin:0 0 12px !important;
+  font-size:16px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-summary__list{
+  margin:0 !important;
+  padding:0 !important;
+  list-style:none !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-summary__list li{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  padding:8px 0 !important;
+  font-size:13px !important;
+  color:#475569 !important;
+  border-bottom:1px dashed #e2e8f0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-summary__list li:last-child{
+  border-bottom:0 !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-summary__free{
+  color:#16a34a !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-summary__total{
+  padding-top:12px !important;
+  margin-top:4px !important;
+  border-top:1px solid #e2e8f0 !important;
+  border-bottom:0 !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui .vm-ecomm-cart-summary__savings{
+  color:#16a34a !important;
+  font-size:12px !important;
+}
+
+@media screen and (max-width:1199px){
+  body.saas-admin-ui section.vm-ecomm-cart-page{
+    --vm-ecomm-main-min:auto;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-page.vm-ecomm-cart-page .vm-rmt-report-panel.vm-ecomm-main.vm-ecomm-cart-panel--full,
+  body.saas-admin-ui section.vm-ecomm-cart-page .vm-rmt-report-panel.vm-ecomm-cart-panel--full{
+    min-height:0 !important;
+    height:auto !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-cart-page .vm-ecomm-cart-main-card{
+    min-height:0 !important;
+    height:auto !important;
+    display:block !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-cart-page .vm-ecomm-cart-shell--in-card{
+    display:block !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-cart-page .vm-ecomm-cart-empty-in-card{
+    min-height:280px !important;
+    margin:0 12px 16px !important;
+  }
+}
+
+@media screen and (max-width:991px){
+  body.saas-admin-ui .vm-ecomm-cart-toolbar{
+    flex-direction:column !important;
+    align-items:stretch !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-toolbar .vm-ecomm-toolbar__actions{
+    width:100% !important;
+    justify-content:flex-start !important;
+    flex-wrap:wrap !important;
+    gap:8px !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-page-head{
+    flex-direction:column !important;
+    align-items:flex-start !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-main,
+  body.saas-admin-ui .vm-ecomm-cart-summary{
+    flex:1 1 100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-summary__card{
+    position:static !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-actions{
+    flex-direction:column !important;
+    align-items:stretch !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-actions .vm-ecomm-cart-pay-form,
+  body.saas-admin-ui .vm-ecomm-cart-pay-btn{
+    width:100% !important;
+  }
+}
+
+@media screen and (max-width:1199px){
+  body.saas-admin-ui section.content.vm-rmt-page.vm-ecomm-page.vm-ecomm-cart-page,
+  body.saas-admin-ui.saas-sidebar-collapsed section.content.vm-rmt-page.vm-ecomm-page.vm-ecomm-cart-page{
+    margin-left:0 !important;
+    margin-top:var(--admin-header-height,58px) !important;
+    padding:12px 12px 20px !important;
+    width:auto !important;
+    max-width:100% !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-cart-page .vm-rmt-report-panel.vm-ecomm-main.vm-ecomm-cart-panel--full,
+  body.saas-admin-ui section.vm-ecomm-cart-page .vm-rmt-report-panel.vm-ecomm-cart-panel--full{
+    width:100% !important;
+    max-width:100% !important;
+    flex:1 1 100% !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-toolbar{
+    flex-direction:column !important;
+    align-items:stretch !important;
+    gap:12px !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-toolbar .vm-ecomm-toolbar__actions{
+    width:100% !important;
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:8px !important;
+    justify-content:stretch !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-toolbar .vm-ecomm-btn-ghost,
+  body.saas-admin-ui .vm-ecomm-cart-toolbar .vm-ecomm-cart-pill--here{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    justify-content:center !important;
+    box-sizing:border-box !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-toolbar .vm-ecomm-btn-ghost span,
+  body.saas-admin-ui .vm-ecomm-cart-toolbar .vm-ecomm-cart-pill--here > span:not(.vm-ecomm-cart-pill__count){
+    font-size:11px !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-cart-page .vm-ecomm-cart-empty-in-card{
+    margin:0 0 16px !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-products-head.vm-ecomm-cart-page-head{
+    padding-left:12px !important;
+    padding-right:12px !important;
+  }
+}
+
+@media screen and (max-width:767px){
+  body.saas-admin-ui section.content.vm-rmt-page.vm-ecomm-page.vm-ecomm-cart-page{
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-toolbar{
+    padding:10px 12px !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-toolbar__crumb{
+    font-size:11px !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-layout{
+    padding:0 10px 12px !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-item{
+    flex-wrap:wrap !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-item__qty{
+    width:100% !important;
+  }
+
+  body.saas-admin-ui section.vm-ecomm-cart-page .vm-ecomm-cart-empty-in-card{
+    margin:0 0 14px !important;
+    padding:28px 12px 36px !important;
+    min-height:220px !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-toolbar .vm-ecomm-toolbar__actions{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:6px !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-toolbar .vm-ecomm-btn-ghost,
+  body.saas-admin-ui .vm-ecomm-cart-toolbar .vm-ecomm-cart-pill--here{
+    padding:8px 4px !important;
+    font-size:10px !important;
+  }
+
+  body.saas-admin-ui .vm-ecomm-cart-toolbar .vm-ecomm-btn-ghost .material-icons,
+  body.saas-admin-ui .vm-ecomm-cart-toolbar .vm-ecomm-cart-pill--here .material-icons{
+    font-size:18px !important;
+  }
+}

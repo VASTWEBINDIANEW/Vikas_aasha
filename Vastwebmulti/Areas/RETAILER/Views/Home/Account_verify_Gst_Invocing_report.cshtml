@@ -1,142 +1,179 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.GST_Monthly_Retailer_verify_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "Gst_Invocing_Retailer_report";
+    ViewBag.Title = "Account_verify_Gst_Invocing_report";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var reports = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.GST_Monthly_Retailer_verify_Result>();
+    var rowCount = reports.Count;
+    decimal totalVerifyGst = 0m;
+    foreach (var r in reports) { try { totalVerifyGst += Convert.ToDecimal(r.rem_gst); } catch { } }
 }
-
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=38" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
+    /* Account Verify GST Report : Gst_Invocing_Retailer_report design me toolbar + table */
+    body.saas-admin-ui .saas-retailer-gstverify-page .vm-ledger-nav { display: inline-flex !important; align-items: center; gap: 6px; min-height: 34px; padding: 0 14px; border-radius: 9px; border: 1px solid #dbe2ec; background: #fff; color: #475569; font-size: 12.5px; font-weight: 800; text-decoration: none !important; transition: all .15s ease; white-space: nowrap; }
+    body.saas-admin-ui .saas-retailer-gstverify-page .vm-ledger-nav:hover { border-color: #2563eb; color: #2563eb; box-shadow: 0 4px 12px rgba(37,99,235,.18); }
+    body.saas-admin-ui .saas-retailer-gstverify-page .vm-gstinv-month-badge { display: inline-flex !important; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: #eff6ff !important; border: 1px solid #bfdbfe !important; color: #1d4ed8 !important; font-size: 12px; font-weight: 800; white-space: nowrap; }
+    body.saas-admin-ui .saas-retailer-gstverify-page .vm-gstinv-num { font-variant-numeric: tabular-nums !important; }
+    body.saas-admin-ui .saas-retailer-gstverify-page .vm-gstinv-total-cell { font-weight: 800 !important; color: #0f172a !important; }
+    body.saas-admin-ui .saas-retailer-gstverify-page .vm-gstinv-print-btn { width: 32px !important; height: 32px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border-radius: 9px !important; border: 1px solid #bfdbfe !important; background: #eff6ff !important; color: #1d4ed8 !important; cursor: pointer !important; text-decoration: none !important; transition: all .15s ease !important; }
+    body.saas-admin-ui .saas-retailer-gstverify-page .vm-gstinv-print-btn:hover { background: #2563eb !important; border-color: #2563eb !important; color: #fff !important; box-shadow: 0 4px 10px rgba(37,99,235,.35) !important; }
+    body.saas-admin-ui .saas-retailer-gstverify-page .vm-gstinv-print-btn .fa { font-size: 15px !important; }
+    /* Desktop (>=1024px): fit-to-width, no scroll, tight columns */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
+        }
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table thead th:nth-child(1),
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table tbody td:nth-child(1) { width: 5% !important; }
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table thead th:nth-child(2),
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table tbody td:nth-child(2) { width: 20% !important; }
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table tbody td:nth-child(3) { width: 17% !important; }
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table thead th:nth-child(4),
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table tbody td:nth-child(4) { width: 18% !important; }
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table thead th:nth-child(5),
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table tbody td:nth-child(5) { width: 15% !important; }
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table thead th:nth-child(6),
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table tbody td:nth-child(6) { width: 15% !important; }
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table thead th:nth-child(7),
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table tbody td:nth-child(7) { width: 10% !important; }
     }
-
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table {
+            width: max-content !important;
+            min-width: 900px !important;
+            max-width: none !important;
+            table-layout: auto !important;
+        }
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-gstverify-page #gstVerifyReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+        }
+        body.saas-admin-ui .saas-retailer-gstverify-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
+        }
     }
 </style>
 
-<section class="content" style="margin:90px 0px 0px 0px; ">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:0px;">
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-retailer-ecomm-transaction-page saas-retailer-gstverify-page">
 
-                <div class="card">
-                    <div class="">
-                        <div class="col-md-4">
-                            <p style="font-size:22px;margin-top:4px;"> Account Verify Invoice Report</p>
-                        </div>
+    <div class="container-fluid vm-opr-page-shell">
 
-                        <div class="col-md-4">
-                            <center>
-                                <a href="@Url.Action("Gst_Invocing_Retailer_report","Home")" class="btn  waves-effect" style="margin-top: 6px; margin-left: 3px; height:32px;border:1px solid #c7c2c2;">
-                                    <i class="fa fa-long-arrow-right" style="top:-1px;font-size:16px;color:black;"></i>
-                                    <span style="top:-2px;color:black;">Go to GST Report</span>
-                                </a>
-                            </center>
-                        </div>
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-                        <div class="col-md-2">
-                            <p style="font-size:20px;margin-top:5px;font-weight:700;color:#55555a;">Month&nbsp;:-&nbsp;@ViewBag.OldMonth</p>
-                        </div>
-                        <div class="col-md-2">
-                            <center>
-                                <a href="@Url.Action("TDSReport","Home")" class="btn  waves-effect" style="margin-top: 6px; margin-left: 3px; height:32px;border:1px solid #c7c2c2;">
-                                    <i class="fa fa-long-arrow-right" style="top:-1px;font-size:16px;color:black;"></i>
-                                    <span style="top:-2px;color:black;">Go to TDS Report</span>
-                                </a>
-                            </center>
-                        </div>
-                    </div>
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
 
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>GST</li>
+                    <li>Account Verify GST Report</li>
+                </ol>
+
+                <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                    <a class="vm-ledger-nav" href="@Url.Action("Gst_Invocing_Retailer_report", "Home")" title="Go to GST Report"><i class="fas fa-file-invoice-dollar" aria-hidden="true"></i> Go to GST Report</a>
+                    <a class="vm-ledger-nav" href="@Url.Action("TDSReport", "Home")" title="Go to TDS Report"><i class="fas fa-long-arrow-right" aria-hidden="true"></i> Go to TDS Report</a>
                 </div>
 
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:-26px;">
-                <div class="card">
-                    <div class="">
-                        <ol class="breadcrumb breadcrumb-col-blue-grey" style="margin-left:5px;margin-top:9px;">
-                            <li class="active" style="color:#9E9E9E; font-size:12px;">RETAILER'S ACCOUNT VERIFY GST INVOCING REPORT&nbsp;></li>
-                        </ol>
 
+        </div>
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-check-circle" aria-hidden="true"></i>
+                        <span>Account verify invoice report</span>
                     </div>
-                    <div class="body" style="padding:7px;">
-                        <div class="table-responsive" style="position:inherit;margin-top:-50px;">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable" style="width:100%; font-size:12px;">
-                                <thead style="background-color:whitesmoke;">
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-gstinv-month-badge" title="Month">
+                            <i class="fa fa-calendar" aria-hidden="true"></i> @ViewBag.OldMonth
+                        </span>
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total Verify GST">
+                            Verify GST: <strong>&#8377; @totalVerifyGst.ToString("N2")</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="gstVerifyReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.No</th>
+                                    <th>Email ID</th>
+                                    <th>Name</th>
+                                    <th>Firm Name</th>
+                                    <th>A/C Verify Comm</th>
+                                    <th>A/C Verify GST</th>
+                                    <th>Print</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < reports.Count; i++)
+                                {
+                                    var item = reports[i];
                                     <tr>
-                                        <th>Sr.No</th>
-                                        <th>Email&nbsp;ID</th>
-                                        <th>Name</th>
-                                        <th>Frim&nbsp;Name</th>
-                                        <th>Account&nbsp;Transfer&nbsp;Verify&nbsp;Comm</th>
-                                        <th>Account&nbsp;Transfer&nbsp;Verify&nbsp;Gst</th>
-                                        <th>Print</th>
-
+                                        <td>@(i + 1)</td>
+                                        <td title="@item.Email">@item.Email</td>
+                                        <td title="@item.RetailerName">@item.RetailerName</td>
+                                        <td title="@item.Frm_Name">@item.Frm_Name</td>
+                                        <td class="vm-gstinv-num" title="@item.rem_comm">@item.rem_comm</td>
+                                        <td class="vm-gstinv-num vm-gstinv-total-cell" title="@String.Format("{0:0.0#}", item.rem_gst)">@String.Format("{0:0.0#}", item.rem_gst)</td>
+                                        <td>
+                                            <a href="@Url.Action("Account_Verify_Gst_Pdf", "Home")" class="vm-gstinv-print-btn" target="_blank" title="Print verify invoice">
+                                                <i class="fa fa-print" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @{
-                                        var i = 1;
-                                    }
-
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>@i</td>
-                                            <td><p style="font-size:12px;">@item.Email</p></td>
-                                            <td><p style="font-size:12px;">@item.RetailerName</p></td>
-                                            <td><p style="font-size:12px;">@item.Frm_Name</p></td>
-                                            <td><p style="font-size:12px;">@item.rem_comm</p></td>
-                                            <td><p style="font-size:12px;">@String.Format("{0:0.0#}", item.rem_gst)</p></td>
-                                            <td><a href="@Url.Action("Account_Verify_Gst_Pdf","Home")" style="font-size:14px;color:blue;font-weight:500;" target="_blank">Print</a></td>
-                                        </tr>
-                                        i++;
-                                    }
-
-                                </tbody>
-
-                            </table>
-                        </div>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-
-
-
-

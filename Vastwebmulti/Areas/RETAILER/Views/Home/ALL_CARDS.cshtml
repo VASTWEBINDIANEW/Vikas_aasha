@@ -3,352 +3,168 @@
     ViewBag.Title = "ALL_CARDS";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
 }
+<link href="~/MainFrontDesign/css/retailer-money-transfer-modern.css?v=45" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-all-cards-modern.css?v=7" rel="stylesheet" />
 <link href="~/AdminDesign/giftcardslider/giftcard.css" rel="stylesheet" />
 
+<section class="vm-rmt-page vm-all-cards-page content is-gift">
 
-<style>
+    <div class="vm-all-cards-shell">
+        <ul id="myDIV1" class="vm-rmt-service-tabs vm-all-cards-top-tabs" role="tablist" aria-label="Cards services">
+            <li class="allc vm-rmt-tab-item active_box current" role="tab" aria-selected="true" tabindex="0" data-cards-panel="gift">
+                <a href="javascript:void(0);">
+                    <img src="~/ashok-images/gift.svg" alt="" />
+                    <span>Gift card</span>
+                </a>
+            </li>
+            <li class="allc vm-rmt-tab-item" role="tab" aria-selected="false" tabindex="0" data-cards-panel="prepaid">
+                <a href="javascript:void(0);">
+                    <img src="~/ashok-images/prepaid-card_2040836.png" alt="" />
+                    <span>Prepaid card</span>
+                </a>
+            </li>
+        </ul>
 
-   /* new css  */
-    .row.rewset {
-        margin-right: 0;
-    }
-    .row.clearfix.giftcardmain {
-        margin: 0;
-    }
-        .row.clearfix.giftcardmain .col-lg-12.col-md-12.col-sm-12.col-xs-12 {
-            padding-left: 0;
-        }
-    .layoutt-retailer section.content {
-        margin-top: 100px !important;
-    }
-
-    
-   
-   /* new css  */
-
-
-    .allc {
-        list-style: none;
-        float: left;
-        /* background-image: linear-gradient(to left, var(--main-bg-lcolor), var(--main-bg-rcolor)); */
-        width: 103px;
-        height: 65px;
-        padding: 4px 0px;
-        border: 1px solid var(--main-bg-rcolor);
-        border-radius: 4px;
-        margin: 0px 2px;
-        background: var(--main-bg-lcolor);
-    }
-
-        .allc span {
-            color: #fff;
-            font-size: 12px;
-        }
-
-        .allc img {
-            width: 34px;
-            height: 34px;
-            margin: 1px 0px;
-        }
-
-
-    .mods {
-        position: fixed;
-        z-index: 999;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        background-color: Black;
-        filter: alpha(opacity=60);
-        opacity: 0.6;
-        -moz-opacity: 0.8;
-        display: none;
-    }
-
-    .cards_input {
-        width: 100%;
-        float: left;
-        height: 600px;
-        background: #f1f1f1;
-    }
-    .cards_table {
-        width: 100%;
-        float: left;
-        height: 600px;
-        overflow-y: scroll;
-    }
-    .PREPAIDCARD {
-        float: left;
-        width: 100%;
-        padding: 0px !important;
-    }
-    .cards_input1 {
-        width: 100%;
-        float: left;
-        border: 5px solid #fff;
-        padding: 10px;
-        margin-top: 15px;
-        text-align: center;
-    }
-
-        .cards_input1 button {
-            margin: 10px 0;
-            padding: 6px 20px;
-            background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor));
-            color: #fff;
-            border: none;
-        }
-
-        .cards_input1 input {
-            padding: 3px;
-            width: 230px;
-        }
-
-    .cards_input h2 {
-        text-align: center;
-        color: var(--main-bg-lcolor);
-    }
-
-    .allc.active_box {
-        background: #a4a0a0;
-    }
-
-        .allc.active_box img {
-            filter: inherit !important;
-        }
-
-        @@media only screen and (max-width:1169px){
-
-            .giftcardcategory.giftcardtab-thirddesign {
-                padding-left: 15px !important;
-            }
-            .card.class-back-tra-fourdesign {
-                padding-left: 15px;
-            }
-
-            .row.rewset .col-md-12 {
-                padding-left: 29px;
-            }
-            .col-md-12.PREPAIDCARD .col-md-6 {
-                padding-left: 15px !important;
-            }
-
-        }
-
-        @@media only screen and (max-width:767px){
-
-            .navbar-header .bars {
-                top: 6px !important;
-                left: -2px !important;
-            }
-
-
-        }
-
-
-        @@media only screen and (max-width:600px){
-
-            #leftulbar li {
-                width: 20%;
-            }
-
-        }
-
-        @@media only screen and (max-width:420px){
-
-            #leftulbar li {
-                width: 50% !important;
-            }
-
-
-        }
-
-
-
-
-
-</style>
-
-<section class="content Gift_Cardd Gift_Cardd-reshponshive content-fourdesign-page allpage-four-design-section" >
-
-    <!--Four-Design-Page-Header-Start-->
-
-
-
-    <div class="row rewset">
-        <div class="col-md-12 " style="">
-            <center class="page-header-third">
-                <ul id="myDIV1">
-                    <li class="allc active_box" onclick="makeActive()">
-                        <a href="#">
-                            <img src="~/ashok-images/gift.svg" style=" filter: brightness(0.4); " />
-                            <br />
-                            <span>GIFT CARD</span>
-                        </a>
-                    </li>
-                    <li class="allc" onclick="makeActive1()">
-                        <a href="#">
-
-                            <img src="~/ashok-images/prepaid-card_2040836.png" style=" filter: brightness(0.5); " />
-                            <br />
-                            <span>PREPAID CARD</span>
-                        </a>
-                    </li>
-
-                </ul>
-            </center>
-
-            @*Gift-Card-Third-Design-Start*@
-
-
-
-            @*Gift-Card-Third-Design-End*@
-
-
+        <div class="giftcardss vm-all-cards-panel vm-all-cards-panel--gift">
+            @{ ViewBag.GiftCardEmbed = true; }
+            @Html.Partial("Gift_Card")
         </div>
-    </div>
 
-    <div class="giftcardss">
-
-        @Html.Partial("Gift_Card")
-
-    </div>
-    <div class="col-md-12 PREPAIDCARD" style="display:block">
-
-        <div class="col-md-6" style="padding-left: 0;">
-            
-            <div class="page-header-third">
-                <div id="image">
-                    <img src="~/ashok-images/1_CsJ05WEGfunYMLGfsT2sXA.gif" style="width:100%; display:none; margin:0,0,0,0;" />
-
-
-                </div>
-                <div class="cards_input">
-
-                    <div style="margin:20px;">
-
-                        <h2>PREPAID CARD</h2>
-
-                        <div class="cards_input1">
-
-
-
-
-                            @using (Ajax.BeginForm("ALL_CARDS", "Home", null, new AjaxOptions
-                            {
-                                HttpMethod = "POST",
-                                OnSuccess = "SuccessMessage",
-                                OnFailure = "FailMessage",
-                                UpdateTargetId = "resultTarget",
-                                LoadingElementId = "image"
-                            }, new { id = "MyNewNameId" })) // set new Id name for  Form
-                            {
-                                <input type="number" name="quantity" placeholder="Enter Quantity of Card" /><br /><br />
-                                <input type="number" name="rupees" placeholder="Enter Amount of Per Card" /><br />
-                                <button value="submit" onclick="craft1()">Buy</button>
-                            }
-
-                        </div>
-
+        <div class="PREPAIDCARD vm-all-cards-panel vm-all-cards-panel--prepaid">
+            <div id="full" class="vm-rmt-left-panel vm-all-cards-prepaid-buy">
+                <div class="vm-all-cards-prepaid-card page-header-third">
+                    <div id="image">
+                        <img src="~/ashok-images/1_CsJ05WEGfunYMLGfsT2sXA.gif" alt="Loading" />
                     </div>
+                    <h2 class="vm-all-cards-prepaid-card__title">Prepaid card</h2>
+                    <p class="vm-all-cards-prepaid-card__hint">Enter quantity and amount per card (₹100 – ₹10,000).</p>
 
+                    @using (Ajax.BeginForm("ALL_CARDS", "Home", null, new AjaxOptions
+                    {
+                        HttpMethod = "POST",
+                        OnSuccess = "SuccessMessage",
+                        OnFailure = "FailMessage",
+                        UpdateTargetId = "resultTarget",
+                        LoadingElementId = "image"
+                    }, new { id = "MyNewNameId", @class = "vm-all-cards-prepaid-form" }))
+                    {
+                        <div class="vm-all-cards-field">
+                            <label for="vmPrepaidQty">Quantity</label>
+                            <input type="number" id="vmPrepaidQty" name="quantity" min="1" placeholder="Enter quantity of cards" autocomplete="off" />
+                        </div>
+                        <div class="vm-all-cards-field">
+                            <label for="vmPrepaidAmt">Amount per card</label>
+                            <input type="number" id="vmPrepaidAmt" name="rupees" min="100" max="10000" placeholder="Enter amount per card" autocomplete="off" />
+                        </div>
+                        <button type="submit" class="vm-all-cards-buy-btn" value="submit">Buy prepaid cards</button>
+                    }
                 </div>
                 <div id="loader" style="display:none">
-                    <img src="~/ashok-images/atm-admin.png" />
+                    <img src="~/ashok-images/atm-admin.png" alt="" />
                 </div>
             </div>
 
+            <div class="vm-rmt-report-panel loader-pagefull">
+                <div class="vm-rmt-report-shell">
+                    <div id="reportallinone" class="vm-all-cards-report-card">
+                        <div id="resultTarget">
+                            @Html.Partial("_ALL_CARDS", Model)
+                        </div>
+                    </div>
+                </div>
             </div>
-        <div class="col-md-6" id="resultTarget">
-           
-
-
-            @Html.Partial("_ALL_CARDS", Model)
-
-
-
-
-
-
         </div>
-
     </div>
-
-
-
-
 </section>
 
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
 <script>
+    function vmAllCardsSwitchPanel(panel) {
+        var $page = $('section.vm-all-cards-page');
+        var isPrepaid = panel === 'prepaid';
+        $page.toggleClass('is-prepaid', isPrepaid).toggleClass('is-gift', !isPrepaid);
 
-    function craft1() {
+        var $tabs = $page.find('#myDIV1 > li.allc');
+        $tabs.removeClass('active_box current').attr('aria-selected', 'false');
+        $tabs.filter('[data-cards-panel="' + panel + '"]').addClass('active_box current').attr('aria-selected', 'true');
 
-        $('.timer_off').show();
-
-
+        if (isPrepaid) {
+            $page.find('.giftcardss').hide();
+            $page.find('.PREPAIDCARD').show();
+        } else {
+            $page.find('.PREPAIDCARD').hide();
+            $page.find('.giftcardss').show();
+        }
     }
-</script>
-
-
-
-
-
-<script>
-    $('.PREPAIDCARD').hide();
 
     function makeActive() {
-
-        $('.giftcardss').show();
-        $('.PREPAIDCARD').hide();
-
+        vmAllCardsSwitchPanel('gift');
     }
+
     function makeActive1() {
-
-        $('.PREPAIDCARD').show();
-        $('.giftcardss').hide();
-
+        vmAllCardsSwitchPanel('prepaid');
     }
 
-</script>
-<script src="~/Scripts/jquery-1.10.2.js"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    function craft1() {
+        $('.timer_off').addClass('is-visible').show();
+    }
 
-@*<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
-<script>
-    //\\\\\\\ JS  retrun message SucccessPost or FailPost
-  
-    function FailMessage(responce) {
-        alert("Fail Post");
-    } 
-</script>
+    function SuccessMessage() {
+        $('#image').hide();
+        $('.timer_off').addClass('is-visible').show();
+    }
 
-<script>
-    // Add active class to the current button (highlight it)
-    var header = document.getElementById("myDIV1");
-    var btns = header.getElementsByClassName("allc");
-    for (var i = 0; i < btns.length; i++) {
-        btns[i].addEventListener("click", function () {
-            var current = document.getElementsByClassName("active_box");
-            current[0].className = current[0].className.replace(" active_box", "");
-            this.className += " active_box";
+    function FailMessage() {
+        $('#image').hide();
+        if (typeof swal === 'function') {
+            swal('Oops', 'Request failed. Please try again.', 'error');
+        } else {
+            alert('Request failed. Please try again.');
+        }
+    }
+
+    $(function () {
+        $('body').addClass('vm-all-cards-active');
+        vmAllCardsSwitchPanel('gift');
+
+        $('#defaultModal, #CheckbalModal').removeClass('in show').attr('aria-hidden', 'true').css('display', 'none');
+        $('.modal-backdrop').remove();
+
+        $(document).off('click.vmAllCardsTabs keydown.vmAllCardsTabs', 'section.vm-all-cards-page #myDIV1 > li.allc');
+        $(document).on('click.vmAllCardsTabs', 'section.vm-all-cards-page #myDIV1 > li.allc', function (e) {
+            e.preventDefault();
+            vmAllCardsSwitchPanel($(this).attr('data-cards-panel') || 'gift');
         });
-    }
+        $(document).on('keydown.vmAllCardsTabs', 'section.vm-all-cards-page #myDIV1 > li.allc', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                vmAllCardsSwitchPanel($(this).attr('data-cards-panel') || 'gift');
+            }
+        });
+
+        /* Keep gift purchase modals on body stack when opened */
+        $(document).off('show.bs.modal.vmAllCards hidden.bs.modal.vmAllCards', '#defaultModal, #CheckbalModal');
+        $(document).on('show.bs.modal.vmAllCards', '#defaultModal', function () {
+            if (typeof vmGiftEnsureModalOnBody === 'function') {
+                vmGiftEnsureModalOnBody('#defaultModal');
+            } else if (!$(this).parent().is('body')) {
+                $(this).appendTo('body');
+            }
+            $('#CheckbalModal').modal('hide');
+        });
+        $(document).on('show.bs.modal.vmAllCards', '#CheckbalModal', function () {
+            if (typeof vmGiftEnsureModalOnBody === 'function') {
+                vmGiftEnsureModalOnBody('#CheckbalModal');
+            } else if (!$(this).parent().is('body')) {
+                $(this).appendTo('body');
+            }
+            $('#defaultModal').modal('hide');
+        });
+        $(document).on('hidden.bs.modal.vmAllCards', '#CheckbalModal, #defaultModal', function () {
+            if ($('.modal.in:visible, .modal.show:visible').length === 0) {
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+            }
+        });
+    });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

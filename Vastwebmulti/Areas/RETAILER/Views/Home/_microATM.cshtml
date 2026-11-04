@@ -102,23 +102,24 @@
         }
 </style>
 <div class="loader loaderpancard"></div>
-<div>
-    <span id="errormposid123" style="color:red;font-weight:bold;"></span>
+<div class="vm-rmt-microatm-shell">
+<div class="vm-rmt-microatm-alert-wrap">
+    <span id="errormposid123" class="vm-rmt-microatm-alert" role="alert"></span>
 </div>
 
-<div id="firstMICRO" class="col-md-12 remitter_button" style="display:none;text-align: center;">
+<div id="firstMICRO" class="col-md-12 remitter_button vm-rmt-microatm-card" style="display:none;text-align: center;">
     <img src="~/ashok-images/forbidden.svg" style="width: 90px;display: block;margin: 0px auto;" />
     <span class="bodycolormy" style="margin-top: 20px;margin-bottom: 20px;font-size: 26px;">MICROATM Service Expired !</span>
     <p style="margin-bottom: 20px;text-align: justify;">Your service is currently down, if you want to keep the service running smoothly, you will have to pay the service fee, which you see below and you can purchase the service by clicking the button.</p>
     <button class="btn btn-default fullbodydycolorbg" onclick="PurchaseMICROATM('VM30')" style="color: #fff;">MICROATM Purchase</button>
 </div>
-<div id="ALLMICRO" class="col-md-12 remitter_button" style="display:none;text-align: center;">
+<div id="ALLMICRO" class="col-md-12 remitter_button vm-rmt-microatm-card" style="display:none;text-align: center;">
     <img src="~/ashok-images/forbidden.svg" style="width: 90px;display: block;margin: 0px auto;" />
     <span class="bodycolormy" style="margin-top: 20px;margin-bottom: 20px;font-size: 26px;">MICROATM Service Expired !</span>
     <p style="margin-bottom: 20px;text-align: justify;">Your service is currently down, if you want to keep the service running smoothly, you will have to pay the service fee, which you see below and you can purchase the service by clicking the button.</p>
     <button class="btn btn-default fullbodydycolorbg" onclick="PurchaseMICROATM('ALL')" style="color: #fff;">ALL Purchase</button>
 </div>
-<div id="BOTHMICRO" class="col-md-12 remitter_button" style="display:none;text-align: center;">
+<div id="BOTHMICRO" class="col-md-12 remitter_button vm-rmt-microatm-card" style="display:none;text-align: center;">
     <img src="~/ashok-images/forbidden.svg" style="width: 90px;display: block;margin: 0px auto;" />
     <span class="bodycolormy" style="margin-top: 20px;margin-bottom: 20px;font-size: 26px;">MICROATM Service Expired !</span>
     <p style="margin-bottom: 20px;text-align: justify;">Your service is currently down, if you want to keep the service running smoothly, you will have to pay the service fee, which you see below and you can purchase the service by clicking the button.</p>
@@ -147,11 +148,6 @@
 
 
 <div>
-    <button id="statuschk" class="btn btn-default fullbodydycolorbg" onclick="microATM_StatusCheck()" style="color: #fff;">Click To Check Status</button> <span id="alredyexist" class="container-fluid aeps" style="color: red;padding: 5px 15px;border: 1px solid;margin-top: 10px;font-weight: 500;display:none;"></span>
-
-</div>
-
-<div>
     <span id="statuschkkk" style="color:red;float:left;display: none;"></span>
 </div>
 
@@ -175,16 +171,14 @@
 
 </div>
 
-<div id="firstRegister" class="col-md-12 remitter_button" style="display:none;text-align: center;">
-    <img src="~/ashok-images/forbidden.svg" style="width: 90px;display: block;margin: 0px auto;" />
-    <span class="bodycolormy" style="margin-top: 20px;margin-bottom: 20px;font-size: 26px;">🙄 Un-Reggistered micro ATM Go to Active</span>
-    <p style="margin-bottom: 20px;text-align: justify;">Your service is currently down, if you want to keep the service running smoothly, you will have to pay the service fee, which you see below and you can purchase the service by clicking the button.</p>
-    <button class="btn btn-default fullbodydycolorbg" onclick="microATMActive()" style="color: #fff;">Click To Active</button>
-
-
-    <div>
-        <span id="errormposid2"></span>
+<div id="firstRegister" class="col-md-12 remitter_button vm-rmt-microatm-card vm-rmt-microatm-card--register" style="display:none;text-align: center;">
+    <div class="vm-rmt-microatm-card__icon-wrap" aria-hidden="true">
+        <img src="~/ashok-images/forbidden.svg" alt="" class="vm-rmt-microatm-card__icon" />
     </div>
+    <h3 class="vm-rmt-microatm-card__title bodycolormy">Micro ATM not registered</h3>
+    <p class="vm-rmt-microatm-card__text">Activate your Micro ATM device to start transactions on the mobile app. Complete registration using the button below.</p>
+    <button type="button" class="btn btn-default fullbodydycolorbg vm-rmt-microatm-card__cta" onclick="microATMActive()" style="color: #fff;">Activate Micro ATM</button>
+    <span id="errormposid2" class="vm-rmt-microatm-card__err"></span>
 </div>
 
 <div id="Updateprofiledetails" class="col-md-12 remitter_button" style="display: none; text-align: center;">
@@ -231,6 +225,12 @@
         <span id="errormposid3" style="color:red;float:left;"></span>
     </div>
 </div>
+
+<div class="vm-rmt-microatm-actions">
+    <button id="statuschk" type="button" class="btn btn-default fullbodydycolorbg vm-rmt-microatm-actions__btn" onclick="microATM_StatusCheck()">Click To Check Status</button>
+    <span id="alredyexist" class="vm-rmt-microatm-actions__note" style="display:none;"></span>
+</div>
+</div><!-- /.vm-rmt-microatm-shell -->
 <script>
     function UpdateRetailerDetails() {
 

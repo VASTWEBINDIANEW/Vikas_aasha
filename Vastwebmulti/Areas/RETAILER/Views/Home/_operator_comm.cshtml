@@ -1,39 +1,43 @@
 ﻿@*@model IEnumerable<Vastwebmulti.Areas.RETAILER.Models.operatorlist>*@
 @model Vastwebmulti.Areas.RETAILER.Models.remmulti
+@* vm-rch: Your Offers — modern table rows (avatar + status pill + offer chip) *@
 
-<table id="showoptcomm" class="table table-striped table-bordered" style="width:100%;border-top: 1px solid #aaa4a4;">
-    <tr class="operator-showoptcomm">
-        <th>Operator </th>
-        <th>Status </th>
-        <th>Offer</th>
-    </tr>
-    @foreach (var item in Model.optlist)
-    {
-        var icon = "";
-        var msg = "";
-        var color = "";
-        DateTime? dd;
-
-        if (item.blocktime == null)
+<table id="showoptcomm" class="table table-striped vm-rch-offer-table" style="width:100%;">
+    <thead>
+        <tr class="operator-showoptcomm">
+            <th>Operator</th>
+            <th class="vm-rch-offer-th-status">Status</th>
+            <th class="vm-rch-offer-th-amt">Offer</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.optlist)
         {
-            icon = "fa fa-thumbs-o-up up-beforen";
-            msg = "Live!";
-            color = "green";
+            var msg = "";
+            var statusClass = "vm-rch-offer-status--live";
+            DateTime? dd;
 
+            if (item.blocktime == null)
+            {
+                msg = "Live";
+            }
+            else
+            {
+                dd = Convert.ToDateTime(item.blocktime);
+                msg = String.Format("{0:dd-MM:HH:mm}", dd);
+                statusClass = "vm-rch-offer-status--blocked";
+            }
+            <tr class="tableimgsecond vm-rch-offer-row">
+                <td class="vm-rch-offer-op-cell">@item.operator_Name</td>
+                <td class="img-rightss vm-rch-offer-st-cell">
+                    <span class="vm-rch-offer-status @statusClass">
+                        <span class="vm-rch-offer-dot" aria-hidden="true"></span>@msg
+                    </span>
+                </td>
+                <td class="vm-rch-offer-amt-cell">
+                    <span class="vm-rch-offer-val-chip" title="Commission offer"><span class="vm-rch-offer-val-sym">₹</span>@item.comm</span>
+                </td>
+            </tr>
         }
-        if (item.blocktime != null)
-        {
-            icon = "fa fa-thumbs-o-down down-beforen";
-            dd = Convert.ToDateTime(item.blocktime);
-            msg = String.Format("{0:dd-MM:HH:mm}", dd);
-            color = "red";
-
-        }
-                <tr class="tableimgsecond">
-                    <td>@item.operator_Name
-                    </td>
-                    <td class="img-rightss"><i class="@icon" style="font-size:13px;color:@color;"></i>&nbsp;&nbsp;@msg</td>
-                    <td>@item.comm</td>
-                </tr>
-}
-    </table>
+    </tbody>
+</table>

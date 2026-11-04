@@ -3,76 +3,121 @@
 @model List<Vastwebmulti.Models.proc_BusReport_Result>
 @{
     Layout = null;
+    var rows = Model == null ? new List<Vastwebmulti.Models.proc_BusReport_Result>() : Model;
 }
-
-
-@if (Model != null && Model.Count > 0)
+@if (rows.Count > 0)
 {
-    foreach (var item in Model)
+    foreach (var item in rows)
     {
-    <tr>
-        <td style="color:;font-weight:700;">
-            <img src="~/ashok-images/correct.svg" style="height:20px;width:20px;margin-right:3px;float:left;background-color:green;" /><span style="font-size:0 !important;">@Html.DisplayFor(modelItem => item.TicketStatus)</span>@Html.DisplayFor(modelItem => item.PNR)
-        </td>
-        <td>@Html.DisplayFor(modelItem => item.PassengerName)</td>
-        <td>@Html.DisplayFor(modelItem => item.TicketNo)</td>
-        <td style="display:none;">@Html.DisplayFor(modelItem => item.PNR)</td>
-        <td style="color:green;font-weight:700;display:none;">@Html.DisplayFor(modelItem => item.TicketStatus)</td>
-        <td>@Html.DisplayFor(modelItem => item.sourceStationName)</td>
-        <td>@Html.DisplayFor(modelItem => item.destinationStationName)</td>
-        <td>@item.dateOfJourney.ToString("dddd,dd MMMM yyyy")</td>
-        <td>@Html.DisplayFor(modelItem => item.FareAmount)</td>
-        <td>@Html.DisplayFor(modelItem => item.RemPre)</td>
-        <td>@Html.DisplayFor(modelItem => item.RemPost)</td>
-        <td>@Html.DisplayFor(modelItem => item.RemInc)</td>
-        <td>@Html.DisplayFor(modelItem => item.TicketDate)</td>
-        @if (item.Status == "Success" || item.Status == "Cancelled")
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+        var dataStatus = "PENDING";
+        var statusLabel = item.Status ?? "";
+        if (statusLabel.ToUpper().Contains("FAILED"))
         {
-            <td title="View Booking Details" class="current-stataus-bus">
-                <span onclick="BookingDetails('@item.TraceId')">
-
-                    <a class="btn btn-primary">Current Status</a>
-                </span>
+            statusTone = "failed";
+            statusFa = "fa-times";
+            dataStatus = "FAILED";
+        }
+        else if (statusLabel.Contains("Success"))
+        {
+            statusTone = "success";
+            statusFa = "fa-check";
+            dataStatus = "SUCCESS";
+        }
+        else if (statusLabel.Contains("Refund"))
+        {
+            statusTone = "refund";
+            statusFa = "fa-undo";
+            dataStatus = "FAILED";
+        }
+        else if (statusLabel.Contains("Pending") || statusLabel.Contains("Proccessed"))
+        {
+            statusTone = "pending";
+            statusFa = "fa-clock-o";
+            dataStatus = "PENDING";
+        }
+        <tr class="vm-dmt-row" data-amount="@item.FareAmount" data-status="@dataStatus">
+            <td class="vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel"><i class="fa @statusFa" aria-hidden="true"></i></span>
+                <span class="vm-ticket-status-text">@statusLabel</span>
             </td>
-        }
-        else
-        {
-            <td><span>&nbsp;</span></td>
-        }
-
-        @if (item.Status == "Success")
-        {
-            <td title="Cancel Booking" class="current-stataus-bus">
-                <span onclick="CancelBooking('@item.TraceId','@item.BusId','@item.TicketNo')">
-
-                    <a class="btn btn-primary">Ticket Cancel</a>
-                </span>
+            <td>
+                <span class="vm-dmt-refno-text">@item.TicketStatus</span>
             </td>
-        }
-        else
-        {
-            <td><span>&nbsp;</span></td>
-        }
-        @if (item.Status == "Success")
-        {
-            <td class="bus-printpage"><a href="@Url.Action("Bus_Print_Pdf","Bus",new { TraceId = item.TraceId})" style="font-size:14px;color:blue;font-weight:500; text-decoration:none;" class="btn btn-primary" target="_blank"><i class="material-icons">print</i></a></td>
-        }
-    </tr>
+            <td>
+                <span class="vm-dmt-consumer-text">@item.PassengerName</span>
+            </td>
+            <td>
+                <span class="vm-dmt-refno-text">@item.sourceStationName</span>
+            </td>
+            <td>
+                <span class="vm-dmt-refno-text">@item.destinationStationName</span>
+            </td>
+            <td class="vm-ticket-time-cell">
+                <span class="vm-dmt-refno-text">@item.dateOfJourney.ToString("dddd, dd MMMM yyyy")</span>
+            </td>
+            <td>
+                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.FareAmount, 2)</span>
+            </td>
+            <td>
+                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.RemPre, 2)</span>
+            </td>
+            <td>
+                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.RemPost, 2)</span>
+            </td>
+            <td>
+                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.RemInc, 2)</span>
+            </td>
+            <td class="vm-ticket-pnr-cell">
+                <span class="vm-dmt-refno-text">@item.PNR</span>
+            </td>
+            <td class="vm-ticket-time-cell">
+                <span class="vm-dmt-refno-text">@String.Format("{0:dd-MMM-yyyy HH:mm:ss}", item.TicketDate)</span>
+            </td>
+            <td>
+                @if (item.Status == "Success" || item.Status == "Cancelled")
+                {
+                    <a class="btn btn-info btn-sm vm-dmt-info-btn" onclick="BookingDetails('@item.TraceId')" title="View Booking Details"><span class="vm-info-label">Current Status</span></a>
+                }
+            </td>
+            <td>
+                @if (item.Status == "Success")
+                {
+                    <a class="btn btn-danger btn-sm vm-dmt-cancel-btn" onclick="CancelBooking('@item.TraceId','@item.BusId','@item.TicketNo')" title="Cancel Booking">Ticket Cancel</a>
+                }
+            </td>
+            <td>
+                @if (item.Status == "Success")
+                {
+                    <a class="btn btn-primary btn-sm vm-dmt-print-btn" href="@Url.Action("Bus_Print_Pdf", "Bus", new { TraceId = item.TraceId })" target="_blank" title="Print ticket">Print</a>
+                }
+            </td>
+        </tr>
+    }
 }
-        }
-
 else
 {
-<tr>
-    @if (@ViewBag.checkdata != null)
+    if (ViewBag.checkdata != null)
     {
-        <td colspan="13"><h3 style="text-align:center;">No Data For Current Search</h3></td>
+        <tr class="vm-opr-table-empty-row">
+            <td colspan="15">
+                <div class="vm-opr-empty-state">
+                    <i class="fas fa-bus" aria-hidden="true"></i>
+                    <span>No Data For Current Search</span>
+                </div>
+            </td>
+        </tr>
     }
     else
     {
-        <td colspan="13"><h3 style="text-align:center;">Data Not Found</h3></td>
+        <tr class="vm-opr-table-empty-row">
+            <td colspan="15">
+                <div class="vm-opr-empty-state">
+                    <i class="fas fa-bus" aria-hidden="true"></i>
+                    <span>Data Not Found</span>
+                </div>
+            </td>
+        </tr>
     }
-
-</tr>
-
 }

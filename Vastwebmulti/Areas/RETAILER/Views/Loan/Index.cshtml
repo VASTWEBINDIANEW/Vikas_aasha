@@ -8,441 +8,333 @@
         "NEW", "UNDER_PROCESS", "DOCUMENT_REQUIRED", "VERIFICATION",
         "ON_HOLD", "APPROVED", "REJECTED", "DISBURSED", "CANCELLED"
     };
+
+    var results = Model.Results ?? new List<Vastwebmulti.Areas.RETAILER.Models.LoanApplicationVm>();
+    var rowCount = results.Count;
+
+    decimal totalAmount = results.Any() ? results.Sum(i => i.LoanAmount) : 0m;
+    decimal approvedAmount = results.Where(i => string.Equals(i.Status, "APPROVED", StringComparison.OrdinalIgnoreCase)).Sum(i => i.LoanAmount);
+    decimal disbursedAmount = results.Where(i => string.Equals(i.Status, "DISBURSED", StringComparison.OrdinalIgnoreCase)).Sum(i => i.LoanAmount);
+    int pendingCount = results.Count(i => !string.Equals(i.Status, "APPROVED", StringComparison.OrdinalIgnoreCase)
+        && !string.Equals(i.Status, "DISBURSED", StringComparison.OrdinalIgnoreCase)
+        && !string.Equals(i.Status, "REJECTED", StringComparison.OrdinalIgnoreCase)
+        && !string.Equals(i.Status, "CANCELLED", StringComparison.OrdinalIgnoreCase));
+
+    var frmDate = (Model.FromDate ?? "").Trim();
+    var toDate = (Model.ToDate ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); Model.FromDate = frmDate; }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); Model.ToDate = toDate; }
+    var dateMode = "get";
 }
 
-<style>
-    .loan-upload-link {
-        color: #b45309 !important;
-        font-weight: 700;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-loan-report-modern.css?v=12" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
-        .loan-upload-link:before {
-            content: "\f0ee"; /* fa-upload */
-            font-family: FontAwesome;
-            margin-right: 4px;
-        }
-    .loan-report-page {
-        --loan-primary: var(--main-bg-lcolor, #2867c9);
-        --loan-ink: #1e293b;
-        --loan-muted: #64748b;
-        --loan-line: #e2e8f0;
-        --loan-soft: #f8fafc;
-        padding: 26px 20px 42px;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-dmt-report-page saas-security-report-page saas-loan-report-page saas-retailer-loan-report-page">
 
-        .loan-report-page *, .loan-report-page *:before, .loan-report-page *:after {
-            box-sizing: border-box;
-        }
-
-    .loan-hero {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 24px;
-        margin-bottom: 22px;
-        flex-wrap: wrap;
-    }
-
-    .loan-kicker {
-        color: var(--loan-primary);
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: .11em;
-        text-transform: uppercase;
-    }
-
-    .loan-hero h3 {
-        color: var(--loan-ink);
-        font-size: 25px;
-        font-weight: 700;
-        margin: 5px 0 0;
-    }
-
-    .loan-breadcrumb {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 7px;
-        color: var(--loan-muted);
-        font-size: 13px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-        .loan-breadcrumb a {
-            color: var(--loan-muted);
-            text-decoration: none;
-        }
-
-            .loan-breadcrumb a:hover {
-                color: var(--loan-primary);
-            }
-
-        .loan-breadcrumb .current {
-            color: var(--loan-ink);
-            font-weight: 600;
-        }
-
-    .loan-new-btn {
-        align-items: center;
-        background: var(--loan-primary);
-        border-radius: 8px;
-        color: #fff;
-        display: inline-flex;
-        font-size: 13px;
-        font-weight: 700;
-        gap: 8px;
-        padding: 10px 18px;
-        text-decoration: none;
-        transition: opacity .15s ease;
-    }
-
-        .loan-new-btn:hover {
-            color: #fff;
-            opacity: .9;
-        }
-
-    .loan-shell {
-        max-width: 1280px;
-        margin: 0 auto;
-    }
-
-    .loan-alert {
-        background: #ecfdf5;
-        border: 1px solid #a7f3d0;
-        border-radius: 8px;
-        color: #047857;
-        font-size: 13px;
-        font-weight: 600;
-        margin-bottom: 18px;
-        padding: 12px 16px;
-    }
-
-    .loan-filter-card {
-        background: #fff;
-        border: 1px solid var(--loan-line);
-        border-radius: 12px;
-        box-shadow: 0 8px 28px rgba(15, 23, 42, .06);
-        margin-bottom: 20px;
-        padding: 20px 22px;
-    }
-
-    .loan-filter-grid {
-        align-items: end;
-        display: grid;
-        gap: 14px 16px;
-        grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
-    }
-
-    .loan-filter-field label {
-        color: #334155;
-        display: block;
-        font-size: 12px;
-        font-weight: 700;
-        margin: 0 0 6px;
-    }
-
-    .loan-filter-field .form-control {
-        border: 1px solid #cbd5e1;
-        border-radius: 7px;
-        font-size: 13px;
-        height: 38px;
-        padding: 7px 10px;
-        width: 100%;
-    }
-
-        .loan-filter-field .form-control:focus {
-            border-color: var(--loan-primary);
-            box-shadow: 0 0 0 3px rgba(40, 103, 201, .12);
-            outline: 0;
-        }
-
-    .loan-filter-actions {
-        display: flex;
-        gap: 8px;
-    }
-
-        .loan-filter-actions .btn {
-            border-radius: 7px;
-            font-size: 13px;
-            font-weight: 700;
-            height: 38px;
-            padding: 0 16px;
-            white-space: nowrap;
-        }
-
-        .loan-filter-actions .btn-primary {
-            background: var(--loan-primary);
-            border-color: var(--loan-primary);
-        }
-
-        .loan-filter-actions .btn-default {
-            background: #fff;
-            border-color: #cbd5e1;
-            color: #475569;
-        }
-
-    .loan-table-card {
-        background: #fff;
-        border: 1px solid var(--loan-line);
-        border-radius: 12px;
-        box-shadow: 0 8px 28px rgba(15, 23, 42, .06);
-        overflow: hidden;
-    }
-
-    .loan-table-wrap {
-        overflow-x: auto;
-    }
-
-    table.loan-table {
-        border-collapse: collapse;
-        min-width: 900px;
-        width: 100%;
-    }
-
-        table.loan-table thead th {
-            background: var(--loan-soft);
-            border-bottom: 1px solid var(--loan-line);
-            color: #475569;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: .04em;
-            padding: 13px 16px;
-            text-align: left;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        table.loan-table tbody td {
-            border-bottom: 1px solid var(--loan-line);
-            color: var(--loan-ink);
-            font-size: 13px;
-            padding: 13px 16px;
-            vertical-align: middle;
-            white-space: nowrap;
-        }
-
-        table.loan-table tbody tr:last-child td {
-            border-bottom: 0;
-        }
-
-        table.loan-table tbody tr:hover {
-            background: #fafcff;
-        }
-
-    .loan-app-no {
-        color: var(--loan-primary);
-        font-weight: 700;
-    }
-
-    .loan-status-badge {
-        border-radius: 20px;
-        display: inline-block;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: .02em;
-        padding: 4px 12px;
-        text-transform: uppercase;
-    }
-
-    .status-new {
-        background: #e0edff;
-        color: #1d4ed8;
-    }
-
-    .status-under_process {
-        background: #fef3c7;
-        color: #b45309;
-    }
-
-    .status-document_required {
-        background: #fee2e2;
-        color: #b91c1c;
-    }
-
-    .status-verification {
-        background: #ede9fe;
-        color: #6d28d9;
-    }
-
-    .status-on_hold {
-        background: #f1f5f9;
-        color: #475569;
-    }
-
-    .status-approved {
-        background: #dcfce7;
-        color: #15803d;
-    }
-
-    .status-rejected {
-        background: #fee2e2;
-        color: #b91c1c;
-    }
-
-    .status-disbursed {
-        background: #d1fae5;
-        color: #047857;
-    }
-
-    .status-cancelled {
-        background: #f1f5f9;
-        color: #64748b;
-    }
-
-    .loan-view-link {
-        color: var(--loan-primary);
-        font-size: 12px;
-        font-weight: 700;
-        text-decoration: none;
-    }
-
-        .loan-view-link:hover {
-            text-decoration: underline;
-        }
-
-    .loan-empty {
-        color: var(--loan-muted);
-        font-size: 13px;
-        padding: 50px 20px;
-        text-align: center;
-    }
-
-        .loan-empty i {
-            color: #cbd5e1;
-            display: block;
-            font-size: 34px;
-            margin-bottom: 10px;
-        }
-
-    @@media (max-width: 900px) {
-        .loan-filter-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        .loan-filter-actions {
-            grid-column: 1 / -1;
-        }
-    }
-
-    @@media (max-width: 600px) {
-        .loan-filter-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
-
-<section class="content loan-report-page">
-    <div class="loan-shell">
-        <div class="loan-hero">
-            <div>
-                <div class="loan-kicker">Loan centre</div>
-                <h3>My Loan Applications</h3>
-                <ul class="loan-breadcrumb" aria-label="Breadcrumb">
-                    <li><a href="@Url.Action("Dashboard", "Home")">Home</a></li>
-                    <li><i class="fa fa-angle-right" aria-hidden="true"></i></li>
-                    <li class="current">Loan Applications</li>
-                </ul>
-            </div>
-            <a href="@Url.Action("Create", "Loan")" class="loan-new-btn">
-                <i class="fa fa-plus" aria-hidden="true"></i> Request New Loan
-            </a>
-        </div>
+    <div class="container-fluid vm-opr-page-shell">
 
         @if (TempData["Success"] != null)
         {
-            <div class="loan-alert"><i class="fa fa-check-circle" aria-hidden="true"></i> @TempData["Success"]</div>
+            <div class="vm-retailer-loan-alert" role="status">
+                <i class="fas fa-check-circle" aria-hidden="true"></i> @TempData["Success"]
+            </div>
         }
 
-        <div class="loan-filter-card">
-            @using (Html.BeginForm("Index", "Loan", new { area = "RETAILER" }, FormMethod.Get))
+        @{
+            var loanFormAttrs = new Dictionary<string, object>
             {
-            <div class="loan-filter-grid">
-                <div class="loan-filter-field">
-                    <label>Status</label>
-                    @Html.DropDownListFor(m => m.Status, new SelectList(statuses), "All Status", new { @class = "form-control" })
-                </div>
-                <div class="loan-filter-field">
-                    <label>Loan Type</label>
-                    @Html.DropDownListFor(m => m.LoanTypeId, new SelectList(Model.LoanTypes, "Id", "Name"), "All Loan Types", new { @class = "form-control" })
-                </div>
-                <div class="loan-filter-field">
-                    <label>From Date</label>
-                    @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control", type = "date" })
-                </div>
-                <div class="loan-filter-field">
-                    <label>To Date</label>
-                    @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control", type = "date" })
-                </div>
-                <div class="loan-filter-actions">
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
-                    <a href="@Url.Action("Index", "Loan")" class="btn btn-default">Reset</a>
-                </div>
-            </div>
-            }
-        </div>
+                { "id", "loanReportForm" },
+                { "class", "vm-rpt-filters-panel__form vm-retailer-loan-filters-form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("Index", "Loan", new { area = "RETAILER" }, FormMethod.Get, loanFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-        <div class="loan-table-card">
-            @if (Model.Results != null && Model.Results.Any())
-            {
-                <div class="loan-table-wrap">
-                    <table class="loan-table">
-                        <thead>
-                            <tr>
-                                <th>Application No</th>
-                                <th>Loan Type</th>
-                                <th>Applicant</th>
-                                <th>Mobile</th>
-                                <th>Amount</th>
-                                <th>Tenure</th>
-                                <th>Status</th>
-                                <th>Applied On</th>
-                                <th></th>
-                             
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.Results)
-                            {
-                                <tr>
-                                    <td class="loan-app-no">@item.ApplicationNo</td>
-                                    <td>@item.LoanTypeName</td>
-                                    <td>@item.FullName</td>
-                                    <td>@item.Mobile</td>
-                                    <td>₹@item.LoanAmount.ToString("N2")</td>
-                                    <td>@(item.TenureMonths.HasValue ? item.TenureMonths + " mo" : "-")</td>
-                                    <td>
-                                        <span class="loan-status-badge status-@item.Status.ToLower()">@item.Status.Replace("_", " ")</span>
-                                    </td>
-                                    <td>@item.CreatedDate.ToString("dd MMM yyyy")</td>
-                                   
-                                    <td>
-                                        @Html.ActionLink("View Details", "Details", "Loan", new { area = "RETAILER", id = item.Id }, new { @class = "loan-view-link" })
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-retailer-loan-toolbar-one-line">
 
-                                        @if (item.Status == "DOCUMENT_REQUIRED")
-                                        {
-                                    <text> &nbsp;|&nbsp; </text>
-                                                            @Html.ActionLink("Upload Documents", "UploadDocuments", "Loan", new { area = "RETAILER", id = item.Id }, new { @class = "loan-view-link loan-upload-link" })}
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Loan</li>
+                        <li>My Applications</li>
+                    </ol>
+
+                    <div class="saas-acc-filter-bar vm-retailer-loan-filter-row">
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--status">
+                            @Html.DropDownListFor(m => m.Status, new SelectList(statuses), "All Status", new { @id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--type">
+                            @Html.DropDownListFor(m => m.LoanTypeId, new SelectList(Model.LoanTypes ?? new List<Vastwebmulti.Areas.RETAILER.Models.LoanTypeVm>(), "Id", "Name"), "All Loan Types", new { @id = "ddlLoanType", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--date">
+                            <input type="date" id="txt_frm_date" name="FromDate" value="@frmDate" class="vm-loan-native-date" required="required" autocomplete="off" title="From date" aria-label="From date" />
+                        </div>
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--date">
+                            <input type="date" id="txt_to_date" name="ToDate" value="@toDate" class="vm-loan-native-date" required="required" autocomplete="off" title="To date" aria-label="To date" />
+                        </div>
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--action">
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--action">
+                            <a href="@Url.Action("Index", "Loan", new { area = "RETAILER" })" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn vm-retailer-loan-reset-btn" title="Reset" style="background:#64748b;border-color:#64748b;text-decoration:none;">
+                                <i class="fas fa-undo" aria-hidden="true"></i><span>Reset</span>
+                            </a>
+                        </div>
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--new">
+                            <a href="@Url.Action("Create", "Loan", new { area = "RETAILER" })" class="vm-retailer-loan-new-btn" title="Request new loan">
+                                <i class="fas fa-plus" aria-hidden="true"></i><span>New Loan</span>
+                            </a>
+                        </div>
+
+                    </div>
+
                 </div>
-            }
-            else
-            {
-                <div class="loan-empty">
-                    <i class="fa fa-inbox" aria-hidden="true"></i>
-                    No loan applications found for the selected filters.
-                    <div style="margin-top:14px;">
-                        <a href="@Url.Action("Create", "Loan")" class="loan-new-btn">
-                            <i class="fa fa-plus" aria-hidden="true"></i> Request New Loan
-                        </a>
+
+                <div class="vm-retailer-loan-totals-panel vm-opr-totals-panel vm-dmt-totals-panel" id="loanReportTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-retailer-loan-totals-panel__head">
+                        <div class="vm-retailer-loan-totals-panel__title">
+                            <span class="vm-retailer-loan-totals-panel__title-icon" aria-hidden="true">
+                                <i class="fas fa-chart-line"></i>
+                            </span>
+                            <div class="vm-retailer-loan-totals-panel__title-text">
+                                <strong>Loan summary</strong>
+                                <span>Overview for your current filters</span>
+                            </div>
+                        </div>
+                        <button type="button" class="vm-retailer-loan-totals-panel__close" onclick="hideLoanReportTotals()" title="Hide summary" aria-label="Hide summary">
+                            <i class="fas fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-retailer-loan-totals-grid">
+                        <article class="vm-retailer-loan-stat is-total">
+                            <span class="vm-retailer-loan-stat__icon" aria-hidden="true"><i class="fas fa-wallet"></i></span>
+                            <div class="vm-retailer-loan-stat__body">
+                                <span class="vm-retailer-loan-stat__label">Total amount</span>
+                                <strong class="vm-retailer-loan-stat__value">&#8377; @totalAmount.ToString("N2")</strong>
+                            </div>
+                        </article>
+                        <article class="vm-retailer-loan-stat is-approved">
+                            <span class="vm-retailer-loan-stat__icon" aria-hidden="true"><i class="fas fa-check-circle"></i></span>
+                            <div class="vm-retailer-loan-stat__body">
+                                <span class="vm-retailer-loan-stat__label">Approved</span>
+                                <strong class="vm-retailer-loan-stat__value">&#8377; @approvedAmount.ToString("N2")</strong>
+                            </div>
+                        </article>
+                        <article class="vm-retailer-loan-stat is-disbursed">
+                            <span class="vm-retailer-loan-stat__icon" aria-hidden="true"><i class="fas fa-hand-holding-usd"></i></span>
+                            <div class="vm-retailer-loan-stat__body">
+                                <span class="vm-retailer-loan-stat__label">Disbursed</span>
+                                <strong class="vm-retailer-loan-stat__value">&#8377; @disbursedAmount.ToString("N2")</strong>
+                            </div>
+                        </article>
+                        <article class="vm-retailer-loan-stat is-pending">
+                            <span class="vm-retailer-loan-stat__icon" aria-hidden="true"><i class="fas fa-hourglass-half"></i></span>
+                            <div class="vm-retailer-loan-stat__body">
+                                <span class="vm-retailer-loan-stat__label">Pending apps</span>
+                                <strong class="vm-retailer-loan-stat__value">@pendingCount</strong>
+                            </div>
+                        </article>
                     </div>
                 </div>
-            }
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card vm-security-report-main-card vm-loan-report-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-money-check-alt" aria-hidden="true"></i>
+                        <span>My loan applications</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total amount for current filter">
+                            Total: <strong>&#8377; @totalAmount.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-retailer-loan-summary-btn vm-loan-totals-btn" onclick="findLoanTotal()" title="Show loan summary" aria-expanded="false" aria-controls="loanReportTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                                <span>Summary</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="loanReportTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Application&nbsp;No</th>
+                                    <th>Loan&nbsp;Type</th>
+                                    <th>Applicant</th>
+                                    <th>Mobile</th>
+                                    <th>Amount&nbsp;&#8377;</th>
+                                    <th>Tenure</th>
+                                    <th>Applied&nbsp;On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (results.Any())
+                                {
+                                    foreach (var item in results)
+                                    {
+                                        var statusUpper = (item.Status ?? "").ToUpper();
+                                        var statusCls = "is-hold";
+                                        if (statusUpper == "APPROVED") { statusCls = "is-approved"; }
+                                        else if (statusUpper == "DISBURSED") { statusCls = "is-disbursed"; }
+                                        else if (statusUpper == "REJECTED" || statusUpper == "CANCELLED") { statusCls = "is-rejected"; }
+                                        else if (statusUpper == "NEW") { statusCls = "is-new"; }
+                                        else if (statusUpper == "UNDER_PROCESS" || statusUpper == "VERIFICATION" || statusUpper == "DOCUMENT_REQUIRED" || statusUpper == "ON_HOLD") { statusCls = "is-process"; }
+                                        var statusText = (item.Status ?? "-").Replace("_", " ");
+                                        <tr>
+                                            <td>
+                                                <span class="vm-loan-status @statusCls"><span class="vm-loan-dot"></span>@statusText</span>
+                                            </td>
+                                            <td>@item.ApplicationNo</td>
+                                            <td>@item.LoanTypeName</td>
+                                            <td>@item.FullName</td>
+                                            <td>@item.Mobile</td>
+                                            <td>@item.LoanAmount.ToString("N2")</td>
+                                            <td>@(item.TenureMonths.HasValue ? item.TenureMonths + " mo" : "-")</td>
+                                            <td>@item.CreatedDate.ToString("dd MMM yyyy")</td>
+                                            <td>
+                                                <a href="@Url.Action("Details", "Loan", new { area = "RETAILER", id = item.Id })" title="View Details" style="color:#ffc107;background:transparent;border:none;">
+                                                    <img src="~/ashok-images/rightaeps.svg" alt="" style="border:1px solid var(--border-color,#e2e8f0);padding:3px;font-size:10px;height:20px !important;" />
+                                                </a>
+                                                @if (string.Equals(item.Status, "DOCUMENT_REQUIRED", StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    <a href="@Url.Action("UploadDocuments", "Loan", new { area = "RETAILER", id = item.Id })" class="vm-retailer-loan-upload-link" title="Upload documents">
+                                                        <i class="fas fa-upload" aria-hidden="true"></i> Upload
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="9" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-money-check-alt" aria-hidden="true"></i>
+                                            <span>No loan applications found for the selected filters.</span>
+                                            <div style="margin-top:12px;">
+                                                <a href="@Url.Action("Create", "Loan", new { area = "RETAILER" })" class="vm-retailer-loan-new-btn">
+                                                    <i class="fas fa-plus" aria-hidden="true"></i><span>Request New Loan</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </section>
+
+@section PostVmScripts {
+<script>
+    (function ($) {
+        if (!$) { return; }
+
+        window.hideLoanReportTotals = function () {
+            var $panel = $('#loanReportTotalsPanel');
+            var $btn = $('.vm-loan-totals-btn');
+            $panel.hide().attr('aria-hidden', 'true').removeClass('is-open');
+            $btn.attr('aria-expanded', 'false').removeClass('is-active');
+        };
+
+        window.findLoanTotal = function () {
+            var $panel = $('#loanReportTotalsPanel');
+            var $btn = $('.vm-loan-totals-btn');
+            if ($panel.is(':visible')) {
+                hideLoanReportTotals();
+                return;
+            }
+            $panel.show().attr('aria-hidden', 'false').addClass('is-open');
+            $btn.attr('aria-expanded', 'true').addClass('is-active');
+        };
+
+        function initLoanNativeDates() {
+            var frm = document.querySelector('#loanReportForm #txt_frm_date');
+            var to = document.querySelector('#loanReportForm #txt_to_date');
+            if (!frm || !to) { return false; }
+
+            if ($.fn.datepicker) {
+                $([frm, to]).each(function () {
+                    var $el = $(this);
+                    if ($el.data('datepicker')) {
+                        try { $el.datepicker('destroy'); } catch (e) { }
+                    }
+                });
+            }
+
+            var openPicker = function () {
+                try { if (this.showPicker) { this.showPicker(); } } catch (e) { }
+            };
+            frm.addEventListener('click', openPicker);
+            to.addEventListener('click', openPicker);
+
+            var syncRange = function () {
+                if (frm.value && to.value && to.value < frm.value) {
+                    to.value = frm.value;
+                }
+            };
+            frm.addEventListener('change', syncRange);
+            to.addEventListener('change', syncRange);
+            return true;
+        }
+
+        function initLoanReportSelect2() {
+            var $status = $('#ddl_status');
+            var $type = $('#ddlLoanType');
+            [$status, $type].forEach(function ($el) {
+                if (!$el.length || !$.fn.select2) { return; }
+                if ($el.data('select2')) { $el.select2('destroy'); }
+                if (typeof window.applyAdminSelect2 === 'function') {
+                    window.applyAdminSelect2($el, { width: '100%', minimumResultsForSearch: 6 }, true);
+                } else {
+                    $el.select2({ width: '100%', minimumResultsForSearch: 6 });
+                }
+            });
+        }
+
+        function loanReportBoot() {
+            initLoanReportSelect2();
+            initLoanNativeDates();
+            $('#loanReportForm .select2-container').css('width', '100%');
+        }
+
+        $(function () { loanReportBoot(); });
+    })(window.jQuery);
+</script>
+}

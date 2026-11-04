@@ -1,101 +1,111 @@
 ﻿@model Vastwebmulti.Areas.RETAILER.Models.Servicefee
-
-<style>
-    .wallet-bank-input input[readonly="readonly"] {
-        background: transparent;
-        border: 0px;
-    }
-</style>
-<style>
-    .slab-first-tab {
-        background: var(--second-bg-color);
-        margin-left: 8px !important;
-    }
-
-    .modal .modal-content .modal-body21 {
-        color: #777;
-        background: #ddd;
-        height: 56px;
-        border-bottom: 2px solid;
-        padding: 15px 122px;
-    }
-</style>
-
-
-<table class="table special-iii table-bordered  table-hover paid-service-table example-second" id="Results1">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Vlaue</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-
-
-    @foreach (var item in Model.AddForm_information)
+@{
+    var editRows = new List<Vastwebmulti.Models.AddForm_information>();
+    Vastwebmulti.Models.AddForm_information editOne = null;
+    try
     {
-        <tbody>
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-
-                @if (item.id == Model.AddForm_informationbyid.id)
-                {
-
-                    @Html.Hidden("idno", Model.AddForm_informationbyid.id)
-
-                    <td>@Html.TextBox("Value", Model.AddForm_informationbyid.Value, new { @class = "form-control" })</td>
-
-                    <td>
-                        <button type="button" id="retailerformsavebtn" onclick="retailerformsavebtn(@item.id)" value="Save" class="btn waves-effect btnssl1 switch-edit-button" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Save</button>
-
-
-                    </td>
-                }
-                else
-                {
-            
-                    <td>@Html.DisplayFor(modelItem => item.Value)</td>
-                    <td class="last-td">
-                        <button type="button" onclick="retailerform('@item.id')" id="retailerformedit1" class="btn waves-effect shownextrow switch-edit-button" value="Edit">
-                            <p>Edit</p>
-                        </button>
-                    </td>
-                }
-
-            </tr>
-
-
-
-        </tbody>
+        if (Model != null && Model.AddForm_information != null) { editRows = Model.AddForm_information.ToList(); }
+        editOne = Model != null ? Model.AddForm_informationbyid : null;
     }
-</table>
-
-
-
+    catch { }
+}
+@if (editRows.Count > 0)
+{
+    <table class="table vm-rform-info" style="width:100%;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="Outerother_links">
+            @foreach (var item in editRows)
+            {
+                <tr class="hidelink" data-serviceid="@Convert.ToString(item.serviceid)">
+                    <td><span class="vm-rform-val" title="@item.Name">@Html.DisplayFor(modelItem => item.Name)</span></td>
+                    @if (editOne != null && item.id == editOne.id)
+                    {
+                        <td>
+                            @Html.Hidden("idno", editOne.id)
+                            @Html.TextBox("Value", editOne.Value, new { @class = "form-control vm-rform-editinput", autocomplete = "off", maxlength = "17" })
+                        </td>
+                        <td>
+                            <button type="button" id="retailerformsavebtn" onclick="retailerformsavebtn(@item.id)" value="Save" class="vm-rform-savebtn">
+                                <i class="fas fa-check" aria-hidden="true"></i><span>Save</span>
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @if (string.IsNullOrWhiteSpace(Convert.ToString(item.Value)))
+                            {
+                                <span class="vm-rform-val vm-rform-val--empty">—</span>
+                            }
+                            else
+                            {
+                                <span class="vm-rform-val" title="@item.Value">@Html.DisplayFor(modelItem => item.Value)</span>
+                            }
+                        </td>
+                        <td class="last-td">
+                            <button type="button" onclick="retailerform('@item.id')" id="retailerformedit1" class="vm-rform-edit" value="Edit">
+                                <i class="fas fa-pen" aria-hidden="true"></i><span>Edit</span>
+                            </button>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="vm-rform-info-empty">No entries found.</div>
+}
+<style>
+    /* Edit row : premium (AJAX se aane par bhi main page wali classes + ye extra) */
+    .vm-rform-editinput.form-control {
+        height: 38px !important; border-radius: 9px !important; border: 1px solid #dbe2ec !important;
+        background: #fff !important; color: #0f172a !important; font-size: 13px !important; font-weight: 600 !important;
+        padding: 0 10px !important; outline: none !important; box-shadow: none !important; width: 100% !important;
+    }
+    .vm-rform-editinput.form-control:focus { border-color: #2563eb !important; box-shadow: 0 0 0 3px rgba(37,99,235,.15) !important; }
+    .vm-rform-savebtn {
+        display: inline-flex !important; align-items: center !important; gap: 6px !important;
+        min-height: 34px !important; padding: 0 18px !important; border: none !important; border-radius: 9px !important;
+        background: linear-gradient(135deg,#059669,#10b981) !important; color: #fff !important;
+        font-size: 12.5px !important; font-weight: 800 !important; cursor: pointer !important;
+        box-shadow: 0 5px 12px rgba(16,185,129,.4) !important; transition: all .15s ease !important; white-space: nowrap !important;
+    }
+    .vm-rform-savebtn:hover { box-shadow: 0 7px 16px rgba(16,185,129,.5) !important; transform: translateY(-1px) !important; }
+    .vm-rform-savebtn:disabled { opacity: .6 !important; cursor: wait !important; transform: none !important; }
+</style>
 <script>
     function retailerformsavebtn(idno) {
-         $.ajax({
-             url: '@Url.Action("RetailerEdit_Data", "Home")',
-             type:'POST',
-             data: { idno: idno, Value: $('#Value').val() },
-
-             success: function (data) {
-
-                 setTimeout(function () { $('#retailerformedit').html(data); }, 500);
-
+        var $scope = jQuery('#retailerformedit');
+        var val = $scope.find('#Value').val();
+        if (jQuery.trim(val || '') === '') {
+            $scope.find('#Value').focus();
+            return;
+        }
+        var $btn = $scope.find('#retailerformsavebtn');
+        $btn.prop('disabled', true);
+        jQuery.ajax({
+            url: '@Url.Action("RetailerEdit_Data", "Home")',
+            type: 'POST',
+            data: { idno: idno, Value: val },
+            success: function (data) {
+                setTimeout(function () {
+                    $scope.html(data);
+                    try { rformListCache = data; } catch (e) { }
+                    if (typeof applyRformFilter === 'function') { applyRformFilter(); }
+                }, 400);
+            },
+            error: function () {
+                alert('Server se jawab nahi mila, dobara try karo.');
+                $btn.prop('disabled', false);
             }
         });
-
-
     }
-
-     $('.btnssl1').on('click', function () {
-                    var $this = $(this);
-                    $this.button('loading');
-                    setTimeout(function () {
-                        $this.button('reset');
-                    }, 500);
-                });
 </script>
-
-

@@ -1,462 +1,562 @@
-﻿
+﻿@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "wallethistory";
+    ViewBag.Title = "Wallet History";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
-}
 
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+}
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-
-    /* new css  */
-
-
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
-    }
-
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .date-sateclassee {
-        padding-left: 0px !important;
-        padding-right: 4px;
-    }
-    /* new css  */
-
-    section.content {
-        margin: 87px 0px 0 164px;
-    }
-    span {color: #fff !important;}
-    .second-design .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .inputpdfbu-retailer-second button {
-        border-color:#555 !important;
-    }
-    .for-search input {
-        box-shadow: none !important;outline: none !important;border-radius: 0;border: 1px solid #aaa4a4;
-    }
-    .form-control:focus {
-        border-color: #ccc;
-    }
-    .datepicker table tr td span {
-        color: #555 !important;
-    }
-
-        .datepicker table tr td span.active {
-            color: #fff !important;
+    /* Desktop (>=1024px): fit-to-width, no scroll, tight columns */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
         }
-    .trypurchasecewq-newadd select {
-        padding-left: 1px;
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(1),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(1) { width: 9% !important; }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(2),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(2) { width: 8% !important; }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(3) { width: 9% !important; }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(4),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(4) { width: 6% !important; }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(5),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(5) { width: 7% !important; }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(6),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(6) { width: 7% !important; }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(7),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(7) { width: 7% !important; }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(8),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(8) { width: 8% !important; }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(9),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(9) { width: 8% !important; }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(10),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(10) { width: 8% !important; }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(11),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(11) { width: 9% !important; }
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:nth-child(12),
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td:nth-child(12) { width: 14% !important; }
     }
-
-    @@media only screen and (max-width:1366px){
-
-        .wallethistory-responshive {
-            padding-top: 0px;
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table {
+            width: max-content !important;
+            min-width: 1250px !important;
+            max-width: none !important;
+            table-layout: auto !important;
         }
-
-
-    }
-
-    @@media screen and (max-width:991px) {
-
-        .padding-both-none-four {
-            float: left;
-            width: 100%;
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody tr {
+            display: table-row !important;
         }
-        .bread-same-all-page.wallethistory-newadd ul li:last-child {
-            width: 100%;
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
         }
-        .xsl-pdfbutton {
-            width: auto;
+        body.saas-admin-ui .saas-retailer-wallethistory-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
         }
-        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .col-md-2.apiclass-satenew {
-            float: left;
-        }
-
-    }
-    @@media screen and (max-width:990px) {
-        .bread-same-all-page.wallethistory-newadd.wallethistory-responshive ul li:last-child {
-            
-            width: 100%;
-        }
-        .bread-same-all-page.wallethistory-newadd.wallethistory-responshive .xsl-pdfbutton {
-            display: block;
-        }
-        
-    }
-
-    @@media screen and (max-width:766px){
-        .fund-tr-history .modal-dialog {
+        /* Mobile + tablet: filter dropdown full width */
+        body.saas-admin-ui .saas-retailer-wallethistory-page .vm-opr-filter-row > .vm-opr-field,
+        body.saas-admin-ui .saas-retailer-wallethistory-page .vm-rpt-filters-panel__bar > .vm-opr-field {
+            flex: 1 1 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
             width: 100% !important;
         }
-    }
-    @@media screen and (max-width:600px) {
-        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq {
+        body.saas-admin-ui .saas-retailer-wallethistory-page .vm-opr-filter-row > .vm-opr-field .vm-opr-select,
+        body.saas-admin-ui .saas-retailer-wallethistory-page .vm-opr-filter-row > .vm-opr-field .select2,
+        body.saas-admin-ui .saas-retailer-wallethistory-page .vm-opr-filter-row > .vm-opr-field .select2-container {
             width: 100% !important;
-            padding: 0 !important;
-            padding-bottom: 4px !important;
-        }
-        .wallethistory-responshive .date-sateclassee.trypurchasecewq .custom-date-icon {
-            display: block;
-        }
-
-
-    }
-    /*@@media screen and (max-width:520px) {
-        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq {
-            width: 100% !important;
-            padding: 0 !important;
-            padding-bottom: 4px !important;
-        }
-
-        
-    }*/
-
-    @@media screen and (max-width:480px) {
-        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq.trypurchasecewq-newadd {
-    width: 100% !important;
-}
-    }
-
-    @@media screen and (max-width:420px) {
-        #leftsidebar.sidebar.retailer-header-left, .second-design #leftsidebar.retailer-header-left.header-left-newresponshive.newresponshive-secondde {
-            margin-top: -88px !important;
+            max-width: 100% !important;
         }
     }
-
+    /* Inline client-search box in panel head */
+    body.saas-admin-ui .saas-retailer-wallethistory-page .vm-opr-panel-search {
+        height: 34px !important;
+        min-height: 34px !important;
+        border: 1px solid #d7dce3 !important;
+        border-radius: 8px !important;
+        padding: 0 12px !important;
+        font-size: 13px !important;
+        width: 200px !important;
+        max-width: 200px !important;
+        background: #fff !important;
+    }
+    /* Wallet table: latest card-grid look (shared partial untouched) */
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        border: none !important;
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        box-shadow: 0 2px 12px rgba(15, 35, 80, 0.08) !important;
+        background: #fff !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th {
+        background: #eef1f6 !important;
+        color: #334155 !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.5px !important;
+        text-transform: uppercase !important;
+        padding: 12px 10px !important;
+        border: none !important;
+        border-bottom: 2px solid #d7dde6 !important;
+        border-right: 1px solid #dfe4ec !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        word-break: break-word !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table thead th:last-child {
+        border-right: none !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody tr.tr {
+        background: #fff !important;
+        cursor: pointer !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody tr.tr:nth-child(even) {
+        background: #f6f9ff !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody tr.tr:hover td {
+        background: #e8f0fe !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td {
+        padding: 10px !important;
+        font-size: 13px !important;
+        color: #1e293b !important;
+        border: none !important;
+        border-bottom: 1px solid #e8edf4 !important;
+        vertical-align: middle !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        word-break: break-word !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td p {
+        margin: 0 !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody tr.tr:last-child td {
+        border-bottom: none !important;
+    }
+    /* Pay-from pills */
+    body.saas-admin-ui .saas-retailer-wallethistory-page .vm-role-pill {
+        display: inline-block !important;
+        padding: 3px 12px !important;
+        border-radius: 999px !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        white-space: nowrap !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page td.vm-role-admin .vm-role-pill {
+        background: #dbeafe !important;
+        color: #1d4ed8 !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page td.vm-role-retailer .vm-role-pill {
+        background: #dcfce7 !important;
+        color: #15803d !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page td.vm-role-other .vm-role-pill {
+        background: #f1f5f9 !important;
+        color: #475569 !important;
+    }
+    /* Charge-back rows keep a soft red tint */
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody tr.vm-wallet-chargeback,
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody tr.vm-wallet-chargeback:nth-child(even) {
+        background: #fef2f2 !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody tr.vm-wallet-chargeback td {
+        border-bottom-color: #fecaca !important;
+    }
+    /* Detail icon -> latest gradient round button */
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td img[data-toggle="modal"] {
+        width: 30px !important;
+        height: 30px !important;
+        padding: 7px !important;
+        border: none !important;
+        border-radius: 50% !important;
+        background: linear-gradient(135deg, #1a56db 0%, #3b82f6 100%) !important;
+        box-shadow: 0 3px 8px rgba(26, 86, 219, 0.4) !important;
+        float: none !important;
+        vertical-align: middle !important;
+        margin-left: 6px !important;
+        cursor: pointer !important;
+        filter: brightness(0) invert(1) !important;
+        transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td img[data-toggle="modal"]:hover {
+        transform: scale(1.15) !important;
+        box-shadow: 0 5px 14px rgba(26, 86, 219, 0.55) !important;
+    }
+    /* Action cell: date full on line-1, icon on line-2, never overlapping */
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td.vm-txn-action-cell {
+        white-space: normal !important;
+        overflow: visible !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td.vm-txn-action-cell .vm-txn-action-wrap {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        white-space: nowrap !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td.vm-txn-action-cell .vm-txn-time {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        background: #eff6ff !important;
+        border: 1px solid #dbeafe !important;
+        border-radius: 8px !important;
+        padding: 4px 8px !important;
+        white-space: nowrap !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td.vm-txn-action-cell .vm-txn-time .vm-txn-date {
+        display: inline !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
+        font-size: 12.5px !important;
+        line-height: 1.3 !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td.vm-txn-action-cell .vm-txn-time .vm-txn-clock {
+        display: inline !important;
+        color: #1a56db !important;
+        font-weight: 600 !important;
+        font-size: 11.5px !important;
+        line-height: 1.3 !important;
+    }
+    body.saas-admin-ui .saas-retailer-wallethistory-page #tblshowMasterD table.vm-opr-data-table tbody td.vm-txn-action-cell img[data-toggle="modal"] {
+        display: inline-block !important;
+        margin: 0 !important;
+        flex: 0 0 auto !important;
+    }
+    /* Fund popup 2-column: CSS grid (float system removed) */
+    /* Fund-info modal: ULTRA PREMIUM 2026 (isolated, wins over legacy) */
+    #m-d-fund-orderRecive .modal-dialog { float: none !important; margin: 40px auto !important; width: calc(100% - 28px) !important; max-width: 780px !important; }
+    #m-d-fund-orderRecive .modal-content { border: none !important; border-radius: 22px !important; overflow: hidden !important; box-shadow: 0 30px 80px rgba(15,23,42,.35) !important; background: #fff !important; animation: vm-fund-pop .3s cubic-bezier(.21,1.02,.73,1) !important; display: flex !important; flex-direction: column !important; max-height: 92vh !important; }
+    @@keyframes vm-fund-pop { 0% { opacity: 0; transform: translateY(24px) scale(.97); } 100% { opacity: 1; transform: none; } }
+    #m-d-fund-orderRecive .ecomm-pop-head { background: linear-gradient(135deg,#1e40ff 0%,#4f46e5 50%,#7c3aed 100%) !important; padding: 16px 18px !important; display: flex !important; align-items: center !important; gap: 12px !important; border: none !important; position: relative !important; overflow: hidden !important; flex: 0 0 auto !important; }
+    #m-d-fund-orderRecive .ecomm-pop-head::before { content: '' !important; position: absolute !important; right: -50px !important; top: -70px !important; width: 180px !important; height: 180px !important; border-radius: 50% !important; background: radial-gradient(circle,rgba(255,255,255,.22) 0%,rgba(255,255,255,0) 70%) !important; pointer-events: none !important; }
+    #m-d-fund-orderRecive .vm-fund-head-ico { width: 46px !important; height: 46px !important; min-width: 46px !important; border-radius: 14px !important; background: rgba(255,255,255,.18) !important; border: 1px solid rgba(255,255,255,.35) !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; font-size: 19px !important; color: #fff !important; position: relative !important; z-index: 2 !important; }
+    #m-d-fund-orderRecive .vm-fund-head-txt { flex: 1 1 auto !important; min-width: 0 !important; position: relative !important; z-index: 2 !important; }
+    #m-d-fund-orderRecive .ecomm-pop-head h5 { color: #fff !important; font-size: 16px !important; font-weight: 800 !important; margin: 0 !important; padding: 0 !important; border: none !important; background: none !important; line-height: 1.3 !important; }
+    #m-d-fund-orderRecive .vm-fund-head-sub { display: block !important; font-size: 11.5px !important; font-weight: 500 !important; color: rgba(255,255,255,.85) !important; margin-top: 2px !important; }
+    #m-d-fund-orderRecive .ecomm-pop-head .vm-fund-close { background: rgba(255,255,255,.16) !important; border: 1px solid rgba(255,255,255,.28) !important; border-radius: 50% !important; width: 32px !important; height: 32px !important; min-width: 32px !important; padding: 0 !important; line-height: 1 !important; cursor: pointer !important; flex: 0 0 auto !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; opacity: 1 !important; position: relative !important; z-index: 2 !important; margin: 0 !important; }
+    #m-d-fund-orderRecive .ecomm-pop-head .vm-fund-close:hover { background: #fff !important; }
+    #m-d-fund-orderRecive .ecomm-pop-head .vm-fund-close:hover i { color: #4f46e5 !important; }
+    #m-d-fund-orderRecive .ecomm-pop-head .vm-fund-close i { color: #fff !important; font-size: 13px !important; }
+    #m-d-fund-orderRecive .ecomm-pop-body { padding: 16px 16px 18px !important; background: #f3f5fa !important; flex: 1 1 auto !important; overflow-y: auto !important; overflow-x: hidden !important; max-height: calc(92vh - 90px) !important; scrollbar-width: thin !important; scrollbar-color: #4f46e5 #eef1f6 !important; }
+    #m-d-fund-orderRecive .ecomm-pop-body::-webkit-scrollbar { width: 7px !important; }
+    #m-d-fund-orderRecive .ecomm-pop-body::-webkit-scrollbar-track { background: #eef1f6 !important; border-radius: 999px !important; }
+    #m-d-fund-orderRecive .ecomm-pop-body::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#4f46e5,#7c3aed) !important; border-radius: 999px !important; }
+    #m-d-fund-orderRecive .vm-fund-hero { display: flex !important; align-items: center !important; gap: 12px !important; background: linear-gradient(135deg,#1e40ff 0%,#6d28d9 70%) !important; border-radius: 16px !important; padding: 14px 16px !important; margin-bottom: 12px !important; color: #fff !important; position: relative !important; overflow: hidden !important; }
+    #m-d-fund-orderRecive .vm-fund-hero::after { content: '' !important; position: absolute !important; right: -40px !important; top: -50px !important; width: 140px !important; height: 140px !important; border-radius: 50% !important; background: rgba(255,255,255,.14) !important; }
+    #m-d-fund-orderRecive .vm-fund-hero-ico { width: 44px !important; height: 44px !important; min-width: 44px !important; border-radius: 13px !important; background: rgba(255,255,255,.2) !important; border: 1px solid rgba(255,255,255,.3) !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; font-size: 18px !important; position: relative !important; z-index: 1 !important; }
+    #m-d-fund-orderRecive .vm-fund-hero-txt { position: relative !important; z-index: 1 !important; min-width: 0 !important; }
+    #m-d-fund-orderRecive .vm-fund-hero-amt { display: block !important; font-size: 21px !important; font-weight: 800 !important; line-height: 1.2 !important; }
+    #m-d-fund-orderRecive .vm-fund-hero-lbl { display: block !important; font-size: 11px !important; font-weight: 600 !important; color: rgba(255,255,255,.8) !important; }
+    #m-d-fund-orderRecive .vm-fund-hero-mode { margin-left: auto !important; position: relative !important; z-index: 1 !important; font-size: 11px !important; font-weight: 800 !important; text-transform: uppercase !important; letter-spacing: .5px !important; background: rgba(255,255,255,.2) !important; border: 1px solid rgba(255,255,255,.35) !important; border-radius: 999px !important; padding: 6px 13px !important; white-space: nowrap !important; }
+    #m-d-fund-orderRecive .vm-fund-modal-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; width: 100% !important; overflow: visible !important; }
+    #m-d-fund-orderRecive .vm-fund-modal-grid .vm-fund-modal-full { grid-column: 1 / -1 !important; clear: none !important; float: none !important; width: auto !important; margin: 0 !important; }
+    #m-d-fund-orderRecive .vm-fund-modal-grid .form-group { position: relative !important; float: none !important; clear: none !important; width: auto !important; margin: 0 !important; background: #fff !important; border: 1px solid #e5e9f2 !important; border-radius: 14px !important; padding: 10px 12px 10px 46px !important; box-shadow: 0 2px 8px rgba(15,23,42,.05) !important; min-width: 0 !important; }
+    #m-d-fund-orderRecive .vm-fund-modal-grid .form-group:focus-within { border-color: #4f46e5 !important; box-shadow: 0 0 0 3px rgba(79,70,229,.13) !important; }
+    #m-d-fund-orderRecive .vm-fund-ico { position: absolute !important; left: 10px !important; top: 50% !important; transform: translateY(-50%) !important; width: 28px !important; height: 28px !important; border-radius: 9px !important; background: #eef2ff !important; color: #4f46e5 !important; font-size: 12px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; margin: 0 !important; }
+    #m-d-fund-orderRecive .vm-fund-modal-grid .form-group label { display: block !important; font-size: 10px !important; font-weight: 800 !important; letter-spacing: .5px !important; text-transform: uppercase !important; color: #64748b !important; margin: 0 0 3px 0 !important; padding: 0 !important; border: none !important; background: none !important; line-height: 1.3 !important; }
+    #m-d-fund-orderRecive .vm-fund-modal-grid .form-group .form-control { border: none !important; box-shadow: none !important; background: transparent !important; padding: 0 !important; margin: 0 !important; height: 24px !important; min-height: 24px !important; font-size: 13.5px !important; font-weight: 800 !important; color: #0f172a !important; width: 100% !important; }
+    #m-d-fund-orderRecive .vm-fund-amt .form-control { color: #1d4ed8 !important; font-size: 15px !important; }
+    #m-d-fund-orderRecive .vm-fund-note { grid-column: 1 / -1 !important; display: flex !important; gap: 9px !important; align-items: flex-start !important; font-size: 11.5px !important; line-height: 1.55 !important; color: #64748b !important; font-weight: 600 !important; background: #f8fafc !important; border: 1px dashed #cbd5e1 !important; border-radius: 12px !important; padding: 10px 12px !important; margin: 0 !important; }
+    #m-d-fund-orderRecive .vm-fund-note i { color: #4f46e5 !important; font-size: 14px !important; margin-top: 1px !important; }
+    @@media (max-width: 640px) {
+        #m-d-fund-orderRecive .modal-dialog { margin: 14px auto !important; }
+        #m-d-fund-orderRecive .vm-fund-modal-grid { grid-template-columns: 1fr !important; }
+        #m-d-fund-orderRecive .vm-fund-hero-amt { font-size: 18px !important; }
+    }
 </style>
 
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section">
-    <div class="container-fluid">
-        <!--Four-Design-Page-Header-Start-->
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-retailer-ecomm-transaction-page saas-retailer-wallethistory-page">
 
-        <div class="page-title-box-fourde">
-            <h3>Wallet History</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Wallet History</a></li>
-            </ul>
-        </div>
+    <div class="container-fluid vm-opr-page-shell">
 
-        <!--Four-Design-Page-Header-End-->
-        <div class="page-header-third">
-            <div class="bread-same-all-page wallethistory-newadd wallethistory-responshive wallethistory-newadd-four">
+        @using (Ajax.BeginForm("MDTODealer", "Home",
+            new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "tblshowMasterD",
+                OnSuccess = "retailerWalletAjaxDone"
+            },
+            new
+            {
+                id = "retailerWalletForm",
+                @class = "vm-rpt-filters-panel__form",
+                data_report_date_form = "",
+                data_report_from = "#retailer_wallet_frm_date",
+                data_report_to = "#retailer_wallet_to_date",
+                data_date_mode = dateMode,
+                data_frm_date = frmDate,
+                data_to_date = toDate
+            }))
+        {
+            <input type="hidden" id="tabtype" name="tabtype" value="FundTranferAllReport" />
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-                <ul style="margin:0;">
-                    <li class="smli four-design-noneclass">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                        </a>
-                    </li>
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
 
-                    <li class="fullbodydycolorbg tmw-total-color-one four-design-noneclass">
-                        Wallet Received History
-                    </li>
-                    <li style="margin:0;">
-                        @using (Ajax.BeginForm("MDTODealer", "Home",
-                                                        new AjaxOptions
-                                                        {
-                                                            InsertionMode = InsertionMode.Replace,
-                                                            UpdateTargetId = "tblshowMasterD"
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Reports</li>
+                        <li>Wallet History</li>
+                    </ol>
 
-                                                            // LoadingElementId = "progress"
-                                                        }))
-                        {
-                            <div class="row fund-t-dalear fund-t-dalear-erfrdfgdf">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
 
-                                <div class="col-md-5 date-sateclassee trypurchasecewq trypurchasecewq-newadd" style="padding-left: 0px;">
+                        <div class="vm-opr-field vm-dmt-field">
+                            <select id="ddtrnsfrom" name="ddtrnsfrom" class="vm-opr-select vm-dmt-select form-control">
+                                <option value="">Select Filter</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Dealer">Dealer</option>
+                            </select>
+                        </div>
 
-                                    <select id="ddtrnsfrom" name="ddtrnsfrom" class="form-control">
-                                        <option value="">Select Filter</option>
-                                        <option value="Admin">Admin</option>
-                                        <option value="Dealer">Dealer</option>
-
-                                    </select>
-
-                                </div>
-
-                                <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
-                                    <div class="custom-date-icon" style="height: 32px;border-top:0px;border-bottom:0px;">
-                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                    </div>
-                                    <input type="datetime" id="txt_frm_date" name="txt_frm_date" />
-                                </div>
-                                <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
-                                    <div class="custom-date-icon" style="height: 31px;border-top:0px;border-bottom:0px;margin-top:1px;">
-                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                    </div>
-                                    <input type="datetime" id="txt_to_date" name="txt_to_date" style=" margin-top: 1px !important;" />
-                                </div>
-                                <div class="col-md-2 apiclass-satenew" style="padding:0px;">
-                                    <input type="hidden" id="tabtype" name="tabtype" value="FundTranferAllReport" />
-                                    <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height:30px;margin-top:2px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                        <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
-                                    </button>
-                                </div>
-                                <div class="xsl-pdfbutton inputpdfbu-retailer-second" style="text-align: right;">
-                                    <button style="width: auto; padding: 0 8px; float: none; margin-right: 0%;"><img src="~/ashok-images/pdf.png" />&nbsp;PDF</button>
-
-                                    <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #7b7777;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 20px;border-color:#bbbbbb;" />
-                                    @*<button><img src="~/ashok-images/xls.png" />XSL</button>*@
-                                </div>
-
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                <input type="text" id="retailer_wallet_frm_date" name="txt_frm_date" value="@frmDate" class="form-control saas-acc-dp-input" autocomplete="off" placeholder="From" title="From date" />
                             </div>
-                        }
-                    </li>
-                </ul>
-            </div>
-
-        </div>
-    </div>
-    
-
-    <div class=" col-md-12" style="width:100%;float:left;">
-        <div class="row clearfix" style="margin:0;">
-            <div class="page-header-third">
-                <div class="col-md-12 searchtable-second-ret" style="margin-bottom: 5px;width:100%;float:right;padding:0;">
-
-                    <div class="for-search retailer-forsearch-second forsearch-third-retailer four-design-noneclass" style="width:auto;float:right;">
-                        <input id="myInput" name="myInput" type="text" placeholder="Search..." onkeyup="myFunction()" style="padding:5px 5px;" />
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                <input type="text" id="retailer_wallet_to_date" name="txt_to_date" value="@toDate" class="form-control saas-acc-dp-input" autocomplete="off" placeholder="To" title="To date" />
+                            </div>
+                            <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
 
                     </div>
-                </div>
-                <div class=" col-md-12 padding-both-none-four" style="padding:0;">
-                    <div class="wallet-history" style="padding:0;">
-                        <div class="table-responsive">
-                            <div id="tblshowMasterD" class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
-                                @Html.Action("MDTODealer", new { tabtype = "FundTranferAllReport" })
-                            </div>
 
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-wallet" aria-hidden="true"></i>
+                        <span>Wallet received history</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="retailerWalletCount">0</strong>
+                        </span>
+                        <input id="myInput" name="myInput" type="text" placeholder="Search..." onkeyup="myFunction()" class="vm-opr-panel-search" />
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" id="btnExportRetailerWallet" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFRetailerWallet" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <div id="tblshowMasterD" class="tblshowMasterclassadd" style="width:100%;">
+                            @Html.Action("MDTODealer", new { tabtype = "FundTranferAllReport" })
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
+
     <!-------------orderrecive-->
 
-    <div class="modal fund-tr-history  in purchase-model" id="m-d-fund-orderRecive" tabindex="-1" role="dialog" style="display: none; margin-top: 77px;">
-        <div class="modal-dialog" role="document" style="margin:0px;float:right;">
+    <div class="modal vm-wallet-fund-modal" id="m-d-fund-orderRecive" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
 
-            <div class="modal-content width100 float-left">
-                <div class="modal-header width100 float-left ecomm-pop-head">
+            <div class="modal-content vm-fund-content">
+                <div class="modal-header vm-fund-head ecomm-pop-head">
 
-                    <h5 id="mdhis">Recive Fund Info.</h5>
+                    <span class="vm-fund-head-ico"><i class="fas fa-wallet" aria-hidden="true"></i></span>
+                    <div class="vm-fund-head-txt">
+                        <h5 id="mdhis">Receive Fund Info.</h5>
+                        <span class="vm-fund-head-sub">Wallet credit ka pura hisaab</span>
+                    </div>
 
-
-                    <button type="button" class="btn waves-effect " data-dismiss="modal" style="float:right;border:0px;color:var(--main-bg-lcolor);padding:0px; height:auto;">
+                    <button type="button" class="vm-fund-close" data-dismiss="modal" aria-label="Close">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </button>
 
 
                 </div><!--.modal-header-->
-                <div class="modal-body width100 float-left ecomm-pop-body">
-                    <div class="float-left width100">
+                <div class="modal-body ecomm-pop-body">
+                    <div class="vm-fund-hero">
+                        <span class="vm-fund-hero-ico"><i class="fas fa-rupee-sign" aria-hidden="true"></i></span>
+                        <span class="vm-fund-hero-txt">
+                            <span class="vm-fund-hero-amt" id="vmFundHeroAmt">Rs. 0.00</span>
+                            <span class="vm-fund-hero-lbl">Total Amount Received</span>
+                        </span>
+                        <span class="vm-fund-hero-mode" id="vmFundHeroMode">UPI</span>
+                    </div>
+                    <div>
 
 
                         <div id="ALLdatashow">
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                    <div class="form-group">
-                                        <label id="mdfrmname">Fund Recive From</label>
-
-                                        <input class="form-control" readonly="readonly" required="required" id="txtfromrecive" type="text">
-
-                                    </div>
+                            <div class="vm-fund-modal-grid">
+                                <div class="form-group vm-fund-modal-full">
+                                    <span class="vm-fund-ico"><i class="fa fa-building" aria-hidden="true"></i></span>
+                                    <label id="mdfrmname">Fund Recive From</label>
+                                    <input class="form-control" readonly="readonly" required="required" id="txtfromrecive" type="text">
                                 </div>
-
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Payment Mode</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtpaymentmodes">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-credit-card" aria-hidden="true"></i></span>
+                                    <label>Payment Mode</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtpaymentmodes">
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label>Total Amount</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" id="txttotalamounht" type="text">
-                                    </div>
+                                <div class="form-group vm-fund-amt">
+                                    <span class="vm-fund-ico"><i class="fas fa-rupee-sign" aria-hidden="true"></i></span>
+                                    <label>Total Amount</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" id="txttotalamounht" type="text">
                                 </div>
-                            </div><!--.row-->
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Current CR</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtcurrentcr">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-arrow-up" aria-hidden="true"></i></span>
+                                    <label>Current CR</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtcurrentcr">
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label id="lblcollreasonrecive">OLD CR</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtoldcr">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-history" aria-hidden="true"></i></span>
+                                    <label id="lblcollreasonrecive">OLD CR</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtoldcr">
                                 </div>
-                            </div><!--.row-->
-                            @*<div class="row">
-                                    <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                            <div class="form-group">
-                                                <label>Credit Adjust</label>
-                                                <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtcradjustshow">
-                                            </div>
-                                        </div>
-                                    <div class="col-md-12 col-sm-12 col-xs-12 col-2">
-                                        <div class="form-group">
-                                            <label>Comment</label>
-                                            <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase;border-color:var(--main-bg-lcolor);" type="text" id="txtdetailsshow">
-                                        </div>
-                                    </div>
-                                </div>*@<!--.row-->
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPreremain">Net Transfer</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtamountnettransfer">
-                                    </div>
+                                <div class="form-group vm-fund-amt">
+                                    <span class="vm-fund-ico"><i class="fa fa-exchange-alt" aria-hidden="true"></i></span>
+                                    <label id="mdPreremain">Net Transfer</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtamountnettransfer">
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label id="mdPostremain">Recived Date</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txttransferdaterecive">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                    <label id="mdPostremain">Recived Date</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txttransferdaterecive">
                                 </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPrecredit">Retailer Pre Balance</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretpreamountbalance">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-wallet" aria-hidden="true"></i></span>
+                                    <label id="mdPrecredit">Retailer Pre Balance</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretpreamountbalance">
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label id="mdPostcredit">Retailer Post Balance</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretPOSTamountbalance">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-wallet" aria-hidden="true"></i></span>
+                                    <label id="mdPostcredit">Retailer Post Balance</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretPOSTamountbalance">
                                 </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 ">
-                                    <div class="form-group">
-                                        <label>Head  Type</label>
-
-                                        <input class="form-control" readonly="readonly" required="required" type="text" id="txtdeadtype">
-
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-tag" aria-hidden="true"></i></span>
+                                    <label>Head Type</label>
+                                    <input class="form-control" readonly="readonly" required="required" type="text" id="txtdeadtype">
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 ">
-                                    <div class="form-group">
-                                        <label id="lblcollectionbyret">Collection By</label>
-
-                                        <input class="form-control" readonly="readonly" required="required" type="text" id="txtcollectionretailer">
-
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-hashtag" aria-hidden="true"></i></span>
+                                    <label id="lblcollectionbyret">Collection By</label>
+                                    <input class="form-control" readonly="readonly" required="required" type="text" id="txtcollectionretailer">
                                 </div>
-                                <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                    <div class="form-group">
-                                        <label>Comment</label>
-
-                                        <input class="form-control" readonly="readonly" required="required" type="text" value="" id="txtretailercomment" style="height:50px;">
-
-                                    </div>
+                                <div class="form-group vm-fund-modal-full">
+                                    <span class="vm-fund-ico"><i class="fa fa-comment" aria-hidden="true"></i></span>
+                                    <label>Comment</label>
+                                    <input class="form-control" readonly="readonly" required="required" type="text" value="" id="txtretailercomment" style="height:50px;">
                                 </div>
-                            </div><!--.row-->
-                            @*<div class="row">
-
-                                    <div class="col-md-12 col-sm-12 col-xs-12 col-2">
-                                        <div class="form-group">
-                                            <label>Comment</label>
-                                            <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase;border-color:var(--main-bg-lcolor);" type="text" id="txtdetailsrecive">
-                                        </div>
-                                    </div>
-                                </div>*@
-                            <!--.row-->
+                                <p class="vm-fund-note"><i class="fa fa-info-circle" aria-hidden="true"></i><span>Ye entry admin se aayi hai. Amount me doubt ho to UTR / Comment ke saath support par raise karein.</span></p>
+                            </div>
                         </div>
                         <div id="retailerdatashowonly">
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPreremain">Transfer From</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtrettransferfrom">
-                                    </div>
+                            <div class="vm-fund-modal-grid">
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                    <label id="mdPreremain">Transfer From</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtrettransferfrom">
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label id="mdPostremain">Payment Mode</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretpaymentmode">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-credit-card" aria-hidden="true"></i></span>
+                                    <label id="mdPostremain">Payment Mode</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretpaymentmode">
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPreremain">Transfer amount</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretamounttransfer">
-                                    </div>
+                                <div class="form-group vm-fund-amt">
+                                    <span class="vm-fund-ico"><i class="fas fa-rupee-sign" aria-hidden="true"></i></span>
+                                    <label id="mdPreremain">Transfer amount</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretamounttransfer">
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPreremain">Transfer Date</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretTransferdate">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                    <label id="mdPreremain">Transfer Date</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretTransferdate">
                                 </div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-
-                                        <label id="mdPreremain">Retailer Pre Balance</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretfrombalancepre">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-wallet" aria-hidden="true"></i></span>
+                                    <label id="mdPreremain">Retailer Pre Balance</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretfrombalancepre">
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label id="mdPostremain">Retailer Post Balance</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretfrompostbalance">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-wallet" aria-hidden="true"></i></span>
+                                    <label id="mdPostremain">Retailer Post Balance</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretfrompostbalance">
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPreremain">Your Pre Balance</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtrettoPrebalance">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-wallet" aria-hidden="true"></i></span>
+                                    <label id="mdPreremain">Your Pre Balance</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtrettoPrebalance">
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-
-                                        <label id="mdPostremain">Your Post Balance</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtrettopostbalance">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-wallet" aria-hidden="true"></i></span>
+                                    <label id="mdPostremain">Your Post Balance</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtrettopostbalance">
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPreremain">Head Type</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretheadtype">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fa fa-tag" aria-hidden="true"></i></span>
+                                    <label id="mdPreremain">Head Type</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretheadtype">
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPreremain">Charges</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretChargess">
-                                    </div>
+                                <div class="form-group">
+                                    <span class="vm-fund-ico"><i class="fas fa-rupee-sign" aria-hidden="true"></i></span>
+                                    <label id="mdPreremain">Charges</label>
+                                    <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtretChargess">
                                 </div>
                             </div>
 
@@ -479,45 +579,166 @@
 
 </section>
 
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<!--Add State dropdown list-->
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+@section PostVmScripts {
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-
 <script>
-    $('#btnExport').click(function () {
+    function retailerWalletRefreshCount() {
+        var n = jQuery('#tblshowMasterD #tblbody tr.tr').length;
+        jQuery('#retailerWalletCount').text(n);
+    }
 
-        var tabID = $('.fullbodydycolorbg1 li.current.active').attr("data-tabname")
-      
+    function retailerWalletAjaxDone() {
+        retailerWalletDecorate();
+        retailerWalletRefreshCount();
+        myFunction();
+    }
 
-        var usernm = $('#ddtrnsfrom').val();
-        alert(usernm)
-        var url = '@Url.Action("ExportExcellFundtransfer", "Home")?tabtype=FundTranferAllReport&txt_frm_date=' + $('#txt_frm_date').val() + '&txt_to_date=' + $('#txt_to_date').val() +'&ddtrnsfrom='+ usernm;
-        location.href = url;
+    // Latest-look touches on the shared-partial table (no partial change)
+    function retailerWalletDecorate() {
+        var $tbl = jQuery('#tblshowMasterD table');
+        $tbl.addClass('vm-opr-data-table');
+        jQuery('#tblshowMasterD #tblbody tr.tr').each(function () {
+            var $tr = jQuery(this);
+            // Charge-back rows keep their soft red tint
+            var st = ($tr.attr('style') || '').replace(/\s/g, '').toLowerCase();
+            if (st.indexOf('ff0000') !== -1) {
+                $tr.addClass('vm-wallet-chargeback');
+            }
+            // Detail icon: tooltip for latest feel
+            jQuery('#tblshowMasterD img[data-toggle="modal"]').each(function () {
+                jQuery(this).attr('title', 'View fund details');
+                jQuery(this).attr('alt', 'View details');
+            });
+            // Action cell: wrap date text so icon never overlaps it
+            jQuery('#tblshowMasterD #tblbody tr.tr').each(function () {
+                var $tr = jQuery(this);
+                var $last = $tr.children('td').last();
+                if ($last.length && !$last.attr('data-action-done')) {
+                    $last.attr('data-action-done', '1');
+                    $last.addClass('vm-txn-action-cell');
+                    var $img = $last.find('img[data-toggle="modal"]');
+                    $last.contents().filter(function () {
+                        return this.nodeType === 3 && jQuery.trim(this.nodeValue) !== '';
+                    }).wrap('<span class="vm-txn-time"></span>');
+                    $last.find('.vm-txn-time').css({ 'color': '#0f172a', 'font-weight': '600' });
+                    if ($img.length) {
+                        $last.find('.vm-txn-time').first().after($img);
+                    }
+                    $last.wrapInner('<span class="vm-txn-action-wrap"></span>');
+                    // Inline (unbeatable): single-line date + time chip with icon at right
+                    $last.css({ 'white-space': 'nowrap', 'overflow': 'visible' });
+                    $last.find('.vm-txn-action-wrap').css({ 'display': 'flex', 'align-items': 'center', 'gap': '6px', 'white-space': 'nowrap' });
+                    $last.find('.vm-txn-time').each(function () {
+                        var $t = jQuery(this);
+                        if ($t.attr('data-chip-done')) { return; }
+                        $t.attr('data-chip-done', '1');
+                        var parts = jQuery.trim($t.text()).split(/\s+/);
+                        if (parts.length >= 2) {
+                            $t.empty().append(
+                                jQuery('<span class="vm-txn-date"></span>').text(parts[0]),
+                                ' ',
+                                jQuery('<span class="vm-txn-clock"></span>').text(parts.slice(1).join(' '))
+                            );
+                        }
+                        $t.css({ 'display': 'inline-flex', 'align-items': 'center', 'gap': '6px', 'white-space': 'nowrap', 'background': '#eff6ff', 'border': '1px solid #dbeafe', 'border-radius': '8px', 'padding': '4px 8px' });
+                        $t.find('.vm-txn-date').css({ 'display': 'inline', 'color': '#0f172a', 'font-weight': '700', 'font-size': '12.5px', 'line-height': '1.3' });
+                        $t.find('.vm-txn-clock').css({ 'display': 'inline', 'color': '#1a56db', 'font-weight': '600', 'font-size': '11.5px', 'line-height': '1.3' });
+                    });
+                    $last.find('img[data-toggle="modal"]').css({
+                        'display': 'inline-block', 'width': '30px', 'height': '30px',
+                        'padding': '7px', 'border': 'none', 'border-radius': '50%',
+                        'background': 'linear-gradient(135deg, #1a56db 0%, #3b82f6 100%)',
+                        'float': 'none', 'margin': '0', 'cursor': 'pointer'
+                    });
+                }
+            });
+            // Pay-from pill badges (once only)
+            var $first = $tr.children('td').first();
+            if ($first.length && !$first.attr('data-pill-done')) {
+                $first.attr('data-pill-done', '1');
+                var txt = jQuery.trim($first.text());
+                var cls = 'vm-role-other';
+                if (/^admin$/i.test(txt)) { cls = 'vm-role-admin'; }
+                else if (/retailer/i.test(txt)) { cls = 'vm-role-retailer'; }
+                $first.addClass(cls);
+                $first.wrapInner('<span class="vm-role-pill"></span>');
+            }
+        });
+    }
 
-    })
-   
+    function initRetailerWalletSelect2() {
+        var $scope = jQuery('.saas-retailer-wallethistory-page');
+        $scope.find('#ddtrnsfrom').each(function () {
+            var $el = jQuery(this);
+            if (!$el.length || !jQuery.fn.select2) {
+                return;
+            }
+            if ($el.hasClass('select2-hidden-accessible')) {
+                try { $el.select2('destroy'); } catch (e) { }
+            }
+            var opts = {
+                width: '100%',
+                dropdownParent: jQuery(document.body),
+                minimumResultsForSearch: 0,
+                dropdownCssClass: 'vm-admin-select2-dropdown vm-admin-select2-searchable'
+            };
+            if (typeof window.forceAdminSelect2 === 'function') {
+                window.forceAdminSelect2($el, opts, true);
+            } else if (typeof window.applyAdminSelect2 === 'function') {
+                window.applyAdminSelect2($el, opts, true);
+            } else {
+                $el.select2(opts);
+            }
+        });
+    }
 
+    function initRetailerWalletDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerWalletDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerWalletForm',
+                '#retailer_wallet_frm_date',
+                '#retailer_wallet_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerWalletSelect2();
+        initRetailerWalletDatepickers();
+        window.setTimeout(initRetailerWalletDatepickers, 150);
+        retailerWalletRefreshCount();
+        // Style the ajax-loaded table with the modern grid classes
+        retailerWalletDecorate();
+        jQuery('#btnExportRetailerWallet').on('click', function (e) {
+            e.preventDefault();
+            var url = '@Url.Action("ExportExcellFundtransfer", "Home")?tabtype=FundTranferAllReport&txt_frm_date=' + encodeURIComponent(jQuery('#retailer_wallet_frm_date').val() || '') + '&txt_to_date=' + encodeURIComponent(jQuery('#retailer_wallet_to_date').val() || '') + '&ddtrnsfrom=' + encodeURIComponent(jQuery('#ddtrnsfrom').val() || '');
+            location.href = url;
+        });
+        jQuery('#btnPDFRetailerWallet').on('click', function () {
+            window.print();
+        });
+        // Action cell (date/icon) click => fill (via row onclick bubble) then open fund popup, guaranteed.
+        // Bound to last-child so it works even before/without decoration.
+        jQuery(document).off('click.vmWalletIcon').on('click.vmWalletIcon', '#tblshowMasterD #tblbody tr.tr td:last-child', function () {
+            window.setTimeout(function () {
+                retailerFundModalTwoCol();
+                jQuery('#m-d-fund-orderRecive').modal('show');
+            }, 0);
+        });
+    });
+
+    // Re-apply grid class whenever the ajax table refreshes
+    jQuery(document).ajaxComplete(function () {
+        retailerWalletDecorate();
+        retailerWalletRefreshCount();
+    });
 </script>
-
-
-
-
-
-
-
 <script>
     function tablerowshowdetailorderrecive(roletype, frm, paymode, transferamount, charges, comment, currentcr, oldcr, nettransfer, rechargedate, retailerfromold, retailerfromnew, ret_to_old, ret_to_new, headtype, TotalBal, utrno) {
 
@@ -536,6 +757,7 @@
             $('#txtretheadtype').val(headtype);
             $('#retailerdatashowonly').show();
             $('#ALLdatashow').hide();
+            try { jQuery('#vmFundHeroAmt').text('Rs. ' + transferamount); jQuery('#vmFundHeroMode').text(paymode || 'UPI'); } catch (e) { }
 
         }
         else {
@@ -610,47 +832,41 @@
 
             $('#retailerdatashowonly').hide();
             $('#ALLdatashow').show();
+            try { jQuery('#vmFundHeroAmt').text('Rs. ' + transferamount); jQuery('#vmFundHeroMode').text(paymode || 'UPI'); } catch (e) { }
         }
         //  $('#txtmdfirmnameshow').val(frmname);
         // / /$('#txtmdfirmnameshow').val(frmname);
         //   $('#txtmdfirmnameshow').val(frmname);
         //   $('#txtmdfirmnameshow').val(frmname);
+
+        // Open the popup on row click, close works via [data-dismiss="modal"] + backdrop click
+        retailerFundModalTwoCol();
+        jQuery('#m-d-fund-orderRecive').modal('show');
     }
 </script>
 <script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('.report-list-change li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('active');
-
-
-            }
-        })
-    });
-</script>
-<script>
-    $(document).ready(function()
-    {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
+    // 2-column layout: CSS grid handles it — just clear any old inline floats
+    function retailerFundModalTwoCol() {
+        if (!window.jQuery) { return; }
+        jQuery('#m-d-fund-orderRecive .vm-fund-modal-grid .form-group').each(function () {
+            var el = this;
+            el.style.float = '';
+            el.style.clear = '';
+            el.style.width = '';
+            el.style.margin = '';
         });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-    })
-</script>
-<script>
-    $(document).ready(function () {
-        $(".date-sateclassee input").click(function () {
-            $(".datepicker").addClass('dlllllllgggglcharge');
+        jQuery('#ALLdatashow .vm-fund-modal-grid, #retailerdatashowonly .vm-fund-modal-grid').css({ 'overflow': 'visible', 'width': '100%' });
+    }
+
+    // Ensure the fund-info popup hides cleanly (close btn / backdrop / Esc)
+    jQuery(function () {
+        var $fundModal = jQuery('#m-d-fund-orderRecive');
+        $fundModal.modal({ show: false, backdrop: true, keyboard: true });
+        retailerFundModalTwoCol();
+        $fundModal.on('hidden.bs.modal', function () {
+            jQuery('body').removeClass('modal-open');
+            jQuery('.modal-backdrop').remove();
+            $fundModal.hide();
         });
     });
 </script>
@@ -660,10 +876,11 @@
         //  var value = $(this).val().toLowerCase();
         var value = $('#myInput').val().toLowerCase();
 
-        $("#tblbody .tr").filter(function () {
+        $("#tblshowMasterD #tblbody .tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     }
 
 
 </script>
+}

@@ -5,21 +5,24 @@
     foreach (var item in Model.recent_Retailer)
     {
         DateTime date = Convert.ToDateTime(item.Date);
-        var val = item.Cr;
-        if (item.Cr == 0)
-        {
-            val = -item.Dr;
-        }
+        var isDr = (item.Cr == 0);
+        var amt = isDr ? item.Dr : item.Cr;
         <tr>
-            <td>@Html.DisplayFor(modelItem => item.Operator_type)</td>
-            <td>@Html.DisplayFor(modelItem => item.Description)</td>
-            <td>@date.ToString("d-MMM-yyyy HH:mm:ss")</td>
-            <td>@val</td>
-            <td>@item.UserPost</td>
+            <td><span class="vm-txn-type">@Html.DisplayFor(modelItem => item.Operator_type)</span></td>
+            <td class="vm-txn-desc">@Html.DisplayFor(modelItem => item.Description)</td>
+            <td class="vm-txn-date">@date.ToString("d-MMM-yyyy") <small>@date.ToString("HH:mm:ss")</small></td>
+            <td>
+                @if (isDr)
+                {
+                    <span class="vm-txn-amt vm-txn-dr">- @amt</span>
+                }
+                else
+                {
+                    <span class="vm-txn-amt vm-txn-cr">+ @amt</span>
+                }
+            </td>
+            <td class="vm-txn-bal">&#8377; @item.UserPost</td>
         </tr>
         //i++;
     }
 }
-
-
-

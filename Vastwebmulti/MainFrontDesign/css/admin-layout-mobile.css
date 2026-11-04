@@ -492,6 +492,41 @@ body.saas-admin-ui .admin-global-loader-box span {
     color: #475569;
 }
 
+/* Ajax overlay (#loadermoney from Loder.cshtml) — full viewport in saas shell */
+body.saas-admin-ui #loadermoney {
+    display: none !important;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 20055 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(248, 250, 252, 0.92) !important;
+    backdrop-filter: blur(6px);
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui #loadermoney.is-active,
+body.saas-admin-ui #loadermoney[style*="display: block"],
+body.saas-admin-ui #loadermoney[style*="display:block"] {
+    display: flex !important;
+}
+
+body.saas-admin-ui #loadermoney .loader_innner {
+    margin: 0 auto !important;
+    width: auto !important;
+    max-width: 120px !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui #loadermoney .loader_innner img {
+    max-width: 100px !important;
+    height: auto !important;
+}
+
 /* Modals — above sidebar & header menus */
 /* Modal z-index — see admin-modal-fix.css (BS3 + BS5 bridge) */
 

@@ -1,0 +1,83 @@
+@model IEnumerable<Vastwebmulti.Models.AepsUPIHistory>
+@{
+    ViewBag.Title = "PDF_AepsUPIReport";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PDF_AepsUPIReport</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+        }
+
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-row-group
+        }
+
+        tr {
+            page-break-inside: avoid
+        }
+    </style>
+</head>
+<body>
+    <table class="table table-bordered table-striped table-hover third-design-table" style="width:100%; font-size:12px;">
+        <thead style="background-color:whitesmoke;">
+            <tr>
+                <th>S. No.</th>
+                <th>Status</th>
+                <th>Unique&nbsp;ID</th>
+                <th>Channel</th>
+                <th>Remain&nbsp;Pre</th>
+                <th>Amount</th>
+                <th>Comm</th>
+                <th>Remain&nbsp;Post</th>
+                <th>Txn&nbsp;Date</th>
+                <th>Update&nbsp;Date</th>
+                <th>Bank&nbsp;RRN</th>
+                <th>Payer&nbsp;VPA</th>
+                <th>Payer&nbsp;Name</th>
+            </tr>
+        </thead>
+        @if (Model != null && Model.Count() > 0)
+        {
+            int sno = 0;
+            foreach (var item in Model)
+            {
+                sno += 1;
+                <tr>
+                    <td>@sno</td>
+                    <td>@item.Status</td>
+                    <td>@item.Txnid</td>
+                    <td>@item.reqtype</td>
+                    <td>@(item.Remainpre.HasValue ? item.Remainpre.Value.ToString("N2") : "")</td>
+                    <td>@item.Amount</td>
+                    <td>@item.totalcomm</td>
+                    <td>@(item.RemainPost.HasValue ? item.RemainPost.Value.ToString("N2") : "")</td>
+                    <td>@(item.txndate.HasValue ? item.txndate.Value.ToString("dd-MM-yyyy HH:mm:ss") : "")</td>
+                    <td>@(item.updatedate.HasValue ? item.updatedate.Value.ToString("dd-MM-yyyy HH:mm:ss") : "")</td>
+                    <td>@item.Bankrrn</td>
+                    <td>@item.PayerVPA</td>
+                    <td>@item.PayerName</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="13"><h2 style="text-align:center;">Data Not Found</h2></td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Certificate";
     Layout = null;
 }
@@ -8,655 +7,524 @@
 
 <style>
     * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(160deg, #eef2f7 0%, #e2e8f0 100%) !important;
+        font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    }
+
+    /* Download button : screen only, never in PDF/print */
+    .vm-cert-toolbar {
+        max-width: 842px;
+        margin: 18px auto 14px auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    .vm-cert-toolbar .vm-cert-tool-title {
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: #64748b;
+    }
+    #download {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 40px;
+        padding: 0 22px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #1e40af, #2563eb);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(37,99,235,.35);
+        transition: all .15s ease;
+    }
+    #download:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(37,99,235,.45);
     }
 
     .full-body {
         width: 100%;
-        height: 585px;
         position: relative;
     }
 
+    /* Certificate card : gold double frame */
+    #invoice {
+        max-width: 842px;
+        margin: 0 auto 30px auto;
+        background: #fff;
+        border: 3px solid #c9a227;
+        outline: 1px solid #e7d08a;
+        outline-offset: 5px;
+        box-shadow: 0 18px 50px rgba(15,23,42,.18);
+        overflow: hidden;
+    }
+
     .full-body-21 {
-        background-size: cover;
-        height: 585px;
-        background-image: linear-gradient(135deg, #fff 0%, var(--main-bg-lcolor) 55%, #fff 100%);
+        height: 8px;
+        background: linear-gradient(90deg, #0f172a 0%, #1e40af 50%, #0f172a 100%);
     }
 
-    .full-body-2 {
-        opacity: .3;
-        height: 585px;
-        background-image: url('../../FooterImages/img41.png');
-    }
-
-    .full-body-22 {
-        position: absolute;
-        top: 0;
-        left: 0;
+    .headers {
+        width: 100%;
+        text-align: center;
+        padding: 18px 26px 12px 26px;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
     }
 
     .logo {
-        width: 20%;
-        padding-right: 30px;
+        width: 22%;
+        text-align: left;
     }
-        .logo .img-responsive {
-            width: 116px !important;
-            height: 49px;
-        }
-
-    .headig {
-        width: 60%;
-        text-transform: uppercase;
+    .logo .img-responsive {
+        width: 116px !important;
+        height: 49px;
+        object-fit: contain;
     }
-
-        .headig h1 {
-            font-size: 16px;
-            text-transform: uppercase;
-            text-align: center;
-            line-height: 1.6;
-            color: #000;
-            font-weight: 700;
-            font-family: 'Roboto', sans-serif;
-        }
 
     .headig-2 {
-        width: 80%;
-        float: left;
+        width: 78%;
     }
-
-    .headig-1 {
-        width: 80%;
+    .headig-2 .headig h1 {
+        font-size: 15px;
+        text-transform: uppercase;
+        text-align: center;
+        line-height: 1.6;
+        color: #0f172a;
+        font-weight: 700;
+        font-family: Georgia, 'Times New Roman', serif;
+        letter-spacing: .04em;
+        margin: 0;
     }
-
-        .headig-1 h1 {
-            font-size: 16px;
-            text-transform: uppercase;
-            text-align: center;
-            line-height: 1.6;
-            color: #000;
-            font-weight: 700;
-            font-family: 'Roboto', sans-serif;
-            float: right;
-        }
-
-    .headig-2.logo-2 {
-        width: 100%;
-    }
-
     .headig.headig-1 {
         display: none;
     }
 
-
-    .headig-2 .headig {
-        width: 75%;
-        text-transform: uppercase;
-        float: left;
-    }
-
-    .headig-2 .logo-2 {
-        width: 25%;
-        float: left;
-    }
-
-    .logo-2 {
-        width: 20%;
-    }
-
+    /* Title band */
     .holder {
         width: 100%;
         float: left;
-        background: var(--main-bg-rcolor);
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #2563eb 100%);
         margin: 2px 0px;
+        border-top: 2px solid #c9a227;
+        border-bottom: 2px solid #c9a227;
     }
-
-        .holder p {
-            font-size: 34px;
-            text-transform: uppercase;
-            color: #fff;
-            text-align: center;
-            font-weight: bold;
-            letter-spacing: 1px;
-            line-height: 1.3;
-            font-family: 'Roboto', sans-serif;
-            margin: 11px;
-            text-shadow: 1px 1px #a4a0a0;
-        }
+    .holder p {
+        font-size: 32px;
+        text-transform: uppercase;
+        color: #f5e6b8;
+        text-align: center;
+        font-weight: bold;
+        letter-spacing: 3px;
+        line-height: 1.3;
+        font-family: Georgia, 'Times New Roman', serif;
+        margin: 12px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,.5);
+    }
 
     .prove {
         width: 100%;
         display: flex;
         align-items: center;
+        padding: 10px 26px 0 26px;
     }
-
     .prov {
         width: 55%;
         text-align: center;
     }
-
-        .prov h2 {
-            text-transform: uppercase;
-            font-weight: inherit;
-            color: #000;
-            font-size: 22px;
-            font-family: 'Roboto', sans-serif;
-        }
-
+    .prov h2 {
+        text-transform: uppercase;
+        font-weight: inherit;
+        color: #0f172a;
+        font-size: 20px;
+        font-family: Georgia, 'Times New Roman', serif;
+        margin: 0;
+    }
     .prov-1 {
         width: 45%;
         float: left;
     }
 
+    .borders {
+        border-bottom: 3px double #c9a227 !important;
+        margin: 10px 26px 6px 26px;
+        text-align: center;
+    }
+
+    /* Photo + details */
     .user {
         width: 100%;
         display: flex;
         align-items: center;
+        padding: 8px 26px;
     }
-
     .user-id {
-        width: 75%;
+        width: 72%;
     }
-
     .on-duty {
-        width: 25%;
-        padding: 14px;
+        width: 28%;
+        padding: 10px 14px 10px 0;
     }
-
-    .on-1 p {
-        width: 100%;
-        text-align: center;
-        height: 145px;
-        background: #9b5d41;
-        color: green;
-        font-size: 39px;
-        margin: 0px;
-        font-weight: 700;
-        border-radius: 43px;
-        padding: -4px;
-    }
-    .sale-2 p {
-        font-family: 'Roboto', sans-serif;
-        color: #fff;
-        line-height: 0.4;
-    }
-    .sale-2 h3 {
-        font-family: 'Roboto', sans-serif;
-        color:#000;
-    }
-
-    .sale-2 {
-        text-align: center;      
-        float: left;
-        margin-left: 40px;
-    }
-
-        .sale-2 h2 {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-    .sales {
-        width: 100%;
-        float: left;
-        background: var(--main-bg-lcolor);
-        display: flex;
-        align-items: center;
-        padding: 21px 0px
-    }
-
-    .sale {
-        width: 35%;
-    }
-
-    .backs-1 {
-        width: 65%;
-        display: flex;
-        align-items: center;
-    }
-
-
-
-    .sale-1 {
-        width: 50%;
-        text-align: center;
-    }
-
-    .nots {
-        width: 100%;
-        float: left;
-        background: var(--main-bg-rcolor);
-        padding: 0px;
-        line-height: 1.5;
-    }
-
-        .nots li {
-            color: #fff;
-            font-family: 'Roboto', sans-serif;
-            font-size: 16px;
-            line-height: 1.7;
-        }
-
-    .headers {
-        width: 100%;
-        text-align: center;
-        padding: 4px 8px;
-        display: flex;
-        align-items: center;
-    }
-
     .on-duty-1 {
-        border: 2px solid var(--main-bg-rcolor) !important;
+        max-width: 164px;
+        max-height: 204px;
+        border: 3px solid #c9a227 !important;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(15,23,42,.18);
+        background: #f1f5f9;
     }
-
-    .borders {
-        border-bottom: 10px solid var(--main-bg-rcolor) !important;
-        margin: 10px 14px 28px 14px;
-        width: 96.60%;
-        text-align: center;
-    }
-
-    .user-id td {
-        text-transform: uppercase;
+    .on-duty-1 img {
+        width: 100%;
+        height: auto;
+        display: block;
     }
 
     .table2 {
         width: 100%;
         float: right;
-        line-height: 4.3;
-        font-family: 'Roboto', sans-serif;
-        margin-right: 12px;
+        font-family: 'Segoe UI', Roboto, Arial, sans-serif;
         color: black;
+        border-collapse: collapse;
+    }
+    .table2 tr {
+        border-bottom: 1px dashed #e2e8f0;
+    }
+    .table2 tr:last-child {
+        border-bottom: none;
+    }
+    .table2 td {
+        padding: 9px 4px;
+        font-size: 14.5px;
+        text-transform: uppercase;
+    }
+    .table2 td:first-child {
+        color: #64748b;
+        font-weight: 700;
+        letter-spacing: .03em;
+        white-space: nowrap;
+    }
+    .table2 td:last-child {
+        text-align: right;
+        color: #0f172a;
+        font-weight: 800;
     }
 
     .more {
         width: 100%;
         text-align: center;
+        padding: 2px 26px 8px 26px;
+    }
+    .more p {
+        font-size: 13.5px;
+        font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        padding: 2px 6px;
+        color: #334155;
+        text-align: justify;
+        line-height: 1.6;
     }
 
-        .more p {
-            font-size: 15px;
-            font-family: 'Roboto', sans-serif;
-            padding: 2px 14px;
-            color: #000;
-            text-align: justify;
-        }
-
-    .weave::before {
-        -moz-transform: rotate(30deg);
-        -ms-transform: rotate(30deg);
-        -webkit-transform: rotate(30deg);
-        transform: rotate(30deg);
+    /* Signature / QR / seal */
+    .sales {
+        width: 100%;
+        float: left;
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+        display: flex;
+        align-items: center;
+        padding: 20px 26px;
+    }
+    .sale {
+        width: 35%;
+    }
+    .backs-1 {
+        width: 65%;
+        display: flex;
+        align-items: center;
+    }
+    .sale-1 {
+        width: 50%;
+        text-align: center;
+    }
+    .sale-2 {
+        text-align: center;
+        float: left;
+        margin-left: 40px;
+    }
+    .sale-2 p {
+        font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        color: #f5e6b8;
+        line-height: 1.5;
+        font-size: 12.5px;
+        margin: 2px 0;
+    }
+    .signature {
+        width: 120px;
+        height: 40px;
+        object-fit: contain;
+        background: #fff;
+        border-radius: 6px;
+        padding: 2px 6px;
+    }
+    .sale-3 {
+        width: 50%;
+        text-align: center;
     }
 
+    /* ON DUTY seal */
     .weave::before, .weave::after {
         display: block;
         width: 65px;
         height: 65px;
-        border: 2px solid var(--main-bg-rcolor);
+        border: 2px solid #c9a227;
         border-radius: 50px;
         content: "";
         position: absolute;
         top: -2px;
         left: -2px;
     }
-
-    .weave {
-        color: #ffb9ad;
-        text-align: center;
-        font: 700 22px/30px "Quicksand", sans-serif;
+    .weave::before {
+        transform: rotate(30deg);
     }
-
-        .weave::after {
-            -moz-transform: rotate(60deg);
-            -ms-transform: rotate(60deg);
-            -webkit-transform: rotate(60deg);
-            transform: rotate(60deg);
-        }
-
+    .weave::after {
+        transform: rotate(60deg);
+    }
     .weave {
         display: block;
         width: 69px;
         height: 69px;
-        border: 2px solid var(--main-bg-rcolor);
+        border: 2px solid #c9a227;
         border-radius: 50px;
         margin: 10px 10px !important;
         position: relative;
-        color: #ffb9ad;
         text-align: center;
         font: 700 22px/120px "Quicksand", sans-serif;
         background: #fff;
     }
-
-    .sale-3 {
-        width: 50%;
-        text-align: center;
-    }
-
     .weave p {
         line-height: 1.2;
         padding: 10px;
-        color: var(--main-bg-rcolor);
-        font-size: 16px;
+        color: #9a3412;
+        font-size: 15px;
     }
-
-
     .curved-text {
         position: relative;
         display: inline-block;
         margin: 0 auto;
     }
-
     .curved-text-out {
         float: left;
         min-width: 0px !important;
         text-align: center;
         margin-left: -2px;
     }
-
     .curved-text span {
         min-width: 0.5em;
         text-align: center;
         padding: 0;
         margin: 0;
-    }
-
-    .curved-text span {
         font-size: 9px;
-        color: #fff;
+        color: #f5e6b8;
         margin-left: -7px;
         margin-top: 1px;
     }
-
     .sale-4 {
         width: 101px;
         height: 101px;
-        border: 6px double #dca167;
-        border-radius: 50px;
+        border: 6px double #c9a227;
+        border-radius: 50%;
         text-align: center;
         margin-right: 40px;
-        background: var(--main-bg-rcolor);
+        background: rgba(255,255,255,.06);
         float: right;
     }
-    .error-1 h2{
-        background: #ddd;
-        padding: 16px;
-        text-transform: uppercase;
-        color: red;
-        text-align: center;
-        font-family: 'Roboto', sans-serif;
-        border:2px solid #ccc;
+
+    /* Notes strip */
+    .nots {
+        width: 100%;
+        float: left;
+        background: #0f172a;
+        padding: 8px 26px;
+        line-height: 1.5;
     }
-    .signature {
-        width: 120px;
-        height: 40px;
+    .nots ul {
+        margin: 4px 0;
+        padding-left: 20px;
+    }
+    .nots li {
+        color: #cbd5e1;
+        font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        font-size: 12.5px;
+        line-height: 1.8;
+    }
+    .nots li::marker {
+        color: #c9a227;
+    }
+
+    .error-1 h2 {
+        background: #fef2f2;
+        padding: 18px;
+        text-transform: uppercase;
+        color: #dc2626;
+        text-align: center;
+        font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        border: 2px solid #fecaca;
+        border-radius: 12px;
+    }
+
+    @@media print {
+        body {
+            background: #fff !important;
+        }
+        .vm-cert-toolbar {
+            display: none !important;
+        }
+        #invoice {
+            box-shadow: none;
+            margin: 0 auto;
+        }
     }
 </style>
 
-<section id="drag" class="content" style="margin-top: 38px;">
+<section id="drag" class="content" style="margin-top: 18px;">
     <div class="container-fluid retailer-page fundtranfer">
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card">
+        <div class="body rwertfdaaa">
+            @if (ViewBag.sts == true)
+            {
+                <div class="vm-cert-toolbar">
+                    <span class="vm-cert-tool-title">Certificate of Association</span>
+                    <button id="download">&#8681; Download / Print PDF</button>
                 </div>
-            </div>
 
-        </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="" style="display:none;">
-                        <h2 id="word" style="color:black; font-size:16px;padding-top:9px; padding-left:22px; font-family:initial;"></h2>
-                    </div>
+                <div id="invoice" class="full-body">
+                    <div class="full-body-21"></div>
 
-                    <div class="body rwertfdaaa">
-                        @*<div class="table-responsive fundtran-responsive" style="position:inherit;margin-top:-10px;">
-                                @if (confirm == true)
+                    <header>
+                        <div class="headers">
+                            <div class="logo">
+                                @if (ViewBag.logo == "")
                                 {
-                                    <span>Name : </span>@name
-                                    <span>firmname : </span>@firmname
-                                    <span>mobile : </span>@mobile
-                                    <span>address : </span>@address
+                                    <img src="/img/Default_Logo.png" class="img-responsive">
                                 }
                                 else
                                 {
-                                    <span>@message</span>
+                                    <img src="@Url.Content("~/" + ViewBag.logo)" class="img-responsive">
                                 }
-                            </div>*@
-                         @if (ViewBag.sts == true)
-                            {
-                        <button id="download">Print</button>
-
-                        <div id="invoice" class="full-body" style="max-width: 842px; margin: auto;">
-
-                            <div class="full-body-1">
-                                <div class="full-body-21">
-                                    <div class="full-body-2">
-
-                                    </div>
-                                </div>
-                                <div class="full-body-22">
-
-                                    <header>
-                                        <div class="headers">
-                                            <div class="logo">
-                                                @if (ViewBag.logo == "")
-                                                {
-                                                    <img src="/img/Default_Logo.png" class="img-responsive">
-                                                }
-                                                else
-                                                {
-                                                    <img src="@Url.Content("~/" + ViewBag.logo)" class="img-responsive">
-                                                }
-                                                @*   <img src="../../certificate/swift-logo.png" alt="swift-logo">*@
-                                            </div>
-
-                                            <div class="headig headig-1">
-                                                <h1>Essential service provider to the country<br>(Banking, AEPS & ATM services)</h1>
-                                            </div>
-
-                                            <div class="headig-2">
-                                                <div class="headig">
-                                                    <h1>Essential service provider to the country<br>(Banking, AEPS & ATM services)</h1>
-                                                </div>
-                                                @*<div class="logo-2">
-                                                        <img src="../../certificate/quicksuntech-logo.png" alt="quicksuntech-logo" style="float: right;">
-                                                    </div>*@
-                                            </div>
-                                        </div>
-                                    </header>
-
-                                    <div class="holder">
-                                        <p>
-                                            CERTIFICATE OF ASSOCIATION
-                                        </p>
-
-                                    </div>
-                                    <div class="prove">
-                                        <div class="prov">
-                                            <h2 style="font-size: 20.3px;"><b>Authorised business correspondent</b></h2>
-                                        </div>
-
-                                        <div class="prov-1">
-                                            <div style="width: 96.50%;text-align: center;">
-                                                <img src="../../certificate/logo-3.png" alt="Kotak Bank" style="width: 38%;">
-                                                <img src="../../certificate/cub-logo-new-size.jpg" alt="CU Bank" style="float: right;width: 157px;">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="borders" style="border-bottom: 10px solid"></div>
-                                    <div class="user">
-
-                                        <div class="on-duty">
-                                            <div class="on-duty-1" style="max-width: 164px;max-height: 204px;">
-                                                <img src="@ViewBag.photo" alt="Photo">
-                                            </div>
-                                        </div>
-                                        <div class="user-id">
-                                            <table class="table2" style="line-height: 3.4;">
-                                                <tr>
-                                                    <td><b>AGENT NAME:</b></td>
-                                                    <td style="text-align:right;">@ViewBag.name</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>AGENT FIRM:</b></td>
-                                                    <td style="text-align:right;">@ViewBag.firmname </td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>REGISTERED MOBILE:</b></td>
-                                                    <td style="text-align:right;">@ViewBag.mobile</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><b>JOINING DATE:</b></td>
-                                                    <td style="text-align:right;">@ViewBag.joindate</td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="more">
-                                        <p>
-                                            The above is hereby authorized as a Banking Channel Partner to provide banking and other financial services provided by the Company from the date of issue to the validity of the Retail Agreement.
-                                            For more information on terms and conditions, please visit our website.
-                                        </p>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="sales">
-                                <div class="sale">
-                                    <div class="sale-2">
-                                        @*<h3>Signature</h3>*@
-                                        <img src="~/@ViewBag.signature" class="signature"/>
-                                        <p>@ViewBag.name</p>
-                                        <p>Authorities Signature</p>
 
-                                    </div>
-                                </div>
-                                <div class="backs-1">
-                                    <div class="sale-1">
-                                        <img src="@ViewBag.qr" alt="QR" style="width: 100px;height: 100px;border: 1px solid #fff;width: 94px;height: 94px;">
-                                    </div>
-                                    <div class="sale-3">
-                                        <div class="sale-4">
-
-                                            <div class="curved-text curved-text-out">Essential Services Available Here&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;*&nbsp;&nbsp;*&nbsp;&nbsp;&nbsp;</div>
-                                            <div class="weave">
-                                                <p style="font-size: 15px;line-height: 1.1;padding: 0px;">ON<br>DUTY</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="headig headig-1">
+                                <h1>Essential service provider to the country<br>(Banking, AEPS & ATM services)</h1>
                             </div>
-                            <div class="nots">
-                                <ul>
-                                    <li>This Certificate must be produced as per demand.</li>
-                                    <li>This is a system generated certificate.</li>
-                                    <li>Holders of this certificate will be acciuntable for ant misuse, loss and damage caused.</li>
-                                </ul>
+
+                            <div class="headig-2">
+                                <div class="headig">
+                                    <h1>Essential service provider to the country<br>(Banking, AEPS & ATM services)</h1>
+                                </div>
                             </div>
                         </div>
-                         }
-                            else
-                            {
-                                <div class="full-body error-1" style="max-width: 842px; margin: auto;">
-                                    <h2 style="background: #ddd; padding: 16px; text-transform: uppercase; color: red;text-align:center;font-family: 'Roboto', sans-serif;">@ViewBag.message</h2> 
+                    </header>
+
+                    <div class="holder">
+                        <p>CERTIFICATE OF ASSOCIATION</p>
+                    </div>
+                    <div class="prove">
+                        <div class="prov">
+                            <h2><b>Authorised business correspondent</b></h2>
+                        </div>
+                        <div class="prov-1">
+                            <div style="width: 96.50%;text-align: center;">
+                                <img src="../../certificate/logo-3.png" alt="Kotak Bank" style="width: 38%;">
+                                <img src="../../certificate/cub-logo-new-size.jpg" alt="CU Bank" style="float: right;width: 157px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="borders"></div>
+                    <div class="user">
+                        <div class="on-duty">
+                            <div class="on-duty-1">
+                                <img src="@ViewBag.photo" alt="Photo">
+                            </div>
+                        </div>
+                        <div class="user-id">
+                            <table class="table2">
+                                <tr>
+                                    <td><b>AGENT NAME:</b></td>
+                                    <td>@ViewBag.name</td>
+                                </tr>
+                                <tr>
+                                    <td><b>AGENT FIRM:</b></td>
+                                    <td>@ViewBag.firmname</td>
+                                </tr>
+                                <tr>
+                                    <td><b>REGISTERED MOBILE:</b></td>
+                                    <td>@ViewBag.mobile</td>
+                                </tr>
+                                <tr>
+                                    <td><b>JOINING DATE:</b></td>
+                                    <td>@ViewBag.joindate</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="more">
+                        <p>
+                            The above is hereby authorized as a Banking Channel Partner to provide banking and other financial services provided by the Company from the date of issue to the validity of the Retail Agreement.
+                            For more information on terms and conditions, please visit our website.
+                        </p>
+                    </div>
+                    <div class="sales">
+                        <div class="sale">
+                            <div class="sale-2">
+                                <img src="~/@ViewBag.signature" class="signature" />
+                                <p>@ViewBag.name</p>
+                                <p>Authorities Signature</p>
+                            </div>
+                        </div>
+                        <div class="backs-1">
+                            <div class="sale-1">
+                                <img src="@ViewBag.qr" alt="QR" style="width: 94px;height: 94px;border: 2px solid #c9a227;border-radius: 8px;background: #fff;padding: 3px;">
+                            </div>
+                            <div class="sale-3">
+                                <div class="sale-4">
+                                    <div class="curved-text curved-text-out">Essential Services Available Here&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;*&nbsp;&nbsp;*&nbsp;&nbsp;&nbsp;</div>
+                                    <div class="weave">
+                                        <p style="font-size: 15px;line-height: 1.1;padding: 0px;">ON<br>DUTY</p>
+                                    </div>
                                 </div>
-                            }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nots">
+                        <ul>
+                            <li>This Certificate must be produced as per demand.</li>
+                            <li>This is a system generated certificate.</li>
+                            <li>Holders of this certificate will be acciuntable for ant misuse, loss and damage caused.</li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-
+            }
+            else
+            {
+                <div class="full-body error-1" style="max-width: 842px; margin: auto;">
+                    <h2>@ViewBag.message</h2>
+                </div>
+            }
         </div>
     </div>
-
 </section>
 
 <!-- Jquery Core Js -->
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/Scripts/printThis.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<!--Add State dropdown list-->
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-
-
-
-<script>
-
-        var pageindex = 2;
-        var NoMoredata = false;
-        var inProgress = false;
-    $(window).scroll(function () {
-            if ($(window).scrollTop() > Number($("#tbldata").height()) / 4 && !NoMoredata && !inProgress) {
-                inProgress = true;
-                $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScrollss","Home")",
-                    { "pageindex": pageindex, txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val() },
-                    function (data) {
-
-                        pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#trow").append(data.HTMLString);
-                        $("#loadingdiv").hide();
-                        inProgress = false;
-                    });
-            }
-        });
-</script>
-
-<script>
-    $(document).ready(function()
-    {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-    });
-</script>
-
-
-<script>
-    $(".input-daterange").click(function () {
-        $(".datepicker").addClass('datepickerfundt');
-    });
-
-
-</script>
-<script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('.report-list-change li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('active');
-
-
-            }
-        })
-    });
-
-
-
-</script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
 <script>
@@ -698,7 +566,6 @@
         $letters.css({
             position: "absolute",
             height: `${radius}px`,
-            // backgroundColor:"orange",
             transformOrigin: "bottom center"
         });
 

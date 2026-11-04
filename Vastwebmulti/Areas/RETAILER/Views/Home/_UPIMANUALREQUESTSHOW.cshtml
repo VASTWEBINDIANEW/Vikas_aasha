@@ -1,36 +1,88 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Showrem_UPIREQ_Result>
+@{ var mreqTotal = 0; var mreqHas = false; if (Model != null) { foreach (var __c in Model) { mreqTotal++; mreqHas = true; } } }
 
+<style>
+    .mreq-wrap { background: #fff; border: 1px solid #e5e9f2; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(15,23,42,.07); }
+    .mreq-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: linear-gradient(135deg,#1e40ff 0%,#4f46e5 55%,#7c3aed 100%); color: #fff; }
+    .mreq-head-ico { width: 36px; height: 36px; min-width: 36px; border-radius: 11px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3); display: inline-flex; align-items: center; justify-content: center; font-size: 15px; }
+    .mreq-head-title { font-size: 13.5px; font-weight: 800; line-height: 1.3; margin: 0; }
+    .mreq-head-sub { display: block; font-size: 11px; font-weight: 500; color: rgba(255,255,255,.82); }
+    .mreq-count { margin-left: auto; font-size: 11px; font-weight: 800; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+    .mreq-scroll { overflow-x: auto; }
+    table.mreq-table { width: 100%; min-width: 780px; border-collapse: separate; border-spacing: 0; margin: 0; }
+    table.mreq-table thead th { background: #f1f4fb; color: #475569; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; padding: 11px 12px; text-align: left; border-bottom: 1.5px solid #e2e8f0; white-space: nowrap; }
+    table.mreq-table thead th:first-child { padding-left: 16px; }
+    table.mreq-table thead th:last-child { padding-right: 16px; }
+    table.mreq-table tbody td { padding: 11px 12px; font-size: 12.5px; font-weight: 600; color: #334155; border-bottom: 1px solid #eef1f6; vertical-align: middle; white-space: nowrap; }
+    table.mreq-table tbody td:first-child { padding-left: 16px; }
+    table.mreq-table tbody td:last-child { padding-right: 16px; }
+    table.mreq-table tbody tr:hover td { background: #f8faff; }
+    table.mreq-table tbody tr:last-child td { border-bottom: none; }
+    .mreq-admin { display: inline-flex; align-items: center; gap: 7px; font-weight: 800; color: #1e293b; }
+    .mreq-admin i { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg,#4f46e5,#7c3aed); color: #fff; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; }
+    .mreq-amt { font-weight: 800; color: #0f172a; font-size: 13px; }
+    .mreq-rrn { font-family: Consolas,monospace; font-size: 12px; font-weight: 700; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 3px 9px; color: #334155; }
+    .mreq-vpa { color: #4f46e5; font-weight: 700; }
+    .mreq-date { color: #64748b; font-size: 12px; }
+    .mreq-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; border-radius: 999px; padding: 4px 11px; text-transform: uppercase; letter-spacing: .3px; }
+    .mreq-pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .mreq-pill--success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .mreq-pill--pending { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .mreq-pill--failed { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+    .mreq-empty td { text-align: center; padding: 34px 16px !important; color: #94a3b8; font-weight: 600; white-space: normal !important; }
+    .mreq-empty i { display: block; font-size: 30px; margin-bottom: 8px; color: #cbd5e1; }
+    @@media screen and (max-width:767px) { .mreq-head-title { font-size: 12.5px; } }
+</style>
 
-
-<table class="table table-bordered table-striped table-hover">
-    <tr>
-        <th>
-            Request To
-        </th>
-        <th>Amount</th>
-        <th>Bank RRN</th>
-        <th>VPA ID</th>
-        <th>Transection date</th>
-        <th>Request date</th>
-        <th>Response date</th>
-        <th>Current Status</th>
-    </tr>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-
-                <td ><span style="color:black !important">Admin</span></td>
-                <td>@item.amount</td>
-                <td>@item.Bankrrn</td>
-                @*<th>Payer&nbsp;Mobile</th>*@
-                <td>@item.sender_vpa</td>
-                <td>@item.transferdate</td>
-                <td>@item.requestdate</td>
-                <td>@item.responsedate</td>
-                <td>@item.status</td>
-               
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="mreq-wrap">
+    <div class="mreq-head">
+        <span class="mreq-head-ico"><i class="fa fa-list-alt" aria-hidden="true"></i></span>
+        <p class="mreq-head-title" style="margin:0;">Manual UPI Requests<span class="mreq-head-sub">Admin approval status track karein</span></p>
+        <span class="mreq-count">Total: @mreqTotal</span>
+    </div>
+    <div class="mreq-scroll">
+        <table class="mreq-table">
+            <thead>
+                <tr>
+                    <th>Request To</th>
+                    <th>Amount</th>
+                    <th>Bank RRN</th>
+                    <th>VPA ID</th>
+                    <th>Txn Date</th>
+                    <th>Request Date</th>
+                    <th>Response Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!mreqHas)
+                {
+                    <tr class="mreq-empty">
+                        <td colspan="8"><i class="fa fa-inbox" aria-hidden="true"></i>No manual UPI requests found.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        var st = "";
+                        if (item.status != null) { st = item.status.Trim().ToUpper(); }
+                        var pillCls = "mreq-pill--pending";
+                        if (st == "SUCCESS" || st == "APPROVED" || st == "COMPLETED") { pillCls = "mreq-pill--success"; }
+                        else if (st == "FAILED" || st == "REJECTED" || st == "FAILURE") { pillCls = "mreq-pill--failed"; }
+                        <tr>
+                            <td><span class="mreq-admin"><i class="fa fa-user-shield" aria-hidden="true"></i>Admin</span></td>
+                            <td><span class="mreq-amt">Rs. @item.amount</span></td>
+                            <td><span class="mreq-rrn">@item.Bankrrn</span></td>
+                            <td><span class="mreq-vpa">@item.sender_vpa</span></td>
+                            <td><span class="mreq-date">@item.transferdate</span></td>
+                            <td><span class="mreq-date">@item.requestdate</span></td>
+                            <td><span class="mreq-date">@item.responsedate</span></td>
+                            <td><span class="mreq-pill @pillCls">@item.status</span></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

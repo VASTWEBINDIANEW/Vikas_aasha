@@ -1,127 +1,314 @@
-﻿
-
-@model IEnumerable<Vastwebmulti.Models.RadiantTransfer_Report>
-
+﻿@model List<Vastwebmulti.Models.RadiantTransfer_Report>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "Redaint Wallet Transfer";
+    ViewBag.Title = "Redaint Wallet Transfer Report";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
-    string role = Session["role"]?.ToString();
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? new List<Vastwebmulti.Models.RadiantTransfer_Report>();
+    var rowCount = reports.Count;
+
+    string role = Session["role"] != null ? Session["role"].ToString() : "";
+    var statusList = ViewBag.StatusList as SelectList;
+    var retailerList = ViewBag.AllRetailers as SelectList;
 }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-    /* new css */
-
-
-    /* new css */
-
-
-    #txt_frm_date {
-        padding-top: -56px;
-        margin-top: -18px;
+    /* Desktop (>=1024px): fit-to-width, no scroll, tight columns */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
+        }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead th:nth-child(1),
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody td:nth-child(1) { width: 16% !important; }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead th:nth-child(2),
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody td:nth-child(2) { width: 14% !important; }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody td:nth-child(3) { width: 10% !important; }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead th:nth-child(4),
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody td:nth-child(4) { width: 12% !important; }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead th:nth-child(5),
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody td:nth-child(5) { width: 14% !important; }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead th:nth-child(6),
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody td:nth-child(6) { width: 11% !important; }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead th:nth-child(7),
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody td:nth-child(7) { width: 11% !important; }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead th:nth-child(8),
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody td:nth-child(8) { width: 12% !important; }
     }
-    #txt_to_date {
-        margin-top: -19px !important;
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table {
+            width: max-content !important;
+            min-width: 900px !important;
+            max-width: none !important;
+            table-layout: auto !important;
+        }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-redaint-page #retailerRedaintReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+        }
+        body.saas-admin-ui .saas-retailer-redaint-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
+        }
+        /* Mobile + tablet: filter dropdowns full width */
+        body.saas-admin-ui .saas-retailer-redaint-page .vm-opr-filter-row > .vm-opr-field,
+        body.saas-admin-ui .saas-retailer-redaint-page .vm-rpt-filters-panel__bar > .vm-opr-field {
+            flex: 1 1 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            width: 100% !important;
+        }
+        body.saas-admin-ui .saas-retailer-redaint-page .vm-opr-filter-row > .vm-opr-field .vm-opr-select,
+        body.saas-admin-ui .saas-retailer-redaint-page .vm-opr-filter-row > .vm-opr-field .select2,
+        body.saas-admin-ui .saas-retailer-redaint-page .vm-opr-filter-row > .vm-opr-field .select2-container {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
     }
 </style>
 
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-retailer-ecomm-transaction-page saas-retailer-redaint-page">
 
-<section class="content">
-    <div class="container-fluid">
-        <div class="page-title-box-fourde-admin">
-            <h3>Redaint Wallet Transfer Report</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")">Home <i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Reports <i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Redaint Wallet Transfer Report</a></li>
-            </ul>
-        </div>
+    <div class="container-fluid vm-opr-page-shell">
 
-        <div class="row clearfix">
-            @*<div class="col-lg-12 gift-card-top all-type-third">*@
-            <div class="col-lg-12 gift-card-top all-type-third" style="margin-top: 5px;">
-                <div class="card margin-bottom-third" style="margin-top: 10px;">
+        @{
+            var redFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerRedaintForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_redaint_frm_date" },
+                { "data-report-to", "#retailer_redaint_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("RedaintWalletTransfer", "Home", FormMethod.Post, redFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-                    @using (Html.BeginForm("RedaintWalletTransfer", "Home", FormMethod.Post))
-                    {
-                        <div class="row mb-3 align-items-end">
-                            <div class="col-md-2">
-                                @Html.DropDownList("ddl_status", ViewBag.StatusList as SelectList, "Status", new { @class = "form-control", @id = "ddl_status" })
-                            </div>
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
 
-                            @* Agar Admin login hai tabhi ye Retailer dropdown dikhayega *@
-                            @if (role == "Admin")
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Reports</li>
+                        <li>Redaint Wallet Transfer Report</li>
+                    </ol>
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
+
+                        <div class="vm-opr-field vm-dmt-field">
+                            @if (statusList != null)
                             {
-                                <div class="col-md-3">
-                                    @Html.DropDownList("allretailer", ViewBag.AllRetailers as SelectList, "Select Retailer", new { @class = "form-control", @id = "allretailer" })
-                                </div>
+                                @Html.DropDownList("ddl_status", statusList, "Status", new { @id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control" })
                             }
-
-                            <div class="col-md-4 respo-upup">
-                                <div class="form-group mb-0">
-                                    <div class="input-daterange input-group">
-                                        <div class="custom-date-icon ner">
-                                            <i class="fa fa-calendar fullbodydycolorbg"></i>
-                                        </div>
-                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #ddd; height:32px;" })
-                                        <span class="input-group-addon" style="padding:0px;"></span>
-                                        <div style="position:relative;">
-                                            <div class="custom-date-icon ner">
-                                                <i class="fa fa-calendar fullbodydycolorbg"></i>
-                                            </div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #ddd; height:32px;" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary btn-block">Search</button>
-                            </div>
+                            else
+                            {
+                                @Html.DropDownList("ddl_status", new List<SelectListItem>
+                                {
+                                    new SelectListItem { Text = "Status", Value = "" },
+                                    new SelectListItem { Text = "Approved", Value = "Approved" },
+                                    new SelectListItem { Text = "Pending", Value = "Pending" },
+                                    new SelectListItem { Text = "Reject", Value = "Reject" }
+                                }, new { @id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control" })
+                            }
                         </div>
-                    }
+
+                        @if (role == "Admin")
+                        {
+                            <div class="vm-opr-field vm-dmt-field">
+                                @Html.DropDownList("allretailer", retailerList, "Select Retailer", new { @id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control" })
+                            </div>
+                        }
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_redaint_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_redaint_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                    </div>
 
                 </div>
 
-                <div class="card mt-3">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerRedaintTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Transfer totals (amount)</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerRedaintTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Approved</span>
+                            <strong class="vm-opr-total-card__value" id="retailerRedaintApproved">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Reject</span>
+                            <strong class="vm-opr-total-card__value" id="retailerRedaintRejected">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="retailerRedaintPending">&#8377; 0.00</strong>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                        <span>Redaint wallet transfer report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-ecomm-totals-btn" onclick="showRetailerRedaintTotals()" title="Show totals" aria-expanded="false" aria-controls="retailerRedaintTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportRetailerRedaint" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFRetailerRedaint" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerRedaintReport" class="table vm-opr-data-table" cellspacing="0">
                             <thead>
                                 <tr>
-
-                                    <th>RetailerName</th>
-                                    <th>Frm_Name</th>
+                                    <th>Retailer&nbsp;name</th>
+                                    <th>Firm&nbsp;name</th>
                                     <th>Status</th>
                                     <th>CEID</th>
-                                    <th>Request Date</th>
-                                    <th>Amount</th>
-                                    <th>Remain Pre</th>
-                                    <th>Remain Post</th>
+                                    <th>Request&nbsp;date</th>
+                                    <th>Amount&nbsp;&#8377;</th>
+                                    <th>Remain&nbsp;pre&nbsp;&#8377;</th>
+                                    <th>Remain&nbsp;post&nbsp;&#8377;</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach (var item in Model)
+                            <tbody id="retailerRedaintRows">
+                                @if (reports.Count > 0)
                                 {
-                                    string rowClass = "";
-                                    switch (item.Sts.ToLower())
+                                    foreach (var item in reports)
                                     {
-                                        case "Approved":
-                                            rowClass = "table-success"; break;
-                                        case "Reject":
-                                            rowClass = "table-danger"; break;
-                                        case "pending":
-                                            rowClass = "table-warning"; break;
+                                        var st = (item.Sts ?? "").Trim();
+                                        var stu = st.ToUpper();
+                                        var tone = "pending";
+                                        var fa = "fa-clock-o";
+                                        var dataStatus = "PENDING";
+                                        if (stu == "APPROVED" || stu == "SUCCESS")
+                                        {
+                                            tone = "success";
+                                            fa = "fa-check";
+                                            dataStatus = "APPROVED";
+                                        }
+                                        else if (stu == "REJECT" || stu == "REJECTED" || stu == "FAILED")
+                                        {
+                                            tone = "failed";
+                                            fa = "fa-times";
+                                            dataStatus = "REJECT";
+                                        }
+                                        <tr class="vm-dmt-row" data-amount="@item.amount" data-status="@dataStatus">
+                                            <td>
+                                                <span class="vm-dmt-consumer-text">@item.RetailerName</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-consumer-text">@item.Frm_Name</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-status vm-dmt-status--@tone" title="@st"><i class="fa @fa" aria-hidden="true"></i></span>
+                                                <span class="vm-dmt-refno-text">@st</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-refno-text">@item.CEID</span>
+                                            </td>
+                                            <td class="vm-ticket-time-cell">
+                                                <span class="vm-dmt-refno-text">@(item.Insertdate.HasValue ? String.Format("{0:dd-MMM-yyyy HH:mm:ss}", item.Insertdate.Value) : "—")</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.amount, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.Remainpre, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.Remainpost, 2)</span>
+                                            </td>
+                                        </tr>
                                     }
-
-
-                                    <tr class="@rowClass">
-
-                                        <td>@item.RetailerName</td>
-                                        <td>@item.Frm_Name</td>
-                                        <td>@item.Sts</td>
-                                        <td>@item.CEID</td>
-                                        <td>@item.Insertdate</td>
-                                        <td>@item.amount</td>
-                                        <td>@item.Remainpre</td>
-                                        <td>@item.Remainpost</td>
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="8" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                                            <span>No wallet transfer records found.</span>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -130,100 +317,110 @@
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
-<!-- Scripts -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-
-
+@section PostVmScripts {
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
+    function hideRetailerRedaintTotals() {
+        var $panel = jQuery('#retailerRedaintTotalsPanel');
+        var $btn = jQuery('.saas-retailer-redaint-page .vm-ecomm-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
 
-
-    @*$(document).ready(function () {
-        $('#ddl_status, #allretailer').select2();
-
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true
-        });
-
-        if ('@ViewBag.chk' != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+    function showRetailerRedaintTotals() {
+        var $panel = jQuery('#retailerRedaintTotalsPanel');
+        var $btn = jQuery('.saas-retailer-redaint-page .vm-ecomm-totals-btn');
+        if ($panel.is(':visible')) {
+            hideRetailerRedaintTotals();
+            return;
         }
-
-        $('.table').DataTable({
-            responsive: true,
-            paging: true,
-            ordering: true,
-            searching: true
+        var approved = 0, rejected = 0, pending = 0;
+        jQuery('#retailerRedaintRows tr.vm-dmt-row').each(function () {
+            var amt = parseFloat(jQuery(this).attr('data-amount')) || 0;
+            var st = (jQuery(this).attr('data-status') || '').toUpperCase();
+            if (st === 'APPROVED') { approved += amt; }
+            else if (st === 'REJECT') { rejected += amt; }
+            else { pending += amt; }
         });
-    });*@
+        jQuery('#retailerRedaintApproved').html('&#8377; ' + approved.toFixed(2));
+        jQuery('#retailerRedaintRejected').html('&#8377; ' + rejected.toFixed(2));
+        jQuery('#retailerRedaintPending').html('&#8377; ' + pending.toFixed(2));
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
 
-    //$(document).ready(function () {
-    //    $('#test_date').datepicker({
-    //        format: "yyyy-mm-dd",
-    //        todayHighlight: true,
-    //        autoclose: true
-    //    }).datepicker("setDate", new Date());
-    //});
-</script>
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+    function downloadRetailerRedaintExcel() {
+        var table = document.getElementById('retailerRedaintReport');
+        if (!table || !table.tBodies || !table.tBodies[0] || table.tBodies[0].rows.length === 0) {
+            alert('No records to export.');
+            return;
         }
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>' + table.outerHTML + '</body></html>';
+        var blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'RedaintWalletTransfer.xls';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 100);
+    }
+
+    function initRetailerRedaintSelect2() {
+        var $scope = jQuery('.saas-retailer-redaint-page');
+        $scope.find('#ddl_status, #allretailer').each(function () {
+            var $el = jQuery(this);
+            if (!$el.length || !jQuery.fn.select2) {
+                return;
+            }
+            if ($el.hasClass('select2-hidden-accessible')) {
+                try { $el.select2('destroy'); } catch (e) { }
+            }
+            var opts = {
+                width: '100%',
+                dropdownParent: jQuery(document.body),
+                minimumResultsForSearch: 0,
+                dropdownCssClass: 'vm-admin-select2-dropdown vm-admin-select2-searchable'
+            };
+            if (typeof window.forceAdminSelect2 === 'function') {
+                window.forceAdminSelect2($el, opts, true);
+            } else if (typeof window.applyAdminSelect2 === 'function') {
+                window.applyAdminSelect2($el, opts, true);
+            } else {
+                $el.select2(opts);
+            }
+        });
+    }
+
+    function initRetailerRedaintDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerRedaintDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerRedaintForm',
+                '#retailer_redaint_frm_date',
+                '#retailer_redaint_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerRedaintSelect2();
+        initRetailerRedaintDatepickers();
+        window.setTimeout(initRetailerRedaintDatepickers, 150);
+        jQuery('#btnExportRetailerRedaint').on('click', function (e) {
+            e.preventDefault();
+            downloadRetailerRedaintExcel();
+        });
+        jQuery('#btnPDFRetailerRedaint').on('click', function () {
+            window.print();
+        });
     });
-
 </script>
-<script>
-    $(document).ready(function () {
-        $('#allretailer, #ddl_status').select2();
-    });
-</script>
-
-<script>
-    $("#btnExport").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var ddlusers = $('#ddlusers').val();
-        var allretailer = $('#allretailer').val();
-        var ddl_status = $('#ddl_status').val();
-        var url = '@Url.Action("ExcelWalletUnloadReport", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddlusers=' + ddlusers + '&allretailer=' + allretailer + '&ddl_status=' + ddl_status ;
-        location.href = url;
-});
-</script>
-
-
-<script>
-    $("#btnPDF").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var ddlusers = $('#ddlusers').val();
-        var allretailer = $('#allretailer').val();
-        var ddl_status = $('#ddl_status').val();
-        var url = '@Url.Action("pdfWalletUnloadReport", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddlusers=' + ddlusers + '&allretailer=' + allretailer + '&ddl_status=' + ddl_status ;
-         window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
-    });
-</script>
+}

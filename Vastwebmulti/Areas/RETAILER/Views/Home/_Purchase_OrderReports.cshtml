@@ -1,12 +1,37 @@
 ﻿@model Vastwebmulti.Areas.RETAILER.ViewModels.RetailerFundRequestViewmodel
-@{ 
+@{
 
     decimal? creditsattle = 0; decimal? oldcrs;decimal? currentcr;decimal? totalcrsattelment=0;
 }
 
+<style>
+    body.saas-admin-ui .saas-retailer-fund-transfer-page #tblshowMasterD table {
+        min-width: 880px;
+    }
+    body.saas-admin-ui .saas-retailer-fund-transfer-page #tblshowMasterD tbody td {
+        font-size: 13px;
+    }
+    body.saas-admin-ui .saas-retailer-fund-transfer-page #tblshowMasterD tbody td.vm-po-nowrap {
+        white-space: nowrap !important;
+    }
+    body.saas-admin-ui .saas-retailer-fund-transfer-page #tblshowMasterD .vm-po-action-arrow {
+        width: 13px !important;
+        cursor: pointer;
+        float: right;
+        margin-left: 6px;
+    }
+    /* Row/column hover — soft blue, text stays dark (no white flash) */
+    body.saas-admin-ui .saas-retailer-fund-transfer-page #tblshowMasterD tbody tr.vm-po-row-hover td {
+        background: #eff6ff !important;
+    }
+    body.saas-admin-ui .saas-retailer-fund-transfer-page #tblshowMasterD tbody td.vm-po-col-hover {
+        background: #dbeafe !important;
+    }
+</style>
+
 @if (Model != null && Model.ShowRem_to_Rem != null)
 {
-    <table id="tbldata" class="table table-bordered table-striped table-hover">
+    <table id="tbldata" class="table table-bordered table-striped table-hover fundtransfer-tableclass third-design-table vm-ft-table">
         <thead>
             <tr>
                 <th>Receiver&nbsp;Fram</th>
@@ -62,7 +87,7 @@
 
                     </p>
                 </td>
-                <td><p style="margin-top:6px;">@item.tran_date</p></td>
+                <td class="vm-po-nowrap"><p style="margin-top:6px;">@item.tran_date</p></td>
                 @*
         <td><p style="margin-top:6px;">@item.oldcrbalance</p></td>*@
 
@@ -77,7 +102,7 @@
 
 else if (Model != null && Model.RemPurchaseOrder != null)
 {
-    <table class="table table-bordered table-striped table-hover">
+    <table class="table table-bordered table-striped table-hover fundtransfertabledealer third-design-table vm-ft-table">
         <thead style="background-color:whitesmoke;">
             <tr>
 
@@ -131,7 +156,7 @@ else if (Model != null && Model.RemPurchaseOrder != null)
 
             <tr class="tr" style="background:no-repeat;" onclick="tablerowshowdetail22( '@item.Farmname','@item.orderno','@item.sts','@item.paymode','@item.utrno','@item.details','@item.amount','@item.reqdate','@item.responsedate','@item.cashDepositCharge','@item.finalAmount','@item.HeadType')">
 
-                <td>
+                <td class="vm-po-nowrap">
                     <p style="margin-top:6px;">
                         @if (item.sts == "Pending")
                         {
@@ -163,7 +188,7 @@ else if (Model != null && Model.RemPurchaseOrder != null)
                 <td>@item.finalAmount</td>
 
                 <td>@Html.DisplayFor(modelItem => item.reqdate)</td>
-                <td class="popupimagepurchase"><img data-toggle="modal" data-target="#m-d-fund-transfer12" src="~/ashok-images/rightaeps.svg" /></td>
+                <td class="popupimagepurchase vm-po-nowrap"><img class="vm-po-action-arrow" src="~/ashok-images/rightaeps.svg" /></td>
                 @*
         <td><p style="margin-top:6px;">@item.remainsuper</p></td>*@
 
@@ -211,7 +236,7 @@ else if (Model != null && Model.RemPurchaseOrder != null)
 else if (Model != null && Model.fundTransferALLReports != null)
 {
 
-    <table class="table table-bordered table-striped table-hover">
+    <table class="table table-bordered table-striped table-hover retailerfundtrtable third-design-table vm-ft-table">
         <thead style="background-color:whitesmoke;">
 
 
@@ -277,7 +302,7 @@ else if (Model != null && Model.fundTransferALLReports != null)
                     <td>@item.comment</td>
 
 
-                    <td>@Html.DisplayFor(modelItem => item.RechargeDate)<img src="~/ashok-images/rightaeps.svg" data-toggle="modal" data-target="#m-d-fund-orderRecive" style="cursor: pointer; float: right; border: 1px solid #aaa4a4; width: 20px; padding: 4px" /></td>
+                    <td class="vm-po-nowrap">@Html.DisplayFor(modelItem => item.RechargeDate)<img src="~/ashok-images/rightaeps.svg" style="cursor: pointer; float: right; border: 1px solid #aaa4a4; width: 20px; padding: 4px" /></td>
                     @*<td>
                     <div class="row">
                         @if (item.sts == "Pending")
@@ -309,4 +334,20 @@ else if (Model != null && Model.fundTransferALLReports != null)
 
 
 }
+
+<script>
+    $('.third-design-dealer .third-design-table td').mouseenter(function () {
+        var $tr = $(this).parent();
+        var colIndex = $tr.children().index($(this)) + 1;
+        $tr.addClass('vm-po-row-hover');
+        $(".third-design-table tr").children(":nth-child(" + colIndex + ")").addClass('vm-po-col-hover');
+    });
+
+    $('.third-design-dealer .third-design-table td').mouseleave(function () {
+        var $tr = $(this).parent();
+        var colIndex = $tr.children().index($(this)) + 1;
+        $tr.removeClass('vm-po-row-hover');
+        $(".third-design-table td:nth-child(" + colIndex + ")").removeClass('vm-po-col-hover');
+    });
+</script>
 

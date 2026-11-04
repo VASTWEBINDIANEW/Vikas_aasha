@@ -1,0 +1,83 @@
+@functions {
+    string OiTabLiClass(string id) {
+        var active = (ViewBag.OiActiveTab as string ?? "");
+        return string.Equals(active, id, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+    }
+}
+@{
+    var oiUrl = Url.Action("Operator_info", "Home");
+}
+<div class="vm-oi-tab-scroll-shell">
+<ul id="vmOiTabList" class="nav nav-tabs tab-col-orange giftul-third-block vm-oi-tablist vm-oi-tab-grid" role="tablist">
+    <li role="presentation" class="@OiTabLiClass("prepaid")">
+        <a href="@(oiUrl)#prepaidoperators" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../ashok-images/mobile-application.svg" alt=""><br><span>Prepaid &amp; Dth</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("utilities")">
+        <a href="@(oiUrl)#utilitisoperators" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../ashok-images/increase.svg" alt=""><br><span>Utilities</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("money")">
+        <a href="@(oiUrl)#moneyoperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../images/transfer-money.png" alt=""><br><span>Money Transfer</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("wallet")">
+        <a href="@(oiUrl)#Walletoperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../images/transfer-money.png" alt=""><br><span>To Wallet</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("pancard")">
+        <a href="@(oiUrl)#pancardoperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../images/pancardicon.png" alt=""><br><span>Pancard</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("aeps")">
+        <a href="@(oiUrl)#aepsoperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../images/aespicon.png" alt=""><br><span>AEPS</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("mpos")">
+        <a href="@(oiUrl)#mposoperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../images/mposicon.png" alt=""><br><span>M-POS</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("microatm")">
+        <a href="@(oiUrl)#Microatmcashoperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../images/mposicon.png" alt=""><br><span>MicroATM</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("vm30")">
+        <a href="@(oiUrl)#Microatmpurchaseoperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../images/mposicon.png" alt=""><br><span>VM30&nbsp;Purchase</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("flight")">
+        <a href="@(oiUrl)#flightoperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../ashok-images/airplane.svg" alt=""><br><span>FLIGHT</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("bus")">
+        <a href="@(oiUrl)#busoperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../ashok-images/bus (1).svg" alt=""><br><span>BUS</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("hotel")">
+        <a href="@(oiUrl)#hoteloperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../ashok-images/hotel(1).svg" alt=""><br><span>HOTEL</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("gift")">
+        <a href="@(oiUrl)#giftcardoperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../ashok-images/business(1).png" alt=""><br><span>Giftcard</span>
+        </a>
+    </li>
+    <li role="presentation" class="@OiTabLiClass("security")">
+        <a href="@(oiUrl)#insuranceoperator" class="vm-oi-tab-link vm-oi-tab-link--route" role="tab">
+            <img src="../../ashok-images/computer.png" alt=""><br><span>Security</span>
+        </a>
+    </li>
+</ul>
+</div>

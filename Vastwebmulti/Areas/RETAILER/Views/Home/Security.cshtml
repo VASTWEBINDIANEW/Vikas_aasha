@@ -1,476 +1,606 @@
 ﻿@model List<Vastwebmulti.Areas.RETAILER.Models.Securityinfo>
+
 @{
+
     ViewBag.Title = "Security";
 
+    var plans = Model ?? new List<Vastwebmulti.Areas.RETAILER.Models.Securityinfo>();
+
+    var providerMsg = ViewBag.msg as string;
+
 }
-<style>
-   /* New css */
-    .security-first {
-        min-height: 100%;
-        height: 647px;
-    }
-   /* New css */
-
-    .for-blink2 {
-        animation: blink1 2s linear infinite;
-    }
-
-    @@keyframes blink1 {
-        0% {
-            color: yellow;
-        }
-
-        100% {
-            color: #000;
-        }
-    }
-
-    .purchaseconfirmcheck p {width: 100%;float: left;padding: 5px 0px;border-bottom: 1px dotted #bbb;}
-
-        .purchaseconfirmcheck p span {width: 50%;float: left;font-size: 13px;}
-
-            .purchaseconfirmcheck p span:first-child {text-align: left;}
-
-            .purchaseconfirmcheck p span:last-child {text-align: right;font-weight: 800;}
-
-
-    @@keyframes ldio-zdyd6mf6t5 {
-        0% {
-            top: 96px;
-            left: 96px;
-            width: 0;
-            height: 0;
-            opacity: 1;
-        }
-
-        100% {
-            top: 18px;
-            left: 18px;
-            width: 156px;
-            height: 156px;
-            opacity: 0;
-        }
-    }
-
-    .ldio-zdyd6mf6t5 div {
-        position: absolute;
-        border-width: 4px;
-        border-style: solid;
-        opacity: 1;
-        border-radius: 50%;
-        animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
-    }
-
-        .ldio-zdyd6mf6t5 div:nth-child(1) {
-            border-color: var(--main-bg-lcolor);
-        }
-
-        .ldio-zdyd6mf6t5 div:nth-child(2) {
-            border-color: #c7c7c7;
-            animation-delay: -0.5s;
-        }
-#loadredmodel{position: fixed;
-top: 0px;
-left: 0px;
-bottom: 0px;
-width: 100%;
-height: 100%;
-background: #000;
-z-index: 9999999;
-opacity: .8;}
-    .loadingio-spinner-ripple-92ar2pfqk5j {
-        width: 200px;
-        height: 200px;
-        display: inline-block;
-        overflow: hidden;
-        background: transparent;
-    }
-
-    .ldio-zdyd6mf6t5 {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform: translateZ(0) scale(1);
-        backface-visibility: hidden;
-        transform-origin: 0 0;
-    }
-
-        .ldio-zdyd6mf6t5 div {
-            box-sizing: content-box;
-        }
-        .security-heding img {max-width: 46%;float: left;margin-top:5px;}
-        .security-img ul.alldata li::before{background-color: rgb(255 194 0);background: rgb(255 194 0) !important;}
-        .security-heding {border-bottom: 1px solid var(--main-bg-lcolor);background: #bbb;padding: 10px;margin-top: 10px;}
-        .security-first {background: #242e39;}
-        .security-content h2 {color: #fff;}
-        .year-detail span.secu-rsbold {color: #fdb511;}
-    .security-first {
-        width: 100%;
-        margin: 0px;
-        display: table;
-        padding: 0 12px;
-    }
-        .year-detail span.secu-rsbold {background: #fff;color: #242e39;}
-        .year-detail {border-bottom: 1px dashed #bbb;}
-        .security-img ul.alldata li{color:#fff;}
-        .security-first {border:0;}
-    .security-content h2 {font-size: 32px;font-family: "Roboto";}
-
-    @@media screen and (max-width:1366px){
-        .year-detail span.secu-rsbold {font-size: 17px;}
-        }
-    @@media screen and (max-width:1300px){
-        .security-content h2 {font-size: 31px;font-family: "Roboto";}
-    }
-
-        @@media screen and (max-width:1200px){
-            .security-first {width: 32.3%;margin: 0px 1%;margin-bottom:18px;}
-        }
-
-        @@media screen and (max-width:766px){
-            .security-first {width: 100%;float: left;}
-            .security-heding img {max-width:190px;float: left;margin-top: 1px;}
-            .year-detail.detail-faredetails {margin-bottom: 5px;}
-            .col-md-3.security-first {min-height: inherit;padding-bottom: 10px;}
-            .security-img ul.alldata li::before{width:15px;height:15px;}
-        }
-        @@media screen and (max-width:420px){
-            .security-heding img {text-align: center;margin: 0px auto;display: block;float: none;margin-bottom: 5px;margin-top: -3px;}
-            .security-heding span.detailprecent {width: 100%;float: left;}
-            .security-content h2 {font-size: 27px;font-family: "Roboto";}
-        }
-
-</style>
-<section class="security security-responsive content-fourdesign-page allpage-four-design-section" style="margin:7%; margin-left: 14.6%; margin-right: 0%; ">
-    <div class="container-fluid security-page" style="padding:0;">
-
-        <!--Four-Design-Page-Header-Start-->
-
-        <div class="page-title-box-fourde">
-            <h3>Security</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Pages&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Security</a></li>
-            </ul>
-        </div>
-
-        <!--Four-Design-Page-Header-End-->
-
-        <div class="securityfirst-tab security-content-tab">
-
-
-            <div class="tab-content">
-                <div id="allpayment" class="tab-pane fade in active">
-                    <div class="col-md-12 security-content">
-                        @foreach (var item in Model)
-                        {
-                            var per = (1 - (item.offer_price) / item.Producation_price) * 100;
-
-                            <div class="col-md-4" style="margin-left: 0;">
-                                <div class="page-header-third" style="margin-bottom: 20px; ">
-                                    <div class=" security-first">
-                                        <div class="security-heding">
-                                            <img src="~/ashok-images/nortonlifelogo.png" />
-                                            <span class="detailprecent">
-                                                <span style="background: #000;border: 1px dashed #fff;border-right-width: 0px;"> @item.Device Device</span>
-                                                <span style="background:#fdb511;border: 1px dashed #fff;border-left-width: 0px;">@item.Month Month</span>
-
-                                            </span>
-
-                                        </div>
-                                        <div class="addclassnorton"><h2>@item.Plan_name</h2></div>
-                                        <div class="col-md-12 security-img" style="padding:0;">
 
 
 
-                                            <div id="home" class="rewsfgt">
-                                                <div class="year-detail detail-faredetails">
-                                                    <strong><span style="width: 50%;float: left;font-size:18px;"><del>MRP Rs @item.Producation_price</del></span><span style="color:#fdb511;font-size:18px;">@per.ToString("0.##") % OFF*</span></strong>
-                                                    <span class="secu-rsbold">Now Available For Just Rs @item.offer_price <strong class="fare"></strong><label class="fare-showblock" style="display:none;">*121</label></span>
+<link href="~/MainFrontDesign/css/retailer-money-transfer-modern.css?v=45" rel="stylesheet" />
 
-                                                </div>
-                                                <p style="border-bottom: 1px dashed #bbb;padding-bottom:3px;color:#fff;">Following are the Key Features & Benefits. For more details visit norton.com </p>
-                                                <ul class="alldata">
-
-
-                                                    <li>@item.features1</li>
-                                                    <li>@item.features2</li>
-                                                    <li>@item.features3</li>
-                                                    <li>@item.features4</li>
-                                                    <li>@item.features5</li>
-                                                </ul>
-                                                <a href="javascript:void(0);" onclick="openFormsss()" class="clickpurchase">Purchase Now</a>
-                                                <!------------------------POPUP------------------------>
-                                                <div class="form-popup purchasemypopup" id="purchasemyForm" style="display:none;">
-                                                    <div class="for-background-clr">
-                                                        <div class="confirm-purch" style="width:100%;float:left;">
-                                                            <form>
-                                                                <p>Consumer Mobile Number</p>
-                                                                @{
-                                                                    var idmob = item.SSp_Code + "txtmobile";
-                                                                    var idemail = item.SSp_Code + "txtemail";
-                                                                }
-                                                                <input id="@idmob" type="text" required placeholder="Enter Mobile No." />
-                                                                <p>Consumer Email ID</p>
-                                                                <input id="@idemail" type="text" required placeholder="Enter Email ID" />
-                                                                <strong>Note:-</strong>
-                                                                <p class="purchasenote" style="text-align:justify;">The customer will receive an anti-virus key through a message that is to be used with security and should not be shared with anyone.</p>
-                                                                <div class="buttonbottom">
-                                                                    <button type="button" class="btn cancel purchaseblock" onclick="closeForm()">Cancel</button>
-                                                                    <button type="button" onclick="confirm('@item.SSp_Code')" class="rightbuttonpu fullbodydycolorbg">Confirm & Pay</button>
-                                                                </div>
-                                                                <span class="errmsg" style="color:red;"></span>
-                                                            </form>
-                                                        </div>
-                                                        <div class="purchaseconfirmcheck" style="display:none;">
-                                                            <h3 style="margin: 0px;border-bottom: 1px solid var(--main-bg-lcolor);padding-bottom: 6px;margin-bottom: 10px;">Confirmation </h3>
-
-
-                                                            <p>
-                                                                <span> Plan Name</span>
-                                                                <span> @item.Plan_name </span>
-                                                            </p>
-                                                            <p>
-                                                                <span>Price</span>
-                                                                <span>@item.offer_price </span>
-                                                            </p>
-                                                            <p>
-                                                                <span>Customer Mobile</span>
-                                                                <span class="c_mobile"> </span>
-                                                            </p>
-                                                            <p>
-                                                                <span>Customer Email</span>
-                                                                <span class="h_email"> </span>
-                                                            </p>
-                                                            <strong>Note:-</strong>
-                                                            <p class="purchasenote" style="border-bottom:0px;text-align:justify;">The customer will receive an anti-virus key through a message that is to be used with security and should not be shared with anyone.</p>
-                                                            <div class="buttonbottom">
-                                                                <button type="button" class="btn cancel purchaseblock" onclick="closeForm()">Cancel</button>
-                                                                <button type="button" onclick="pay('@item.SSp_Code','@item.offer_price','@item.Plan_name','@item.Month','@item.Device')" class="rightbuttonpu fullbodydycolorbg">Confirm & Pay</button>
-                                                            </div>
-                                                            <span class="errmsg" style="color:red;"></span>
-                                                        </div>
-                                                        <div class="purchasesucces" style="display:none;">
-
-                                                            <div class="ghgh" style="display:none;">
-                                                                <p style="margin-top: 20px;"><img src="~/ashok-images/correct.svg" style="width:92px;padding:15px;background:green;border-radius:50%;" /></p>
-                                                                <span class="koibhe" style="font-size: 30px;font-weight: 800;border-bottom: 1px solid #bbb;width: 100%;display: block;"></span>
-                                                                <p style="font-size:15px;margin-top: 22px;">Your purchase is complete and the anti-virus key and PIN have been successfully sent to the user Email ID.</p>
-                                                            </div>
-                                                            <div class="ghgh1" style="display:none;">
-                                                                <p style="margin-top: 20px;"><img src="~/ashok-images/clock.svg" style="width:92px;" /></p>
-                                                                <span class="koibhe1" style="font-size: 30px;font-weight: 800;border-bottom: 1px solid #bbb;width: 100%;display: block;"></span>
-                                                                <p style="font-size:15px;margin-top: 22px;color:#fdb511;">Currently Your Order In Pending Please Check Report For Responce</p>
-
-                                                            </div>
-                                                            <div class="ghgh2" style="display:none;">
-                                                                <p style="margin-top: 20px;"><img src="~/ashok-images/closes.svg" style="width:92px;padding:15px;background:red;border-radius:50%;" /></p>
-                                                                <span class="koibhe2" style="font-size: 30px;font-weight: 800;border-bottom: 1px solid #bbb;width: 100%;display: block;"></span>
-                                                                <p style="font-size:15px;margin-top: 22px;">Please Read Proper Responce And Try Again </p>
-                                                            </div>
-
-
-                                                            <div class="buttonlastpu" style="text-align:center;">
-                                                                <button class="cancelclasnone" onclick="closeForm()">Close</button>
-                                                                <button class="fullbodydycolorbg"><a href="@Url.Action("SecurityReport","Home")" style="background: transparent;padding: 0px;font-size: 15px;margin: 0px;">Go To Report</a></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <!------------------------POPUP------------------------>
-
-                                            </div>
+<link href="~/MainFrontDesign/css/retailer-security-modern.css?v=2" rel="stylesheet" />
 
 
 
-                                        </div>
-                                    </div>
+<section class="content vm-security-page">
+
+    <div class="vm-security-shell">
+
+        <div class="vm-security-main-card">
+
+            <header class="vm-security-head">
+
+                <div class="vm-security-head__left">
+
+                    <nav class="vm-security-breadcrumb" aria-label="Breadcrumb">
+
+                        <a href="@Url.Action("Dashboard", "Home")">Home</a>
+
+                        <span class="vm-security-breadcrumb__sep">/</span>
+
+                        <span>Security</span>
+
+                    </nav>
+
+                    <h1 class="vm-security-head__title">
+
+                        <i class="material-icons" aria-hidden="true">verified_user</i>
+
+                        Norton security plans
+
+                    </h1>
+
+                    <p class="vm-security-head__hint">Select a plan, enter customer details, and pay from your wallet balance.</p>
+
+                </div>
+
+                <a class="vm-security-head__report" href="@Url.Action("SecurityReport", "Home")">
+
+                    <i class="material-icons" aria-hidden="true">assessment</i>
+
+                    <span>Security report</span>
+
+                </a>
+
+            </header>
+
+
+
+            @if (!string.IsNullOrWhiteSpace(providerMsg))
+
+            {
+
+                <div class="vm-security-empty">
+
+                    <div class="vm-security-empty__icon" aria-hidden="true"><i class="material-icons">cloud_off</i></div>
+
+                    <h3>Plans unavailable</h3>
+
+                    <p>@providerMsg</p>
+
+                </div>
+
+            }
+
+            else if (plans.Count == 0)
+
+            {
+
+                <div class="vm-security-empty">
+
+                    <div class="vm-security-empty__icon" aria-hidden="true"><i class="material-icons">inventory_2</i></div>
+
+                    <h3>No plans found</h3>
+
+                    <p>Security plans are not available right now. Please try again later.</p>
+
+                </div>
+
+            }
+
+            else
+
+            {
+
+                <div class="vm-security-grid">
+
+                    @foreach (var item in plans)
+
+                    {
+
+                        var per = item.Producation_price > 0
+
+                            ? (1 - (item.offer_price) / item.Producation_price) * 100
+
+                            : 0;
+
+
+
+                        <article class="vm-security-plan-card">
+
+                            <div class="vm-security-plan-card__top">
+
+                                <img class="vm-security-plan-card__logo" src="~/ashok-images/nortonlifelogo.png" alt="Norton" />
+
+                                <div class="vm-security-plan-card__badges">
+
+                                    <span class="vm-security-plan-card__badge vm-security-plan-card__badge--device">@item.Device device</span>
+
+                                    <span class="vm-security-plan-card__badge vm-security-plan-card__badge--term">@item.Month month</span>
+
                                 </div>
-                                
 
                             </div>
 
-                        }
+                            <div class="vm-security-plan-card__body">
+
+                                <h2 class="vm-security-plan-card__name">@item.Plan_name</h2>
+
+                                <div class="vm-security-plan-card__pricing">
+
+                                    <div class="vm-security-plan-card__pricing-row">
+
+                                        <span class="vm-security-plan-card__mrp"><del>MRP ₹ @item.Producation_price</del></span>
+
+                                        <span class="vm-security-plan-card__off">@per.ToString("0.##")% OFF</span>
+
+                                    </div>
+
+                                    <span class="vm-security-plan-card__offer">Now ₹ @item.offer_price</span>
+
+                                </div>
+
+                                <p class="vm-security-plan-card__note">Key features — see norton.com for full details.</p>
+
+                                <ul class="vm-security-plan-card__features">
+
+                                    @if (!string.IsNullOrWhiteSpace(item.features1)) { <li>@item.features1</li> }
+
+                                    @if (!string.IsNullOrWhiteSpace(item.features2)) { <li>@item.features2</li> }
+
+                                    @if (!string.IsNullOrWhiteSpace(item.features3)) { <li>@item.features3</li> }
+
+                                    @if (!string.IsNullOrWhiteSpace(item.features4)) { <li>@item.features4</li> }
+
+                                    @if (!string.IsNullOrWhiteSpace(item.features5)) { <li>@item.features5</li> }
+
+                                </ul>
+
+                                <button type="button" class="clickpurchase vm-security-plan-card__buy" data-ssp-code="@item.SSp_Code">
+
+                                    <i class="material-icons" aria-hidden="true">shopping_cart</i>
+
+                                    <span>Purchase now</span>
+
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                    }
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
 
 
+
+    @if (string.IsNullOrWhiteSpace(providerMsg) && plans.Count > 0)
+
+    {
+
+        <div class="vm-security-modals-root" aria-hidden="true">
+
+            @foreach (var item in plans)
+
+            {
+
+                var idmob = item.SSp_Code + "txtmobile";
+
+                var idemail = item.SSp_Code + "txtemail";
+
+                <div class="form-popup purchasemypopup" style="display:none;" role="dialog" aria-modal="true" data-ssp-code="@item.SSp_Code" aria-labelledby="vmSecPurchTitle_@item.SSp_Code">
+
+                    <div class="for-background-clr vm-security-modal">
+
+                        <button type="button" class="vm-security-modal__close purchaseblock" onclick="closeForm()" aria-label="Close">&times;</button>
+
+                        <div class="confirm-purch">
+
+                            <h3 class="vm-security-modal__title" id="vmSecPurchTitle_@item.SSp_Code">Purchase @item.Plan_name</h3>
+
+                            <label class="vm-security-field-label" for="@idmob">Consumer mobile number</label>
+
+                            <input id="@idmob" type="tel" required placeholder="10-digit mobile" maxlength="10" inputmode="numeric" autocomplete="tel" class="vm-security-field" />
+
+                            <label class="vm-security-field-label" for="@idemail">Consumer email ID</label>
+
+                            <input id="@idemail" type="email" required placeholder="Email address" autocomplete="email" class="vm-security-field" />
+
+                            <p class="purchasenote vm-security-modal__note"><strong>Note:</strong> Customer receives the anti-virus key by SMS/email. Do not share it.</p>
+
+                            <div class="buttonbottom vm-security-modal__actions">
+
+                                <button type="button" class="btn purchaseblock vm-security-btn vm-security-btn--ghost" onclick="closeForm()">Cancel</button>
+
+                                <button type="button" onclick="confirm('@item.SSp_Code')" class="rightbuttonpu vm-security-btn vm-security-btn--primary">Continue</button>
+
+                            </div>
+
+                            <span class="errmsg vm-security-modal__error"></span>
+
+                        </div>
+
+                        <div class="purchaseconfirmcheck" style="display:none;">
+
+                            <h3 class="vm-security-modal__title">Confirm purchase</h3>
+
+                            <p><span>Plan name</span><span>@item.Plan_name</span></p>
+
+                            <p><span>Price</span><span>₹ @item.offer_price</span></p>
+
+                            <p><span>Customer mobile</span><span class="c_mobile"></span></p>
+
+                            <p><span>Customer email</span><span class="h_email"></span></p>
+
+                            <p class="purchasenote vm-security-modal__note">Customer receives the key by SMS/email.</p>
+
+                            <div class="buttonbottom vm-security-modal__actions">
+
+                                <button type="button" class="btn purchaseblock vm-security-btn vm-security-btn--ghost" onclick="closeForm()">Cancel</button>
+
+                                <button type="button" onclick="pay('@item.SSp_Code','@item.offer_price','@item.Plan_name','@item.Month','@item.Device')" class="rightbuttonpu vm-security-btn vm-security-btn--primary">Confirm &amp; pay</button>
+
+                            </div>
+
+                            <span class="errmsg vm-security-modal__error"></span>
+
+                        </div>
+
+                        <div class="purchasesucces" style="display:none;">
+
+                            <div class="ghgh vm-security-result vm-security-result--success" style="display:none;">
+
+                                <img src="~/ashok-images/correct.svg" alt="" class="vm-security-result__icon" />
+
+                                <span class="koibhe vm-security-result__title"></span>
+
+                                <p>Purchase complete. Key and PIN sent to customer email.</p>
+
+                            </div>
+
+                            <div class="ghgh1 vm-security-result vm-security-result--pending" style="display:none;">
+
+                                <img src="~/ashok-images/clock.svg" alt="" class="vm-security-result__icon" />
+
+                                <span class="koibhe1 vm-security-result__title"></span>
+
+                                <p>Order pending — check Security report for status.</p>
+
+                            </div>
+
+                            <div class="ghgh2 vm-security-result vm-security-result--failed" style="display:none;">
+
+                                <img src="~/ashok-images/closes.svg" alt="" class="vm-security-result__icon" />
+
+                                <span class="koibhe2 vm-security-result__title"></span>
+
+                                <p>Please read the message and try again.</p>
+
+                            </div>
+
+                            <div class="buttonlastpu vm-security-modal__actions vm-security-modal__actions--stack">
+
+                                <button type="button" class="cancelclasnone vm-security-btn vm-security-btn--ghost" onclick="closeForm()">Close</button>
+
+                                <a href="@Url.Action("SecurityReport", "Home")" class="vm-security-btn vm-security-btn--primary vm-security-btn--link">Go to report</a>
+
+                            </div>
+
+                        </div>
 
                     </div>
+
                 </div>
-            </div>
+
+            }
+
         </div>
-      
-    </div>
+
+    }
 
 
 
+    <div class="model-drop" style="display:none;" aria-hidden="true"></div>
 
-    <div class="model-drop" style="position: fixed;display:none;
-    background: #000;
-    top: 0px;
-    bottom: -5000px;
-    width: 100%;
+    <div id="backtodashboardcall" data-request-url="@Url.Action("Dashboard", "Home")"></div>
 
-    z-index: 9;
-    right: 0px;
-    opacity: .6;">
+    <input type="hidden" id="latss" name="latss" />
 
+    <input type="hidden" id="longloc" name="longloc" />
 
-    </div>
-    <div>
-        <div id="backtodashboardcall" data-request-url="@Url.Action("Dashboard", "Home")"></div>
-        <input type="hidden" id="latss" required name="latss" />
-        <input type="hidden" id="longloc" required name="longloc" />
-    </div>
 </section>
-<div id="loadredmodel" style="display:none;">
-    <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);" class="loadingio-spinner-ripple-92ar2pfqk5j">
-        <div class="ldio-zdyd6mf6t5">
-            <div></div><div></div>
-        </div>
-    </div>
+
+
+
+<div id="loadredmodel" style="display:none;" aria-hidden="true" role="status">
+
+    <div class="vm-security-pay-loader" aria-label="Processing payment"></div>
+
 </div>
-<script src="~/Scripts/CheckValidation/valideatelocations.js"></script>
-<script>
-    function confirm(sspcode) {
-        $('.errmsg').text("");
-        var mobilecode = "#" + sspcode + "txtmobile";
-        var emailcode = "#" + sspcode + "txtemail";
-        var txtmobile1 = $('' + mobilecode + '').val();
-        var email = $('' + emailcode + '').val();
-        intRegex = /[0-9 -()+]+$/;
-        var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-        if ((!intRegex.test(txtmobile1))) {
-            $('.errmsg').text("Please enter a valid phone number.");
+
+
+
+@section PostVmScripts {
+
+    <script src="~/Scripts/CheckValidation/valideatelocations.js"></script>
+
+    <script>
+
+        function vmSecurityGetPopup(sspcode) {
+            return jQuery('.purchasemypopup').filter(function () {
+                return jQuery(this).attr('data-ssp-code') === sspcode;
+            });
         }
-        else if (txtmobile1.length == 10) {
-            if (!expr.test(email)) {
-                $('.errmsg').text("Please enter a valid email address");
+
+
+
+        function closeForm() {
+
+            jQuery('.purchasemypopup').hide();
+
+            jQuery('.model-drop').hide();
+
+            jQuery('.confirm-purch').show();
+
+            jQuery('.purchaseconfirmcheck').hide();
+
+            jQuery('.purchasesucces').hide();
+
+            jQuery('.ghgh, .ghgh1, .ghgh2').hide();
+
+            jQuery('.errmsg').text('');
+
+            jQuery('body').removeClass('vm-security-modal-open');
+
+        }
+
+
+
+        function confirm(sspcode) {
+
+            var mobilecode = '#' + sspcode + 'txtmobile';
+
+            var emailcode = '#' + sspcode + 'txtemail';
+
+            var txtmobile1 = jQuery(mobilecode).val();
+
+            var email = jQuery(emailcode).val();
+
+            var intRegex = /[0-9 -()+]+$/;
+
+            var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+
+            var $popup = vmSecurityGetPopup(sspcode);
+
+            $popup.find('.errmsg').text('');
+
+
+
+            if (!intRegex.test(txtmobile1)) {
+
+                $popup.find('.confirm-purch .errmsg').text('Please enter a valid phone number.');
+
+            } else if (txtmobile1.length === 10) {
+
+                if (!expr.test(email)) {
+
+                    $popup.find('.confirm-purch .errmsg').text('Please enter a valid email address.');
+
+                } else {
+
+                    $popup.find('.c_mobile').text(txtmobile1);
+
+                    $popup.find('.h_email').text(email);
+
+                    $popup.find('.purchaseconfirmcheck').show();
+
+                    $popup.find('.confirm-purch').hide();
+
+                }
+
+            } else {
+
+                $popup.find('.confirm-purch .errmsg').text('Please enter a valid 10-digit mobile number.');
+
             }
-            else {
-                $('.c_mobile').text(txtmobile1);
-                $('.h_email').text(email);
 
-                $('.purchaseconfirmcheck').show();
-                $('.confirm-purch').hide();
+        }
+
+
+
+        function pay(sspcode, offerprice, planname, month, device) {
+
+            var latss = jQuery('#latss').val();
+
+            var longloc = jQuery('#longloc').val();
+
+            var mobilecode = '#' + sspcode + 'txtmobile';
+
+            var emailcode = '#' + sspcode + 'txtemail';
+
+            var txtmobile = jQuery(mobilecode).val();
+
+            var email = jQuery(emailcode).val();
+
+            var $popup = vmSecurityGetPopup(sspcode);
+
+
+
+            jQuery('#loadredmodel').css('display', 'flex');
+
+            $popup.find('.purchaseconfirmcheck').hide();
+
+            if (typeof window.showAdminLoader === 'function') {
+
+                window.showAdminLoader();
+
             }
+
+
+
+            jQuery.ajax({
+
+                type: 'POST',
+
+                url: '@Url.Action("AddPurchase", "Home")',
+
+                data: {
+
+                    sspcode: sspcode,
+
+                    offerprice: offerprice,
+
+                    planname: planname,
+
+                    month: month,
+
+                    txtmobile: txtmobile,
+
+                    email: email,
+
+                    device: device,
+
+                    latss: latss,
+
+                    longloc: longloc
+
+                },
+
+                dataType: 'json',
+
+                cache: false,
+
+                success: function (result) {
+
+                    jQuery('#loadredmodel').hide();
+
+                    if (typeof window.hideAdminLoader === 'function') {
+
+                        window.hideAdminLoader();
+
+                    }
+
+                    $popup.find('.purchasesucces').show();
+
+                    $popup.find('.ghgh, .ghgh1, .ghgh2').hide();
+
+
+
+                    if (result === 'DONE') {
+
+                        $popup.find('.koibhe').text('Successfully purchased');
+
+                        $popup.find('.ghgh').show();
+
+                    } else if (result === 'PENDING') {
+
+                        $popup.find('.koibhe1').text('Order pending');
+
+                        $popup.find('.ghgh1').show();
+
+                    } else {
+
+                        $popup.find('.koibhe2').text(result);
+
+                        $popup.find('.ghgh2').show();
+
+                    }
+
+                },
+
+                error: function () {
+
+                    jQuery('#loadredmodel').hide();
+
+                    if (typeof window.hideAdminLoader === 'function') {
+
+                        window.hideAdminLoader();
+
+                    }
+
+                    $popup.find('.purchasesucces').show();
+
+                    $popup.find('.ghgh, .ghgh1, .ghgh2').hide();
+
+                    $popup.find('.koibhe2').text('Request failed. Please try again.');
+
+                    $popup.find('.ghgh2').show();
+
+                }
+
+            });
+
         }
-        else {
-            $('.errmsg').text("Please enter a valid phone number");
-        }
-    }
-</script>
-
-<script>
-    function pay(sspcode, offerprice, planname, month, device) {
-        
-        latss = $('#latss').val();
-        longloc = $('#longloc').val();
-        $('#loadredmodel').show();
-        $('.purchaseconfirmcheck').hide();
-       
-        var mobilecode = "#"+sspcode + "txtmobile";
-        var emailcode = "#"+sspcode + "txtemail";
-        var txtmobile = $(''+mobilecode+'').val();
-        var email = $('' + emailcode + '').val();
-      
-   
-          $.ajax({
-              type: "POST", url: '@Url.Action("AddPurchase", "Home")',
-              data: { 'sspcode': sspcode, 'offerprice': offerprice, 'planname': planname, 'month': month, 'txtmobile': txtmobile, 'email': email, 'device': device, latss: latss, longloc: longloc },
-              dataType: 'json',
-              cache: false,
-              success: function (result) {
-                  
-                  $('#loadredmodel').hide();
-                  $('.purchasesucces').show();
-                
-                  if (result == "DONE") {
-                      $('.koibhe').text("Successfully Purchased");
-                      $('.ghgh').show();
-                      
-                  }
-                  else if (result == "PENDING") {
-                      $('.koibhe1').text("Order Pending");
-                        $('.ghgh1').show();
-                  }
-                  else {
-                      
-                      
-                      $('.koibhe2').text(result);
-                        $('.ghgh2').show();
-                  }
-                 
-        }
-    });
-    }
-</script>
-
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
 
 
+        jQuery(function ($) {
 
-<script>
-    $(document).ready(function () {
+            $('.clickpurchase').on('click', function () {
 
-        $(".clickpurchase").click(function () {
-            $('.confirm-purch').show();
-            $(".purchaseconfirmcheck").css("display", "none");
-            $(this).next(".purchasemypopup").css("display", "block")
-            $('.model-drop').show();
-        });
-        $(".purchaseblock").click(function () {
-            $(".purchasemypopup").css("display", "none")
-            $('.model-drop').hide();
-        });
-        $(".cancelclasnone").click(function () {
-            $(".purchasemypopup").css("display", "none");
-            $(".purchasesucces").css("display", "none");
-             $('.model-drop').hide();
-            
+                var ssp = $(this).attr('data-ssp-code');
 
-          
+                var $popup = vmSecurityGetPopup(ssp);
+
+                closeForm();
+
+                $popup.find('.confirm-purch').show();
+
+                $popup.find('.purchaseconfirmcheck, .purchasesucces').hide();
+
+                $popup.css('display', 'flex');
+
+                $('.model-drop').show();
+
+                $('body').addClass('vm-security-modal-open');
+
+                $popup.find('.vm-security-field').first().trigger('focus');
+
+            });
+
+
+
+            $('.purchaseblock').on('click', function () {
+
+                closeForm();
+
+            });
+
+
+
+            $('.cancelclasnone').on('click', function () {
+
+                closeForm();
+
+            });
+
+
+
+            $(document).on('keydown', function (e) {
+
+                if (e.key === 'Escape') {
+
+                    closeForm();
+
+                }
+
+            });
 
         });
-    });
 
-</script>
+    </script>
 
-
-<script>
-    $(".detail-faredetails strong.fare").click(function () {
-        $(".detail-faredetails label.fare-showblock").css("display", "inline-block");
-        $(this).hide();
-    });
-
-    $(".detail-faredetails label.fare-showblock").click(function () {
-        $(".detail-faredetails strong.fare").css("display", "inline-block");
-        $(this).hide();
-    });
-</script>
+}
 

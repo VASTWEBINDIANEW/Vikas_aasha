@@ -1,237 +1,219 @@
 ﻿@model Vastwebmulti.Areas.RETAILER.Models.Referal
+@using System.Linq
 @{
     ViewBag.Title = "Set_Referral";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var refSettings = Model != null && Model.refsetting != null ? Model.refsetting.ToList() : null;
+    var refIncomes = Model != null && Model.Refincome != null ? Model.Refincome.ToList() : null;
+    var incomeCount = refIncomes != null ? refIncomes.Count : 0;
 }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=21" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=38" rel="stylesheet" />
+<script>document.body.classList.add('saas-fund-transfer-page', 'saas-retailer-referral-page');</script>
 
 <style>
+    /* ===== Set Referral : Fund_Transfer_Retailer_To_Retailer premium language ===== */
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-layout { display: flex !important; gap: 14px !important; align-items: flex-start !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-left { flex: 0 0 360px !important; max-width: 360px !important; min-width: 0 !important; display: flex !important; flex-direction: column !important; gap: 14px !important; background: #fff !important; border: 1px solid #e5e9f2 !important; border-radius: 16px !important; padding: 14px !important; height: 700px !important; max-height: 700px !important; overflow-y: auto !important; box-shadow: 0 4px 16px rgba(15,23,42,.06) !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-right { flex: 1 1 auto !important; min-width: 0 !important; }
 
-    /* new css  */
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-hero { background: #fff !important; border: 1px solid #e5e9f2 !important; border-radius: 16px !important; padding: 18px 16px !important; color: #0f172a !important; text-align: center !important; box-shadow: 0 4px 16px rgba(15,23,42,.06) !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-hero::after { display: none !important; content: none !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-hero__lbl { display: block !important; font-size: 11px !important; font-weight: 800 !important; letter-spacing: 1px !important; text-transform: uppercase !important; color: #64748b !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-hero__code { display: block !important; font-size: 28px !important; font-weight: 800 !important; letter-spacing: 3px !important; margin: 10px 0 6px 0 !important; padding: 10px 8px !important; color: #1e40af !important; background: #f8faff !important; border: 1.5px dashed #c7d2fe !important; border-radius: 12px !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-hero__tag { display: block !important; font-size: 12.5px !important; font-weight: 600 !important; color: #64748b !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-copyrow { display: flex !important; gap: 8px !important; margin-top: 12px !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-copyrow input { flex: 1 1 auto !important; min-width: 0 !important; width: auto !important; height: 40px !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; background: #f1f5f9 !important; color: #0f172a !important; font-weight: 800 !important; letter-spacing: 1px !important; padding: 0 12px !important; outline: none !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-copybtn { flex: 0 0 auto !important; height: 40px !important; padding: 0 14px !important; border: none !important; border-radius: 10px !important; background: linear-gradient(135deg,#4f46e5,#7c3aed) !important; color: #fff !important; font-size: 13px !important; font-weight: 800 !important; cursor: pointer !important; text-decoration: none !important; display: inline-flex !important; align-items: center !important; gap: 6px !important; white-space: nowrap !important; box-shadow: 0 4px 12px rgba(79,70,229,.35) !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-copybtn:hover { transform: translateY(-1px) !important; filter: brightness(1.07) !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-hero__img { display: block !important; width: 100% !important; height: auto !important; object-fit: contain !important; border-radius: 12px !important; margin-top: 12px !important; }
 
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-card { background: #fff !important; border: 1px solid #e5e9f2 !important; border-radius: 16px !important; overflow: hidden !important; box-shadow: 0 4px 16px rgba(15,23,42,.06) !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-card__head { display: flex !important; align-items: center !important; gap: 8px !important; padding: 12px 16px !important; background: linear-gradient(180deg,#f8faff,#fff) !important; border-bottom: 1px solid #eef1f6 !important; font-size: 13px !important; font-weight: 800 !important; color: #0f172a !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-card__head i { color: #4f46e5 !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-benefit { list-style: none !important; margin: 0 !important; padding: 6px 16px 12px 16px !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-benefit li { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 10px !important; padding: 8px 0 !important; border-bottom: 1px dashed #e5e9f2 !important; font-size: 12.5px !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-benefit li:last-child { border-bottom: none !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-benefit li strong { color: #64748b !important; font-weight: 700 !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-benefit li span { color: #0f172a !important; font-weight: 800 !important; text-align: right !important; }
+
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-right .vm-ft-table-wrap { height: 615px !important; max-height: 615px !important; overflow-y: auto !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-right .vm-radiant-record-badge { margin-left: auto !important; }
+    body.saas-admin-ui .saas-retailer-referral-page .vm-ref-benefit-cell { font-weight: 800 !important; color: #15803d !important; }
+
+    @@media screen and (max-width:1024px) {
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-layout { flex-direction: column !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-left { flex: 0 0 100% !important; max-width: 100% !important; height: auto !important; max-height: none !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-right { width: 100% !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-right .vm-ft-table-wrap { height: 480px !important; max-height: 480px !important; }
     }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
+    @@media screen and (max-width:767px) {
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ft-page-shell { padding-left: 10px !important; padding-right: 10px !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ft-page-toolbar { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ft-breadcrumb { flex-wrap: wrap !important; gap: 4px 8px !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ft-export-group { display: flex !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ft-export-group .saas-acc-btn { flex: 1 1 0 !important; justify-content: center !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-hero__code { font-size: 22px !important; letter-spacing: 2px !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-copyrow { flex-wrap: wrap !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-copyrow input { flex: 1 1 100% !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-copybtn { flex: 1 1 100% !important; justify-content: center !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-benefit li { font-size: 12px !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ft-history-toolbar__head { flex-wrap: wrap !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-right .vm-radiant-record-badge { margin-left: 0 !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-right .vm-ft-table-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+        body.saas-admin-ui .saas-retailer-referral-page #referralIncomeTable { min-width: 620px !important; }
+        body.saas-admin-ui .saas-retailer-referral-page #referralIncomeTable thead th,
+        body.saas-admin-ui .saas-retailer-referral-page #referralIncomeTable tbody td { font-size: 12px !important; padding: 9px 10px !important; }
     }
-
-    .table {
-        margin-bottom: 0px;
+    @@media print {
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ft-page-toolbar,
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-left { display: none !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-layout { display: block !important; }
+        body.saas-admin-ui .saas-retailer-referral-page .vm-ref-right { width: 100% !important; }
     }
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-     
-    /* new css  */
-
-    .col-md-3.buttonPdf button:last-child {
-        padding-left: 16px;
-    }
-    .setreferral-content li span {color: #555 !important;}
-    .setreferral-content li:first-child span {color: #333 !important;}
-    .buttonPdf button {color: #555 !important;}
-    .referralall-report table, .referralall-report table tr, .referralall-report table tr td, .referralall-report table tr th {
-        border-color: #ddd;
-    }
-    @@media only screen and (max-width:1169px){
-        .container-fluid.resp_set {
-            padding-left: 15px !important;
-        }
-        .col-md-4.refferal-code {
-            padding-left: 0;
-        }
-
-    }
-
-    @@media only screen and (max-width:767px){
-        .col-md-8.referral-report {
-            padding-left: 0;
-        }
-
-
-
-    }
-
-
-
-
 </style>
 
-<section class="content refferal-code-responshive content-fourdesign-page allpage-four-design-section" style="overflow-x:hidden;">
-    <div class="container-fluid resp_set" style="padding-left: 11px;height:100vh;">
-        <!--Four-Design-Page-Header-Start-->
+<section class="content saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium saas-retailer-referral-page">
+    <div class="container-fluid vm-ft-page-shell">
 
-        <div class="page-title-box-fourde">
-            <h3>Referral</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">My Account 1&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Referral</a></li>
-            </ul>
-        </div>
-
-        <!--Four-Design-Page-Header-End-->
-        <div class="row clearfix" style="">
-            <div class="col-md-12">
-                <div class="page-header-third">
-                    <div class="bread-same-all-page" style="float:left;">
-
-                        <ul style="margin:0;">
-                            <li class="smli">
-                                <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                                </a>
-                            </li>
-
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                Set Referral
-                            </li>
-                        </ul>
-                        <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;">
-
-                            <button>PDF</button>
-                            <button>Export</button>
-
-                        </div>
-                    </div>
-                    
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <div>
+                    <ol class="vm-ft-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>My Account</li>
+                        <li>Set Referral</li>
+                    </ol>
                 </div>
             </div>
+            <div class="vm-ft-export-group">
+                <button type="button" id="btnRefExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                <button type="button" id="btnRefPdf" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+            </div>
         </div>
-        
-        <div class="row clearfix">
-            
-            <div class="col-md-12">
-                <div class="col-md-4 refferal-code refferal-noneclass">
-                    <div class="page-header-third">
-                        <div class="refferal-codeew changeback-four-design four-design-table-design">
-                            <h2>My Referral Code</h2>
-                            <div class="code-background code-background-responshive">
-                                <div class="coderetygfhg">
-                                    <h3>@ViewBag.refcode</h3>
-                                    <p>Referral Kro aur Kamao</p>
-                                </div>
 
-                            </div>
-                            <div class="Purshasesbasissew Purshasesbasiss">
-
-                                <div class="Businessreferral">
-                                    <p class="referralheadertop fullbodydycolorbg">Referral Benefit</p>
-
-                                    @foreach (var item in Model.refsetting)
-                                    {
-                                        <ul class="setreferral-content">
-                                            <li class="purchasetypere"><strong>Referral type</strong><span>@item.ReferalType</span></li>
-                                            <li><strong>Minimum Bussiness</strong><span>@item.minimiumimit</span></li>
-                                            <li><strong>Category</strong><span>@item.category</span></li>
-                                            <li><strong>Expiry No. Of Days</strong><span>@item.expnoofday</span></li>
-                                            <li><strong>Sharing Type</strong><span>@item.SharingType</span></li>
-                                            <li><strong>Sharing Value</strong><span>@item.SharingValue</span></li>
-                                        </ul>
-                                    }
-
-                                </div>
-                            </div>
-                        </div>
-
+        <div class="vm-ref-layout">
+            <div class="vm-ref-left">
+                <div class="vm-ref-hero">
+                    <span class="vm-ref-hero__lbl">My Referral Code</span>
+                    <span class="vm-ref-hero__code">@ViewBag.refcode</span>
+                    <span class="vm-ref-hero__tag">Referral Kro aur Kamao</span>
+                    <div class="vm-ref-copyrow">
+                        <input id="copytexttap" type="text" value="@ViewBag.refcode" readonly="readonly" aria-label="Referral code" />
+                        <a href="Javascript:void(0);" class="vm-ref-copybtn" onclick="copyFunction()" title="Tap to Copy"><i class="fa fa-copy" aria-hidden="true"></i> Tap to Copy</a>
                     </div>
                 </div>
 
-                @*Four-Design-Refferal-Code-New-Design-Start*@
+                <div class="vm-ref-card">
+                    <div class="vm-ref-card__head"><i class="fas fa-gift" aria-hidden="true"></i> Referral Benefit</div>
+                    @if (refSettings != null)
+                    {
+                        foreach (var item in refSettings)
+                        {
+                            <ul class="vm-ref-benefit">
+                                <li><strong>Referral type</strong><span>@item.ReferalType</span></li>
+                                <li><strong>Minimum Bussiness</strong><span>@item.minimiumimit</span></li>
+                                <li><strong>Category</strong><span>@item.category</span></li>
+                                <li><strong>Expiry No. Of Days</strong><span>@item.expnoofday</span></li>
+                                <li><strong>Sharing Type</strong><span>@item.SharingType</span></li>
+                                <li><strong>Sharing Value</strong><span>@item.SharingValue</span></li>
+                            </ul>
+                        }
+                    }
+                </div>
+            </div>
 
-                <div class="col-md-4 refferal-four-design-retailer">
-                    <div class="page-header-third">
-                        <div class="refferal-fullclass">
-                            <div class="refferal-sec-first">
-                                <div class="refer-fourdesign">
-                                    <h4>Refer a Friend</h4>
-                                </div>
-                                <div class="refer-fourdesign-se">
-                                    <input id="copytexttap" type="text" value="@ViewBag.refcode" readonly="readonly">
-                                    <a href="Javascript:void(0);" onclick="copyFunction()">Tap to Copy</a>
-                                </div>
-                                <div class="refferal-img-four">
-                                    <img src="~/ashok-images/referral-retailer-four.jpg" />
-                                </div>
-
+            <div class="vm-ref-right fund-trasfer-right vm-ft-history-panel">
+                <div class="vm-ft-history-body">
+                    <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium">
+                        <div class="vm-ft-history-toolbar__head">
+                            <i class="fas fa-users" aria-hidden="true"></i>
+                            <div>
+                                <span class="vm-ft-history-toolbar__title">Referral income</span>
+                                <span class="vm-ft-history-toolbar__sub">Referral se mili hui benefit history</span>
                             </div>
-
-                            <div class="refferal-sec-second">
-                                @foreach (var item in Model.refsetting)
-                                {
-                                    <ul class="setreferral-content">
-                                        <li class="purchasetypere"><strong>Referral type</strong><span>@item.ReferalType</span></li>
-                                        <li><strong>Minimum Bussiness</strong><span>@item.minimiumimit</span></li>
-                                        <li><strong>Category</strong><span>@item.category</span></li>
-                                        <li><strong>Expery No. Of Days</strong><span>@item.expnoofday</span></li>
-                                        <li><strong>Sharing Type</strong><span>@item.SharingType</span></li>
-                                        <li><strong>Sharing Value</strong><span>@item.SharingValue</span></li>
-                                    </ul>
-                                }
-                            </div>
+                            <span class="vm-radiant-record-badge" title="Total records">
+                                Records: <strong>@incomeCount</strong>
+                            </span>
                         </div>
                     </div>
-
-                </div>
-
-                @*Four-Design-Refferal-Code-New-Design-Start*@
-
-                <div class="col-md-8 referral-report">
-                    <div class="page-header-third">
-                        <div class="referralall-report changeback-four-design four-design-table-design">
-                            <table border="1">
-                                <thead>
-                                    <tr>
-                                        <th>Referral Type</th>
-                                        <th>Received Date</th>
-                                        <th>Pre&nbsp;₹</th>
-                                        <th>Get&nbsp;Benefit</th>
-                                        <th>post&nbsp;₹</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach (var item in Model.Refincome)
-                                    {
+                    <div id="tblshowMasterD" class="vm-ft-table-wrap table-responsive">
+                        <table id="referralIncomeTable" class="table third-design-table vm-ft-table" cellspacing="0">
+                                    <thead>
                                         <tr>
-                                            <td>@item.RefferalType</td>
-                                            <td>@item.RecivedDate</td>
-                                            <td>@item.PreParrentRetailerBalance₹</td>
-                                            <td>@item.Benifitrecived</td>
-                                            <td>@item.@item.sharingvalue₹</td>
+                                            <th>Referral Type</th>
+                                            <th>Received Date</th>
+                                            <th>Pre &#8377;</th>
+                                            <th>Get Benefit</th>
+                                            <th>Post &#8377;</th>
                                         </tr>
-                                    }
-                                </tbody>
-                            </table>
-
-                        </div>
-
+                                    </thead>
+                                    <tbody>
+                                        @if (refIncomes != null)
+                                        {
+                                            foreach (var item in refIncomes)
+                                            {
+                                                <tr>
+                                                    <td title="@item.RefferalType">@item.RefferalType</td>
+                                                    <td title="@item.RecivedDate">@item.RecivedDate</td>
+                                                    <td title="@item.PreParrentRetailerBalance">@item.PreParrentRetailerBalance &#8377;</td>
+                                                    <td class="vm-ref-benefit-cell" title="@item.Benifitrecived">@item.Benifitrecived</td>
+                                                    <td title="@item.sharingvalue">@item.sharingvalue &#8377;</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
                     </div>
                 </div>
             </div>
-
         </div>
 
     </div>
-
 </section>
 
-
-
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
+<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
 <script>
     function copyFunction() {
-        
         var copyText = document.getElementById("copytexttap");
+        if (!copyText) { return; }
         copyText.select();
-        
-        document.execCommand("copy");
-
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(copyText.value);
+            } else {
+                document.execCommand("copy");
+            }
+        } catch (e) {
+            try { document.execCommand("copy"); } catch (e2) { }
+        }
     }
+
+    document.getElementById("btnRefPdf").addEventListener("click", function () {
+        window.print();
+    });
+
+    document.getElementById("btnRefExport").addEventListener("click", function () {
+        var table = document.getElementById("referralIncomeTable");
+        if (!table) { return; }
+        var bom = String.fromCharCode(65279);
+        var html = "<html><head><meta charset='UTF-8'></head><body>" + table.outerHTML + "</body></html>";
+        var blob = new Blob([bom + html], { type: "application/vnd.ms-excel" });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "Referral_Income.xls";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 100);
+    });
 </script>

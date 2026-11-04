@@ -1,134 +1,41 @@
 ﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
 
 
-<style>
-
-    .loader {
-        position: fixed;
-        top: -90px;
-        left: 0;
-        background-color: rgba(255,255,255,0.7);
-        z-index: 999999999999;
-        display: none;
-        height: 100vw;
-        width: 100vw;
-    }
-
-    @@-webkit-keyframes spin {
-        from {
-            -webkit-transform: rotate(0deg);
-        }
-
-        to {
-            -webkit-transform: rotate(360deg);
-        }
-    }
-
-    @@keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    .loader::after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 48%;
-        top: 25%;
-        width: 100px;
-        height: 100px;
-        border-style: solid;
-        border-color: black;
-        border-top-color: transparent;
-        border-width: 4px;
-        border-radius: 50%;
-        -webkit-animation: spin .8s linear infinite;
-        animation: spin .8s linear infinite;
-    }
-
-    @@media screen and (max-width:1440px) {
-        .Recharg11 {
-            font-size: 17px;
-        }
-    }
-
-    @@media screen and (max-width:1080px) {
-        .Recharg11 {
-            font-size: 14px;
-        }
-    }
-</style>
-<div id="broadshow" class="row" style="padding-left: 4px;">
-    <div class="col-md-4 elecpay-first broadshow-class">
+@* vm-rch: purane loader/Recharg11 <style> hataye — retailer-recharge-modern.css (sec-12) me port *@
+<div id="broadshow" class="vm-rch-formgrid vm-rch-broad-grid fund-transfer-form">
+    <div class="vm-rch-fcell vm-rch-fop elecpay-first broadshow-class">
         <div>
-            <p id="" class="insurancemessage22" style=" top:-15px !important;margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
+            <p id="" class="insurancemessage22 vm-rch-err"></p>
         </div>
-        <div class="form-group" style="margin-bottom:0px;">
-            <div class="input-group">
-                @Html.DropDownList("broadbandddltype", ViewBag.Broadband as SelectList, "Select Operators", new { id = "broadbandddltype", @class = "form-control", required = "required", onchange = "broadbandddl(this)" })
-                <div class="input-group-addon in-addon">
-
-                </div>
-
-            </div>
-            <!-- /.input group -->
-        </div>
-
+        <i class="fa fa-wifi vm-rch-in-ico vm-rch-in-ico--op" aria-hidden="true"></i>
+        @Html.DropDownList("broadbandddltype", ViewBag.Broadband as SelectList, "Select Operators", new { id = "broadbandddltype", @class = "form-control", required = "required", onchange = "broadbandddl(this)" })
     </div>
-    <div class="col-md-3">
+    <div class="vm-rch-fcell vm-rch-fnum">
         <div>
-            <p id="broadbandmessage" class="insurancemessage22" style="top:-16px !important; margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
+            <p id="broadbandmessage" class="insurancemessage22 vm-rch-err"></p>
         </div>
-        <div class="form-group" style="margin-bottom:0px;">
-            <div class="txtelectricity1" style="margin-top:-1px; height:37px;">
-                <input type="text" id="txtbroadbandno" name="txtbroadbandno" class="form-control" placeholder="Enter User ID " onkeypress="return isNumber(event)" />
-            </div>
+        <i class="fa fa-user vm-rch-in-ico" aria-hidden="true"></i>
+        <input type="text" id="txtbroadbandno" name="txtbroadbandno" class="form-control" placeholder="Enter User ID" onkeypress="return isNumber(event)" />
+    </div>
+    <div class="vm-rch-fcell vm-rch-famt" id="wamount-second-f">
+        <div>
+            <p id="broadbandamountmessage" class="insurancemessage22 vm-rch-err"></p>
+        </div>
+        <i class="fa fa-inr vm-rch-in-ico" aria-hidden="true"></i>
+        <input type="text" id="broadbandamount" name="broadbandamount" class="form-control" placeholder="Enter Amount" onkeypress="return AmountWithDecimal(this, event)" />
+        <div class="wamount-input-type">
+            <input type="button" id="btnnn6" class="btn bg-blue-grey" value="View Bill" onclick="Getbroadbandviewbill('broadbandddltype')" />
         </div>
     </div>
-    <div class="col-md-2" id="wamount-second-f">
-        <div>
-            <p id="broadbandamountmessage" class="insurancemessage22" style="top:-16px !important; margin-top: 10px; color: #E91E63; font-size: 10px; padding-left: 1px;"></p>
-        </div>
-        <div class="form-group" style="margin-bottom: 0px;">
-            <div class="txtelectricity1" style="margin-top:-1px; height:37px;">
-                <input type="text" id="broadbandamount" name="broadbandamount" class="form-control" placeholder="Enter Amount" style="padding-left:0px;" onkeypress="return AmountWithDecimal(this, event)" />
-                <!--View Bill button--->
-                <div class="col-md-1 wamount-input-type">
-                    <center>
-                        <div class="form-group" style="margin-bottom:0px;">
-                            <div class="form-line" style="border-bottom:none;">
-                                <input type="submit" id="btnnn6" class="btn bg-blue-grey" value="View Bill" style="height: 37px;" onclick="Getbroadbandviewbill('broadbandddltype')" />
-                            </div>
-                        </div>
-                    </center>
-                </div>
-                <!---add button vive-->
-            </div>
-        </div>
-    </div>
-    <div class="col-md-1 gasamount-input-before">
-        <center>
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="form-line" style="margin-top:-1px !important; border-bottom:none;">
-                    <input type="submit" id="btn6" class="btn bg-blue-grey" value="Continue" style="height:37px;" onclick="getbroadbandcontinuebtn('broadbandddltype')" />
-
-
-                </div>
-            </div>
-        </center>
-
+    <div class="vm-rch-fcell vm-rch-fbtn2" id="btncontinue-broad">
+        <input type="submit" id="btn6" class="btn bg-blue-grey" value="Continue" onclick="getbroadbandcontinuebtn('broadbandddltype')" />
     </div>
     <!--View Bill button
-    <div class="col-md-1">
+    <div class="vm-rch-fcell vm-rch-fbtn2">
         <center>
             <div class="form-group" style="margin-bottom:0px;">
                 <div class="form-line" style="margin-top:38px; border-bottom:none;">
-                    <input type="submit" id="btnnn" class="btn bg-blue-grey" value="View Bill" style="height:37px;" onclick="Getbroadbandviewbill('broadbandddltype')" />
+                    <input type="submit" id="btnnn" class="btn bg-blue-grey" value="View Bill" style="height:37px;border:0;border-radius:8px;background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;font-weight:700;" onclick="Getbroadbandviewbill('broadbandddltype')" />
                 </div>
             </div>
         </center>
@@ -180,9 +87,9 @@
 
         }
 
-        <td><button class="Recharg11" style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="broadprocessToPay()">Procces To Pay</button></td>
+        <td><button class="Recharg11" style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="broadprocessToPay()">Procces To Pay</button></td>
 
-        @*<td><button class="Recharg11" style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="broadrechargeconfirm()">Procces To Pay</button></td>*@
+        @*<td><button class="Recharg11" style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="broadrechargeconfirm()">Procces To Pay</button></td>*@
 
     </tr>
 </table>
@@ -195,7 +102,7 @@
     <tr>
         <td style="font-size: 20px;"><b> <span id="rchstatuschkbroad"></span> </b></td>
         <td class="border-centerbe border-centerbess" style="font-size: 20px;"><b><span id="rchmsgbroad"></span></b></td>
-        <td><button class="Recharg11" style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagainbroad()">Recharge Again</button></td>
+        <td><button class="Recharg11" style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagainbroad()">Recharge Again</button></td>
     </tr>
 </table>
 

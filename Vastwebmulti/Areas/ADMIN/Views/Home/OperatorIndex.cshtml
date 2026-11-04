@@ -20,7 +20,7 @@
 <link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-operator-index-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-index-modern.css?v=29" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-operator-index-modals.css?v=9" rel="stylesheet" />
 
 <style>
@@ -100,7 +100,7 @@
                         </ul>
 
                         <div id="tab-1" class="tab-content  Same-design-form">
-                            @using (Ajax.BeginForm("BlockDealerUser", new AjaxOptions { OnSuccess = "BlockDealer" }))
+                            @using (Ajax.BeginForm("BlockDealerUser", new AjaxOptions { OnSuccess = "BlockDealer", OnBegin = "oiValidateBlockDistributor", OnFailure = "oiBlockFailure" }))
                             {
                                 @*<input type="hidden" id="Durl" name="Durl" value="@Url.Action("BlockDealer","Home")" />*@
 
@@ -160,7 +160,7 @@
                             }
                         </div><!-- #tab-1-->
                         <div id="tab-2" class="tab-content current Same-design-form">
-                            @using (Ajax.BeginForm("BlockUser", new AjaxOptions { OnSuccess = "BlockRetailer" }))
+                            @using (Ajax.BeginForm("BlockUser", new AjaxOptions { OnSuccess = "BlockRetailer", OnBegin = "oiValidateBlockRetailer", OnFailure = "oiBlockFailure" }))
                             {
 
                                 <div class="items custom-select">
@@ -172,7 +172,7 @@
                                 <div class="items test2 custom-select">
                                     <label>Select Category</label>
                                     <div class="custom-district oi-field-icon-wrap" data-oi-icon="category">
-                                        @Html.DropDownList("RequiredCategory", ViewBag.RequiredCategory as SelectList, "Select Category", new { id = "RequireCategory", @class = " form-control border-0", data_live_search = "true", @style = "border:1px solid #8e7f7f4d;", @required = "required" })
+                                        @Html.DropDownList("RequiredCategory", ViewBag.RequiredCategory as SelectList, "Select Category", new { id = "RequireCategory", @class = " form-control border-0", data_live_search = "true", data_request_url = Url.Action("FillOperatorType", "Home"), data_secondrequest_url = Url.Action("BindService", "Home"), @style = "border:1px solid #8e7f7f4d;", @required = "required" })
                                     </div>
                                 </div>
                                 <div id="servpro" class="items" style="display:none">
@@ -197,7 +197,7 @@
                                 </div>
                                 <div class="right-button button-seconddesign" id="OncreditBLock">
 
-                                    <button class="btn-first" type="submit" id="btnoncreditblock" name="btnoncreditblock" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><span style="color:#000;">On Credit Block</span> </button>
+                                    <button class="btn-first" type="button" id="btnoncreditblock" name="btnoncreditblock" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><span style="color:#000;">On Credit Block</span> </button>
                                 </div>
 
 
@@ -221,7 +221,7 @@
 
                         </div><!--#tab-2-->
                         <div id="tab-3" class="tab-content Same-design-form">
-                            @using (Ajax.BeginForm("BlockWhitelabel", new AjaxOptions { OnSuccess = "BlockWhitelabel" }))
+                            @using (Ajax.BeginForm("BlockWhitelabel", new AjaxOptions { OnSuccess = "BlockWhitelabel", OnBegin = "oiValidateBlockWhitelabel", OnFailure = "oiBlockFailure" }))
                             {
                                 <div class="items">
                                     <label>Select White Label</label>
@@ -285,7 +285,7 @@
 
                         </div><!--#tab-3-->
                         <div id="tab-4" class="tab-content Same-design-form">
-                            @using (Ajax.BeginForm("BlockAPIUser", new AjaxOptions { OnSuccess = "BlockAPIUSERS" }))
+                            @using (Ajax.BeginForm("BlockAPIUser", new AjaxOptions { OnSuccess = "BlockAPIUser", OnBegin = "oiValidateBlockApiUser", OnFailure = "oiBlockFailure" }))
                             {
                                 <input type="hidden" id="APIUSERurl" name="APIUSERurl" value="@Url.Action("BlockAPIUSER","Home")" />
 
@@ -1801,7 +1801,47 @@
 <script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 @*<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>*@
-<script src="~/Scripts/OperatorIndex/OperatorIndexPG.js"></script>
+<script src="~/Scripts/OperatorIndex/OperatorIndexPG.js?v=3"></script>
+<script>
+    /* Old OperatorIndex: jQuery .show/.hide + modern flex CSS — conditional fields sync */
+    (function ($) {
+        var oiCondSel = '#servpro,#operatorsselect,#Dservpro,#DOperatorselect,#Whitelabelservpro,#Whitelabeloperatorsselect,#APIUSERservpro,#APIUSERoperatorsselect';
+        window.oiCondFieldShow = function (sel) {
+            $(sel).removeClass('oi-cond-hidden').addClass('oi-cond-visible').each(function () {
+                this.style.setProperty('display', 'block', 'important');
+                var $inner = $(this).find('select').first();
+                if ($inner.length && window.oiPgReinitSelect2) {
+                    setTimeout(function () { window.oiPgReinitSelect2($inner); }, 0);
+                }
+            });
+        };
+        window.oiCondFieldHide = function (sel) {
+            $(sel).removeClass('oi-cond-visible').addClass('oi-cond-hidden').each(function () {
+                this.style.setProperty('display', 'none', 'important');
+            });
+        };
+        ['show', 'hide'].forEach(function (method) {
+            var orig = $.fn[method];
+            if (!orig) return;
+            $.fn[method] = function () {
+                var res = orig.apply(this, arguments);
+                this.filter(oiCondSel).each(function () {
+                    if (method === 'show') window.oiCondFieldShow(this);
+                    else window.oiCondFieldHide(this);
+                });
+                return res;
+            };
+        });
+        $(function () {
+            $(oiCondSel).each(function () {
+                var $el = $(this);
+                if ($el.is(':hidden') || (this.style.display && this.style.display.indexOf('none') >= 0)) {
+                    window.oiCondFieldHide(this);
+                }
+            });
+        });
+    })(jQuery);
+</script>
 <script src="~/img/js/datepicker.min.js"></script>
 <script src="~/img/js/datepicker.en.js"></script>
 
@@ -1921,23 +1961,37 @@
 
     })
 
-    $('#btnoncreditblock').click(function () {
+    $('#btnoncreditblock').click(function (e) {
+        e.preventDefault();
+        if (!oiValidateBlockRetailer()) { return false; }
         var rem = $('#rem').val();
         var service123 = $('#service123').val();
-          $.ajax({
-        type: 'POST',
-              url: '@Url.Action("OnCreditBlockRetailer", "Home")',
-              data: { rem: rem, service123: service123, operatornameid: $('#operatornameid').val(), RequiredCategory: $('#RequireCategory').val() },
-        success: function (data) {
-
-             //swal("Good job!", "Retailer has been OnBlock Status!", "success");
-
-            ToastrMessage();
-            toastr.success("Retailer has been OnBlock Status!");
-
-        }
-    });
-
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("OnCreditBlockRetailer", "Home")',
+            data: { rem: rem, service123: service123, operatornameid: $('#operatornameid').val(), RequiredCategory: $('#RequireCategory').val() },
+            success: function (data) {
+                if (data > 0) {
+                    oiSwal("Good job!", "Retailer has been On Credit Block status!", "success");
+                    try {
+                        $("#rem").val('').trigger('change');
+                        $('#RequireCategory').val('').trigger('change');
+                    } catch (e2) {
+                        try { $("#rem").val(''); $('#RequireCategory').val(''); } catch (e3) { }
+                    }
+                    $('#operatorsselect').hide();
+                    $('#servpro').hide();
+                    if (window.oiOpenHistory) { window.oiOpenHistory('.for-Retailer'); }
+                }
+                else {
+                    oiSwal("Sorry!", "On Credit Block NOT applied! Please check selection.", "error");
+                }
+            },
+            error: function () {
+                oiSwal("Sorry!", "Server busy, please try after some time!", "error");
+            }
+        });
+        return false;
 
 
 
@@ -2470,6 +2524,12 @@
                 $('#DCategory').append($('<option></option>').text(item.Text).val(item.Value));
 
             });
+            if (typeof window.oiPgReinitSelect2 === 'function') {
+                window.oiPgReinitSelect2('#Distributorlist');
+                window.oiPgReinitSelect2('#DCategory');
+            } else if (typeof window.oiInitOperatorIndexSelects === 'function') {
+                window.oiInitOperatorIndexSelects('#tab-1');
+            }
         }
     });
  }
@@ -2497,6 +2557,14 @@
                 $('#APIUSERCategory').append($('<option></option>').text(item.Text).val(item.Value));
 
             });
+            if (typeof window.oiPgReinitSelect2 === 'function') {
+                window.oiPgReinitSelect2('#APIUSERCategory');
+            } else if (typeof window.oiInitOperatorIndexSelects === 'function') {
+                window.oiInitOperatorIndexSelects('#tab-4');
+            }
+            if (typeof window.forceAdminSelect2 === 'function') {
+                window.forceAdminSelect2(document.getElementById('tab-4'));
+            }
 
         }
     });
@@ -2684,6 +2752,12 @@
                 $('#WhiteLabelCategory').append($('<option></option>').text(item.Text).val(item.Value));
 
             });
+            if (typeof window.oiPgReinitSelect2 === 'function') {
+                window.oiPgReinitSelect2('#Whitelabellist');
+                window.oiPgReinitSelect2('#WhiteLabelCategory');
+            } else if (typeof window.oiInitOperatorIndexSelects === 'function') {
+                window.oiInitOperatorIndexSelects('#tab-3');
+            }
         }
     });
  }
@@ -2694,126 +2768,13 @@
 
 
 
-    $('#RequireCategory').change(function () {
-        $('#operatornameid').empty();
-        $('#service123').empty();
-        var name = $('#RequireCategory').val();
-        if (name == "PrePaid") {
-            $('#servpro').hide();
-
-             $('#operatorsselect').show();
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("FillOperatorType", "Home")',
-            data: { name: name },
-            success: function (result) {
-                var operatornameid = $('#operatornameid');
-                operatornameid.empty(); // remove any existing options
-                operatornameid.append($('<option></option>').text('All Operator').val(''));
-                $.each(result, function (result, item) {
-                    operatornameid.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-
-                //window.location.reload(true);
-            }
-        });
-    }
-        if (name == "Utility") {
-
-             $('#operatornameid').empty();
-            $('#servpro').show();
-            $('#operatorsselect').hide();
-             $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("BindService", "Home")',
-                    data: {name:name  },
-             success: function (result) {
-                 var service123 = $('#service123');
-                 service123.empty(); // remove any existing options
-               service123.append($('<option></option>').text('Select Service').val(''));
-                 $.each(result, function (result, item) {
-             service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-        });
-                        //window.location.reload(true);
-                    }
-                });
-        }
-        if (name == "Finance") {
-
-             $('#operatornameid').empty();
-            $('#servpro').show();
-           // $('#operatorsselect').show();
-             $('#operatorsselect').hide();
-             $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("BindService", "Home")',
-                    data: {name:name  },
-             success: function (result) {
-                 var service123 = $('#service123');
-                 service123.empty(); // remove any existing options
-               service123.append($('<option></option>').text('Select Service').val(''));
-                 $.each(result, function (result, item) {
-             service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-        });
-                        //window.location.reload(true);
-                    }
-                });
-        }
-        if (name == "Travels") {
-            $('#operatorsselect').hide();
-             $('#operatornameid').empty();
-            $('#servpro').show();
-             $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("BindService", "Home")',
-                    data: {name:name  },
-             success: function (result) {
-                 var service123 = $('#service123');
-                 service123.empty(); // remove any existing options
-               service123.append($('<option></option>').text('Select Service').val(''));
-                 $.each(result, function (result, item) {
-             service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-        });
-                        //window.location.reload(true);
-                    }
-                });
-        }
-
-        if (name == "Others") {
-            $('#operatorsselect').hide();
-             $('#operatornameid').empty();
-            $('#servpro').show();
-             $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("BindService", "Home")',
-                    data: {name:name  },
-             success: function (result) {
-                 var service123 = $('#service123');
-                 service123.empty(); // remove any existing options
-               service123.append($('<option></option>').text('Select Service').val(''));
-                 $.each(result, function (result, item) {
-             service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-        });
-                        //window.location.reload(true);
-                    }
-                });
-        }
-
-
-
-    })
+    /* #RequireCategory — OperatorIndexPG.js oiPgOnRetailerCategoryChange (delegated) */
 
     $('#service123').change(function () {
 
-       var cate= $('#RequireCategory').val();
+       var cate= ($('#RequireCategory').val() || '').toString().trim();
         if (cate == 'PrePaid') {
-            $('#operatorsselect').show();
-
+            if (window.oiPgShow) { window.oiPgShow('#operatorsselect'); } else { $('#operatorsselect').show(); }
         }
         var name = $('#service123').val();
 
@@ -2832,15 +2793,10 @@
                         operatornameid.append($('<option></option>').text(item.Text).val(item.Value));
 
                     });
-                    //window.location.reload(true);
+                    if (window.oiPgShow) { window.oiPgShow('#operatorsselect'); }
+                    if (window.oiPgReinitSelect2) { window.oiPgReinitSelect2(operatornameid); }
                 }
             });
-
-
-          //  $('#operatorsselect').hide();
-
-
-
     })
 
 
@@ -4147,33 +4103,84 @@ $('#OthersBlocktime').on('blur', function(event) {
         }
     })
 
+    /* Block Service's — sweet-alert + validation helpers (4 tabs) */
+    function oiSwal(title, msg, type) {
+        try {
+            if (window.swal) { swal(title, msg, type); return; }
+        } catch (e) { }
+        alert(msg);
+    }
+    function oiValidateBlock(userSel, catSel, svcSel, svcWrap, userLabel) {
+        var u = $(userSel).val(), c = $(catSel).val();
+        if (!u) { oiSwal("Sorry!", "Please select " + userLabel + " first!", "error"); return false; }
+        if (!c) { oiSwal("Sorry!", "Please select Category first!", "error"); return false; }
+        /* Operator khali = "All Operator" (poori category block) — valid hai, isliye sirf Service mandatory */
+        if ($(svcWrap).is(':visible') && !$(svcSel).val()) { oiSwal("Sorry!", "Please select Particular Service!", "error"); return false; }
+        return true;
+    }
+    function oiValidateBlockDistributor() { return oiValidateBlock('#Distributorlist', '#DCategory', '#DService', '#Dservpro', 'Distributor'); }
+    function oiValidateBlockRetailer() { return oiValidateBlock('#rem', '#RequireCategory', '#service123', '#servpro', 'Retailer'); }
+    function oiValidateBlockWhitelabel() { return oiValidateBlock('#Whitelabellist', '#WhiteLabelCategory', '#WhitelabelService', '#Whitelabelservpro', 'White Label'); }
+    function oiValidateBlockApiUser() { return oiValidateBlock('#APIUSERlist', '#APIUSERCategory', '#APIUSERService', '#APIUSERservpro', 'API User'); }
+    function oiBlockFailure() { oiSwal("Sorry!", "Server busy, please try after some time!", "error"); }
+    /* Blocked History — missing failure callbacks (page/PG.js me defined nahi the) + empty-list feedback */
+    function onTestFailure() { oiSwal("Sorry!", "Blocked history could not load! Server busy, please try again.", "error"); }
+    function onTestFailure2() { oiSwal("Sorry!", "Blocked history could not load! Server busy, please try again.", "error"); }
+    function onTestFailure3() { oiSwal("Sorry!", "Blocked history could not load! Server busy, please try again.", "error"); }
+    (function () {
+        try {
+            if (typeof onTestSuccess2 === 'function') {
+                var oiOldSuccess2 = onTestSuccess2;
+                onTestSuccess2 = function (data) {
+                    oiOldSuccess2(data);
+                    if (!data || !data.list || !data.list.length) {
+                        oiSwal("Sorry!", "No blocked history found!", "error");
+                    }
+                };
+            }
+        } catch (e) { }
+    })();
+    function oiBlockSuccess(userSel, catSel, hideSels, okMsg) {
+        try {
+            $(userSel).val('').trigger('change');
+            $(catSel).val('').trigger('change');
+        } catch (e) {
+            try { $(userSel).val(''); $(catSel).val(''); } catch (e2) { }
+        }
+        $.each(hideSels, function (i, s) { $(s).hide(); });
+        oiSwal("Good job!", okMsg, "success");
+    }
+
     function BlockDealer(result) {
-        $('#Distributorlist').val('');
-        $('#DCategory').val('');
-        $('#DOperatorselect').hide();
-        $('#Dservpro').hide();
-        if (window.oiOpenHistory) {
-            window.oiOpenHistory('.for-Distributor');
+        if (result > 0) {
+            oiBlockSuccess('#Distributorlist', '#DCategory', ['#DOperatorselect', '#Dservpro'], "Distributor service blocked successfully!");
+            if (window.oiOpenHistory) {
+                window.oiOpenHistory('.for-Distributor');
+            }
+        } else {
+            oiSwal("Sorry!", "Service is NOT blocked! Please check selection.", "error");
         }
     }
 
     function BlockWhitelabel(result) {
-        $('#Whitelabellist').val('');
-        $('#WhiteLabelCategory').val('');
-        $('#Whitelabeloperatorsselect').hide();
-        $('#Whitelabelservpro').hide();
-        if (window.oiOpenHistory) {
-            window.oiOpenHistory('.for-White-Label');
+        if (result > 0) {
+            oiBlockSuccess('#Whitelabellist', '#WhiteLabelCategory', ['#Whitelabeloperatorsselect', '#Whitelabelservpro'], "White Label service blocked successfully!");
+            if (window.oiOpenHistory) {
+                window.oiOpenHistory('.for-White-Label');
+            }
+        } else {
+            oiSwal("Sorry!", "Service is NOT blocked! Please check selection.", "error");
         }
     }
 
     function BlockAPIUser(result) {
-        $('#APIUSERlist').val('');
-        $('#APIUSERCategory').val('');
-        $('#APIUSERoperatorsselect').hide();
-        $('#APIUSERservpro').hide();
-        if (window.oiOpenHistory) {
-            window.oiOpenHistory('.for-Api-User');
+        if (result > 0) {
+            oiBlockSuccess('#APIUSERlist', '#APIUSERCategory', ['#APIUSERoperatorsselect', '#APIUSERservpro'], "API User service blocked successfully!");
+            if (window.oiOpenHistory) {
+                window.oiOpenHistory('.for-Api-User');
+            }
+        } else {
+            oiSwal("Sorry!", "Service is NOT blocked! Please check selection.", "error");
         }
     }
 
@@ -4248,24 +4255,15 @@ $('#OthersBlocktime').on('blur', function(event) {
     });
 
     function BlockRetailer(result) {
-        // $('select').select2().val('');
-        if (result == 1) {
-            j('#operatorsselect').hide();
-            j('#servpro').hide();
-
-            // Reset selects safely (Select2 v4 doesn't support select2("val", ...))
-            try {
-                j("#rem").val('').trigger('change');
-                j('#RequireCategory').val('').trigger('change');
-            } catch (e) {
-                try {
-                    j("#rem").val('');
-                    j('#RequireCategory').val('');
-                } catch (e2) { }
-            }
+        // controller returns SaveChanges() count — 1 se zyada rows block ho sakti hain
+        if (result > 0) {
+            oiBlockSuccess("#rem", '#RequireCategory', ['#operatorsselect', '#servpro'], "Retailer service blocked successfully!");
             if (window.oiOpenHistory) {
                 window.oiOpenHistory('.for-Retailer');
             }
+        }
+        else {
+            oiSwal("Sorry!", "Service is NOT blocked! Please check selection.", "error");
         }
     }
 </script>

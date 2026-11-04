@@ -1,78 +1,12 @@
 ﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
 
 
-<style>
-
-    /* new css */
-
-    .form-line {
-        display: flex;
-        align-items: center;
-        justify-content: right;
-    }
-
-    #btnnn2 {
-        padding: 0 10px !important;
-        margin-top: 1.5px !important;
-    }
-
-
-    /* new css */
-
-
-    .loader {
-        position: fixed;
-        top: -90px;
-        left: 0;
-        background-color: rgba(255,255,255,0.7);
-        z-index: 999999999999;
-        display: none;
-        height: 100vw;
-        width: 100vw;
-    }
-
-    @@-webkit-keyframes spin {
-        from {
-            -webkit-transform: rotate(0deg);
-        }
-
-        to {
-            -webkit-transform: rotate(360deg);
-        }
-    }
-
-    @@keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    .loader::after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 48%;
-        top: 25%;
-        width: 100px;
-        height: 100px;
-        border-style: solid;
-        border-color: black;
-        border-top-color: transparent;
-        border-width: 4px;
-        border-radius: 50%;
-        -webkit-animation: spin .8s linear infinite;
-        animation: spin .8s linear infinite;
-    }
-</style>
-<div id="Landlineshow" class="row" style="padding-left:4px;">
+@* vm-rch: purane form-line/btnnn2/loader <style> hataye — retailer-recharge-modern.css (sec-12) me port *@
+<div id="Landlineshow" class="vm-rch-formgrid fund-transfer-form">
     <!--Lnadline dropdown-->
-    <div class="col-md-2 Landlineshow-first" style="margin-top:10px;">
-        <div style="visibility:inherit;">
-            <p id="landlineopt" style=" position:absolute;margin-top:0;color:#E91E63; font-size:10px; padding-left:0px; bottom: 27px;"></p>
+    <div class="vm-rch-fcell vm-rch-fop Landlineshow-first">
+        <div>
+            <p id="landlineopt" class="vm-rch-err"></p>
         </div>
         <div class="form-group" style="margin-bottom:0px;">
             <img src="~/AdminDesign/BBPSlogo.png" style="float: right; width: 50px !important; " />
@@ -90,9 +24,9 @@
 
     </div>
     <!--Landline number-->
-    <div class="col-md-4 Landlineshow-second customelandcss" style="margin-top:8px;">
+    <div class="vm-rch-fcell vm-rch-fnum Landlineshow-second customelandcss">
         <div>
-            <p id="landlinemessage" class="landlinemessagecustome" style="margin-top:0;color:#E91E63; font-size:10px; padding-left:0px;"></p>
+            <p id="landlinemessage" class="landlinemessagecustome vm-rch-err"></p>
         </div>
         <div class="form-group" style="margin-bottom:0px;">
             @* <div class="" style="margin-top:-2px;float:left;width:100%;height:37px;">*@
@@ -114,9 +48,9 @@
 
     </div>
     <!--STD Code-->
-    <div class="col-md-1" id="DivSTDCode" style="margin-top:10px;">
-        <div style="height:28px;position:absolute;top: -21px !important;width: 100%;">
-            <p id="stdcodemessage" style="color:#E91E63; font-size:10px; padding-left:1px;"></p>
+    <div class="vm-rch-fcell vm-rch-fcircle" id="DivSTDCode">
+        <div>
+            <p id="stdcodemessage" class="vm-rch-err"></p>
         </div>
         <div class="form-group" style="margin-bottom:0px;">
             <div class="form-line form-line-after" style="margin-top:-2px; height:37px;">
@@ -125,9 +59,9 @@
         </div>
     </div>
     <!--Landline Account number-->
-    <div class="col-md-2 Divaccountnumbereswr" id="Divaccountnumber" style="margin-top:10px;">
-        <div style="height:28px; position:absolute;width:100%;float:left;top: -22px !important;">
-            <p id="accountmessage" style="margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
+    <div class="vm-rch-fcell vm-rch-fcircle Divaccountnumbereswr" id="Divaccountnumber">
+        <div>
+            <p id="accountmessage" class="vm-rch-err"></p>
         </div>
         <div class="form-group" style="margin-bottom:0px;">
             <div class="form-line form-line-after" style="margin-top: -2px; height: 37px;">
@@ -136,9 +70,9 @@
         </div>
     </div>
     <!--Land line amount-->
-    <div class="col-md-2" style="margin-top:10px;">
-        <div style="height: 28px;position: absolute;top: -22px !important;">
-            <p id="amountmessage" style="margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
+    <div class="vm-rch-fcell vm-rch-famt">
+        <div>
+            <p id="amountmessage" class="vm-rch-err"></p>
         </div>
         <div class="form-group" style="margin-bottom:0px;">
             <div class="form-line" style="margin-top:-2px; height:37px;">
@@ -148,7 +82,7 @@
                 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 wamount-input-type" id="btngetviewbill">
                     <div class="form-group" style="margin-bottom:0px;">
                         <div class="form-line" style="border-bottom:none;">
-                            <input type="button" id="btnnn2" class="btn bg-blue-grey" value="View Bill" style="height:37px;float:left;" onclick="GetviewbillLandline('landlineddl')" />
+                            <input type="button" id="btnnn2" class="btn bg-blue-grey" value="View Bill" style="height:37px;float:left;border:0;border-radius:8px;background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;font-weight:700;" onclick="GetviewbillLandline('landlineddl')" />
                         </div>
                     </div>
                 </div>
@@ -158,12 +92,8 @@
         </div>
     </div>
 
-    <div class="col-md-1 Divaccountnumber-second" style="margin-top:10px;">
-        <div class="form-group" style="margin-bottom:0px; ">
-            <div class="form-line" style="border-bottom:none;">
-                <input type="button" id="btn1" class="btn bg-blue-grey" value="Continue" style="height:37px;" onclick="Getlanlinecontinuebtn('landlineddl')" />
-            </div>
-        </div>
+    <div class="vm-rch-fcell vm-rch-fbtn2 Divaccountnumber-second">
+        <input type="button" id="btn1" class="btn bg-blue-grey" value="Continue" onclick="Getlanlinecontinuebtn('landlineddl')" />
     </div>
 </div>
 
@@ -211,10 +141,10 @@
             </td>
         }
 
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="landlineprocessToPay()">Procces To Pay</button></td>
+        <td><button style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="landlineprocessToPay()">Procces To Pay</button></td>
 
 
-        @*<td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="landlinerechargeconfirm()">Procces To Pay</button></td>*@
+        @*<td><button style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="landlinerechargeconfirm()">Procces To Pay</button></td>*@
 
     </tr>
 </table>
@@ -227,14 +157,12 @@
     <tr>
         <td style="font-size: 20px;"><b> <span id="rchstatuschklandline"></span> </b></td>
         <td style="font-size: 20px;"><b><span id="rchmsglandline"></span></b></td>
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagainlandline()">Recharge Again</button></td>
+        <td><button style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagainlandline()">Recharge Again</button></td>
     </tr>
 </table>
 
 
 <div class="loader loaderwww"></div>
-landline
-
 
 <script>
     var isPinOn = @Model.Ispin.ToString().ToLower();

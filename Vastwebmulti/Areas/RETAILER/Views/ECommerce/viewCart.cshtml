@@ -1,72 +1,266 @@
-﻿@{
-    ViewBag.Title = "viewCart";
+﻿ @model List<Vastwebmulti.Areas.RETAILER.Models.CartVM>
+
+@{
+
+    ViewBag.Title = "Shopping cart";
+
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var itemCount = Model != null ? Model.Count : 0;
+
 }
-<section class="content" style="margin: 75px 0px 0 0px;">
-    <!-- Product Detailed Description-->
-    <div class="container-fluid">
-   
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="row" id="cartDetails">
-                   @Html.Action("_viewCart")
+
+
+
+<link href="~/MainFrontDesign/css/retailer-money-transfer-modern.css?v=45" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/retailer-ecommerce-modern.css?v=50" rel="stylesheet" />
+
+<link href="~/AdminDesign/plugins/animate-css/animate.min.css" rel="stylesheet" />
+
+
+
+<section class="vm-rmt-page vm-ecomm-page vm-ecomm-cart-page content">
+
+    <div class="vm-rmt-report-panel vm-ecomm-main vm-ecomm-cart-panel--full">
+
+        <div class="vm-rmt-report-shell">
+
+            <div class="vm-ecomm-main-card vm-ecomm-cart-main-card">
+
+                <div class="vm-ecomm-toolbar vm-ecomm-cart-toolbar">
+
+                    <nav class="vm-ecomm-cart-toolbar__crumb" aria-label="Breadcrumb">
+
+                        <a href="@Url.Action("Index", "ECommerce", new { area = "RETAILER" })">E-Commerce</a>
+
+                        <span class="vm-ecomm-cart-toolbar__sep" aria-hidden="true">/</span>
+
+                        <span class="vm-ecomm-cart-toolbar__current">Shopping cart</span>
+
+                    </nav>
+
+                    <div class="vm-ecomm-toolbar__actions">
+
+                        <a class="vm-ecomm-btn-ghost" href="@Url.Action("Index", "ECommerce", new { area = "RETAILER" })">
+
+                            <i class="material-icons">storefront</i>
+
+                            <span>Store</span>
+
+                        </a>
+
+                        <span class="vm-ecomm-cart-pill vm-ecomm-cart-pill--here" aria-current="page">
+
+                            <i class="material-icons">shopping_cart</i>
+
+                            <span>Cart</span>
+
+                            <span class="vm-ecomm-cart-pill__count" id="vmEcommCartPillCount">@itemCount</span>
+
+                        </span>
+
+                        <a class="vm-ecomm-btn-ghost" href="@Url.Action("Transaction", "ECommerce", new { area = "RETAILER" })">
+
+                            <i class="fa fa-list-ul"></i>
+
+                            <span>Transactions</span>
+
+                        </a>
+
+                    </div>
+
                 </div>
+
+
+
+                <div class="vm-ecomm-products-head vm-ecomm-cart-page-head" id="vmEcommCartPageHead">
+
+                    <div class="vm-ecomm-products-head__left">
+
+                        <h2 class="vm-ecomm-products-card__title">
+
+                            <i class="material-icons vm-ecomm-cart-page-head__icon" aria-hidden="true">shopping_cart</i>
+
+                            My cart
+
+                        </h2>
+
+                        <p class="vm-ecomm-products-head__hint">Review items, update quantity, and pay from your wallet balance</p>
+
+                    </div>
+
+                    @if (itemCount > 0)
+
+                    {
+
+                        <span class="vm-ecomm-products-head__badge" id="vmEcommCartCountBadge">@itemCount item@(itemCount == 1 ? "" : "s")</span>
+
+                    }
+
+                    else
+
+                    {
+
+                        <span class="vm-ecomm-products-head__badge" id="vmEcommCartCountBadge" style="display:none;"></span>
+
+                    }
+
+                </div>
+
+
+
+                <div id="cartDetails" class="vm-ecomm-cart-shell vm-ecomm-cart-shell--in-card">
+
+                    @Html.Action("_viewCart")
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
-    <!-- END-->
+
 </section>
-@using (Ajax.BeginForm("UpdateQTY", "Ecommerce", new AjaxOptions { UpdateTargetId = "cartDetails", InsertionMode = InsertionMode.Replace, LoadingElementId = "loadermoney" }))
+
+
+
+@using (Ajax.BeginForm("UpdateQTY", "ECommerce", new AjaxOptions { UpdateTargetId = "cartDetails", InsertionMode = InsertionMode.Replace, LoadingElementId = "loadermoney", OnComplete = "vmEcommCartOnComplete" }))
+
 {
+
     <input type="hidden" name="productId" id="productId" />
+
     <input type="hidden" name="QTY" id="QTY" />
 
     <input type="submit" id="viewCartSubmit" style="display:none;" />
 
 }
-@using (Ajax.BeginForm("RemoveCartItem", "Ecommerce", new AjaxOptions { UpdateTargetId = "cartDetails", InsertionMode = InsertionMode.Replace, LoadingElementId = "loadermoney" }))
+
+@using (Ajax.BeginForm("RemoveCartItem", "ECommerce", new AjaxOptions { UpdateTargetId = "cartDetails", InsertionMode = InsertionMode.Replace, LoadingElementId = "loadermoney", OnComplete = "vmEcommCartOnComplete" }))
+
 {
+
     <input type="hidden" name="productId" id="removeCartProductId" />
+
     <input type="submit" id="removeCartSubmit" style="display:none;" />
 
 }
 
 @Html.Partial("Loder")
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-<script src="~/Scripts/PageScript/Retailer/viewCart.js"></script>
 
-<script type="text/javascript">
 
-    function onRemoveItem(e) {
-        swal({
-            title: "Are you sure?",
-            text: "Do you want to delete  Data !",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            closeOnConfirm: false
-        },
-function () {
 
-    $.ajax({
-        type: "POST",
-        url: '@Url.Action("RemoveCartItem", "Ecommerce")',
-        data: { productId: e },
-        dataType: 'html',
-        cache: false,
-        success: function (result) {
-            swal.close();
-            location.reload();
-             }
-    });
+@section PostVmScripts {
+
+    <script src="~/AdminDesign/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script src="~/Swalalert/sweetalert-dev.js"></script>
+
+    <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+
+    <script src="~/Scripts/PageScript/Retailer/viewCart.js?v=3"></script>
+
+    <script>
+
+        function onRemoveItem(productId) {
+
+            swal({
+
+                title: 'Remove item?',
+
+                text: 'This product will be removed from your cart.',
+
+                type: 'warning',
+
+                showCancelButton: true,
+
+                confirmButtonColor: '#DD6B55',
+
+                confirmButtonText: 'Yes, remove',
+
+                closeOnConfirm: true
+
+            }, function () {
+
+                jQuery('#removeCartProductId').val(productId);
+
+                jQuery('#removeCartSubmit').click();
+
+            });
+
+        }
+
+
+
+        function vmEcommCartOnComplete() {
+
+            var count = jQuery('#cartDetails .vm-ecomm-cart-item').length;
+
+            var $badge = jQuery('#vmEcommCartCountBadge');
+
+            var $pillCount = jQuery('#vmEcommCartPillCount');
+
+            if ($pillCount.length) {
+
+                $pillCount.text(count);
+
+            }
+
+            if (count > 0) {
+
+                var label = count + ' item' + (count === 1 ? '' : 's');
+
+                $badge.text(label).show();
+
+            } else {
+
+                $badge.hide().text('');
+
+            }
+
+            if (typeof window.vmEcommCartBindNotify === 'function') {
+
+                window.vmEcommCartBindNotify();
+
+            }
+
+        }
+
+
+
+        window.vmEcommCartBindNotify = function () {
+
+            var sts = '@TempData["Status"]';
+
+            var msg = '@TempData["Message"]';
+
+            if (sts && msg) {
+
+                jQuery.notify(msg, {
+
+                    animate: { enter: 'animated fadeInRight', exit: 'animated fadeOutRight' },
+
+                    type: sts === 'Success' ? 'success' : 'danger'
+
+                });
+
+            }
+
+        };
+
+
+
+        jQuery(function () {
+
+            vmEcommCartBindNotify();
+
+        });
+
+    </script>
+
 }
-);
-
-
-    }
-
-</script>
-
 

@@ -1,0 +1,74 @@
+@model IEnumerable<Vastwebmulti.Models.show_ecomm_report_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.show_ecomm_report_Result>();
+    var i = 1;
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var color = "#64748b";
+        var fontweight = "600";
+        var sts = "Pending";
+
+        if (item.OrderStatus == 2)
+        {
+            color = "green";
+            fontweight = "700";
+            sts = "Success";
+        }
+        else if (item.OrderStatus == 3)
+        {
+            color = "red";
+            fontweight = "700";
+            sts = "Rejected";
+        }
+        else if (item.OrderStatus == 1)
+        {
+            color = "#FF9800";
+            fontweight = "700";
+            sts = "Pending";
+        }
+
+        <tr>
+            <td>@i</td>
+            <td><p style="font-size:12px;"><span style="color:@color;font-weight:@fontweight;">@sts</span></p></td>
+            <td class="vm-ecomm-user-cell">
+                <p style="font-size:12px;margin:0;">
+                    <span class="vm-ecomm-user-firm"><i class="fa fa-user-circle-o"></i> @item.Vendorfrmname</span>
+                    <span class="vm-ecomm-user-email">⇒ @item.VendorEmail</span>
+                </p>
+            </td>
+            <td><p style="font-size:11px;margin:0;">@item.OrderDate</p></td>
+            <td class="vm-ecomm-product-cell"><p style="font-size:11px;margin:0;">@item.ProductName</p></td>
+            <td><p style="font-size:12px;margin:0;">@item.ListPrice</p></td>
+            <td><p style="font-size:12px;margin:0;">@item.StandardPrice</p></td>
+            <td><p style="font-size:12px;margin:0;">@item.QTY</p></td>
+            <td><p style="font-size:12px;margin:0;">@item.Amount</p></td>
+            <td class="vm-ecomm-comm-cell">
+                @if (item.RoleName == "Retailer")
+                {
+                    <p class="vm-ecomm-comm-line" style="margin:0;">
+                        <span class="vm-ecomm-comm-role">Retailer</span>
+                        <span class="vm-ecomm-comm-val">@item.RemPre</span>
+                        <span class="vm-ecomm-comm-val">@item.Remcomm</span>
+                        <span class="vm-ecomm-comm-val">@item.RemPost</span>
+                    </p>
+                }
+            </td>
+            <td><p style="font-size:11px;margin:0;">@item.UpdatedOn</p></td>
+        </tr>
+        i++;
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="11" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-shopping-bag" aria-hidden="true"></i>
+            <span>No ecommerce transactions found.</span>
+        </td>
+    </tr>
+}

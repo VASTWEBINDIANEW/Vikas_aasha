@@ -1,416 +1,360 @@
-﻿@model IEnumerable<Vastwebmulti.Models.Show_Ecommerce_Retailer_Report_Result>
+﻿@model List<Vastwebmulti.Models.Show_Ecommerce_Retailer_Report_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "Ecommerce_Report";
+    ViewBag.Title = "Ecommerce Report";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? new List<Vastwebmulti.Models.Show_Ecommerce_Retailer_Report_Result>();
+    var rowCount = reports.Count;
+
+    decimal totalSuccess = ViewData["totalsuccess"] != null ? Convert.ToDecimal(ViewData["totalsuccess"]) : 0m;
+    decimal totalFailed = ViewData["totalfailed"] != null ? Convert.ToDecimal(ViewData["totalfailed"]) : 0m;
+    decimal totalPending = ViewData["totalpending"] != null ? Convert.ToDecimal(ViewData["totalpending"]) : 0m;
+    decimal totalAmount = totalSuccess + totalFailed + totalPending;
 }
-<style>
 
-    /* new css  */
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-retailer-ecomm-transaction-page">
 
+    <div class="container-fluid vm-opr-page-shell">
 
-    .bread-same-all-page {
-        float: left;
-        width: 100%;
-    }
-        .bread-same-all-page li.smli {
-            font-weight: bold;
+        @{
+            var ecomFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerEcomReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_ecomrep_frm_date" },
+                { "data-report-to", "#retailer_ecomrep_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
-        .bread-same-all-page li {
-            float: left;
-            margin-bottom: 11px;
-            list-style: none;
-        }
-    .tmw-total-color-one {
-        -webkit-background-clip: text !important;
-        -moz-background-clip: text !important;
-        -webkit-text-fill-color: transparent;
-    }
-    .bread-same-all-page a {
-        font-size: 15px;
-        color: #000;
-        float: left;
-        font-weight: normal;
-    }
-    .bread-same-all-page li {
-        margin: 6px 0;
-    }
+        @using (Html.BeginForm("Ecommerce_Report", "Home", FormMethod.Post, ecomFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
 
-    /* new css  */
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Reports</li>
+                        <li>Ecommerce Report</li>
+                    </ol>
 
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
 
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("ddl_status", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "All status", Value = "ALL" },
+                                new SelectListItem { Text = "Success", Value = "SUCCESS" },
+                                new SelectListItem { Text = "Pending", Value = "PENDING" },
+                                new SelectListItem { Text = "Rejected", Value = "FAILED" }
+                            }, new { @id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
 
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("category", ViewBag.category as SelectList, "ALL Category", new { id = "category", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
 
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_ecomrep_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_ecomrep_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
 
-    @@media only screen and (max-width:1169px){
+                    </div>
 
-        .container-fluid.giftcardpage {
-            padding-left: 15px;
-        }
-
-
-    }
-
-    @@media only screen and (max-width:991px) {
-
-        .col-md-3.giftfor {
-            width: 33%;
-            float: left;
-        }
-        .col-md-2.giftsecond {
-            float: left;
-            width: 100px;
-        }
-        .giftcardcontent .col-md-2.giftfirst {
-            float: left;
-        }
-
-
-    }
-
-    @@media only screen and (max-width:767px){
-
-        .eccomerce-first .col-md-2.giftsecond {
-            width: 50%;
-            margin-bottom: 4px;
-        }
-        .eccomerce-first .col-md-2.giftfirst {
-            width: 50%;
-            margin-bottom: 4px;
-        }
-        .giftcardcontent .col-md-2.giftfirst button, .giftcardcontent .col-md-2.giftfirst .btn-group.bootstrap-select.form-control.open button {
-            background-size: 10px;
-        }
-        .eccomerce-first .col-md-3.giftfor input {
-            text-align: left;
-            padding-left: 28px !important;
-        }
-
-    }
-
-    @@media only screen and (max-width:480px) {
-        .eccomerce-first .col-md-2.giftsecond {
-            width: 100%;
-        }
-
-        .eccomerce-first .col-md-2.giftfirst {
-            width: 100%;
-        }
-        .giftcardcontent .col-md-2 {
-            padding-left: 0px;
-        }
-        .eccomerce-first .col-md-3.giftfor {
-            width: 100%;
-            margin-bottom: 4px;
-            padding: 0;
-        }
-        .giftcardcontent .col-md-1.giftfive {
-            width: 50%;
-        }
-        .col-md-3.buttonPdf {
-            width: 100%;
-        }
-        
-    }
-
-    @@media only screen and (max-width:420px) {
-
-        .ecommerce-page-responshive .giftsecond, .ecommerce-page-responshive .giftfirst {
-            width: 100% !important;
-        }
-
-        
-
-    }
-
-</style>
-<section class="content content-margin-second" style="">
-    <div class="container-fluid giftcardpage ecommerce-page ecommerce-page-responshive">
-
-        <div class="page-header-third">
-            <div class="addtfgf-new">
-                <div class="bread-same-all-page">
-                    <ul>
-                        <li class="smli">
-                            <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                            </a>
-                        </li>
-
-                        <li class="fullbodydycolorbg tmw-total-color-one">
-                            Ecommerce Report
-                        </li>
-                    </ul>
                 </div>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerEcomRepTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Ecommerce totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerEcomRepTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total amount</span>
+                            <strong class="vm-opr-total-card__value">@totalAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value">@totalSuccess.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Rejected</span>
+                            <strong class="vm-opr-total-card__value">@totalFailed.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value">@totalPending.ToString("N2")</strong>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
+        }
 
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="page-header-third">
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-shopping-bag" aria-hidden="true"></i>
+                        <span>Ecommerce report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total amount for current filter">
+                            Total: <strong>&#8377; @totalAmount.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-ecomm-totals-btn" onclick="showRetailerEcomRepTotals()" title="Show totals" aria-expanded="false" aria-controls="retailerEcomRepTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportRetailerEcomRep" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFRetailerEcomRep" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-                        @using (Html.BeginForm("Ecommerce_Report", "Home", FormMethod.Post))
-                        {
-                            <div class="col-md-7 giftcardcontent eccomerce-first">
-                                <div class="row">
-                                    <div class="col-md-2 giftsecond">
-                                        <div class="form-group">
-                                            <div class="" style="">
-                                                @Html.DropDownList("ddl_status", new List<SelectListItem>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerEcommTransactionReport" class="table vm-opr-data-table vm-retailer-ecomm-txn-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr&nbsp;no.</th>
+                                    <th>Vendor&nbsp;name</th>
+                                    <th>Product&nbsp;name</th>
+                                    <th>List&nbsp;price&nbsp;&#8377;</th>
+                                    <th>Price&nbsp;&#8377;</th>
+                                    <th>Qty</th>
+                                    <th>Amount&nbsp;&#8377;</th>
+                                    <th>OTP</th>
+                                    <th>Status</th>
+                                    <th>Order&nbsp;date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (reports.Count > 0)
                                 {
-                                new SelectListItem{ Text="All Status",Value="ALL",},
-                                new SelectListItem{Text="SUCCESS",Value="SUCCESS"},
-                                new SelectListItem{Text="Pending",Value="PENDING"},
-                                new SelectListItem{Text="FAILED",Value="FAILED"}
-                                }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    @*<div class="col-md-2 giftthree">
-                                            <div class="form-group">
-                                                <div class="" style="">
-                                                    @Html.DropDownList("ddl_top", new List<SelectListItem>
+                                    var sr = 1;
+                                    foreach (var item in reports)
                                     {
-                                    new SelectListItem{ Text="50",Value="50"},
-                                    new SelectListItem{Text="100",Value="100"},
-                                    new SelectListItem{Text="200",Value="200"},
-                                    new SelectListItem{Text="500",Value="500"},
-                                    new SelectListItem{Text="1500",Value="1500"},
-                                    new SelectListItem{Text="All",Value="All"}
-                                    }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-
-                                                </div>
-                                            </div>
-                                        </div>*@
-
-                                    <div class="col-md-2 giftfirst">
-                                        <div class="form-group">
-                                            <div class="" style="">
-                                                @Html.DropDownList("category", ViewBag.category as SelectList, "ALL Category", new { id = "category", @class = "selectpicker form-control", data_live_search = "true" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 giftfor">
-                                        <div class="form-group" style="margin-bottom:0px;margin-top:0px;">
-                                            <div class="input-daterange input-group">
-                                                <div class="datesate datesates">
-                                                    <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                    @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                                </div>
-                                                <span class="input-group-addon" style="display:none;">
-                                                    <i class="fa fa-exchange" style="padding-top:10px;"></i>
-                                                </span>
-                                                <div class="datesate datesatese">
-                                                    <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                                </div>
-                                            </div>
-                                            <!-- /.input group -->
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 giftfive">
-                                        <div class="form-group">
-                                            <div class="form-line" style="border-bottom:none;">
-                                                <button type="submit" class="btn" id="btntype" name="btntype" style="margin-top:5px; margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                    <span style="top:-1px;color:black;">Search</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                        <div class="col-md-3 buttonPdf giftcardpdf retailer-pdf-second">
-
-                            <button>PDF</button>
-                            <button id="btnExport">Export</button>
-                            <button>Total</button>
-                        </div>
-                        <div class="col-md-6 giftcard-button" style="display:none;">
-                            <div class="row">
-                                <div class="form-group" style="">
-                                    <div style="padding-top: 22px;  margin-right: 4px; float:right;">
-                                        <button type="button" class="btn btn-danger waves-effect" style="margin-top:2px;" title="Total  Failed"><i style="font-size:15px;top:1px;" class="fa fa-times-circle-o" aria-hidden="true"></i>&nbsp;PDF&nbsp;@ViewData["totalfailed"]</button>
-                                        <button type="button" class="btn btn-warning waves-effect" style="margin-top:2px;" title="Total  Pending"><i style="font-size:15px;top:1px;" class="fa fa-question-circle-o" aria-hidden="true"></i>&nbsp;Export&nbsp;@ViewData["totalpending"]</button>
-                                        <button type="button" class="btn btn-success waves-effect" style="margin-top:2px;" title="Total  Success"><i style="font-size:15px;top:1px;" class="fa fa-check-circle-o" aria-hidden="true"></i>&nbsp;Total&nbsp;@ViewData["totalsuccess"]</button>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="">
-                <div class="card">
-                    <div class="page-header-third">
-                        <div class="body" style="padding: 0px;">
-                            <div class="table-responsive" style="position:inherit;">
-                                <table class="table table-bordered table-striped table-hover" style="width:100%;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            @*<th>Retailer&nbsp;Name</th>*@
-                                            <th>Vendor&nbsp;Name</th>
-                                            <th>Product&nbsp;Name</th>
-                                            <th>List&nbsp;Price</th>
-                                            <th>Price</th>
-                                            <th>Qty</th>
-                                            <th>Amount</th>
-                                            <th>OTP</th>
-                                            <th>Status</th>
-                                            <th>Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        @foreach (var item in Model)
+                                        var sts = "Pending";
+                                        var tone = "pending";
+                                        var fa = "fa-clock-o";
+                                        if (item.AdminStatus == 2)
                                         {
-                                            <tr role="row" class="odd">
-
-                                                @*<td>@item.RetailerName</td>*@
-                                                <td>@item.Name</td>
-                                                <td>@item.ProductName</td>
-                                                <td>@item.ListPrice</td>
-                                                <td>@item.StandardPrice</td>
-                                                <td>@item.QTY</td>
-                                                <td>@item.Amount</td>
-                                                <td>@item.DOTP</td>
-                                                @if (item.AdminStatus == 1)
-                                                {
-                                                    <td>Pending</td>
-                                                }
-                                                else if (item.AdminStatus == 2)
-                                                {
-                                                    <td>Success</td>
-                                                }
-                                                else if (item.AdminStatus == 3)
-                                                {
-                                                    <td>Rejected</td>
-                                                }
-
-                                                <td>@item.OrderDate</td>
-                                            </tr>
-
+                                            sts = "Success";
+                                            tone = "success";
+                                            fa = "fa-check";
                                         }
-
-
-                                        <tr>
-                                            <td colspan="13"><h2 style="text-align:center;">Data Not Found</h2></td>
-
+                                        else if (item.AdminStatus == 3)
+                                        {
+                                            sts = "Rejected";
+                                            tone = "failed";
+                                            fa = "fa-times";
+                                        }
+                                        <tr class="vm-dmt-row">
+                                            <td class="vm-dmt-sr-cell">@sr</td>
+                                            <td>
+                                                <span class="vm-dmt-consumer-text">@item.Name</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-refno-text">@item.ProductName</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.ListPrice, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.StandardPrice, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-refno-text">@item.QTY</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.Amount, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-refno-text">@item.DOTP</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-status vm-dmt-status--@tone" title="@sts"><i class="fa @fa" aria-hidden="true"></i></span>
+                                            </td>
+                                            <td class="vm-ticket-time-cell">
+                                                <span class="vm-dmt-refno-text">@(item.OrderDate.HasValue ? String.Format("{0:dd-MMM-yyyy HH:mm:ss}", item.OrderDate.Value) : "—")</span>
+                                            </td>
                                         </tr>
-
-
-
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                        sr++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="10" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-shopping-bag" aria-hidden="true"></i>
+                                            <span>No ecommerce records found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
-                    
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-
-<script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<!--Calendar Javascript-->
-<script>
-    $(document).ready(function () {
-
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+@section PostVmScripts {
+    <script>
+        function hideRetailerEcomRepTotals() {
+            var $panel = jQuery('#retailerEcomRepTotalsPanel');
+            var $btn = jQuery('.saas-retailer-ecomm-transaction-page .vm-ecomm-totals-btn');
+            $panel.hide().attr('aria-hidden', 'true');
+            $btn.attr('aria-expanded', 'false');
         }
 
-    });
-</script>
-
-
-<!--My Script-->
-<script>
-    $(".input-daterange").click(function () {
-        $(".datepicker").addClass('datepickerpurchaseee datepickerecommwqxd');
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('.report-list-change li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('active');
-
-
+        function showRetailerEcomRepTotals() {
+            var $panel = jQuery('#retailerEcomRepTotalsPanel');
+            var $btn = jQuery('.saas-retailer-ecomm-transaction-page .vm-ecomm-totals-btn');
+            if ($panel.is(':visible')) {
+                hideRetailerEcomRepTotals();
+                return;
             }
-        })
-    });
-</script>
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-        var category = $('#category').val();
-        var ddl_top = $('#ddl_top').val();
-        var txt_frm_date = $('#ddl_status').val();
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("Excel_Ecommerce_Report", "Home")?category=' + category + '&ddl_top=' + ddl_top + '&ddl_status=' + ddl_status + '&txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        location.href = url;
-});
-</script>
+            $panel.show().attr('aria-hidden', 'false');
+            $btn.attr('aria-expanded', 'true');
+        }
+
+        function retailerEcomRepFilters() {
+            return {
+                category: jQuery('#category').val() || '',
+                ddl_status: jQuery('#ddl_status').val() || 'ALL',
+                txt_frm_date: jQuery('#retailer_ecomrep_frm_date').val() || '',
+                txt_to_date: jQuery('#retailer_ecomrep_to_date').val() || ''
+            };
+        }
+
+        function exportRetailerEcomRepTable(type) {
+            if (type === 'excel') {
+                var f = retailerEcomRepFilters();
+                location.href = '@Url.Action("Excel_Ecommerce_Report", "Home")?category=' + encodeURIComponent(f.category) + '&ddl_status=' + encodeURIComponent(f.ddl_status) + '&txt_frm_date=' + encodeURIComponent(f.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(f.txt_to_date);
+                return;
+            }
+            var table = document.getElementById('retailerEcommTransactionReport');
+            if (!table) {
+                return;
+            }
+            var title = 'Ecommerce Report';
+            var clone = table.cloneNode(true);
+            if (clone.querySelector('.vm-opr-table-empty-row')) {
+                alert('No data available to export.');
+                return;
+            }
+            var printWin = window.open('', '_blank');
+            if (!printWin) {
+                alert('Please allow pop-ups to export PDF.');
+                return;
+            }
+            printWin.document.write(
+                '<html><head><title>' + title + '</title>'
+                + '<style>body{font-family:Arial,sans-serif;padding:16px}h3{margin:0 0 12px}table{border-collapse:collapse;width:100%;font-size:10px}th,td{border:1px solid #ccc;padding:4px;text-align:left}th{background:#f3f4f6}</style>'
+                + '</head><body><h3>' + title + '</h3>' + clone.outerHTML + '</body></html>'
+            );
+            printWin.document.close();
+            printWin.focus();
+            printWin.print();
+        }
+
+        function initRetailerEcomRepSelect2() {
+            var $scope = jQuery('.saas-retailer-ecomm-transaction-page');
+            $scope.find('#category, #ddl_status').each(function () {
+                var $el = jQuery(this);
+                if (!$el.length || !jQuery.fn.select2) {
+                    return;
+                }
+                if ($el.hasClass('select2-hidden-accessible')) {
+                    try { $el.select2('destroy'); } catch (e) { }
+                }
+                var opts = {
+                    width: '100%',
+                    dropdownParent: jQuery(document.body),
+                    minimumResultsForSearch: 0,
+                    dropdownCssClass: 'vm-admin-select2-dropdown vm-admin-select2-searchable'
+                };
+                if (typeof window.forceAdminSelect2 === 'function') {
+                    window.forceAdminSelect2($el, opts, true);
+                } else if (typeof window.applyAdminSelect2 === 'function') {
+                    window.applyAdminSelect2($el, opts, true);
+                } else {
+                    $el.select2(opts);
+                }
+            });
+        }
+
+        function initRetailerEcomRepDatepickers() {
+            if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+                window.setTimeout(initRetailerEcomRepDatepickers, 50);
+                return;
+            }
+            if (typeof window.initAdminReportDateForm === 'function') {
+                window.initAdminReportDateForm(
+                    '#retailerEcomReportForm',
+                    '#retailer_ecomrep_frm_date',
+                    '#retailer_ecomrep_to_date',
+                    true
+                );
+            }
+        }
+
+        jQuery(function () {
+            initRetailerEcomRepSelect2();
+            initRetailerEcomRepDatepickers();
+            window.setTimeout(initRetailerEcomRepDatepickers, 150);
+            jQuery('#btnExportRetailerEcomRep').on('click', function () {
+                exportRetailerEcomRepTable('excel');
+            });
+            jQuery('#btnPDFRetailerEcomRep').on('click', function () {
+                exportRetailerEcomRepTable('pdf');
+            });
+        });
+    </script>
+}

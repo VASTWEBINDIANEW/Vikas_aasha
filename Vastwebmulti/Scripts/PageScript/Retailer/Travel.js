@@ -10,9 +10,13 @@ function AddTextBox() {
     jq("#divForSpacialReturn").hide();
     var div = document.createElement('DIV');
     div.innerHTML = GetDynamicTextbox("");
-    document.getElementById("multicityDynamic").appendChild(div);    jq(".hoja").autocomplete({
-        //source: '/A2ZMultiService/RETAILER/Home/GetSourceName', //For localhost        source: '/RETAILER/Home/GetSourceName', //For Live        minLength: 3
-    })}
+    document.getElementById("multicityDynamic").appendChild(div);
+    jq(".hoja").autocomplete({
+        //source: '/A2ZMultiService/RETAILER/Home/GetSourceName', //For localhost
+        source: '/RETAILER/Home/GetSourceName', //For Live
+        minLength: 3
+    })
+}
 function RemoveTextBox(div) {
 
     document.getElementById("multicityDynamic").removeChild(div.parentNode.parentNode);
@@ -129,44 +133,31 @@ function btnHotelAdlutPlus(dom) {
 };
 /* ------ ADULT Config  END----------*/
 /* ------ Child Config ----------*/
+function vmHotelSyncChildAgeUI(dom, childCount) {
+    var block = jq(dom).closest(".vm-travel-hotel-room-block");
+    block.find(".vm-travel-hotel-child-ages").toggleClass("vm-travel-hotel-child-ages--visible", childCount > 0);
+    block.find(".vm-travel-hotel-child-age[data-child-age='0']").toggleClass("vm-travel-hotel-child-age--show", childCount >= 1);
+    block.find(".vm-travel-hotel-child-age[data-child-age='1']").toggleClass("vm-travel-hotel-child-age--show", childCount >= 2);
+}
 function btnHotelChildMinus(dom) {
-    //alert();
-    var roomIndex = parseInt(jq(dom).parent().attr("data-room"));
-    //alert("room Index" + roomIndex);
+    var roomIndex = parseInt(jq(dom).parent().attr("data-room"), 10);
     if (roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild > 0) {
         roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild--;
-        jq(dom).prev().find("span").html(roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild);
-        var childAgeLi = parseInt(roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild );
-        //alert(childAgeLi);
-        //jq("li[data-child-age='" + childAgeLi + "']").hide();
-        if (childAgeLi == 0) {
-            jq(dom).next().next().hide();
-        } else {
-            jq(dom).next().next().next().hide();
-        }
+        jq(dom).closest("ul.satediv").find(".showHotelChildCount").html(roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild);
         roomGuestMapObjects.RoomNodes[roomIndex - 1].ChildAge.pop();
+        vmHotelSyncChildAgeUI(dom, roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild);
         jq("#roomsDetails").val(JSON.stringify(roomGuestMapObjects));
         console.log(JSON.stringify(roomGuestMapObjects));
-    } 
+    }
 };
 function btnHotelChildPlus(dom) {
-    //alert();
-    var roomIndex = parseInt(jq(dom).parent().attr("data-room"));
-   // alert("room Index" + roomIndex);
+    var roomIndex = parseInt(jq(dom).parent().attr("data-room"), 10);
     if (roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild < 2) {
         roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild++;
-        jq(dom).prev().prev().find("span").html(roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild);
-        var childAgeLi = parseInt(roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild - 1);
-          //alert(childAgeLi);
-        //jq("li[data-child-age='" + childAgeLi + "']").show();
-          if (childAgeLi == 0)
-          {
-              jq(dom).next().show();
-          } else {
-              jq(dom).next().next().show();
-          }
-          roomGuestMapObjects.RoomNodes[roomIndex - 1].ChildAge.push(0);
-          jq("#roomsDetails").val(JSON.stringify(roomGuestMapObjects));
+        jq(dom).closest("ul.satediv").find(".showHotelChildCount").html(roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild);
+        roomGuestMapObjects.RoomNodes[roomIndex - 1].ChildAge.push(0);
+        vmHotelSyncChildAgeUI(dom, roomGuestMapObjects.RoomNodes[roomIndex - 1].NoOfChild);
+        jq("#roomsDetails").val(JSON.stringify(roomGuestMapObjects));
         console.log(JSON.stringify(roomGuestMapObjects));
     }
     else {
@@ -185,11 +176,9 @@ function btnHotelChildPlus(dom) {
 //    console.log(JSON.stringify(roomGuestMapObjects));
 //});
 function ddlChildAge (dom) {
-    var end = parseInt(dom.value);
-    //alert(end);
-    var childAgeArrayIndex = parseInt(jq(dom).parent().attr("data-child-age"));
-    //alert(childAgeArrayIndex);
-    var roomIndex = parseInt(jq(dom).parent().parent().attr("data-room"));
+    var end = parseInt(dom.value, 10);
+    var childAgeArrayIndex = parseInt(jq(dom).parent().attr("data-child-age"), 10);
+    var roomIndex = parseInt(jq(dom).closest(".vm-travel-hotel-child-ages").attr("data-room"), 10);
     roomGuestMapObjects.RoomNodes[roomIndex - 1].ChildAge[childAgeArrayIndex] = end;
     jq("#roomsDetails").val(JSON.stringify(roomGuestMapObjects));
     console.log(JSON.stringify(roomGuestMapObjects));
@@ -206,8 +195,11 @@ function AddHotelTextBox() {
     // jq("#divForSpacialReturn").hide();
     var div = document.createElement('DIV');
     div.innerHTML = GetDynamicHotelTextbox("");
-    document.getElementById("roomGuestDynamic").appendChild(div);    var NoOfRoomsOldValue = document.getElementById("NoOfRooms").value;    document.getElementById("NoOfRooms").value = parseInt(NoOfRoomsOldValue) + parseInt("1");    document.getElementById("totalRoomsToShow").textContent = parseInt(NoOfRoomsOldValue) + parseInt("1");
-    div.setAttribute("class", "row");
+    document.getElementById("roomGuestDynamic").appendChild(div);
+    var NoOfRoomsOldValue = document.getElementById("NoOfRooms").value;
+    document.getElementById("NoOfRooms").value = parseInt(NoOfRoomsOldValue) + parseInt("1");
+    document.getElementById("totalRoomsToShow").textContent = parseInt(NoOfRoomsOldValue) + parseInt("1");
+    div.setAttribute("class", "row vm-travel-hotel-room-row");
     ////// add node ///
     var newRoomItem = { "NoOfAdults": 1, "NoOfChild": 0, "ChildAge": [] };
     roomGuestMapObjects.RoomNodes.push(newRoomItem);
@@ -215,14 +207,25 @@ function AddHotelTextBox() {
     var newRoomIndex = roomGuestMapObjects.RoomNodes.length;
     //alert(newRoomIndex);
     //alert(div.childNodes[0].html());
-    div.getElementsByTagName("UL")[0].setAttribute("data-room", newRoomIndex);
+    jq(div).find("ul[data-room], .vm-travel-hotel-child-ages[data-room]").attr("data-room", newRoomIndex);
+    var roomLabel = div.querySelector(".vm-travel-hotel-room-num");
+    if (roomLabel) {
+        roomLabel.textContent = "Room " + newRoomIndex;
+    }
     jq("#roomsDetails").val(JSON.stringify(roomGuestMapObjects));
     console.log(JSON.stringify(roomGuestMapObjects));
 }
 function RemoveHotelTextBox(div) {
-    document.getElementById("roomGuestDynamic").removeChild(div.parentNode.parentNode.parentNode);    var NoOfRoomsOldValue = document.getElementById("NoOfRooms").value;    document.getElementById("NoOfRooms").value = parseInt(NoOfRoomsOldValue) - parseInt("1");    //alert(parseInt(NoOfRoomsOldValue) - parseInt("1"));
+    var row = jq(div).closest("#roomGuestDynamic > .row")[0];
+    if (!row) {
+        return;
+    }
+    var roomIndex = parseInt(jq(row).find("ul[data-room]").first().attr("data-room"), 10);
+    document.getElementById("roomGuestDynamic").removeChild(row);
+    var NoOfRoomsOldValue = document.getElementById("NoOfRooms").value;
+    document.getElementById("NoOfRooms").value = parseInt(NoOfRoomsOldValue) - parseInt("1");
+    //alert(parseInt(NoOfRoomsOldValue) - parseInt("1"));
     document.getElementById("totalRoomsToShow").textContent = parseInt(NoOfRoomsOldValue) - parseInt("1");
-    var roomIndex = parseInt(jq(div).parent().parent().attr("data-room"));
     roomIndex = roomIndex - 1;
    // alert(roomIndex);
     //roomGuestMapObjects.RoomNodes.pop();

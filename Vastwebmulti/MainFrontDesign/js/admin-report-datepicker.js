@@ -62,6 +62,10 @@
         var left = margin;
         if (anchor) {
             var rect = anchor.getBoundingClientRect();
+            var alignRect = rect;
+            if ($input.length) {
+                alignRect = $input[0].getBoundingClientRect();
+            }
             top = rect.bottom + gap;
             if (top + height > vh - margin) {
                 top = rect.top - height - gap;
@@ -69,9 +73,9 @@
             if (top < margin) {
                 top = margin;
             }
-            left = rect.left;
+            left = alignRect.left;
             if (left + width > vw - margin) {
-                left = vw - margin - width;
+                left = Math.max(margin, alignRect.right - width);
             }
             if (left < margin) {
                 left = margin;
@@ -319,6 +323,7 @@
         initReportDateForm("#incomingReportForm");
         initReportDateForm("#rofferReportForm");
         initReportDateForm("#radiantPrepayForm");
+        initReportDateForm("#raoAccountOpeningDateForm", "#axis_from_date", "#axis_to_date");
         initReportDateForm("#dthBookingReportForm");
         initReportDateForm("#sendFundHistoryForm1");
         initReportDateForm("#sendFundHistoryForm2", "#txt_frm_datee", "#txt_to_datee");
@@ -329,6 +334,7 @@
         initReportDateForm("#dealerTokenPurchaseHistoryForm");
         initReportDateForm("#radiantCmsDepositForm");
         initReportDateForm("#ecommerceHistoryForm");
+        initReportDateForm("#retailerEcommTransactionForm", "#retailer_ecomm_frm_date", "#retailer_ecomm_to_date");
         initReportDateForm("#securityReportForm");
         initReportDateForm("#whatsappPurchaseForm");
         initReportDateForm("#giftcardReportForm");

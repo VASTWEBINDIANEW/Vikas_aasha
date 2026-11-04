@@ -1,86 +1,55 @@
 ﻿@model List<Vastwebmulti.Models.prepaid_card_Transaction>
+@{
+    var prepaidMsg = Session["succes"] as string;
+    var hasMsg = !string.IsNullOrWhiteSpace(prepaidMsg);
+}
 
-
-<style>
-
-
-    th, td {
-        padding: 10px;
-        border: 1px solid;
-    }
-
-    table {
-        width: 100%;
-    }
-
-  /*  #cards_table {
-       margin:
-    }
-*/
-    
-</style>
-
-<div class="page-header-third">
-    <div class="timer_off">
-
-        @if (Session["succes"] != "")
-        {
-            @Session["succes"]
-            <button onclick="craft()">OK</button>
-        }
+<div class="vm-all-cards-report-inner">
+    <div class="vm-all-cards-alert timer_off@(hasMsg ? " is-visible" : "")" id="vmAllCardsPrepaidAlert" role="status">
+        <span class="vm-all-cards-alert__text">@(hasMsg ? prepaidMsg : "")</span>
+        <button type="button" class="vm-all-cards-alert__ok" onclick="craft()">OK</button>
     </div>
 
-
-
-    @*@Session["succes"]*@
-    <div class="cards_table" id="cards">
-        <table>
-            <tr>
-                <th>STATUS</th>
-                <th>AMOUNT</th>
-                <th>QUANTITY</th>
-                <th>COMM</th>
-                <th>REMAIN PRE</th>
-                <th>REMAIN POST</th>
-                <th>FINAL BALANCE</th>
-            </tr>
-
-            @foreach (var i in Model)
-            {
-                <tr>
-                    <td>@i.Status</td>
-                    <td>@i.Amount</td>
-                    <td>@i.Quantity</td>
-                    <td>@i.Rem_comm</td>
-                    <td>@i.Rem_remain_pre</td>
-                    <td>@i.rem_remain_post</td>
-                    <td>@i.rem_final</td>
-                </tr>
-
-            }
-
-
-
-        </table>
-
+    <div class="vm-all-cards-table-wrap" id="cards">
+        @if (Model == null || Model.Count == 0)
+        {
+            <div class="vm-all-cards-empty">No prepaid card transactions yet.</div>
+        }
+        else
+        {
+            <table class="vm-all-cards-table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th>Quantity</th>
+                        <th>Comm</th>
+                        <th>Remain pre</th>
+                        <th>Remain post</th>
+                        <th>Final balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in Model)
+                    {
+                        <tr>
+                            <td>@i.Status</td>
+                            <td>@i.Amount</td>
+                            <td>@i.Quantity</td>
+                            <td>@i.Rem_comm</td>
+                            <td>@i.Rem_remain_pre</td>
+                            <td>@i.rem_remain_post</td>
+                            <td>@i.rem_final</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
 </div>
 
 <script>
-   
-     
-
     function craft() {
-       
-        $('.timer_off').hide();
-            
-        
+        $('.timer_off').removeClass('is-visible').hide();
     }
-    //else {
-    //    const myTimeout = setTimeout(my, 5000);
-
-    //    function my() {
-    //        document.getElementById("cards_table").style.display = "none"
-    //    }
- /*   }*/
 </script>

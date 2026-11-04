@@ -1,58 +1,10 @@
 ﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
 
-<style>
-    .loader {
-        position: fixed;
-        top: -90px;
-        left: 0;
-        background-color: rgba(255,255,255,0.7);
-        z-index: 999999999999;
-        display: none;
-        height: 100vw;
-        width: 100vw;
-    }
-
-    @@-webkit-keyframes spin {
-        from {
-            -webkit-transform: rotate(0deg);
-        }
-
-        to {
-            -webkit-transform: rotate(360deg);
-        }
-    }
-
-    @@keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    .loader::after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 48%;
-        top: 25%;
-        width: 100px;
-        height: 100px;
-        border-style: solid;
-        border-color: black;
-        border-top-color: transparent;
-        border-width: 4px;
-        border-radius: 50%;
-        -webkit-animation: spin .8s linear infinite;
-        animation: spin .8s linear infinite;
-    }
-</style>
-<div id="elecpay" class="row elecpaymyclass" style="padding-left: 4px;">
-    <div class="col-md-4 elecpay-first">
+@* vm-rch: purana loader <style> hataya — retailer-recharge-modern.css (sec-12) me port *@
+<div id="elecpay" class="vm-rch-formgrid elecpaymyclass fund-transfer-form">
+    <div class="vm-rch-fcell vm-rch-fop elecpay-first">
         <div>
-            <p id="electricityoperator" style="margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px; top:-16px !important;"></p>
+            <p id="electricityoperator" class="vm-rch-err"></p>
         </div>
         <div class="form-group" style="margin-bottom:0px;">
             <div class="input-group">
@@ -68,9 +20,9 @@
     </div>
 
 
-    <div class="col-md-2" id="divconsumerno">
+    <div class="vm-rch-fcell vm-rch-fnum" id="divconsumerno">
         <div>
-            <p id="electricitymessage" style="margin-top:10px; color:#E91E63; font-size:10px; padding-left:2px; top: -16px !important;"></p>
+            <p id="electricitymessage" class="vm-rch-err"></p>
 
         </div>
         <div class="form-group" style="margin-bottom:0px;">
@@ -82,9 +34,9 @@
 
     <!--Paybillamount-->
 
-    <div class="col-md-1" id="divpayamount">
+    <div class="vm-rch-fcell vm-rch-famt" id="divpayamount">
         <div>
-            <p id="amountelectricityMessage" style="margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px; top: -16px !important;"></p>
+            <p id="amountelectricityMessage" class="vm-rch-err"></p>
         </div>
         <div class="form-group" style="margin-bottom:0px;">
             <div class="txtelectricity1" style="margin-top:-1px; height:37px;">
@@ -94,7 +46,7 @@
                 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 wamount-input-type" id="btngetviewbill">
                     <div class="form-group" style="margin-bottom:0px;">
                         <div class="form-line" style="border-bottom:none;">
-                            <input type="button" id="btnnn2" class="btn bg-blue-grey" value="View Bill" style="height:37px;float:left;" onclick="Getviewbill('eddltype')" />
+                            <input type="button" id="btnnn2" class="btn bg-blue-grey" value="View Bill" style="height:37px;float:left;border:0;border-radius:8px;background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;font-weight:700;" onclick="Getviewbill('eddltype')" />
                         </div>
                     </div>
                 </div>
@@ -182,19 +134,15 @@
         </div>
     </div>
     <!--Continue button-->
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="btncontinue">
-        <div class="form-group" style="margin-bottom:0px;">
-            <div class="form-line" style="margin-top:0px !important; border-bottom:none;">
-                <input type="submit" id="btn2" class="btn bg-blue-grey" value="Pay Bill" style="height:37px;float:left;" onclick="GetSelectedTextValue('eddltype')" />
-            </div>
-        </div>
+    <div class="vm-rch-fcell vm-rch-fbtn2" id="btncontinue">
+        <input type="submit" id="btn2" class="btn bg-blue-grey" value="Continue" onclick="GetSelectedTextValue('eddltype')" />
     </div>
     <!--View Bill button-->
     <!--
     <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" id="btngetviewbill">
         <div class="form-group" style="margin-bottom:0px;">
             <div class="form-line" style="margin-top:25px !important; border-bottom:none;">
-                <input type="button" id="btnnn" class="btn bg-blue-grey" value="View Bill" style="height:37px;float:left;" onclick="Getviewbill('eddltype')" />
+                <input type="button" id="btnnn" class="btn bg-blue-grey" value="View Bill" style="height:37px;float:left;border:0;border-radius:8px;background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;font-weight:700;" onclick="Getviewbill('eddltype')" />
             </div>
         </div>
     </div>
@@ -249,13 +197,13 @@
 
         <td>
             <button style="        float: right;
-        background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; border: 0px;color: #fff; padding: 4px 19px;font-size: 20px;" onclick="elecprocessToPay()">
+        background: linear-gradient(135deg, #1e40af, #3b82f6) !important; border: 0px;color: #fff; padding: 4px 19px;font-size: 20px;" onclick="elecprocessToPay()">
                 Procces To Pay
             </button>
         </td>
         @*<td>
                 <button style="        float: right;
-            background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; border: 0px;color: #fff; padding: 4px 19px;font-size: 20px;" onclick="elecrechargeconfirm()">
+            background: linear-gradient(135deg, #1e40af, #3b82f6) !important; border: 0px;color: #fff; padding: 4px 19px;font-size: 20px;" onclick="elecrechargeconfirm()">
                     Procces To Pay
                 </button>
             </td>*@
@@ -271,7 +219,7 @@
     <tr>
         <td style="font-size: 20px;"><b> <span id="rchstatuschkelec"></span> </b></td>
         <td class="border-centerbe border-centerbess" style="font-size: 20px;"><b><span id="rchmsgelec"></span></b></td>
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagainelec()">Recharge Again</button></td>
+        <td><button style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagainelec()">Recharge Again</button></td>
     </tr>
 </table>
 

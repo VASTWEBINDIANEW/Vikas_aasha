@@ -3,121 +3,12 @@
     ViewBag.Title = "Operator_info";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
 }
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-<style>
+@section HeadStyles {
+    <link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/retailer-operator-info-modern.css?v=47" rel="stylesheet" />
+}
 
-
-    /* new css  */
-    .wallet_transfer #ul {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        padding: 14px 0;
-    }
-
-        .wallet_transfer #ul a {
-            padding: 10px 14px;
-            background: #ccc;
-            color: #000;
-            border-radius: 2px;
-        }
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
-
-    .bread-same-all-page li {
-        margin: 6px 0 !important;
-    }
-
-    .table {
-        margin-bottom: 0px;
-    }
-
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-
-
-    /* new css  */
-
-    .giftcardcategory ul li a span {
-        font-size: 12px;
-    }
-
-    .giftcardcategory ul li a span, .giftcardcategory ul li.active a span {
-        color: #fff !important;
-    }
-
-    .operator-clearfix table tr td span {
-        color: #555;
-    }
-
-    .second-design .giftcardcategory ul li a span, .second-design .giftcardcategory ul li.active a span {
-        color: #000 !important;
-    }
-
-    @@media only screen and (max-width:1169px) {
-        .body.Gift_Carddbody {
-            padding: 0;
-        }
-            .body.Gift_Carddbody .row {
-                margin-left: 0;
-                margin-right: 0;
-            }
-
-    }
-    @@media screen and (max-width:992px) {
-        .third-design .giftcardtab-thirddesign .giftul-third-block {
-            display: block !important;
-        }
-
-        .third-design .giftcardtab-thirddesign .giftul-third {
-            display: none !important;
-        }
-    }
-
-    @@media only screen and (max-width:991px) {
-    }
-
-    @@media only screen and (max-width:767px) {
-        #leftulbar li {
-            width: 20% !important;
-        }
-        .operator-clearfix .giftcardcategory ul li.active a {
-            margin-top: 0px;
-        }
-        .Gift_Carddbody .giftcardcategory ul li.active a {
-            padding: 10px 2px;
-        }
-        .giftcardcategory-second ul {
-            display: inline-block !important;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        
-    }
-    
-
-    @@media only screen and (max-width:480px) {
-        #leftulbar li {
-            width: 50% !important;
-        }
-        .bread-same-all-page {
-            display: block;
-        }
-            .bread-same-all-page .col-md-6 {
-                width: 100% !important;
-            }
-    }
-    
-</style>
-<section class="content operator-responsive content-fourdesign-page allpage-four-design-section" style="">
+<section class="content saas-admin-account-page vm-operator-info-page" data-vm-oi-initial="@(ViewData["type"] ?? "")">
     <div class="container-fluid">
 
         <!--Four-Design-Page-Header-Start-->
@@ -136,35 +27,26 @@
         <div class="row clearfix operator-clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                <div class="page-header-third">
-                    <div class="bread-same-all-page header-margin-top-thrddesihn" style="width:100%;float:left;">
-                        <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                            <ul>
-                                <li class="smli">
-                                    <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                                    </a>
-                                </li>
-                                <li class="">
-                                    Operator Info&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                                </li>
-                                <li class="textshowspanclass-header">
-                                    Prepaid & Dth
-                                </li>
-                            </ul>
+                <div class="page-header-third vm-oi-toolbar-zone">
+                    <div class="container-fluid vm-opr-page-shell">
+                        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+                            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
+                                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                                    <li>Operator Info</li>
+                                    <li class="textshowspanclass-header">Prepaid &amp; Dth</li>
+                                </ol>
+                                <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group vm-oi-toolbar-actions">
+                                    <button type="button" id="btnOpInfoExport" class="saas-acc-btn saas-acc-btn--excel" title="Active tab ka Excel download"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                                    <button type="button" id="btnOpInfoPdf" class="saas-acc-btn saas-acc-btn--pdf" title="Active tab ka print / PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3 buttonPdf buttonPdfdispute retailer-pdf-second" style="text-align:right;width:auto;float:right;display:block !important;">
-
-                            <button style="color:#555;">PDF</button>
-                            <button style="color:#555;">Export</button>
-
-                        </div>
-
                     </div>
 
                 </div>
 
-                <div class="card navbar class-back-tra-fourdesign" style="position:initial;">
+                <div class="card navbar class-back-tra-fourdesign">
                     
                     <div class="body Gift_Carddbody">
 
@@ -183,111 +65,111 @@
                         @*Third_Design-End*@
 
 
-                    <div class="row">
-                        <div class="col-md-12 giftcardcategory giftcardcategory-second giftcardcategory-second-design giftcardtab-thirddesign" style="margin-bottom:0px;">
-                            <center>
-                                <div class="page-header-third">
-                                    <ul id="leftulbar" class="nav nav-tabs tab-col-orange fullbodydycolorbg giftul-third-block" role="tablist" style="background:#607D8B;border-bottom:none;display: flex;">
-                                        <li role="presentation" class="active" style="margin-left:22px;" @*onclick="showComm('Prepaid')"*@>
-                                            <a href="#prepaidoperators" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../ashok-images/mobile-application.svg" style="height:45px; margin-top:-5px;">
+                    <div class="row vm-oi-white-panel">
+                        <div class="col-md-12 giftcardcategory giftcardcategory-second giftcardcategory-second-design giftcardtab-thirddesign">
+                            <center class="vm-oi-tab-strip-wrap">
+                                <div class="page-header-third vm-oi-tab-strip-head">
+                                    <ul id="vmOiTabList" class="nav nav-tabs tab-col-orange giftul-third-block vm-oi-tablist vm-oi-tab-grid" role="tablist">
+                                        <li role="presentation" class="active">
+                                            <a href="#prepaidoperators" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-controls="prepaidoperators" aria-selected="true">
+                                                <img src="../../ashok-images/mobile-application.svg">
                                                 <br>
-                                                <span id="alltab" style="padding-left:5px;">Prepaid & Dth</span>
+                                                <span id="alltab">Prepaid & Dth</span>
                                             </a>
                                         </li>
-                                        <li role="presentation" class="" style="margin-left:36px;">
-                                            <a href="#utilitisoperators" data-toggle="tab" aria-expanded="true">
-                                                <img src="../../ashok-images/increase.svg" style="height:45px; margin-top:-5px;">
+                                        <li role="presentation">
+                                            <a href="#utilitisoperators" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="true">
+                                                <img src="../../ashok-images/increase.svg">
                                                 <br><span>Utilities</span>
                                             </a>
                                         </li>
-                                        <li role="presentation" class="" style="margin-left:19px;">
-                                            <a href="#moneyoperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../images/transfer-money.png" style="height:45px; margin-top:-5px;">
+                                        <li role="presentation">
+                                            <a href="#moneyoperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../images/transfer-money.png">
                                                 <br>
-                                                <span style="padding-left:5px;">Money Transfer</span>
+                                                <span>Money Transfer</span>
                                             </a>
                                         </li>
-                                        <li role="presentation" class="" style="margin-left:19px;">
-                                            <a href="#Walletoperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../images/transfer-money.png" style="height:45px; margin-top:-5px;">
+                                        <li role="presentation">
+                                            <a href="#Walletoperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../images/transfer-money.png">
                                                 <br>
-                                                <span style="padding-left:5px;">To Wallet</span>
-                                            </a>
-                                        </li>
-
-
-                                        <li role="presentation" class="" style="margin-left:26px;">
-                                            <a href="#pancardoperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../images/pancardicon.png" style="height:45px; margin-top:-5px;">
-                                                <br>
-                                                <span style="padding-left:0px;">Pancard</span>
-                                            </a>
-                                        </li>
-                                        <li role="presentation" class="" style="margin-left:8px;box-shadow:none;">
-                                            <a href="#aepsoperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../images/aespicon.png" style="height:45px;margin-top:-5px;">
-                                                <br><span style="margin-left:14px;">AEPS</span>
-                                            </a>
-                                        </li>
-                                        <li role="presentation" class="" style="margin-left:19px;">
-                                            <a href="#mposoperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../images/mposicon.png" style="height:45px; margin-top:-5px;">
-                                                <br>
-                                                <span style="padding-left:5px;">M-POS</span>
-                                            </a>
-                                        </li>
-                                        <li role="presentation" class="" style="margin-left:19px;">
-                                            <a href="#Microatmcashoperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../images/mposicon.png" style="height:45px; margin-top:-5px;">
-                                                <br>
-                                                <span style="padding-left:5px;">MicroATM</span>
-                                            </a>
-                                        </li>
-                                        <li role="presentation" class="" style="margin-left:19px;">
-                                            <a href="#Microatmpurchaseoperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../images/mposicon.png" style="height:45px; margin-top:-5px;">
-                                                <br>
-                                                <span style="padding-left:5px;">VM30&nbsp;Purchase</span>
+                                                <span>To Wallet</span>
                                             </a>
                                         </li>
 
-                                        <li role="presentation" class="" style="margin-left:19px;">
-                                            <a href="#flightoperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../ashok-images/airplane.svg" style="height:45px; margin-top:-5px;">
+
+                                        <li role="presentation">
+                                            <a href="#pancardoperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../images/pancardicon.png">
                                                 <br>
-                                                <span style="padding-left:5px;">FLIGHT</span>
+                                                <span>Pancard</span>
+                                            </a>
+                                        </li>
+                                        <li role="presentation">
+                                            <a href="#aepsoperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../images/aespicon.png">
+                                                <br><span>AEPS</span>
+                                            </a>
+                                        </li>
+                                        <li role="presentation">
+                                            <a href="#mposoperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../images/mposicon.png">
+                                                <br>
+                                                <span>M-POS</span>
+                                            </a>
+                                        </li>
+                                        <li role="presentation">
+                                            <a href="#Microatmcashoperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../images/mposicon.png">
+                                                <br>
+                                                <span>MicroATM</span>
+                                            </a>
+                                        </li>
+                                        <li role="presentation">
+                                            <a href="#Microatmpurchaseoperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../images/mposicon.png">
+                                                <br>
+                                                <span>VM30&nbsp;Purchase</span>
                                             </a>
                                         </li>
 
-                                        <li role="presentation" class="" style="margin-left:10px;box-shadow:none;padding-bottom:2px;">
-                                            <a href="#busoperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../ashok-images/bus (1).svg" style="height:38px;margin-top:2px;">
+                                        <li role="presentation">
+                                            <a href="#flightoperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../ashok-images/airplane.svg">
                                                 <br>
-                                                <span style="margin-left:-8px;">BUS</span>
+                                                <span>FLIGHT</span>
                                             </a>
                                         </li>
 
-                                        <li role="presentation" class="" style="margin-left:10px;box-shadow:none;padding-bottom:2px;">
-                                            <a href="#hoteloperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../ashok-images/hotel(1).svg" style="height:38px;margin-top:2px;">
+                                        <li role="presentation">
+                                            <a href="#busoperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../ashok-images/bus (1).svg">
                                                 <br>
-                                                <span style="margin-left:-8px;">HOTEL</span>
-                                            </a>
-                                        </li>
-                                        <li role="presentation" class="" style="margin-left:10px;box-shadow:none;padding-bottom:2px;">
-                                            <a href="#giftcardoperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../ashok-images/business(1).png" style="height:38px;margin-top:2px;">
-                                                <br>
-                                                <span style="margin-left:-8px;">Giftcard</span>
+                                                <span>BUS</span>
                                             </a>
                                         </li>
 
-                                        <li role="presentation" class="" style="margin-left:10px;box-shadow:none;padding-bottom:2px;">
-                                            <a href="#insuranceoperator" data-toggle="tab" aria-expanded="false">
-                                                <img src="../../ashok-images/computer.png" style="height:38px;margin-top:2px;">
+                                        <li role="presentation">
+                                            <a href="#hoteloperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../ashok-images/hotel(1).svg">
                                                 <br>
-                                                <span style="margin-left:-8px;">Security</span>
+                                                <span>HOTEL</span>
+                                            </a>
+                                        </li>
+                                        <li role="presentation">
+                                            <a href="#giftcardoperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../ashok-images/business(1).png">
+                                                <br>
+                                                <span>Giftcard</span>
+                                            </a>
+                                        </li>
+
+                                        <li role="presentation">
+                                            <a href="#insuranceoperator" class="vm-oi-tab-link" data-toggle="tab" role="tab" aria-expanded="false">
+                                                <img src="../../ashok-images/computer.png">
+                                                <br>
+                                                <span>Security</span>
                                             </a>
                                         </li>
 
@@ -296,115 +178,14 @@
                                 </div>
                             </center>
 
-                            @*Operator-Info-Third-Design-Start*@
-                            <center>
-                                <ul id="leftulbar" class="nav nav-tabs tab-col-orange fullbodydycolorbg giftul-third" role="tablist" style="background:#607D8B;border-bottom:none;">
-                                    <li role="presentation" class="active" style="margin-left:22px;" @*onclick="showComm('Prepaid')"*@>
-                                        <a href="#prepaidoperators" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../ashok-images/mobile-application.svg" /></i>
-
-                                            <span id="alltab">Prepaid & Dth</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:36px;">
-                                        <a href="#utilitisoperators" data-toggle="tab" aria-expanded="true">
-                                            <i><img src="../../ashok-images/increase.svg" /></i>
-                                            <span>Utilities</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:19px;">
-                                        <a href="#moneyoperator" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../images/transfer-money.png" /></i>
-
-                                            <span style="padding-left:5px;">Money Transfer</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:26px;">
-                                        <a href="#pancardoperator" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../images/pancardicon.png" /></i>
-
-                                            <span>Pancard</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:8px;box-shadow:none;">
-                                        <a href="#aepsoperator" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../images/aespicon.png" /></i>
-                                            <span>AEPS</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:19px;">
-                                        <a href="#mposoperator" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../images/mposicon.png" /></i>
-
-                                            <span>M-POS</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:19px;">
-                                        <a href="#Microatmcashoperator" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../images/mposicon.png" /></i>
-
-                                            <span>MicroATM</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:19px;">
-                                        <a href="#Microatmpurchaseoperator" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../images/mposicon.png" /></i>
-
-                                            <span>VM-30&nbsp;Purchase</span>
-                                        </a>
-                                    </li>
-
-                                    <li role="presentation" class="" style="margin-left:19px;">
-                                        <a href="#flightoperator" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../ashok-images/airplane.svg" /></i>
-
-                                            <span>FLIGHT</span>
-                                        </a>
-                                    </li>
-
-                                    <li role="presentation" class="" style="margin-left:10px;box-shadow:none;padding-bottom:2px;">
-                                        <a href="#busoperator" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../ashok-images/bus (1).svg" /></i>
-
-                                            <span>BUS</span>
-                                        </a>
-                                    </li>
-
-                                    <li role="presentation" class="" style="margin-left:10px;box-shadow:none;padding-bottom:2px;">
-                                        <a href="#hoteloperator" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../ashok-images/hotel(1).svg" /></i>
-
-                                            <span>HOTEL</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:10px;box-shadow:none;padding-bottom:2px;">
-                                        <a href="#giftcardoperator" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../ashok-images/business(1).png" /></i>
-
-                                            <span>Giftcard</span>
-                                        </a>
-                                    </li>
-
-                                    <li role="presentation" class="" style="margin-left:10px;box-shadow:none;padding-bottom:2px;">
-                                        <a href="#insuranceoperator" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="../../ashok-images/computer.png" /></i>
-
-                                            <span>Security</span>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            
-                            </center>
-                            @*Operator-Info-Third-Design-End*@
-
                         </div>
 
                         <div class="page-header-third">
+                            <div class="vm-oi-table-area-shell">
                             <div class="tab-content tab-contentoperators tab-content-gifts-secondde tablethirddesign-new tablethirddesign-newnew four-design-table-design">
 
 
-                                <div role="tabpanel" class="tab-pane  active prepaidoperators-respons" id="prepaidoperators">
+                                <div role="tabpanel" class="tab-pane active show prepaidoperators-respons" id="prepaidoperators">
                                     <div class="col-md-12">
                                         @{
                                             var range1 = Model.AmountRange[0].maximum1;
@@ -416,7 +197,7 @@
                                             var from3 = rangg1 + " And Above";
                                         }
 
-                                        <table class="table table-bordered table-striped table-hover example-second third-design-table">
+                                        <table class="table vm-oi-data-table vm-oi-table-full example-second third-design-table">
 
                                             <thead style="background-color:whitesmoke;">
                                                 <tr>
@@ -467,7 +248,7 @@
                                 <div role="tabpanel" class="tab-pane flash utilitisoperators-report" id="utilitisoperators">
                                     <div class="col-md-12">
 
-                                        <table class="table table-bordered table-striped example-second third-design-table">
+                                        <table class="table vm-oi-data-table vm-oi-table-full example-second third-design-table">
 
                                             <thead style="background-color:whitesmoke;">
                                                 <tr>
@@ -564,7 +345,7 @@
                                 <div role="tabpanel" class="tab-pane flash" id="moneyoperator">
 
                                     <div class="wallet_transfer">
-                                        <ul id="ul" class="financal-second financal-third">
+                                        <ul id="ul" class="financal-second financal-third vm-oi-wallet-pills">
                                             <li style=" border-left:none;"><a href="@Url.Action("Money_Transfer_Slab_DMT2", "Home")">Pay Out (Slab1)</a></li>
                                             <li style=" border-left:none;"><a href="@Url.Action("Money_Transfer_Slab_DMT1", "Home")">Pay Out(Slab2)</a></li>
                                             <li><a href="@Url.Action("Money_Transfer_Slab_UPI", "Home")">Pay Out UPI</a></li>
@@ -579,7 +360,7 @@
 
                                     <div class="col-md-12">
 
-                                        <table class="table table-bordered table-striped example-second third-design-table">
+                                        <table class="table vm-oi-data-table example-second third-design-table">
 
                                             <thead style="background-color:whitesmoke;">
                                                 <tr>
@@ -791,162 +572,7 @@
                                                             <td>@Html.DisplayFor(modelItem => item.Type_26000)</td>
 
                                                         </tr>
-                                                        @*<tr>
-                                        <td>25001</td>
-                                        <td>26000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_26000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>26001</td>
-                                        <td>27000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_27000)</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>27001</td>
-                                        <td>28000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_28000)</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>28001</td>
-                                        <td>29000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_29000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>29001</td>
-                                        <td>30000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_30000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>30001</td>
-                                        <td>31000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_31000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>31001</td>
-                                        <td>32000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_32000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>32001</td>
-                                        <td>33000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_33000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>33001</td>
-                                        <td>34000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_34000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>34001</td>
-                                        <td>35000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_35000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>35001</td>
-                                        <td>36000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_36000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>36001</td>
-                                        <td>37000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_37000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>37001</td>
-                                        <td>38000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_38000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>38001</td>
-                                        <td>39000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_39000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>39001</td>
-                                        <td>40000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_40000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>40001</td>
-                                        <td>41000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_41000)</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>41001</td>
-                                        <td>42000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_42000)</td>
-
-                                    </tr>
-
-
-                                    <tr>
-                                        <td>42001</td>
-                                        <td>43000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_43000)</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>43001</td>
-                                        <td>44000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_44000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>44001</td>
-                                        <td>45000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_45000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>45001</td>
-                                        <td>46000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_46000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>46001</td>
-                                        <td>47000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_47000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>47001</td>
-                                        <td>48000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_48000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>48001</td>
-                                        <td>49000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_49000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>49001</td>
-                                        <td>50000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_50000)</td>
-
-                                    </tr>*@
+                                                        
 
                                                     }
                                                 }
@@ -963,7 +589,7 @@
                                 <div role="tabpanel" class="tab-pane flash" id="Walletoperator">
                                     <div class="col-md-12">
 
-                                        <table class="table table-bordered table-striped example-second third-design-table">
+                                        <table class="table vm-oi-data-table example-second third-design-table">
 
                                             <thead style="background-color:whitesmoke;">
                                                 <tr>
@@ -1136,162 +762,7 @@
                                                             <td>@Html.DisplayFor(modelItem => item.comm_25000)</td>
 
                                                         </tr>
-                                                        @*<tr>
-                                        <td>25001</td>
-                                        <td>26000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_26000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>26001</td>
-                                        <td>27000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_27000)</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>27001</td>
-                                        <td>28000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_28000)</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>28001</td>
-                                        <td>29000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_29000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>29001</td>
-                                        <td>30000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_30000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>30001</td>
-                                        <td>31000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_31000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>31001</td>
-                                        <td>32000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_32000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>32001</td>
-                                        <td>33000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_33000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>33001</td>
-                                        <td>34000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_34000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>34001</td>
-                                        <td>35000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_35000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>35001</td>
-                                        <td>36000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_36000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>36001</td>
-                                        <td>37000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_37000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>37001</td>
-                                        <td>38000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_38000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>38001</td>
-                                        <td>39000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_39000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>39001</td>
-                                        <td>40000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_40000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>40001</td>
-                                        <td>41000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_41000)</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>41001</td>
-                                        <td>42000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_42000)</td>
-
-                                    </tr>
-
-
-                                    <tr>
-                                        <td>42001</td>
-                                        <td>43000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_43000)</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td>43001</td>
-                                        <td>44000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_44000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>44001</td>
-                                        <td>45000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_45000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>45001</td>
-                                        <td>46000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_46000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>46001</td>
-                                        <td>47000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_47000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>47001</td>
-                                        <td>48000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_48000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>48001</td>
-                                        <td>49000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_49000)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>49001</td>
-                                        <td>50000</td>
-                                        <td>@Html.DisplayFor(modelItem => item.comm_50000)</td>
-
-                                    </tr>*@
+                                                        
 
                                                     }
                                                 }
@@ -1308,7 +779,7 @@
                                 <div role="tabpanel" class="tab-pane flash" id="pancardoperator">
                                     <div class="col-md-12">
 
-                                        <table class="table table-bordered table-striped third-design-back-trans">
+                                        <table class="table vm-oi-data-table vm-oi-table-full third-design-back-trans">
 
                                             <thead style="background-color:whitesmoke;">
                                                 @*<tr>
@@ -1409,9 +880,9 @@
                                 </div>
 
                                 <div role="tabpanel" class="tab-pane flash" id="aepsoperator">
-                                    <div class="col-md-12" style="overflow:scroll;">
+                                    <div class="col-md-12 vm-oi-hscroll">
 
-                                        <table class="table table-bordered table-striped borderclass-show-thirdd">
+                                        <table class="table vm-oi-data-table vm-oi-table-full borderclass-show-thirdd vm-oi-grid-table">
 
                                             <thead style="background-color:whitesmoke;">
 
@@ -1617,7 +1088,7 @@
                                 <div role="tabpanel" class="tab-pane flash" id="mposoperator">
                                     <div class="col-md-12 mposoperator-scroll">
 
-                                        <table class="table table-bordered table-striped">
+                                        <table class="table vm-oi-data-table">
                                             <thead style="background-color:whitesmoke;">
                                                 <tr>
                                                     <th>mPos&nbsp;Min&nbsp;(0&nbsp;Comm)</th>
@@ -1664,7 +1135,7 @@
 
                                 <div role="tabpanel" class="tab-pane flash" id="Microatmpurchaseoperator">
                                     <div class="col-md-12 Microatmpurchaseoperator-scroll">
-                                        <table class="table table-bordered table-striped">
+                                        <table class="table vm-oi-data-table vm-oi-table-full">
                                             <thead style="background-color:whitesmoke;">
                                                 <tr>
                                                     <th>Card&nbsp;Type</th>
@@ -1717,9 +1188,9 @@
                                 </div>
 
                                 <div role="tabpanel" class="tab-pane flash" id="Microatmcashoperator">
-                                    <div class="col-md-12" style="overflow:scroll;">
+                                    <div class="col-md-12 vm-oi-hscroll">
 
-                                        <table class="table table-bordered table-striped">
+                                        <table class="table vm-oi-data-table vm-oi-table-full vm-oi-grid-table">
 
                                             <thead style="background-color:whitesmoke;">
 
@@ -1964,7 +1435,7 @@
                                 <div role="tabpanel" class="tab-pane flash" id="flightoperator">
                                     <div class="col-md-12">
 
-                                        <table class="table table-bordered table-striped">
+                                        <table class="table vm-oi-data-table">
                                             <thead style="background-color:whitesmoke;">
                                                 <tr class="tableactivebutton tableactivebuttoneqe">
                                                     <th>
@@ -2027,7 +1498,7 @@
                                 <div role="tabpanel" class="tab-pane flash" id="busoperator">
                                     <div class="col-md-12">
 
-                                        <table class="table table-bordered table-striped">
+                                        <table class="table vm-oi-data-table">
                                             <thead style="background-color:whitesmoke;">
                                                 <tr class="tableactivebutton tableactivebuttoneqe">
                                                     <th>
@@ -2086,7 +1557,7 @@
                                 <div role="tabpanel" class="tab-pane flash" id="hoteloperator">
                                     <div class="col-md-12">
 
-                                        <table class="table table-bordered table-striped">
+                                        <table class="table vm-oi-data-table">
                                             <thead style="background-color:whitesmoke;">
                                                 <tr class="tableactivebutton tableactivebuttoneqe">
                                                     <th>
@@ -2145,7 +1616,7 @@
                                 <div role="tabpanel" class="tab-pane flash giftcardoperator-report" id="giftcardoperator">
                                     <div class="col-md-12">
 
-                                        <table class="table table-bordered table-striped third-design-table">
+                                        <table class="table vm-oi-data-table third-design-table">
                                             <thead style="background-color:whitesmoke;">
                                                 <tr>
                                                     <th style="padding-left:0px; text-align:center">Operator&nbsp;Current&nbsp;Status</th>
@@ -2210,11 +1681,50 @@
                                 <div role="tabpanel" class="tab-pane flash" id="insuranceoperator">
                                     <div class="col-md-12">
 
-
+                                        <table class="table vm-oi-data-table third-design-table">
+                                            <thead style="background-color:whitesmoke;">
+                                                <tr>
+                                                    <th style="padding-left:0px; text-align:center">Operator&nbsp;Current&nbsp;Status</th>
+                                                    <th style="padding-left:0px; text-align:center">Operator&nbsp;Type</th>
+                                                    <th style="padding-left:0px; text-align:center">Code</th>
+                                                    <th style="padding-left:0px; text-align:center">Commission</th>
+                                                    <th style="padding-left:0px; text-align:center">GST</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.Insurance != null && Model.Insurance.Count > 0)
+                                                {
+                                                    foreach (var item in Model.Insurance)
+                                                    {
+                                                        <tr>
+                                                            <td class="activeinactive">
+                                                                @if (item.Status == "Y")
+                                                                {
+                                                                    <p class="" style="font-size:15px;"><span class="activeopertor">Active</span>@Html.DisplayFor(modelItem => item.OperatorName)</p>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p class="" style="color:;font-size:15px;"><span class="inactiveopertor">Inactive</span>@Html.DisplayFor(modelItem => item.OperatorName)</p>
+                                                                }
+                                                            </td>
+                                                            <td>@Html.DisplayFor(modelItem => item.OperatorType)</td>
+                                                            <td>@Html.DisplayFor(modelItem => item.OperatorCode)</td>
+                                                            <td>@Html.DisplayFor(modelItem => item.Commission)</td>
+                                                            <td>@Html.DisplayFor(modelItem => item.Gst)</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <tr><td colspan="5"><h3 style="text-align:center">Firstly Purchase Insurance Service</h3></td></tr>
+                                                }
+                                            </tbody>
+                                        </table>
 
                                     </div>
                                 </div>
 
+                            </div>
                             </div>
 
 
@@ -2230,787 +1740,22 @@
 
 
 
-        @*<div class="row clearfix" style="">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        @using (Html.BeginForm("Operator_info", "Home", FormMethod.Post))
-                        {
-                            <div class="row">
-                                <div class="col-md-7">
-                                    <div class="form-group" style="margin-top: 2px;margin-bottom:0px;">
-                                        <ol class="breadcrumb breadcrumb-col-blue-grey" style="margin-left:-12px;">
-                                            <li class="active" style="color:#a79f9f; font-size:15px;font-weight:700;">Show Operator Wise Commission Details</li>
-                                        </ol>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group" style="margin-bottom:0px;">
-                                        @Html.DropDownList("ddlcomm", new List<SelectListItem>
-                                    {
-                                            new SelectListItem{ Text="Select One",Value="Select",},
-                                            new SelectListItem{Text="Prepaid & Dth",Value="Prepaid"},
-                                            new SelectListItem{Text="Utilities",Value="Utility"},
-                                            new SelectListItem{Text="Money",Value="Money"},
-                                            new SelectListItem{Text="Money2",Value="Money2"},
-                                            new SelectListItem{Text="Pancard",Value="Pancard"},
-                                            new SelectListItem{Text="AEPS",Value="AEPS"},
-                                            new SelectListItem{Text="M-POS",Value="MPOS"},
-                                            new SelectListItem{Text="INDO-NEPAL",Value="INDONEPAL"},
-                                            new SelectListItem{Text="FLIGHT",Value="FLIGHT"},
-                                            new SelectListItem{Text="BUS",Value="BUS"},
-                                            new SelectListItem{Text="HOTEL",Value="HOTEL"},
-                                            new SelectListItem{Text="Giftcard",Value="GIFT"},
-                                            new SelectListItem{Text="Broadband",Value="Broadband"},
-                                            new SelectListItem{Text="Loan",Value="Loan"},
-                                            new SelectListItem{Text="Water",Value="Water"},
-                                            new SelectListItem{Text="Insurance",Value="Insurance"},
-                                            }, new { @class = "form-control", @style = "margin-top:10px; padding-left:0px; padding-right:0px;text-align:center;border:1px solid #dddddd;height:32px;" })
+        
 
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" id="btntype" name="btntype" class="btn  waves-effect" style="margin-top:11px;margin-right:6px;border:1px solid #c7c2c2;background:#dedddd;">
-                                        <i class="fa fa-search" style="top:1px;font-size:15px;"></i>
-                                        <span style="top:0px;">Search</span>
-                                    </button>
-                                </div>
-
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>*@
-
-        @*<div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:12px;">
-                    <div class="card">
-                        <div class="body" style="margin-top:-30px;">
-                            <div id="Prepaid" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
-
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Name</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Type</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Code</th>
-                                            <th style="padding-left:0px; text-align:center">Status</th>
-                                            <th style="padding-left:0px; text-align:center">Block&nbsp;Time</th>
-                                            <th style="padding-left:0px; text-align:center">Commission</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Prepaid)
-                                        {
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorName)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorType)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorCode)</td>
-                                                <td>
-                                                    @if (item.Status == "Y")
-                                                    {
-                                                        <p style="color:green;font-size:15px;">Active</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p style="color:red;font-size:15px;">InActive</p>
-                                                    }
-                                                </td>
-                                                <td>@Html.DisplayFor(modelItem => item.BlockTime)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Commission)</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div id="Utility" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Name</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Type</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Code</th>
-                                            <th style="padding-left:0px; text-align:center">Status</th>
-                                            <th style="padding-left:0px; text-align:center">Block&nbsp;Time</th>
-                                            <th style="padding-left:0px; text-align:center">Commission</th>
-                                            <th style="padding-left:0px; text-align:center">GST</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Electricity_comm)
-                                        {
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorName)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorType)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorCode)</td>
-                                                <td>
-                                                    @if (item.Status == "Y")
-                                                    {
-                                                        <p style="color:green;font-size:15px;">Active</p>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <p style="color:red;font-size:15px;">InActive</p>
-
-                                                    }
-                                                </td>
-                                                <td>@Html.DisplayFor(modelItem => item.BlockTime)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Commission)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Gst)</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div id="Money" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th style="padding-left:0px; text-align:center">Verify&nbsp;Comm</th>
-                                            <th style="padding-left:0px; text-align:center">Comm&nbsp;0&nbsp;-&nbsp;1000</th>
-                                            <th style="padding-left:0px; text-align:center">Comm&nbsp;1001&nbsp;-&nbsp;2000</th>
-                                            <th style="padding-left:0px; text-align:center">Comm&nbsp;2001&nbsp;-&nbsp;3000</th>
-                                            <th style="padding-left:0px; text-align:center">Comm&nbsp;3001&nbsp;-&nbsp;4000</th>
-                                            <th style="padding-left:0px; text-align:center">Comm&nbsp;4001&nbsp;-&nbsp;5000</th>
-                                            <th style="padding-left:0px; text-align:center">GST</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Money)
-                                        {
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => item.Verifycomm)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_1000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_2000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_3000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_4000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_5000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.gst)</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div id="Money2" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th style="padding-left:0px; text-align:center">Verify&nbsp;Charge (₹)</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;0&nbsp;-&nbsp;1000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;1001&nbsp;-&nbsp;2000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;2001&nbsp;-&nbsp;3000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;3001&nbsp;-&nbsp;4000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;4001&nbsp;-&nbsp;5000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;5001&nbsp;-&nbsp;6000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;6001&nbsp;-&nbsp;7000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;7001&nbsp;-&nbsp;8000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;8001&nbsp;-&nbsp;9000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;9001&nbsp;-&nbsp;10000</th>
-
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;10001&nbsp;-&nbsp;11000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;11001&nbsp;-&nbsp;12000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;12001&nbsp;-&nbsp;13000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;13001&nbsp;-&nbsp;14000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;14001&nbsp;-&nbsp;15000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;15001&nbsp;-&nbsp;16000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;16001&nbsp;-&nbsp;17000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;17001&nbsp;-&nbsp;18000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;18001&nbsp;-&nbsp;19000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;19001&nbsp;-&nbsp;20000</th>
-
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;20001&nbsp;-&nbsp;21000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;21001&nbsp;-&nbsp;22000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;22001&nbsp;-&nbsp;23000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;23001&nbsp;-&nbsp;24000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;24001&nbsp;-&nbsp;25000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;25001&nbsp;-&nbsp;26000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;26001&nbsp;-&nbsp;27000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;27001&nbsp;-&nbsp;28000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;28001&nbsp;-&nbsp;29000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;29001&nbsp;-&nbsp;30000</th>
-
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;30001&nbsp;-&nbsp;31000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;31001&nbsp;-&nbsp;32000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;32001&nbsp;-&nbsp;33000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;33001&nbsp;-&nbsp;34000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;34001&nbsp;-&nbsp;35000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;35001&nbsp;-&nbsp;36000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;36001&nbsp;-&nbsp;37000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;37001&nbsp;-&nbsp;38000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;38001&nbsp;-&nbsp;39000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;39001&nbsp;-&nbsp;40000</th>
-
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;40001&nbsp;-&nbsp;41000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;41001&nbsp;-&nbsp;32000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;42001&nbsp;-&nbsp;43000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;43001&nbsp;-&nbsp;44000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;44001&nbsp;-&nbsp;45000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;45001&nbsp;-&nbsp;46000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;46001&nbsp;-&nbsp;47000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;47001&nbsp;-&nbsp;48000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;48001&nbsp;-&nbsp;49000</th>
-                                            <th style="padding-left:0px; text-align:center">Charge (₹)&nbsp;49001&nbsp;-&nbsp;50000</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Money2)
-                                        {
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => item.Verifycomm)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_1000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_2000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_3000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_4000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_5000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_6000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_7000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_8000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_9000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_10000)</td>
-
-                                                <td>@Html.DisplayFor(modelItem => item.comm_11000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_12000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_13000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_14000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_15000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_16000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_17000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_18000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_19000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_20000)</td>
-
-                                                <td>@Html.DisplayFor(modelItem => item.comm_21000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_22000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_23000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_24000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_25000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_26000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_27000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_28000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_29000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_30000)</td>
-
-                                                <td>@Html.DisplayFor(modelItem => item.comm_31000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_32000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_33000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_34000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_35000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_36000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_37000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_38000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_39000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_40000)</td>
-
-                                                <td>@Html.DisplayFor(modelItem => item.comm_41000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_42000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_43000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_44000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_45000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_46000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_47000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_48000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_49000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.comm_50000)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.gst)</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div id="Pancard" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-
-
-                                            <th style="padding-left:0px;text-align:center">Token&nbsp;Digital&nbsp;Value</th>
-                                            <th style="padding-left:0px;text-align:center">Token&nbsp;Physical&nbsp;Value</th>
-                                            <th style="padding-left:0px;text-align:center">Digital&nbsp;Commission</th>
-                                            <th style="padding-left:0px;text-align:center">Physical&nbsp;Commission</th>
-                                            <th style="padding-left:0px;text-align:center">GST</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Pencard_comm)
-                                        {
-                                            <tr>
-                                                <td style="text-align:center;"> @Html.DisplayFor(modelItem => item.TokenValueDigital)</td>
-                                                <td style="text-align:center;"> @Html.DisplayFor(modelItem => item.TokenValuePhysical)</td>
-                                                <td style="text-align:center;"> @Html.DisplayFor(modelItem => item.CommissionDigital)</td>
-                                                <td style="text-align:center;"> @Html.DisplayFor(modelItem => item.CommissionPhysical)</td>
-                                                <td style="text-align:center;"> @Html.DisplayFor(modelItem => item.Gst)</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div id="AEPS" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>₹&nbsp;20</th>
-                                            <th>₹&nbsp;50</th>
-                                            <th>₹&nbsp;100</th>
-                                            <th>₹&nbsp;200</th>
-                                            <th>₹&nbsp;500</th>
-                                            <th>₹&nbsp;1000</th>
-                                            <th>₹&nbsp;2000</th>
-                                            <th>₹&nbsp;2500</th>
-                                            <th>₹&nbsp;3000</th>
-                                            <th>₹&nbsp;3500</th>
-                                            <th>₹&nbsp;5000</th>
-                                            <th>₹&nbsp;10000</th>
-                                            <th>IsGstApplicable</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.AEPS)
-                                        {
-                                            <tr>
-                                                <td> @Html.DisplayFor(modelItem => item.RS20)</td>
-                                                <td> @Html.DisplayFor(modelItem => item.RS50)</td>
-                                                <td> @Html.DisplayFor(modelItem => item.RS100)</td>
-                                                <td> @Html.DisplayFor(modelItem => item.RS200)</td>
-                                                <td> @Html.DisplayFor(modelItem => item.RS500)</td>
-                                                <td> @Html.DisplayFor(modelItem => item.RS1000)</td>
-                                                <td> @Html.DisplayFor(modelItem => item.RS2000)</td>
-                                                <td> @Html.DisplayFor(modelItem => item.RS2500)</td>
-                                                <td> @Html.DisplayFor(modelItem => item.RS3000)</td>
-                                                <td> @Html.DisplayFor(modelItem => item.RS3500)</td>
-                                                <td> @Html.DisplayFor(modelItem => item.RS5000)</td>
-                                                <td> @Html.DisplayFor(modelItem => item.RS10000)</td>
-                                                <td>
-                                                    @if (item.IsGstApplicable == true)
-                                                    {
-                                                        <center><p style="color:green;font-weight:600;">Yes</p></center>
-                                                    }
-                                                    else
-                                                    {
-                                                        <center><p style="color:red;font-weight:600;">No</p></center>
-                                                    }
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-                            <div id="MPOS" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-
-                                            <th>Withdraw</th>
-                                            <th>S&nbsp;Debit&nbsp;2000</th>
-                                            <th>S&nbsp;Debit&nbsp;above&nbsp;2000</th>
-                                            <th>S&nbsp;Credit&nbsp;Normal</th>
-                                            <th>S&nbsp;Credit&nbsp;Grocery</th>
-                                            <th>S&nbsp;Credit&nbsp;EduIns</th>
-                                            <th>Gst</th>
-                                            <th>Credit_Type</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.MPOS)
-                                        {
-                                            <tr>
-
-                                                <td>@item.CashWithdraw</td>
-                                                <td>@item.Salesdebitupto2000</td>
-                                                <td>@item.Salesdebitabove2000</td>
-                                                <td>@item.SalescreditNormal</td>
-                                                <td>@item.Salescreditgrocery</td>
-                                                <td>@item.SalescreditEduandInsu</td>
-                                                <td>@item.gst</td>
-                                                <td>@item.credit_type</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div id="INDONEPAL" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>Min&nbsp;Value&nbsp;(₹)</th>
-                                            <th>Max&nbsp;Value&nbsp;(₹)</th>
-                                            <th>Charge</th>
-                                            <th>Margin</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.INDONEPAL)
-                                        {
-                                            <tr>
-
-                                                <td>@item.min</td>
-                                                <td>@item.max</td>
-                                                <td>@item.charge</td>
-                                                <td>@item.margin</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div id="FLIGHT" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>Flight&nbsp;Type)</th>
-                                            <th>Commision&nbsp;Value&nbsp;(%)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.FLIGHT)
-                                        {
-                                            <tr>
-                                                <td>@string.Format("{0}", item.IsDomestic ? "Domestic" : "International")</td>
-                                                <td>@item.marginPercentage</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-                            <div id="BUS" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>Type</th>
-                                            <th>Commision&nbsp;Value&nbsp;(%)</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.BUS)
-                                        {
-                                            <tr>
-                                                <td>BUS</td>
-                                                <td>@item.marginPercentage</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-                            <div id="HOTEL" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>Hotel&nbsp;Type</th>
-                                            <th>Commision&nbsp;Value&nbsp;(%)</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.HOTEL)
-                                        {
-                                            <tr>
-                                                <td>@string.Format("{0}", item.IsDomestic ? "Domestic" : "International")</td>
-                                                <td>@item.marginPercentage</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div id="GIFT" class="table-responsive " style="position:inherit; display:none; margin-top:-17px;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Name</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Type</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Code</th>
-                                            <th style="padding-left:0px; text-align:center">Status</th>
-                                            <th style="padding-left:0px; text-align:center">Commission</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Giftcard)
-                                        {
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorName)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorType)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorCode)</td>
-                                                <td>
-                                                    @if (item.Status == "Y")
-                                                    {
-                                                        <p style="color:green;font-size:15px;">Active</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p style="color:red;font-size:15px;">InActive</p>
-                                                    }
-                                                </td>
-                                                <td>@Html.DisplayFor(modelItem => item.Commission)</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div id="Broadband" class="table-responsive " style="position:inherit; display:none; margin-top:-17px;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Name</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Type</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Code</th>
-                                            <th style="padding-left:0px; text-align:center">Status</th>
-                                            <th style="padding-left:0px; text-align:center">Block&nbsp;Time</th>
-                                            <th style="padding-left:0px; text-align:center">Commission</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Broadband)
-                                        {
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorName)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorType)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorCode)</td>
-                                                <td>
-                                                    @if (item.Status == "Y")
-                                                    {
-                                                        <p style="color:green;font-size:15px;">Active</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p style="color:red;font-size:15px;">InActive</p>
-                                                    }
-                                                </td>
-                                                <td>@Html.DisplayFor(modelItem => item.BlockTime)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Commission)</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div id="Loan" class="table-responsive " style="position:inherit; display:none; margin-top:-17px;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Name</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Type</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Code</th>
-                                            <th style="padding-left:0px; text-align:center">Status</th>
-                                            <th style="padding-left:0px; text-align:center">Block&nbsp;Time</th>
-                                            <th style="padding-left:0px; text-align:center">Commission</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Loan)
-                                        {
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorName)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorType)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorCode)</td>
-                                                <td>
-                                                    @if (item.Status == "Y")
-                                                    {
-                                                        <p style="color:green;font-size:15px;">Active</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p style="color:red;font-size:15px;">InActive</p>
-                                                    }
-                                                </td>
-                                                <td>@Html.DisplayFor(modelItem => item.BlockTime)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Commission)</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div id="Water" class="table-responsive " style="position:inherit; display:none; margin-top:-17px;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Name</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Type</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Code</th>
-                                            <th style="padding-left:0px; text-align:center">Status</th>
-                                            <th style="padding-left:0px; text-align:center">Block&nbsp;Time</th>
-                                            <th style="padding-left:0px; text-align:center">Commission</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Water)
-                                        {
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorName)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorType)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorCode)</td>
-                                                <td>
-                                                    @if (item.Status == "Y")
-                                                    {
-                                                        <p style="color:green;font-size:15px;">Active</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p style="color:red;font-size:15px;">InActive</p>
-                                                    }
-                                                </td>
-                                                <td>@Html.DisplayFor(modelItem => item.BlockTime)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Commission)</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div id="Insurance" class="table-responsive " style="position:inherit; display:none;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Name</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Type</th>
-                                            <th style="padding-left:0px; text-align:center">Operator&nbsp;Code</th>
-                                            <th style="padding-left:0px; text-align:center">Status</th>
-                                            <th style="padding-left:0px; text-align:center">Block&nbsp;Time</th>
-                                            <th style="padding-left:0px; text-align:center">Commission</th>
-                                            <th style="padding-left:0px; text-align:center">GST</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Insurance)
-                                        {
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorName)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorType)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.OperatorCode)</td>
-                                                <td>
-                                                    @if (item.Status == "Y")
-                                                    {
-                                                        <p style="color:green;font-size:15px;">Active</p>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <p style="color:red;font-size:15px;">InActive</p>
-
-                                                    }
-                                                </td>
-                                                <td>@Html.DisplayFor(modelItem => item.BlockTime)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Commission)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Gst)</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-
-                        </div>
-                    </div>
-                </div>
-            </div>*@
+        
     </div>
 </section>
 
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-
-<script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+@section PostVmScripts {
 <script>
-    $(function () {
-        var chh = '@ViewData["type"]';
-        $('#' + chh + '').show();
-    });
-</script>
-
-@*<script>
-        function showComm(OptType) {
-
-            if (OptType == "") {
-                document.getElementById("txtHint").innerHTML = "";
-                return;
-            } else {
-
-                $.ajax({
-
-                    url: 'Operator_info',
-                    type: 'POST',
-                    data: { 'ddlcomm': OptType},
-                    dataType: 'json',
-                    success: function (data) {
-                        alert('Data: ' + data);
-                        //document.getElementById("txtHint").innerHTML = data;
-                    },
-                    error: function (request, error) {
-                        alert("Request: " + JSON.stringify(request));
-                    }
-                });
-
-            }
-        }
-
-
-    </script>*@
-
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
+    jQuery(function () {
+        jQuery('section.vm-operator-info-page #vmOiTabList').each(function () {
+            this.style.removeProperty('background-image');
+            this.style.removeProperty('background');
+            this.style.setProperty('background-color', '#ffffff', 'important');
         });
     });
-
 </script>
-
-<script>
-    $(window).load(function () {
-
-        var viewportWidth = $(window).width();
-        if (viewportWidth < 420) {
-            $(".second-design .giftcardcategory-second-design").removeClass("giftcardcategory-second-design");
-
-        }
-
-        $(window).resize(function () {
-
-            if (viewportWidth < 420) {
-                $(".second-design .giftcardcategory-second-design").removeClass("giftcardcategory-second-design");
-            }
-        });
-
-    });
-</script>
-
-<script>
-
-    $(".giftcardcategory ul li").click(function () {
-        var text = $(this).text();
-
-        $(".textshowspanclass-header").html(text);
-    });
-</script>
+<script src="~/MainFrontDesign/js/retailer-operator-info-tabs.js?v=14"></script>
+}

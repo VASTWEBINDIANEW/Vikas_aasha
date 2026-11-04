@@ -1,0 +1,1164 @@
+/* ============================================================
+   Retailer Operator Info — ALL_CARDS MATCHED SKIN (v10 / css v14)
+   Page : AREAS/RETAILER/Views/Home/Operator_info.cshtml
+   Scope: section.vm-operator-info-page (nayi vm class)
+   Design language : ALL_CARDS / money-transfer (blue family)
+   Sirf design + print helpers — markup / form / tab-ids same
+   ============================================================ */
+
+section.vm-operator-info-page {
+    --vm-bg: #eef2f7;
+    --vm-card: #ffffff;
+    --vm-line: #e2e8f0;
+    --vm-ink: #0f172a;
+    --vm-muted: #64748b;
+    --vm-accent: #2563eb;
+    --vm-accent-dark: #1d4ed8;
+    --vm-navy-1: #0f172a;
+    --vm-navy-2: #1e3a8a;
+    --vm-navy-3: #2563eb;
+    --vm-green-bg: #dcfce7;
+    --vm-green-ink: #15803d;
+    --vm-green-line: #86efac;
+    --vm-red-bg: #fee2e2;
+    --vm-red-ink: #b91c1c;
+    --vm-red-line: #fca5a5;
+    background: var(--vm-bg) !important;
+    border-radius: 16px !important;
+    padding: 12px 2px 18px !important;
+}
+
+/* ---------- 1. Duplicate / extra blocks hatiao ---------- */
+section.vm-operator-info-page ul#leftulbar.giftul-third { display: none !important; }
+section.vm-operator-info-page .giftcardtab-thirddesign .giftul-third-block:not(#vmOiTabList) { display: flex !important; }
+section.vm-operator-info-page .tab-contentoperators { clear: both !important; }
+section.vm-operator-info-page .tab-contentoperators > .tab-pane {
+    display: none !important; animation: none !important; -webkit-animation: none !important; opacity: 1 !important;
+}
+section.vm-operator-info-page .tab-contentoperators > .tab-pane:not(.active) {
+    display: none !important;
+}
+section.vm-operator-info-page .tab-contentoperators > .tab-pane.active,
+section.vm-operator-info-page .tab-contentoperators > .tab-pane.active.show {
+    display: block !important; visibility: visible !important; opacity: 1 !important;
+}
+section.vm-operator-info-page .tab-contentoperators > .tab-pane.flash {
+    animation-name: none !important; -webkit-animation-name: none !important;
+}
+section.vm-operator-info-page .page-title-box-fourde { display: none !important; }
+section.vm-operator-info-page .svg-container-third-design { display: none !important; }
+section.vm-operator-info-page .card.navbar.class-back-tra-fourdesign {
+    background: transparent !important; border: none !important; box-shadow: none !important;
+    margin-bottom: 0 !important;
+}
+    section.vm-operator-info-page .body.Gift_Carddbody {
+        padding: 0 !important;
+        display: contents;
+    }
+section.vm-operator-info-page .vm-oi-white-panel {
+    background: #fff !important; border: 1px solid var(--vm-line) !important; border-radius: 14px !important;
+    box-shadow: 0 4px 16px rgba(15,23,42,.06) !important; margin: 0 !important; padding: 0 !important;
+    max-width: 100% !important; min-width: 0 !important; overflow: hidden !important;
+}
+section.vm-operator-info-page .vm-oi-white-panel > .giftcardcategory { background: #fff !important; margin-bottom: 0 !important; }
+section.vm-operator-info-page .vm-oi-white-panel > .page-header-third { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+section.vm-operator-info-page .vm-oi-white-panel #vmOiTabList.giftul-third-block {
+    border-radius: 0 !important; border-left: none !important; border-right: none !important; border-top: none !important;
+    box-shadow: none !important;
+}
+
+/* ---------- 2. vm breadcrumb bar ---------- */
+section.vm-operator-info-page .page-header-third:not(.vm-oi-toolbar-zone) { margin-bottom: 12px !important; }
+section.vm-operator-info-page .page-header-third.vm-oi-toolbar-zone { margin-bottom: 8px !important; padding: 0 !important; }
+section.vm-operator-info-page .vm-oi-toolbar-zone .container-fluid.vm-opr-page-shell { padding: 0 !important; margin: 0 !important; }
+section.vm-operator-info-page .vm-oi-toolbar-zone .saas-acc-toolbar.vm-opr-toolbar-unified {
+    margin: 0 !important; padding: 12px 14px !important; gap: 0 !important;
+    display: flex !important; align-items: center !important;
+}
+section.vm-operator-info-page .vm-oi-toolbar-zone .saas-acc-toolbar--stacked { gap: 0 !important; }
+section.vm-operator-info-page .vm-oi-toolbar-zone .saas-acc-toolbar-top.vm-opr-toolbar-head,
+section.vm-operator-info-page .vm-oi-toolbar-zone .vm-dmt-toolbar-head--one-line {
+    display: flex !important; align-items: center !important; justify-content: space-between !important;
+    width: 100% !important; min-height: 42px !important; padding: 0 !important; margin: 0 !important; border: none !important;
+}
+section.vm-operator-info-page .vm-oi-toolbar-zone .vm-dmt-breadcrumb,
+section.vm-operator-info-page .vm-oi-toolbar-zone .saas-acc-breadcrumb {
+    margin: 0 !important; padding: 0 !important; align-items: center !important; line-height: 1.35 !important;
+}
+section.vm-operator-info-page .vm-oi-toolbar-zone .vm-dmt-breadcrumb li,
+section.vm-operator-info-page .vm-oi-toolbar-zone .saas-acc-breadcrumb li {
+    display: inline-flex !important; align-items: center !important; line-height: 1.35 !important;
+}
+section.vm-operator-info-page .vm-oi-toolbar-zone .vm-oi-toolbar-actions { align-self: center !important; margin-left: auto !important; padding: 0 !important; }
+section.vm-operator-info-page .bread-same-all-page {
+    display: flex !important; align-items: center !important; justify-content: space-between !important;
+    gap: 12px !important; flex-wrap: wrap !important;
+    background: #fff !important;
+    border: 1px solid var(--vm-line) !important; border-radius: 16px !important;
+    box-shadow: 0 12px 32px -18px rgba(30,64,175,.2) !important;
+    padding: 8px 10px !important; width: 100% !important; float: none !important;
+    position: relative !important; overflow: hidden !important;
+}
+section.vm-operator-info-page .bread-same-all-page::before {
+    content: "" !important; position: absolute !important; left: 0 !important; top: 0 !important; bottom: 0 !important;
+    width: 4px !important; background: linear-gradient(180deg,var(--vm-accent),#60a5fa) !important;
+}
+section.vm-operator-info-page .bread-same-all-page ul {
+    list-style: none !important; margin: 0 !important; padding: 0 !important;
+    display: flex !important; align-items: center !important; gap: 8px !important; flex-wrap: wrap !important;
+}
+section.vm-operator-info-page .bread-same-all-page ul li {
+    margin: 0 !important; font-size: 13px !important; font-weight: 700 !important; color: var(--vm-muted) !important;
+    display: inline-flex !important; align-items: center !important; gap: 8px !important;
+}
+section.vm-operator-info-page .bread-same-all-page ul li a {
+    background: none !important; color: var(--vm-accent-dark) !important; text-decoration: none !important;
+    display: inline-flex !important; align-items: center !important; gap: 6px !important;
+}
+section.vm-operator-info-page .bread-same-all-page ul li a:hover { text-decoration: underline !important; }
+section.vm-operator-info-page .bread-same-all-page ul li:last-child { color: var(--vm-ink) !important; font-weight: 800 !important; }
+section.vm-operator-info-page .bread-same-all-page ul li img { width: 12px !important; opacity: .6 !important; }
+section.vm-operator-info-page .textshowspanclass-header {
+    background: #eff6ff !important;
+    border: 1px solid #bfdbfe !important; color: var(--vm-accent-dark) !important;
+    font-weight: 800 !important; border-radius: 999px !important; padding: 4px 16px !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.7) !important;
+    max-width: 46vw !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important;
+}
+/* Breadcrumb columns (purani inline width/float ki jagah) */
+section.vm-operator-info-page .bread-same-all-page .vm-oi-crumb,
+section.vm-operator-info-page .bread-same-all-page .col-md-6 {
+    width: auto !important; float: none !important; padding: 0 !important; flex: 1 1 auto !important;
+}
+section.vm-operator-info-page .bread-same-all-page .buttonPdf {
+    width: auto !important; float: none !important; margin-left: auto !important;
+    text-align: right !important;
+}
+/* vm PDF / Export buttons */
+section.vm-operator-info-page .buttonPdf { display: flex !important; gap: 8px !important; align-items: center !important; }
+section.vm-operator-info-page .buttonPdf button {
+    display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;
+    min-height: 36px !important; padding: 0 22px !important; border-radius: 10px !important;
+    font-size: 12px !important; font-weight: 800 !important; letter-spacing: .6px !important;
+    text-transform: uppercase !important; cursor: pointer !important;
+    transition: transform .15s ease, filter .15s ease, box-shadow .15s ease !important;
+}
+section.vm-operator-info-page .buttonPdf button:first-child {
+    background: linear-gradient(135deg,#0f172a,#334155) !important;
+    border: 1px solid transparent !important; color: #fff !important;
+    box-shadow: 0 6px 14px rgba(15,23,42,.3) !important;
+}
+section.vm-operator-info-page .buttonPdf button:last-child {
+    background: linear-gradient(135deg,var(--vm-accent),var(--vm-accent-dark)) !important;
+    border: 1px solid #1e40af !important; color: #fff !important;
+    box-shadow: 0 8px 20px rgba(37,99,235,.35) !important;
+}
+section.vm-operator-info-page .buttonPdf button:hover { transform: translateY(-1px) !important; filter: brightness(1.08) !important; }
+section.vm-operator-info-page .buttonPdf button:active { transform: translateY(0) !important; }
+
+/* ---------- 2b. Scroll shells — tabs stay in card; tables scroll on compact ---------- */
+section.vm-operator-info-page .vm-oi-tab-scroll-shell,
+section.vm-dmt-slab-page .vm-oi-tab-scroll-shell {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+section.vm-operator-info-page .vm-oi-tab-scroll-shell #vmOiTabList,
+section.vm-dmt-slab-page .vm-oi-tab-scroll-shell #vmOiTabList {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+section.vm-operator-info-page .vm-oi-table-area-shell,
+section.vm-dmt-slab-page .vm-oi-table-area-shell {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+}
+section.vm-operator-info-page .vm-oi-table-scroll-shell {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    clear: both !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+}
+section.vm-dmt-slab-page .vm-oi-table-scroll-shell {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    clear: both !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-x: contain !important;
+}
+section.vm-operator-info-page .vm-oi-table-scroll-shell > .col-md-12,
+section.vm-dmt-slab-page .vm-oi-table-scroll-shell > .col-md-12 {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+}
+
+/* ---------- 3. vm service tabs — white strip (giftul-third-block) ---------- */
+section.vm-operator-info-page .giftcardcategory { margin-bottom: 12px !important; }
+section.vm-operator-info-page .giftcardtab-thirddesign center.vm-oi-tab-strip-wrap,
+section.vm-operator-info-page .giftcardtab-thirddesign .vm-oi-tab-strip-head {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    z-index: 12 !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+}
+section.vm-operator-info-page .card .row > .page-header-third .tab-contentoperators {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block {
+    position: relative !important;
+    z-index: 8 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block a.vm-oi-tab-link {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block,
+section.vm-operator-info-page #vmOiTabList.giftul-third-block.fullbodydycolorbg {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+    border: 1px solid #e5e9f2 !important; border-radius: 14px 14px 0 0 !important;
+    box-shadow: none !important;
+    padding: 10px !important; margin: 0 !important; list-style: none !important;
+    display: flex !important; align-items: stretch !important; gap: 6px !important;
+    width: 100% !important; max-width: 100% !important; box-sizing: border-box !important;
+    overflow-x: hidden !important; overflow-y: hidden !important; scrollbar-width: thin !important; scrollbar-color: #93c5fd transparent !important;
+}
+@media screen and (min-width: 1025px) {
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block.fullbodydycolorbg,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav.nav-tabs.tab-col-orange {
+        flex-wrap: nowrap !important;
+    }
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block > li,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav.nav-tabs > li,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav.nav-tabs > li.active {
+        flex: 1 1 0 !important; width: auto !important; max-width: none !important;
+    }
+}
+section.vm-operator-info-page ul#leftulbar::-webkit-scrollbar { height: 6px !important; }
+section.vm-operator-info-page ul#leftulbar::-webkit-scrollbar-thumb { background: #93c5fd !important; border-radius: 99px !important; }
+section.vm-operator-info-page .giftcardcategory > center { width: 100% !important; max-width: 100% !important; }
+section.vm-operator-info-page .giftcardcategory .page-header-third:not(.vm-oi-toolbar-zone) { width: 100% !important; max-width: 100% !important; }
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li {
+    margin: 0 !important; padding: 0 !important; min-width: 0 !important; float: none !important; box-shadow: none !important;
+    border: none !important; background: none !important; box-sizing: border-box !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a {
+    display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; gap: 4px !important;
+    width: 100% !important; height: 66px !important; min-height: 66px !important; max-height: 66px !important;
+    padding: 6px 3px !important; margin: 0 !important; border-radius: 9px !important; box-sizing: border-box !important;
+    background: #fff !important; border: 1px solid #dbe2ec !important; color: #475569 !important;
+    text-align: center !important; text-decoration: none !important; cursor: pointer !important; overflow: hidden !important;
+    transition: background .2s ease,border-color .2s ease,transform .2s ease,box-shadow .2s ease !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a br { display: none !important; }
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a img {
+    height: 20px !important; width: 20px !important; min-width: 20px !important; min-height: 20px !important;
+    object-fit: contain !important; margin: 0 !important; padding: 0 !important; flex: 0 0 20px !important;
+    filter: brightness(0) !important; opacity: 1 !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a span {
+    display: -webkit-box !important; -webkit-box-orient: vertical !important; -webkit-line-clamp: 2 !important;
+    margin: 0 !important; padding: 0 !important; width: 100% !important;
+    color: #475569 !important; font-size: 9.5px !important; font-weight: 800 !important;
+    line-height: 1.15 !important; overflow: hidden !important; white-space: normal !important; word-break: break-word !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav.nav-tabs { border-bottom: none !important; }
+section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li,
+section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li.active {
+    min-width: 0 !important; margin: 0 !important; margin-bottom: 0 !important; float: none !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li.active > a,
+section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li.active > a:hover,
+section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li.active > a:focus {
+    border-bottom-color: #1d4ed8 !important; margin-bottom: 0 !important; line-height: 1.15 !important;
+    height: 66px !important; min-height: 66px !important; max-height: 66px !important;
+    padding: 6px 3px !important; transform: none !important; box-shadow: none !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a,
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li.active > a,
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a:hover,
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li.active > a:hover {
+    height: 66px !important; min-height: 66px !important; max-height: 66px !important;
+    transform: none !important; box-shadow: none !important; margin: 0 !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block.tab-col-orange > li > a::before,
+section.vm-operator-info-page #vmOiTabList.giftul-third-block.tab-col-orange > li.active > a::before { display: none !important; content: none !important; }
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li:not(.active) > a:hover {
+    border-color: #2563eb !important; color: #2563eb !important; background: #fff !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li.active > a,
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li.active > a:hover,
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li.active > a:focus {
+    background: linear-gradient(135deg,#1e40af,#2563eb) !important; border: 1px solid #1d4ed8 !important; color: #fff !important;
+}
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li.active > a span { color: #fff !important; }
+section.vm-operator-info-page #vmOiTabList.giftul-third-block > li.active > a img {
+    filter: brightness(0) invert(1) !important; opacity: 1 !important;
+}
+section.vm-operator-info-page ul#leftulbar > li > a:focus-visible,
+section.vm-operator-info-page .buttonPdf button:focus-visible {
+    outline: 2px solid rgba(147,197,253,.85) !important; outline-offset: 2px !important;
+}
+
+/* ---------- 4. vm tab content card ---------- */
+section.vm-operator-info-page .tab-contentoperators {
+    background: #fff !important; border: none !important; border-top: 1px solid #eef2f7 !important;
+    border-radius: 0 !important; box-shadow: none !important; padding: 0 !important;
+}
+section.vm-operator-info-page .tab-contentoperators .tab-pane .col-md-12 {
+    display: block !important; width: 100% !important; max-height: none !important; height: auto !important;
+    overflow-x: visible !important; overflow-y: visible !important;
+    padding-left: 0 !important; padding-right: 0 !important; position: relative !important;
+}
+section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-scroll .col-md-12 {
+    overflow-x: auto !important; overflow-y: auto !important; max-height: 640px !important; scrollbar-width: thin !important;
+}
+section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-compact .col-md-12 {
+    padding: 0 !important; overflow: visible !important; width: 100% !important;
+}
+section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-compact table.vm-oi-data-table:not(.vm-oi-grid-table) {
+    width: 100% !important; min-width: 100% !important; max-width: 100% !important; table-layout: fixed !important;
+}
+section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-scroll table.vm-oi-data-table:not(.vm-oi-table-full) {
+    width: max-content !important; min-width: 100% !important; table-layout: auto !important;
+}
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table.vm-oi-table-full,
+section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-scroll table.vm-oi-data-table.vm-oi-table-full {
+    width: 100% !important; min-width: 100% !important; max-width: 100% !important;
+    table-layout: fixed !important; margin: 0 !important;
+}
+section.vm-operator-info-page .tab-contentoperators > .tab-pane.active#prepaidoperators,
+section.vm-operator-info-page .tab-contentoperators > .tab-pane.active#utilitisoperators,
+section.vm-operator-info-page .tab-contentoperators > .tab-pane.active#pancardoperator,
+section.vm-operator-info-page .tab-contentoperators > .tab-pane.active#aepsoperator,
+section.vm-operator-info-page .tab-contentoperators > .tab-pane.active#Microatmcashoperator,
+section.vm-operator-info-page .tab-contentoperators > .tab-pane.active#Microatmpurchaseoperator {
+    width: 100% !important; max-width: 100% !important; min-width: 0 !important;
+}
+section.vm-operator-info-page #prepaidoperators > .col-md-12,
+section.vm-operator-info-page #utilitisoperators > .col-md-12,
+section.vm-operator-info-page #pancardoperator > .col-md-12,
+section.vm-operator-info-page #aepsoperator > .col-md-12,
+section.vm-operator-info-page #Microatmcashoperator > .col-md-12,
+section.vm-operator-info-page #Microatmpurchaseoperator > .col-md-12 {
+    width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important;
+}
+section.vm-operator-info-page table.vm-oi-grid-table.vm-oi-table-full thead th,
+section.vm-operator-info-page table.vm-oi-grid-table.vm-oi-table-full thead td,
+section.vm-operator-info-page table.vm-oi-grid-table.vm-oi-table-full tbody td {
+    white-space: normal !important; word-break: break-word !important; min-width: 0 !important;
+}
+section.vm-operator-info-page #aepsoperator > .col-md-12.vm-oi-hscroll,
+section.vm-operator-info-page #Microatmcashoperator > .col-md-12.vm-oi-hscroll {
+    overflow-x: auto !important; overflow-y: visible !important; max-width: 100% !important;
+    -webkit-overflow-scrolling: touch !important; scrollbar-width: thin !important;
+    scrollbar-color: #93c5fd #eef2f7 !important; padding-bottom: 6px !important;
+}
+section.vm-operator-info-page #aepsoperator.tab-pane.active,
+section.vm-operator-info-page #Microatmcashoperator.tab-pane.active { overflow: hidden !important; max-width: 100% !important; }
+section.vm-operator-info-page #aepsoperator > .col-md-12.vm-oi-hscroll,
+section.vm-operator-info-page #Microatmcashoperator > .col-md-12.vm-oi-hscroll { position: relative !important; }
+section.vm-operator-info-page #aepsoperator table.vm-oi-grid-table,
+section.vm-operator-info-page #Microatmcashoperator table.vm-oi-grid-table {
+    width: max-content !important; min-width: 100% !important; max-width: none !important; table-layout: auto !important;
+}
+section.vm-operator-info-page #aepsoperator table.vm-oi-grid-table th,
+section.vm-operator-info-page #aepsoperator table.vm-oi-grid-table td,
+section.vm-operator-info-page #Microatmcashoperator table.vm-oi-grid-table th,
+section.vm-operator-info-page #Microatmcashoperator table.vm-oi-grid-table td {
+    white-space: nowrap !important; word-break: normal !important; min-width: 52px !important;
+}
+section.vm-operator-info-page #aepsoperator table.vm-oi-data-table.vm-oi-table-full tbody td,
+section.vm-operator-info-page #Microatmcashoperator table.vm-oi-data-table.vm-oi-table-full tbody td {
+    white-space: nowrap !important; word-break: normal !important; min-width: 52px !important;
+}
+section.vm-operator-info-page .tab-contentoperators.tablethirddesign-newnew { padding: 0 !important; }
+section.vm-operator-info-page .tab-contentoperators h3 { color: var(--vm-muted) !important; font-size: 15px !important; }
+
+/* ---------- 5. vm tables — simple flat (vm-oi-data-table) ---------- */
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table,
+section.vm-operator-info-page .tab-contentoperators table.table.third-design-table {
+    min-width: 860px !important; width: 100% !important; margin-bottom: 0 !important;
+    border: none !important; border-collapse: collapse !important; border-spacing: 0 !important; background: #fff !important;
+}
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table.vm-oi-table-full {
+    min-width: 100% !important; max-width: 100% !important;
+}
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table thead th {
+    position: sticky !important; top: 0 !important; z-index: 2 !important;
+    background: #f8fafc !important; background-image: none !important; color: #475569 !important;
+    font-size: 11px !important; font-weight: 800 !important; text-transform: uppercase !important;
+    padding: 12px 10px !important; text-align: center !important; vertical-align: middle !important;
+    border: none !important; border-bottom: 1px solid #e2e8f0 !important; white-space: nowrap !important;
+    box-shadow: none !important; border-radius: 0 !important;
+}
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table thead th:first-child {
+    text-align: left !important; padding-left: 14px !important;
+}
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table thead th p {
+    margin: 3px 0 0 !important; font-size: 10px !important; font-weight: 600 !important;
+    color: #64748b !important; background: none !important; border: none !important;
+    display: block !important; padding: 0 !important; border-radius: 0 !important; text-transform: none !important;
+}
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table thead th span { color: #334155 !important; }
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table tbody td {
+    font-size: 13px !important; font-weight: 500 !important; color: #0f172a !important;
+    padding: 10px 10px !important; text-align: center !important; vertical-align: middle !important;
+    border: none !important; border-bottom: 1px solid #f1f5f9 !important; white-space: nowrap !important;
+    background: #fff !important; box-shadow: none !important; font-variant-numeric: tabular-nums !important;
+}
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table.vm-oi-table-full tbody td {
+    white-space: normal !important; word-break: break-word !important;
+}
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table tbody tr:nth-child(even) td { background: #fafbfc !important; }
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table tbody tr:hover td,
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table tbody td:hover {
+    background: #f1f5f9 !important; box-shadow: none !important; color: inherit !important;
+}
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table tbody td p { margin: 0 !important; }
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table tbody td.activeinactive {
+    text-align: left !important; font-weight: 600 !important; min-width: 220px !important;
+    position: static !important; left: auto !important; z-index: auto !important; box-shadow: none !important;
+}
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table tbody td.activeinactive p {
+    display: inline-flex !important; align-items: center !important; gap: 8px !important; font-size: 13px !important;
+}
+section.vm-operator-info-page .tablethirddesign-newnew table.vm-oi-data-table tbody tr:hover td,
+section.vm-operator-info-page .four-design-table-design table.vm-oi-data-table tbody tr:hover td {
+    color: #0f172a !important; background: #f1f5f9 !important;
+}
+/* Operator type : soft */
+section.vm-operator-info-page #prepaidoperators table.table tbody td:nth-child(2),
+section.vm-operator-info-page #utilitisoperators table.table tbody td:nth-child(2) {
+    color: #475569 !important; font-weight: 700 !important; min-width: 90px !important;
+}
+/* CODE column : fix width */
+section.vm-operator-info-page #prepaidoperators table.table tbody td:nth-child(3),
+section.vm-operator-info-page #utilitisoperators table.table tbody td:nth-child(3) {
+    min-width: 76px !important;
+}
+/* CODE pill chip (JS .vm-oi-code wrap karta hai) */
+section.vm-operator-info-page .tab-contentoperators .vm-oi-code {
+    display: inline-block !important; background: #eff6ff !important;
+    border: 1px solid #bfdbfe !important; color: var(--vm-accent-dark) !important;
+    border-radius: 8px !important; padding: 2px 12px !important;
+    font-family: Consolas,'Courier New',monospace !important; font-size: 12px !important;
+    font-weight: 800 !important; letter-spacing: .5px !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.7) !important;
+}
+/* BLOCKED TIME column : fix width + soft */
+section.vm-operator-info-page #prepaidoperators table.table tbody td:nth-child(4),
+section.vm-operator-info-page #utilitisoperators table.table tbody td:nth-child(4) {
+    min-width: 118px !important; color: #64748b !important; font-weight: 700 !important;
+}
+/* Khaali cell dash */
+section.vm-operator-info-page .tab-contentoperators table.table tbody td.oi-empty-time { color: #94a3b8 !important; font-weight: 700 !important; }
+/* Commission units (%) / (Rs.) halke */
+section.vm-operator-info-page .tab-contentoperators .vm-oi-unit {
+    color: #94a3b8 !important; font-weight: 700 !important; font-size: 11px !important;
+    margin-left: 3px !important;
+}
+/* Status pills */
+section.vm-operator-info-page .tab-contentoperators span.activeopertor,
+section.vm-operator-info-page .tab-contentoperators p[style*="color:green"] {
+    display: inline-block !important; padding: 3px 12px !important; border-radius: 999px !important;
+    background: var(--vm-green-bg) !important; color: var(--vm-green-ink) !important;
+    border: 1px solid var(--vm-green-line) !important;
+    font-size: 11px !important; font-weight: 800 !important; flex: 0 0 auto !important;
+    box-shadow: 0 1px 3px rgba(21,128,61,.18) !important;
+}
+section.vm-operator-info-page .tab-contentoperators span.inactiveopertor,
+section.vm-operator-info-page .tab-contentoperators p[style*="color:red"] {
+    display: inline-block !important; padding: 3px 12px !important; border-radius: 999px !important;
+    background: var(--vm-red-bg) !important; color: var(--vm-red-ink) !important;
+    border: 1px solid var(--vm-red-line) !important;
+    font-size: 11px !important; font-weight: 800 !important; flex: 0 0 auto !important;
+}
+/* Pancard card-style rows */
+section.vm-operator-info-page #pancardoperator table.table tbody th {
+    background: #f8faff !important; color: var(--vm-ink) !important;
+    font-size: 12.5px !important; font-weight: 800 !important; text-align: center !important;
+    padding: 12px 10px !important; border: none !important; border-bottom: 1px solid #eef1f6 !important;
+}
+section.vm-operator-info-page #pancardoperator .activebefore,
+section.vm-operator-info-page #pancardoperator .inactivebefore {
+    border-radius: 999px !important; padding: 3px 14px !important; font-size: 11px !important;
+    font-weight: 800 !important; margin-left: 8px !important; border: 1px solid !important;
+}
+section.vm-operator-info-page #pancardoperator .activebefore {
+    background: var(--vm-green-bg) !important; color: var(--vm-green-ink) !important; border-color: var(--vm-green-line) !important;
+}
+section.vm-operator-info-page #pancardoperator .inactivebefore {
+    background: var(--vm-red-bg) !important; color: var(--vm-red-ink) !important; border-color: var(--vm-red-line) !important;
+}
+
+/* ---------- 6. Money Transfer slab links ---------- */
+section.vm-operator-info-page .wallet_transfer #ul {
+    display: flex !important; align-items: center !important; justify-content: flex-start !important;
+    gap: 10px !important; flex-wrap: wrap !important; padding: 4px 0 14px !important;
+    margin: 0 !important; list-style: none !important;
+}
+section.vm-operator-info-page .wallet_transfer #ul li,
+section.vm-dmt-slab-page .wallet_transfer #ul li {
+    border: none !important; margin: 0 !important; padding: 0 !important;
+    list-style: none !important; float: none !important; box-sizing: border-box !important;
+}
+section.vm-operator-info-page .wallet_transfer #ul a {
+    display: inline-flex !important; align-items: center !important; gap: 7px !important;
+    padding: 9px 18px !important; border-radius: 999px !important;
+    background: #fff !important; border: 1.5px solid #bfdbfe !important;
+    color: var(--vm-accent-dark) !important; font-size: 12.5px !important; font-weight: 800 !important;
+    text-decoration: none !important; transition: all .2s ease !important; white-space: nowrap !important;
+}
+section.vm-operator-info-page .wallet_transfer #ul a:hover {
+    background: linear-gradient(135deg,var(--vm-accent),var(--vm-accent-dark)) !important; color: #fff !important;
+    border-color: transparent !important; box-shadow: 0 8px 20px rgba(37,99,235,.35) !important;
+}
+
+/* ---------- 7. Leftover overrides ---------- */
+section.vm-operator-info-page .table { margin-bottom: 0px; }
+section.vm-operator-info-page .operator-clearfix table tr td span { color: #555; }
+section.vm-operator-info-page .tab-contentoperators span.activeopertor,
+section.vm-operator-info-page .tab-contentoperators span.inactiveopertor { float: none !important; }
+
+/* ---------- 8. Side space minimum : content full width ---------- */
+section.content.vm-operator-info-page { padding-left: 0 !important; padding-right: 2px !important; }
+section.vm-operator-info-page { padding-left: 0 !important; padding-right: 0 !important; }
+section.vm-operator-info-page > .container-fluid { padding-left: 2px !important; padding-right: 2px !important; }
+section.vm-operator-info-page .row.clearfix { margin-left: 0 !important; margin-right: 0 !important; }
+section.vm-operator-info-page .row.clearfix > [class*="col-"] { padding-left: 0 !important; padding-right: 0 !important; }
+
+/* ---------- 9. Table left-right scroll buttons ---------- */
+section.vm-operator-info-page .vm-oi-scrollbtn {
+    position: absolute !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 6 !important;
+    width: 34px !important; height: 34px !important; border-radius: 50% !important;
+    background: linear-gradient(135deg,var(--vm-accent),var(--vm-accent-dark)) !important; color: #fff !important;
+    border: 1px solid #1e40af !important;
+    font-size: 20px !important; line-height: 1 !important; padding: 0 0 4px !important;
+    cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important;
+    box-shadow: 0 8px 20px rgba(37,99,235,.4) !important;
+    transition: filter .18s ease, transform .18s ease !important;
+}
+section.vm-operator-info-page .vm-oi-prev { left: 8px !important; }
+section.vm-operator-info-page .vm-oi-next { right: 8px !important; }
+section.vm-operator-info-page .vm-oi-scrollbtn:hover { filter: brightness(1.12) !important; transform: translateY(-50%) scale(1.06) !important; }
+section.vm-operator-info-page .vm-oi-noscroll .vm-oi-scrollbtn { display: none !important; }
+section.vm-operator-info-page .vm-oi-at-start .vm-oi-prev { display: none !important; }
+section.vm-operator-info-page .vm-oi-at-end .vm-oi-next { display: none !important; }
+
+/* ---------- 10. Print (PDF button) : sirf active tab ---------- */
+@media print {
+    body.oi-printing section.vm-operator-info-page ul#leftulbar,
+    body.oi-printing section.vm-operator-info-page .buttonPdf,
+    body.oi-printing section.vm-operator-info-page .vm-oi-scrollbtn,
+    body.oi-printing section.vm-operator-info-page .wallet_transfer { display: none !important; }
+    body.oi-printing section.vm-operator-info-page .tab-contentoperators > .tab-pane { display: none !important; }
+    body.oi-printing section.vm-operator-info-page .tab-contentoperators > .tab-pane.active { display: block !important; }
+    body.oi-printing section.vm-operator-info-page {
+        background: #fff !important; padding: 0 !important; border-radius: 0 !important;
+    }
+    body.oi-printing section.vm-operator-info-page .tab-contentoperators {
+        box-shadow: none !important; border: 1px solid #999 !important; border-radius: 0 !important;
+    }
+    body.oi-printing section.vm-operator-info-page .tab-contentoperators table.table thead th {
+        position: static !important; background: #4b5563 !important; color: #fff !important;
+        -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+    }
+}
+
+/* ---------- 11. DMT slab pages (Money_Transfer_Slab_DMT2, …) — Operator Info shell reuse ---------- */
+section.vm-dmt-slab-page .vm-oi-slab-body { padding: 0 !important; background: #fff !important; }
+section.vm-dmt-slab-page .wallet_transfer #ul a.vm-oi-fin-active,
+section.vm-operator-info-page .wallet_transfer #ul a.vm-oi-fin-active {
+    background: linear-gradient(135deg,#1e40af,#2563eb) !important;
+    border-color: #1d4ed8 !important;
+    color: #fff !important;
+}
+section.vm-dmt-slab-page .vm-oi-slab-table-wrap { padding: 0 0 10px 0 !important; width: 100% !important; }
+section.vm-dmt-slab-page .vm-oi-slab-table-wrap:not(.vm-oi-slab-common-table) table.vm-oi-data-table {
+    width: 100% !important; min-width: 100% !important; table-layout: fixed !important;
+}
+/* Pay Out Slab2 / UPI / DMT common grid — wide table, horizontal scroll (no column squeeze) */
+section.vm-dmt-slab-page .vm-oi-slab-common-table,
+section.vm-dmt-slab-page .vm-oi-slab-common-table .table-responsive,
+section.vm-dmt-slab-page .vm-oi-slab-common-table .slab-edit-table {
+    overflow: visible !important; max-width: 100% !important; min-width: 0 !important;
+}
+section.vm-dmt-slab-page .vm-oi-slab-common-table table.slab-table,
+section.vm-dmt-slab-page .vm-oi-slab-common-table table.vm-oi-slab-wide-table,
+section.vm-dmt-slab-page .vm-oi-slab-common-table table.vm-oi-data-table {
+    width: max-content !important;
+    min-width: 2600px !important;
+    max-width: none !important;
+    table-layout: auto !important;
+    margin-bottom: 0 !important;
+}
+section.vm-dmt-slab-page .vm-oi-slab-common-table table thead.navbar {
+    position: static !important; max-height: none !important; margin: 0 !important;
+}
+section.vm-dmt-slab-page .vm-oi-slab-common-table table th,
+section.vm-dmt-slab-page .vm-oi-slab-common-table table td {
+    white-space: nowrap !important;
+    word-break: normal !important;
+    vertical-align: middle !important;
+    min-width: 52px !important;
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    padding: 8px 6px !important;
+}
+section.vm-dmt-slab-page .vm-oi-slab-common-table table thead th:first-child,
+section.vm-dmt-slab-page .vm-oi-slab-common-table table tbody td:first-child {
+    min-width: 80px !important;
+    text-align: left !important;
+}
+section.vm-dmt-slab-page .vm-oi-slab-common-table table input.form-control,
+section.vm-dmt-slab-page .vm-oi-slab-common-table table select {
+    min-width: 48px !important; width: auto !important; max-width: none !important;
+}
+section.vm-dmt-slab-page #vmOiTabList a.vm-oi-tab-link--route { text-decoration: none !important; }
+
+/* ---------- 12. Responsive — tablet/mobile: 4 service tabs per row ---------- */
+@media screen and (max-width: 1024px) {
+    section.vm-operator-info-page .vm-oi-white-panel > .row,
+    section.vm-dmt-slab-page .vm-oi-white-panel > .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    section.vm-operator-info-page .vm-oi-white-panel [class*="col-"],
+    section.vm-dmt-slab-page .vm-oi-white-panel [class*="col-"] {
+        padding-left: 6px !important;
+        padding-right: 6px !important;
+    }
+    section.vm-operator-info-page .vm-oi-table-scroll-shell,
+    section.vm-dmt-slab-page .vm-oi-table-scroll-shell {
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        overscroll-behavior-x: contain !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x pan-y !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: #93c5fd #eef2f7 !important;
+        padding-bottom: 8px !important;
+    }
+    section.vm-operator-info-page .vm-oi-table-scroll-shell > .col-md-12,
+    section.vm-dmt-slab-page .vm-oi-table-scroll-shell > .col-md-12 {
+        overflow: visible !important;
+        max-height: none !important;
+        width: auto !important;
+        min-width: 100% !important;
+        max-width: none !important;
+    }
+    section.vm-operator-info-page .card .row > .page-header-third .vm-oi-table-area-shell,
+    section.vm-dmt-slab-page .vm-oi-table-area-shell {
+        overflow: visible !important;
+        max-width: 100% !important;
+    }
+    body.saas-admin-ui.fourthdesign-retailer-allnone section.vm-operator-info-page .giftcardtab-thirddesign #vmOiTabList.giftul-third-block {
+        display: flex !important; flex-wrap: wrap !important; width: 100% !important; max-width: 100% !important; min-width: 0 !important;
+    }
+    section.vm-operator-info-page .operator-clearfix > [class*="col-"] { overflow: visible !important; }
+    section.vm-operator-info-page .tab-contentoperators { overflow: visible !important; }
+    section.vm-operator-info-page .tab-contentoperators > .tab-pane.active { overflow: visible !important; }
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block.fullbodydycolorbg,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav.nav-tabs.tab-col-orange,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block.nav.nav-tabs.tab-col-orange {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        overflow: hidden !important;
+        overflow-x: hidden !important;
+        gap: 6px !important;
+        padding: 8px !important;
+        box-sizing: border-box !important;
+    }
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block > li,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block > li,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li.active,
+    section.vm-operator-info-page #vmOiTabList.vm-oi-tab-grid.nav-tabs > li,
+    section.vm-operator-info-page #vmOiTabList.vm-oi-tab-grid.nav-tabs > li.active,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block.nav-tabs > li,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block.nav-tabs > li.active {
+        flex: 0 0 calc((100% - 18px) / 4) !important;
+        width: calc((100% - 18px) / 4) !important;
+        max-width: calc((100% - 18px) / 4) !important;
+        min-width: 0 !important;
+        float: none !important;
+        box-sizing: border-box !important;
+    }
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block > li > a {
+        width: 100% !important;
+        height: 68px !important;
+        min-height: 68px !important;
+        max-height: 68px !important;
+        padding: 6px 4px !important;
+    }
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a span,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block > li > a span {
+        display: block !important;
+        font-size: 9px !important;
+        line-height: 1.2 !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        -webkit-line-clamp: unset !important;
+    }
+    section.vm-operator-info-page .vm-oi-white-panel,
+    section.vm-dmt-slab-page .vm-oi-white-panel {
+        width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; overflow: hidden !important;
+    }
+    section.vm-operator-info-page .giftcardcategory.giftcardtab-thirddesign,
+    section.vm-dmt-slab-page .giftcardcategory.giftcardtab-thirddesign {
+        width: 100% !important; max-width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; overflow: hidden !important;
+    }
+    section.vm-operator-info-page .vm-oi-tab-strip-wrap,
+    section.vm-operator-info-page .vm-oi-tab-strip-head,
+    section.vm-dmt-slab-page .vm-oi-tab-strip-wrap,
+    section.vm-dmt-slab-page .vm-oi-tab-strip-head {
+        width: 100% !important; max-width: 100% !important; overflow: hidden !important; box-sizing: border-box !important;
+    }
+    section.vm-operator-info-page #vmOiTabList.vm-oi-tab-grid,
+    section.vm-dmt-slab-page #vmOiTabList.vm-oi-tab-grid {
+        width: 100% !important; max-width: 100% !important; box-sizing: border-box !important;
+    }
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block > li,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block > li {
+        min-width: 0 !important; overflow: hidden !important;
+    }
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block > li > a {
+        max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important;
+    }
+    section.vm-operator-info-page .tab-contentoperators .vm-oi-table-scroll-wrap,
+    section.vm-operator-info-page .tab-contentoperators > .tab-pane > .col-md-12,
+    section.vm-dmt-slab-page .vm-oi-slab-table-wrap,
+    section.vm-dmt-slab-page .vm-oi-slab-body > .col-md-12 {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        overscroll-behavior-x: contain !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x pan-y !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: #93c5fd #eef2f7 !important;
+        padding-bottom: 8px !important;
+    }
+    section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-scroll .col-md-12,
+    section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-compact .col-md-12 {
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        max-height: none !important;
+    }
+    section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table,
+    section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table.vm-oi-table-full,
+    section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-scroll table.vm-oi-data-table.vm-oi-table-full,
+    section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-compact table.vm-oi-data-table:not(.vm-oi-grid-table),
+    section.vm-dmt-slab-page table.vm-oi-data-table {
+        width: max-content !important;
+        min-width: 880px !important;
+        max-width: none !important;
+        table-layout: auto !important;
+    }
+    section.vm-operator-info-page #pancardoperator > .col-md-12 table.vm-oi-data-table {
+        width: 100% !important;
+        min-width: 100% !important;
+        table-layout: fixed !important;
+    }
+    section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table thead th,
+    section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table tbody td {
+        white-space: nowrap !important;
+        word-break: normal !important;
+    }
+    section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table tbody td.activeinactive {
+        min-width: 210px !important;
+        white-space: normal !important;
+    }
+    section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table tbody td.activeinactive p {
+        white-space: nowrap !important;
+    }
+}
+@media only screen and (max-width: 991px) {
+    section.vm-operator-info-page .bread-same-all-page { align-items: flex-start !important; flex-direction: column !important; }
+    section.vm-operator-info-page .textshowspanclass-header { max-width: 100% !important; }
+}
+@media only screen and (max-width: 767px) {
+    section.vm-operator-info-page { padding: 8px 2px 12px !important; }
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block { padding: 8px !important; gap: 6px !important; }
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block > li > a { height: 62px !important; min-height: 62px !important; max-height: 62px !important; padding: 5px 2px !important; }
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a img,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block > li > a img { height: 20px !important; width: 20px !important; }
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a span,
+    section.vm-dmt-slab-page #vmOiTabList.giftul-third-block > li > a span { font-size: 8.5px !important; }
+    section.vm-operator-info-page .wallet_transfer #ul li,
+    section.vm-dmt-slab-page .wallet_transfer #ul li { flex: 0 0 calc(50% - 3px) !important; max-width: calc(50% - 3px) !important; }
+    section.vm-operator-info-page .wallet_transfer #ul a,
+    section.vm-dmt-slab-page .wallet_transfer #ul a { width: 100% !important; justify-content: center !important; }
+    section.vm-operator-info-page .tab-contentoperators { padding: 10px 8px !important; border-radius: 16px !important; }
+    section.vm-operator-info-page .tab-contentoperators table.table tbody td { font-size: 12px !important; padding: 8px !important; }
+    section.vm-operator-info-page .buttonPdf { width: 100% !important; margin-left: 0 !important; }
+    section.vm-operator-info-page .buttonPdf button { flex: 1 !important; justify-content: center !important; }
+}
+@media only screen and (max-width: 480px) {
+    section.vm-operator-info-page .bread-same-all-page .col-md-6 { width: 100% !important; }
+    section.vm-operator-info-page .wallet_transfer #ul a { width: 100% !important; justify-content: center !important; }
+}
+
+/* ---------- 13. Global layout overrides (formerly inline in Operator_info.cshtml) ---------- */
+body.saas-admin-ui section.vm-operator-info-page .vm-oi-toolbar-zone {
+    margin: 0 !important; padding: 0 !important; background: transparent !important;
+    box-shadow: none !important; border: none !important;
+}
+body.saas-admin-ui section.vm-operator-info-page .vm-oi-toolbar-zone ol {
+    list-style: none !important; list-style-type: none !important;
+}
+body.saas-admin-ui section.vm-operator-info-page .vm-oi-toolbar-zone ol > li::before,
+body.saas-admin-ui section.vm-operator-info-page .vm-oi-toolbar-zone ol > li::marker {
+    content: "" !important; display: none !important;
+}
+body.saas-admin-ui section.vm-operator-info-page .vm-oi-toolbar-zone li.textshowspanclass-header {
+    background: none !important; border: none !important; padding: 0 !important; border-radius: 0 !important;
+    box-shadow: none !important; max-width: none !important; overflow: visible !important;
+    text-overflow: clip !important; white-space: nowrap !important; font-weight: 800 !important; color: #1e40af !important;
+}
+body.saas-admin-ui section.vm-operator-info-page .vm-oi-toolbar-actions {
+    display: inline-flex !important; align-items: center !important; gap: 8px !important; margin-left: auto !important;
+}
+body.saas-admin-ui section.vm-operator-info-page > .container-fluid {
+    max-width: 100% !important; min-width: 0 !important; overflow-x: hidden !important;
+}
+body.saas-admin-ui section.vm-operator-info-page .operator-clearfix { margin: 0 !important; }
+body.saas-admin-ui section.vm-operator-info-page .operator-clearfix > [class*="col-"] {
+    padding-top: 0 !important; margin-top: 0 !important; max-width: 100% !important; min-width: 0 !important;
+}
+body.saas-admin-ui section.vm-operator-info-page .giftcardcategory {
+    margin: 0 !important; padding: 0 !important; max-width: 100% !important; min-width: 0 !important;
+}
+body.saas-admin-ui section.vm-operator-info-page .tab-contentoperators {
+    margin-top: 0 !important; max-width: 100% !important; min-width: 0 !important;
+}
+@media screen and (min-width: 1025px) {
+    body.saas-admin-ui section.vm-operator-info-page .tab-contentoperators { overflow: hidden !important; }
+    body.saas-admin-ui section.vm-operator-info-page .card .row > .page-header-third .vm-oi-table-area-shell {
+        overflow-x: hidden !important;
+    }
+}
+body.saas-admin-ui section.vm-operator-info-page #moneyoperator .wallet_transfer {
+    padding: 12px 14px 8px !important; margin: 0 !important; background: #fff !important;
+    border-bottom: 1px solid #eef2f7 !important;
+}
+section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-compact table.vm-oi-data-table thead tr.tableactivebutton th {
+    background: #f8fafc !important; text-align: left !important; padding: 12px 14px !important;
+    font-size: 12px !important; font-weight: 800 !important; text-transform: uppercase !important;
+    letter-spacing: .04em !important; border-bottom: 1px solid #e2e8f0 !important;
+}
+section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-compact table.vm-oi-data-table thead tr.tableactivebutton th:last-child {
+    text-align: center !important;
+}
+section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-compact table.vm-oi-data-table thead th .activebefore,
+section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-compact table.vm-oi-data-table thead th .inactivebefore {
+    display: inline-block !important; margin-left: 8px !important; position: static !important;
+    padding: 4px 12px !important; border-radius: 999px !important; font-size: 11px !important; font-weight: 800 !important;
+}
+section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-compact table.vm-oi-data-table tbody td:first-child {
+    text-align: left !important; padding-left: 14px !important;
+}
+section.vm-operator-info-page .tablethirddesign-newnew table.borderclass-show-thirdd th,
+section.vm-operator-info-page .tablethirddesign-newnew table.borderclass-show-thirdd td,
+section.vm-operator-info-page table.borderclass-show-thirdd th,
+section.vm-operator-info-page table.borderclass-show-thirdd td {
+    border-left: none !important; border-right: none !important; margin: 0 !important; background-image: none !important;
+}
+section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table thead td {
+    position: sticky !important; z-index: 2 !important; top: 48px !important;
+    background: #f1f5f9 !important; color: #64748b !important; font-size: 10px !important; font-weight: 700 !important;
+    text-align: center !important; vertical-align: middle !important; padding: 8px 6px !important;
+    border: none !important; border-bottom: 1px solid #e2e8f0 !important; white-space: nowrap !important;
+}
+section.vm-operator-info-page #aepsoperator table.vm-oi-data-table thead tr:first-child th,
+section.vm-operator-info-page #Microatmcashoperator table.vm-oi-data-table thead tr:first-child th {
+    z-index: 4 !important; top: 0 !important; line-height: 1.25 !important; padding: 10px 8px !important; text-transform: none !important;
+}
+section.vm-operator-info-page #aepsoperator table.vm-oi-data-table thead th span,
+section.vm-operator-info-page #Microatmcashoperator table.vm-oi-data-table thead th span {
+    color: #15803d !important; font-size: 10px !important; font-weight: 700 !important; text-transform: none !important;
+}
+section.vm-operator-info-page .tab-contentoperators .oi-empty-time { color: #cbd5e1 !important; }
+@media print {
+    body.oi-printing section.vm-operator-info-page .vm-oi-toolbar-zone { display: none !important; }
+}
+@media only screen and (max-width: 767px) {
+    body.saas-admin-ui section.vm-operator-info-page .vm-oi-toolbar-actions {
+        width: 100% !important; margin-left: 0 !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .vm-oi-toolbar-actions .saas-acc-btn {
+        flex: 1 1 0 !important; justify-content: center !important;
+    }
+    section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-scroll .col-md-12 { max-height: none !important; }
+}
+
+/* ---------- 14. Mobile/tablet — last wins (beats global admin + section 13) ---------- */
+@media screen and (max-width: 1024px) {
+    body.saas-admin-ui section.vm-operator-info-page,
+    body.saas-admin-ui section.vm-operator-info-page > .container-fluid {
+        max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .operator-clearfix > [class*="col-"],
+    body.saas-admin-ui section.vm-operator-info-page .card .row,
+    body.saas-admin-ui section.vm-operator-info-page .vm-oi-white-panel {
+        max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .operator-clearfix > [class*="col-"] {
+        overflow: visible !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .vm-oi-tab-scroll-shell {
+        display: block !important; width: 100% !important; max-width: 100% !important; min-width: 0 !important;
+        overflow: hidden !important; box-sizing: border-box !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .vm-oi-tab-scroll-shell #vmOiTabList {
+        display: flex !important; flex-direction: row !important; flex-wrap: wrap !important;
+        width: 100% !important; max-width: 100% !important; min-width: 0 !important;
+        overflow: hidden !important; box-sizing: border-box !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.giftul-third-block > li,
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li,
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li.active,
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.vm-oi-tab-grid.nav-tabs > li {
+        flex: 0 0 calc((100% - 18px) / 4) !important; width: calc((100% - 18px) / 4) !important;
+        max-width: calc((100% - 18px) / 4) !important; min-width: 0 !important; float: none !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.nav-tabs > li > a,
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.nav-tabs > li.active > a,
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.nav-tabs > li.active > a:hover,
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.nav-tabs > li.active > a:focus {
+        margin-bottom: 0 !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.nav-tabs > li:not(.active) > a {
+        background: #fff !important; color: #475569 !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.nav-tabs > li.active > a,
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.nav-tabs > li.active > a:hover,
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.nav-tabs > li.active > a:focus {
+        background: linear-gradient(135deg, #1e40af, #2563eb) !important;
+        border-color: #1d4ed8 !important; color: #fff !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .giftcardtab-thirddesign .giftul-third-block#vmOiTabList {
+        display: flex !important; flex-wrap: wrap !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .tab-contentoperators,
+    body.saas-admin-ui section.vm-operator-info-page .tab-contentoperators > .tab-pane.active,
+    body.saas-admin-ui section.vm-operator-info-page .vm-oi-table-area-shell {
+        overflow: visible !important; max-width: 100% !important; min-width: 0 !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .vm-oi-table-scroll-shell {
+        display: block !important; width: 100% !important; max-width: 100% !important; min-width: 0 !important;
+        overflow-x: auto !important; overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch !important; touch-action: pan-x pan-y !important;
+        overscroll-behavior-x: contain !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .vm-oi-table-scroll-shell > .col-md-12 {
+        float: none !important; width: auto !important; min-width: 100% !important; max-width: none !important;
+        overflow: visible !important; max-height: none !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-scroll .col-md-12,
+    body.saas-admin-ui section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-compact .col-md-12 {
+        overflow-x: auto !important; overflow-y: visible !important; max-height: none !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table,
+    body.saas-admin-ui section.vm-operator-info-page .tab-contentoperators table.vm-oi-data-table.vm-oi-table-full,
+    body.saas-admin-ui section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-scroll table.vm-oi-data-table.vm-oi-table-full,
+    body.saas-admin-ui section.vm-operator-info-page .tab-contentoperators .tab-pane.vm-oi-pane-compact table.vm-oi-data-table:not(.vm-oi-grid-table) {
+        width: max-content !important; min-width: 880px !important; max-width: none !important;
+        table-layout: auto !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page #pancardoperator .vm-oi-table-scroll-shell table.vm-oi-data-table,
+    body.saas-admin-ui section.vm-operator-info-page #pancardoperator > .col-md-12 table.vm-oi-data-table {
+        width: 100% !important; min-width: 100% !important; max-width: 100% !important; table-layout: fixed !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .vm-oi-toolbar-zone .saas-acc-toolbar-top {
+        flex-wrap: wrap !important; gap: 10px !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .vm-oi-toolbar-zone .vm-dmt-breadcrumb {
+        flex: 1 1 100% !important; min-width: 0 !important;
+    }
+}
+@media screen and (max-width: 560px) {
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.giftul-third-block > li,
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li,
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li.active,
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.vm-oi-tab-grid.nav-tabs > li,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block > li,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block.nav-tabs > li.active {
+        flex: 0 0 calc((100% - 6px) / 2) !important;
+        width: calc((100% - 6px) / 2) !important;
+        max-width: calc((100% - 6px) / 2) !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a > span,
+    section.vm-operator-info-page #vmOiTabList.giftul-third-block > li > a > span {
+        font-size: 8px !important; line-height: 1.15 !important;
+        -webkit-line-clamp: 3 !important;
+    }
+}
+
+/* ---------- 15. Mobile tab grid lock (beats legacy giftcard / report / .nav block rules) ---------- */
+@media screen and (max-width: 1024px) {
+    body.saas-admin-ui section.content.vm-operator-info-page .body.Gift_Carddbody .giftcardcategory.giftcardtab-thirddesign .vm-oi-tab-strip-head.page-header-third {
+        display: block !important;
+        overflow: visible !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+    body.saas-admin-ui section.content.vm-operator-info-page .giftcardcategory.giftcardtab-thirddesign center.vm-oi-tab-strip-wrap {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        text-align: left !important;
+    }
+    body.saas-admin-ui section.content.vm-operator-info-page .Gift_Carddbody .giftcardcategory ul#vmOiTabList.giftul-third-block.nav.nav-tabs.tab-col-orange,
+    body.saas-admin-ui section.content.vm-operator-info-page .Gift_Carddbody .giftcardcategory ul#vmOiTabList.vm-oi-tab-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        grid-auto-flow: row !important;
+        align-items: stretch !important;
+        gap: 6px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        float: none !important;
+        flex: none !important;
+        flex-direction: unset !important;
+        flex-wrap: unset !important;
+        list-style: none !important;
+        box-sizing: border-box !important;
+        padding: 8px !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+    }
+    body.saas-admin-ui section.content.vm-operator-info-page .Gift_Carddbody .giftcardcategory ul#vmOiTabList > li,
+    body.saas-admin-ui section.content.vm-operator-info-page .Gift_Carddbody .giftcardcategory ul#vmOiTabList.nav-tabs > li,
+    body.saas-admin-ui section.content.vm-operator-info-page .Gift_Carddbody .giftcardcategory ul#vmOiTabList.nav-tabs > li.active {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        flex: none !important;
+        float: none !important;
+        clear: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+    body.saas-admin-ui section.content.vm-operator-info-page .Gift_Carddbody .giftcardcategory ul#vmOiTabList > li > a,
+    body.saas-admin-ui section.content.vm-operator-info-page .Gift_Carddbody .giftcardcategory ul#vmOiTabList.nav-tabs > li > a,
+    body.saas-admin-ui section.content.vm-operator-info-page .Gift_Carddbody .giftcardcategory ul#vmOiTabList.nav-tabs > li.active > a {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        float: none !important;
+        box-sizing: border-box !important;
+    }
+}
+@media screen and (max-width: 560px) {
+    body.saas-admin-ui section.content.vm-operator-info-page .Gift_Carddbody .giftcardcategory ul#vmOiTabList.giftul-third-block,
+    body.saas-admin-ui section.content.vm-operator-info-page .Gift_Carddbody .giftcardcategory ul#vmOiTabList.vm-oi-tab-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+/* ---------- 16. Pay Out pills — mobile/tablet: 2 per row ---------- */
+@media screen and (max-width: 1024px) {
+    body.saas-admin-ui section.vm-operator-info-page .wallet_transfer #ul.vm-oi-wallet-pills,
+    body.saas-admin-ui section.vm-operator-info-page .wallet_transfer #ul.financal-second,
+    body.saas-admin-ui section.vm-operator-info-page .wallet_transfer #ul,
+    body.saas-admin-ui section.vm-dmt-slab-page .wallet_transfer #ul {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: stretch !important;
+        justify-content: flex-start !important;
+        gap: 8px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        padding: 8px 10px 14px !important;
+        margin: 0 !important;
+        list-style: none !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .wallet_transfer #ul > li,
+    body.saas-admin-ui section.vm-dmt-slab-page .wallet_transfer #ul > li {
+        display: block !important;
+        flex: 0 0 calc(50% - 4px) !important;
+        width: calc(50% - 4px) !important;
+        max-width: calc(50% - 4px) !important;
+        min-width: 0 !important;
+        float: none !important;
+        clear: none !important;
+        box-sizing: border-box !important;
+    }
+    body.saas-admin-ui section.vm-operator-info-page .wallet_transfer #ul > li > a,
+    body.saas-admin-ui section.vm-dmt-slab-page .wallet_transfer #ul > li > a {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 44px !important;
+        padding: 10px 8px !important;
+        box-sizing: border-box !important;
+        text-align: center !important;
+        white-space: normal !important;
+        line-height: 1.25 !important;
+        word-break: break-word !important;
+    }
+}

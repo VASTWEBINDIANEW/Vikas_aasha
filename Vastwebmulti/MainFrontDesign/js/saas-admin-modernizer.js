@@ -72,6 +72,40 @@
         element.style.setProperty(property, value, "important");
     }
 
+    /** Retailer recharge (vm-rch) — styles live in retailer-recharge-modern.css; no inline overrides. */
+    function isVmRechargeManaged(element) {
+        return !!(element && element.closest && element.closest("#my-index.vm-rch-page, #my-index"));
+    }
+
+    function restoreVmRechargeVisuals() {
+        var rechargeRoot = document.querySelector("#my-index");
+        if (!rechargeRoot) {
+            return;
+        }
+
+        Array.prototype.forEach.call(
+            rechargeRoot.querySelectorAll(".table-responsive, .card, .panel, .well, .page-header-third, [data-saas-inline-normalized]"),
+            function (element) {
+                element.style.removeProperty("border-radius");
+                element.style.removeProperty("background-image");
+            }
+        );
+    }
+
+    /** Horizontal service tab strips (Operator Info, slabs, Gift Card) — not sidebar chrome. */
+    function isContentServiceTabStrip(element) {
+        if (!element || !element.matches) {
+            return false;
+        }
+        if ((element.id === "leftulbar" || element.id === "vmOiTabList") && (element.classList.contains("giftul-third-block") || element.classList.contains("giftul-third") || element.classList.contains("vm-gift-cat-tabs"))) {
+            return true;
+        }
+        if (element.matches("ul.nav-tabs.giftul-third-block, ul.nav-tabs.giftul-third, ul.nav-tabs.vm-gift-cat-tabs")) {
+            return true;
+        }
+        return false;
+    }
+
     function isAdminThemeManagedSidebar(element) {
         if (!element) {
             return false;
@@ -125,6 +159,18 @@
 
         Array.prototype.forEach.call(scope.querySelectorAll(selector), function (element) {
             if (element.dataset.saasInlineNormalized === "true") {
+                return;
+            }
+
+            if (isVmRechargeManaged(element)) {
+                element.dataset.saasInlineNormalized = "skip-vm-rch";
+                return;
+            }
+
+            if (isContentServiceTabStrip(element)) {
+                element.dataset.saasInlineNormalized = "skip-content-tabs";
+                forceStyle(element, "background-image", "none");
+                forceStyle(element, "background-color", "#ffffff");
                 return;
             }
 
@@ -538,6 +584,7 @@
         });
 
         normalizeInlineVisuals(scope);
+        restoreVmRechargeVisuals();
         normalizeSidebarMenus(scope);
         simplifyDashboard(scope);
         applyPanelSpecificCleanup();

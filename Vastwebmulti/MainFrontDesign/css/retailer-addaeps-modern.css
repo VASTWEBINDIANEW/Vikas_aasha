@@ -1,0 +1,278 @@
+/* ==========================================================================
+   retailer-addaeps-modern.css (v1)
+   RETAILER/Home/AddAepsAccount — ADMIN Fund_transfer (admin-fund-transfer-
+   modern.css, vm-ft-* system) wali latest design ka reuse.
+   - Section par .saas-fund-transfer-page class hai taaki vm-ft-* rules lagen.
+   - Yahan SIRF page-specific cheezein: 50/50 layout vars, buttons, loader,
+     spinner, OTP box, added-accounts table. Baaki sab ft CSS se.
+   - Koi JS/IDs/handlers yahan nahi badle — sirf look.
+   ========================================================================== */
+
+/* 2 barabar cards (form 50% + list 50%) */
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page {
+    --vm-split-nav-flex: calc(50% - 6px);
+    --vm-split-main-flex: calc(50% - 6px);
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-ft-layout--full {
+    row-gap: 12px;
+}
+
+/* Form + list cards andar ka spacing */
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .fund-transfer-form {
+    padding: 14px 12px 16px;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .fund-transfer-form .text-danger {
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-msg {
+    margin: 2px 6px 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #dc2626;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-msg:empty {
+    display: none;
+}
+
+/* Send OTP / Submit — full-width gradient pills */
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    border: 0;
+    border-radius: 999px;
+    padding: 11px 18px;
+    font-size: 0.86rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-btn--go {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #4f46e5 100%);
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-btn--go:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.42);
+    color: #fff;
+}
+
+/* OTP box — Send OTP ke baad chamke */
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-otp {
+    border: 1.5px dashed #93c5fd;
+    background: #eff6ff;
+    border-radius: 10px;
+    padding: 10px 10px 4px;
+    margin-bottom: 12px;
+}
+
+/* Added accounts table — ft wali latest look */
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.78rem;
+    border: 1px solid var(--ft-border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-table thead th {
+    background: linear-gradient(180deg, #f1f5f9, #e2e8f0);
+    color: #334155;
+    font-weight: 800;
+    padding: 10px;
+    border-bottom: 2px solid #cbd5e1;
+    white-space: nowrap;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-align: left;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-table tbody td {
+    padding: 9px 10px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+    background: #fff;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-table tbody tr:nth-child(even) td {
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-table tbody tr:hover td {
+    background: #eff6ff;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-empty {
+    text-align: center;
+    padding: 26px 10px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+/* Full-page loader + ripple spinner (theme blue) */
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .Account_Loder,
+body.saas-admin-ui .Account_Loder {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(15, 23, 42, 0.35);
+    z-index: 9999999;
+    text-align: center;
+}
+
+body.saas-admin-ui .loadingio-spinner-ripple-92ar2pfqk5j {
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    overflow: hidden;
+    background: transparent;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+body.saas-admin-ui .ldio-zdyd6mf6t5 {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(1);
+    backface-visibility: hidden;
+    transform-origin: 0 0;
+}
+
+body.saas-admin-ui .ldio-zdyd6mf6t5 div {
+    position: absolute;
+    border-width: 4px;
+    border-style: solid;
+    opacity: 1;
+    border-radius: 50%;
+    animation: ldio-zdyd6mf6t5 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    box-sizing: content-box;
+}
+
+body.saas-admin-ui .ldio-zdyd6mf6t5 div:nth-child(1) {
+    border-color: #2563eb;
+}
+
+body.saas-admin-ui .ldio-zdyd6mf6t5 div:nth-child(2) {
+    border-color: #c7c7c7;
+    animation-delay: -0.5s;
+}
+
+@keyframes ldio-zdyd6mf6t5 {
+    0% {
+        top: 96px;
+        left: 96px;
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+
+    100% {
+        top: 18px;
+        left: 18px;
+        width: 156px;
+        height: 156px;
+        opacity: 0;
+    }
+}
+
+/* Toolbar text overlap fix (v2) — hero stack pakka block layout me */
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-ft-page-toolbar {
+    align-items: center;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-ft-page-hero {
+    gap: 12px;
+}
+
+/* Toolbar ek line me (v3): title left, breadcrumb right — icon hataya */
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-hero > div:first-child {
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-hero .vm-ft-breadcrumb {
+    margin: 0;
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-hero .vm-aeps-title {
+    text-align: right;
+    min-width: 0;
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-hero .vm-aeps-title {
+        text-align: left;
+    }
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-ft-page-hero > div:last-child {
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-ft-breadcrumb {
+    display: flex;
+    margin: 0 0 4px;
+    line-height: 1.5;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page h1.vm-ft-page-title {
+    display: block;
+    margin: 0 0 2px;
+    line-height: 1.4;
+    font-size: 1.05rem;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page p.vm-ft-page-subtitle {
+    display: block;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Tablet + mobile — cards stack */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page {
+        --vm-split-nav-flex: 100%;
+        --vm-split-main-flex: 100%;
+    }
+
+    body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-ft-table-wrap {
+        overflow-x: auto;
+    }
+
+    body.saas-admin-ui .saas-fund-transfer-page.vm-aeps-page .vm-aeps-table {
+        min-width: 560px;
+    }
+}

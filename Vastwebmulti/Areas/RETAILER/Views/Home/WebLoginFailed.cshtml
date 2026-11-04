@@ -1,294 +1,271 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Failed_Login_info>
+@using System.Linq
+@using System.Collections.Generic
 @{
     ViewBag.Title = "WebLoginFailed";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.Failed_Login_info>();
+    var rowCount = reports.Count;
+    Func<string, string> failVal = v => string.IsNullOrWhiteSpace(v) ? "—" : v.Trim();
 }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-    /* new css  */
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
-    }
-
-    .table {
-        margin-bottom: 0px;
-    }
-
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .col-md-6.contentrightfirst .form-group {
-        width: 45%;
-        float: left;
-        padding-right: 4px;
-    }
-
-    .webdateloginfirst .col-md-3.buttonPdf {
-        width: auto;
-    }
-    
-
-    /* new css  */
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-    .buttonPdf button {
-        color: #555 !important;
-    }
-    @@media only screen and (max-width:1169px) {
-        .container-fluid.webdateloginfirst {
-            padding-left: 15px !important;
-        }
-    }
-
-    @@media only screen and (max-width:990px) {
-        .col-md-6.webdatelogin {
-            padding-left: 0;
-        }
-
-        .nonewidthrighttuyopi {
-            width: 100%;
-            display: block;
-        }
-
-            .nonewidthrighttuyopi .contentrightfirst {
-                float: left;
-            }
-
-            .nonewidthrighttuyopi .col-md-2.websearch {
-                float: left;
-            }
-
-        .weblogin-table {
-            padding-right: 15px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        .col-md-6.contentrightfirst .form-group {
-            width: 60%;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-        .contentrightfirst-responshive .contentrightfirst {
+    /* Login tabs : dates ke bilkul paas, right side */
+    .saas-retailer-applogin-page .vm-opr-toolbar-head { flex-wrap: wrap !important; }
+    .saas-retailer-applogin-page .vm-login-tabs { display: inline-flex !important; flex-wrap: nowrap !important; width: max-content !important; max-width: 100% !important; flex: 0 0 auto !important; gap: 8px !important; background: #eef1f6 !important; border-radius: 12px !important; padding: 4px !important; margin: 0 12px 0 auto !important; align-self: center !important; }
+    .saas-retailer-applogin-page .vm-login-tabs .vm-login-tab { display: inline-flex !important; width: auto !important; flex: 0 0 auto !important; float: none !important; white-space: nowrap !important; }
+    .saas-retailer-applogin-page .saas-acc-filter-bar { margin-left: 0 !important; }
+    .saas-retailer-applogin-page .vm-login-tab { display: inline-flex !important; align-items: center !important; gap: 7px !important; padding: 8px 18px !important; border-radius: 9px !important; font-size: 13px !important; font-weight: 800 !important; color: #64748b !important; text-decoration: none !important; transition: all .15s ease !important; white-space: nowrap !important; }
+    .saas-retailer-applogin-page .vm-login-tab:hover { color: #0f172a !important; }
+    .saas-retailer-applogin-page .vm-login-tab--active { background: #fff !important; color: #1d4ed8 !important; box-shadow: 0 2px 8px rgba(15,23,42,.12) !important; }
+    /* Failed pill */
+    body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport tbody tr:hover { background: #f6f9ff !important; }
+    body.saas-admin-ui .saas-retailer-applogin-page .vm-login-status { display: inline-flex !important; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; padding: 4px 12px; border-radius: 999px; white-space: nowrap; background: #fdecec !important; color: #c62828 !important; }
+    body.saas-admin-ui .saas-retailer-applogin-page .vm-login-mono { font-family: Consolas,'Courier New',monospace !important; font-size: 12px !important; }
+    /* Desktop (>=1024px): fit-to-width, no scroll, tight columns */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table {
             width: 100% !important;
-            padding-right: 0 !important;
-            padding-bottom: 4px;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
         }
-
-        .col-md-6.contentrightfirst .form-group {
-            width: 71%;
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
         }
-
-        .contentrightfirst-responshive .contentrightfirst input {
-            text-align: end;
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
         }
-
-        #btn {
-            width: 50%;
-            float: left;
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table thead th:nth-child(1),
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table tbody td:nth-child(1) { width: 12% !important; }
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table thead th:nth-child(2),
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table tbody td:nth-child(2) { width: 20% !important; }
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table tbody td:nth-child(3) { width: 17% !important; }
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table thead th:nth-child(4),
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table tbody td:nth-child(4) { width: 15% !important; }
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table thead th:nth-child(5),
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table tbody td:nth-child(5) { width: 16% !important; }
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table thead th:nth-child(6),
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table tbody td:nth-child(6) { width: 20% !important; }
+    }
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table {
+            width: max-content !important;
+            min-width: 900px !important;
+            max-width: none !important;
+            table-layout: auto !important;
+        }
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-applogin-page #retailerAppLoginReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+        }
+        body.saas-admin-ui .saas-retailer-applogin-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
         }
     }
-
 </style>
 
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="margin:90px 0px 0px 0px; overflow-x:hidden;">
-    <div class="container-fluid webdateloginfirst" style="padding-left: 10px; height: 100vh;">
-        <!--Four-Design-Page-Header-Start-->
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-retailer-ecomm-transaction-page saas-retailer-applogin-page">
 
-        <div class="page-title-box-fourde">
-            <h3>App Login History</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">My Account 1&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">App Login History</a></li>
-            </ul>
-        </div>
+    <div class="container-fluid vm-opr-page-shell">
 
-        <!--Four-Design-Page-Header-End-->
-        <div class="row clearfix">
-            <div class="col-md-12" style="">
+        @{
+            var appLoginFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerAppLoginForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_applogin_frm_date" },
+                { "data-report-to", "#retailer_applogin_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("WebLoginFailed", "Home", FormMethod.Post, appLoginFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-                <div class="page-header-third">
-                    <div class="col-md-6 webapplogin activeclass-bac-four" style="width: 100%; float: left;padding:0;">
-                        <a href="@Url.Action("WebLogin","Home")" id="btn" class="btn" style="" title="Go to Web Success Login History">
-                            <span style="top:-1px;color:black;">Web Login History</span>
-                        </a>
-                        <a href="@Url.Action("WebLoginFailed","Home")" id="btn" class="btn active" style="">
-                            <span style="top:-1px;color:black;">App Login History</span>
-                        </a>
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
 
-                    </div>
-                </div>
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>My Account</li>
+                        <li>App Login History</li>
+                    </ol>
 
-                
-            </div>
-        </div>
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 weblogin-table" style="">
-                <div class="page-header-third">
-                    <div class="card class-back-tra-fourdesign" style="width:100%;float:left;padding-bottom:4px;">
-
-                        <div class="col-md-6 webdatelogin" style="width:100%;float:left;">
-                            @using (Html.BeginForm("WebLoginFailed", "Home", FormMethod.Post))
-                            {
-                                <div class="row nonewidthrighttuyopi contentrightfirst-responshive">
-                                    
-                                    <div class="col-md-6 contentrightfirst" style="padding-left: 0px;">
-                                        <div class="form-group" style="margin-bottom:0px;">
-                                            <div class="input-daterange input-group">
-                                                <div class="datesate datesates">
-                                                    <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                    @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;", autocomplete = "off" })
-                                                </div>
-                                                <span class="input-group-addon" style="display:none;">
-                                                    <i class="fa fa-exchange"></i>
-                                                </span>
-                                                <div class="datesate datesatese">
-                                                    <div class="form-iconmy form-iconmyss" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;", autocomplete = "off" })
-                                                </div>
-                                            </div>
-                                            <!-- /.input group -->
-                                        </div>
-                                        <div class="col-md-2 websearch">
-                                            <center>
-                                                <button type="submit" class="btn bg-grey waves-effect retailer-search-second" style="margin-top: 4px; margin-left: -3px; height:34px;">
-                                                    <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                                    <span style="top:-2px;color:black;">Search</span>
-                                                </button>
-                                            </center>
-                                        </div>
-
-                                    </div>
-                                    
-
-                                    <div class="col-md-3 buttonPdf retailer-pdf-second">
-
-                                        <button id="btnPDF">PDF</button>
-                                        <button id="btnExport">Export</button>
-                                    </div>
-
-                                </div>
-                            }
-                        </div>
+                    <div class="vm-login-tabs" role="tablist">
+                        <a class="vm-login-tab" href="@Url.Action("WebLogin", "Home")" title="Go to Web Login History"><i class="fas fa-globe" aria-hidden="true"></i> Web Login History</a>
+                        <a class="vm-login-tab vm-login-tab--active" href="@Url.Action("WebLoginFailed", "Home")"><i class="fas fa-mobile-alt" aria-hidden="true"></i> App Login History</a>
                     </div>
 
-                    <div class="card class-back-tra-fourdesign" style="width: 100%; float: left;">
-                        
-                        <div class="body four-design-table-design" style="padding:0px;">
-                            <div class="table-responsive web-responsive tablethirddesign-new tablethirddesign-newnew" style="position:inherit;">
-                                <table id="" class="table table-bordered table-striped table-hover third-design-table fourdesign-data-table" style="width:100%;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            @*<th>Sr.&nbsp;No.</th>*@
-                                            <th>Login&nbsp;Status</th>
-                                            <th>Login&nbsp;ID</th>
-                                            @*<th>Password</th>
-                                <th>IP&nbsp;Address</th>
-                                <th>Browser</th>*@
-                                            <th>Device&nbsp;Details</th>
-                                            <th>IMEI&nbsp;No</th>
-                                            <th>Location</th>
-                                            <th>Login&nbsp;Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{ var i = 1;}
-                                        @foreach (var item in Model)
-                                        {
-                                            <tr role="row" class="odd">
-                                                @*<td>@i</td>*@
-                                                <td class="activeinactive">
-                                                    <p class="" style="font-size:15px;"><span class="activeopertor">Success</span></p>
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
 
-                                                    <p class="" style="display:none;font-size:15px;"><span class="inactiveopertor">Failed</span></p>
-                                                </td>
-                                                <td>@item.EmailId</td>
-                                                @*<td>@item.pwd</td>
-                                    <td>@item.IP_Address</td>
-                                    <td>@item.browser</td>*@
-                                                <td style="font-weight:bold;">Device&nbsp;Details</td>
-                                                <td style="font-weight:bold;">IMEI&nbsp;No</td>
-                                                <td style="font-weight:bold;">Location</td>
-                                                <td>@item.LoginTime</td>
-                                            </tr>
-                                            i++;
-                                        }
-                                    </tbody>
-                                </table>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_applogin_frm_date", placeholder = "From", title = "From date" })
                             </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_applogin_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                        <span>App login history</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" id="btnExportRetailerAppLogin" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFRetailerAppLogin" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
                         </div>
                     </div>
                 </div>
-                
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerAppLoginReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Login Status</th>
+                                    <th>Login ID</th>
+                                    <th>Device Details</th>
+                                    <th>IMEI No</th>
+                                    <th>Location</th>
+                                    <th>Login Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (reports.Count > 0)
+                                {
+                                    foreach (var item in reports)
+                                    {
+                                        string device = failVal(item.LoginFrom);
+                                        if (device == "—" && !string.IsNullOrWhiteSpace(item.browser)) { device = item.browser.Trim(); }
+                                        string loc = failVal(item.Location);
+                                        if (loc == "—" && !string.IsNullOrWhiteSpace(item.city)) { loc = item.city.Trim(); }
+                                        <tr class="vm-dmt-row">
+                                            <td><span class="vm-login-status"><i class="fa fa-times" aria-hidden="true"></i>Failed</span></td>
+                                            <td><span class="vm-dmt-consumer-text" title="@item.EmailId">@item.EmailId</span></td>
+                                            <td><span class="vm-dmt-refno-text" title="@device">@device</span></td>
+                                            <td><span class="vm-dmt-refno-text vm-login-mono">@failVal(item.Macaddress)</span></td>
+                                            <td><span class="vm-dmt-refno-text" title="@loc">@loc</span></td>
+                                            <td class="vm-ticket-time-cell"><span class="vm-dmt-refno-text">@item.LoginTime</span></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="6" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                                            <span>No login records found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
 </section>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
 
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-
+@section PostVmScripts {
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
+    function retailerAppLoginDates() {
+        return {
+            txt_frm_date: jQuery('#retailer_applogin_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_applogin_to_date').val() || ''
+        };
+    }
 
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+    function initRetailerAppLoginDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerAppLoginDatepickers, 50);
+            return;
         }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerAppLoginForm',
+                '#retailer_applogin_frm_date',
+                '#retailer_applogin_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerAppLoginDatepickers();
+        window.setTimeout(initRetailerAppLoginDatepickers, 150);
+        jQuery('#btnExportRetailerAppLogin').on('click', function (e) {
+            e.preventDefault();
+            var d = retailerAppLoginDates();
+            location.href = '@Url.Action("ExcelWebLoginFailed", "Home")?txt_frm_date=' + encodeURIComponent(d.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(d.txt_to_date);
+        });
+        jQuery('#btnPDFRetailerAppLogin').on('click', function () {
+            var d = retailerAppLoginDates();
+            window.open('@Url.Action("PDF_WebLoginFailed", "Home")?txt_frm_date=' + encodeURIComponent(d.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(d.txt_to_date), '_blank');
+        });
     });
 </script>
-
-
-<script>
-    $(".input-daterange").click(function () {
-        $(".datepicker").addClass('datepickerwebse');
-    });
-
-
-</script>
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("ExcelWebLoginFailed", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        location.href = url;
-});
-</script>
-<script>
-    $("#btnPDF").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("PDF_WebLoginFailed", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
-    });
-</script>
+}

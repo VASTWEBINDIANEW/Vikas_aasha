@@ -1,0 +1,2245 @@
+/* ============================================================
+   RETAILER • Prepaid & Utility (Recharge) — Modern Blue Theme
+   File: retailer-recharge-modern.css   (vm-rch-* design system)
+   Scope: #my-index only — koi backend/JS/ID change nahi.
+   ============================================================ */
+
+/* ---------- 1. Page base ---------- */
+#my-index{
+  --vm-rch-h:42px;
+  --vm-rch-lh:40px;
+  --vm-rch-inbtn-h:34px;
+  --vm-rch-row-top:19px;
+}
+#my-index.vm-rch-page{
+  background:#eef2f7 !important;
+  min-height:100vh;
+}
+/* Header ke turant neeche — layout 73px margin vs ~58px topbar = white gap */
+body.saas-admin-ui #my-index.vm-rch-page.my-indexclass.content{
+  --admin-header-height:58px;
+  margin-top:58px !important;
+  padding:0 18px 34px !important;
+}
+@media screen and (min-width:992px){
+  body.saas-admin-ui #my-index.vm-rch-page.my-indexclass.content{
+    margin-top:58px !important;
+    padding-top:0 !important;
+  }
+}
+#my-index.vm-rch-page .row{margin-left:-8px;margin-right:-8px;}
+#my-index.vm-rch-page [class*="col-"]{padding-left:8px;padding-right:8px;}
+
+/* ---------- 2. Toolbar (breadcrumb left / title right) ---------- */
+#my-index .vm-rch-toolbar{
+  background:#fff;border:1px solid #e2e8f0;border-radius:16px;
+  box-shadow:0 6px 18px -8px rgba(15,23,42,.18);
+  padding:10px 18px;margin-bottom:6px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px 16px;flex-wrap:wrap;
+}
+#my-index .vm-rch-breadcrumb{margin:0;padding:0;list-style:none;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+#my-index .vm-rch-breadcrumb li{font-size:13px;color:#64748b;font-weight:600;}
+#my-index .vm-rch-breadcrumb li a{color:#1d4ed8;text-decoration:none;font-weight:700;}
+#my-index .vm-rch-breadcrumb li a:hover{text-decoration:underline;}
+#my-index .vm-rch-breadcrumb li + li::before{content:"/";color:#cbd5e1;margin-right:8px;}
+#my-index .vm-rch-title{text-align:right;}
+#my-index .vm-rch-title h1{margin:0;font-size:19px;font-weight:800;color:#0f172a;letter-spacing:.2px;}
+#my-index .vm-rch-title p{margin:1px 0 0;font-size:12px;color:#64748b;font-weight:500;}
+
+/* ---------- 3. Main white shell ---------- */
+#my-index .vm-rch-shell{
+  background:#fff;border:1px solid #e2e8f0;border-radius:18px;
+  box-shadow:0 14px 34px -18px rgba(30,64,175,.35);
+  padding:0 16px 20px;margin-bottom:16px;position:relative;overflow:visible !important;
+}
+#my-index .vm-rch-shell-body{padding:0;}
+#my-index .vm-rch-tabsbox,
+#my-index .vm-rch-tabsrow{padding:0;margin:0;}
+/* Service tabs — white card ki full width (edge-to-edge blue bar) */
+#my-index .vm-rch-tabsbox,
+#my-index .vm-rch-tabsrow{
+  position:relative !important;z-index:30 !important;
+}
+#my-index .vm-rch-tabsrow{
+  margin-left:-16px !important;margin-right:-16px !important;
+  width:calc(100% + 32px) !important;max-width:none !important;
+}
+#my-index .vm-rch-tabsrow .row{margin-left:0 !important;margin-right:0 !important;}
+#my-index .vm-rch-tabsrow center{
+  display:block !important;width:100% !important;margin:0 !important;padding:0 !important;
+}
+
+#my-index .vm-rch-tabscol{width:100% !important;float:none !important;}
+#my-index .vm-rch-panecol{width:100%;}
+#my-index .vm-rch-spacer{display:none !important;}
+#my-index .vm-rch-recentcol{padding-left:0 !important;}
+#my-index .vm-rch-fbtn2{flex:0 1 auto;align-self:flex-end;min-width:0;}
+#my-index .vm-rch-formgrid .vm-rch-fbtn2 .btn{margin:0 !important;white-space:nowrap;}
+/* ---------- 4. Icon tabs bar (blue gradient) ---------- */
+#my-index .vm-rch-tabs{
+  width:100% !important;overflow:visible !important;
+  scrollbar-width:thin;scrollbar-color:#93c5fd transparent;
+  padding:0 0 4px !important;position:relative !important;z-index:31 !important;
+}
+#my-index .vm-rch-tabs::-webkit-scrollbar{height:6px;}
+#my-index .vm-rch-tabs::-webkit-scrollbar-thumb{background:#93c5fd;border-radius:6px;}
+#my-index ul#changeborderbotto.vm-rch-tabs-list{
+  display:flex !important;flex-wrap:nowrap !important;align-items:stretch !important;
+  justify-content:stretch !important;
+  width:100% !important;max-width:100% !important;min-width:100% !important;
+  margin:0 !important;padding:5px 6px !important;list-style:none !important;
+  box-sizing:border-box !important;
+  background:linear-gradient(135deg,#1e3a8a 0%,#1e40af 45%,#3b82f6 100%) !important;
+  border:0 !important;border-radius:0 !important;
+  box-shadow:0 12px 26px -10px rgba(30,64,175,.55), inset 0 1px 0 rgba(255,255,255,.25) !important;
+  min-height:92px;
+  overflow:visible !important;
+  position:relative !important;z-index:32 !important;
+}
+#my-index .vm-rch-tabscol{
+  overflow-x:auto !important;overflow-y:visible !important;
+  -webkit-overflow-scrolling:touch;
+}
+#my-index .fast-popewrts-responshive ul#changeborderbotto.vm-rch-tabs-list > li:last-child{
+  float:none !important;
+}
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li{
+  flex:1 1 0 !important;float:none !important;position:relative !important;z-index:1 !important;
+  display:flex !important;align-items:stretch !important;align-self:stretch !important;
+  width:auto !important;min-width:0 !important;max-width:none !important;
+  margin:0 2px !important;padding:0 !important;
+}
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li.active{z-index:8 !important;}
+/* Legacy StyleSheet .fast-popewrts-responshive ul li {width:9%;float:left} — tabs ek horizontal row (flex) */
+#my-index .fast-popewrts-responshive.vm-rch-tabs{
+  float:none !important;width:100% !important;display:block !important;
+}
+#my-index .fast-popewrts-responshive ul#changeborderbotto.vm-rch-tabs-list{
+  display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;
+  align-items:stretch !important;float:none !important;width:100% !important;
+  max-width:100% !important;min-width:100% !important;box-sizing:border-box !important;
+}
+#my-index .fast-popewrts-responshive ul#changeborderbotto.vm-rch-tabs-list > li,
+#my-index .fast-popewrts-responshive ul#changeborderbotto.vm-rch-tabs-list > li:last-child{
+  display:flex !important;float:none !important;width:auto !important;
+  flex:1 1 0 !important;min-width:0 !important;
+  align-items:stretch !important;align-self:stretch !important;
+}
+#my-index .fast-popewrts-responshive ul#changeborderbotto.vm-rch-tabs-list > li.active{
+  margin-top:0 !important;
+}
+#my-index .fast-popewrts-responshive ul#changeborderbotto.vm-rch-tabs-list > li.dd{
+  margin-bottom:0 !important;
+}
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li > a img[style]{
+  height:32px !important;width:auto !important;margin:0 !important;margin-top:0 !important;margin-left:0 !important;
+}
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li > a span[style]{
+  position:static !important;top:auto !important;margin-left:0 !important;margin-right:0 !important;
+}
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li > a{
+  display:flex !important;flex:1 1 auto !important;align-self:stretch !important;
+  flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  width:100% !important;min-height:100% !important;height:auto !important;
+  padding:8px 8px !important;margin:0 !important;border:0 !important;border-radius:11px !important;
+  background:rgba(255,255,255,.10) !important;color:#fff !important;text-decoration:none !important;
+  transition:background .15s ease, box-shadow .15s ease !important;box-sizing:border-box !important;
+}
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li > a:hover{background:rgba(255,255,255,.22) !important;}
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li > a img{
+  height:32px !important;width:auto !important;margin:0 !important;filter:brightness(0) invert(1);
+}
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li > a br{display:none !important;}
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li > a span{
+  position:static !important;display:block !important;margin:0 !important;
+  font-size:11px !important;font-weight:700 !important;color:#fff !important;
+  white-space:nowrap !important;line-height:1.2 !important;
+  max-width:100%;overflow:hidden;text-overflow:ellipsis;
+}
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li.active > a{
+  background:#fff !important;color:#1e40af !important;
+  box-shadow:0 6px 16px -8px rgba(0,0,0,.35) !important;
+  transform:none !important;border-radius:12px !important;
+  position:relative !important;z-index:2 !important;
+}
+/* active (safed) tile: icon chahe kisi bhi rang ka ho, brand-blue dikhega — gayab kabhi nahi */
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li.active > a img{
+  filter:brightness(0) invert(22%) sepia(91%) saturate(2276%) hue-rotate(207deg) brightness(94%) contrast(101%) !important;
+}
+#my-index ul#changeborderbotto.vm-rch-tabs-list > li.active > a span{color:#1e40af !important;}
+
+/* "+6 More" tile — baaki service tabs jaisa height; dropdown bar ke bahar */
+#my-index ul#changeborderbotto > li.vm-rch-tab-more{
+  flex:0 0 auto !important;min-width:72px !important;max-width:88px !important;
+  align-self:stretch !important;overflow:visible !important;
+  z-index:12 !important;position:relative !important;
+}
+#my-index ul#changeborderbotto > li.vm-rch-tab-more > a{
+  background:rgba(255,255,255,.12) !important;box-shadow:none !important;
+  justify-content:center !important;gap:4px !important;padding:8px 6px !important;
+}
+#my-index ul#changeborderbotto > li.vm-rch-tab-more > a:hover{
+  background:rgba(255,255,255,.22) !important;box-shadow:none !important;color:#fff !important;
+}
+#my-index ul#changeborderbotto > li.vm-rch-tab-more.vm-rch-tab-more-open > a{
+  background:rgba(255,255,255,.26) !important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35) !important;
+}
+/* More se koi service select — baaki tabs jaisa safed active tile */
+#my-index ul#changeborderbotto > li.vm-rch-tab-more.active > a{
+  background:#fff !important;color:#1e40af !important;
+  box-shadow:0 6px 16px -8px rgba(0,0,0,.35) !important;border-radius:12px !important;
+}
+#my-index ul#changeborderbotto > li.vm-rch-tab-more.active > a .plusandmore{color:#1e40af !important;}
+#my-index ul#changeborderbotto > li.vm-rch-tab-more.active > a .moretextshowstrong{
+  background:#1e40af !important;color:#fff !important;
+}
+#my-index ul#changeborderbotto .moretextshowstrong{
+  background:#fff !important;color:#1e40af !important;font-weight:800;
+  width:32px !important;height:32px !important;display:inline-flex !important;
+  align-items:center;justify-content:center;font-size:14px !important;border-radius:50%;
+  padding:0 !important;line-height:1 !important;flex-shrink:0;
+}
+#my-index ul#changeborderbotto > li.vm-rch-tab-more .plusandmore{
+  font-size:11px !important;font-weight:700 !important;color:#fff !important;line-height:1.2 !important;
+}
+#my-index ul#changeborderbotto ul.morebuttontab{display:none !important;}
+#my-index ul#changeborderbotto > li.vm-rch-tab-more > ul.morebuttontab.morebuttontab-after{display:block !important;}
+#my-index ul#changeborderbotto > li.vm-rch-tab-more.vm-rch-tab-more-open,
+#my-index ul#changeborderbotto > li.vm-rch-tab-more:has(> ul.morebuttontab-after){
+  z-index:500 !important;
+}
+#my-index ul#changeborderbotto > li.vm-rch-tab-more > ul.morebuttontab{
+  position:absolute !important;top:100% !important;margin-top:8px !important;
+  right:0 !important;left:auto !important;bottom:auto !important;
+  min-width:210px !important;max-width:min(280px,92vw) !important;
+  list-style:none !important;margin-left:0 !important;margin-right:0 !important;
+  padding:8px !important;z-index:9999 !important;
+  width:auto !important;float:none !important;
+  background:#fff !important;border:1px solid #dbe4f3 !important;border-radius:12px !important;
+  box-shadow:0 20px 44px -10px rgba(15,23,42,.45) !important;
+  pointer-events:auto !important;
+}
+/* Open menu: fixed layer — tab bar overflow / pane stack se clip nahi hoga */
+#my-index ul#changeborderbotto > li.vm-rch-tab-more > ul.morebuttontab.morebuttontab-after{
+  position:fixed !important;
+  top:var(--vm-rch-more-top, auto) !important;
+  right:var(--vm-rch-more-right, 12px) !important;
+  left:auto !important;bottom:auto !important;margin-top:0 !important;
+  z-index:100050 !important;
+  max-height:min(420px,70vh) !important;overflow-y:auto !important;overflow-x:hidden !important;
+}
+body.vm-rch-more-menu-open #my-index .vm-rch-tabsrow > .row:first-child{
+  position:relative !important;z-index:100 !important;
+}
+body.vm-rch-more-menu-open #my-index .vm-rch-panecol,
+body.vm-rch-more-menu-open #my-index .vm-rch-pane-wrap{
+  z-index:1 !important;
+}
+body.vm-rch-more-menu-open #my-index .vm-rch-shell,
+body.vm-rch-more-menu-open #my-index .vm-rch-tabsrow,
+body.vm-rch-more-menu-open #my-index .vm-rch-tabs,
+body.vm-rch-more-menu-open #my-index .vm-rch-tabsrow center,
+body.vm-rch-more-menu-open #my-index .vm-rch-tabscol,
+body.vm-rch-more-menu-open #my-index .vm-rch-shell-body,
+body.vm-rch-more-menu-open #my-index .row{
+  overflow:visible !important;
+}
+#my-index ul#changeborderbotto ul.morebuttontab li{display:block !important;width:100% !important;margin:0 !important;text-align:left !important;float:none !important;}
+#my-index ul#changeborderbotto ul.morebuttontab li a{
+  display:flex !important;align-items:center;gap:10px;padding:8px 10px !important;
+  border:0 !important;border-radius:8px !important;color:#0f172a !important;text-decoration:none !important;background:transparent !important;
+}
+#my-index ul#changeborderbotto ul.morebuttontab li a:hover{background:#eff6ff !important;}
+#my-index ul#changeborderbotto ul.morebuttontab li.active a{background:#dbeafe !important;}
+#my-index ul#changeborderbotto ul.morebuttontab li a .vm-rch-more-ico{
+  flex:0 0 28px;width:28px;height:28px;margin:0 !important;
+  display:inline-flex !important;align-items:center;justify-content:center;
+  font-size:17px !important;line-height:1 !important;color:#0f172a !important;
+  background:#f1f5f9 !important;border-radius:8px !important;
+}
+#my-index ul#changeborderbotto ul.morebuttontab li a:hover .vm-rch-more-ico{
+  background:#e0e7ff !important;color:#1e3a8a !important;
+}
+#my-index ul#changeborderbotto ul.morebuttontab li.active a .vm-rch-more-ico{
+  background:#1e40af !important;color:#fff !important;
+}
+#my-index ul#changeborderbotto ul.morebuttontab li a img{
+  height:24px !important;width:24px !important;margin:0 !important;object-fit:contain !important;
+  filter:brightness(0) !important;opacity:.88 !important;
+}
+#my-index ul#changeborderbotto ul.morebuttontab li.active a img{opacity:1 !important;}
+#my-index ul#changeborderbotto ul.morebuttontab li a br{display:none !important;}
+#my-index ul#changeborderbotto ul.morebuttontab li a span{
+  position:static !important;font-size:13px !important;font-weight:600 !important;color:#0f172a !important;background:none !important;margin:0 !important;
+}
+#my-index ul#changeborderbotto ul.morebuttontab li.active a span{color:#1e40af !important;font-weight:700 !important;}
+
+/* ---------- 5. Tab content card ---------- */
+#my-index .vm-rch-panecol{position:relative !important;z-index:1 !important;}
+#my-index .vm-rch-pane-wrap{
+  margin-top:10px !important;background:#ffffff !important;
+  border:1px solid #dbe4f3 !important;border-radius:14px !important;
+  box-shadow:0 8px 20px -12px rgba(15,23,42,.25) !important;
+  padding:16px 16px 18px !important;min-height:150px;color:#0f172a !important;
+  position:relative !important;z-index:1 !important;
+}
+/* pane ke andar ka saara text/data gehra (clearly readable) */
+#my-index .vm-rch-pane-wrap p,
+#my-index .vm-rch-pane-wrap label,
+#my-index .vm-rch-pane-wrap td,
+#my-index .vm-rch-pane-wrap th,
+#my-index .vm-rch-pane-wrap div{color:#0f172a;}
+#my-index .vm-rch-pane-wrap input,
+#my-index .vm-rch-pane-wrap select{color:#0f172a !important;}
+#my-index .vm-rch-pane-wrap input::placeholder{color:#94a3b8 !important;opacity:1;}
+#my-index .vm-rch-pane-wrap > .tab-pane{min-height:120px;}
+/* Bootstrap5 opacity fix: BS5 CSS '.fade:not(.show){opacity:0}' rakhta hai aur BS3-style
+   '.in' class ko nahi samajhta — isliye active pane transparent (gayab) ho jata tha.
+   Active pane hamesha fully visible (sidha page pe, koi popup nahi). */
+#my-index .vm-rch-pane-wrap > .tab-pane.fade{opacity:1 !important;transition:none !important;}
+
+/* pane header (title + BBPS logo + radio pills) */
+#my-index .vm-rch-pane-wrap .custom-rch{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  background:#fff;border:1px solid #dbe4f3;border-radius:12px;
+  padding:10px 14px;margin:0 0 14px !important;position:relative;
+}
+#my-index .vm-rch-pane-wrap .custom-rch::after{display:none !important;}
+#my-index .vm-rch-pane-wrap .custom-rch > span{
+  font-size:14.5px;font-weight:800;color:#1e40af;letter-spacing:.2px;
+  background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:6px 16px;
+}
+#my-index .vm-rch-pane-wrap .custom-rch img{width:86px !important;margin:0 !important;float:none !important;}
+#my-index .vm-rch-pane-wrap .newclassbuttonlpg.Rechargeform-second{
+  display:flex !important;align-items:center;gap:16px;flex-wrap:wrap;
+  background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:7px 18px;
+}
+#my-index .vm-rch-pane-wrap .newclassbuttonlpg label{
+  margin:0 !important;font-size:13px;font-weight:700;color:#334155;cursor:pointer;float:none !important;
+}
+#my-index .vm-rch-pane-wrap .newclassbuttonlpg input[type="radio"]{accent-color:#1d4ed8;width:15px;height:15px;}
+
+/* bulk buttons (top-right of mobile pane) */
+#my-index .vm-rch-pane-wrap .custom-rch .btn{
+  border:0 !important;border-radius:999px !important;font-weight:700 !important;font-size:12.5px !important;
+  padding:8px 16px !important;color:#fff !important;float:none !important;margin:0 0 0 8px !important;
+  background:linear-gradient(135deg,#1e40af,#3b82f6) !important;
+  box-shadow:0 6px 14px -6px rgba(37,99,235,.6) !important;
+}
+#my-index .vm-rch-pane-wrap .custom-rch .btn a{color:#fff !important;text-decoration:none !important;}
+
+/* ---------- 6a. Full-width form grid (har tab ka form seedha page pe, ek line me) ---------- */
+#my-index .vm-rch-formgrid{display:flex;flex-wrap:nowrap;gap:6px 8px;align-items:flex-start;width:100%;margin-top:4px;}
+#my-index .vm-rch-formgrid .vm-rch-fcell{min-width:0;position:relative;}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .form-group{margin-bottom:0 !important;margin-top:0 !important;}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .form-line{border-bottom:none !important;margin:0 !important;height:auto !important;}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .form-group > div[style*="height:37px"],
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .txtelectricity1,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .form-group > div{border:0 !important;height:auto !important;margin-top:0 !important;}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .input-group{display:block;width:100%;}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .input-group .form-control{width:100% !important;border-radius:8px !important;}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid > .col-md-1,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid > .col-md-2,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid > .col-lg-1,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid > .col-sm-1{
+  flex:0 1 auto;width:auto !important;max-width:none;padding:0 !important;float:none !important;
+}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .form-control,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid input.form-control,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid select.form-control{
+  height:var(--vm-rch-h) !important;line-height:var(--vm-rch-lh) !important;padding-top:0 !important;padding-bottom:0 !important;
+  border-radius:10px !important;font-size:14px !important;margin-top:0 !important;
+}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .select2-container--default .select2-selection--single{
+  height:var(--vm-rch-h) !important;border:1px solid #cbd5e1 !important;border-radius:10px !important;background:#fff !important;
+}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height:var(--vm-rch-lh) !important;font-size:14px !important;padding-left:12px !important;
+}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .select2-container--default .select2-selection--single .select2-selection__arrow{height:var(--vm-rch-lh) !important;}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fbtn .btn,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fbtn2 .btn,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid input[type="submit"].btn,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid input[type="button"].btn{
+  height:var(--vm-rch-h) !important;margin:19px 0 0 !important;margin-left:0 !important;
+  padding:6px 20px !important;white-space:nowrap;border-radius:8px !important;font-size:13px !important;
+  border:0 !important;background:linear-gradient(135deg,#1e40af,#3b82f6) !important;color:#fff !important;
+  box-shadow:0 6px 14px rgba(37,99,235,.35) !important;
+}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fbtn2 .vm-rch-linkbtn{
+  display:inline-flex;align-items:center;justify-content:center;height:var(--vm-rch-h);margin:19px 0 0 !important;
+  padding:0 10px;font-size:11px;font-weight:700;text-decoration:none !important;border-radius:8px;white-space:nowrap;
+}
+#my-index .vm-rch-linkbtn--warn{border:1px solid #ff9600 !important;color:#ff9600 !important;background:#fffaf0;}
+#my-index .vm-rch-linkbtn--ok{border:1px solid #059669 !important;color:#059669 !important;background:#ecfdf5;}
+/* Icons + same 36px row (saari vm-rch-formgrid tabs) */
+#my-index .vm-rch-formgrid .vm-rch-fnum,
+#my-index .vm-rch-formgrid .vm-rch-famt,
+#my-index .vm-rch-formgrid .vm-rch-fop,
+#my-index .vm-rch-formgrid .vm-rch-fcircle{position:relative;}
+#my-index .vm-rch-formgrid .vm-rch-in-ico{
+  position:absolute;top:var(--vm-rch-row-top);left:0;width:34px;height:var(--vm-rch-h);margin:0;
+  display:flex;align-items:center;justify-content:center;color:#94a3b8;
+  font-size:17px;z-index:6;pointer-events:none;line-height:1;
+}
+#my-index .vm-rch-formgrid .vm-rch-in-ico--op{font-size:15px;}
+#my-index .vm-rch-formgrid .vm-rch-fnum .form-control{padding-left:32px !important;}
+#my-index .vm-rch-formgrid .vm-rch-famt .form-control{padding-left:30px !important;}
+#my-index .vm-rch-formgrid .vm-rch-fcircle .form-control{padding-left:32px !important;}
+#my-index .vm-rch-formgrid .vm-rch-fcircle:not(:has(.vm-rch-in-ico))::before{
+  font-family:FontAwesome;content:"\f041";position:absolute;top:var(--vm-rch-row-top);left:0;width:34px;height:var(--vm-rch-h);margin:0;
+  display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:16px;z-index:6;pointer-events:none;
+}
+#my-index .vm-rch-formgrid .vm-rch-fop .form-control{padding-left:28px !important;}
+#my-index .vm-rch-formgrid .vm-rch-fop .select2-container--default .select2-selection--single .select2-selection__rendered{
+  padding-left:28px !important;
+}
+#my-index .vm-rch-formgrid .vm-rch-fop:not(:has(.vm-rch-in-ico))::before,
+#my-index .vm-rch-formgrid .vm-rch-fnum:not(:has(.vm-rch-in-ico))::before,
+#my-index .vm-rch-formgrid .vm-rch-famt:not(:has(.vm-rch-in-ico))::before{
+  font-family:FontAwesome;position:absolute;top:var(--vm-rch-row-top);left:0;width:34px;height:var(--vm-rch-h);margin:0;
+  display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:16px;z-index:6;pointer-events:none;
+}
+#my-index .vm-rch-formgrid .vm-rch-fop:not(:has(.vm-rch-in-ico))::before{content:"\f0e7";}
+#my-index .vm-rch-formgrid .vm-rch-fnum:not(:has(.vm-rch-in-ico))::before{content:"\f007";}
+#my-index .vm-rch-formgrid .vm-rch-famt:not(:has(.vm-rch-in-ico))::before{content:"\f156";}
+#my-index .vm-rch-formgrid .vm-rch-fbtn2{flex:0 0 auto;display:flex;align-items:flex-end;}
+#my-index .vm-rch-formgrid .vm-rch-fbtn2 .btn,
+#my-index .vm-rch-formgrid .vm-rch-fbtn2 .vm-rch-linkbtn{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;
+  margin:19px 0 0 !important;padding:0 16px !important;box-sizing:border-box;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+  line-height:1 !important;font-size:13px !important;border-radius:8px !important;
+}
+#my-index .vm-rch-formgrid .vm-rch-fnum .vm-rch-infield-action{
+  position:absolute;top:var(--vm-rch-row-top);right:4px;margin:0;width:auto;z-index:7;padding:0;
+}
+#my-index .vm-rch-formgrid .vm-rch-fnum .vm-rch-infield-action .vm-rch-linkbtn{
+  margin:0 !important;height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;
+  padding:0 12px !important;font-size:12px !important;white-space:nowrap;box-sizing:border-box;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+  line-height:1 !important;border-radius:8px !important;
+}
+#my-index .vm-rch-formgrid .vm-rch-fnum:has(.vm-rch-infield-action:not([style*="display: none"])) input.form-control,
+#my-index .vm-rch-formgrid .vm-rch-fnum:has(#dthtvviewplan:not([style*="display: none"])) #txtdthcardno{
+  padding-right:132px !important;
+}
+#my-index #dthrchform.vm-rch-formgrid{align-items:flex-start;}
+/* DTH — purani StyleSheet.css (#dthtvviewplan float/7% width) hatao; row sab 36px */
+#my-index #dthrchform.vm-rch-formgrid .vm-rch-fcell{align-self:flex-start;}
+#my-index #dthtvviewplan,
+#my-index #checkplan{
+  width:auto !important;max-width:none !important;float:none !important;padding:0 !important;margin:0 !important;
+}
+#my-index #dthtvviewplan.vm-rch-infield-action{
+  position:absolute !important;top:var(--vm-rch-row-top,19px) !important;right:4px !important;margin:0 !important;
+  height:var(--vm-rch-h) !important;display:flex !important;align-items:center !important;z-index:7 !important;
+}
+#my-index #dthtvviewplan a#dthplaan,
+#my-index #dthtvviewplan a#dthplaan.vm-rch-linkbtn{
+  float:none !important;width:auto !important;height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;
+  margin:0 !important;padding:0 12px !important;padding-top:0 !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+  line-height:1 !important;font-size:12px !important;font-weight:700 !important;box-sizing:border-box;
+  background:#ecfdf5 !important;color:#059669 !important;border:1px solid #059669 !important;
+  box-shadow:none !important;border-radius:8px !important;
+}
+#my-index #checkplan.vm-rch-fbtn2 a.vm-rch-linkbtn{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;margin:19px 0 0 !important;
+  padding:0 12px !important;display:inline-flex !important;align-items:center !important;
+  background:#fffaf0 !important;color:#ff9600 !important;border:1px solid #ff9600 !important;box-shadow:none !important;
+}
+#my-index #dthrchform .select2-container--default .select2-selection--single,
+#my-index #dthrchform input.form-control,
+#my-index #dthrchform #btn.btn{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;box-sizing:border-box;
+}
+#my-index .vm-rch-fnum{flex:1.35 1 150px;min-width:0;}
+#my-index .vm-rch-fop{flex:1.25 1 140px;min-width:0;}
+#my-index .vm-rch-fcircle{flex:1 1 130px;min-width:0;}
+#my-index .vm-rch-famt{flex:1 1 120px;min-width:0;}
+#my-index .vm-rch-fbtn{flex:0 0 auto;}
+#my-index .vm-rch-formgrid .form-control{width:100% !important;}
+/* select2 safety: asli <select> kabhi dohra (duplicate) na dikhe — sirf select2 box dikhega */
+#my-index select.select2-hidden-accessible{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0 0 0 0) !important;border:0 !important;}
+/* double-container guard: galti se do select2 box ban jaye to doosra hamesha chhupa rahe */
+#my-index .select2-container + .select2-container{display:none !important;}
+/* Prepaid/Postpaid toggle lock (sirf chhupata hai, dikhata nahi — JS show() chalta rahega):
+   Prepaid tick = postpaid wala kabhi nahi dikhega; Postpaid tick = prepaid wala + View Plans kabhi nahi */
+#my-index #Rechargeform:has(#radio_1:checked) #droppostpaid{display:none !important;}
+#my-index #Rechargeform:has(#radio_2:checked) #dropprepaid{display:none !important;}
+#my-index #Rechargeform:has(#radio_2:checked) #viewplan{display:none !important;}
+#my-index .vm-rch-err{display:block;min-height:15px;margin:0 0 4px !important;font-size:11px;color:#e11d48;font-weight:600;}
+#my-index .vm-rch-radioinline{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12.5px;font-weight:600;color:#334155;}
+#my-index .vm-rch-radioinline input[type="radio"]{accent-color:#1d4ed8;width:15px;height:15px;margin:0 !important;}
+#my-index .vm-rch-radioinline label{margin:0 10px 0 0 !important;font-size:12.5px;font-weight:600;color:#334155;float:none !important;}
+/* Prepaid/Postpaid pill toggle — input ke upar, latest segmented design, ek line me */
+#my-index #Rechargeform .vm-rch-fnum{
+  position:relative;flex:1.65 1 280px !important;max-width:380px !important;min-width:248px !important;
+}
+#my-index #Rechargeform .vm-rch-fnum #txtmobile{padding-right:128px !important;padding-left:36px !important;font-size:14px !important;}
+#my-index #Rechargeform .vm-rch-fnum .vm-rch-in-ico{
+  position:absolute;top:var(--vm-rch-row-top);left:0;height:var(--vm-rch-h);width:36px;
+  display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:20px;
+  z-index:5;pointer-events:none;margin:0;
+}
+/* Mobile row — Prepaid/Postpaid input ke andar right side (absolute), old-project style radios */
+#my-index #Rechargeform .vm-rch-fnum .vm-rch-radioinline{
+  position:absolute;top:var(--vm-rch-row-top);right:12px;height:var(--vm-rch-h);max-width:none;
+  z-index:6;display:flex;align-items:center;flex-wrap:nowrap;background:none;border:0;border-radius:0;
+  padding:0;margin:0;width:auto;gap:0 3px;box-shadow:none;overflow:visible;pointer-events:auto;
+}
+#my-index #Rechargeform .vm-rch-fnum .vm-rch-radioinline input[type="radio"]{
+  position:static !important;opacity:1 !important;width:13px !important;height:13px !important;
+  margin:0 !important;flex:0 0 auto;pointer-events:auto;accent-color:#1d4ed8;cursor:pointer;
+}
+#my-index #Rechargeform .vm-rch-fnum .vm-rch-radioinline label{
+  margin:0 !important;padding:0 !important;border-radius:0 !important;cursor:pointer;
+  font-size:11px;font-weight:600;color:#475569;float:none !important;background:transparent !important;
+  line-height:1.1;box-shadow:none !important;white-space:nowrap;
+}
+#my-index #Rechargeform .vm-rch-fnum .vm-rch-radioinline label::before,
+#my-index #Rechargeform .vm-rch-fnum .vm-rch-radioinline label::after{content:none !important;display:none !important;}
+#my-index #Rechargeform .vm-rch-fnum .vm-rch-radioinline input:checked + label{
+  background:transparent !important;background-image:none !important;color:#1d4ed8 !important;
+  font-weight:700 !important;box-shadow:none !important;
+}
+#my-index #Rechargeform .vm-rch-radioinline #rchspinner{margin:0 2px;}
+#my-index .vm-rch-formgrid .vm-rch-fbtn .btn{margin:0 !important;height:var(--vm-rch-h) !important;}
+/* Mobile (prepaid) one-line: cells top se align; View Plans + Continue input-row ke barabar */
+#my-index #Rechargeform.vm-rch-formgrid{align-items:flex-start;}
+#my-index #Rechargeform .vm-rch-famt{position:relative;}
+#my-index #Rechargeform .vm-rch-famt #txtmobileamount{padding-right:12px !important;padding-left:34px !important;font-size:14px !important;}
+#my-index #Rechargeform .vm-rch-famt .vm-rch-in-ico{
+  position:absolute;top:var(--vm-rch-row-top);left:0;height:var(--vm-rch-h);width:34px;
+  display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:16px;
+  z-index:5;pointer-events:none;margin:0;
+}
+/* Mobile one-line compact bar — old project jaisa (36px fields, tight gap) */
+#my-index #Rechargeform.vm-rch-formgrid{gap:4px 6px !important;}
+#my-index #Rechargeform .vm-rch-fop{flex:1.15 1 130px !important;}
+#my-index #Rechargeform .vm-rch-fcircle{flex:1 1 118px !important;}
+#my-index #Rechargeform .vm-rch-famt{
+  flex:0 0 108px !important;min-width:100px !important;max-width:118px !important;width:108px !important;
+}
+#my-index #Rechargeform .form-control{height:var(--vm-rch-h) !important;line-height:var(--vm-rch-lh) !important;padding-top:0 !important;padding-bottom:0 !important;border-radius:10px !important;font-size:14px !important;}
+#my-index #Rechargeform .select2-container--default .select2-selection--single{height:var(--vm-rch-h) !important;border:1px solid #cbd5e1 !important;border-radius:10px !important;background:#fff !important;}
+#my-index #Rechargeform .select2-container--default .select2-selection--single .select2-selection__rendered{line-height:var(--vm-rch-lh) !important;font-size:14px !important;color:#0f172a !important;padding-left:12px !important;}
+#my-index #Rechargeform .select2-container--default .select2-selection--single .select2-selection__arrow{height:var(--vm-rch-lh) !important;right:6px !important;}
+#my-index #Rechargeform .vm-rch-fbtn2 .btn{height:var(--vm-rch-h) !important;margin:19px 0 0 !important;white-space:nowrap;border-radius:10px !important;font-size:14px !important;padding:0 22px !important;}
+/* Mobile row — input / select2 / native select / Continue = same 36px (beat StyleSheet + pane 42px) */
+#my-index #Rechargeform.vm-rch-formgrid .select2-container{
+  width:100% !important;height:var(--vm-rch-h) !important;vertical-align:top !important;margin:0 !important;
+}
+#my-index #Rechargeform .select2-container--default .select2-selection--single{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;
+  margin-top:0 !important;padding-top:0 !important;box-sizing:border-box !important;
+  border:1px solid #cbd5e1 !important;border-radius:10px !important;background:#fff !important;
+  position:relative !important;display:flex !important;align-items:center !important;
+}
+#my-index #Rechargeform .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height:var(--vm-rch-lh) !important;padding-top:0 !important;padding-bottom:0 !important;
+  font-size:14px !important;color:#0f172a !important;padding-left:12px !important;
+}
+#my-index #Rechargeform .select2-container--default .select2-selection--single .select2-selection__arrow,
+#my-index .rechargewidth #Rechargeform .select2-container--default .select2-selection--single .select2-selection__arrow{
+  position:absolute !important;top:0 !important;right:8px !important;left:auto !important;bottom:0 !important;
+  width:22px !important;height:100% !important;max-height:100% !important;
+  padding:0 !important;margin:0 !important;float:none !important;
+  display:flex !important;align-items:center !important;justify-content:center !important;
+}
+#my-index #Rechargeform .select2-container--default .select2-selection--single .select2-selection__arrow b{
+  position:static !important;top:auto !important;margin:0 !important;
+  border-color:#64748b transparent transparent transparent !important;
+}
+#my-index #Rechargeform input.form-control,
+#my-index #Rechargeform select#ddlcircle.form-control{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;
+  box-sizing:border-box !important;line-height:var(--vm-rch-lh) !important;
+  padding-top:0 !important;padding-bottom:0 !important;
+}
+#my-index #Rechargeform .rechargebutton input#btn,
+#my-index #Rechargeform .vm-rch-fbtn2 input[type="submit"].btn,
+#my-index #Rechargeform .vm-rch-fbtn2 input[type="button"].btn{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;
+  padding:0 20px !important;padding-top:0 !important;margin:19px 0 0 !important;
+  line-height:1 !important;box-sizing:border-box !important;border-radius:10px !important;font-size:14px !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+}
+#my-index #prepaid #viewplan,
+#my-index #Rechargeform #viewplan.vm-rch-fbtn2--aux{
+  width:auto !important;float:none !important;position:static !important;top:auto !important;right:auto !important;
+  left:auto !important;padding:0 !important;margin:0 !important;flex:0 0 auto !important;align-items:flex-end !important;
+}
+#my-index #Rechargeform #viewplan.vm-rch-fbtn2--aux:not([style*="display: none"]):not([style*="display:none"]){
+  display:flex !important;
+}
+#my-index #Rechargeform #viewplan .view-plans-button,
+#my-index #prepaid #viewplan a.view-plans-button{
+  float:none !important;position:static !important;top:auto !important;right:auto !important;
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;
+  margin:19px 0 0 !important;padding:0 14px !important;display:inline-flex !important;align-items:center !important;
+  justify-content:center !important;border-radius:10px !important;font-size:13px !important;font-weight:700 !important;
+  line-height:1 !important;box-sizing:border-box !important;white-space:nowrap;text-decoration:none !important;
+  border:1px solid #cbd5e1 !important;background:#f1f5f9 !important;color:#1d4ed8 !important;box-shadow:none !important;
+}
+#my-index .vm-rch-linkbtn--plan{border:1px solid #cbd5e1 !important;background:#f1f5f9 !important;color:#1d4ed8 !important;}
+#my-index #Rechargeform .vm-rch-viewplan{margin-top:0 !important;}
+#my-index .vm-rch-viewplan-in a.view-plans-button{
+  display:inline-block;font-size:12px;font-weight:700;color:#1d4ed8;text-decoration:none !important;
+  border:1px solid #93c5fd;border-radius:999px;padding:5px 16px;background:#eff6ff;white-space:nowrap;
+}
+#my-index .vm-rch-viewplan-in a.view-plans-button:hover{background:#dbeafe;}
+/* ---------- 6. Form controls inside panes ---------- */
+#my-index .vm-rch-pane-wrap .form-group{margin-bottom:10px !important;}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .form-group,
+#my-index .vm-rch-pane-wrap .vm-rch-loan-grid .form-group{margin-bottom:0 !important;}
+#my-index .vm-rch-pane-wrap .input-group{
+  border:1px solid #cbd5e1 !important;border-radius:10px !important;background:#fff !important;
+  overflow:hidden;margin:0 !important;height:42px !important;
+}
+#my-index .vm-rch-pane-wrap .input-group .form-control{
+  border:0 !important;box-shadow:none !important;height:40px !important;font-size:13.5px !important;border-radius:0 !important;
+}
+#my-index .vm-rch-pane-wrap input[type="text"].form-control,
+#my-index .vm-rch-pane-wrap input[type="number"].form-control,
+#my-index .vm-rch-pane-wrap select.form-control{
+  height:42px !important;border:1px solid #cbd5e1 !important;border-radius:10px !important;
+  font-size:13.5px !important;background:#fff !important;box-shadow:none !important;color:#0f172a !important;
+}
+#my-index .vm-rch-pane-wrap input.form-control:focus,
+#my-index .vm-rch-pane-wrap select.form-control:focus{
+  border-color:#3b82f6 !important;box-shadow:0 0 0 3px rgba(59,130,246,.18) !important;outline:0 !important;
+}
+#my-index .vm-rch-pane-wrap .input-group-addon{
+  background:#eff6ff !important;border:0 !important;border-left:1px solid #dbe4f3 !important;
+}
+#my-index .vm-rch-pane-wrap .mycustomicon{color:#1d4ed8 !important;}
+#my-index .vm-rch-pane-wrap p[id$="message"],#my-index .vm-rch-pane-wrap p[class*="message"]{font-size:10.5px !important;}
+
+/* grey action buttons -> blue gradient pills (beats inline grey) */
+#my-index .vm-rch-pane-wrap input[type="submit"].btn,
+#my-index .vm-rch-pane-wrap input[type="button"].btn,
+#my-index .vm-rch-pane-wrap button.btn{
+  border:0 !important;border-radius:999px !important;font-weight:700 !important;
+  min-height:42px !important;padding:9px 26px !important;font-size:13.5px !important;
+  color:#fff !important;background-color:#2563eb !important;
+  background-image:linear-gradient(135deg,#1e40af,#3b82f6) !important;
+  box-shadow:0 8px 16px -6px rgba(37,99,235,.55) !important;
+  float:none !important;width:auto !important;white-space:nowrap;
+}
+#my-index .vm-rch-pane-wrap input[type="submit"].btn:hover,
+#my-index .vm-rch-pane-wrap input[type="button"].btn:hover,
+#my-index .vm-rch-pane-wrap button.btn:hover{filter:brightness(1.08);}
+
+/* ---------- 6b. Form grid — Mobile jaisa (pane ke 42px rules ko override) ---------- */
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .input-group,
+#my-index .vm-rch-pane-wrap .vm-rch-loan-grid .input-group{
+  display:block !important;width:100% !important;height:auto !important;
+  border:0 !important;border-radius:0 !important;overflow:visible !important;background:transparent !important;
+}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid .input-group .form-control,
+#my-index .vm-rch-pane-wrap .vm-rch-loan-grid .input-group .form-control{
+  height:var(--vm-rch-h) !important;border:1px solid #cbd5e1 !important;border-radius:8px !important;
+  font-size:13px !important;box-shadow:none !important;
+}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid input[type="text"].form-control,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid input[type="number"].form-control,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid input[type="password"].form-control,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid select.form-control,
+#my-index .vm-rch-pane-wrap .vm-rch-loan-grid input.form-control,
+#my-index .vm-rch-pane-wrap .vm-rch-loan-grid select.form-control{
+  height:var(--vm-rch-h) !important;line-height:var(--vm-rch-lh) !important;border:1px solid #cbd5e1 !important;
+  border-radius:10px !important;font-size:14px !important;padding-top:0 !important;padding-bottom:0 !important;
+}
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid input[type="submit"].btn,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid input[type="button"].btn,
+#my-index .vm-rch-pane-wrap .vm-rch-formgrid button.btn,
+#my-index .vm-rch-pane-wrap .vm-rch-loan-grid input[type="submit"].btn,
+#my-index .vm-rch-pane-wrap .vm-rch-loan-grid input[type="button"].btn{
+  min-height:var(--vm-rch-h) !important;height:var(--vm-rch-h) !important;margin:19px 0 0 !important;margin-left:0 !important;
+  padding:0 20px !important;border-radius:10px !important;font-size:14px !important;
+  float:none !important;width:auto !important;
+}
+#my-index .vm-rch-formgrid > .col-md-1,
+#my-index .vm-rch-formgrid > .col-md-2,
+#my-index .vm-rch-formgrid > .col-md-3,
+#my-index .vm-rch-formgrid > .col-md-4,
+#my-index .vm-rch-loan-grid > [class*="col-"]{
+  flex:1 1 110px;min-width:0;padding-left:4px !important;padding-right:4px !important;
+  float:none !important;width:auto !important;max-width:none !important;
+}
+#my-index .vm-rch-loan-grid{
+  display:flex !important;flex-wrap:nowrap !important;align-items:flex-start !important;
+  gap:6px 8px !important;width:100% !important;margin:4px 0 0 !important;
+}
+#my-index .vm-rch-formgrid .vm-rch-famt{position:relative;}
+#my-index .vm-rch-formgrid .vm-rch-famt #electricityAmount,
+#my-index .vm-rch-formgrid .vm-rch-famt #wateramount,
+#my-index .vm-rch-formgrid .vm-rch-famt #gasamount,
+#my-index .vm-rch-formgrid .vm-rch-famt #lpggasamount,
+#my-index .vm-rch-formgrid .vm-rch-famt #broadbandamount,
+#my-index .vm-rch-formgrid .vm-rch-famt #FastTagAmount{padding-right:92px !important;}
+#my-index #gasinfo .newpipedgas.vm-rch-formgrid,
+#my-index #gasinfo .gasinfo-class-newaddclass.vm-rch-formgrid{
+  margin-top:8px;width:100%;overflow-x:auto;overflow-y:visible;
+}
+#my-index .vm-rch-formgrid .wamount-input-type,
+#my-index .vm-rch-formgrid #btngetviewbill{
+  position:absolute !important;top:23px !important;right:4px !important;
+  width:auto !important;padding:0 !important;margin:0 !important;float:none !important;z-index:5;
+}
+#my-index .vm-rch-formgrid .wamount-input-type .form-group,
+#my-index .vm-rch-formgrid #btngetviewbill .form-group{margin:0 !important;}
+#my-index .vm-rch-formgrid .wamount-input-type input.btn,
+#my-index .vm-rch-formgrid #btngetviewbill input.btn{
+  margin:0 !important;height:var(--vm-rch-inbtn-h) !important;min-height:var(--vm-rch-inbtn-h) !important;padding:4px 10px !important;
+  font-size:11px !important;border-radius:6px !important;white-space:nowrap;
+  background:#f1f5f9 !important;color:#1d4ed8 !important;
+  box-shadow:none !important;border:1px solid #cbd5e1 !important;
+}
+#my-index .vm-rch-pane-wrap .custom-rch img[src*="BBPS"],
+#my-index .vm-rch-formgrid img[src*="BBPSlogo"]{display:none !important;}
+#my-index .vm-rch-formgrid .form-line .input-group-addon.in-addon{display:none !important;}
+#my-index .vm-rch-formgrid i.mycustomicon.fa-angle-down{display:none !important;}
+#my-index .vm-rch-pane-wrap .custom-rch .vm-rch-tabactions{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto;align-items:center;}
+
+/* ---------- 7. Best-offer / plan / customer-info strips ---------- */
+#my-index .vm-rch-pane-wrap #DTHCustomerInfo,
+#my-index .vm-rch-pane-wrap #ElectricityCustomerInfo,
+#my-index .vm-rch-pane-wrap #gasCustomerInfo,
+#my-index .vm-rch-pane-wrap #lpggasCustomerInfo,
+#my-index .vm-rch-pane-wrap #fasttagCustomerInfo,
+#my-index .vm-rch-pane-wrap #insurCustomerInfo,
+#my-index .vm-rch-pane-wrap #broadbandinfo{
+  background:#fff !important;border:1px dashed #93c5fd !important;border-radius:12px !important;
+  padding:12px 14px !important;margin-top:12px;
+}
+/* Recommended plans (PrePaidbestplan) — card list */
+#my-index .vm-rch-bestplan-wrap{
+  background:#fff !important;border:1px solid #e2e8f0 !important;border-radius:14px !important;
+  margin-top:12px !important;padding:0 !important;overflow:hidden;
+  box-shadow:0 10px 28px -18px rgba(30,64,175,.28) !important;
+}
+#my-index .vm-rch-bestplan-head{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  background:linear-gradient(135deg,#eff6ff 0%,#f8fafc 100%);
+  border-bottom:1px solid #e2e8f0;
+}
+#my-index .vm-rch-bestplan-head__icon{
+  width:40px;height:40px;border-radius:12px;flex-shrink:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;font-size:16px;
+  box-shadow:0 4px 12px rgba(37,99,235,.35);
+}
+#my-index .vm-rch-bestplan-head__title{display:block;font-size:14px;font-weight:800;color:#0f172a;line-height:1.25;}
+#my-index .vm-rch-bestplan-head__sub{display:block;margin-top:2px;font-size:11.5px;font-weight:600;color:#64748b;line-height:1.3;}
+#my-index #BestOfferTbl.vm-rch-bestplan-grid,
+#my-index #BestOfferTbl.form-line.vm-rch-bestplan-grid{
+  display:grid !important;grid-template-columns:1fr;gap:10px;
+  align-items:stretch !important;justify-content:stretch !important;
+  float:none !important;width:100% !important;padding:14px 16px 16px !important;margin:0 !important;
+  max-height:min(380px,52vh);overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:thin;scrollbar-color:#cbd5e1 transparent;
+}
+#my-index #BestOfferTbl.vm-rch-bestplan-grid::-webkit-scrollbar{width:6px;}
+#my-index #BestOfferTbl.vm-rch-bestplan-grid::-webkit-scrollbar-thumb{
+  background:#cbd5e1;border-radius:999px;
+}
+#my-index .vm-rch-plan-offer{margin:0 !important;padding:0 !important;width:100% !important;float:none !important;}
+#my-index .vm-rch-plan-offer__card{
+  display:grid !important;grid-template-columns:92px 1fr auto;gap:12px 14px;align-items:center;
+  width:100% !important;margin:0 !important;padding:12px 14px !important;
+  border:1px solid #e2e8f0 !important;border-radius:12px !important;
+  background:#fff !important;cursor:pointer;text-align:left !important;
+  box-shadow:0 2px 8px -6px rgba(15,23,42,.12) !important;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+#my-index .vm-rch-plan-offer__card:hover{
+  border-color:#93c5fd !important;background:#f8fbff !important;
+  box-shadow:0 8px 20px -12px rgba(37,99,235,.45) !important;
+}
+#my-index .vm-rch-plan-offer.is-selected .vm-rch-plan-offer__card{
+  border-color:#2563eb !important;background:#eff6ff !important;
+  box-shadow:0 0 0 2px rgba(37,99,235,.18) !important;
+}
+#my-index .vm-rch-plan-offer__price{
+  display:flex;align-items:center;justify-content:center;min-height:48px;padding:8px 10px;
+  border-radius:10px;font-size:16px;font-weight:800;line-height:1.1;color:#fff !important;
+  background:linear-gradient(135deg,#1e40af,#3b82f6) !important;
+  box-shadow:0 4px 12px rgba(37,99,235,.32);
+}
+#my-index .vm-rch-plan-offer__desc{
+  font-size:13px;font-weight:500;line-height:1.45;color:#334155 !important;
+  white-space:normal !important;word-break:break-word;overflow:visible;text-overflow:clip;
+}
+#my-index .vm-rch-plan-offer__action{
+  flex-shrink:0;font-size:11px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;
+  color:#1d4ed8 !important;padding:7px 12px;border-radius:999px;
+  background:#eff6ff !important;border:1px solid #bfdbfe !important;
+}
+#my-index .vm-rch-plan-offer.is-selected .vm-rch-plan-offer__action{
+  background:#2563eb !important;border-color:#1d4ed8 !important;color:#fff !important;
+}
+/* legacy col-sm-4 rows (fallback) */
+#my-index .bestoffer-predaidc .col-sm-4{display:flex;align-items:center;gap:8px;margin-bottom:10px !important;}
+#my-index .bestoffer-predaidc .col-sm-4 button{
+  width:auto !important;min-width:52px;text-align:center;padding:10px 12px !important;
+  border:1px solid #bfdbfe !important;border-radius:10px !important;
+  background:#eff6ff !important;color:#1e40af !important;font-weight:800 !important;font-size:13px !important;
+}
+/* plan tables */
+#my-index .vm-rch-pane-wrap .for-prepaid{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;}
+#my-index .vm-rch-pane-wrap .for-prepaid tr th,
+#my-index .vm-rch-pane-wrap .for-prepaid tr td{
+  border:1px solid #e2e8f0 !important;text-align:center;width:auto !important;
+  white-space:nowrap;padding:7px 10px;font-size:13px !important;
+}
+#my-index .vm-rch-pane-wrap .for-prepaid tr th{
+  background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;font-weight:700;
+}
+#my-index .vm-rch-pane-wrap .for-prepaid tr:nth-child(even) td{background:#f1f5ff;}
+
+/* ---------- 8. Bottom row: number card + offers + recent ---------- */
+#my-index .vm-rch-bottom{margin-top:2px;}
+#my-index .vm-rch-side .body{padding:0 !important;background:transparent !important;}
+#my-index .vm-rch-number{
+  background:#ffffff !important;border:1px solid #dbe4f3 !important;border-radius:16px !important;
+  box-shadow:0 10px 24px -14px rgba(15,23,42,.25) !important;
+  min-height:86px !important;height:auto !important;margin-bottom:14px !important;
+  display:none !important;flex-direction:column;align-items:center;justify-content:center;padding:10px !important;
+}
+#my-index .vm-rch-number.vm-rch-number--visible{display:flex !important;}
+#my-index .vm-rch-number::before{
+  content:"Mobile Number";font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;
+}
+#my-index .vm-rch-number #numbershowmobile{
+  font-size:34px !important;font-weight:800 !important;color:#0f172a !important;
+  margin:0 !important;display:block !important;letter-spacing:1px;min-height:40px;
+}
+#my-index .vm-rch-offersbody{
+  padding:0 !important;background:transparent !important;margin-bottom:14px;
+  border:1px solid #dbe4f3;border-radius:0 !important;overflow:hidden;
+  box-shadow:0 12px 28px -16px rgba(15,23,42,.28);
+}
+#my-index .vm-rch-offershead{
+  position:relative;background:#ffffff !important;
+  border:0;border-bottom:1px solid #e2e8f0;border-radius:0;
+  padding:14px 16px;margin:0;
+}
+#my-index .vm-rch-offershead::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#1e40af,#3b82f6);border-radius:0 3px 3px 0;
+}
+#my-index .vm-rch-offershead.changeback-four-design{background-image:none !important;}
+#my-index .vm-rch-offershead ul,#my-index .vm-rch-offershead li{list-style:none;margin:0;padding:0;}
+#my-index .vm-rch-offershead-in{display:flex;align-items:center;gap:12px;padding-left:6px;}
+#my-index .vm-rch-offershead-ico{
+  flex:0 0 auto;width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#1e40af,#3b82f6);border:0;border-radius:14px;
+  box-shadow:0 8px 18px -8px rgba(37,99,235,.55);
+}
+#my-index .vm-rch-offershead-ico img{height:22px;width:auto;display:block;filter:brightness(0) invert(1);}
+#my-index .vm-rch-offershead-text{flex:1;min-width:0;}
+#my-index .vm-rch-offershead h2{
+  margin:0;font-size:16px;font-weight:800;color:#0f172a;letter-spacing:.15px;line-height:1.2;
+}
+#my-index .vm-rch-offershead-sub{display:block;margin-top:3px;font-size:11px;font-weight:600;color:#64748b;line-height:1.25;}
+#my-index .vm-rch-offershead-badge{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;
+  font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.35px;color:#1d4ed8;
+  background:#fff;border:1px solid #bfdbfe;border-radius:999px;padding:6px 11px;
+  box-shadow:0 4px 10px -6px rgba(37,99,235,.25);
+}
+#my-index .vm-rch-offershead-badge i{font-size:11px;color:#2563eb;}
+#my-index .vm-rch-offers,
+#my-index #fillopt.vm-rch-offers.card{
+  background:#fff;border:0;border-radius:0 !important;
+  box-shadow:none;padding:10px 12px 12px !important;margin-bottom:0;max-height:380px;overflow:auto;
+}
+body.saas-admin-ui.layoutt-retailer #my-index #fillopt.card.four-design-table-design{
+  --bs-border-radius:0;border-radius:0 !important;
+}
+#my-index .vm-rch-offers #showoptcomm.vm-rch-offer-table,
+#my-index .vm-rch-offers #showoptcomm{
+  border-radius:0 !important;overflow:visible;
+}
+/* Your Offers — table (lite gray header) */
+#my-index .vm-rch-offers .vm-rch-offer-table,#my-index .vm-rch-offers #showoptcomm{
+  width:100% !important;border:0 !important;margin:0 !important;
+  border-collapse:separate !important;border-spacing:0 !important;
+}
+/* Your Offers thead — top corners square (no pill radius on OPERATOR / OFFER columns) */
+body.saas-admin-ui.layoutt-retailer #my-index #fillopt.vm-rch-offers #showoptcomm.vm-rch-offer-table.table > thead > tr.operator-showoptcomm > th,
+#my-index .vm-rch-offers #showoptcomm thead tr.operator-showoptcomm th,
+#my-index .vm-rch-offers #showoptcomm tr.operator-showoptcomm th{
+  background:linear-gradient(180deg,#f8fafc,#eef2f7) !important;color:#334155 !important;
+  font-size:10.5px !important;font-weight:800 !important;text-transform:uppercase;letter-spacing:.5px;
+  padding:10px 8px !important;border:0 !important;border-bottom:2px solid #dbeafe !important;
+  white-space:nowrap;position:sticky;top:0;z-index:2;
+  box-shadow:0 1px 0 #fff inset;
+  border-radius:0 !important;
+  -webkit-border-radius:0 !important;
+  border-top-left-radius:0 !important;
+  border-top-right-radius:0 !important;
+}
+body.saas-admin-ui.layoutt-retailer #my-index #fillopt.vm-rch-offers #showoptcomm.vm-rch-offer-table.table > thead > tr.operator-showoptcomm > th:first-child,
+#my-index .vm-rch-offers #showoptcomm thead tr.operator-showoptcomm th:first-child,
+#my-index .vm-rch-offers #showoptcomm tr.operator-showoptcomm th:first-child{
+  border-radius:0 !important;
+  border-top-left-radius:0 !important;border-bottom-left-radius:0 !important;
+  padding-left:10px !important;
+}
+body.saas-admin-ui.layoutt-retailer #my-index #fillopt.vm-rch-offers #showoptcomm.vm-rch-offer-table.table > thead > tr.operator-showoptcomm > th:last-child,
+#my-index .vm-rch-offers #showoptcomm thead tr.operator-showoptcomm th:last-child,
+#my-index .vm-rch-offers #showoptcomm tr.operator-showoptcomm th:last-child{
+  border-radius:0 !important;
+  border-top-right-radius:0 !important;border-bottom-right-radius:0 !important;
+  padding-right:10px !important;
+}
+#my-index .vm-rch-offers #showoptcomm thead{border-radius:0 !important;}
+#my-index .vm-rch-offers #showoptcomm thead tr.operator-showoptcomm{border-radius:0 !important;}
+#my-index .vm-rch-offers #showoptcomm thead .vm-rch-offer-th-status{text-align:center !important;}
+#my-index .vm-rch-offers #showoptcomm thead .vm-rch-offer-th-amt{text-align:right !important;}
+#my-index .vm-rch-offers #showoptcomm tbody tr.vm-rch-offer-row td{
+  padding:9px 6px !important;border:0 !important;border-bottom:1px solid #f1f5f9 !important;
+  font-size:12.5px !important;background:#fff !important;color:#334155;vertical-align:middle !important;
+}
+#my-index .vm-rch-offers #showoptcomm tbody tr.vm-rch-offer-row:last-child td{border-bottom:0 !important;}
+#my-index .vm-rch-offers #showoptcomm tbody tr.vm-rch-offer-row:hover td{background:#f8fafc !important;}
+#my-index .vm-rch-offer-op-wrap{display:flex;align-items:center;gap:7px;min-width:0;}
+#my-index .vm-rch-offer-op-avatar{
+  flex:0 0 auto;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#475569;background:#f1f5f9;border:0;
+}
+#my-index .vm-rch-offer-op-name{font-weight:600;color:#0f172a;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;}
+#my-index .vm-rch-offer-st-cell{text-align:center !important;}
+#my-index .vm-rch-offer-amt-cell{text-align:right !important;white-space:nowrap;}
+#my-index .vm-rch-offer-status{
+  display:inline-flex;align-items:center;justify-content:center;gap:4px;
+  padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;line-height:1.3;
+  text-transform:none;white-space:nowrap;
+}
+#my-index .vm-rch-offer-status--live{color:#059669;background:#ecfdf5;border:0;}
+#my-index .vm-rch-offer-status--blocked{color:#dc2626;background:#fef2f2;border:0;font-size:10px;}
+#my-index .vm-rch-offer-dot{width:5px;height:5px;border-radius:50%;flex:0 0 auto;}
+#my-index .vm-rch-offer-status--live .vm-rch-offer-dot{background:#10b981;box-shadow:none;animation:none;}
+#my-index .vm-rch-offer-status--blocked .vm-rch-offer-dot{background:#ef4444;box-shadow:none;}
+#my-index .vm-rch-offer-val-chip{
+  display:inline-flex;align-items:center;gap:2px;padding:0;border:0;border-radius:0;box-shadow:none;
+  font-size:12.5px;font-weight:700;color:#1d4ed8;background:transparent;
+}
+#my-index .vm-rch-offer-val-sym{font-size:12px;font-weight:600;color:#94a3b8;margin-right:2px;}
+/* Recent Activity — full-width table, compact horizontal padding */
+#my-index #reportchk.vm-rch-recent.card,
+#my-index #reportchk.card.four-design-table-design.vm-rch-recent{
+  background:#fff !important;border:1px solid #dbe4f3 !important;border-radius:0 !important;
+  box-shadow:0 12px 28px -16px rgba(15,23,42,.28) !important;
+  padding:0 !important;margin:0 !important;overflow:hidden;
+}
+#my-index .vm-rch-recent .vm-rch-recent-body{padding:0 !important;margin:0 !important;background:transparent !important;}
+#my-index .vm-rch-recenthead{
+  background:#fff;border:0;border-bottom:1px solid #e2e8f0;padding:12px 14px;position:relative;
+}
+#my-index .vm-rch-recenthead::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#0b1220,#334155);border-radius:0 3px 3px 0;
+}
+#my-index .vm-rch-recenthead-in{display:flex;align-items:center;gap:12px;padding-left:6px;}
+#my-index .vm-rch-recenthead-ico{
+  flex:0 0 auto;width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#0b1220,#374151);border-radius:12px;color:#fff;font-size:16px;
+  box-shadow:0 8px 18px -8px rgba(15,23,42,.45);
+}
+#my-index .vm-rch-recenthead-text{flex:1;min-width:0;}
+#my-index .vm-rch-recenthead h2{margin:0;font-size:15px;font-weight:800;color:#0f172a;line-height:1.2;}
+#my-index .vm-rch-recenthead-sub{display:block;margin-top:2px;font-size:11px;font-weight:600;color:#64748b;}
+#my-index .vm-rch-recent .vm-rch-recent-scroll,
+#my-index .vm-rch-recent .table-responsive.vm-rch-recent-scroll{
+  width:100% !important;margin:0 !important;padding:0 !important;border:0 !important;
+  border-radius:0 !important;box-shadow:none !important;overflow-x:auto;overflow-y:visible;
+}
+#my-index .vm-rch-recent .dataTables_wrapper{
+  width:100% !important;margin:0 !important;padding:0 !important;border:0 !important;
+  border-radius:0 !important;box-shadow:none !important;overflow:visible !important;
+}
+#my-index .vm-rch-recent #example_wrapper{width:100% !important;}
+#my-index .vm-rch-recent table.vm-rch-recent-table,
+#my-index .vm-rch-recent #example.vm-rch-recent-table{
+  width:100% !important;min-width:100% !important;max-width:100% !important;
+  table-layout:fixed !important;border-collapse:separate !important;border-spacing:0 !important;
+  margin:0 !important;background:#fff !important;border:0 !important;
+}
+#my-index .vm-rch-recent table.vm-rch-recent-table.example-recharge{background:#fff !important;}
+body.saas-admin-ui.layoutt-retailer #my-index #reportchk #example.vm-rch-recent-table > thead > tr.vm-rch-recent-thead > th.vm-rch-recent-th,
+#my-index .vm-rch-recent table thead th.vm-rch-recent-th,
+#my-index .vm-rch-recent table thead th{
+  background:linear-gradient(180deg,#111827,#1f2937) !important;color:#f8fafc !important;
+  font-size:10.5px !important;font-weight:800 !important;text-transform:uppercase;letter-spacing:.45px;
+  padding:9px 6px !important;border:0 !important;border-bottom:2px solid #374151 !important;
+  white-space:nowrap;vertical-align:middle !important;
+  border-radius:0 !important;-webkit-border-radius:0 !important;
+}
+#my-index .vm-rch-recent table thead th:first-child{
+  padding-left:12px !important;
+  border-radius:0 !important;border-top-left-radius:0 !important;border-bottom-left-radius:0 !important;
+}
+#my-index .vm-rch-recent table thead th:last-child{
+  padding-right:12px !important;
+  border-radius:0 !important;border-top-right-radius:0 !important;border-bottom-right-radius:0 !important;
+}
+body.saas-admin-ui.layoutt-retailer #my-index #reportchk #example.vm-rch-recent-table thead > tr > th,
+body.saas-admin-ui.layoutt-retailer #my-index #reportchk table.dataTable thead > tr > th,
+#my-index .vm-rch-recent .dataTables_wrapper table.dataTable thead th{
+  border-radius:0 !important;-webkit-border-radius:0 !important;
+  border-top-left-radius:0 !important;border-top-right-radius:0 !important;
+  border-bottom-left-radius:0 !important;border-bottom-right-radius:0 !important;
+}
+#my-index .vm-rch-recent table thead tr.vm-rch-recent-thead,
+#my-index .vm-rch-recent table thead{border-radius:0 !important;}
+#my-index .vm-rch-recent-th--op{width:22%;}
+#my-index .vm-rch-recent-th--id{width:11%;}
+#my-index .vm-rch-recent-th--mob{width:17%;}
+#my-index .vm-rch-recent-th--amt{width:11%;text-align:right !important;}
+#my-index .vm-rch-recent-th--oid{width:18%;}
+#my-index .vm-rch-recent-th--time{width:21%;text-align:right !important;}
+#my-index .vm-rch-recent table tbody td{
+  font-size:12px !important;color:#334155;padding:8px 6px !important;
+  border:0 !important;border-bottom:1px solid #eef2f7 !important;vertical-align:middle !important;
+  overflow:hidden;text-overflow:ellipsis;
+}
+#my-index .vm-rch-recent table tbody td:first-child{padding-left:12px !important;}
+#my-index .vm-rch-recent table tbody td:last-child{padding-right:12px !important;}
+#my-index .vm-rch-recent table tbody td:nth-child(4){text-align:right;font-weight:700;color:#0f172a;}
+#my-index .vm-rch-recent table tbody td:nth-child(6){text-align:right;}
+#my-index .vm-rch-recent table tbody td p{margin:0;font-size:12px;line-height:1.3;}
+#my-index .vm-rch-recent table tbody tr:nth-child(even) td{background:#f8fafc !important;}
+#my-index .vm-rch-recent table tbody tr:hover td{background:#eff6ff !important;}
+#my-index .vm-rch-recent table tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 #3b82f6;}
+#my-index .vm-rch-recent .dataTables_filter,
+#my-index .vm-rch-recent .dataTables_length,
+#my-index .vm-rch-recent .dataTables_info,
+#my-index .vm-rch-recent .dataTables_paginate{display:none !important;}
+
+/* ---------- 9. Offer modals on this page ---------- */
+#my-index.vm-rch-page ~ .modal .modal-content,
+body .modal .vm-rch-modalbox{border-radius:16px;overflow:hidden;border:0;}
+body .modal .modal-header.vm-rch-mhead{
+  background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;border:0;padding:13px 18px;
+}
+body .modal .modal-header.vm-rch-mhead .modal-title{color:#fff;font-weight:800;font-size:15px;}
+body .modal .modal-header.vm-rch-mhead .close{color:#fff;opacity:.9;}
+
+/* ---------- 9b. View Plans modal (#offerPlanModal) — latest layout ---------- */
+#offerPlanModal.vm-rch-plan-modal-wrap .modal-dialog.vm-rch-plan-dialog{
+  max-width:940px;width:calc(100% - 28px);margin:68px auto 20px !important;
+}
+#offerPlanModal .vm-rch-plan-modal{
+  border-radius:18px !important;box-shadow:0 24px 48px -20px rgba(15,23,42,.45) !important;
+  border:1px solid #e2e8f0 !important;overflow:hidden;
+}
+#offerPlanModal .vm-rch-plan-modal__header{padding:16px 18px 14px !important;}
+#offerPlanModal .vm-rch-plan-modal__headrow{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 !important;width:100%;
+  position:relative;padding-right:36px;
+}
+#offerPlanModal .vm-rch-plan-modal__title{
+  flex:0 0 auto;min-width:140px;padding:0 !important;margin:0 !important;float:none !important;width:auto !important;
+}
+#offerPlanModal .vm-rch-plan-modal__eyebrow{
+  display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.75);margin-bottom:2px;
+}
+#offerPlanModal .compnyname1{font-weight:800 !important;color:#fff !important;font-size:20px !important;line-height:1.2;}
+#offerPlanModal .vm-rch-plan-modal__plans-label{font-size:18px;font-weight:700;color:#fff;margin-left:4px;}
+#offerPlanModal .vm-rch-plan-modal__filters{
+  flex:1 1 340px;padding:0 !important;margin:0 !important;float:none !important;width:auto !important;max-width:none !important;
+}
+#offerPlanModal .vm-rch-plan-modal__filters-form{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%;margin:0;
+}
+#offerPlanModal .icon-select{
+  flex:1 1 150px;min-width:130px;margin:0 !important;position:relative;float:none !important;width:auto !important;
+}
+#offerPlanModal .icon-select select{
+  width:100% !important;height:42px !important;line-height:40px !important;
+  border:1px solid rgba(255,255,255,.45) !important;border-radius:10px !important;
+  background:rgba(255,255,255,.96) !important;color:#0f172a !important;font-size:13px !important;font-weight:600;
+  padding:0 34px 0 12px !important;appearance:auto;-webkit-appearance:menulist;box-shadow:none !important;
+}
+#offerPlanModal .icon-select .mycustomicon.fa-angle-down{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:#64748b !important;
+  display:block !important;font-size:16px;
+}
+#offerPlanModal .best-search-icon{
+  flex:1 1 170px;min-width:150px;display:block !important;float:none !important;width:auto !important;margin:0 !important;position:relative;
+}
+#offerPlanModal .best-search-icon input.open-toggle-search{
+  width:100% !important;height:42px !important;border:0 !important;border-radius:10px !important;
+  background:rgba(255,255,255,.96) !important;padding:0 12px !important;font-size:13px !important;color:#0f172a !important;
+  box-shadow:none !important;
+}
+#offerPlanModal .best-search-icon input.open-toggle-search::placeholder{color:#94a3b8;}
+#offerPlanModal .vm-rch-plan-modal__closewrap{
+  position:absolute !important;top:8px !important;right:0 !important;width:auto !important;padding:0 !important;margin:0 !important;
+}
+#offerPlanModal .vm-rch-plan-modal__close{
+  font-size:32px !important;line-height:1;color:#fff !important;opacity:.92 !important;text-shadow:none !important;
+  float:none !important;margin:0 !important;padding:0 6px !important;
+}
+#offerPlanModal .vm-rch-plan-modal__body{
+  padding:14px 16px 18px !important;background:#f8fafc !important;margin-top:0 !important;
+}
+#offerPlanModal .vm-rch-plan-modal__layout{
+  display:flex !important;flex-wrap:nowrap;gap:12px;margin:0 !important;align-items:flex-start;
+}
+#offerPlanModal .clearfix-custom{display:none !important;}
+#offerPlanModal .vm-rch-plan-modal__types{
+  flex:0 0 228px;max-width:240px;padding:0 !important;float:none !important;width:auto !important;
+}
+#offerPlanModal .vm-rch-plan-modal__details{
+  flex:1 1 auto;min-width:0;padding:0 !important;float:none !important;width:auto !important;
+  max-height:min(420px,55vh);overflow:auto;border-radius:12px;background:#fff;border:1px solid #e2e8f0;
+}
+#offerPlanModal .vm-rch-plan-modal__types .table-responsive,
+#offerPlanModal .vm-rch-plan-modal__details .table-responsive{
+  border:0;margin:0;overflow:visible;
+}
+#offerPlanModal .vm-rch-plan-modal__types table,
+#offerPlanModal .vm-rch-plan-modal__details table{
+  background:#fff !important;border:0 !important;margin:0 !important;border-radius:12px;
+}
+#offerPlanModal .vm-rch-plan-modal__types thead th{
+  background:#f1f5f9 !important;color:#475569 !important;font-size:11px !important;font-weight:800 !important;
+  text-transform:uppercase;letter-spacing:.04em;border:0 !important;border-bottom:1px solid #e2e8f0 !important;
+  padding:10px 8px !important;text-align:center !important;
+}
+#offerPlanModal .vm-rch-plan-modal__types tbody td{
+  border:0 !important;padding:5px 0 !important;background:transparent !important;
+}
+#offerPlanModal .vm-rch-plan-type-btn,
+#offerPlanModal .vm-rch-plan-modal__types tbody button{
+  width:100% !important;display:block !important;float:none !important;
+  padding:10px 12px !important;margin:0 !important;
+  border:1px solid #e2e8f0 !important;border-radius:10px !important;
+  background:#fff !important;color:#334155 !important;font-size:13px !important;font-weight:600 !important;
+  box-shadow:none !important;text-align:left !important;white-space:normal;line-height:1.3;
+}
+#offerPlanModal .vm-rch-plan-type-btn:hover,
+#offerPlanModal .vm-rch-plan-modal__types tbody button:hover{
+  border-color:#93c5fd !important;background:#eff6ff !important;color:#1d4ed8 !important;
+}
+#offerPlanModal .vm-rch-plan-type-btn.active,
+#offerPlanModal .vm-rch-plan-modal__types tbody button.active,
+#offerPlanModal .vm-rch-plan-modal__types tbody button.addcls{
+  background:linear-gradient(135deg,#1e40af,#3b82f6) !important;color:#fff !important;border-color:#1e40af !important;
+}
+#offerPlanModal .vm-rch-plan-modal__details thead th,
+#offerPlanModal #fixedclass th{
+  background:#fff !important;color:#64748b !important;font-size:11px !important;font-weight:800 !important;
+  text-transform:uppercase;letter-spacing:.04em;border:0 !important;border-bottom:1px solid #e2e8f0 !important;
+  padding:11px 10px !important;text-align:center !important;position:sticky;top:0;z-index:2;
+  box-shadow:none !important;border-radius:0 !important;
+}
+#offerPlanModal .vm-rch-plan-modal__details tbody td{
+  font-size:13px !important;color:#334155;padding:10px 8px !important;
+  border-color:#f1f5f9 !important;vertical-align:middle !important;background:#fff !important;
+}
+#offerPlanModal .vm-rch-plan-modal__details tbody tr:nth-child(even) td{background:#fafbff !important;}
+#offerPlanModal .vm-rch-plan-price-btn,
+#offerPlanModal .vm-rch-plan-modal__details tbody td button,
+#offerPlanModal.vm-rch-plan-modal-wrap .modal-dialog.modal-lg.modal-lg-start-cssfirst .vm-rch-plan-modal__details table tr td button,
+#offerPlanModal.vm-rch-plan-modal-wrap .modal-dialog.modal-lg.modal-lg-start-cssfirst .vm-rch-plan-modal__details table tr td button.bg-blue-grey,
+#offerPlanModal.vm-rch-plan-modal-wrap .modal-dialog.modal-lg.modal-lg-start-cssfirst .vm-rch-plan-modal__details table tr td button.vm-rch-plan-price-btn{
+  width:auto !important;min-width:76px !important;padding:7px 14px !important;margin:0 auto !important;
+  display:inline-flex !important;align-items:center;justify-content:center;
+  border:0 !important;border-radius:999px !important;
+  background:linear-gradient(135deg,#1e40af,#3b82f6) !important;
+  background-color:#2563eb !important;
+  color:#fff !important;-webkit-text-fill-color:#fff !important;
+  font-size:13px !important;font-weight:700 !important;box-shadow:0 4px 10px rgba(37,99,235,.35) !important;
+}
+#offerPlanModal.vm-rch-plan-modal-wrap .modal-dialog.modal-lg.modal-lg-start-cssfirst .vm-rch-plan-modal__types table tr td button{
+  color:#334155 !important;-webkit-text-fill-color:#334155 !important;
+  background:#fff !important;background-color:#fff !important;
+}
+#offerPlanModal.vm-rch-plan-modal-wrap .modal-dialog.modal-lg.modal-lg-start-cssfirst .vm-rch-plan-modal__types table tr td button.active,
+#offerPlanModal.vm-rch-plan-modal-wrap .modal-dialog.modal-lg.modal-lg-start-cssfirst .vm-rch-plan-modal__types table tr td button.addcls{
+  color:#fff !important;-webkit-text-fill-color:#fff !important;
+  background:linear-gradient(135deg,#1e40af,#3b82f6) !important;
+}
+@media (max-width:767px){
+  #offerPlanModal .vm-rch-plan-modal__layout{flex-direction:column;}
+  #offerPlanModal .vm-rch-plan-modal__types{flex:1 1 100%;max-width:none;width:100% !important;}
+  #offerPlanModal .vm-rch-plan-modal__details{max-height:50vh;width:100% !important;}
+}
+
+/* ---------- 10. Loader + ported essentials ---------- */
+#my-index .loadermoney,.loadermoney{
+  position:fixed;left:0;top:0;width:100%;height:100%;z-index:199999;
+  background:url('../../images/recharge.svg') 50% 50% no-repeat rgba(249,249,249,.9);
+}
+#my-index .dropdown-menu:not(.inner){margin-top:81px !important;}
+#my-index .bootstrap-select .dropdown-menu,
+#my-index .select2-container--open .select2-dropdown{margin-top:0 !important;}
+#my-index #loan #divloanddl .bs-searchbox1 input{padding:0 10px 0 30px !important;}
+#my-index #viewplan a{top:-3px;right:-43px;}
+#my-index .col-md-3.recharge-tabel span#numbershowmobile{margin-top:0 !important;}
+#my-index #fastaginfo{position:relative;top:0;}
+#my-index .muncipalandmoretab{position:relative;top:7px;}
+
+/* ---------- 12. Purane partial <style> blocks ka port (loader/for-prepaid/form-line/btnnn2/select2/Recharg11) ---------- */
+#my-index .loader{position:fixed;top:-90px;left:0;background-color:rgba(255,255,255,.7);z-index:999999999999;display:none;height:100vw;width:100vw;}
+#my-index .loader::after{content:'';display:block;position:absolute;left:48%;top:25%;width:100px;height:100px;border-style:solid;border-color:#000;border-top-color:transparent;border-width:4px;border-radius:50%;-webkit-animation:spin .8s linear infinite;animation:spin .8s linear infinite;}
+@-webkit-keyframes spin{from{-webkit-transform:rotate(0deg);}to{-webkit-transform:rotate(360deg);}}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+#my-index .for-prepaid{width:100%;}
+#my-index .for-prepaid tr th{text-transform:uppercase;}
+#my-index .form-line{display:flex;align-items:center;justify-content:right;}
+#my-index #btnnn2{padding:0 10px !important;margin-top:1.5px !important;}
+#my-index .select2-container{width:100% !important;}
+@media screen and (max-width:1440px){#my-index .Recharg11{font-size:17px;}}
+@media screen and (max-width:1080px){#my-index .Recharg11{font-size:14px;}}
+
+/* ---------- 11. Responsive ---------- */
+@media screen and (max-width:990px){
+  #my-index.vm-rch-page{padding:14px 10px 30px !important;}
+  #my-index .vm-rch-title{text-align:left;}
+  #my-index #reportchk .body{padding-left:0;}
+  #my-index #PrePaidbestplan{width:100%;float:left;}
+  #my-index .vm-rch-plan-offer__card{grid-template-columns:80px 1fr auto;gap:10px;padding:11px 12px !important;}
+  #my-index .vm-rch-plan-offer__price{font-size:15px;min-height:44px;}
+}
+@media screen and (max-width:766px){
+  #my-index .vm-rch-formgrid{flex-wrap:wrap;}
+  #my-index .vm-rch-fnum,#my-index .vm-rch-fop,#my-index .vm-rch-fcircle,#my-index .vm-rch-famt{flex:1 1 100%;}
+  #my-index .vm-rch-fbtn{flex:1 1 100%;}
+  #my-index .vm-rch-fbtn2{flex:1 1 100%;}
+  #my-index #Rechargeform #txtmobileamtemessage{margin-right:0;white-space:normal;}
+  #my-index .vm-rch-formgrid .vm-rch-fbtn .btn{width:100% !important;}
+  #my-index ul#changeborderbotto.vm-rch-tabs-list > li{min-width:0 !important;}
+  #my-index ul#changeborderbotto ul.morebuttontab.morebuttontab-after{min-width:170px;}
+  #my-index .vm-rch-pane-wrap{padding:12px 10px 14px !important;}
+  #my-index .vm-rch-pane-wrap .custom-rch > span{font-size:12.5px;}
+  #my-index .vm-rch-plan-offer__card{grid-template-columns:72px 1fr;grid-template-rows:auto auto;}
+  #my-index .vm-rch-plan-offer__action{grid-column:2;justify-self:start;margin-top:-2px;}
+  #my-index .vm-rch-number #numbershowmobile{font-size:26px !important;}
+}
+@media screen and (max-width:520px){
+  #my-index #BestOfferTbl.vm-rch-bestplan-grid{max-height:min(320px,48vh);padding:12px !important;}
+  #my-index .vm-rch-plan-offer__action{font-size:10px;padding:6px 10px;}
+  #my-index .vm-rch-pane-wrap .for-prepaid{display:block;overflow-x:auto;}
+  #my-index .vm-rch-pane-wrap input[type="submit"].btn,
+  #my-index .vm-rch-pane-wrap input[type="button"].btn,
+  #my-index .vm-rch-pane-wrap button.btn{width:100% !important;}
+}
+
+/* Mobile row — final 36px lock (select2 global 40px, legacy #viewplan float, pane 42px buttons) */
+body.saas-admin-ui #my-index #Rechargeform.vm-rch-formgrid .select2-container{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;
+}
+body.saas-admin-ui #my-index #Rechargeform .select2-container--default .select2-selection--single{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;
+}
+body.saas-admin-ui #my-index #Rechargeform .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height:var(--vm-rch-lh) !important;height:auto !important;min-height:0 !important;
+}
+#my-index #Rechargeform .vm-rch-fnum .vm-rch-radioinline label{
+  padding:0 !important;font-size:11px !important;line-height:1.1 !important;
+  display:inline-flex !important;align-items:center !important;box-sizing:border-box;margin:0 !important;
+  background:transparent !important;box-shadow:none !important;border-radius:0 !important;
+}
+#my-index #Rechargeform .vm-rch-fnum .vm-rch-radioinline input:checked + label{
+  background:transparent !important;color:#1d4ed8 !important;box-shadow:none !important;
+}
+#my-index #Rechargeform.vm-rch-formgrid .rechargebutton input#btn,
+#my-index #Rechargeform.vm-rch-formgrid input[type="submit"].btn.bg-blue-grey{
+  min-height:var(--vm-rch-h) !important;height:var(--vm-rch-h) !important;max-height:var(--vm-rch-h) !important;
+  padding:0 20px !important;border-radius:8px !important;font-size:13px !important;
+  box-shadow:0 6px 14px rgba(37,99,235,.35) !important;
+}
+#my-index #viewplan a.view-plans-button{top:auto !important;border:none !important;}
+#my-index #viewplan{top:auto !important;right:auto !important;}
+#my-index #prepaid #viewplan{top:auto !important;left:auto !important;width:auto !important;float:none !important;}
+
+/* Select2 dropdown arrow — recharge row (legacy StyleSheet padding-top:29px hatao) */
+#my-index .vm-rch-formgrid .select2-container--default .select2-selection--single{
+  position:relative !important;display:flex !important;align-items:center !important;
+}
+#my-index .vm-rch-formgrid .select2-container--default .select2-selection--single .select2-selection__rendered{
+  display:flex !important;align-items:center !important;height:100% !important;
+  padding-right:28px !important;
+}
+#my-index .vm-rch-formgrid .select2-container--default .select2-selection--single .select2-selection__arrow,
+#my-index .rechargewidth .select2-container--default .select2-selection--single .select2-selection__arrow{
+  position:absolute !important;top:0 !important;right:8px !important;left:auto !important;bottom:0 !important;
+  width:22px !important;height:100% !important;max-height:100% !important;
+  padding:0 !important;padding-top:0 !important;margin:0 !important;float:none !important;
+  display:flex !important;align-items:center !important;justify-content:center !important;
+}
+#my-index .vm-rch-formgrid .select2-container--default .select2-selection--single .select2-selection__arrow b{
+  position:static !important;margin:0 !important;top:auto !important;
+}
+body.saas-admin-ui #my-index #Rechargeform .select2-container--default .select2-selection--single .select2-selection__rendered{
+  display:flex !important;align-items:center !important;height:100% !important;padding-right:28px !important;
+}
+body.saas-admin-ui #my-index #Rechargeform .select2-container--default .select2-selection--single .select2-selection__arrow{
+  position:absolute !important;top:0 !important;right:8px !important;height:100% !important;
+  padding:0 !important;display:flex !important;align-items:center !important;justify-content:center !important;
+}
+
+/* ---------- Gas Book — Electricity jaisa ek horizontal row (StyleSheet #gasamount-input / gasamount-input-before beat) ---------- */
+#my-index #gas #gasinfo.fund-transfer-form{
+  float:none !important;width:100% !important;height:auto !important;min-height:0 !important;
+  padding:0 !important;margin:0 !important;background:transparent !important;
+}
+#my-index #gas .vm-rch-gas-row{
+  display:none !important;
+}
+#my-index #gas .vm-rch-gas-row.vm-rch-gas-row--active{
+  display:flex !important;flex-wrap:nowrap !important;align-items:flex-end !important;
+  gap:6px 8px !important;width:100% !important;margin-top:4px !important;
+}
+#my-index #gas #firstrediobuttonshow .vm-rch-fcell,
+#my-index #gas #showlpggassclass .vm-rch-fcell{
+  float:none !important;width:auto !important;max-width:none !important;min-width:0 !important;
+  margin:0 !important;padding-left:4px !important;padding-right:4px !important;
+}
+#my-index #gas #gasamount-input,
+#my-index #gas #lpggasamount-input,
+#my-index #gas #gasamount-input.gasamounterwidth,
+#my-index #gas #lpggasamount-input.gasamounterwidth,
+#my-index #gas #divgasbilldiv,
+#my-index #gas #divlpggasbilldiv,
+#my-index #gas .gasinfo-class.elecpay-first{
+  width:auto !important;float:none !important;position:relative !important;
+}
+#my-index #gas #gasamount-input.vm-rch-famt,
+#my-index #gas #lpggasamount-input.vm-rch-famt{
+  flex:1 1 188px !important;min-width:168px !important;max-width:none !important;
+}
+#my-index #gas #gasamount-input.gasamounterwidth,
+#my-index #gas #lpggasamount-input.gasamounterwidth{
+  width:auto !important;
+}
+#my-index #gas #btncontinue-gas,
+#my-index #gas #btncontinue-lpg{
+  flex:0 0 auto !important;float:none !important;width:auto !important;padding-left:4px !important;
+}
+#my-index #gas #btncontinue-gas input.btn,
+#my-index #gas #btncontinue-lpg input.btn{
+  float:none !important;width:auto !important;margin:0 !important;
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  max-height:var(--vm-rch-h) !important;border-radius:8px !important;
+}
+#my-index #gas #btncontinue-gas,
+#my-index #gas #btncontinue-lpg{
+  align-self:flex-end !important;
+}
+#my-index #gas #gasamount-input .wamount-input-type,
+#my-index #gas #lpggasamount-input .wamount-input-type,
+#my-index #gas #gasamount-input div .wamount-input-type,
+#my-index #gas #lpggasamount-input div .wamount-input-type{
+  position:absolute !important;top:auto !important;bottom:0 !important;right:8px !important;
+  width:auto !important;float:none !important;margin:0 !important;height:var(--vm-rch-h) !important;
+  display:flex !important;align-items:center !important;z-index:8 !important;
+}
+body.saas-admin-ui #my-index #gas #gasamount-input .wamount-input-type input#btnnn3,
+body.saas-admin-ui #my-index #gas #lpggasamount-input .wamount-input-type input#btnnn3lpg,
+body.saas-admin-ui #my-index #gas #gasamount-input div .wamount-input-type input.btn,
+body.saas-admin-ui #my-index #gas #lpggasamount-input div .wamount-input-type input.btn{
+  float:none !important;margin:0 !important;
+  min-height:var(--vm-rch-inbtn-h) !important;height:var(--vm-rch-inbtn-h) !important;
+  max-height:var(--vm-rch-inbtn-h) !important;padding:0 10px !important;
+  font-size:11px !important;line-height:1 !important;border-radius:6px !important;
+  background:#f1f5f9 !important;color:#1d4ed8 !important;border:1px solid #cbd5e1 !important;
+  box-shadow:none !important;width:auto !important;
+}
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fcell > div:first-child{
+  flex:0 0 auto;width:100%;
+}
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fcell > div:first-child p.vm-rch-err{
+  min-height:14px;margin:0 0 2px !important;line-height:1.2;
+}
+/* Icons input ke andar — absolute top:19px gap me float na ho */
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fnum,
+#my-index #gas .vm-rch-gas-row--active .vm-rch-famt,
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fop,
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fcircle{
+  display:flex !important;flex-direction:column !important;justify-content:flex-end !important;
+}
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fnum .vm-rch-in-ico,
+#my-index #gas .vm-rch-gas-row--active .vm-rch-famt .vm-rch-in-ico,
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fop .vm-rch-in-ico,
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fcircle .vm-rch-in-ico{
+  top:auto !important;bottom:0 !important;left:10px !important;
+  height:var(--vm-rch-h) !important;width:28px !important;
+}
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fnum input.form-control,
+#my-index #gas .vm-rch-gas-row--active .vm-rch-famt input.form-control,
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fcircle input.form-control{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  padding-left:34px !important;box-sizing:border-box !important;
+}
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fop .select2-container--default .select2-selection--single{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;border-radius:10px !important;
+}
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fop .select2-container{
+  height:var(--vm-rch-h) !important;margin:0 !important;
+}
+#my-index #gas .vm-rch-gas-row--active .vm-rch-fop .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height:var(--vm-rch-lh) !important;padding-left:34px !important;
+}
+#my-index #gas #gasamount-input #gasamount,
+#my-index #gas #lpggasamount-input #lpggasamount{
+  padding-right:96px !important;
+}
+#my-index #gas .txtelectricity1 input,
+#my-index #gas #gasinfo input.form-control{
+  height:var(--vm-rch-h) !important;border:1px solid #cbd5e1 !important;border-radius:10px !important;
+}
+#my-index #gas #showlpggassclass.vm-rch-formgrid{
+  overflow-x:auto !important;overflow-y:visible !important;-webkit-overflow-scrolling:touch;
+}
+@media screen and (min-width:768px){
+  #my-index #gas #firstrediobuttonshow.vm-rch-formgrid .vm-rch-fop{flex:1.25 1 140px !important;}
+  #my-index #gas #firstrediobuttonshow.vm-rch-formgrid .vm-rch-fnum{flex:1.35 1 150px !important;}
+  #my-index #gas #firstrediobuttonshow.vm-rch-formgrid .vm-rch-famt{flex:1 1 120px !important;}
+}
+
+/* ---------- Insurance — Gas jaisa ek horizontal row ---------- */
+#my-index #insurance #insurinfo.fund-transfer-form{
+  float:none !important;width:100% !important;height:auto !important;padding:0 !important;
+  margin:0 !important;background:transparent !important;
+}
+#my-index #insurance #insurinfo.vm-rch-insur-grid{
+  display:flex !important;flex-wrap:nowrap !important;align-items:flex-end !important;
+  gap:6px 6px !important;width:100% !important;margin-top:4px !important;
+  overflow-x:auto !important;overflow-y:visible !important;-webkit-overflow-scrolling:touch;
+}
+#my-index #insurance #insurinfo .vm-rch-fcell{
+  float:none !important;width:auto !important;max-width:none !important;min-width:0 !important;
+  margin:0 !important;padding-left:3px !important;padding-right:3px !important;
+}
+#my-index #insurance #insurinfo .vm-rch-fop{flex:1.15 1 128px !important;min-width:118px !important;}
+#my-index #insurance #insurinfo .vm-rch-fnum{flex:1.1 1 118px !important;min-width:108px !important;}
+#my-index #insurance #insurinfo .vm-rch-fcircle{flex:1 1 108px !important;min-width:98px !important;}
+#my-index #insurance #insurinfo #divbob{flex:1.05 1 132px !important;min-width:122px !important;}
+#my-index #insurance #insurinfo #gasamount-input-right.vm-rch-famt{
+  flex:1 1 168px !important;min-width:158px !important;position:relative !important;
+  width:auto !important;float:none !important;
+}
+#my-index #insurance #btncontinue-insur{
+  flex:0 0 auto !important;align-self:flex-end !important;
+}
+#my-index #insurance #btncontinue-insur input.btn{
+  margin:0 !important;height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  border-radius:8px !important;float:none !important;width:auto !important;
+}
+#my-index #insurance #insurinfo .vm-rch-fcell > div:first-child p.vm-rch-err{
+  min-height:14px;margin:0 0 2px !important;line-height:1.2;
+}
+#my-index #insurance #insurinfo .vm-rch-fnum,
+#my-index #insurance #insurinfo .vm-rch-famt,
+#my-index #insurance #insurinfo .vm-rch-fop,
+#my-index #insurance #insurinfo .vm-rch-fcircle{
+  display:flex !important;flex-direction:column !important;justify-content:flex-end !important;
+  position:relative !important;
+}
+#my-index #insurance #insurinfo .vm-rch-in-ico{
+  top:auto !important;bottom:0 !important;left:10px !important;
+  height:var(--vm-rch-h) !important;width:28px !important;
+}
+#my-index #insurance #insurinfo input.form-control,
+#my-index #insurance #insurinfo #txtDOB{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  padding-left:34px !important;box-sizing:border-box !important;
+  border:1px solid #cbd5e1 !important;border-radius:10px !important;
+}
+#my-index #insurance #insurinfo #insuranceamount{padding-right:96px !important;}
+#my-index #insurance #insurinfo .vm-rch-fop .select2-container{
+  height:var(--vm-rch-h) !important;width:100% !important;
+}
+#my-index #insurance #insurinfo .vm-rch-fop .select2-container--default .select2-selection--single{
+  height:var(--vm-rch-h) !important;border-radius:10px !important;
+}
+#my-index #insurance #insurinfo .vm-rch-fop .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height:var(--vm-rch-lh) !important;padding-left:34px !important;
+}
+#my-index #insurance #gasamount-input-right .wamount-input-type,
+#my-index #insurance #gasamount-input-right div .wamount-input-type{
+  position:absolute !important;top:auto !important;bottom:0 !important;right:7px !important;
+  float:none !important;margin:0 !important;height:var(--vm-rch-h) !important;
+  display:flex !important;align-items:center !important;z-index:8 !important;width:auto !important;
+}
+body.saas-admin-ui #my-index #insurance #gasamount-input-right .wamount-input-type input#btnnn4,
+body.saas-admin-ui #my-index #insurance #gasamount-input-right div .wamount-input-type input.btn{
+  min-height:var(--vm-rch-inbtn-h) !important;height:var(--vm-rch-inbtn-h) !important;
+  max-height:var(--vm-rch-inbtn-h) !important;padding:0 10px !important;font-size:11px !important;
+  border-radius:6px !important;background:#f1f5f9 !important;color:#1d4ed8 !important;
+  border:1px solid #cbd5e1 !important;box-shadow:none !important;margin:0 !important;float:none !important;
+  width:auto !important;
+}
+#my-index #insurance #insurinfo .form-group,
+#my-index #insurance #insurinfo .txtelectricity1,
+#my-index #insurance #insurinfo .input-daterange{margin:0 !important;height:auto !important;border:0 !important;}
+#my-index #insurance #insurinfo .input-group{display:block !important;width:100% !important;}
+
+/* ---------- Water — Gas jaisa ek horizontal row ---------- */
+#my-index #water #watershow.fund-transfer-form{
+  float:none !important;width:100% !important;height:auto !important;padding:0 !important;
+  margin:0 !important;background:transparent !important;
+}
+#my-index #water #watershow.vm-rch-water-grid{
+  display:flex !important;flex-wrap:nowrap !important;align-items:flex-end !important;
+  gap:6px 8px !important;width:100% !important;margin-top:4px !important;
+}
+#my-index #water #watershow .vm-rch-fcell{
+  float:none !important;width:auto !important;max-width:none !important;min-width:0 !important;
+  margin:0 !important;padding-left:4px !important;padding-right:4px !important;
+}
+#my-index #water #wamount.vm-rch-famt{
+  flex:1 1 188px !important;min-width:168px !important;position:relative !important;
+  width:auto !important;float:none !important;
+}
+#my-index #water #wamount{
+  width:auto !important;float:none !important;
+}
+#my-index #water #btncontinue-water{
+  flex:0 0 auto !important;align-self:flex-end !important;
+}
+#my-index #water #btncontinue-water input.btn{
+  margin:0 !important;height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  border-radius:8px !important;float:none !important;width:auto !important;
+}
+#my-index #water #watershow .vm-rch-fnum,
+#my-index #water #watershow .vm-rch-famt,
+#my-index #water #watershow .vm-rch-fop,
+#my-index #water #watershow .vm-rch-fcircle,
+#my-index #water #watershow #wmobile{
+  display:flex !important;flex-direction:column !important;justify-content:flex-end !important;
+  position:relative !important;
+}
+#my-index #water #watershow .vm-rch-in-ico{
+  top:auto !important;bottom:0 !important;left:10px !important;
+  height:var(--vm-rch-h) !important;width:28px !important;
+}
+#my-index #water #watershow input.form-control{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  padding-left:34px !important;box-sizing:border-box !important;
+  border:1px solid #cbd5e1 !important;border-radius:10px !important;
+}
+#my-index #water #wateramount{padding-right:96px !important;}
+#my-index #water #watershow .vm-rch-fop .select2-container{height:var(--vm-rch-h) !important;width:100% !important;}
+#my-index #water #watershow .vm-rch-fop .select2-container--default .select2-selection--single{
+  height:var(--vm-rch-h) !important;border-radius:10px !important;
+}
+#my-index #water #watershow .vm-rch-fop .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height:var(--vm-rch-lh) !important;padding-left:34px !important;
+}
+#my-index #water #wamount .wamount-input-type,
+#my-index #water #wamount div .wamount-input-type,
+#my-index #water .wamount-input-type{
+  position:absolute !important;top:auto !important;bottom:0 !important;right:8px !important;
+  float:none !important;width:auto !important;max-width:none !important;
+  margin:0 !important;height:var(--vm-rch-h) !important;
+  display:flex !important;align-items:center !important;justify-content:flex-end !important;
+  z-index:8 !important;padding:0 !important;
+}
+body.saas-admin-ui #my-index #water #wamount .wamount-input-type input#btnnn5,
+body.saas-admin-ui #my-index #water #wamount .wamount-input-type input.btn,
+body.saas-admin-ui #my-index #water .wamount-input-type input#btnnn{
+  min-height:var(--vm-rch-inbtn-h) !important;height:var(--vm-rch-inbtn-h) !important;
+  max-height:var(--vm-rch-inbtn-h) !important;padding:0 10px !important;font-size:11px !important;
+  border-radius:6px !important;background:#f1f5f9 !important;color:#1d4ed8 !important;
+  border:1px solid #cbd5e1 !important;box-shadow:none !important;margin:0 !important;float:none !important;
+  width:auto !important;position:static !important;
+}
+#my-index #water #watershow .vm-rch-fcell > div:first-child p.vm-rch-err{
+  min-height:14px;margin:0 0 2px !important;line-height:1.2;
+}
+@media screen and (min-width:768px){
+  #my-index #water #watershow .vm-rch-fop{flex:1.25 1 140px !important;}
+  #my-index #water #watershow .vm-rch-fnum{flex:1.35 1 180px !important;}
+}
+
+/* ---------- Broadband — Water/Gas jaisa ek horizontal row ---------- */
+#my-index #broadband #broadshow.fund-transfer-form{
+  float:none !important;width:100% !important;height:auto !important;padding:0 !important;
+  margin:0 !important;background:transparent !important;
+}
+#my-index #broadband #broadshow.vm-rch-broad-grid{
+  display:flex !important;flex-wrap:nowrap !important;align-items:flex-end !important;
+  gap:6px 8px !important;width:100% !important;margin-top:4px !important;
+}
+#my-index #broadband #broadshow .vm-rch-fcell{
+  float:none !important;width:auto !important;max-width:none !important;min-width:0 !important;
+  margin:0 !important;padding-left:4px !important;padding-right:4px !important;
+}
+#my-index #broadband #wamount-second-f.vm-rch-famt,
+#my-index #broadband #wamount-second-f{
+  flex:1 1 188px !important;min-width:168px !important;position:relative !important;
+  width:auto !important;float:none !important;
+}
+#my-index #broadband #btncontinue-broad{
+  flex:0 0 auto !important;align-self:flex-end !important;
+}
+#my-index #broadband #btncontinue-broad input.btn{
+  margin:0 !important;height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  border-radius:8px !important;float:none !important;width:auto !important;
+}
+#my-index #broadband #broadshow .vm-rch-fnum,
+#my-index #broadband #broadshow .vm-rch-famt,
+#my-index #broadband #broadshow .vm-rch-fop{
+  display:flex !important;flex-direction:column !important;justify-content:flex-end !important;
+  position:relative !important;
+}
+#my-index #broadband #broadshow .vm-rch-in-ico{
+  top:auto !important;bottom:0 !important;left:10px !important;
+  height:var(--vm-rch-h) !important;width:28px !important;
+}
+#my-index #broadband #broadshow input.form-control{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  padding-left:34px !important;box-sizing:border-box !important;
+  border:1px solid #cbd5e1 !important;border-radius:10px !important;
+}
+#my-index #broadband #broadbandamount{padding-right:96px !important;}
+#my-index #broadband #broadshow .vm-rch-fop .select2-container{height:var(--vm-rch-h) !important;width:100% !important;}
+#my-index #broadband #broadshow .vm-rch-fop .select2-container--default .select2-selection--single{
+  height:var(--vm-rch-h) !important;border-radius:10px !important;
+}
+#my-index #broadband #broadshow .vm-rch-fop .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height:var(--vm-rch-lh) !important;padding-left:34px !important;
+}
+#my-index #broadband #wamount-second-f .wamount-input-type,
+#my-index #broadband #wamount-second-f div .wamount-input-type{
+  position:absolute !important;top:auto !important;bottom:0 !important;right:8px !important;
+  float:none !important;width:auto !important;margin:0 !important;height:var(--vm-rch-h) !important;
+  display:flex !important;align-items:center !important;z-index:8 !important;padding:0 !important;
+}
+body.saas-admin-ui #my-index #broadband #wamount-second-f .wamount-input-type input#btnnn6,
+body.saas-admin-ui #my-index #broadband #wamount-second-f .wamount-input-type input.btn{
+  min-height:var(--vm-rch-inbtn-h) !important;height:var(--vm-rch-inbtn-h) !important;
+  max-height:var(--vm-rch-inbtn-h) !important;padding:0 10px !important;font-size:11px !important;
+  border-radius:6px !important;background:#f1f5f9 !important;color:#1d4ed8 !important;
+  border:1px solid #cbd5e1 !important;box-shadow:none !important;margin:0 !important;float:none !important;
+  width:auto !important;position:static !important;
+}
+#my-index #broadband #broadshow .vm-rch-fcell > div:first-child p.vm-rch-err{
+  min-height:14px;margin:0 0 2px !important;line-height:1.2;
+}
+@media screen and (min-width:768px){
+  #my-index #broadband #broadshow .vm-rch-fop{flex:1.25 1 140px !important;}
+  #my-index #broadband #broadshow .vm-rch-fnum{flex:1.35 1 150px !important;}
+}
+
+/* ---------- Loan EMI — ek horizontal row (BBPS clutter + button drift fix) ---------- */
+#my-index #loan .vm-rch-loan-grid.fund-transfer-form{
+  float:none !important;width:100% !important;padding:0 !important;margin:4px 0 0 !important;
+  background:transparent !important;
+}
+#my-index #loan .vm-rch-loan-grid{
+  display:flex !important;flex-wrap:nowrap !important;align-items:flex-end !important;
+  gap:6px 8px !important;width:100% !important;
+  overflow-x:auto !important;overflow-y:visible !important;
+  max-height:none !important;-webkit-overflow-scrolling:touch;
+}
+@media screen and (min-width:992px){
+  #my-index #loan .vm-rch-loan-grid{
+    overflow:visible !important;overflow-x:visible !important;overflow-y:visible !important;
+    flex-wrap:nowrap !important;
+  }
+}
+#my-index #loan .vm-rch-loan-grid > .vm-rch-fcell{
+  float:none !important;width:auto !important;max-width:none !important;
+  margin:0 !important;padding-left:4px !important;padding-right:4px !important;
+  display:flex !important;flex-direction:column !important;justify-content:flex-start !important;
+  position:relative !important;min-width:0 !important;flex:0 1 auto !important;
+}
+/* JS display:none inline — flex !important se extra fields sab dikhte the */
+#my-index #loan .vm-rch-loan-grid > .vm-rch-fcell[style*="display:none"],
+#my-index #loan .vm-rch-loan-grid > .vm-rch-fcell[style*="display: none"]{
+  display:none !important;flex:0 0 0 !important;min-width:0 !important;padding:0 !important;margin:0 !important;
+}
+#my-index #loan #divloanddl{flex:1.35 1 0 !important;min-width:160px !important;}
+#my-index #loan #divLoanAcno{flex:1.45 1 0 !important;min-width:170px !important;}
+#my-index #loan #divLoanmobileno{flex:1.2 1 0 !important;min-width:140px !important;}
+#my-index #loan #divpayamountloan{flex:1 1 0 !important;min-width:108px !important;}
+#my-index #loan #divLoanPaymentMode,
+#my-index #loan #divLoandob,
+#my-index #loan #divLoanpancard,
+#my-index #loan #divLoanCustomerid,
+#my-index #loan #divLoanName{
+  flex:1 1 0 !important;min-width:128px !important;
+}
+#my-index #loan #divLoanPaymentMode select,
+#my-index #loan #divLoandob input,
+#my-index #loan #divLoanpancard input,
+#my-index #loan #divLoanCustomerid input,
+#my-index #loan #divLoanName input{
+  padding-left:34px !important;
+}
+#my-index #loan #btngetloanviewbill,
+#my-index #loan #btncontinue-loan{
+  flex:0 0 auto !important;align-self:flex-end !important;
+  padding-top:0 !important;margin-top:0 !important;
+  display:flex !important;flex-direction:column !important;justify-content:flex-end !important;
+}
+#my-index #loan #btngetloanviewbill::before,
+#my-index #loan #btncontinue-loan::before{
+  content:"";display:block;flex:0 0 auto;min-height:16px;height:16px;width:100%;
+}
+#my-index #loan #btngetloanviewbill input,
+#my-index #loan #btncontinue-loan input{
+  margin:0 !important;height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  float:none !important;width:auto !important;white-space:nowrap;padding:0 14px !important;
+  border-radius:8px !important;font-size:12px !important;flex:0 0 auto !important;
+}
+#my-index #loan .vm-rch-loan-grid input[type="submit"].btn,
+#my-index #loan .vm-rch-loan-grid input[type="button"].btn{
+  margin-top:0 !important;
+}
+#my-index #loan #btngetloanviewbill input#btnnn1{
+  background:#f1f5f9 !important;color:#1d4ed8 !important;border:1px solid #cbd5e1 !important;
+  box-shadow:none !important;
+}
+#my-index #loan .vm-rch-loan-grid .vm-rch-in-ico{
+  position:absolute !important;
+  top:var(--vm-rch-row-top) !important;bottom:auto !important;left:0 !important;
+  height:var(--vm-rch-h) !important;width:40px !important;
+  display:flex !important;align-items:center !important;justify-content:center !important;
+  margin:0 !important;pointer-events:none !important;z-index:6 !important;
+  font-size:18px !important;line-height:1 !important;color:#64748b !important;
+}
+#my-index #loan .vm-rch-loan-grid .vm-rch-in-ico.vm-rch-in-ico--op{
+  font-size:17px !important;
+}
+#my-index #loan #divLoanAcno .vm-rch-in-ico{
+  font-size:19px !important;width:42px !important;color:#475569 !important;
+}
+/* fa-mobile glyph chhota dikhta hai — id-card ke barabar visual size */
+#my-index #loan #divLoanmobileno .vm-rch-in-ico,
+#my-index #loan #divLoanmobileno .vm-rch-in-ico.fa-mobile{
+  font-size:24px !important;width:44px !important;color:#475569 !important;
+  line-height:1 !important;
+}
+#my-index #loan #divLoanmobileno #txtLoanMobileno{
+  padding-left:44px !important;
+}
+#my-index #loan #divpayamountloan .vm-rch-in-ico{
+  font-size:17px !important;font-weight:700 !important;
+}
+#my-index #loan .vm-rch-loan-grid input.form-control,
+#my-index #loan .vm-rch-loan-grid select.form-control:not(.select2-hidden-accessible){
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  padding-left:42px !important;box-sizing:border-box !important;
+  border:1px solid #cbd5e1 !important;border-radius:10px !important;
+}
+#my-index #loan #divloanddl select#loanddltype.select2-hidden-accessible{
+  position:absolute !important;width:1px !important;height:1px !important;min-height:0 !important;
+  padding:0 !important;margin:-1px !important;overflow:hidden !important;
+  clip:rect(0,0,0,0) !important;border:0 !important;opacity:0 !important;pointer-events:none !important;
+}
+#my-index #loan #divloanddl .bootstrap-select{display:none !important;}
+#my-index #loan #divloanddl .select2-container ~ .select2-container{display:none !important;}
+#my-index #loan #divloanddl .select2-container{
+  width:100% !important;height:var(--vm-rch-h) !important;display:block !important;
+}
+#my-index #loan #divloanddl .select2-container--default .select2-selection--single{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  border:1px solid #cbd5e1 !important;border-radius:10px !important;
+  background:#fff !important;display:flex !important;align-items:center !important;
+}
+#my-index #loan #divloanddl .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height:var(--vm-rch-lh) !important;padding-left:42px !important;padding-right:26px !important;
+  color:#0f172a !important;font-size:13px !important;font-weight:500 !important;
+}
+#my-index #loan #divloanddl .select2-container--default .select2-selection--single .select2-selection__arrow{
+  height:var(--vm-rch-h) !important;top:0 !important;right:6px !important;
+}
+#my-index #loan #divloanddl .vm-rch-in-ico{
+  top:var(--vm-rch-row-top) !important;bottom:auto !important;left:0 !important;
+  z-index:7 !important;color:#64748b !important;
+}
+#my-index #loan .vm-rch-loan-grid .vm-rch-fcell > span.text-danger,
+#my-index #loan .vm-rch-loan-grid .vm-rch-fcell > span.test-danger{
+  display:block !important;flex:0 0 auto !important;min-height:0 !important;
+  margin:2px 0 0 !important;padding:0 !important;font-size:11px !important;line-height:1.2 !important;
+}
+#my-index #loan .select2-container--open .select2-dropdown{
+  border-color:#cbd5e1 !important;border-radius:10px !important;
+  box-shadow:0 12px 28px -8px rgba(15,23,42,.25) !important;
+  z-index:100060 !important;min-width:220px !important;
+}
+#my-index #loan .select2-dropdown.vm-rch-loan-lender-drop,
+#my-index #loan .select2-dropdown.vm-admin-select2-searchable{
+  min-width:min(320px,92vw) !important;
+}
+#my-index #loan .select2-dropdown .select2-search--dropdown,
+#my-index #loan .select2-dropdown .select2-search--dropdown.select2-search--hide{
+  padding:8px !important;display:block !important;visibility:visible !important;
+  opacity:1 !important;height:auto !important;min-height:44px !important;
+  overflow:visible !important;pointer-events:auto !important;
+}
+#my-index #loan .select2-dropdown .select2-search__field{
+  width:100% !important;border:1px solid #cbd5e1 !important;
+  border-radius:8px !important;padding:8px 10px !important;font-size:13px !important;
+  outline:none !important;box-sizing:border-box !important;display:block !important;
+  visibility:visible !important;opacity:1 !important;min-height:36px !important;
+}
+#my-index #loan .select2-dropdown .select2-search__field:focus{
+  border-color:#3b82f6 !important;box-shadow:0 0 0 2px rgba(59,130,246,.25) !important;
+}
+#my-index #loan .select2-results__option{
+  font-size:13px !important;padding:8px 10px !important;
+}
+#my-index #loan #divloanddl select.vm-rch-loan-lender-select:not(.select2-hidden-accessible){
+  display:none !important;
+}
+#my-index #loan #divloanddl .input-group-addon.in-addon,
+#my-index #loan #divloanddl img[src*="bbps"],
+#my-index #loan #divloanddl .mycustomicon{display:none !important;}
+#my-index #loan .vm-rch-loan-grid .form-group,
+#my-index #loan .vm-rch-loan-grid .form-line,
+#my-index #loan .vm-rch-loan-grid .txtelectricity1{
+  margin:0 !important;border:0 !important;height:auto !important;
+}
+#my-index #loan .vm-rch-loan-grid .vm-rch-fcell > div:first-child p.vm-rch-err,
+#my-index #loan .vm-rch-loan-grid .vm-rch-fcell > div:first-child p.insurancemessage22{
+  min-height:14px;margin:0 0 2px !important;line-height:1.2;
+}
+#my-index #loan .vm-rch-loan-grid .select2-container{width:100% !important;}
+#my-index #loan #divloanddl select#loanddltype:not(.select2-hidden-accessible){width:100% !important;}
+#my-index #loan #divpayamountloan #LoanAmount{padding-left:42px !important;}
+#my-index #loan #divLoanPaymentMode select{padding-left:10px !important;}
+
+/* ---------- FASTag — Water/Broadband jaisa ek horizontal row ---------- */
+#my-index #fastaginfo #fasttagpay.fund-transfer-form{
+  float:none !important;width:100% !important;height:auto !important;padding:0 !important;
+  margin:0 !important;background:transparent !important;
+}
+#my-index #fastaginfo #fasttagpay.vm-rch-fastag-grid{
+  display:flex !important;flex-wrap:nowrap !important;align-items:flex-end !important;
+  gap:6px 8px !important;width:100% !important;margin-top:4px !important;
+}
+#my-index #fastaginfo #fasttagpay .vm-rch-fcell{
+  float:none !important;width:auto !important;max-width:none !important;min-width:0 !important;
+  margin:0 !important;padding-left:4px !important;padding-right:4px !important;
+  display:flex !important;flex-direction:column !important;justify-content:flex-end !important;
+  position:relative !important;
+}
+#my-index #fastaginfo #fasttagpay .vm-rch-fop{flex:1.45 1 0 !important;min-width:200px !important;}
+#my-index #fastaginfo #fasttagpay .vm-rch-fnum{flex:1.35 1 0 !important;min-width:160px !important;}
+#my-index #fastaginfo #fasttagpay #divfasttagamount{flex:1 1 0 !important;min-width:168px !important;}
+#my-index #fastaginfo #btncontinuefasttag{
+  flex:0 0 auto !important;align-self:flex-end !important;
+}
+#my-index #fastaginfo #btncontinuefasttag input.btn{
+  margin:0 !important;height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  border-radius:8px !important;float:none !important;width:auto !important;
+}
+#my-index #fastaginfo #fasttagpay .vm-rch-in-ico{
+  top:auto !important;bottom:0 !important;left:10px !important;
+  height:var(--vm-rch-h) !important;width:28px !important;
+}
+#my-index #fastaginfo #fasttagpay input.form-control,
+#my-index #fastaginfo #fasttagpay select.form-control{
+  height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+  padding-left:34px !important;box-sizing:border-box !important;
+  border:1px solid #cbd5e1 !important;border-radius:10px !important;
+}
+#my-index #fastaginfo #FastTagAmount{padding-right:96px !important;}
+#my-index #fastaginfo #fasttagpay .vm-rch-fop .select2-container{
+  height:var(--vm-rch-h) !important;width:100% !important;
+}
+#my-index #fastaginfo #fasttagpay .vm-rch-fop .select2-container--default .select2-selection--single{
+  height:var(--vm-rch-h) !important;border-radius:10px !important;
+}
+#my-index #fastaginfo #fasttagpay .vm-rch-fop .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height:var(--vm-rch-lh) !important;padding-left:34px !important;
+}
+#my-index #fastaginfo #divfasttagamount .wamount-input-type,
+#my-index #fastaginfo #btngetfasttagviewbill.wamount-input-type{
+  position:absolute !important;top:auto !important;bottom:0 !important;right:8px !important;
+  float:none !important;width:auto !important;margin:0 !important;height:var(--vm-rch-h) !important;
+  display:flex !important;align-items:center !important;z-index:8 !important;padding:0 !important;
+}
+body.saas-admin-ui #my-index #fastaginfo #divfasttagamount .wamount-input-type input#btnnn2,
+body.saas-admin-ui #my-index #fastaginfo #btngetfasttagviewbill input.btn{
+  min-height:var(--vm-rch-inbtn-h) !important;height:var(--vm-rch-inbtn-h) !important;
+  max-height:var(--vm-rch-inbtn-h) !important;padding:0 10px !important;font-size:11px !important;
+  border-radius:6px !important;background:#f1f5f9 !important;color:#1d4ed8 !important;
+  border:1px solid #cbd5e1 !important;box-shadow:none !important;margin:0 !important;float:none !important;
+  width:auto !important;
+}
+#my-index #fastaginfo #fasttagpay .vm-rch-fcell > div:first-child p.vm-rch-err{
+  min-height:14px;margin:0 0 2px !important;line-height:1.2;
+}
+#my-index #fastaginfo #divbillfastagRefId[style*="display: none"],
+#my-index #fastaginfo #divbillfastagRefId[style*="display:none"]{
+  display:none !important;
+}
+
+/* ---------- 13. Mobile + tablet — poora Prepaid & Utility page ---------- */
+@media screen and (max-width:1024px){
+  body.saas-admin-ui #my-index.my-indexclass.content,
+  body.saas-admin-ui #my-index.vm-rch-page{
+    margin-left:0 !important;margin-right:0 !important;
+    margin-top:var(--admin-header-height,56px) !important;
+    padding:2px 10px 24px !important;
+    width:100% !important;max-width:100% !important;box-sizing:border-box !important;
+  }
+  #my-index .vm-rch-toolbar{
+    flex-direction:column;align-items:flex-start;gap:6px;padding:12px 14px;
+  }
+  #my-index .vm-rch-title{text-align:left;width:100%;}
+  #my-index .vm-rch-title h1{font-size:17px;}
+  #my-index .vm-rch-shell{padding:0 12px 16px !important;border-radius:14px;}
+  #my-index .vm-rch-toolbar{margin-bottom:4px !important;padding:10px 14px !important;}
+  #my-index .vm-rch-tabsrow{
+    margin-left:0 !important;margin-right:0 !important;width:100% !important;
+  }
+  /* Service tabs — mobile/tablet: 3 per row, no horizontal scroll */
+  #my-index .vm-rch-tabscol,
+  #my-index .vm-rch-tabs,
+  #my-index .vm-rch-tabsrow center{
+    overflow:visible !important;max-width:100% !important;
+  }
+  #my-index .fast-popewrts-responshive ul#changeborderbotto.vm-rch-tabs-list,
+  #my-index ul#changeborderbotto.vm-rch-tabs-list{
+    display:grid !important;
+    grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
+    gap:6px 8px !important;
+    width:100% !important;max-width:100% !important;min-width:0 !important;
+    min-height:auto !important;padding:8px 8px 10px !important;
+    overflow:visible !important;float:none !important;
+    box-sizing:border-box !important;
+  }
+  #my-index .fast-popewrts-responshive ul#changeborderbotto.vm-rch-tabs-list > li,
+  #my-index ul#changeborderbotto.vm-rch-tabs-list > li{
+    flex:none !important;width:100% !important;min-width:0 !important;max-width:none !important;
+    margin:0 !important;float:none !important;align-self:stretch !important;
+  }
+  #my-index ul#changeborderbotto > li.vm-rch-tab-more{
+    width:100% !important;min-width:0 !important;max-width:none !important;
+  }
+  #my-index ul#changeborderbotto.vm-rch-tabs-list > li > a{
+    min-height:72px !important;height:100% !important;padding:8px 6px !important;
+    border-radius:10px !important;
+  }
+  #my-index ul#changeborderbotto.vm-rch-tabs-list > li > a span{
+    font-size:10px !important;line-height:1.2 !important;
+    white-space:normal !important;overflow:visible !important;text-overflow:clip !important;
+    max-width:100% !important;display:block !important;
+    word-break:break-word !important;
+  }
+  #my-index ul#changeborderbotto.vm-rch-tabs-list > li > a img{
+    height:28px !important;margin-bottom:4px !important;
+  }
+  #my-index ul#changeborderbotto.vm-rch-tabs-list > li.active > a{
+    border-radius:10px !important;
+  }
+  #my-index .vm-rch-pane-wrap .custom-rch{
+    flex-wrap:wrap;gap:8px;align-items:center;
+  }
+  #my-index .vm-rch-pane-wrap .custom-rch > span{
+    flex:1 1 100%;font-size:13px;line-height:1.3;
+  }
+  #my-index .vm-rch-pane-wrap .custom-rch .btn,
+  #my-index .vm-rch-pane-wrap .custom-rch .vm-rch-tabactions{
+    margin:0 !important;float:none !important;width:100%;justify-content:flex-start;
+  }
+  #my-index .vm-rch-bottom > [class*="col-"],
+  #my-index .vm-rch-bottom .col-lg-6,
+  #my-index .vm-rch-bottom .col-md-6{
+    width:100% !important;max-width:100% !important;flex:0 0 100% !important;
+    float:none !important;
+  }
+  #my-index .vm-rch-offersbody{margin-bottom:12px;}
+  #my-index #reportchk{margin-top:12px;}
+}
+
+@media screen and (max-width:991px){
+  /* Mobile/tablet — saari utility forms compact (empty error slot hide, tight gap) */
+  #my-index{--vm-rch-row-top:0;}
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid,
+  #my-index .vm-rch-pane-wrap .vm-rch-fastag-grid,
+  #my-index .vm-rch-pane-wrap .vm-rch-loan-grid{--vm-rch-row-top:0;}
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-err:empty,
+  #my-index .vm-rch-pane-wrap .vm-rch-loan-grid .vm-rch-err:empty{
+    display:none !important;min-height:0 !important;height:0 !important;margin:0 !important;padding:0 !important;
+  }
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-err:not(:empty),
+  #my-index .vm-rch-pane-wrap .vm-rch-loan-grid .vm-rch-err:not(:empty){
+    min-height:13px !important;margin:0 0 2px !important;line-height:1.2;
+  }
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fcell:has(.vm-rch-err:not(:empty)),
+  #my-index .vm-rch-pane-wrap .vm-rch-loan-grid > .vm-rch-fcell:has(.vm-rch-err:not(:empty)){--vm-rch-row-top:16px;}
+  #my-index .vm-rch-formgrid .vm-rch-in-ico,
+  #my-index .vm-rch-formgrid .vm-rch-fop:not(:has(.vm-rch-in-ico))::before,
+  #my-index .vm-rch-formgrid .vm-rch-fnum:not(:has(.vm-rch-in-ico))::before,
+  #my-index .vm-rch-formgrid .vm-rch-famt:not(:has(.vm-rch-in-ico))::before,
+  #my-index .vm-rch-formgrid .vm-rch-fcircle:not(:has(.vm-rch-in-ico))::before{
+    top:var(--vm-rch-row-top) !important;
+    height:var(--vm-rch-h) !important;
+  }
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fcell:has(.vm-rch-err:not(:empty)) .vm-rch-in-ico,
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fcell:has(.vm-rch-err:not(:empty)) .vm-rch-fop:not(:has(.vm-rch-in-ico))::before,
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fcell:has(.vm-rch-err:not(:empty)) .vm-rch-fnum:not(:has(.vm-rch-in-ico))::before,
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fcell:has(.vm-rch-err:not(:empty)) .vm-rch-famt:not(:has(.vm-rch-in-ico))::before,
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fcell:has(.vm-rch-err:not(:empty)) .vm-rch-fcircle:not(:has(.vm-rch-in-ico))::before{
+    top:16px !important;
+  }
+  #my-index #Rechargeform.vm-rch-formgrid{
+    flex-wrap:wrap !important;align-items:flex-start !important;gap:4px 6px !important;
+  }
+  #my-index #Rechargeform{--vm-rch-row-top:0;}
+  #my-index #Rechargeform .vm-rch-err:empty{
+    display:none !important;min-height:0 !important;height:0 !important;margin:0 !important;padding:0 !important;
+  }
+  #my-index #Rechargeform .vm-rch-err:not(:empty){
+    min-height:13px !important;margin:0 0 2px !important;line-height:1.2;
+  }
+  #my-index #Rechargeform .vm-rch-fcell:has(.vm-rch-err:not(:empty)){--vm-rch-row-top:16px;}
+  #my-index #Rechargeform .vm-rch-fnum{
+    flex:1 1 100% !important;max-width:none !important;min-width:0 !important;
+    padding-bottom:0 !important;
+  }
+  #my-index #Rechargeform .vm-rch-fnum #txtmobile{
+    padding-right:12px !important;padding-left:36px !important;width:100% !important;
+  }
+  #my-index #Rechargeform .vm-rch-fnum .vm-rch-in-ico,
+  #my-index #Rechargeform .vm-rch-famt .vm-rch-in-ico{
+    top:var(--vm-rch-row-top) !important;height:var(--vm-rch-h) !important;
+  }
+  #my-index #Rechargeform .vm-rch-fop .select2-container--default .select2-selection--single .select2-selection__rendered,
+  #my-index #Rechargeform .vm-rch-fcircle .select2-container--default .select2-selection--single .select2-selection__rendered,
+  #my-index #Rechargeform .vm-rch-fcircle select.form-control{
+    padding-left:28px !important;
+  }
+  #my-index #Rechargeform .vm-rch-fnum .vm-rch-radioinline{
+    position:static !important;display:flex !important;flex-wrap:wrap !important;
+    width:100% !important;height:auto !important;margin:4px 0 0 !important;padding:0 0 0 2px !important;
+    gap:8px 16px !important;justify-content:flex-start !important;
+  }
+  #my-index #Rechargeform .vm-rch-fnum .vm-rch-radioinline label{
+    font-size:12px !important;padding:4px 0 !important;
+  }
+  #my-index #Rechargeform .vm-rch-fnum .vm-rch-radioinline input[type="radio"]{
+    width:16px !important;height:16px !important;
+  }
+  #my-index #Rechargeform .vm-rch-fop,
+  #my-index #Rechargeform .vm-rch-fcircle,
+  #my-index #Rechargeform .vm-rch-famt{
+    flex:1 1 100% !important;min-width:0 !important;max-width:100% !important;width:100% !important;
+  }
+  #my-index #Rechargeform .vm-rch-fbtn2,
+  #my-index #Rechargeform .vm-rch-fbtn{
+    flex:1 1 100% !important;align-self:flex-start !important;width:100% !important;
+  }
+  #my-index #Rechargeform .vm-rch-fbtn2 .btn,
+  #my-index #Rechargeform .vm-rch-fbtn .btn{
+    margin-top:0 !important;width:100% !important;max-width:100% !important;
+  }
+  #my-index #Rechargeform #viewplan{
+    position:relative !important;left:auto !important;right:auto !important;top:auto !important;
+    float:none !important;width:100% !important;margin:0 !important;
+  }
+  #my-index #Rechargeform #viewplan .view-plans-button,
+  #my-index #Rechargeform .rechargebutton input#btn{
+    margin:0 !important;width:100% !important;max-width:100% !important;
+  }
+  #my-index #Rechargeform .vm-rch-fbtn2--aux{margin-top:0 !important;}
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid,
+  #my-index .vm-rch-pane-wrap .vm-rch-fastag-grid,
+  #my-index #Landlineshow.vm-rch-formgrid,
+  #my-index #insurance #insurinfo.vm-rch-insur-grid,
+  #my-index #gas .vm-rch-gas-row--active,
+  #my-index #gas #showlpggassclass.vm-rch-formgrid,
+  #my-index #gas #firstrediobuttonshow.vm-rch-formgrid,
+  #my-index #water #watershow.vm-rch-formgrid,
+  #my-index #broadband #broadshow.vm-rch-formgrid,
+  #my-index #fastaginfo #fasttagpay.vm-rch-fastag-grid,
+  #my-index #dthrchform.vm-rch-formgrid,
+  #my-index #elecpay.vm-rch-formgrid{
+    flex-wrap:wrap !important;align-items:flex-start !important;gap:4px 6px !important;
+  }
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid > .vm-rch-fcell,
+  #my-index #insurance #insurinfo .vm-rch-fcell,
+  #my-index #gas .vm-rch-gas-row--active .vm-rch-fcell,
+  #my-index #water #watershow .vm-rch-fcell,
+  #my-index #broadband #broadshow .vm-rch-fcell,
+  #my-index #fastaginfo #fasttagpay .vm-rch-fcell,
+  #my-index #dthrchform .vm-rch-fcell,
+  #my-index #elecpay .vm-rch-fcell,
+  #my-index #Landlineshow .vm-rch-fcell{
+    flex:1 1 100% !important;min-width:0 !important;max-width:100% !important;width:100% !important;
+  }
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fbtn,
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fbtn2{
+    flex:1 1 100% !important;align-self:flex-start !important;width:100% !important;
+  }
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid input[type="submit"].btn,
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid input[type="button"].btn,
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fbtn .btn,
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fbtn2 .btn,
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .vm-rch-fbtn2 .vm-rch-linkbtn{
+    margin-top:0 !important;margin-left:0 !important;width:100% !important;max-width:100% !important;
+  }
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .form-line,
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .form-line.form-line-after{
+    display:block !important;height:auto !important;min-height:0 !important;margin:0 !important;
+    justify-content:flex-start !important;
+  }
+  #my-index #Landlineshow .form-line input.form-control,
+  #my-index .vm-rch-pane-wrap .vm-rch-formgrid .form-line input.form-control{width:100% !important;}
+  #my-index #Landlineshow #STDCODE{padding-left:32px !important;}
+  #my-index #Landlineshow #txtlandline{padding-left:32px !important;}
+  #my-index #Landlineshow #txtaccount{padding-left:32px !important;}
+  #my-index #Landlineshow #landamount{padding-right:92px !important;padding-left:32px !important;}
+  /* DTH — Customer Info: mobile/tablet par input ke neeche full-width (overlap na ho) */
+  #my-index #dthrchform .dthrchform-first.vm-rch-fnum{
+    display:flex !important;flex-direction:column !important;align-items:stretch !important;gap:0 !important;
+  }
+  #my-index #dthrchform .vm-rch-fnum:has(#dthtvviewplan:not([style*="display: none"])) #txtdthcardno,
+  #my-index #dthrchform .vm-rch-fnum:has(#dthtvviewplan:not([style*="display:none"])) #txtdthcardno,
+  #my-index #dthrchform .vm-rch-fnum:has(.vm-rch-infield-action:not([style*="display: none"])) #txtdthcardno{
+    padding-right:12px !important;padding-left:36px !important;width:100% !important;order:0;
+  }
+  #my-index #dthrchform #dthtvviewplan.vm-rch-infield-action,
+  #my-index #dthrchform #dthtvviewplan[style*="display: block"],
+  #my-index #dthrchform #dthtvviewplan[style*="display:block"]{
+    position:static !important;top:auto !important;right:auto !important;left:auto !important;
+    width:100% !important;max-width:100% !important;margin:4px 0 0 !important;
+    height:auto !important;flex:0 0 auto !important;order:1;
+  }
+  #my-index #dthrchform #dthtvviewplan a#dthplaan,
+  #my-index #dthrchform #dthtvviewplan a#dthplaan.vm-rch-linkbtn{
+    width:100% !important;max-width:100% !important;margin:0 !important;
+    height:var(--vm-rch-h) !important;min-height:var(--vm-rch-h) !important;
+    font-size:13px !important;border-radius:10px !important;
+  }
+  #my-index #dthrchform #checkplan.vm-rch-fbtn2{
+    flex:1 1 100% !important;width:100% !important;margin:0 !important;
+  }
+  #my-index #dthrchform #checkplan a.vm-rch-linkbtn{
+    width:100% !important;margin:0 !important;height:var(--vm-rch-h) !important;
+    border-radius:10px !important;
+  }
+  #my-index #dthrchform #txtdthcardno{padding-left:36px !important;}
+  #my-index #dthrchform .dthrchform-first .vm-rch-in-ico{
+    top:var(--vm-rch-row-top) !important;
+  }
+  #my-index #dthrchform .dthrchform-first.vm-rch-fcell:has(.vm-rch-err:not(:empty)) .vm-rch-in-ico{
+    top:16px !important;
+  }
+  #my-index #Rechargeform .vm-rch-fbtn2{
+    flex:1 1 100% !important;
+  }
+  /* Loan EMI — mobile + tablet: saari fields / buttons full width (ek ke neeche ek) */
+  #my-index #loan .vm-rch-loan-grid{
+    flex-wrap:wrap !important;align-items:flex-start !important;gap:4px 6px !important;
+    overflow-x:visible !important;overflow-y:visible !important;
+  }
+  #my-index #loan .vm-rch-loan-grid > .vm-rch-fcell{
+    flex:1 1 100% !important;width:100% !important;max-width:100% !important;
+    min-width:0 !important;padding-left:0 !important;padding-right:0 !important;
+  }
+  #my-index #loan #divloanddl,
+  #my-index #loan #divLoanAcno,
+  #my-index #loan #divLoanmobileno,
+  #my-index #loan #divpayamountloan,
+  #my-index #loan #divLoanPaymentMode,
+  #my-index #loan #divLoandob,
+  #my-index #loan #divLoanpancard,
+  #my-index #loan #divLoanCustomerid,
+  #my-index #loan #divLoanName{
+    flex:1 1 100% !important;width:100% !important;min-width:0 !important;max-width:100% !important;
+  }
+  #my-index #loan .vm-rch-loan-grid .vm-rch-in-ico,
+  #my-index #loan #divloanddl .vm-rch-in-ico{
+    top:var(--vm-rch-row-top) !important;bottom:auto !important;left:0 !important;
+    width:42px !important;font-size:19px !important;
+  }
+  #my-index #loan #divLoanAcno .vm-rch-in-ico{
+    font-size:20px !important;
+  }
+  #my-index #loan #divLoanmobileno .vm-rch-in-ico,
+  #my-index #loan #divLoanmobileno .vm-rch-in-ico.fa-mobile{
+    font-size:26px !important;width:46px !important;
+  }
+  #my-index #loan #divLoanmobileno #txtLoanMobileno{
+    padding-left:46px !important;
+  }
+  #my-index #loan #divloanddl .select2-container,
+  #my-index #loan .vm-rch-loan-grid input.form-control,
+  #my-index #loan .vm-rch-loan-grid select.form-control:not(.select2-hidden-accessible){
+    width:100% !important;
+  }
+  #my-index #loan #btngetloanviewbill,
+  #my-index #loan #btncontinue-loan{
+    flex:1 1 100% !important;width:100% !important;align-self:stretch !important;
+  }
+  #my-index #loan #btngetloanviewbill input,
+  #my-index #loan #btncontinue-loan input{
+    width:100% !important;max-width:100% !important;
+  }
+}
+
+@media screen and (max-width:600px){
+  body.saas-admin-ui #my-index.vm-rch-page{
+    padding:2px 6px 20px !important;
+    margin-top:var(--admin-header-height,56px) !important;
+  }
+  #my-index .vm-rch-breadcrumb li{font-size:12px;}
+  #my-index ul#changeborderbotto.vm-rch-tabs-list > li > a{min-height:68px !important;}
+  #my-index ul#changeborderbotto.vm-rch-tabs-list > li > a img{height:26px !important;}
+  #my-index ul#changeborderbotto.vm-rch-tabs-list > li > a span{font-size:9.5px !important;}
+  #my-index #Rechargeform .vm-rch-fop,
+  #my-index #Rechargeform .vm-rch-fcircle,
+  #my-index #Rechargeform .vm-rch-famt,
+  #my-index #Rechargeform .vm-rch-fbtn2,
+  #my-index #Rechargeform .vm-rch-fbtn{
+    flex:1 1 100% !important;
+  }
+  #my-index #Rechargeform .vm-rch-fnum #txtmobile{
+    font-size:15px !important;min-height:44px !important;height:44px !important;
+  }
+  #my-index{--vm-rch-h:44px;--vm-rch-lh:42px;}
+  #my-index #Rechargeform{--vm-rch-row-top:0;}
+  #my-index #Rechargeform .vm-rch-fnum .vm-rch-in-ico,
+  #my-index #Rechargeform .vm-rch-famt .vm-rch-in-ico{
+    height:var(--vm-rch-h) !important;top:var(--vm-rch-row-top) !important;
+  }
+  #my-index #Rechargeform .vm-rch-fcell:has(.vm-rch-err:not(:empty)) .vm-rch-in-ico{
+    top:16px !important;
+  }
+  #my-index .vm-rch-formgrid .vm-rch-fop:not(:has(.vm-rch-in-ico))::before,
+  #my-index .vm-rch-formgrid .vm-rch-famt:not(:has(.vm-rch-in-ico))::before{
+    height:var(--vm-rch-h) !important;
+  }
+  #my-index #Rechargeform .form-control,
+  #my-index #Rechargeform .select2-container--default .select2-selection--single{
+    min-height:44px !important;height:44px !important;
+  }
+  #my-index #loan .vm-rch-loan-grid > .vm-rch-fcell,
+  #my-index #insurance #insurinfo .vm-rch-fcell,
+  #my-index #gas .vm-rch-gas-row--active .vm-rch-fcell,
+  #my-index #water #watershow .vm-rch-fcell,
+  #my-index #broadband #broadshow .vm-rch-fcell,
+  #my-index #fastaginfo #fasttagpay .vm-rch-fcell,
+  #my-index #dthrchform .vm-rch-fcell,
+  #my-index #elecpay .vm-rch-fcell{
+    flex:1 1 100% !important;
+  }
+  #my-index #loan #btngetloanviewbill,
+  #my-index #loan #btncontinue-loan{
+    flex:1 1 100% !important;
+  }
+  #my-index #loan #btngetloanviewbill input,
+  #my-index #loan #btncontinue-loan input{width:100% !important;}
+  #my-index .vm-rch-pane-wrap{padding:12px 8px 14px !important;}
+  #my-index .vm-rch-number #numbershowmobile{font-size:22px !important;}
+  #my-index .vm-rch-offershead{padding:12px;}
+  #my-index .vm-rch-recent-scroll{overflow-x:auto !important;-webkit-overflow-scrolling:touch;}
+}

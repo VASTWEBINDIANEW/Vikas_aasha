@@ -1,259 +1,248 @@
 ﻿@model Vastwebmulti.Areas.RETAILER.Models.Servicefee
+@using System.Linq
 @{
     ViewBag.Title = "Service_Fee";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var paidList = Model != null && Model.PaidList != null ? Model.PaidList.ToList() : null;
+    var paidHistory = Model != null && Model.PaidHistorty != null ? Model.PaidHistorty.ToList() : null;
+    var historyCount = paidHistory != null ? paidHistory.Count : 0;
 }
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=21" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=38" rel="stylesheet" />
+<script>document.body.classList.add('saas-fund-transfer-page', 'saas-retailer-servicefee-page');</script>
 
 <style>
-    /* new css  */
+    /* ===== Service Fee : Set_Referral premium language ===== */
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-ref-layout { display: flex !important; gap: 14px !important; align-items: flex-start !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-ref-left { flex: 0 0 30% !important; max-width: 30% !important; min-width: 0 !important; display: flex !important; flex-direction: column !important; gap: 14px !important; background: #fff !important; border: 1px solid #e5e9f2 !important; border-radius: 16px !important; padding: 14px !important; box-shadow: 0 4px 16px rgba(15,23,42,.06) !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-ref-right { flex: 0 0 70% !important; max-width: 70% !important; min-width: 0 !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-ref-right .vm-radiant-record-badge { margin-left: auto !important; }
 
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-card { background: #fff !important; border: 1px solid #e5e9f2 !important; border-radius: 16px !important; overflow: hidden !important; box-shadow: 0 4px 16px rgba(15,23,42,.06) !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-card__head { display: flex !important; align-items: center !important; gap: 8px !important; padding: 12px 16px !important; background: linear-gradient(180deg,#f8faff,#fff) !important; border-bottom: 1px solid #eef1f6 !important; font-size: 13px !important; font-weight: 800 !important; color: #0f172a !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-card__head i { color: #4f46e5 !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-card__head .vm-radiant-record-badge { margin-left: auto !important; }
+
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-table { width: 100% !important; border-collapse: collapse !important; margin: 0 !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-table thead th { background: linear-gradient(180deg,#f1f5f9,#e2e8f0) !important; color: #334155 !important; font-size: 10.5px !important; font-weight: 800 !important; text-transform: uppercase !important; letter-spacing: .03em !important; padding: 9px 8px !important; border: none !important; border-bottom: 2px solid #cbd5e1 !important; white-space: nowrap !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-table tbody td { padding: 9px 8px !important; font-size: 12.5px !important; border: none !important; border-bottom: 1px solid #f1f5f9 !important; vertical-align: middle !important; background: #fff !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-table tbody tr:nth-child(even) td { background: #f8fafc !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-table tbody tr:hover td { background: #eff6ff !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-name { font-weight: 800 !important; color: #0f172a !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-type { display: inline-block !important; font-size: 10.5px !important; font-weight: 800 !important; padding: 2px 10px !important; border-radius: 999px !important; background: #eef2ff !important; color: #4f46e5 !important; white-space: nowrap !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-type--free { background: #e7f7ee !important; color: #15803d !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-mode-btn { border: 1.5px solid #e2e8f0 !important; background: #fff !important; color: #475569 !important; font-size: 11.5px !important; font-weight: 800 !important; border-radius: 999px !important; padding: 5px 14px !important; cursor: pointer !important; white-space: nowrap !important; transition: all .15s ease !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-mode-btn:hover { border-color: #4f46e5 !important; color: #4f46e5 !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-mode-btn--auto { background: #e7f7ee !important; border-color: #86efac !important; color: #15803d !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-scroll { height: 700px !important; max-height: 700px !important; overflow-y: auto !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-table thead th { position: sticky !important; top: 0 !important; z-index: 2 !important; }
+    body.saas-admin-ui .saas-retailer-servicefee-page .vm-ref-right .vm-ft-table-wrap { height: 700px !important; max-height: 700px !important; overflow-y: auto !important; }
+
+    @@media screen and (max-width:1024px) {
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ref-layout { flex-direction: column !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ref-left { flex: 0 0 100% !important; max-width: 100% !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ref-right { width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important; }
     }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
+    @@media screen and (max-width:767px) {
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ft-page-shell { padding-left: 10px !important; padding-right: 10px !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ft-page-toolbar { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ft-breadcrumb { flex-wrap: wrap !important; gap: 4px 8px !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ft-export-group { display: flex !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ft-export-group .saas-acc-btn { flex: 1 1 0 !important; justify-content: center !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ft-history-toolbar__head { flex-wrap: wrap !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ref-right .vm-radiant-record-badge { margin-left: 0 !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ref-right .vm-ft-table-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; height: 450px !important; max-height: 450px !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page #serviceFeeHistoryTable { min-width: 760px !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-scroll { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; height: 450px !important; max-height: 450px !important; }
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-fee-table { min-width: 480px !important; }
     }
-
-    .table {
-        margin-bottom: 0px;
+    @@media print {
+        body.saas-admin-ui .saas-retailer-servicefee-page .vm-ft-page-toolbar { display: none !important; }
     }
-
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .referralall-report {
-        overflow: scroll;
-    }
-    /* new css  */
-
-    .col-md-3.buttonPdf button:last-child {
-        padding-left: 15px;
-    }
-
-    .buttonPdf button {
-        color: #555 !important;
-    }
-
-    .servicepaidreport h2 span {
-        color: #fff;
-    }
-
-    .referralall-report table tr th, .referralall-report table tr td, .referralall-report table tr, .referralall-report table {
-        border-color: #ccc;
-    }
-
-    .servicefee-button button {
-        border-radius: 0;
-        border: 1px solid #ccc;
-        color: #555;
-        padding: 3px 5px;
-    }
-
-    .fourthdesign-retailer-allnone table.dataTable {
-        border-collapse: collapse;
-        border-spacing: 0;
-    }
-
-    @@media only screen and (max-width:1169px){
-        .container-fluid.resp_set {
-            padding-left: 15px !important;
-        }
-        .col-md-4.servicepaidreport {
-            padding-left: 0;
-        }
-    }
-    @@media only screen and (max-width:767px){
-        .col-md-8, .col-md-4.servicepaidreport {
-            padding-left: 0px;
-        }
-
-    }
-
-    @@media screen and (max-width:766px) {
-        .col-md-3.buttonPdf {
-            display: block;
-        }
-
-        .container-fluid {
-            padding-bottom: 0px;
-        }
-
-        .col-md-4.servicepaidreport {
-            margin-top: 0;
-            padding-left: 0;
-        }
-
-        .col-md-8 {
-            padding-left: 0px;
-        }
-    }
-
 </style>
 
-<section class="content servicefee-content servicefee-responshive content-fourdesign-page allpage-four-design-section" style="overflow-x:hidden;">
-    <div class="container-fluid resp_set" style="padding-left: 11px;height:100vh;">
-        <!--Four-Design-Page-Header-Start-->
+<section class="content saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium saas-retailer-servicefee-page">
+    <div class="container-fluid vm-ft-page-shell">
 
-        <div class="page-title-box-fourde">
-            <h3>Service Fee</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">My Account 1&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Service Fee</a></li>
-            </ul>
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <div>
+                    <ol class="vm-ft-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>My Account</li>
+                        <li>Service Fee</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="vm-ft-export-group">
+                <button type="button" id="btnFeeExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                <button type="button" id="btnFeePdf" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+            </div>
         </div>
 
-        <!--Four-Design-Page-Header-End-->
-        <div class="container-fluid" style="padding:0px;padding-bottom:10px;">
-            
-            <div class="page-header-third">
-                <div class="bread-same-all-page" style="float:left;">
-
-                    <ul style="margin:0;">
-                        <li class="smli">
-                            <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                            </a>
-                        </li>
-
-                        <li class="fullbodydycolorbg tmw-total-color-one">
-                            Service Fee
-                        </li>
-                    </ul>
-                    <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;">
-
-                        <button>PDF</button>
-                        <button>Export</button>
-
+        <div class="vm-ref-layout">
+            <div class="vm-ref-left">
+                <div class="vm-fee-card">
+                    <div class="vm-fee-card__head"><i class="fas fa-tags" aria-hidden="true"></i> Service Fee</div>
+                    <div class="vm-fee-scroll">
+                        <div id="tbl1">
+                            <table class="vm-fee-table" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Service's</th>
+                                        <th>Type</th>
+                                        <th>Mode</th>
+                                        <th>Price</th>
+                                        <th>Auto Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (paidList != null)
+                                    {
+                                        foreach (var item in paidList)
+                                        {
+                                            var type = "Paid";
+                                            if (item.IsFree)
+                                            {
+                                                type = "Free";
+                                            }
+                                            <tr>
+                                                @if (item.ServiceName == "DMT")
+                                                {
+                                                    <td class="vm-fee-name">ACC PAY</td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="vm-fee-name" title="@item.ServiceName">@item.ServiceName</td>
+                                                }
+                                                <td><span class="vm-fee-type@(item.IsFree ? " vm-fee-type--free" : "")">@type</span></td>
+                                                <td title="@item.PaymentType">@item.PaymentType</td>
+                                                <td title="@item.Price">@item.Price</td>
+                                                <td>
+                                                    @if (item.AutoSts == "Y")
+                                                    {
+                                                        <button type="button" class="vm-fee-mode-btn vm-fee-mode-btn--auto" onclick="statuscheck('@item.ServiceName', this)">AUTO</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="vm-fee-mode-btn" onclick="statuscheck('@item.ServiceName', this)">MANUAL</button>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-        </div>
-        <div class="col-md-4 servicepaidreport four-design-table-design">
-            <div class="page-header-third">
-                <div id="tbl1" class="referralall-report changeback-four-design">
-                    <h2 class="fullbodydycolorbg"><img src="~/ashok-images/support(1).svg" /><span>Service Fee</span></h2>
-                    <table border="1">
-                        <thead>
-                            <tr>
-                                <th>Service's</th>
-                                <th>Type</th>
-                                <th>Mode</th>
-                                <th>Price</th>
-                                <th>Auto Status</th>
 
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach (var item in Model.PaidList)
-                            {
-                                var type = "Paid";
-                                if (item.IsFree)
+            <div class="vm-ref-right fund-trasfer-right vm-ft-history-panel">
+                <div class="vm-ft-history-body">
+                    <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium">
+                        <div class="vm-ft-history-toolbar__head">
+                            <i class="fas fa-receipt" aria-hidden="true"></i>
+                            <div>
+                                <span class="vm-ft-history-toolbar__title">Service fee history</span>
+                                <span class="vm-ft-history-toolbar__sub">Service kharidne ka pura hisaab</span>
+                            </div>
+                            <span class="vm-radiant-record-badge" title="Total records">
+                                Records: <strong>@historyCount</strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div id="tblshowMasterD" class="vm-ft-table-wrap table-responsive">
+                        <table id="serviceFeeHistoryTable" class="table third-design-table vm-ft-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Service Name</th>
+                                    <th>Mode</th>
+                                    <th>Pre &#8377;</th>
+                                    <th>Fee</th>
+                                    <th>Post &#8377;</th>
+                                    <th>Purchase Date</th>
+                                    <th>Exp Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (paidHistory != null)
                                 {
-                                    type = "Free";
+                                    foreach (var item in paidHistory)
+                                    {
+                                        <tr>
+                                            @if (item.ServiceName == "DMT")
+                                            {
+                                                <td>ACC PAY</td>
+                                            }
+                                            else
+                                            {
+                                                <td title="@item.ServiceName">@item.ServiceName</td>
+                                            }
+                                            <td title="@item.PaymentType">@item.PaymentType</td>
+                                            <td title="@item.RemainPre">@item.RemainPre</td>
+                                            <td title="@item.AmountPaid">@item.AmountPaid</td>
+                                            <td title="@item.RemainPost">@item.RemainPost</td>
+                                            <td title="@item.PurchaseDate">@item.PurchaseDate</td>
+                                            <td title="@item.ExpiryDate">@item.ExpiryDate</td>
+                                        </tr>
+                                    }
                                 }
-
-                                <tr>
-                                    @if (item.ServiceName == "DMT")
-                                    {
-                                        <td>ACC PAY</td>
-                                    }
-                                    else
-                                    {
-                                        <td>@item.ServiceName</td>
-                                    }
-
-                                    <td>@type</td>
-                                    <td>@item.PaymentType</td>
-                                    <td>@item.Price</td>
-                                    <td class="servicefee-button">
-                                        @if (item.AutoSts == "Y")
-                                        {
-                                            <button onclick="statuscheck('@item.ServiceName')">AUTO</button>
-                                        }
-                                        else
-                                        {
-                                            <button onclick="statuscheck('@item.ServiceName')">MANUAL</button>
-                                        }
-
-                                    </td>
-
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
-            </div>
-
-            
-
-        </div>
-        <div class="col-md-8 four-design-table-design" style="padding-right:0;">
-            <div class="page-header-third">
-                <div class="referralall-report tablethirddesign-new tablethirddesign-newnew changeback-four-design">
-                    <table border="1" class="third-design-table fourdesign-data-table">
-                        <thead>
-                            <tr>
-                                <th>Service&nbsp;Name</th>
-                                <th>Mode</th>
-                                <th>Pre&nbsp;₹</th>
-                                <th>Fee</th>
-                                <th>post&nbsp;₹</th>
-                                <th>Purchase&nbsp;Date</th>
-                                <th>Exp&nbsp;Date</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach (var item in Model.PaidHistorty)
-                            {
-                                <tr>
-                                    @if (@item.ServiceName == "DMT")
-                                    {
-                                        <td>ACC PAY</td>
-                                    }
-                                    else
-                                    {
-                                        <td>@item.ServiceName</td>
-                                    }
-
-                                    <td>@item.PaymentType</td>
-                                    <td>@item.RemainPre</td>
-                                    <td>@item.AmountPaid</td>
-                                    <td>@item.RemainPost</td>
-                                    <td>@item.PurchaseDate</td>
-                                    <td>@item.ExpiryDate</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-
             </div>
         </div>
+
     </div>
 </section>
+
+<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+
 <script>
-    function statuscheck(servicename) {
+    function statuscheck(servicename, btn) {
+        if (btn) { btn.disabled = true; }
         $.ajax({
-            url: '@Url.Action("UpdateServicefee","Home")',
+            url: '@Url.Action("UpdateServicefee", "Home")',
             data: { type: servicename },
             cache: false,
             type: "GET",
             dataType: 'json',
             success: function (data) {
                 $("#tbl1").load(location.href + " #tbl1");
+            },
+            error: function () {
+                if (btn) { btn.disabled = false; }
+                alert("Status update fail hua. Dobara try karein.");
             }
         });
     }
+
+    document.getElementById("btnFeePdf").addEventListener("click", function () {
+        window.print();
+    });
+
+    document.getElementById("btnFeeExport").addEventListener("click", function () {
+        var table = document.getElementById("serviceFeeHistoryTable");
+        if (!table) { return; }
+        var bom = String.fromCharCode(65279);
+        var html = "<html><head><meta charset='UTF-8'></head><body>" + table.outerHTML + "</body></html>";
+        var blob = new Blob([bom + html], { type: "application/vnd.ms-excel" });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "Service_Fee_History.xls";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 100);
+    });
 </script>

@@ -1,488 +1,205 @@
 ﻿@{
     ViewBag.Title = "Help";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+    Func<string, string> helpVal = v => string.IsNullOrWhiteSpace(v) ? "No Data Found !" : v.Trim();
+    string adminCompany = "", adminName = "", adminEmail = "", adminMobile = "", adminAddress = "";
+    string dlrCompany = "", dlrName = "", dlrEmail = "", dlrMobile = "", dlrAddress = "";
+    try
+    {
+        if (ViewBag.admin != null)
+        {
+            if (ViewBag.admin.Companyname != null) { adminCompany = Convert.ToString(ViewBag.admin.Companyname); }
+            if (ViewBag.admin.Name != null) { adminName = Convert.ToString(ViewBag.admin.Name); }
+            try { if (ViewBag.admin.email1 != null && Convert.ToString(ViewBag.admin.email1) != "") { adminEmail = Convert.ToString(ViewBag.admin.email1); } else if (ViewBag.admin.email != null) { adminEmail = Convert.ToString(ViewBag.admin.email); } } catch { }
+            try { if (ViewBag.admin.mobile1 != null && Convert.ToString(ViewBag.admin.mobile1) != "") { adminMobile = Convert.ToString(ViewBag.admin.mobile1); } else if (ViewBag.admin.mobile != null) { adminMobile = Convert.ToString(ViewBag.admin.mobile); } } catch { }
+            if (ViewBag.admin.Address != null) { adminAddress = Convert.ToString(ViewBag.admin.Address); }
+        }
+    }
+    catch { }
+    try
+    {
+        if (ViewBag.dealer != null)
+        {
+            if (ViewBag.dealer.FarmName != null) { dlrCompany = Convert.ToString(ViewBag.dealer.FarmName); }
+            if (ViewBag.dealer.DealerName != null) { dlrName = Convert.ToString(ViewBag.dealer.DealerName); }
+            if (ViewBag.dealer.Email != null) { dlrEmail = Convert.ToString(ViewBag.dealer.Email); }
+            if (ViewBag.dealer.Mobile != null) { dlrMobile = Convert.ToString(ViewBag.dealer.Mobile); }
+            if (ViewBag.dealer.Address != null) { dlrAddress = Convert.ToString(ViewBag.dealer.Address); }
+        }
+    }
+    catch { }
 }
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=48" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-
-    /* new css  */
-
-
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
+    /* Retailer Help — 2-column premium grid (own scope, always wins) */
+    .saas-retailer-help-page .vm-dr-help-grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 16px !important; align-items: start !important; }
+    .saas-retailer-help-page .vm-dr-help-card { min-width: 0 !important; margin: 0 !important; }
+    .saas-retailer-help-page .vm-dr-help-panel { border: 1px solid #e5e9f2 !important; border-radius: 18px !important; overflow: hidden !important; background: #fff !important; box-shadow: 0 8px 24px rgba(15,23,42,.07) !important; transition: transform .16s ease, box-shadow .16s ease !important; }
+    .saas-retailer-help-page .vm-dr-help-panel:hover { transform: translateY(-2px) !important; box-shadow: 0 14px 32px rgba(15,23,42,.12) !important; }
+    .saas-retailer-help-page .vm-dr-help-panel__head { background: #fff !important; border: none !important; border-bottom: 1.5px solid #eef1f6 !important; padding: 14px 16px !important; }
+    .saas-retailer-help-page .vm-opr-table-panel__title { color: #0f172a !important; font-size: 17px !important; font-weight: 800 !important; display: flex !important; align-items: center !important; gap: 12px !important; line-height: 1.3 !important; }
+    .saas-retailer-help-page .vm-opr-table-panel__title i { display: inline-flex !important; width: 36px !important; height: 36px !important; min-width: 36px !important; border-radius: 11px !important; background: linear-gradient(135deg,#eef2ff,#e0e7ff) !important; border: 1px solid #c7d2fe !important; color: #4f46e5 !important; align-items: center !important; justify-content: center !important; font-size: 15px !important; margin: 0 !important; }
+    .saas-retailer-help-page .vm-dr-help-panel__body { padding: 8px 16px 14px !important; }
+    .saas-retailer-help-page .vm-dr-help-schedule { list-style: none !important; margin: 0 !important; padding: 0 !important; }
+    .saas-retailer-help-page .vm-dr-help-schedule__row { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 10px !important; padding: 10px 2px !important; border-bottom: 1px dashed #e5e9f2 !important; }
+    .saas-retailer-help-page .vm-dr-help-schedule__row:last-child { border-bottom: none !important; }
+    .saas-retailer-help-page .vm-dr-help-schedule__day { font-size: 13px !important; font-weight: 800 !important; color: #1e293b !important; display: inline-flex !important; align-items: center !important; gap: 8px !important; }
+    .saas-retailer-help-page .vm-dr-help-schedule__day::before { content: '' !important; width: 8px !important; height: 8px !important; border-radius: 50% !important; background: linear-gradient(135deg,#4f46e5,#7c3aed) !important; display: inline-block !important; }
+    .saas-retailer-help-page .vm-dr-help-schedule__time { font-size: 12.5px !important; font-weight: 700 !important; color: #334155 !important; background: none !important; border: none !important; border-radius: 0 !important; padding: 0 !important; white-space: nowrap !important; }
+    .saas-retailer-help-page .vm-dr-help-schedule__row--highlight .vm-dr-help-schedule__time { background: none !important; border: none !important; color: #b45309 !important; }
+    .saas-retailer-help-page .vm-dr-help-contact { margin: 0 !important; padding: 0 !important; }
+    .saas-retailer-help-page .vm-dr-help-contact__row { display: grid !important; grid-template-columns: 130px 1fr !important; gap: 10px !important; padding: 10px 2px !important; border-bottom: 1px dashed #e5e9f2 !important; margin: 0 !important; }
+    .saas-retailer-help-page .vm-dr-help-contact__row:last-child { border-bottom: none !important; }
+    .saas-retailer-help-page .vm-dr-help-contact__row dt { font-size: 10.5px !important; font-weight: 800 !important; text-transform: uppercase !important; letter-spacing: .5px !important; color: #64748b !important; }
+    .saas-retailer-help-page .vm-dr-help-contact__row dd { margin: 0 !important; font-size: 13.5px !important; font-weight: 700 !important; color: #0f172a !important; word-break: break-word !important; }
+    .saas-retailer-help-page .vm-dr-help-contact__row--full { grid-template-columns: 130px 1fr !important; }
+    @@media screen and (max-width:900px) {
+        .saas-retailer-help-page .vm-dr-help-grid { grid-template-columns: 1fr !important; }
     }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
+    @@media screen and (max-width:480px) {
+        .saas-retailer-help-page .vm-dr-help-contact__row { grid-template-columns: 1fr !important; gap: 3px !important; }
     }
-
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-
-       
-    /* new css  */
-
-    .table tbody tr td, .table tbody tr th {
-        border-top: 0px;
-        border-bottom: 0px;
-    }
-
-    .table-responsive {
-        border: 0px;
-        margin-right: 10px;
-        margin-left: 10px;
-    }
-
-    .dsdtb tr {
-        border-bottom: 1px dashed;
-    }
-
-        .dsdtb tr td:nth-child(2) {
-            text-align: right;
-        }
-
-    .pki img {
-        width: 57%;
-        padding: 20px;
-    }
-
-    .dsdtb tr:last-child {
-        border-bottom: 0px;
-    }
-
-    @@media only screen and (max-width:767px){
-
-        .bread-same-all-page li {
-            margin: 6px 0 !important;
-        }
-        .allpage-responshivenew {
-            padding: 0px 0;
-        }
-
-
-    }
-
-   
 </style>
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="overflow-x: hidden; ">
-    <div class="container-fluid">
-        <!--Four-Design-Page-Header-Start-->
+<script>document.body.classList.add('saas-sell-rch-dp-page', 'saas-dealer-notification-page', 'saas-retailer-help-page');</script>
 
-        <div class="page-title-box-fourde">
-            <h3>Support</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Support</a></li>
-            </ul>
-        </div>
+<section class="content saas-admin-account-page saas-admin-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-dealer-retailer-index-page saas-dealer-notification-page saas-retailer-help-page">
 
+    <div class="container-fluid vm-opr-page-shell">
 
-        <!--Four-Design-Page-Header-End-->
-
-        <div class="page-header-third">
-
-            <div class="bread-same-all-page allpage-responshivenew marginbottom-retailer-second">
-
-
-                <div class="col-md-12" style="width: auto; float: left; padding: 0;">
-                    <ul style="margin:0;">
-                        <li class="smli">
-                            <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                            </a>
-                        </li>
-
-                        <li class="fullbodydycolorbg tmw-total-color-one">
-                            &nbsp;Help
-                        </li>
-                    </ul>
-                </div>
-
-
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-dr-rem-toolbar-top">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Account Active</li>
+                    <li>Help</li>
+                </ol>
             </div>
         </div>
 
-        <!--Four-Design-Page-Header-End-->
-        <div class="row clearfix retailer-help-four" style="border-bottom: 2px solid #ff0003;margin-bottom: 35px;padding-bottom: 10px;">
-            @*<div class="col-md-6">
-                    <div class="card card-help-responsive">
-                        <p class="font-enter-responsive" style="font-size:21px;padding-top:2px;padding-bottom:7px;padding-left:15px;background-color:whitesmoke;font-weight:700;"><img src="~/images/reportimage/Help.svg" style="height:24px;">&nbsp;Customer&nbsp;Care&nbsp;Support&nbsp;Time</p>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="body" style="padding: 0px;">
-                                    <div style="padding-top:13px;border:1px solid #dddddd;border-radius:5px;">
+        <div class="vm-dr-help-grid">
 
-                                        <div class="row row-help-responsive">
-                                            <div class="col-md-12" style="margin-bottom:-25px;">
-                                                <div class="table-responsive dsdtb dsdtb-responshivdsdtb">
-                                                    <table class="table">
-                                                        <thead>
-
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>MONDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>TUESDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>WEDNESDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td>THURSDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>FRIDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>SATURDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>SUNDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  02.00 PM</p></td>
-
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+            <div class="vm-opr-main-card vm-dr-help-card">
+                <div class="vm-opr-table-panel vm-dr-help-panel">
+                    <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                        <div class="vm-opr-table-panel__title">
+                            <i class="fas fa-headset" aria-hidden="true"></i>
+                            <span>Customer care support time</span>
                         </div>
                     </div>
-                </div>*@
-
-
-            <div class="col-md-6 helpretailer-second">
-                <div class="card card-help-responsive class-back-tra-fourdesign" style="margin-top:0px;">
-                    <div class="page-header-third">
-                        <p class="font-enter-responsive help-heding-second headingback-fourdesign fourdesign-heding-border" style="font-size:21px;padding-top:2px;padding-bottom:7px;padding-left:15px;background-color:whitesmoke;font-weight:700;margin:0;"><img src="~/AdminDesign/images/company.svg" style="height:24px;">&nbsp;Company&nbsp;Contact&nbsp;Information</p>
-
-                    </div>
-                   
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="body page-header-third" style="padding: 5px;">
-                                <div class="helpback-second-retailer changeback-four-design" style="padding-top:13px;border:1px solid #dddddd;border-radius:5px;">
-
-                                    <div class="row row-help-responsive">
-                                        <div class="col-md-12" style="margin-bottom:-19px;">
-                                            <div class="table-responsive dsdtb dsdtb-lastresponshive">
-                                                <table class="table">
-                                                    <thead>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Company Name</td>
-
-                                                            <td>
-                                                                @if (ViewBag.admin.Companyname != null && ViewBag.admin.Companyname != "")
-                                                                {
-                                                                    <p style="margin-left:12%;">@ViewBag.admin.Companyname</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p style="margin-left:12%;">No Data Found !</p>
-                                                                }
-                                                            </td>
-
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Name</td>
-
-                                                            <td>
-                                                                @if (ViewBag.admin.Name != null && ViewBag.admin.Name != "")
-                                                                {
-                                                                    <p style="margin-left:12%;">@ViewBag.admin.Name</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p style="margin-left:12%;">No Data Found !</p>
-                                                                }
-                                                            </td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Email-ID</td>
-
-                                                            <td>
-                                                                @if (ViewBag.admin.email != null && ViewBag.admin.email1 != "")
-                                                                {
-                                                                    <p style="margin-left:12%;">@ViewBag.admin.email1</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p style="margin-left:12%;">No Data Found !</p>
-                                                                }
-                                                            </td>
-
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>Mobile No</td>
-
-                                                            <td>
-                                                                @if (ViewBag.admin.mobile != null && ViewBag.admin.mobile1 != "")
-                                                                {
-                                                                    <p style="margin-left:12%;">@ViewBag.admin.mobile1</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p style="margin-left:12%;">No Data Found !</p>
-                                                                }
-                                                            </td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Address</td>
-
-                                                            <td>
-                                                                @if (ViewBag.admin.Address != null && ViewBag.admin.Address != "")
-                                                                {
-                                                                    <p style="margin-left:12%;">@ViewBag.admin.Address</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p style="margin-left:12%;">No Data Found !</p>
-                                                                }
-                                                            </td>
-
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                    <div class="vm-dr-help-panel__body">
+                        <ul class="vm-dr-help-schedule" role="list">
+                            <li class="vm-dr-help-schedule__row">
+                                <span class="vm-dr-help-schedule__day">Monday</span>
+                                <span class="vm-dr-help-schedule__time">9:00 AM to 8:00 PM</span>
+                            </li>
+                            <li class="vm-dr-help-schedule__row">
+                                <span class="vm-dr-help-schedule__day">Tuesday</span>
+                                <span class="vm-dr-help-schedule__time">9:00 AM to 8:00 PM</span>
+                            </li>
+                            <li class="vm-dr-help-schedule__row">
+                                <span class="vm-dr-help-schedule__day">Wednesday</span>
+                                <span class="vm-dr-help-schedule__time">9:00 AM to 8:00 PM</span>
+                            </li>
+                            <li class="vm-dr-help-schedule__row">
+                                <span class="vm-dr-help-schedule__day">Thursday</span>
+                                <span class="vm-dr-help-schedule__time">9:00 AM to 8:00 PM</span>
+                            </li>
+                            <li class="vm-dr-help-schedule__row">
+                                <span class="vm-dr-help-schedule__day">Friday</span>
+                                <span class="vm-dr-help-schedule__time">9:00 AM to 8:00 PM</span>
+                            </li>
+                            <li class="vm-dr-help-schedule__row">
+                                <span class="vm-dr-help-schedule__day">Saturday</span>
+                                <span class="vm-dr-help-schedule__time">9:00 AM to 8:00 PM</span>
+                            </li>
+                            <li class="vm-dr-help-schedule__row vm-dr-help-schedule__row--highlight">
+                                <span class="vm-dr-help-schedule__day">Sunday</span>
+                                <span class="vm-dr-help-schedule__time">9:00 AM to 2:00 PM</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 helpretailer-second helpretailer-second-second">
-                <div class="card card-help-responsive class-back-tra-fourdesign" style="margin-top:0px;">
-                    <div class="page-header-third">
-                        <p class="font-enter-responsive help-heding-second headingback-fourdesign fourdesign-heding-border" style="font-size:21px;padding-top:2px;padding-bottom:7px;padding-left:15px;background-color:whitesmoke;font-weight:700;margin:0;"><img src="~/AdminDesign/images/company.svg" style="height:24px;">&nbsp;Distributer&nbsp;Contact&nbsp;Information</p>
-
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="body page-header-third" style="padding: 5px;">
-                                <div class="helpback-second-retailer changeback-four-design" style="padding-top:13px;border:1px solid #dddddd;border-radius:5px;">
-
-                                    <div class="row row-help-responsive">
-                                        <div class="col-md-12" style="margin-bottom:-19px;">
-                                            <div class="table-responsive dsdtb dsdtb-lastresponshive">
-                                                <table class="table">
-                                                    <thead>
-
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Company Name</td>
-
-                                                            <td>
-                                                                @if (ViewBag.admin.Companyname != null && ViewBag.dealer.FarmName != "")
-                                                                {
-                                                                    <p style="margin-left:12%;">@ViewBag.dealer.FarmName</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p style="margin-left:12%;">No Data Found !</p>
-                                                                }
-                                                            </td>
-
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Name</td>
-
-                                                            <td>
-                                                                @if (ViewBag.admin.Name != null && ViewBag.dealer.DealerName != "")
-                                                                {
-                                                                    <p style="margin-left:12%;">@ViewBag.dealer.DealerName</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p style="margin-left:12%;">No Data Found !</p>
-                                                                }
-                                                            </td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Email-ID</td>
-
-                                                            <td>
-                                                                @if (ViewBag.admin.email != null && ViewBag.dealer.Email != "")
-                                                                {
-                                                                    <p style="margin-left:12%;">@ViewBag.dealer.Email</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p style="margin-left:12%;">No Data Found !</p>
-                                                                }
-                                                            </td>
-
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>Mobile No</td>
-
-                                                            <td>
-                                                                @if (ViewBag.admin.mobile != null && ViewBag.dealer.Mobile != "")
-                                                                {
-                                                                    <p style="margin-left:12%;">@ViewBag.dealer.Mobile</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p style="margin-left:12%;">No Data Found !</p>
-                                                                }
-                                                            </td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Address</td>
-
-                                                            <td>
-                                                                @if (ViewBag.admin.Address != null && ViewBag.dealer.Address != "")
-                                                                {
-                                                                    <p style="margin-left:12%;">@ViewBag.dealer.Address</p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <p style="margin-left:12%;">No Data Found !</p>
-                                                                }
-                                                            </td>
-
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="vm-opr-main-card vm-dr-help-card">
+                <div class="vm-opr-table-panel vm-dr-help-panel">
+                    <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                        <div class="vm-opr-table-panel__title">
+                            <i class="fas fa-address-card" aria-hidden="true"></i>
+                            <span>Company contact information</span>
                         </div>
-
+                    </div>
+                    <div class="vm-dr-help-panel__body">
+                        <dl class="vm-dr-help-contact">
+                            <div class="vm-dr-help-contact__row">
+                                <dt>Company name</dt>
+                                <dd>@helpVal(adminCompany)</dd>
+                            </div>
+                            <div class="vm-dr-help-contact__row">
+                                <dt>Name</dt>
+                                <dd>@helpVal(adminName)</dd>
+                            </div>
+                            <div class="vm-dr-help-contact__row">
+                                <dt>Email-ID</dt>
+                                <dd>@helpVal(adminEmail)</dd>
+                            </div>
+                            <div class="vm-dr-help-contact__row">
+                                <dt>Mobile no</dt>
+                                <dd>@helpVal(adminMobile)</dd>
+                            </div>
+                            <div class="vm-dr-help-contact__row vm-dr-help-contact__row--full">
+                                <dt>Address</dt>
+                                <dd>@helpVal(adminAddress)</dd>
+                            </div>
+                        </dl>
                     </div>
                 </div>
             </div>
-        </div>
-        @*<div class="row clearfix">
-                <div class="col-md-6">
-                    <div class="card card-help-responsive">
-                        <p class="font-enter-responsive" style="font-size:21px;padding-top:2px;padding-bottom:7px;padding-left:15px;background-color:whitesmoke;font-weight:700;"><img src="~/images/reportimage/Help.svg" style="height:24px;">&nbsp;Distributer&nbsp;Working&nbsp;Time</p>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="body" style="padding: 0px;">
-                                    <div style="padding-top:13px;border:1px solid #dddddd;border-radius:5px;">
 
-                                        <div class="row row-help-responsive">
-                                            <div class="col-md-12" style="margin-bottom:-25px;">
-                                                <div class="table-responsive dsdtb dsdtb-responshivdsdtb">
-                                                    <table class="table">
-                                                        <thead>
-
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>MONDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>TUESDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>WEDNESDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td>THURSDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>FRIDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>SATURDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  08.00 PM</p></td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>SUNDAY</td>
-
-                                                                <td><p style="font-weight:700;">9.00 AM  to  02.00 PM</p></td>
-
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+            <div class="vm-opr-main-card vm-dr-help-card">
+                <div class="vm-opr-table-panel vm-dr-help-panel">
+                    <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                        <div class="vm-opr-table-panel__title">
+                            <i class="fas fa-user-tie" aria-hidden="true"></i>
+                            <span>Distributor contact information</span>
                         </div>
                     </div>
+                    <div class="vm-dr-help-panel__body">
+                        <dl class="vm-dr-help-contact">
+                            <div class="vm-dr-help-contact__row">
+                                <dt>Company name</dt>
+                                <dd>@helpVal(dlrCompany)</dd>
+                            </div>
+                            <div class="vm-dr-help-contact__row">
+                                <dt>Name</dt>
+                                <dd>@helpVal(dlrName)</dd>
+                            </div>
+                            <div class="vm-dr-help-contact__row">
+                                <dt>Email-ID</dt>
+                                <dd>@helpVal(dlrEmail)</dd>
+                            </div>
+                            <div class="vm-dr-help-contact__row">
+                                <dt>Mobile no</dt>
+                                <dd>@helpVal(dlrMobile)</dd>
+                            </div>
+                            <div class="vm-dr-help-contact__row vm-dr-help-contact__row--full">
+                                <dt>Address</dt>
+                                <dd>@helpVal(dlrAddress)</dd>
+                            </div>
+                        </dl>
+                    </div>
                 </div>
+            </div>
 
-            </div>*@
+        </div>
+
     </div>
 </section>
-

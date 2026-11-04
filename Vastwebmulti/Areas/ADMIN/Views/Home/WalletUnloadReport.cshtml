@@ -11,7 +11,7 @@
 
     var frmDate = (Request["txt_frm_date"] ?? "").Trim();
     var toDate = (Request["txt_to_date"] ?? "").Trim();
-    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.AddDays(-30).ToString("yyyy-MM-dd"); }
     if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
 
     var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
@@ -69,6 +69,146 @@
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=31" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<style>
+    /* Wallet unload action buttons — solid green/red like old page, clearly visible icons */
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-gift-act-btn {
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 6px !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-gift-act-btn i.fa {
+        font-size: 14px !important;
+        line-height: 1 !important;
+        color: #fff !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-gift-act-btn--success {
+        background: #16a34a !important;
+        border: 1px solid #16a34a !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-gift-act-btn--success:hover {
+        background: #15803d !important;
+        border-color: #15803d !important;
+        color: #fff !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-gift-act-btn--failed {
+        background: #dc2626 !important;
+        border: 1px solid #dc2626 !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-gift-act-btn--failed:hover {
+        background: #b91c1c !important;
+        border-color: #b91c1c !important;
+        color: #fff !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-act-cell {
+        white-space: nowrap !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-act-cell .vm-gift-act-btn {
+        margin-left: 6px !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-act-cell .vm-gift-act-btn:first-child {
+        margin-left: 0 !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-no-act {
+        display: inline-block;
+        min-width: 30px;
+        text-align: center;
+        color: #94a3b8 !important;
+        font-size: 14px;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-mini-act {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        height: 28px !important;
+        padding: 0 12px !important;
+        border-radius: 999px !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        line-height: 1 !important;
+        color: #fff !important;
+        border: 1px solid transparent !important;
+        cursor: pointer !important;
+        white-space: nowrap !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-mini-act i.fa {
+        font-size: 12px !important;
+        line-height: 1 !important;
+        color: #fff !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-mini-act--success {
+        background: #16a34a !important;
+        border-color: #16a34a !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-mini-act--success:hover {
+        background: #15803d !important;
+        border-color: #15803d !important;
+        color: #fff !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-mini-act--failed {
+        background: #dc2626 !important;
+        border-color: #dc2626 !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-mini-act--failed:hover {
+        background: #b91c1c !important;
+        border-color: #b91c1c !important;
+        color: #fff !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-final-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 0.66rem;
+        font-weight: 800;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+        white-space: nowrap;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-final-badge.is-success {
+        background: #ecfdf5;
+        color: #059669;
+        border-color: #a7f3d0;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-final-badge.is-failed {
+        background: #fef2f2;
+        color: #dc2626;
+        border-color: #fecaca;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-final-badge.is-refund {
+        background: #f5f3ff;
+        color: #7c3aed;
+        border-color: #ddd6fe;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-toggle-btn {
+        background: #fff !important;
+        border: 1px solid #f59e0b !important;
+        margin-left: 6px !important;
+        width: 26px !important;
+        height: 26px !important;
+        vertical-align: middle;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-toggle-btn i.fa {
+        font-size: 12px !important;
+        color: #d97706 !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-toggle-btn:hover {
+        background: #fffbeb !important;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-status-dot {
+        background: #7c3aed !important;
+        border: 1px solid #7c3aed !important;
+        width: 26px !important;
+        height: 26px !important;
+        cursor: default !important;
+        vertical-align: middle;
+    }
+    body.saas-admin-ui .saas-wallet-unload-report-page .vm-wallet-unload-status-dot i.fa {
+        font-size: 12px !important;
+        color: #fff !important;
+    }
+</style>
 
 <section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-giftcard-report-page saas-radiant-wallet-report-page saas-wallet-unload-report-page">
 
@@ -247,6 +387,10 @@
 
                                         var amountVal = item.Amount ?? 0m;
 
+                                        var isFinalStatus = statusUpper.Contains("SUCCESS") || statusUpper == "REJECTED" || statusUpper.Contains("REFUND") || statusUpper.Contains("FAIL");
+                                        var canMarkSuccess = (statusUpper == "REJECTED" || statusUpper.Contains("FAIL")) && !statusUpper.Contains("REFUND") && !statusUpper.Contains("SUCCESS");
+                                        var canMarkFailed = statusUpper.Contains("SUCCESS");
+
                                         <tr class="@rowClass" data-status="@statusKey" data-amount="@amountVal">
                                             <td><span class="vm-radiant-wallet-status">@item.Status</span></td>
                                             <td>@item.RoleName</td>
@@ -261,24 +405,48 @@
                                             <td>@item.ResponseDate</td>
                                             <td>@item.BankRRN</td>
                                             <td class="vm-wallet-unload-act-cell">
-                                                <button type="button" class="vm-gift-act-btn vm-gift-act-btn--success" title="Approved"
-                                                        data-request-id="@item.RequestId"
-                                                        data-action="Approved"
-                                                        data-firm="@item.FirmName"
-                                                        data-amount="@item.Amount"
-                                                        data-bank="@item.BankName"
-                                                        onclick="openWalletUnloadActionModal(this)">
-                                                    <i class="fa fa-check" aria-hidden="true"></i>
-                                                </button>
-                                                <button type="button" class="vm-gift-act-btn vm-gift-act-btn--failed" title="Reject"
-                                                        data-request-id="@item.RequestId"
-                                                        data-action="Reject"
-                                                        data-firm="@item.FirmName"
-                                                        data-amount="@item.Amount"
-                                                        data-bank="@item.BankName"
-                                                        onclick="openWalletUnloadActionModal(this)">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </button>
+                                                @if (!isFinalStatus)
+                                                {
+                                                    <button type="button" class="vm-gift-act-btn vm-gift-act-btn--success" title="Approved"
+                                                            data-request-id="@item.RequestId"
+                                                            data-action="Approved"
+                                                            data-firm="@item.FirmName"
+                                                            data-amount="@item.Amount"
+                                                            data-bank="@item.BankName"
+                                                            onclick="openWalletUnloadActionModal(this)">
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                                    </button>
+                                                    <button type="button" class="vm-gift-act-btn vm-gift-act-btn--failed" title="Reject"
+                                                            data-request-id="@item.RequestId"
+                                                            data-action="Reject"
+                                                            data-firm="@item.FirmName"
+                                                            data-amount="@item.Amount"
+                                                            data-bank="@item.BankName"
+                                                            onclick="openWalletUnloadActionModal(this)">
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    if (canMarkSuccess)
+                                                    {
+                                                        <button type="button" class="vm-wallet-unload-mini-act vm-wallet-unload-mini-act--success" title="Mark as success"
+                                                                onclick="walletFailedToSuccess('@item.Idno', '@statusKey')">
+                                                            <i class="fa fa-check" aria-hidden="true"></i><span>Success</span>
+                                                        </button>
+                                                    }
+                                                    else if (canMarkFailed)
+                                                    {
+                                                        <button type="button" class="vm-wallet-unload-mini-act vm-wallet-unload-mini-act--failed" title="Mark as failed"
+                                                                onclick="walletSuccessToFailed('@item.Idno', '@statusKey')">
+                                                            <i class="fa fa-times" aria-hidden="true"></i><span>Failed</span>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="vm-wallet-unload-no-act" title="No action available">&mdash;</span>
+                                                    }
+                                                }
                                             </td>
                                         </tr>
                                     }
@@ -477,6 +645,90 @@
             if (reloadOnOk) {
                 location.reload();
             }
+        });
+    }
+
+    function walletFailedToSuccess(idno, status) {
+        var st = (status || '').toString().toUpperCase();
+        var isFailed = (st === 'REJECTED' || st.indexOf('FAIL') >= 0) && st.indexOf('REFUND') === -1 && st.indexOf('SUCCESS') === -1;
+        if (!isFailed) {
+            return;
+        }
+        if (!idno || isNaN(parseInt(idno, 10))) {
+            swal('Oops!', 'Is row ka request number nahi mila. Page reload karke phir try karo.', 'error');
+            return;
+        }
+        swal({
+            title: 'Mark as success?',
+            text: 'This will change this rejected request to success.',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, continue',
+            cancelButtonText: 'Cancel',
+            closeOnConfirm: true
+        }, function (isConfirm) {
+            if (!isConfirm) {
+                return;
+            }
+            $.ajax({
+                url: '@Url.Action("wallet_upload_failed_to_success", "Home")',
+                type: 'POST',
+                data: { idno: idno },
+                success: function () {
+                    swal({
+                        title: 'Success!',
+                        text: 'Request marked as success.',
+                        type: 'success',
+                        closeOnConfirm: true
+                    }, function () {
+                        location.reload();
+                    });
+                },
+                error: function () {
+                    swal('Oops!', 'Unable to update request.', 'error');
+                }
+            });
+        });
+    }
+
+    function walletSuccessToFailed(idno, status) {
+        if ((status || '').toString().toUpperCase().indexOf('SUCCESS') === -1) {
+            return;
+        }
+        if (!idno || isNaN(parseInt(idno, 10))) {
+            swal('Oops!', 'Is row ka request number nahi mila. Page reload karke phir try karo.', 'error');
+            return;
+        }
+        swal({
+            title: 'Mark as failed?',
+            text: 'This will change this success request to failed.',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, continue',
+            cancelButtonText: 'Cancel',
+            closeOnConfirm: true
+        }, function (isConfirm) {
+            if (!isConfirm) {
+                return;
+            }
+            $.ajax({
+                url: '@Url.Action("wallet_upload_success_to_failed", "Home")',
+                type: 'POST',
+                data: { idno: idno },
+                success: function () {
+                    swal({
+                        title: 'Updated!',
+                        text: 'Request marked as failed.',
+                        type: 'success',
+                        closeOnConfirm: true
+                    }, function () {
+                        location.reload();
+                    });
+                },
+                error: function () {
+                    swal('Oops!', 'Unable to update request.', 'error');
+                }
+            });
         });
     }
 

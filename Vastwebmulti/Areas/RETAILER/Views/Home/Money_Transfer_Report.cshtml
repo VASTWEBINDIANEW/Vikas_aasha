@@ -2,1692 +2,675 @@
 @{
     ViewBag.Title = "Money_Transfer_Report";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var selStatus = (Request["ddl_status"] ?? "").Trim();
+    var selType = (Request["ddl_Type"] ?? "").Trim();
+    var selFind = (Request["txtnumberfind"] ?? "").Trim();
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
 }
-<style>
-
-
-    /* new css */
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
-    
-
-    /* new css */
-
-    .dropdown-menu {
-        margin-top: 91px !important;
-    }
-    table #trow {
-        counter-reset: rowNumber;
-    }
-
-        table #trow tr::before {
-            display: table-cell;
-            counter-increment: rowNumber;
-            content: counter(rowNumber) ".";
-            text-align: left;
-            padding-left: 3px;
-            border-right: 1px solid #aaa4a4;
-            border-bottom: 1px solid #aaa4a4;
-            padding-top: 3px;
-        }
-    .table-bordered tbody tr, .table-bordered tbody tr {
-        border: 1px solid var(--border-color);
-    }
-    .tfooter-trnone::before{display:none !important;}
-</style>
-<style>
-    #totafind span#lblpending::after, #totafind span#lblsuccess::after, #totafind span#lblfailed::after {
-        content: "";
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        float: left;
-        background-color: #ff9800;
-        background-size: 81%;
-        background-position: center;
-        border-radius: 50%;
-        margin: 2px 3px 0px 3px;
-    }
-
-    #totafind span#lblsuccess::after {
-        background: url(../../ashok-images/correct.svg)no-repeat;
-        background-color: green;
-        background-size: 65%;
-        background-position: center;
-    }
-
-    #totafind span#lblfailed::after {
-        background: url(../../ashok-images/closes.svg)no-repeat;
-        background-color: #ff0000;
-        background-size: 65%;
-        background-position: center;
-    }
-
-    #totafind span#lblpending::after {
-        background: url(../../ashok-images/clkk.png)no-repeat;
-        background-color: #FF9800;
-        background-size: 65%;
-        background-position: center;
-    }
-
-    .for-searchretailerinput input {padding: 2px 4px;}
-
-    .col-md-3.buttonPdf.retailer-pdf-second.retailer-pdf-second-retailer button {font-size: 12px;}
-
-    .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li {
-        width: auto;float: left;padding-right: 8px;margin: 0px !important;float: left !important;
-
-    }
-     .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li a {padding: 4px 8px !important;}
-    .form-group {width: 100%;}
-
-    .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li a {
-        width: 100%;float: left;display: flex;text-align: center;justify-content: center;
-        background: var(--nav-tab-bg);border: 1px solid var(--main-bg-rcolor) !important;position: relative;
-    }
-    .aepsfullpage .newtabsreport.uladdcssnew .container-tabsrepor ul.nav.nav-tabs.tabsrepor-nav li a {
-        min-height: 30px;
-    }
-    .tableclasscssfirst table thead tr th {border-bottom: 0;}
-
-    .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li:last-child {padding-right: 0px;}
-
-    .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav {
-        width: 100% !important;float: left;
-    }
-
-        .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li a.active::before {
-            content: "";display: block;width: 10px;height: 10px;position: absolute;
-            background: var(--main-bg-lcolor);border: 1px solid var(--main-bg-lcolor) !important;
-            border-left: 0;bottom: -4px;border-top: 0;transform: rotate(45deg);text-align: center;
-            margin: 0px auto;left: 0;right: 0;transition: .4s linear;z-index: 9;
-        }
-         
-  
-    .responsive-report-moneynew .finacial-select .select2 {width: 100% !important;float: left;}
-        .responsive-report-moneynew .finacial-select .select2 .select2-selection {
-            border-radius: 0;border: 1px solid #ccc;height: 32px;
-        }
-    .responsive-report-moneynew .surchnumberqqqq {padding: 0;padding-right: 0px;padding-right: 0px;padding-right: 3px;width: 15%;}
-    .responsive-report-moneynew .surchnumberqqqq input {padding:0 5px !important;}
-    .responsive-report-moneynew .finacial-select {width: 11%;float: left;}
-    .responsive-report-moneynew .buttonPdf {
-        float: right;width: auto;
-    }
-    .responsive-report-moneynew .col-md-4.finacial-selects {
-        width: 30%;float: left;
-    }
-
-    .totalfaild-retailer span {float: left;}
-    .totalfaild-retailer span ~ br {display: none;}
-    .totalfaild-retailer span {padding: 5px 5px;}
-    .totalfaild-retailer {
-        position: absolute;bottom: 12px;right: 47px;background: #eeebeb;border: 1px solid #ccc;width: auto;
-    }
-    .totalfaild-retailer span:first-child {border-right: 1px solid #ccc;}
-    .totalfaild-retailer span:last-child {border-left: 1px solid #ccc;}
-
-    .Financial-pagetabs *, .Financial-pagetabs .btn.dropdown-toggle.btn-default span, .Financial-pagetabs .aeps-status-search button i, .Financial-pagetabs .aeps-status-search button span {
-        color: #555 !important;
-    }
-
-    .Financial-pagetabs .enteraddarnumber input::placeholder {
-        color: #555 !important;
-    }
-    .row-moneyresponsive input::placeholder, .row-moneyresponsive input, .row-moneyresponsive button span, .row-moneyresponsive button i {
-        color: #555 !important;
-    }
-    .col-md-3.buttonPdf.retailer-pdf-second.retailer-pdf-second-retailer button {
-        color: #555 !important;
-    }
-
-    @@media screen and (max-width:1169px) {
-        .newtabsreport .container-tabsrepor.money-transfer-retailer .tab-content.tabsrepor-content {
-            width: 100% !important;
-        }
-        .layoutt-retailer section.content.aepsfullpage {
-            margin-left: 0% !important;
-        }
-
-        .aepsfullpage .container-fluid.Financial-page, .aepsfullpage .container.container-tabsrepor {
-            padding-left: 15px !important;
-        }
-
-    }
-
-    @@media only screen and (max-width:767px){
-
-        .responsive-report-money .row-moneyresponsive {
-            margin: 0 !important;
-        }
-
-            .responsive-report-money .row-moneyresponsive .col-md-12 {
-                padding: 0;
-            }
-        .col-md-3.buttonPdf {
-            display: block;
-        }
-        .uladdcssnew-responsive .col-md-2.finacial-select {
-            width: 50%;
-        }
-        .responsive-report-moneynew .surchnumberqqqq {
-            width: 50%;
-            padding-top: 5px;
-            padding-left: 4px;
-            padding-right: 0;
-        }
-        .responsive-report-moneynew .col-md-4.finacial-selects {
-            width: 50%;
-            padding-top: 5px;
-        }
-        .uladdcssnew-responsive .col-md-2.finacial-select-search {
-            width: 50%;
-            padding-top: 5px;
-        }
-
-        .content.aepsfullpage.aepsfullpageweertd .col-md-3.buttonPdf {
-            left: auto;
-            padding-top: 5px;
-            width: 50%;
-            text-align: end;
-        }
-        .content.aepsfullpage.aepsfullpageweertd .tabsrepor-content-fluid .col-md-2.finacial-select {
-            padding-left: 4px;
-        }
-        .col-md-12.statusshow-dmtpage {
-            padding-right: 15px !important;
-            padding-left: 15px !important;
-        }
-
-    }
-
-
-    @@media screen and (max-width: 766px) {
-        .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav {margin-bottom: 0px !important;}
-
-            .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li {padding-right: 5px;}
-
-        .money-transfer-retailer .col-md-2.finacial-select {width: 50%;float: left;}
-
-            
-
-        .money-transfer-retailer .tab-content.tabsrepor-content .col-md-12 .col-md-3 {
-            width: 100%;float: left;padding-left: 6px;margin: 10px 0;
-        }
-
-        .money-transfer-retailer .col-md-4.finacial-selectsss {
-            width: 100% !important;float: left;margin-bottom: 10px;
-        }
-
-        .money-transfer-retailer .col-md-2.finacial-select-search {
-            width: auto !important;float: left;
-        }
-
-        .money-transfer-retailer .tab-content.tabsrepor-content .col-md-12 {width: 100%;}
-
-        .row-moneyresponsive {position: relative;}
-
-        .col-md-12.statusshow-dmtpage {padding: 0 15px !important;}
-
-        .money-transfer-retailer .col-md-2.finacial-select-search button span {font-size: 12px !important;}
-
-        .money-transfer-retailer .tab-content.tabsrepor-content .statusshow-dmt.statusshow-dmt .statusshow-dmtpage {
-            width: 100% !important;float: left;margin-left: 0;
-        }
-        .row-moneyresponsive .col-md-12 {padding: 0;}
-        .row-moneyresponsive .col-md-12 .surchnumberqqqq {
-            width: 100%;padding-left: 6px;margin: 8px 0;
-        }
-        .col-md-3.buttonPdf {display: block;width: auto;float: right;position: static !important;}
-        .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav {display: block !important;}
-        .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li {width: 33% !important;margin-bottom: 15px !important;}
-        .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li a img {width: 14px !important;}
-        .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li a {
-            padding-left: 0px !important;padding-right: 0px !important;
-        }
-
-    }
-
-    @@media screen and (max-width:480px) {
-        .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li {
-            padding-right: 0px;
-        }
-
-        .content.aepsfullpage.aepsfullpageweertd .col-md-3.buttonPdf {
-            padding-top: 0px;
-            width: 100%;
-        }
-
-        .money-transfer-retailer .col-md-2.finacial-select {
-            width: 100%;
-            padding: 0 !important;
-            padding-bottom: 5px !important;
-        }
-        .row-moneyresponsive .col-md-12 .surchnumberqqqq {
-            padding-left: 0px;
-            margin: 0px 0;
-            padding-top: 0;
-        }
-        .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li {
-            width: 50% !important;
-            margin-bottom: 10px !important;
-        }
-
-           
-            .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li:nth-child(4), .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li:nth-child(5) {
-                width: 50%;
-                float: left;
-            }
-
-        .money-transfer-retailer .col-md-4.finacial-selectsss {
-            padding-left: 0;
-        }
-        .money-transfer-retailer .col-md-2.finacial-select-search {
-            padding: 0;
-            padding-bottom: 5px !important;
-            width: 100% !important;
-        }
-
-    }
-
-    @@media only screen and (max-width:420px){
-
-        .addnew-responsiveclass .finacial-select {
-            width: 100% !important;
-            margin-bottom: 0px;
-        }
-        .addnew-responsiveclass .finacial-selectsss {
-            padding-left: 0px !important;
-        }
-        .money-transfer-retailer .col-md-4.finacial-selectsss {
-            margin-bottom: 5px;
-        }
-
-    }
-
-
-
-</style>
-
-<section class="content aepsfullpage aepsfullpageweertd content-margin-second content-fourdesign-page allpage-four-design-section" style="overflow-x: hidden;">
-    <!--newtabsreport-->
-    <!--Four-Design-Page-Header-Start-->
-
-    <div class="page-title-box-fourde">
-        <h3>Financial Services</h3>
-        <ul>
-            <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-            <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-            <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Financial Services</a></li>
-        </ul>
-    </div>
-
-    <!--Four-Design-Page-Header-End-->
-    <div class="newtabsreport uladdcssnew uladdcssnew-responsive">
-        <div class="container container-tabsrepor addnew-responsiveclass money-transfer-retailer">
-
-            @Html.Partial("_menuFinicalReport")
-
-            <div id="home" class="tab-pane fade in active" style="width:100%;float:left;">
-                <div class="container-fluid tabsrepor-content-fluid responsive-report-money responsive-report-moneynew">
-                    <div class="row clearfix row-moneyresponsive page-header-third" style="margin-right: -15px; margin-left: -15px;">
-                        <div class="col-md-12">
-                            <div class="card class-back-tra-fourdesign" style="margin-bottom: 0;">
-                                <div class="">
-
-                                    <div class="row rowchange-margin" style="position:relative;">
-                                        @using (Html.BeginForm("Money_Transfer_Report", "Home", FormMethod.Post))
-                                        {
-                                            <div class="col-md-2 finacial-select">
-                                                <div class="form-group">
-                                                    <div class="" style="margin-top: 0px;">
-                                                        @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                            {
-                                            new SelectListItem{ Text="Status",Value="ALL",},
-                                            new SelectListItem{Text="SUCCESS",Value="SUCCESS"},
-                                            new SelectListItem{Text="Pending",Value="PENDING"},
-                                            new SelectListItem{Text="FAILED",Value="FAILED"}
-                                            }, new { @class = "form-control for-select2" })
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 finacial-select">
-                                                <div class="form-group">
-                                                    <div class="" style="margin-top: 0px;">
-                                                        @Html.DropDownList("ddl_Type", new List<SelectListItem>
-                                                          {
-                                                              new SelectListItem{ Text="Transition Type",Value="ALL",},
-                                                              new SelectListItem{Text="Account Transfer",Value="IMPS"},
-                                                              new SelectListItem{Text="UPI Transfer",Value="UPI"},
-                                                              new SelectListItem{Text="Paytm Wallet",Value="WALLET"},
-                                                              new SelectListItem{Text="Verify",Value="IMPS_VERIFY"},
-                                                              new SelectListItem{Text="Credit Card",Value="Credit Card"}
-                                                            }, new { @class = "form-control for-select2" })
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 surchnumberqqqq">
-
-                                                @Html.TextBox("txtnumberfind", "", new { @class = "form-control", @placeholder = "Sender Number / Bank Acc", @style = "height:32px !important;padding:0px; background:none;font-size:12px;border-color: #ccc !important;box-shadow: none;" })
-                                            </div>
-                                            <div class="col-md-4 finacial-selects finacial-selectsss" id="rwqrtse">
-                                                <div class="form-group" style="margin-bottom:0px;margin-top:0px;">
-                                                    <div class="input-daterange input-group">
-                                                        <div class="datesate datesates">
-                                                            <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", autocomplete = "off" })
-                                                        </div>
-                                                        <span class="input-group-addon">
-                                                            <i class="fa fa-exchange" style="padding-top:10px;"></i>
-                                                        </span>
-                                                        <div class="datesate datesatese">
-                                                            <div class="form-iconmy form-iconmyss" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", autocomplete = "off" })
-                                                        </div>
-                                                    </div>
-                                                    <!-- /.input group -->
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 finacial-select-search">
-                                                <div class="form-group">
-                                                    <div class="form-line" style="border-bottom:none;">
-                                                        <button value="LIVE" type="submit" class="btn retailer-search-second" id="submit" name="submit" style="margin-top:5px; margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                                                            <i class="fa fa-search" style="top:-1px;font-size:13px;color:#aaa;"></i>
-                                                            <span class="font-responsiveo" style="top:-1px;color:black;">Search</span>
-                                                        </button>
-
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    <div class="col-md-3 buttonPdf retailer-pdf-second retailer-pdf-second-retailer" style="margin:0px;">
-
-                                        <button id="btnPDF">PDF</button>
-                                        <button id="btnExport">Export</button>
-                                        <button onclick="Findtotal()">Total</button>
-
-                                    </div>
-                                        <div id="totafind" class="totalfaild-retailer"></div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @*<div class="col-md-12">
-
-                            <div class="for-search for-searchretailerinput forsearch-third-retailer" style="float:right;width:auto;">
-                                <input id="myInput" name="myInput" type="text" placeholder="Search..."  />
-
-                            </div>
-                        </div>*@
-                    <div class="row clearfix">
-                        <div class="col-md-12 statusshow-dmtpage" style="padding:0;">
-                            <div class="card class-back-tra-fourdesign">
-                                <div class="body" style="padding:0px;padding-left: 0;padding-top: 5px;">
-                                    <div class="page-header-third">
-                                        <div class="table-responsive tableclasscssfirst responsive-last-child tablethirddesign-newnew" style="position:inherit;margin-top:0px;">
-                                            <table id="tbldata" class="table table-bordered table-striped table-hover dataTable gfdgfdgfdgf third-design-table" cellspacing="0" style="width: 100%; margin: 0 !important;">
-                                                <thead style="background-color:whitesmoke;">
-                                                    <tr>
-                                                        <th>S.&nbsp;No.</th>
-                                                        <th class="first-statuswe">Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-
-                                                        <th>Sender&nbsp;No</th>
-
-                                                        <th>Beneficiary&nbsp;A/C</th>
-                                                        <th>Beneficiary&nbsp;Name</th>
-
-                                                        <th style="display:none;">Request&nbsp;Date</th>
-
-                                                        <th>Net&nbsp;T/F</th>
-                                                        <th>Charge</th>
-                                                        @*<th>Tax</th>*@
-
-                                                        <th style="display:none;">Total&nbsp;.&nbsp;Trans</th>
-                                                        <th style="display:none;">My&nbsp;Sharing</th>
-                                                        <th style="display:none;">GST&nbsp;│&nbsp;TDS</th>
-                                                        <th style="display:none;">Net&nbsp;INC</th>
-
-                                                        <th>Debit&nbsp;₹</th>
-                                                        <th>Pre&nbsp;₹</th>
-                                                        <th>Post&nbsp;₹</th>
-                                                        @*<th>Earn</th>*@
-                                                        <th>Request&nbsp;Time</th>
-                                                        <th>Response&nbsp;Time</th>
-                                                        <th>RRN&nbsp;(utr)&nbsp;no</th>
-                                                        <th>Refund</th>
-                                                        <th style="width: 65px; float: left;">Action</th>
-                                                       
-                                                        @*<th class="last-childaction">Action</th>*@
-                                                        <th style="display:none;">View&nbsp;Sts</th>
-                                                        <th style="display:none;">Bank&nbsp;Ref&nbsp;No</th>
-                                                        <th style="display:none;">Bank&nbsp;Name</th>
-                                                        <th style="display:none;">Request&nbsp;ID</th>
-                                                        <th style="display:none;">Common&nbsp;Trans&nbsp;ID</th>
-                                                        <th style="display:none;">IFSC&nbsp;Code</th>
-                                                        <th style="display:none;">Response&nbsp;Date</th>
-
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="trow" class="myTable">
-                                                    @{
-                                                        Html.RenderAction("_Money_Transfer_Report", "Home", new { Model = Model });
-                                                    }
-                                                </tbody>
-                                            </table>
-                                            <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
-                                                <div class="loadertablecssnew">Loading...</div>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="home1" class="tab-pane fade hidden" style="clear: both;">
-                <div class="container-fluid Financial-page">
-                    <div class="row clearfix">
-                        <div class="col-md-12">
-                            <div class="card class-back-tra-fourdesign">
-                                <div class="col-md-9 Financial-pagetab">
-                                    <div class="row">
-                                        @using (Html.BeginForm("AepsReport", "Home", FormMethod.Post))
-                                        {
-                                            <div class="col-md-2 Financial-none">
-                                                <div class="form-group">
-                                                    <div class="" style="margin-top:5px;border:1px solid #dddddd;">
-                                                        @Html.TextBox("amount", "", new { @placeholder = "Amt", @class = "form-control", @style = "margin-top:0px; padding-left:3px; padding-right:0px;height:30px;" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 Financial-pagetab Financial-none">
-                                                <div class="form-group">
-                                                    <div class="" style="margin-top:5px;margin-left:-13px;border:1px solid #dddddd;">
-                                                        @Html.TextBox("BankId", "", new { @placeholder = "Bank Id", @class = "form-control", @style = "margin-top:0px; padding-left:3px; padding-right:0px;height:30px;" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 enteraddarnumber">
-                                                <div class="form-group">
-                                                    <div class="" style="margin-top:5px;margin-left:-13px;border:1px solid #dddddd;">
-                                                        @Html.TextBox("aadhar", "", new { @placeholder = "Enter Addar / Banck Id / Amount", @class = "form-control", @style = "margin-top:0px; padding-left:3px; padding-right:0px;height:30px;" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 aeps-statusclass">
-                                                <div class="form-group">
-                                                    <div class="" style="margin-top:5px;border:1px solid #dddddd;margin-left:-13px;width:108%;">
-                                                        @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                                           {
-                                                   new SelectListItem{ Text="Status",Value="ALL",},
-                                                   new SelectListItem{Text="SUCCESS",Value="SUCCESS"},
-                                                   new SelectListItem{Text="Pending",Value="PENDING"},
-                                                   new SelectListItem{Text="FAILED",Value="FAILED"}
-                                                    }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="col-md-3 aeps-status">
-                                                <div class="form-group">
-                                                    <div class="input-daterange input-group">
-                                                        <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                                        <span class="input-group-addon">
-                                                            <i class="fa fa-exchange" style="padding-top:8px;"></i>
-                                                        </span>
-                                                        <div class="form-iconmy form-iconmyss" style="top: 0px;left: 1px;padding: 6px 5px;left: 142px !important;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                                    </div>
-                                                    <!-- /.input group -->
-                                                </div>
-                                            </div>
-                                            <div class="col-md-1 aeps-status-search">
-                                                <div class="form-group">
-                                                    <center>
-                                                        <button type="submit" class="btn" id="btntype" name="btntype" style="margin-top:5px; margin-left:-22px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                                                            <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                            <span style="top:-1px;color:black;">Search</span>
-                                                        </button>
-                                                    </center>
-                                                </div>
-                                            </div>
-                                        }
-                                        <div class="col-md-3 buttonPdf" style="float: right;margin-right: 11px;">
-
-                                            <button>PDF</button>
-                                            <button>Export</button>
-                                            <button>Total</button>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row clearfix statusshow-dmt" style="width: 83.3vw;float: left;margin-left: -55vw;position: relative;left:48%;">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 statusshow-dmtpage" style="margin-top:-26px;">
-                            <div class="card">
-                                <div class="">
-                                    <ol class="breadcrumb breadcrumb-col-blue-grey" style="margin-left:5px;margin-top:9px;">
-                                        <li class="active" style="color:#9E9E9E; font-size:12px;"></li>
-                                    </ol>
-                                </div>
-                                <div class="body" style="padding:7px;padding-left:0;">
-                                    <div class="table-responsive" style="position:inherit;margin-top:-49px;">
-                                        <table class="table table-bordered table-striped table-hover" style="width:100%;font-size:12px;">
-                                            <thead style="background-color:whitesmoke;">
-                                                <tr>
-                                                    <th style="width:110px;">Live&nbsp;Status</th>
-                                                    <th>From</th>
-                                                    <th>Aadhaar&nbsp;Number</th>
-                                                    <th>Customer&nbsp;Bank&nbsp;Name</th>
-                                                    <th>View&nbsp;Status</th>
-                                                    <th>Merchant&nbsp;ID</th>
-                                                    <th>Req&nbsp;Date</th>
-                                                    <th>Transfer&nbsp;</th>
-                                                    <th>Mobile&nbsp;No</th>
-                                                    <th>User&nbsp;Credit&nbsp;</th>
-                                                    <th>Bank&nbsp;RRN&nbsp;</th>
-                                                    <th>User&nbsp;Pre&nbsp;₹&nbsp;│&nbsp;Credit&nbsp;│&nbsp;Post&nbsp;Amt&nbsp;₹</th>
-                                                    <th>Terminal&nbsp;ID</th>
-                                                    <th>Remark</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="trow">
-                                                @{
-                                                    Html.RenderAction("_AepsReport", "Home", new { Model = Model });
-                                                }
-                                            </tbody>
-                                        </table>
-                                        <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
-                                            <img src="~/img/ajax-loader.gif" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-            <div id="menu1" class="tab-pane fade hidden" style="clear: both;">
-                <div class="container-fluid">
-
-                    <div class="row clearfix statusclas-mpos">
-                        @using (Html.BeginForm("m_Possreport", "Home", FormMethod.Post))
-                        {
-                            <div class="col-md-12" style="padding:0;">
-                                <div class="card class-back-tra-fourdesign">
-                                    <div class="">
-                                        <div class="col-md-6" style="display:none;">
-                                            <div style="margin-left:-6px;">
-                                                <p style="font-size:20px;color:#aba8a8;margin-top:2px;">M-Poss&nbsp;Report</p>
-                                            </div>
-                                        </div>
-
-
-
-                                        <div class="col-md-6 mpos-full">
-                                            <div class="row">
-                                                <div class="col-md-2 enteraddarnumber enteraddarnumbers">
-                                                    <div class="form-group">
-                                                        <div class="focused" style="margin-top:5px;margin-left:-13px;border:1px solid #dddddd;">
-                                                            <input class="form-control" id="aadhar" name="aadhar" placeholder="Enter Addar / Banck Id / Amount" style="margin-top:0px; padding-left:3px; padding-right:0px;height:30px;" type="text" value="">
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="col-md-2 aeps-statusclass">
-                                                    <div class="form-group">
-                                                        <div class="" style="margin-top:5px;border:1px solid #dddddd;width:100%;">
-                                                            @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                                               {
-                                                       new SelectListItem{ Text="Status",Value="ALL",},
-                                                       new SelectListItem{Text="SUCCESS",Value="SUCCESS"},
-                                                       new SelectListItem{Text="Pending",Value="PENDING"},
-                                                       new SelectListItem{Text="FAILED",Value="FAILED"}
-                                                        }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="col-md-5 mpos-date">
-                                                    <div class="form-group" style="margin-bottom:0px;margin-top:0px;">
-                                                        <div class="input-daterange input-group">
-                                                            <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", autocomplete = "off" })
-                                                            <span class="input-group-addon">
-                                                                <i class="fa fa-exchange" style="padding-top:10px;"></i>
-                                                            </span>
-                                                            <div class="form-iconmy form-iconmyss" style="top: 0px;left: 1px;padding: 6px 5px;left: 142px !important;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", autocomplete = "off" })
-                                                        </div>
-                                                        <!-- /.input group -->
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3 mpos-search">
-                                                    <div class="form-group">
-                                                        <div class="form-line" style="border-bottom:none;">
-                                                            <button type="submit" class="btn" id="btntype" name="btntype" style="margin-top:5px; margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                                <span style="top:-1px;color:black;">Search</span>
-                                                            </button>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-3 buttonPdf" style="float: right;margin-right: 11px;">
-
-                                                    <button>PDF</button>
-                                                    <button>Export</button>
-                                                    <button>Total</button>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-
-                    <div class="row clearfix statusshow-dmt" style="width: 83.3vw;float: left;margin-left: -55vw;position: relative;left:48%;">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 statusshow-dmtpage" style="margin-top:-19px;">
-                            <div class="card class-back-tra-fourdesign">
-                                <div class="body" style="padding-left:0;">
-                                    <div class="table-responsive" style="position:inherit;margin-top:-18px;">
-                                        <table class="table table-bordered table-striped table-hover" style="width:100%; font-size:12px;">
-                                            <thead style="background-color:whitesmoke;">
-                                                <tr>
-                                                    <th>M&nbsp;-&nbsp;Poss&nbsp;Id</th>
-                                                    <th>Message</th>
-                                                    <th>TransType</th>
-                                                    <th>Amount</th>
-                                                    <th>Status</th>
-                                                    <th>MerchantID</th>
-                                                    <th>BankmerchantID</th>
-                                                    <th>BankterminalID</th>
-                                                    <th>Cardbrand</th>
-                                                    <th>Card&nbsp;Holder&nbsp;Name</th>
-                                                    <th>Cardnumber</th>
-                                                    <th>Card&nbsp;Type</th>
-                                                    <th>Date</th>
-                                                    <th>Invoice&nbsp;No</th>
-                                                    <th>Payment&nbsp;Id</th>
-                                                    <th>Merchant&nbsp;Address</th>
-                                                    <th>Retailer&nbsp;Pre</th>
-                                                    <th>Retailer&nbsp;Post</th>
-                                                    <th>Retailer&nbsp;Comm</th>
-                                                    <th>Retailer&nbsp;GST</th>
-                                                    <th>Retailer&nbsp;Income</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="trow">
-                                                @{
-                                                    Html.RenderAction("_m_Possreport", "Home", new { Model = Model });
-                                                }
-                                            </tbody>
-                                        </table>
-                                        <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
-                                            <img src="~/img/ajax-loader.gif" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="menu2" class="tab-pane fade hidden" style="clear: both;">
-                <div class="container-fluid">
-                    <div class="row clearfix">
-                        @using (Html.BeginForm("TokenPurchaseReport", "PANCARD", FormMethod.Post))
-                        {
-                            <div class="col-md-12" style="padding-left:0;">
-                                <div class="card class-back-tra-fourdesign">
-                                    <div class="">
-                                        <div class="col-md-2" style="display:none;">
-                                            <div style="margin-left:-6px;">
-                                                <p style="font-size:20px;color:#aba8a8;margin-top:2px;">Pancard&nbsp;Report</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-10" style="padding-right:0;width:100%;">
-                                            <div class="row">
-                                                <div class="col-md-2 enteraddarnumber enteraddarnumbers">
-                                                    <div class="form-group">
-                                                        <div class="focused" style="margin-top:5px;margin-left:-13px;border:1px solid #dddddd;">
-                                                            <input class="form-control" id="aadhar" name="aadhar" placeholder="Enter Addar / Banck Id / Amount" style="margin-top:0px; padding-left:3px; padding-right:0px;height:30px;" type="text" value="">
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                                <div class="col-md-2 pancard-status" style="width: 13%;">
-                                                    <div class="form-group">
-                                                        <div class="" style="margin-top:5px;width:100%;border:1px solid #dddddd;">
-                                                            @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                            {
-                                    new SelectListItem{ Text="Status",Value="ALL",},
-                                    new SelectListItem{Text="SUCCESS",Value="SUCCESS"},
-                                    new SelectListItem{Text="PENDING",Value="PENDING"},
-                                    new SelectListItem{Text="FAILED",Value="FAILED"}
-                                     }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;height:34px;" })
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="col-md-3 pancarddate" style="padding-left:0;">
-                                                    <div class="form-group" style="margin-bottom:0px;margin-top:0px;">
-                                                        <div class="input-daterange input-group">
-                                                            <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", autocomplete = "off" })
-                                                            <span class="input-group-addon">
-                                                                <i class="fa fa-exchange" style="padding-top:10px;"></i>
-                                                            </span>
-                                                            <div class="form-iconmy form-iconmyss" style="top: 0px;left: 1px;padding: 6px 5px;left: 142px !important;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", autocomplete = "off" })
-                                                        </div>
-                                                        <!-- /.input group -->
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2 pancard-search">
-                                                    <div class="form-group">
-                                                        <div class="form-line" style="border-bottom:none;">
-                                                            <button type="submit" class="btn" id="btntype" name="btntype" style="margin-top:5px; margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                                <span style="top:-1px;color:black;">Search</span>
-                                                            </button>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-3 buttonPdf" style="float: right;margin-right: 11px;">
-
-                                                    <button>PDF</button>
-                                                    <button>Export</button>
-                                                    <button>Total</button>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                    <div class="row clearfix statusshow-dmt" style="width: 83.3vw;float: left;margin-left: -55vw;position: relative;left:48%;">
-                        <div class="col-md-12 statusshow-dmtpage">
-                            <div class="card">
-                                <div class="body" style="margin-top:-18px;padding:0px;padding-left:0;">
-                                    <div class="table-responsive " style="position:inherit;">
-                                        <table id="example1" class="table table-bordered table-striped table-hover responshivemargin" style="width:100%; font-size:12px;">
-                                            <thead style="background-color:whitesmoke;">
-                                                <tr>
-                                                    <th>Live&nbsp;Status</th>
-                                                    <th>Retailer&nbsp;Id</th>
-                                                    <th>Processing&nbsp;Fees</th>
-                                                    <th>Physical</th>
-                                                    <th>Digital</th>
-                                                    <th>TXN&nbsp;ID</th>
-                                                    <th>UTI&nbsp;TXN&nbsp;ID</th>
-                                                    <th>UTI&nbsp;Status</th>
-                                                    <th>Date</th>
-                                                    <th>Action</th>
-                                                    <th>Retailer&nbsp;Remain&nbsp;Pre</th>
-                                                    <th>Net&nbsp;Income</th>
-                                                    <th>Retailer&nbsp;Remain&nbsp;Post</th>
-
-                                                </tr>
-                                            </thead>
-                                            <tbody id="trow">
-                                                @{
-                                                    Html.RenderAction("_TokenPurchaseReport", "PANCARD", new { Model = Model });
-                                                }
-                                            </tbody>
-                                        </table>
-                                        <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
-                                            <img src="~/img/ajax-loader.gif" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    </div>
-    </div>
-
-    <!--newtabsreport-->
-    <!--<div class="container-fluid">
-                <div class="row clearfix">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="">
-                                @using (Html.BeginForm("Money_Transfer_Report", "Home", FormMethod.Post))
-                                {
-                                    <div class="row">
-
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <div class="" style="margin-top: 5px;">
-                                                    @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                        {
-                                        new SelectListItem{ Text="Status",Value="ALL",},
-                                        new SelectListItem{Text="SUCCESS",Value="SUCCESS"},
-                                        new SelectListItem{Text="Pending",Value="PENDING"},
-                                        new SelectListItem{Text="FAILED",Value="FAILED"}
-                                        }, new { @class = "form-control" })
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <div class="form-group">
-                                                <div class="" style="margin-top: 5px;">
-                                                    @Html.DropDownList("ddl_Type", new List<SelectListItem>
-                                        {
-                                                 new SelectListItem{ Text="Type",Value="ALL",},
-                                         new SelectListItem{Text="Transfer",Value="IMPS"},
-                                         new SelectListItem{Text="Verify",Value="IMPS_VERIFY"}
-                                        }, new { @class = "form-control" })
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group" style="margin-bottom:0px;margin-top:0px;">
-                                                <div class="input-daterange input-group">
-                                                    @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", autocomplete = "off" })
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-exchange" style="padding-top:10px;"></i>
-                                                    </span>
-                                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", autocomplete = "off" })
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <div class="form-line" style="border-bottom:none;">
-                                                    <button value="LIVE" type="submit" class="btn" id="submit" name="submit" style="margin-top:5px; margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                                                        <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                        <span style="top:-1px;color:black;">Search</span>
-                                                    </button>
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row clearfix">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="body" style="padding:12px;">
-                                <div class="table-responsive" style="position:inherit;margin-top:-10px;">
-                                    <table id="tbldata" class="table table-bordered table-striped table-hover dataTable" cellspacing="0" style="width:100%;">
-                                        <thead style="background-color:whitesmoke;">
-                                            <tr>
-                                                <th>Status</th>
-                                                <th>Sender&nbsp;No</th>
-                                                <th>Beneficiary&nbsp;Account&nbsp;Information</th>
-                                                <th>Type</th>
-                                                <th>Request&nbsp;Date</th>
-                                                <th>Transfer&nbsp;&#x002B;&nbsp;Fee&nbsp;=&nbsp;Total</th>
-                                                <th>Total&nbsp;.&nbsp;Trans</th>
-                                                <th>My&nbsp;Sharing</th>
-                                                <th>GST&nbsp;│&nbsp;TDS</th>
-                                                <th>Net&nbsp;INC</th>
-                                                <th>Pre&nbsp;Amt&nbsp;│&nbsp;Debit&nbsp;│&nbsp;Post&nbsp;Amt</th>
-                                                <th>Print</th>
-                                                <th>View&nbsp;Sts</th>
-                                                <th>Bank&nbsp;Ref&nbsp;No</th>
-                                                <th>Bank&nbsp;Name</th>
-                                                <th>Request&nbsp;ID</th>
-                                                <th>Common&nbsp;Trans&nbsp;ID</th>
-                                                <th style="width:84px; padding:9px;">IFSC&nbsp;Code</th>
-                                                <th style="width:84px; padding:9px;">Response&nbsp;Date</th>
-
-
-                                            </tr>
-                                        </thead>
-                                        <tbody id="trow">
-                                            @{
-                                                Html.RenderAction("_Money_Transfer_Report", "Home", new { Model = Model });
-                                            }
-                                        </tbody>
-                                    </table>
-                                    <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
-                                        <img src="~/img/ajax-loader.gif" />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-    -->
-
-</section>
-<!--View Status Model PopUp Modal-->
-
-<div class="modal fade" id="myModal" role="dialog" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header" style="position:initial;background-color:whitesmoke;">
-                <h4 class="modal-title" id="RegisterremitterModalLabel" style="color:#00000080; text-align:center;color:black;">Refund OTP</h4>
-            </div>
-            <div class="modal-body" style="margin-top:0px;">
-                <div class="body">
-                    <form>
-
-                        <div class="row clearfix">
-                            <div class="form-group" style="margin-top:27px;">
-                                <div class="" style="border:1px solid #dddddd;">
-                                    <input type="text" id="name" name="name" class="form-control" autocomplete="off" placeholder="Enter Otp">
-                                    @Html.Hidden("TID")
-                                </div>
-                                <span style="color:red" id="invalidname"></span>
-                            </div>
-                        </div>
-                        <div class="modal-footer" id="silder1" style="margin-top:-17px;">
-                            <button type="button" class="btn bg-blue-grey waves-effect" style="margin-left:-10px;" onclick="Resendotp()">Resend Otp</button>
-                            <button type="button" class="btn bg-blue-grey waves-effect" onclick="Submit()">Send</button>
-                            <button type="button" class="btn bg-grey waves-effect" data-dismiss="modal">CLOSE</button>
-                        </div>
-
-
-                    </form>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="myModalold" role="dialog" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header" style="position:initial;background-color:whitesmoke;">
-                <h4 class="modal-title" id="RegisterremitterModalLabel" style="color:#00000080; text-align:center;color:black;">Refund OTP</h4>
-            </div>
-            <div class="modal-body" style="margin-top:0px;">
-                <div class="body">
-                    <form>
-
-                        <div class="row clearfix">
-                            <div class="form-group" style="margin-top: 27px;">
-                                <div class="" style="border:1px solid #dddddd;">
-                                    <input type="text" id="nameold" name="nameold" class="form-control" autocomplete="off" placeholder="Enter Otp">
-                                    @Html.Hidden("TIDold")
-                                </div>
-                                <span style="color:red" id="invalidnameold"></span>
-                            </div>
-                        </div>
-                        <div class="modal-footer" id="silder1" style="margin-top:-17px;">
-                            <button type="button" class="btn bg-blue-grey waves-effect" style="margin-left:-10px;" onclick="Resendotpold()">Resend Otp</button>
-                            <button type="button" class="btn bg-blue-grey waves-effect" onclick="Submitold()">Send</button>
-                            <button type="button" class="btn bg-grey waves-effect" data-dismiss="modal">CLOSE</button>
-                        </div>
-
-
-                    </form>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="myModalRefund" role="dialog" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header" style="position:initial;background-color:whitesmoke;">
-                <h4 class="modal-title" style="color:#00000080; text-align:center;color:black;">Refund OTP</h4>
-            </div>
-            <div class="modal-body" style="margin-top:0px;">
-                <div class="body">
-                    <form>
-
-                        <div class="row clearfix">
-                            <div class="form-group" style="margin-top:27px;">
-                                <div class="" style="border:1px solid #dddddd;">
-                                    @Html.TextBox("txtotpinfo", "", new {@class="form-control", @placeholder = "Enter Otp" })
-                                    @Html.Hidden("hidetxnid")
-                                </div>
-                                <span style="color:red" id="errorhideotp"></span>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="Submitinfo()">Submit</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">CLOSE</button>
-                        </div>
-
-
-                    </form>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="myModalRefundPPI" role="dialog" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header" style="position:initial;background-color:whitesmoke;">
-                <h4 class="modal-title" style="color:#00000080; text-align:center;color:black;">Refund OTP</h4>
-            </div>
-            <div class="modal-body" style="margin-top:0px;">
-                <div class="body">
-                    <form>
-
-                        <div class="row clearfix">
-                            <div class="form-group" style="margin-top:27px;">
-                                <div class="" style="border:1px solid #dddddd;">
-                                    @Html.TextBox("txtotpinfoPPI", "", new { @class = "form-control", @placeholder = "Enter Otp" })
-                                    @Html.Hidden("hidetxnidPPI")
-                                    @Html.Hidden("hidestateresp")
-                                </div>
-                                <span style="color:red" id="errorhideotp"></span>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="SubmitinfoPPI()">Submit</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">CLOSE</button>
-                        </div>
-
-
-                    </form>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-
-<script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<label id="lbltxt"></label>
-
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=34" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=38" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
-
-<script>
-    $('.for-select2').select2();
-
-
-</script>
-
-
-<script>
-    function Findtotal() {
-        
-        $('#totafind').empty();
-        $.ajax({
-            url: '@Url.Action("FindCurrentTotal")',
-            type: 'GET',
-            data: { txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val(), ddl_status: $('#ddl_status').val(), ddl_Type: $('#ddl_Type').val() },
-            success: function (data) {
-                $('#totafind').html('<span id="lblsuccess" >' + data.success + ' </span><br/><span id="lblfailed" >' + data.failed + ' </span><br/><span id="lblpending">' + data.pending +' </span>')
-
-            }
-
-
-
-        })
-
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<style>
+    /* Sender/Bank A/C is a text input, not a select — remove select chevron */
+    body.saas-admin-ui .saas-dmt-report-page #retailerDmtNumberfind.form-control {
+        background-image: none !important;
+        cursor: text !important;
+        padding: 0 12px !important;
     }
+    /* ==== Money transfer rows : latest clean look ==== */
+    /* Har cell single-line : koi text upar-niche nahi dabega, table side-scroll hogi */
+    body.saas-admin-ui .saas-dmt-report-page .vm-opr-table-scroll{overflow-x:auto !important;}
+    /* Desktop (>=1024px): table hamesha full 100% width cover karegi, fixed columns */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable{table-layout:fixed !important;width:100% !important;min-width:0 !important;max-width:100% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead tr,
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody tr{display:table-row !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th,
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td{display:table-cell !important;min-width:0 !important;max-width:none !important;overflow:hidden !important;text-overflow:ellipsis !important;white-space:nowrap !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(1),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(1){width:3% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(2),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(2){width:8% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(3),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(3){width:8% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(4),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(4){width:7% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(5),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(5){width:8% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(6),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(6),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(7),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(7),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(8),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(8),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(9),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(9),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(10),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(10){width:6% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(11),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(11){width:8% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(12),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(12){width:9% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(13),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(13){width:8% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(14),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(14){width:4% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th:nth-child(15),
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td:nth-child(15){width:7% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable .vm-dmt-ellipsis{max-width:100% !important;}
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable .vm-dmt-time-chip{font-size:10.5px !important;padding:2px 8px !important;}
+    }
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable{table-layout:auto !important;width:max-content !important;min-width:100% !important;max-width:none !important;}
+    }
+    body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable thead th{white-space:nowrap !important;vertical-align:middle !important;font-size:12px;padding:10px 10px !important;}
+    body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody td{white-space:nowrap !important;vertical-align:middle !important;font-size:12.5px;padding:9px 10px !important;}
+    body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody tr{border-bottom:1px solid #eef1f6 !important;transition:background .15s ease;}
+    body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody tr:hover{background:#f6f9ff !important;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-row--success{background:#f6fef9 !important;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-sr-cell{color:#8a94a6;font-weight:700;}
+    /* Status : pill + type chip ek hi line me (flex row) */
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-status-cell{white-space:nowrap !important;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-status-cell-inner{display:inline-flex !important;align-items:center;gap:6px;flex-wrap:nowrap !important;}
+    body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody tr{border-bottom:1px solid #eef1f6 !important;transition:background .15s ease;}
+    body.saas-admin-ui .saas-dmt-report-page #retailerDmtTable tbody tr:hover{background:#f6f9ff !important;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-row--success{background:#f6fef9 !important;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-sr-cell{color:#8a94a6;font-weight:700;}
+    /* Status : icon + label ek hi pill me */
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-status{display:inline-flex !important;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-status em{font-style:normal;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-status .fa{font-size:11px;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-status--success{background:#e7f7ee !important;color:#15803d !important;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-status--failed{background:#fdecec !important;color:#c62828 !important;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-status--pending{background:#fff7e0 !important;color:#a16207 !important;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-type-chip{display:inline-block;margin-top:0;padding:1px 8px;border-radius:999px;background:#eef1f6;color:#5b6b82;font-size:10.5px;font-weight:700;letter-spacing:.3px;white-space:nowrap;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-strong{white-space:nowrap;}
+    /* Lambe text : ... ke sath, row kabhi failegi nahi (hover = full text) */
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-ellipsis{display:inline-block;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-ellipsis--name{max-width:150px;text-transform:uppercase;font-weight:600;color:#334155;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-ellipsis--utr{max-width:150px;font-family:Consolas,'Courier New',monospace;font-size:11.5px;color:#475569;}
+    /* Amounts : mono look, right side, ek line me */
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-amt-cell{white-space:nowrap !important;font-variant-numeric:tabular-nums;font-weight:600;color:#1e293b;text-align:right !important;}
+    /* Time : single-line chip */
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-time-chip{display:inline-flex;align-items:center;white-space:nowrap;font-size:11.5px;font-weight:600;color:#475569;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:999px;padding:3px 10px;}
+    /* Action buttons : ek line me */
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-action-bar{display:flex !important;align-items:center;gap:6px;flex-wrap:nowrap !important;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-act-btn{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;border:1px solid #e2e8f0;background:#fff;color:#5b6b82;cursor:pointer;transition:all .15s ease;}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-act-btn:hover{background:#0ea5e9;border-color:#0ea5e9;color:#fff;box-shadow:0 4px 10px rgba(14,165,233,.35);}
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-act-btn .material-icons{font-size:17px;}
+</style>
 
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;" aria-hidden="true">
+    <div class="vm-dmt-loader__panel" role="status" aria-live="polite" aria-label="Processing">
+        <div class="vm-dmt-table-loader__spinner" aria-hidden="true"></div>
+        <span class="vm-dmt-loader__text">Please wait…</span>
+    </div>
+</div>
 
-</script>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-retailer-dmt-report-page">
+    <div class="container-fluid vm-opr-page-shell">
 
+        @{
+            var dmtFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerDmtReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_dmt_frm_date" },
+                { "data-report-to", "#retailer_dmt_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("Money_Transfer_Report", "Home", FormMethod.Post, dmtFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Financial Services</li>
+                        <li>Money Transfer Report</li>
+                    </ol>
+                    <div class="vm-dmt-fin-nav-row">
+                        @Html.Partial("_menuFinicalReport")
+                    </div>
+                </div>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerDmtTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Transaction totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerDmtTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value" id="retailerDmtSuccess">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value" id="retailerDmtFailed">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="retailerDmtPending">&#8377; 0.00</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-rpt-filters-panel__bar">
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("ddl_status", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "All Status", Value = "ALL", Selected = (selStatus == "" || selStatus == "ALL") },
+                                new SelectListItem { Text = "Success", Value = "SUCCESS", Selected = selStatus == "SUCCESS" },
+                                new SelectListItem { Text = "Pending", Value = "PENDING", Selected = selStatus == "PENDING" },
+                                new SelectListItem { Text = "Failed", Value = "FAILED", Selected = selStatus == "FAILED" }
+                            }, new { id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control", title = "Status" })
+                        </div>
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("ddl_Type", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "All Types", Value = "ALL", Selected = (selType == "" || selType == "ALL") },
+                                new SelectListItem { Text = "Account Transfer", Value = "IMPS", Selected = selType == "IMPS" },
+                                new SelectListItem { Text = "UPI Transfer", Value = "UPI", Selected = selType == "UPI" },
+                                new SelectListItem { Text = "Paytm Wallet", Value = "WALLET", Selected = selType == "WALLET" },
+                                new SelectListItem { Text = "Verify", Value = "IMPS_VERIFY", Selected = selType == "IMPS_VERIFY" },
+                                new SelectListItem { Text = "Credit Card", Value = "Credit Card", Selected = selType == "Credit Card" }
+                            }, new { id = "ddl_Type", @class = "vm-opr-select vm-dmt-select form-control", title = "Transfer type" })
+                        </div>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="vm-opr-field vm-dmt-field vm-dmt-field--search">
+                                @Html.TextBox("txtnumberfind", selFind, new { @class = "form-control vm-dmt-search-input", placeholder = "Sender No. / Bank A/C", autocomplete = "off", id = "retailerDmtNumberfind", title = "Sender number or bank account", onkeypress = "return isNumber(event)" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_dmt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_dmt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" value="LIVE" name="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                        <span>Money transfer transactions</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn" onclick="FindtotalRetailerDmt()" title="Show totals" aria-expanded="false" aria-controls="retailerDmtTotalsPanel"><i class="fas fa-chart-pie" aria-hidden="true"></i></button>
+                            <button type="button" id="btnRetailerDmtExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                            <button type="button" id="btnRetailerDmtPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerDmtTable" class="table vm-opr-data-table" cellspacing="0" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>S.R.</th>
+                                    <th>Status</th>
+                                    <th>Sender Number</th>
+                                    <th>Beneficiary A/C</th>
+                                    <th>Beneficiary Name</th>
+                                    <th>Net T/F &#8377;</th>
+                                    <th>Charge &#8377;</th>
+                                    <th>Debit &#8377;</th>
+                                    <th>Pre &#8377;</th>
+                                    <th>Post &#8377;</th>
+                                    <th>Request Time</th>
+                                    <th>Resp Time</th>
+                                    <th>Bank UTR</th>
+                                    <th>Refund</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="retailerDmtRows">
+                                @{ Html.RenderAction("_Money_Transfer_Report", "Home", new { txt_frm_date = frmDate, txt_to_date = toDate, ddl_status = (selStatus == "" ? "ALL" : selStatus), ddl_Type = (selType == "" ? "ALL" : selType), txtnumberfind = selFind }); }
+                            </tbody>
+                        </table>
+                        <div id="retailerDmtLoading" class="vm-opr-table-loading vm-dmt-table-loading" style="display:none;">
+                            <div class="vm-dmt-table-loader" role="status" aria-live="polite" aria-label="Loading transactions">
+                                <div class="vm-dmt-table-loader__spinner" aria-hidden="true"></div>
+                                <span class="vm-dmt-table-loader__text">Loading transactions…</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Refund OTP -->
+<div class="modal fade saas-admin-modal vm-dmt-modal" id="myModal" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-amber">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="modal-title saas-admin-modal-title">Refund OTP</h4>
+                        <p class="saas-admin-modal-sub">Enter OTP to confirm refund</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body vm-dmt-modal-body">
+                <div class="vm-dmt-modal-field">
+                    <label for="name">OTP</label>
+                    <input type="text" id="name" name="name" class="form-control vm-dmt-modal-input" autocomplete="off" placeholder="Enter OTP" />
+                    @Html.Hidden("TID")
+                    <span class="vm-dmt-modal-error" id="invalidname"></span>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" onclick="Resendotp()"><i class="fas fa-redo" aria-hidden="true"></i> Resend OTP</button>
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--primary" onclick="Submit()"><i class="fas fa-paper-plane" aria-hidden="true"></i> Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade saas-admin-modal vm-dmt-modal" id="myModalold" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-amber">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="modal-title saas-admin-modal-title">Refund OTP</h4>
+                        <p class="saas-admin-modal-sub">Enter OTP to confirm refund</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body vm-dmt-modal-body">
+                <div class="vm-dmt-modal-field">
+                    <label for="nameold">OTP</label>
+                    <input type="text" id="nameold" name="nameold" class="form-control vm-dmt-modal-input" autocomplete="off" placeholder="Enter OTP" />
+                    @Html.Hidden("TIDold")
+                    <span class="vm-dmt-modal-error" id="invalidnameold"></span>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" onclick="Resendotpold()"><i class="fas fa-redo" aria-hidden="true"></i> Resend OTP</button>
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--primary" onclick="Submitold()"><i class="fas fa-paper-plane" aria-hidden="true"></i> Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade saas-admin-modal vm-dmt-modal" id="myModalRefund" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-amber">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="modal-title saas-admin-modal-title">Refund OTP</h4>
+                        <p class="saas-admin-modal-sub">Paysprint refund verification</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body vm-dmt-modal-body">
+                <div class="vm-dmt-modal-field">
+                    <label for="txtotpinfo">OTP</label>
+                    @Html.TextBox("txtotpinfo", "", new { @class = "form-control vm-dmt-modal-input", placeholder = "Enter OTP", autocomplete = "off" })
+                    @Html.Hidden("hidetxnid")
+                    <span class="vm-dmt-modal-error" id="errorhideotp"></span>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--primary" onclick="Submitinfo()">Submit</button>
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade saas-admin-modal vm-dmt-modal" id="myModalRefundPPI" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-amber">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="modal-title saas-admin-modal-title">Refund OTP</h4>
+                        <p class="saas-admin-modal-sub">Paysprint PPI refund verification</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body vm-dmt-modal-body">
+                <div class="vm-dmt-modal-field">
+                    <label for="txtotpinfoPPI">OTP</label>
+                    @Html.TextBox("txtotpinfoPPI", "", new { @class = "form-control vm-dmt-modal-input", placeholder = "Enter OTP", autocomplete = "off" })
+                    @Html.Hidden("hidetxnidPPI")
+                    @Html.Hidden("hidestateresp")
+                    <span class="vm-dmt-modal-error"></span>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--primary" onclick="SubmitinfoPPI()">Submit</button>
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PostVmScripts {
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $(document).ready(function () {
-        $("#myInput").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $(".myTable tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
-</script>
-<script>
-    var txt_frm_date = $('#txt_frm_date').val();
-    var txt_to_date = $('#txt_to_date').val();
-    var ddl_status = $('#ddl_status').val();
+    var retailerDmtPageIndex = 2;
+    var retailerDmtNoMore = false;
+    var retailerDmtBusy = false;
 
-        var pageindex = 2;
-        var NoMoredata = false;
-        var inProgress = false;
-    $(window).scroll(function () {
-            if ($(window).scrollTop() > Number($("#tbldata").height()) / 4 && !NoMoredata && !inProgress) {
-                inProgress = true;
-                $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScroll_money","Home")",
-                    { "pageindex": pageindex, "txt_frm_date": txt_frm_date,"txt_to_date":txt_to_date, "ddl_status": ddl_status},
-                    function (data) {
-                        pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#trow").append(data.HTMLString);
-                        $("#loadingdiv").hide();
-                        inProgress = false;
-                    });
-            }
-        });
-</script>
-
-<script>
     function isNumber(evt) {
-        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode;
+        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57)) {
             return false;
+        }
         return true;
     }
-</script>
-<!--Calendar Javascript-->
-<script>
-    $(document).ready(function () {
 
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
+    function retailerDmtFilters() {
+        return {
+            txt_frm_date: jQuery('#retailer_dmt_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_dmt_to_date').val() || '',
+            ddl_status: jQuery('#ddl_status').val() || 'ALL',
+            ddl_Type: jQuery('#ddl_Type').val() || 'ALL',
+            txtnumberfind: jQuery('#retailerDmtNumberfind').val() || ''
+        };
+    }
 
+    function renumberRetailerDmtSr() {
+        jQuery('#retailerDmtRows tr.vm-dmt-row').each(function (i) {
+            jQuery(this).find('.vm-dmt-sr-cell').first().text(i + 1);
         });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+    }
+
+    function hideRetailerDmtTotals() {
+        var $panel = jQuery('#retailerDmtTotalsPanel');
+        var $btn = jQuery('.vm-dmt-totals-btn');
+        $panel.removeClass('is-open').hide().attr('aria-hidden', 'true');
+        $btn.removeClass('is-active').attr({ title: 'Show totals', 'aria-expanded': 'false' });
+    }
+
+    function FindtotalRetailerDmt() {
+        var $panel = jQuery('#retailerDmtTotalsPanel');
+        var $btn = jQuery('.vm-dmt-totals-btn');
+        if ($panel.hasClass('is-open')) {
+            hideRetailerDmtTotals();
+            return;
         }
-
-    });
-</script>
-
-<script type="text/javascript">
-                   function GotoPDF(e) {
-                       // alert(e)
-                       var idno = e.toString();
-                       var url = '@Url.Action("IMPSPDF", "Home")?Idno=' + idno + '';
-                       //window.location.href = url,;
-                       window.open(url, '_blank');
-                   }
-</script>
-<script>
-    $('select').select2();
-</script>
-
-<!--View Status-->
-<script>
-    function GotoView(idno)
-    {
-        $.ajax({
-            url: '@Url.Action("viewsearch", "Home")',
-            type: "Post",
-            dataType: 'json',
-            cache: false,
-            //   async: false,
-            data: { idno: idno},
-            //cache: false,
-            success: function (result) {
-                var resp = result.split('~');
-                var output = resp[0];
-                var Tid = resp[1];
-                $('#TID').val(Tid);
-                if (output == "RefundPending") {
-                    $('#myModal').modal('show');
-                }
-                else if (output == "Success")
-                {
-                    swal({ title: "Response !", text: "Money Transfer Success.", type: "success" },
-                                            function () {
-                                                location.reload();
-                                            }
-                    );
-                }
-                else if (output == "Failed" || output == "Refunded")
-                {
-                    swal({ title: "Response !", text: "Money Transfer Failed.", type: "error" },
-                                           function () {
-                                               location.reload();
-                                           }
-                   );
-                }
-                else if (output == "Pending") {
-                    swal({ title: "Response !", text: "Money Transfer Pending.", type: "warning" },
-                                           function () {
-                                              // location.reload();
-                                           }
-                   );
-                }
+        $panel.addClass('is-open').show().attr('aria-hidden', 'false');
+        $btn.addClass('is-active').attr({ title: 'Hide totals', 'aria-expanded': 'true' });
+        var f = retailerDmtFilters();
+        jQuery.ajax({
+            url: '@Url.Action("FindCurrentTotal")',
+            type: 'GET',
+            data: { txt_frm_date: f.txt_frm_date, txt_to_date: f.txt_to_date, ddl_status: f.ddl_status, ddl_Type: f.ddl_Type },
+            success: function (data) {
+                jQuery('#retailerDmtSuccess').html('&#8377; ' + data.success);
+                jQuery('#retailerDmtFailed').html('&#8377; ' + data.failed);
+                jQuery('#retailerDmtPending').html('&#8377; ' + data.pending);
             }
         });
     }
+
+    function GotoPDF(e) {
+        var url = '@Url.Action("IMPSPDF", "Home")?Idno=' + e.toString();
+        window.open(url, '_blank');
+    }
+
+    function GotoView(idno) {
+        jQuery.ajax({
+            url: '@Url.Action("viewsearch", "Home")', type: 'Post', dataType: 'json', cache: false, data: { idno: idno },
+            success: function (result) {
+                var resp = result.split('~');
+                var output = resp[0];
+                jQuery('#TID').val(resp[1]);
+                if (output == 'RefundPending') { jQuery('#myModal').modal('show'); }
+                else if (output == 'Success') { swal({ title: 'Response !', text: 'Money Transfer Success.', type: 'success' }, function () { location.reload(); }); }
+                else if (output == 'Failed' || output == 'Refunded') { swal({ title: 'Response !', text: 'Money Transfer Failed.', type: 'error' }, function () { location.reload(); }); }
+                else if (output == 'Pending') { swal({ title: 'Response !', text: 'Money Transfer Pending.', type: 'warning' }, function () { }); }
+            }
+        });
+    }
+
     function GotoViewDMT1(idno) {
-        $.ajax({
-            url: '@Url.Action("viewsearchDMT1", "Home")',
-            type: "Post",
-            dataType: 'json',
-            cache: false,
-            //   async: false,
-            data: { idno: idno },
-            //cache: false,
+        jQuery.ajax({
+            url: '@Url.Action("viewsearchDMT1", "Home")', type: 'Post', dataType: 'json', cache: false, data: { idno: idno },
             success: function (result) {
                 var resp = result.split('~');
                 var output = resp[0];
-                var Tid = resp[1];
-                $('#TID').val(Tid);
-                if (output == "RefundPending") {
-                    $('#myModal').modal('show');
-                }
-                else if (output == "Success") {
-                    swal({ title: "Response !", text: "Money Transfer Success.", type: "success" },
-                                            function () {
-                                                location.reload();
-                                            }
-                    );
-                }
-                else if (output == "Failed" || output == "Refunded") {
-                    swal({ title: "Response !", text: "Money Transfer Failed.", type: "error" },
-                                           function () {
-                                               location.reload();
-                                           }
-                   );
-                }
-                else if (output == "Pending") {
-                    swal({ title: "Response !", text: "Money Transfer Pending.", type: "warning" },
-                                           function () {
-                                              // location.reload();
-                                           }
-                   );
-                }
+                jQuery('#TID').val(resp[1]);
+                if (output == 'RefundPending') { jQuery('#myModal').modal('show'); }
+                else if (output == 'Success') { swal({ title: 'Response !', text: 'Money Transfer Success.', type: 'success' }, function () { location.reload(); }); }
+                else if (output == 'Failed' || output == 'Refunded') { swal({ title: 'Response !', text: 'Money Transfer Failed.', type: 'error' }, function () { location.reload(); }); }
+                else if (output == 'Pending') { swal({ title: 'Response !', text: 'Money Transfer Pending.', type: 'warning' }, function () { }); }
             }
         });
     }
+
     function GotoViewold(idno) {
-        $.ajax({
-            url: '@Url.Action("viewsearchold", "Home")',
-            type: "Post",
-            dataType: 'json',
-            cache: false,
-            //   async: false,
-            data: { idno: idno },
-            //cache: false,
+        jQuery.ajax({
+            url: '@Url.Action("viewsearchold", "Home")', type: 'Post', dataType: 'json', cache: false, data: { idno: idno },
             success: function (result) {
                 var resp = result.split('~');
                 var output = resp[0];
-                var Tid = resp[1];
-                $('#TIDold').val(Tid);
-                if (output == "RefundPending") {
-                    $('#myModalold').modal('show');
-                }
-                else if (output == "Success") {
-                    swal({ title: "Response !", text: "Money Transfer Success.", type: "success" },
-                                            function () {
-                                                location.reload();
-                                            }
-                    );
-                }
-                else if (output == "Failed" || output == "Refunded") {
-                    swal({ title: "Response !", text: "Money Transfer Failed.", type: "error" },
-                                           function () {
-                                               location.reload();
-                                           }
-                   );
-                }
-                else if (output == "Pending") {
-                    swal({ title: "Response !", text: "Money Transfer Pending.", type: "warning" },
-                                           function () {
-                                             //  location.reload();
-                                           }
-                   );
-                }
+                jQuery('#TIDold').val(resp[1]);
+                if (output == 'RefundPending') { jQuery('#myModalold').modal('show'); }
+                else if (output == 'Success') { swal({ title: 'Response !', text: 'Money Transfer Success.', type: 'success' }, function () { location.reload(); }); }
+                else if (output == 'Failed' || output == 'Refunded') { swal({ title: 'Response !', text: 'Money Transfer Failed.', type: 'error' }, function () { location.reload(); }); }
+                else if (output == 'Pending') { swal({ title: 'Response !', text: 'Money Transfer Pending.', type: 'warning' }, function () { }); }
             }
         });
     }
+
     function GotoViewoldDMT1(idno) {
-        $.ajax({
-            url: '@Url.Action("viewsearcholdDMT1", "Home")',
-            type: "Post",
-            dataType: 'json',
-            cache: false,
-            //   async: false,
-            data: { idno: idno },
-            //cache: false,
+        jQuery.ajax({
+            url: '@Url.Action("viewsearcholdDMT1", "Home")', type: 'Post', dataType: 'json', cache: false, data: { idno: idno },
             success: function (result) {
                 var resp = result.split('~');
                 var output = resp[0];
-                var Tid = resp[1];
-                $('#TIDold').val(Tid);
-                if (output == "RefundPending") {
-                    $('#myModal').modal('show');
-                }
-                else if (output == "Success") {
-                    swal({ title: "Response !", text: "Money Transfer Success.", type: "success" },
-                                            function () {
-                                                location.reload();
-                                            }
-                    );
-                }
-                else if (output == "Failed" || output == "Refunded") {
-                    swal({ title: "Response !", text: "Money Transfer Failed.", type: "error" },
-                                           function () {
-                                               location.reload();
-                                           }
-                   );
-                }
-                else if (output == "Pending") {
-                    swal({ title: "Response !", text: "Money Transfer Pending.", type: "warning" },
-                                           function () {
-                                              // location.reload();
-                                           }
-                   );
-                }
+                jQuery('#TIDold').val(resp[1]);
+                if (output == 'RefundPending') { jQuery('#myModal').modal('show'); }
+                else if (output == 'Success') { swal({ title: 'Response !', text: 'Money Transfer Success.', type: 'success' }, function () { location.reload(); }); }
+                else if (output == 'Failed' || output == 'Refunded') { swal({ title: 'Response !', text: 'Money Transfer Failed.', type: 'error' }, function () { location.reload(); }); }
+                else if (output == 'Pending') { swal({ title: 'Response !', text: 'Money Transfer Pending.', type: 'warning' }, function () { }); }
             }
         });
     }
-    function Submit()
-    {
-        var tid = $('#TID').val();
-        var otp = $('#name').val();
-        $.ajax({
-            url: '@Url.Action("Refund", "Home")',
-            type: "Post",
-            dataType: 'json',
-            cache: false,
-            //   async: false,
-            data: { tid: tid, otp: otp },
-            //cache: false,
-            success: function (result) {
-                swal("Response ! ", result, "success");
-                if (result != "Wrong TID or OTP")
-                {
-                    $('#myModal').modal('hide');
-                }
-            }
-        });
 
+    function Submit() {
+        var tid = jQuery('#TID').val();
+        var otp = jQuery('#name').val();
+        jQuery.ajax({
+            url: '@Url.Action("Refund", "Home")', type: 'Post', dataType: 'json', cache: false, data: { tid: tid, otp: otp },
+            success: function (result) {
+                swal('Response ! ', result, 'success');
+                if (result != 'Wrong TID or OTP') { jQuery('#myModal').modal('hide'); }
+            }
+        });
     }
+
     function Submitold() {
-        var tid = $('#TIDold').val();
-        var otp = $('#nameold').val();
-        $.ajax({
-            url: '@Url.Action("Refundold", "Home")',
-            type: "Post",
-            dataType: 'json',
-            cache: false,
-            //   async: false,
-            data: { tid: tid, otp: otp },
-            //cache: false,
+        var tid = jQuery('#TIDold').val();
+        var otp = jQuery('#nameold').val();
+        jQuery.ajax({
+            url: '@Url.Action("Refundold", "Home")', type: 'Post', dataType: 'json', cache: false, data: { tid: tid, otp: otp },
             success: function (result) {
-                swal("Response ! ", result, "success");
-                if (result != "Wrong TID or OTP") {
-                    $('#myModalold').modal('hide');
-                }
+                swal('Response ! ', result, 'success');
+                if (result != 'Wrong TID or OTP') { jQuery('#myModalold').modal('hide'); }
             }
         });
-
     }
+
     function Resendotp() {
-        var tid = $('#TID').val();
-        $.ajax({
-            url: '@Url.Action("ResendDMT", "Home")',
-            type: "Post",
-            dataType: 'json',
-            cache: false,
-            //   async: false,
-            data: { tid: tid, },
-            //cache: false,
-            success: function (result) {
-
-                swal("Response ! ", result, "success");
-
-            }
+        var tid = jQuery('#TID').val();
+        jQuery.ajax({
+            url: '@Url.Action("ResendDMT", "Home")', type: 'Post', dataType: 'json', cache: false, data: { tid: tid },
+            success: function (result) { swal('Response ! ', result, 'success'); }
         });
-
     }
+
     function Resendotpold() {
-        var tid = $('#TIDold').val();
-        $.ajax({
-            url: '@Url.Action("ResendDMT", "Home")',
-            type: "Post",
-            dataType: 'json',
-            cache: false,
-            //   async: false,
-            data: { tid: tid, },
-            //cache: false,
+        var tid = jQuery('#TIDold').val();
+        jQuery.ajax({
+            url: '@Url.Action("ResendDMT", "Home")', type: 'Post', dataType: 'json', cache: false, data: { tid: tid },
+            success: function (result) { swal('Response ! ', result, 'success'); }
+        });
+    }
+
+    Submitinfo = function () {
+        var txnid = jQuery('#hidetxnid').val();
+        var otp = jQuery('#txtotpinfo').val();
+        jQuery.ajax({
+            url: '@Url.Action("PaysprintVerifyOTP", "Home")', type: 'Post', dataType: 'json', cache: false,
+            data: { txnid: txnid, otp: otp },
+            success: function (result) { alert(result.message); location.reload(); }
+        });
+    };
+
+    SubmitinfoPPI = function () {
+        var txnid = jQuery('#hidetxnidPPI').val();
+        var otp = jQuery('#txtotpinfoPPI').val();
+        var stateresp = jQuery('#hidestateresp').val();
+        jQuery.ajax({
+            url: '@Url.Action("PaysprintVerifyOTPPPI", "Home")', type: 'Post', dataType: 'json', cache: false,
+            data: { txnid: txnid, otp: otp, stateresp: stateresp },
+            success: function (result) { alert(result.message); location.reload(); }
+        });
+    };
+
+    Refund = function (transid) {
+        jQuery.ajax({
+            url: '@Url.Action("PaysprintRefundOTP", "Home")', type: 'Post', dataType: 'json', cache: false, data: { txnid: transid },
             success: function (result) {
-
-                swal("Response ! ", result, "success");
-
+                if (result.status) { jQuery('#myModalRefund').modal('show'); jQuery('#hidetxnid').val(transid); }
+                else { alert(result.message); }
             }
         });
+    };
 
-    }
-
-
-
-</script>
-<script>
-    Submitinfo = () => {
-        var txnid = $('#hidetxnid').val()
-        var otp = $('#txtotpinfo').val()
-             $.ajax({
-                   url: '@Url.Action("PaysprintVerifyOTP", "Home")',
-                   type: "Post",
-                   dataType: 'json',
-                   cache: false,
-                   data: { txnid, otp },
-                   success: function (result) {
-                         var sts = result.status;
-                         var msg = result.message;
-                       alert(msg)
-                       location.reload();
-                 }
-             });
-    }
-</script>
-<script>
-    SubmitinfoPPI = () => {
-        var txnid = $('#hidetxnidPPI').val()
-        var otp = $('#txtotpinfoPPI').val()
-        var stateresp = $('#hidestateresp').val()
-        
-             $.ajax({
-                   url: '@Url.Action("PaysprintVerifyOTPPPI", "Home")',
-                   type: "Post",
-                   dataType: 'json',
-                   cache: false,
-                 data: { txnid, otp, stateresp },
-                   success: function (result) {
-                         var sts = result.status;
-                         var msg = result.message;
-                       alert(msg)
-                       location.reload();
-                 }
-             });
-    }
-</script>
-<script>
-    Refund = (transid) => {
-          $.ajax({
-                  url: '@Url.Action("PaysprintRefundOTP", "Home")',
-                  type: "Post",
-                  dataType: 'json',
-                  cache: false,
-      //   async: false,
-              data: { txnid: transid, },
-      //cache: false,
-      success: function (result) {
-        //  let obj = JSON.parse(jsonData);
-          var sts = result.status;
-          var msg = result.message;
-   
-
-          if (sts) {
-              $('#myModalRefund').modal('show')
-              $('#hidetxnid').val(transid)
-          }
-          else {
-              alert(msg)
-          }
-      }
-  });
-        
-    }
-</script>
-<script>
-    RefundPPI = (transid) => {
-          $.ajax({
-                  url: '@Url.Action("PaysprintRefundOTPPPI", "Home")',
-                  type: "Post",
-                  dataType: 'json',
-                  cache: false,
-      //   async: false,
-              data: { txnid: transid, },
-      //cache: false,
-              success: function (result) {
-                  console.log()
-        //  let obj = JSON.parse(jsonData);
-                  var sts = result.status;
-          var msg = result.message;
-
-                  if (sts == true) {
-                      var stateresp = result.data.stateresp;
-              $('#myModalRefundPPI').modal('show')
-              $('#hidetxnidPPI').val(transid)
-              $('#hidestateresp').val(stateresp)
-          }
-          else {
-              alert(msg)
-          }
-      }
-  });
-
-    }
-</script>
-
-
-<script>
-    $("").click(function () {
-        $(".report-list-change li").addClass(".active");
-    });
-
-</script>
-<script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('.report-list-change li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('active');
-
-
+    RefundPPI = function (transid) {
+        jQuery.ajax({
+            url: '@Url.Action("PaysprintRefundOTPPPI", "Home")', type: 'Post', dataType: 'json', cache: false, data: { txnid: transid },
+            success: function (result) {
+                if (result.status == true) {
+                    jQuery('#myModalRefundPPI').modal('show');
+                    jQuery('#hidetxnidPPI').val(transid);
+                    jQuery('#hidestateresp').val(result.data.stateresp);
+                }
+                else { alert(result.message); }
             }
-        })
-    });
-</script>
+        });
+    };
 
-<script>
-    $(document).ready(function () {
-        $(".addnew-responsiveclass .finacial-selectsss input").click(function () {
-            $(".datepicker").addClass('datapicker-bottom-responshive');
+    function initRetailerDmtSelect2() {
+        jQuery('#ddl_status, #ddl_Type').each(function () {
+            var $el = jQuery(this);
+            if (!$el.length || !jQuery.fn.select2) { return; }
+            if ($el.hasClass('select2-hidden-accessible')) {
+                try { $el.select2('destroy'); } catch (e) { }
+            }
+            $el.select2({ width: '100%', minimumResultsForSearch: 6 });
+        });
+    }
+
+    function initRetailerDmtDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerDmtDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerDmtReportForm',
+                '#retailer_dmt_frm_date',
+                '#retailer_dmt_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerDmtSelect2();
+        initRetailerDmtDatepickers();
+        window.setTimeout(initRetailerDmtDatepickers, 150);
+        renumberRetailerDmtSr();
+
+        jQuery('#btnRetailerDmtExport').on('click', function () {
+            var f = retailerDmtFilters();
+            location.href = '@Url.Action("Excel_Money_Transfer_Report", "Home")?txt_frm_date=' + encodeURIComponent(f.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(f.txt_to_date) + '&ddl_status=' + encodeURIComponent(f.ddl_status) + '&ddl_Type=' + encodeURIComponent(f.ddl_Type) + '&txtnumberfind=' + encodeURIComponent(f.txtnumberfind);
+        });
+        jQuery('#btnRetailerDmtPDF').on('click', function () {
+            var f = retailerDmtFilters();
+            window.open('@Url.Action("PDF_Money_Transfer_Report", "Home")?txt_frm_date=' + encodeURIComponent(f.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(f.txt_to_date) + '&ddl_status=' + encodeURIComponent(f.ddl_status) + '&ddl_Type=' + encodeURIComponent(f.ddl_Type) + '&txtnumberfind=' + encodeURIComponent(f.txtnumberfind), '_blank');
+        });
+
+        jQuery(window).on('scroll', function () {
+            if (retailerDmtNoMore || retailerDmtBusy) { return; }
+            var nearBottom = jQuery(window).scrollTop() + jQuery(window).height() > jQuery(document).height() - 400;
+            if (!nearBottom) { return; }
+            retailerDmtBusy = true;
+            jQuery('#retailerDmtLoading').show();
+            var f = retailerDmtFilters();
+            jQuery.post('@Url.Action("InfiniteScroll_money", "Home")',
+                { pageindex: retailerDmtPageIndex, txt_frm_date: f.txt_frm_date, txt_to_date: f.txt_to_date, ddl_status: f.ddl_status, ddl_Type: f.ddl_Type, txtnumberfind: f.txtnumberfind },
+                function (data) {
+                    retailerDmtPageIndex = retailerDmtPageIndex + 1;
+                    retailerDmtNoMore = data.NoMoredata;
+                    var html = data.HTMLString || '';
+                    if (html && html.indexOf('vm-opr-table-empty-row') === -1) {
+                        jQuery('#retailerDmtRows .vm-opr-table-empty-row').remove();
+                        jQuery('#retailerDmtRows').append(html);
+                    } else {
+                        retailerDmtNoMore = true;
+                    }
+                    renumberRetailerDmtSr();
+                    jQuery('#retailerDmtLoading').hide();
+                    retailerDmtBusy = false;
+                })
+                .fail(function () {
+                    jQuery('#retailerDmtLoading').hide();
+                    retailerDmtBusy = false;
+                });
         });
     });
 </script>
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var ddl_status = $('#ddl_status').val();
-        var ddl_Type = $('#ddl_Type').val();
-        var txtnumberfind = $('#txtnumberfind').val();
-        var url = '@Url.Action("Excel_Money_Transfer_Report", "Home")?txt_frm_date=' + txt_frm_date + '&txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddl_status=' + ddl_status + '&ddl_Type=' + ddl_Type + '&txtnumberfind=' + txtnumberfind;
-        location.href = url
-});
-</script>
-<script>
-    $("#btnPDF").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var ddl_status = $('#ddl_status').val();
-        var ddl_Type = $('#ddl_Type').val();
-        var txtnumberfind = $('#txtnumberfind').val();
-        var url = '@Url.Action("PDF_Money_Transfer_Report", "Home")?txt_frm_date=' + txt_frm_date + '&txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddl_status=' + ddl_status + '&ddl_Type=' + ddl_Type + '&txtnumberfind=' + txtnumberfind;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
-    });
-</script>
-
-
+}

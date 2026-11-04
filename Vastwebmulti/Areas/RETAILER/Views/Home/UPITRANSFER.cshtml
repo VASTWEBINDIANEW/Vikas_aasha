@@ -12,743 +12,514 @@
     TempData.Keep("QRCodeImage");
     TempData.Keep("UPICollect");
     TempData.Keep("GetUniqueid");
+    var upiRows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.show_upi_txn_details_Result>()).ToList();
+    var upiRowCount = upiRows.Count;
 }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=21" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page', 'saas-dealer-fund-transfer-page', 'saas-retailer-fund-transfer-page', 'saas-fund-transfer-page', 'saas-retailer-upi-page', 'saas-retailer-upitransfer-page');</script>
+
 <style>
-    .loaders443 {
-        width: 31px;
-        height: 30px;
-        border: 5px solid #FFF;
-        border-bottom-color: #FF3D00;
-        border-radius: 50%;
-        display: inline-block;
-        box-sizing: border-box;
-        animation: rotation 1s linear infinite;
-    }
-    @@keyframes rotation {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    span {
-        color: #fff !important;
-    }
-
-    section.content {
-        margin: 87px 0px 0 164px;
-    }
-
-    .datepicker table tr td span {
-        color: #555 !important;
-    }
-
-        .datepicker table tr td span.active {
-            color: #fff !important;
-        }
-
-
-    .tab-menur li a::before {
-        content: '';
-        width: 12px;
-        height: 12px;
-        display: inline-block;
-        border: 2px solid #bbb;
-        border-radius: 50%;
-        margin: 2px 6px 0px 0px;
-    }
-
-    .tab-menur li a.active-ar::before {
-        border-color: var(--main-bg-lcolor);
-        background: var(--main-bg-lcolor);
-    }
-
-    .tab-menur li a.active-ar {
-        color: var(--main-bg-lcolor);
-    }
-
-    .fund-t-dalear input {
-        border: 1px solid #bbb;
-        height: 32px;
-        padding: 0px 5px;
-        padding-top: 0px !important;
-        width: 100%;
-        padding-left: 40px;
-    }
-
-    .fund-t-dalear button {
-        height: 32px;
-        border: 1px solid #c7c2c2;
-        background: #fff;
-    }
-
-    .for-change-fund {
-        margin: 0px;
-        width: 100%;
-    }
-
-    .fund-fistory {
-        float: left;
-        margin-top: 0px;
-        font-size: 18px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-        .fund-fistory sub {
-            position: absolute;
-            bottom: 4px !important;
-            top: 24px;
-            line-height: 8px;
-            left: 11px;
-            font-size: 9px;
-        }
-
-    .nav-tabs li.active .for-change-fund .fa {
-        float: left;
-        font-size: 44px;
-        transform: rotate(-90deg);
-        margin-left: 5px;
-        color: var(--main-bg-lcolor) !important;
-        margin-top: -2px;
-        line-height: 36px;
-    }
-
-    .fund-trasfer-right .nav-tabs + .tab-content {
-        padding: 5px !important;
-    }
-
-    .fund-trasfer-right .tab-content {
-        height: 74vh;
-    }
-
-    .retailer-upitransfer {
-        padding-right: 0;
-    }
-
-        .retailer-upitransfer .col-md-3 {
-            padding-right: 0;
-        }
-
-            .retailer-upitransfer .col-md-3 label {
-                font-size: 10px;
-                text-transform: uppercase;
-                margin-bottom: 0px !important;
-            }
-
-            .retailer-upitransfer .col-md-3 input {
-                height: auto !important;
-                min-height: 28px;
-            }
-
-        .retailer-upitransfer .col-md-3 {
-            padding-left: 5px;
-        }
-
-    .retailer-upitransfer {
-        margin-bottom: 8px;
-        margin-top: -7px;
-    }
-
-    .retailer-upilastclass .fund-t-dalearretailer .date-sateclassee {
-        width: 24%;
-        padding-right: 5px;
-    }
-
-    .retailer-upilastclass .fund-t-dalearretailer .apiclass-satenew.apiclass-satenew-responshive.retailer-addupiclass {
-        width: 24%;
-        padding-right: 5px !important;
-    }
-
-    .retailer-upilastclass .apiclass-satenew.apiclass-satenew-responshive.apiclass-satenewnewclas {
-        width: 16%;
-    }
-
-    .retailer-upilastclass .fund-t-dalearretailer .apiclass-satenew.apiclass-satenew-responshive.retailer-addupiclass button {
-        background: var(--main-bg-lcolor);
-        color: #fff;
-    }
-
-    .retailer-upitransfer .col-md-3 .btn.btn-success {
-        background: #eeebeb !important;
-        color: #555 !important;
-    }
-
-    .fundtransfer-retailerupi .modal-dialog {
-        width: 40%;
-        float: right;
-    }
-
-        .fundtransfer-retailerupi .modal-dialog .form-group label {
-            font-size: 13px;
-        }
-
-        .fundtransfer-retailerupi .modal-dialog .col-md-12 {
-            padding-left: 6px;
-            padding-right: 6px;
-        }
-
-        .fundtransfer-retailerupi .modal-dialog .modal-header {
-            padding: 15px 15px;
-        }
-
-    .fundtransfer-retailerupi .modal-dialog {
-        width: 40%;
-    }
-
-        .fundtransfer-retailerupi .modal-dialog .form-group input.btn.btn-default {
-            background: #ddd !important;
-            float: right;
-            padding: 8px 15px;
-            height: auto;
-        }
-
-    .dropdown-menu.datepicker-dropdown.datepicker {
-        margin-top: 99px !important;
-    }
-
-    .upi-retailer-date .date-sateclassee input {
-        border: 1px solid #555;
-    }
-
-    .upi-retailer-date .apiclass-satenewnewclas button {
-        border-color: #555 !important;
-    }
-
-    .upi-retailer-date .date-sateclassee .custom-date-icon {
-        border-color: #555 !important;
-        height: 29px !important;
-        top: 1px !important;
-    }
-
-    .upi-retailer-datepdf .col-md-4.date-sateclassee {
-        width: 20%;
-        float: left;
-    }
-
-    .upi-retailer-datepdf .col-md-2.apiclass-satenew {
-        width: 14% !important;
-    }
-
-    .upi-retailer-datepdf .col-md-4.date-sateclassee input {
-        text-align: right;
-        font-size: 14px;
-    }
-
-    .upi-retailer-datepdf .col-md-2.apiclass-satenew.apiclass-satenew-responshive.retailer-addupiclass {
-        width: 24% !important;
-    }
-
-    .upi-retailer-datepdf .col-md-3.buttonPdf.retailer-pdf-second {
-        padding-left: 0px !important;
-        padding-right: 5px;
-        padding-top: 1px !important;
-    }
-
-        .upi-retailer-datepdf .col-md-3.buttonPdf.retailer-pdf-second button {
-            background-color: #fff !important;
-            border: 1px solid #555 !important;
-            color: #555;
-            height: 30px;
-        }
-
-
-    @@media screen and (max-width:1366px) {
-        .retailer-upitransfer {
-            margin-top: 0;
-        }
-
-        .bread-same-all-page.allpage-responshivenew ul {
-            margin-top: 5px;
-        }
-
-        .upi-retailer-datepdf .col-md-4.date-sateclassee .custom-date-icon {
-            width: 26px;
-        }
-    }
-
-    @@media screen and (max-width:992px) {
-        .retailer-upitransfer {
-            width: 100% !important;
-            float: left;
-        }
-
-            .retailer-upitransfer .col-md-3 {
-                width: 25%;
-                float: left;
-            }
-
-                .retailer-upitransfer .col-md-3 label, .retailer-upitransfer .col-md-3 input {
-                    width: 100%;
-                    float: left;
-                }
-
-        .col-md-12.retailer-upitransfer {
-            padding: 0;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li {
-            width: 100% !important;
-            float: left !important;
-            border: 0px !important;
-            text-align: center;
-        }
-
-            .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li a {
-                width: 100% !important;
-                float: none !important;
-                text-align: center;
-            }
-
-                .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li a label .fund-fistory sub {
-                    position: static;
-                    display: block;
-                }
-
-                .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li a .fund-fistory {
-                    text-align: center;
-                    width: 100%;
-                }
-
-                .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li a label .fa.fa-caret-down {
-                    display: none;
-                }
-
-        .retailer-upilastclass-second ul.responsive-sateulce li .col-md-4, .retailer-upilastclass-second ul.responsive-sateulce li .col-md-2 {
-            float: left;
-        }
-
-        .retailer-upilastclass-second ul.responsive-sateulce {
-            padding-bottom: 10px;
-            padding-left: 4px;
-        }
-
-        .bread-same-all-page.allpage-responshivenew ul {
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-
-        .upi-retailer-datepdf .col-md-3.buttonPdf.retailer-pdf-second {
-            display: block;
-        }
-
-        .upi-retailer-datepdf .col-md-4.date-sateclassee {
-            width: 50%;
-            margin-bottom: 5px;
-        }
-
-            .upi-retailer-datepdf .col-md-4.date-sateclassee input {
-                text-align: center;
-            }
-
-        .upi-retailer-datepdf .col-md-2.apiclass-satenew.apiclass-satenew-responshive.retailer-addupiclass {
-            width: auto !important;
-        }
-
-            .upi-retailer-datepdf .col-md-2.apiclass-satenew.apiclass-satenew-responshive.retailer-addupiclass button {
-                padding: 0 4px !important;
-            }
-
-        .fourthdesign-retailer-allnone .col-md-4, .fourthdesign-retailer-allnone .col-md-8 {
-            padding-left: 0;
-        }
-    }
-
+    .datepicker table tr td span { color: #555 !important; }
+    .datepicker table tr td span.active { color: #fff !important; }
+    /* Loader ring (generate-QR spinner, kept from old page) */
+    body.saas-admin-ui .saas-retailer-upitransfer-page .loaders443 { width: 31px; height: 30px; border: 5px solid #e2e8f0; border-bottom-color: #FF3D00; border-radius: 50%; display: inline-block; box-sizing: border-box; animation: vm-tx-rotation 1s linear infinite; }
+    @@keyframes vm-tx-rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* ===== TRANSFER TOTAL CHIPS (history header, top-right) ===== */
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-head-stats { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; align-items: center; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; color: #334155; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 999px; padding: 5px 11px; white-space: nowrap; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip b { font-weight: 800; color: #0f172a; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip .fa, body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip .fas { font-size: 10px; width: 18px; height: 18px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #fff !important; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip--success .fa, body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip--success .fas { background: #22c55e; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip--pending .fa, body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip--pending .fas { background: #f59e0b; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip--failed .fa, body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip--failed .fas { background: #ef4444; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip--charges .fa, body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip--charges .fas { background: #6366f1; }
+
+    /* ===== TRANSFER LEFT PANEL (modern compact) ===== */
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-panel { background: #fff; padding: 12px 10px; display: flex; flex-direction: column; gap: 10px; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-mode-tabs { display: flex; background: #eef1f7; border-radius: 10px; padding: 3px; gap: 3px; list-style: none; margin: 0; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-mode-tabs li { flex: 1 1 0; text-align: center; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-mode-tabs li a { display: block; padding: 8px 2px; border-radius: 8px; font-size: 10.5px; font-weight: 800; letter-spacing: .2px; color: #64748b !important; cursor: pointer; text-decoration: none; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-mode-tabs li.active a { background: linear-gradient(135deg,#4f46e5,#7c3aed); color: #fff !important; box-shadow: 0 4px 10px rgba(79,70,229,.4); }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-field label { display: block; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 5px 2px; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-input.form-control { height: 40px; border-radius: 9px; border: 1.5px solid #e2e8f0; background: #f8fafc; font-size: 13.5px; font-weight: 600; color: #0f172a; padding: 0 12px; box-shadow: none; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-input.form-control::placeholder { color: #94a3b8; font-weight: 500; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-input.form-control:focus { border-color: #4f46e5; background: #fff; box-shadow: 0 0 0 4px rgba(79,70,229,.13); outline: none; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-grid-2 { display: flex; gap: 8px; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-grid-2 > div { flex: 1 1 0; min-width: 0; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-submit-btn { min-height: 42px; border: none; border-radius: 10px; background: linear-gradient(135deg,#4f46e5 0%,#6d28d9 60%,#7c3aed 100%); color: #fff !important; font-size: 14px; font-weight: 800; letter-spacing: .3px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 16px rgba(79,70,229,.35); width: 100%; padding: 10px 12px; transition: transform .15s ease, filter .15s ease; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-submit-btn:hover { transform: translateY(-1px); filter: brightness(1.06); color: #fff !important; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-generate-btn { width: 100%; border: 1.5px dashed #c7d2fe; background: #eef2ff; color: #4f46e5; font-weight: 800; font-size: 14px; border-radius: 10px; padding: 12px; cursor: pointer; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-generate-btn:hover { background: #e0e7ff; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-qr-figure { text-align: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 10px; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-qr-figure img { max-width: 210px; width: 100%; border-radius: 8px; border: 3px solid #0f172a; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-back-link { display: inline-block; font-size: 13.5px; font-weight: 800; color: #4f46e5; margin: 2px 0 4px; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-msg { font-size: 12.5px; font-weight: 700; margin: 0; text-align: center; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-status-panel { background: #f8fafc; border: 1.5px dashed #c7d2fe; border-radius: 10px; padding: 12px; text-align: center; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-status-count { color: #b45309; font-weight: 700; font-size: 13px; margin: 6px 0 0; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-status-final { font-weight: 800; font-size: 13.5px; margin: 0 0 6px; }
+    /* Manual-REQ toggle + manual request buttons */
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-mini-btn { border: 1.5px solid #e2e8f0; background: #fff; color: #475569; font-size: 12px; font-weight: 800; border-radius: 9px; padding: 7px 12px; cursor: pointer; white-space: nowrap; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-mini-btn:hover { border-color: #4f46e5; color: #4f46e5; }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-mini-btn--primary { background: linear-gradient(135deg,#4f46e5,#7c3aed); border-color: transparent; color: #fff; box-shadow: 0 4px 10px rgba(79,70,229,.3); }
+    body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-mini-btn--primary:hover { color: #fff; filter: brightness(1.06); }
+    /* Manual fund modal — CLEAN FIX v3 (isolated, no body dependency) */
+    #fundtransfer .modal-dialog { max-width: 472px !important; margin: 48px auto !important; float: none !important; width: calc(100% - 28px) !important; }
+    #fundtransfer .modal-content { border: none !important; border-radius: 22px !important; overflow: hidden !important; box-shadow: 0 30px 80px rgba(15,23,42,.35) !important; background: #fff !important; animation: vm-txm-pop .32s cubic-bezier(.21,1.02,.73,1) !important; }
+    @@keyframes vm-txm-pop { 0% { opacity: 0; transform: translateY(26px) scale(.97); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+    #fundtransfer .modal-header { background: linear-gradient(135deg,#1e40ff 0%,#4f46e5 50%,#7c3aed 100%) !important; border: none !important; border-bottom: none !important; padding: 16px 16px !important; display: flex !important; align-items: center !important; gap: 12px !important; position: relative !important; overflow: hidden !important; min-height: 0 !important; }
+    #fundtransfer .modal-header::before { content: '' !important; position: absolute !important; right: -50px !important; top: -70px !important; width: 180px !important; height: 180px !important; border-radius: 50% !important; background: radial-gradient(circle,rgba(255,255,255,.22) 0%,rgba(255,255,255,0) 70%) !important; pointer-events: none !important; }
+    #fundtransfer .vm-txm-head-ico { width: 46px !important; height: 46px !important; min-width: 46px !important; border-radius: 14px !important; background: rgba(255,255,255,.18) !important; border: 1px solid rgba(255,255,255,.35) !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; font-size: 19px !important; color: #fff !important; position: relative !important; z-index: 2 !important; }
+    #fundtransfer .vm-txm-head-txt { flex: 1 1 auto !important; min-width: 0 !important; position: relative !important; z-index: 2 !important; }
+    #fundtransfer .vm-txm-title { display: block !important; margin: 0 !important; padding: 0 !important; font-size: 16px !important; font-weight: 800 !important; color: #fff !important; line-height: 1.3 !important; letter-spacing: .1px !important; border: none !important; background: none !important; }
+    #fundtransfer .vm-txm-sub { display: block !important; font-size: 11.5px !important; font-weight: 500 !important; color: rgba(255,255,255,.85) !important; margin-top: 3px !important; line-height: 1.4 !important; }
+    #fundtransfer .modal-header .close-btn { background: rgba(255,255,255,.16) !important; border: 1px solid rgba(255,255,255,.28) !important; color: #fff !important; width: 32px !important; height: 32px !important; min-width: 32px !important; border-radius: 50% !important; cursor: pointer !important; font-size: 12px !important; position: relative !important; z-index: 2 !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; opacity: 1 !important; text-shadow: none !important; margin: 0 !important; padding: 0 !important; }
+    #fundtransfer .modal-header .close-btn:hover { background: #fff !important; color: #4f46e5 !important; transform: rotate(90deg) !important; }
+    #fundtransfer .vm-txm-stepsbar { display: flex !important; gap: 8px !important; padding: 12px 16px !important; background: #fff !important; border-bottom: 1px solid #eef1f6 !important; }
+    #fundtransfer .vm-txm-step { flex: 1 1 0 !important; display: flex !important; align-items: center !important; gap: 7px !important; background: #f1f4fb !important; border: 1px solid #e3e8f2 !important; border-radius: 10px !important; padding: 7px 8px !important; min-width: 0 !important; }
+    #fundtransfer .vm-txm-step i { width: 22px !important; height: 22px !important; min-width: 22px !important; border-radius: 50% !important; background: linear-gradient(135deg,#4f46e5,#7c3aed) !important; color: #fff !important; font-size: 10px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+    #fundtransfer .vm-txm-step span { font-size: 10.5px !important; font-weight: 700 !important; color: #334155 !important; line-height: 1.3 !important; white-space: normal !important; }
+    #fundtransfer .modal-body { padding: 16px 16px 18px !important; background: #f3f5fa !important; }
+    #fundtransfer .vm-txm-secure { display: flex !important; align-items: center !important; justify-content: center !important; gap: 7px !important; font-size: 11.5px !important; font-weight: 700 !important; color: #047857 !important; background: #ecfdf5 !important; border: 1px solid #a7f3d0 !important; border-radius: 999px !important; padding: 8px 12px !important; margin: 0 0 12px 0 !important; }
+    #fundtransfer .vm-txm-card { background: #fff !important; border: 1px solid #e5e9f2 !important; border-radius: 18px !important; padding: 16px 14px !important; display: flex !important; flex-direction: column !important; gap: 14px !important; box-shadow: 0 8px 24px rgba(15,23,42,.07) !important; }
+    #fundtransfer .vm-txm-field { display: block !important; margin: 0 !important; padding: 0 !important; }
+    #fundtransfer .vm-txm-lbl { display: flex !important; align-items: center !important; gap: 7px !important; font-size: 11.5px !important; font-weight: 800 !important; color: #1e293b !important; text-transform: uppercase !important; letter-spacing: .4px !important; margin: 0 0 7px 2px !important; padding: 0 !important; border: none !important; background: none !important; line-height: 1.4 !important; }
+    #fundtransfer .vm-txm-tag { width: 26px !important; height: 26px !important; min-width: 26px !important; border-radius: 9px !important; background: linear-gradient(135deg,#4f46e5,#7c3aed) !important; color: #fff !important; font-size: 11px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+    #fundtransfer .vm-txm-req { color: #ef4444 !important; font-size: 13px !important; }
+    #fundtransfer .vm-txm-hint { margin-left: auto !important; font-size: 10px !important; font-weight: 700 !important; color: #fff !important; background: #94a3b8 !important; border-radius: 999px !important; padding: 2px 9px !important; text-transform: none !important; letter-spacing: 0 !important; white-space: nowrap !important; }
+    #fundtransfer .vm-txm-box { position: relative !important; display: block !important; }
+    #fundtransfer .vm-txm-box .form-control { height: 47px !important; border-radius: 13px !important; border: 1.5px solid #dbe2ef !important; background: #f8fafc !important; font-size: 14px !important; font-weight: 700 !important; color: #0f172a !important; padding: 0 12px 0 44px !important; box-shadow: none !important; width: 100% !important; margin: 0 !important; }
+    #fundtransfer .vm-txm-box .form-control::placeholder { color: #9aa6bb !important; font-weight: 500 !important; }
+    #fundtransfer .vm-txm-box .form-control:focus { border-color: #4f46e5 !important; background: #fff !important; box-shadow: 0 0 0 4px rgba(79,70,229,.14) !important; outline: none !important; }
+    #fundtransfer .vm-txm-in-ico { position: absolute !important; left: 9px !important; top: 50% !important; transform: translateY(-50%) !important; width: 29px !important; height: 29px !important; border-radius: 10px !important; background: #eef2ff !important; color: #4f46e5 !important; font-size: 13px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; pointer-events: none !important; z-index: 2 !important; margin: 0 !important; }
+    #fundtransfer .vm-txm-chips { display: flex !important; gap: 7px !important; flex-wrap: wrap !important; margin-top: 8px !important; }
+    #fundtransfer .vm-txm-chipbtn { border: 1.5px solid #e2e8f0 !important; background: #fff !important; color: #4f46e5 !important; font-size: 11.5px !important; font-weight: 800 !important; border-radius: 999px !important; padding: 6px 13px !important; cursor: pointer !important; margin: 0 !important; line-height: 1.2 !important; }
+    #fundtransfer .vm-txm-chipbtn:hover, #fundtransfer .vm-txm-chipbtn.active { background: #4f46e5 !important; border-color: #4f46e5 !important; color: #fff !important; }
+    #fundtransfer .vm-txm-row { display: flex !important; gap: 10px !important; }
+    #fundtransfer .vm-txm-row > div { flex: 1 1 0 !important; min-width: 0 !important; }
+    #fundtransfer .vm-txm-field-err { font-size: 11px !important; font-weight: 600 !important; color: #ef4444 !important; margin: 5px 2px 0 2px !important; padding: 0 !important; line-height: 1.4 !important; }
+    #fundtransfer .vm-txm-submit { height: 50px !important; border: none !important; border-radius: 14px !important; background: linear-gradient(135deg,#1e40ff 0%,#6d28d9 60%,#7c3aed 100%) !important; color: #fff !important; font-size: 15px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 9px !important; box-shadow: 0 10px 24px rgba(79,70,229,.45) !important; width: 100% !important; position: relative !important; overflow: hidden !important; margin: 0 !important; padding: 0 12px !important; }
+    #fundtransfer .vm-txm-submit::after { content: '' !important; position: absolute !important; top: 0 !important; left: -70% !important; width: 45% !important; height: 100% !important; background: linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent) !important; transform: skewX(-20deg) !important; animation: vm-txm-shine 2.8s infinite !important; }
+    @@keyframes vm-txm-shine { 0% { left: -70%; } 60%,100% { left: 130%; } }
+    #fundtransfer .vm-txm-submit:hover { transform: translateY(-2px) !important; filter: brightness(1.07) !important; color: #fff !important; }
+    #fundtransfer .vm-txm-submit .vm-txm-go { width: 28px !important; height: 28px !important; border-radius: 50% !important; background: rgba(255,255,255,.22) !important; border: 1px solid rgba(255,255,255,.3) !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; font-size: 12px !important; }
+    #fundtransfer .vm-txm-note { display: flex !important; gap: 9px !important; align-items: flex-start !important; text-align: left !important; font-size: 11.5px !important; line-height: 1.55 !important; color: #64748b !important; font-weight: 600 !important; margin: 0 !important; background: #f8fafc !important; border: 1px dashed #cbd5e1 !important; border-radius: 12px !important; padding: 10px 11px !important; }
+    #fundtransfer .vm-txm-note i { color: #4f46e5 !important; font-size: 14px !important; margin-top: 1px !important; }
     @@media screen and (max-width:480px) {
-        .retailer-upilastclass-second ul.responsive-sateulce li .col-md-4 {
-            width: 50%;
-            margin-bottom: 5px;
-        }
-
-        .retailer-upilastclass-second ul.responsive-sateulce li .col-md-2 {
-            width: auto !important;
-            float: left;
-        }
-
-            .retailer-upilastclass-second ul.responsive-sateulce li .col-md-2 button {
-                padding: 0 15px !important;
-            }
-
-        .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li {
-            padding: 0px !important;
-        }
+        #fundtransfer .vm-txm-row { flex-direction: column !important; }
+        #fundtransfer .vm-txm-stepsbar { flex-direction: column !important; }
     }
+    /* ===== Charges mini-card — latest premium ===== */
+    .vm-upi-charges-table { width: 100% !important; border-collapse: separate !important; border-spacing: 0 !important; margin: 12px 0 0 0 !important; border: 1px solid #e5e9f2 !important; border-radius: 14px !important; overflow: hidden !important; box-shadow: 0 6px 18px rgba(15,23,42,.06) !important; background: #fff !important; }
+    .vm-upi-charges-table tr:first-child th { background: linear-gradient(135deg,#1e40ff 0%,#4f46e5 55%,#7c3aed 100%) !important; color: #fff !important; font-size: 12px !important; font-weight: 800 !important; text-transform: uppercase !important; letter-spacing: .5px !important; padding: 10px 14px !important; text-align: left !important; border: none !important; }
+    .vm-upi-charges-table tr:first-child th:last-child { text-align: right !important; }
+    .vm-upi-charges-table th { background: linear-gradient(135deg,#1e40ff 0%,#4f46e5 55%,#7c3aed 100%) !important; color: #fff !important; font-size: 11px !important; font-weight: 800 !important; text-transform: uppercase !important; letter-spacing: .5px !important; padding: 10px 14px !important; border: none !important; }
+    .vm-upi-charges-table td { padding: 10px 14px !important; font-size: 12.5px !important; font-weight: 600 !important; color: #475569 !important; border-bottom: 1px solid #eef1f6 !important; border-top: none !important; background: #fff !important; }
+    .vm-upi-charges-table tr:last-child td { border-bottom: none !important; }
+    .vm-upi-charges-table tr:nth-child(even) td { background: #f8faff !important; }
+    .vm-upi-charges-table td:last-child { text-align: right !important; font-weight: 800 !important; color: #0f172a !important; }
+    .vm-upi-charges-table td:last-child::before { content: ''; display: none !important; }
+    /* instruction list polish */
+    .scan-third-responshive ol { background: #f8faff; border: 1px solid #e3e8f2; border-radius: 12px; padding: 12px 12px 12px 32px; margin: 0; display: flex; flex-direction: column; gap: 7px; }
+    .scan-third-responshive ol li { font-size: 12px; line-height: 1.55; color: #475569; font-weight: 500; }
+    /* ===== New premium loader ===== */
+    .vm-upi-loader { display: inline-flex; flex-direction: column; align-items: center; gap: 10px; background: #fff; border: 1px solid #e5e9f2; border-radius: 16px; padding: 20px 42px; box-shadow: 0 8px 24px rgba(15,23,42,.08); }
+    .vm-upi-loader-ring { width: 46px; height: 46px; border-radius: 50%; background: conic-gradient(#1e40ff,#7c3aed,#1e40ff); display: inline-flex; align-items: center; justify-content: center; animation: vm-upi-spin 0.9s linear infinite; }
+    .vm-upi-loader-ring > span { width: 36px; height: 36px; border-radius: 50%; background: #fff; display: inline-flex; align-items: center; justify-content: center; }
+    .vm-upi-loader-ring > span::after { content: ''; width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg,#4f46e5,#7c3aed); animation: vm-upi-pulse 1s ease-in-out infinite; }
+    @@keyframes vm-upi-spin { to { transform: rotate(360deg); } }
+    @@keyframes vm-upi-pulse { 0%,100% { transform: scale(.7); opacity: .6; } 50% { transform: scale(1.15); opacity: 1; } }
+    .vm-upi-loader-txt { font-size: 12.5px; font-weight: 800; color: #334155; letter-spacing: .2px; }
+    .vm-upi-loader-dots i { font-style: normal; animation: vm-upi-blink 1.2s infinite; }
+    .vm-upi-loader-dots i:nth-child(2) { animation-delay: .2s; }
+    .vm-upi-loader-dots i:nth-child(3) { animation-delay: .4s; }
+    @@keyframes vm-upi-blink { 0%,100% { opacity: .2; } 50% { opacity: 1; } }
+    .vm-upi-loader-bar { width: 170px; height: 6px; border-radius: 999px; background: #eef1f6; overflow: hidden; }
+    .vm-upi-loader-bar > span { display: block; width: 40%; height: 100%; border-radius: 999px; background: linear-gradient(90deg,#1e40ff,#7c3aed); animation: vm-upi-slide 1.1s ease-in-out infinite; }
+    @@keyframes vm-upi-slide { 0% { margin-left: -40%; } 100% { margin-left: 100%; } }
+    /* ===== Modal internal scroll (fixed header + steps, scrollable body) ===== */
+    #fundtransfer .modal-dialog { max-height: 92vh !important; }
+    #fundtransfer .modal-content { max-height: 92vh !important; display: flex !important; flex-direction: column !important; }
+    #fundtransfer .modal-header, #fundtransfer .vm-txm-stepsbar { flex: 0 0 auto !important; }
+    #fundtransfer .modal-body { flex: 1 1 auto !important; overflow-y: auto !important; overflow-x: hidden !important; max-height: calc(92vh - 190px) !important; scrollbar-width: thin !important; scrollbar-color: #4f46e5 #eef1f6 !important; overscroll-behavior: contain !important; }
+    #fundtransfer .modal-body::-webkit-scrollbar { width: 7px !important; }
+    #fundtransfer .modal-body::-webkit-scrollbar-track { background: #eef1f6 !important; border-radius: 999px !important; }
+    #fundtransfer .modal-body::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#4f46e5,#7c3aed) !important; border-radius: 999px !important; }
+    @@media screen and (max-height:700px) { #fundtransfer .modal-body { max-height: calc(92vh - 170px) !important; } }
 
-
-    @@media screen and (max-width:420px) {
-        #leftsidebar.sidebar.retailer-header-left, .second-design #leftsidebar.retailer-header-left.header-left-newresponshive.newresponshive-secondde {
-            margin-top: -78px !important;
-        }
+    @@media screen and (max-width:767px) {
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-head-stats { margin-left: 0; gap: 5px; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip { font-size: 10.5px; padding: 4px 9px; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page #fundtransfer .modal-dialog { margin: 40px auto; }
     }
-
-    @@media screen and (max-width:375px) {
-        .retailer-upitransfer .col-md-3 {
-            width: 50%;
-            float: left;
+    /* ===== Responsive: tablet + mobile (UPI Transfer page) ===== */
+    @@media screen and (max-width:1024px) {
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-layout { display: flex !important; flex-direction: column !important; gap: 14px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-form-col,
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-history-col { width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-page-toolbar { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-search-wrap { width: 100% !important; max-width: 100% !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-search-wrap .form-control { width: 100% !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-history-toolbar__head { flex-wrap: wrap !important; gap: 10px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-head-stats { margin-left: 0 !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-history-toolbar__filters { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-date-search-group { flex-wrap: wrap !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-export-group { display: flex !important; flex-wrap: wrap !important; gap: 8px !important; }
+    }
+    @@media screen and (max-width:767px) {
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-page-shell { padding-left: 10px !important; padding-right: 10px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-form-card-header__title { font-size: 15px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-panel { padding: 10px 8px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-qr-figure img { max-width: 180px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-dmt-field--date { flex: 1 1 46% !important; min-width: 140px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-search-btn { flex: 1 1 100% !important; min-height: 40px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-mini-btn { flex: 1 1 auto !important; text-align: center !important; padding: 9px 10px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-export-btn { width: 44px !important; height: 40px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page #tblshowMasterUPI { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; border-radius: 12px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page #tblshowMasterUPI table { min-width: 640px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page #tblshowMasterUPI table th,
+        body.saas-admin-ui .saas-retailer-upitransfer-page #tblshowMasterUPI table td { font-size: 12px !important; padding: 9px 10px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .scan-third-responshive ol { padding: 10px 10px 10px 28px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .scan-third-responshive ol li { font-size: 11.5px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-upi-charges-table td { font-size: 12px !important; padding: 9px 10px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .mreq-scroll { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page table.mreq-table { min-width: 680px !important; }
+        #fundtransfer .modal-dialog { margin: 16px auto !important; width: calc(100% - 20px) !important; }
+        #fundtransfer .modal-body { padding: 12px 12px 14px !important; }
+        #fundtransfer .vm-txm-card { padding: 12px 10px !important; }
+    }
+    @@media screen and (max-width:480px) {
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-breadcrumb { font-size: 11px !important; flex-wrap: wrap !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-head-stats { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 6px !important; width: 100% !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-chip { justify-content: center !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-radiant-record-badge { width: 100% !important; text-align: center !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-dmt-field--date { flex: 1 1 100% !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-mode-tabs li a { font-size: 10px !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-grid-2 { flex-direction: column !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-upi-loader { padding: 16px 22px !important; width: 100% !important; box-sizing: border-box !important; }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-upi-loader-bar { width: 100% !important; }
+    }
+    /* Clean print (PDF) — only history table prints */
+    @@media print {
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-form-col,
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-page-toolbar,
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-history-toolbar__filters,
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-export-group,
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-tx-head-stats,
+        body.saas-admin-ui .saas-retailer-upitransfer-page #fundtransfer {
+            display: none !important;
+        }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-layout {
+            display: block !important;
+        }
+        body.saas-admin-ui .saas-retailer-upitransfer-page .vm-ft-history-col {
+            width: 100% !important;
+            max-width: 100% !important;
+            flex: 0 0 100% !important;
+        }
+        body.saas-admin-ui .saas-retailer-upitransfer-page #tblshowMasterUPI {
+            overflow: visible !important;
+            max-height: none !important;
+        }
+        body.saas-admin-ui .saas-retailer-upitransfer-page #tblshowMasterUPI table {
+            min-width: 0 !important;
+            width: 100% !important;
         }
     }
 </style>
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section">
-    <div class="container-fluid">
-        <!--Four-Design-Page-Header-Start-->
 
-        <div class="page-title-box-fourde">
-            <h3>Upi Transfer</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Upi Transfer</a></li>
-            </ul>
-        </div>
+<section class="content saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium saas-dealer-fund-transfer-page saas-retailer-fund-transfer-page saas-retailer-upi-page saas-retailer-upitransfer-page">
 
-        <!--Four-Design-Page-Header-End-->
-        <div class="bread-same-all-page allpage-responshivenew">
-            <ul style="width:auto;float:left;">
-                <li class="smli">
-                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                    </a>
-                </li>
-                <li class="smli">
-                    <a href="@Url.Action("UPITRANSFER","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Add Wallet By UPI&nbsp;
-                    </a>
-                </li>
-                <li><input type="button" id="btnUPIreq" class="btn btn-success" name="btnUPIreq" value="Show Manual UPI REQ" /></li>
-            </ul>
+    <div class="container-fluid vm-ft-page-shell">
 
-            <div class="col-md-12 retailer-upitransfer" style="float:right;width:auto;">
-                <div class="col-md-3">
-                    <label>TOTAL SUCCESS</label> <input type="button" class="btn btn-success col-md-12" style="color:white;" value="@totalsuccess" />
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <div>
+                    <ol class="vm-ft-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Report's</li>
+                        <li>UPI Transfer</li>
+                    </ol>
                 </div>
-                <div class="col-md-3">
-                    <label>TOTAL Pending</label> <input type="button" class="btn btn-warning  col-md-12" style="color:white;" value="@penamount" />
-                </div>
-
-                <div class="col-md-3">
-                    <label>TOTAL Failed</label>  <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalfailamnt" />
-                </div>
-
-                <div class="col-md-3">
-                    <label>TOTAL Charges</label> <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalcharges" />
-                </div>
-
+            </div>
+            <div class="vm-ft-search-wrap">
+                <input class="form-control" type="text" value="" id="myInput" name="myInput" placeholder="Search by name, amount, RRN..." autocomplete="off" onkeyup="myFunction()" />
             </div>
         </div>
 
-    </div>
-
-    <div class="col-md-12">
-
-        <div class="row clearfix four-design-table-design">
-            <div class="col-md-4">
-                <div class="fund-trasfer-left fund-user-left">
-
-                    <ul class="nav nav-tabs tabtypeschages" id="tabs">
+        <div class="vm-ft-layout-wrap">
+        <div class="vm-ft-layout vm-ft-layout--full">
+            <div class="vm-ft-form-col">
+                <div class="fund-trasfer-left vm-ft-form-card">
+                    <div class="vm-ft-form-card-header">
+                        <div class="vm-ft-form-card-header__icon" aria-hidden="true">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div>
+                            <span class="vm-ft-form-card-header__title">UPI Transfer</span>
+                            <span class="vm-ft-form-card-header__sub">Add wallet via UPI QR</span>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs fullbodydycolorbg1 tab-seconddesign tab-third-design vm-ft-role-tabs fulltabchange" id="tabs">
                         @if (UPIQRBASEPRICEset == null)
                         {
-                            <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true" style="font-size: 18px !important;font-weight: 600;">+ Wallet By QR Code (UPI)</a></li>
+                            <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--active current active" data-tab="tab-1" role="presentation" style="width:100% !important;">
+                                <a data-toggle="tab" href="#home" class="vm-ft-role-tab" aria-expanded="true" aria-selected="true">Wallet By QR Code (UPI)</a>
+                            </li>
                         }
                         else if (UPIQRBASEPRICEset != null && UPIQRBASEPRICEset.status == true)
                         {
-
-                            <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true" style="font-size: 18px !important;font-weight: 600;">+ Price Base QR Code(UPI)</a></li>
-
-
+                            <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--active current active" data-tab="tab-1" role="presentation" style="width:100% !important;">
+                                <a data-toggle="tab" href="#home" class="vm-ft-role-tab" aria-expanded="true" aria-selected="true">Price Base QR Code (UPI)</a>
+                            </li>
                         }
                     </ul>
-                    <div class="width100 float-left ">
-                        @if (UPIQRBASEPRICEset == null)
-                        {
-                            <div id="home" class="width100 float-left tab-pane fade active in newaddclasstghghg changeback-four-design" style="background: var(--second-bg-color);min-height:599px;">
-                                <div class="scan-outer">
-                                    @if (ViewBag.set == "NOTOK")
-                                    {
-                                        <div class="scan-first">
-                                            @using (Html.BeginForm("UPITRANSFER_add", "Home", FormMethod.Post))
-                                            {
-                                                <button type="submit" style="border: 1px solid #aaa4a4; background: #fff;">
-                                                    <p style="text-align:center;"> Generate</p> QR Code
-                                                </button>
-                                            }
-                                        </div>
-                                    }
-                                    <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.msg </p>
-                                    @if (TempData["QRCodeImage"] != null)
-                                    {
-                                        <a href="@Url.Action("UPITRANSFER", "Home")" class="fullbodydycolorbg tmw-total-color-one" style="font-size: 18px; font-weight: bold; margin-left: 10px;">
-                                            Go Back&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
-                                        </a>
-                                    }
-                                    <div style="width: 60%;float:none;text-align: center;padding-bottom: 15px;padding-top: 10px;margin: 0px auto;">
-                                        @if (TempData["QRCodeImage"] != null)
-                                        {
-                                            <img src="@TempData["QRCodeImage"]" alt="" style=" border:5px solid black;max-width:100%;" />
-                                        }
-                                    </div>
-                                    @*<div class="scan-Second">
-                                            <img src="~/AdminDesign/images/download.png" />
-                                        </div>*@
-                                    <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
-                                        <ol>
-                                            <li>You can Not update the amount in your wallet by scanning the QR code.</li>
-                                            <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
-                                            <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
-                                        </ol>
-                                        <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
-                                            <tr>
-                                                <th colspan="2"><center>Charges</center></th>
-                                            </tr>
-                                            <tr>
-                                                <td>Minimum Fix Charge (In Rupees)</td>
-                                                <td>@ViewBag.min&nbsp;₹</td>
-                                            </tr>
-                                            <tr>
-                                                <td> Charges (In Precentage)</td>
-                                                <td>@ViewBag.charge&nbsp;%</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                        else if (UPIQRBASEPRICEset != null && UPIQRBASEPRICEset.status == true)
-                        {
 
-                            <div id="home" class="width100 float-left tab-pane fade active in newaddclasstghghg changeback-four-design" style="background: var(--second-bg-color);min-height:599px;">
+                    <div class="width100 float-left tabcurrent-seconddesign input-border-third">
+                        <div id="home" class="width100 float-left tab-pane vm-ft-left-tab-pane fade remove-activein active in">
+                            <div class="fund-transfer-form vm-dealer-ft-form-fs14">
                                 <div class="scan-outer">
-                                    @if (ViewBag.set == "NOTOK")
+                                    @if (UPIQRBASEPRICEset == null)
                                     {
-                                        <div class="" id="contentshowhide" style="margin: 36px;">
-                                            <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabs" style="display: flex; padding: 0px;">
-                                                @if (cfreeapi != null || phonepeapi != null)
-                                                {
-                                                    <li class="tab-link active hovof" data-tab="tab-1" style="width: 50%; border-right: 1px solid #fff; cursor: pointer; text-align: center; background: #c1c1c1;"><a style="cursor: pointer;" data-toggle="tab" onclick="generateqr_opt();">QR&nbsp;Code</a></li>
-                                                    <li class="tab-link hovof" style="width: 50%; text-align: center; background: #c1c1c1; cursor: pointer;"><a style="cursor: pointer;" data-toggle="tab" onclick="requestupi_opt()">UPI&nbsp;Request</a></li>
-                                                    if (phonepeapi != null)
+                                        <div class="vm-tx-panel">
+                                            @if (ViewBag.set == "NOTOK")
+                                            {
+                                                <div class="scan-first">
+                                                    @using (Html.BeginForm("UPITRANSFER_add", "Home", FormMethod.Post))
                                                     {
-                                                        @*<li class="tab-link hovof" style="width: 50%; text-align: center; background: #c1c1c1; cursor: pointer;"><a style="cursor: pointer;" data-toggle="tab" onclick="requestdebit()">Debit&nbsp;Card</a></li>*@
-
+                                                        <button type="submit" class="vm-tx-generate-btn">
+                                                            <span style="display:block;font-size:15px;">Generate</span> QR Code
+                                                        </button>
                                                     }
-                                                }
-                                                else
-                                                {
-                                                    <li class="tab-link active hovof" data-tab="tab-1" style="width: 100%; border-right: 1px solid #fff; cursor: pointer; text-align: center; background: #c1c1c1;"><a style="cursor: pointer;" data-toggle="tab" onclick="generateqr_opt();">QR&nbsp;Code</a></li>
-                                                }
-                                            </ul>
-
-                                            @using (Html.BeginForm("GenerateQrBasePrice", "Home", FormMethod.Post))
-                                            {
-                                                <div class="genrateamt" style="text-align: center; width: 100%; margin-top: 35px;">
-                                                    <label style="display: block; float: left; margin-top: 35px;">Enter Amount</label>
-                                                    <input class="form-control" type="number" id="txtgenerateamnt" name="txtgenerateamnt" value="" required placeholder="Enter Amount" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                </div>
-                                                <div class="genrateamt" style="text-align: center; width: 100%; display:none; " id="cardbox">
-
-
-                                                    <div>
-                                                        <label style="display: block; float: left; margin-top: 15px;">Card Number</label>
-                                                        <input class="form-control" type="text" id="txtdebitCardnumber" name="txtdebitCardnumber" value="" placeholder="Enter Card Number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="19" autocomplete="off" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                    </div>
-                                                    <div>
-                                                        <label style="display: block; float: left; margin-top: 15px;">Name on Card</label>
-                                                        <input class="form-control" type="text" id="txtdebitCardname" name="txtdebitCardname" value="" placeholder="Enter name as on card" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                    </div>
-                                                    <div style="display:flex; flex-direction:row; margin-top: 15px; width:100%;">
-                                                        <div style="flex-direction: column; width: 50%; float: left; margin-right: 20px; ">
-                                                            <label style="display: block; float: left !important;">Expiry</label><br />
-                                                            <input class="form-control" type="text" id="inputExpDate" name="inputExpDate" value="" maxlength='5' placeholder="MM/YY" onkeyup="formatString(event);"
-                                                                   style="height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                        </div>
-                                                        <div style="display:flex; flex-direction:column; float:left; width:50%;">
-                                                            <label style="display: block; float: left !important; width: 10px;">CVV</label>
-                                                            <input class="form-control" type="password" id="inputcvv" name="inputcvv" value="" maxlength='3' placeholder="CVV" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                                                                   style="height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="genrateamt" style="text-align: center; width: 100%; display: none; margin-top: 14px; " id="upibox">
-                                                    <label style="display: block; float:left;">Enter UPI ID</label>
-                                                    <input class="form-control" type="text" id="Requestedupiid" name="Requestedupiid" value="" placeholder="Enter UPI ID" style="display: none; width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                </div>
-                                                <div style="display:flex;">
-                                                    <button onclick="spinnerhd1212()" type="submit" id="upisubmit"
-                                                            style=" border-radius: 50px; border: none; color: #fff; padding: 5px 10px; width: 100%; margin-top: 20px; font-size: 19px; font-weight: 600; text-align: center; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; }">
-                                                        Generate QR
-                                                    </button>
-                                                    <i id="showspinner44" class="loaders443" style=" margin: 24px 0 0 -37px;display:none;"></i>
                                                 </div>
                                             }
-
-                                        </div>
-                                        <div id="upispinner22" style=" display: none; width: 100%; height: 91px; position: absolute; top: -63px; left: 0; ">
-                                            <img src="~/AdminDesign/images/spinner.gif" style="width: 100%; filter: opacity(0.5); " />
-
-                                        </div>
-                                        <a href="@Url.Action("UPITRANSFER", "Home")" onclick="oncliktoremovetext()" id="gobackshow" class="fullbodydycolorbg tmw-total-color-one" style="font-size: 18px; font-weight: bold; margin-left: 10px; margin-top: 15px; display: none; ">
-                                            Go Back&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
-                                        </a>
-                                        <div id="MessageShoHidecollect" style="display: none; margin: 7px 89px;"></div>
-                                        <div id="hidemsg1212" style="margin-top: 21px !important; font-size: 20px; font-family: serif; text-align:center;">
-                                            <span id="msgg" style="color: red !important;"></span>
-                                            <span id="msggcollect" style="color: red !important; background-color: white;"></span>
-                                        </div>
-                                    }
-                                    <p style="color:red;text-align:center; font-weight:bold;">@ViewBag.msg </p>
-                                    @if (TempData["QRCodeImage"] != null)
-                                    {
-                                        <a href="@Url.Action("UPITRANSFER", "Home")" onclick="oncliktoremovetext()" class="fullbodydycolorbg tmw-total-color-one" style="font-size: 18px; font-weight: bold; margin-left: 10px;">
-                                            Go Back&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
-                                        </a>
-                                    }
-                                    <div style="width: 60%;float:none;text-align: center;padding-bottom: 15px;padding-top: 10px;margin: 0px auto;">
-                                        @if (TempData["QRCodeImage"] != null)
-                                        {
-                                            <div id="QrShowHide">
-                                                <img src="@TempData["QRCodeImage"]" alt="" style=" border:5px solid black;max-width:100%;margin-bottom:21px;" />
-                                                <div>
-                                                    <span id="countDownShow" style="color: red !important; background-color: white; font-size: 20px; font-family: serif;"></span>
-                                                </div>
-                                            </div>
-                                            <div id="MessageShoHide" style="display:none;"></div>
-
-                                        }
-                                        @*else
+                                            <p class="vm-tx-msg" style="color: red;">@ViewBag.msg</p>
+                                            @if (TempData["QRCodeImage"] != null)
                                             {
-                                                <img alt="Currently UPI Service is Down" style=" border:1px solid black;max-width:100%;padding: 4px 6px;" />
-                                            }*@
-                                    </div>
-                                    @*<div class="scan-Second">
-                                            <img src="~/AdminDesign/images/download.png" />
-                                        </div>*@
+                                                <a href="@Url.Action("UPITRANSFER", "Home")" class="vm-tx-back-link">
+                                                    Go Back &nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
+                                                </a>
+                                                <div class="vm-tx-qr-figure">
+                                                    <img src="@TempData["QRCodeImage"]" alt="UPI QR Code" />
+                                                </div>
+                                            }
+                                            <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
+                                                <ol>
+                                                    <li>You can Not update the amount in your wallet by scanning the QR code.</li>
+                                                    <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
+                                                    <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
+                                                </ol>
+                                                <table class="table vm-upi-charges-table">
+                                                    <tr>
+                                                        <th colspan="2">Charges</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Minimum Fix Charge (In Rupees)</td>
+                                                        <td>@ViewBag.min&nbsp;₹</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> Charges (In Precentage)</td>
+                                                        <td>@ViewBag.charge&nbsp;%</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (UPIQRBASEPRICEset != null && UPIQRBASEPRICEset.status == true)
+                                    {
+                                        <div class="vm-tx-panel">
+                                            @if (ViewBag.set == "NOTOK")
+                                            {
+                                                <div id="contentshowhide">
+                                                    <ul class="vm-tx-mode-tabs" id="qrModeTabs">
+                                                        @if (cfreeapi != null || phonepeapi != null)
+                                                        {
+                                                            <li class="tab-link active hovof" data-tab="tab-1"><a data-toggle="tab" onclick="generateqr_opt();">QR&nbsp;Code</a></li>
+                                                            <li class="tab-link hovof"><a data-toggle="tab" onclick="requestupi_opt()">UPI&nbsp;Request</a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li class="tab-link active hovof" data-tab="tab-1" style="width:100%;"><a data-toggle="tab" onclick="generateqr_opt();">QR&nbsp;Code</a></li>
+                                                        }
+                                                    </ul>
 
-                                    <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
-                                        <ol>
-                                            <li>You can update the amount in your wallet by scanning the QR code.</li>
-                                            <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
-                                            <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
-                                        </ol>
-                                        <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
-                                            <tr>
-                                                <th><center>Min Amount</center></th>
-                                                <th><center>Max Amount</center></th>
-                                            </tr>
-                                            <tr>
-                                                <td>@UPIQRBASEPRICEset.minmium</td>
-                                                <td>@UPIQRBASEPRICEset.maximium</td>
-                                            </tr>
+                                                    @using (Html.BeginForm("GenerateQrBasePrice", "Home", FormMethod.Post))
+                                                    {
+                                                        <div class="vm-tx-field" style="margin-top:10px;">
+                                                            <label for="txtgenerateamnt">Enter Amount</label>
+                                                            <input class="form-control vm-tx-input" type="number" id="txtgenerateamnt" name="txtgenerateamnt" value="" required placeholder="Enter Amount">
+                                                        </div>
+                                                        <div style="text-align:center;width:100%;display:none;" id="cardbox">
+                                                            <div class="vm-tx-field" style="margin-top:10px;">
+                                                                <label for="txtdebitCardnumber">Card Number</label>
+                                                                <input class="form-control vm-tx-input" type="text" id="txtdebitCardnumber" name="txtdebitCardnumber" value="" placeholder="Enter Card Number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="19" autocomplete="off">
+                                                            </div>
+                                                            <div class="vm-tx-field" style="margin-top:10px;">
+                                                                <label for="txtdebitCardname">Name on Card</label>
+                                                                <input class="form-control vm-tx-input" type="text" id="txtdebitCardname" name="txtdebitCardname" value="" placeholder="Enter name as on card">
+                                                            </div>
+                                                            <div class="vm-tx-grid-2" style="margin-top:10px;">
+                                                                <div class="vm-tx-field">
+                                                                    <label for="inputExpDate">Expiry</label>
+                                                                    <input class="form-control vm-tx-input" type="text" id="inputExpDate" name="inputExpDate" value="" maxlength='5' placeholder="MM/YY" onkeyup="formatString(event);">
+                                                                </div>
+                                                                <div class="vm-tx-field">
+                                                                    <label for="inputcvv">CVV</label>
+                                                                    <input class="form-control vm-tx-input" type="password" id="inputcvv" name="inputcvv" value="" maxlength='3' placeholder="CVV" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
-                                        </table>
-                                    </div>
+                                                        <div style="text-align:center;width:100%;display:none;margin-top:10px;" id="upibox">
+                                                            <div class="vm-tx-field">
+                                                                <label for="Requestedupiid">Enter UPI ID</label>
+                                                                <input class="form-control vm-tx-input" type="text" id="Requestedupiid" name="Requestedupiid" value="" placeholder="Enter UPI ID" style="display:none;">
+                                                            </div>
+                                                        </div>
+                                                        <div style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+                                                            <button onclick="spinnerhd1212()" type="submit" id="upisubmit" class="vm-tx-submit-btn">
+                                                                Generate QR
+                                                            </button>
+                                                            <i id="showspinner44" class="loaders443" style="display:none;"></i>
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <div id="upispinner22" style="display:none;width:100%;text-align:center;">
+                                                    <img src="~/AdminDesign/images/spinner.gif" style="max-width:100%;filter:opacity(0.5);" />
+                                                </div>
+                                                <a href="@Url.Action("UPITRANSFER", "Home")" onclick="oncliktoremovetext()" id="gobackshow" class="vm-tx-back-link" style="display:none;">
+                                                    Go Back&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
+                                                </a>
+                                                <div id="MessageShoHidecollect" class="vm-tx-status-final" style="display:none;"></div>
+                                                <div id="hidemsg1212" style="text-align:center;">
+                                                    <p id="msgg" class="vm-tx-msg" style="color:red;"></p>
+                                                    <p id="msggcollect" class="vm-tx-msg" style="color:red;"></p>
+                                                </div>
+                                            }
+                                            <p class="vm-tx-msg" style="color:red;">@ViewBag.msg</p>
+                                            @if (TempData["QRCodeImage"] != null)
+                                            {
+                                                <a href="@Url.Action("UPITRANSFER", "Home")" onclick="oncliktoremovetext()" class="vm-tx-back-link">
+                                                    Go Back&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
+                                                </a>
+                                                <div class="vm-tx-qr-figure">
+                                                    <div id="QrShowHide">
+                                                        <img src="@TempData["QRCodeImage"]" alt="UPI QR Code" />
+                                                        <p id="countDownShow" class="vm-tx-status-count"></p>
+                                                    </div>
+                                                    <div id="MessageShoHide" class="vm-tx-status-final" style="display:none;"></div>
+                                                </div>
+                                            }
+                                            <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
+                                                <ol>
+                                                    <li>You can update the amount in your wallet by scanning the QR code.</li>
+                                                    <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
+                                                    <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
+                                                </ol>
+                                                <table class="table vm-upi-charges-table">
+                                                    <tr>
+                                                        <th>Min Amount</th>
+                                                        <th>Max Amount</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@UPIQRBASEPRICEset.minmium</td>
+                                                        <td>@UPIQRBASEPRICEset.maximium</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
-
                             </div>
-
-                        }
+                        </div>
 
                     </div>
                 </div>
             </div>
 
+            <div class="vm-ft-history-col">
+                <div class="fund-trasfer-right vm-ft-history-panel">
 
-            <div class="col-md-8 retailer-upilastclass retailer-upilastclass-second">
-                <div class="fund-trasfer-right fund-user-right">
+                    <div id="tab-1" class="vm-ft-history-body">
 
-
-                    <ul class="nav nav-tabs responsive-sateulce" id="tabs">
-                        <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
-                            <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
-                                <label class="for-change-fund">
-                                    <span class="fund-fistory">History<sub class="tmw-total-color-one fullbodydycolorbg">By upi QR Code</sub></span>
-                                    <i class="fa fa-caret-down" aria-hidden="true"></i>
-                                </label>
-                            </a>
-                        </li>
-                        <li class="upi-retailer-date upi-retailer-datepdf" style="width:75%;float: right;margin-top: 4px;margin-right:1px;">
-                            <div class="row fund-t-dalear fund-t-dalearretailer" style="margin:0;">
-                                @using (Html.BeginForm("UPITRANSFER", "Home", FormMethod.Post))
-                                {
-                                    <div class="input-daterange input-group">
-                                        <div class="col-md-4 date-sateclassee" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 32px;border-top: 0;border-bottom: 0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date")
-
-                                        </div>
-                                        <div class="col-md-4 date-sateclassee" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 32px;border-top: 0;border-bottom: 0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_to_date", "", new { @style = " margin-top: 1px !important;" })
-
-                                        </div>
-
-                                        <div class="col-md-2 apiclass-satenew apiclass-satenew-responshive apiclass-satenewnewclas" style="padding:0px;">
-                                            <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="border:1px solid #fff;padding:0px 15px;float:left;position:relative;height: 30px;top: 1px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
-                                            </button>
-                                        </div>
-                                        <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;padding-top: 3px;padding-left: 5px;">
-
-                                            <button>PDF</button>
-                                            <button>Export</button>
-
-                                        </div>
-                                        <div class="col-md-2 apiclass-satenew apiclass-satenew-responshive retailer-addupiclass" style="padding:0px;float:right;">
-                                            <button type="button" class="btnssl22" data-toggle="modal" data-target="#fundtransfer" style="border:1px solid #fff;padding:0px 15px;float:left;position:relative;height: 30px;top: 1px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                UPI Manual Request
-                                            </button>
-                                        </div>
-
-                                    </div>
-
-
-                                }
+                        <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium">
+                            <div class="vm-ft-history-toolbar__head">
+                                <i class="fas fa-history" aria-hidden="true"></i>
+                                <div>
+                                    <span class="vm-ft-history-toolbar__title">UPI History</span>
+                                    <span class="vm-ft-history-toolbar__sub">View, filter &amp; export UPI transactions</span>
+                                </div>
+                                <div class="vm-tx-head-stats">
+                                    <span class="vm-tx-chip vm-tx-chip--success" title="Total Success"><i class="fas fa-check" aria-hidden="true"></i> Success: <b>@totalsuccess</b></span>
+                                    <span class="vm-tx-chip vm-tx-chip--pending" title="Total Pending"><i class="fas fa-clock" aria-hidden="true"></i> Pending: <b>@penamount</b></span>
+                                    <span class="vm-tx-chip vm-tx-chip--failed" title="Total Failed"><i class="fas fa-times" aria-hidden="true"></i> Failed: <b>@totalfailamnt</b></span>
+                                    <span class="vm-tx-chip vm-tx-chip--charges" title="Total Charges"><i class="fas fa-receipt" aria-hidden="true"></i> Charges: <b>@totalcharges</b></span>
+                                </div>
+                                <span class="vm-radiant-record-badge" title="Total records">
+                                    Records: <strong id="upiRecordCount">@upiRowCount</strong>
+                                </span>
                             </div>
-                        </li>
+                            @using (Html.BeginForm("UPITRANSFER", "Home", FormMethod.Post))
+                            {
+                                <div class="vm-ft-history-toolbar__filters vm-ft-history-filters-row">
+                                    <div class="vm-dmt-filter-search-group vm-ft-date-search-group input-daterange">
+                                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date date-sateclassee">
+                                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control saas-acc-dp-input", autocomplete = "off", placeholder = "From", title = "From date" })
+                                        </div>
+                                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date date-sateclassee">
+                                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control saas-acc-dp-input", autocomplete = "off", placeholder = "To", title = "To date" })
+                                        </div>
+                                        <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-ft-search-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                            <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                                        </button>
+                                    </div>
+                                    <div class="vm-ft-export-group">
+                                        <button type="button" id="btnUPIreq" name="btnUPIreq" value="Show Manual UPI REQ" class="vm-tx-mini-btn" title="Show manual UPI requests">Manual REQ</button>
+                                        <button type="button" class="vm-tx-mini-btn vm-tx-mini-btn--primary" data-toggle="modal" data-target="#fundtransfer" title="New manual UPI request">+ Manual Request</button>
+                                        <button type="button" id="btnExport" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i></button>
+                                        <button type="button" id="btnPDF" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
 
-                    </ul>
-                    <div id="tab-1" class="width100 float-left tab-content current changeback-four-design" style="overflow:auto;">
-
-
-                        <div class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
-                            <table id="btnUPIreqnonetable" class="table table-bordered table-striped table-hover fourdesign-data-table">
-                                <thead style="background-color:whitesmoke;">
-
-
+                        <div id="tblshowMasterUPI" class="third-design-dealer vm-ft-table-wrap table-responsive tableseconddes-dealer tableseconddes-admin">
+                            <table id="btnUPIreqnonetable" class="table table-bordered table-striped table-hover fourdesign-data-table fundtransfer-tableclass third-design-table vm-ft-table">
+                                <thead>
                                     <tr>
-
                                         <th>Payer&nbsp;Name</th>
-                                        @*<th>Payer&nbsp;Mobile</th>*@
                                         <th>Amount</th>
                                         <th>Charges</th>
                                         <th>Net&nbsp;Received</th>
                                         <th>Bank RRN</th>
                                         <th>Transaction&nbsp;Time</th>
-
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
+                                <tbody id="tblbody">
+                                    @if (upiRowCount == 0)
+                                    {
+                                        <tr class="vm-opr-table-empty-row">
+                                            <td colspan="6">No UPI transactions found for the selected filters.</td>
+                                        </tr>
+                                    }
+                                    @foreach (var item in upiRows)
                                     {
                                         var img = "";
                                         var bgcolor = "";
-                                        if (item.status.ToUpper() == "SUCCESS")
+                                        var txnStatus = (item.status ?? "").ToUpper();
+                                        if (txnStatus == "SUCCESS")
                                         {
                                             img = "../../ashok-images/correct.svg";
                                             bgcolor = "green";
-
                                         }
-                                        else if (item.status.ToUpper() == "PENDING")
+                                        else if (txnStatus == "PENDING")
                                         {
                                             img = "../../ashok-images/clkk.png";
                                             bgcolor = "#FF9800";
@@ -758,9 +529,8 @@
                                             img = "../../ashok-images/closes.svg";
                                             bgcolor = "red";
                                         }
-                                        <tr>
-                                            <td class="status-failsuccessa"><img src='@img' style="width: 20px; background:@bgcolor;">&nbsp;@item.PayerName</td>
-                                            @*<td>9166940603</td>*@
+                                        <tr class="tr">
+                                            <td class="status-failsuccessa vm-upi-nowrap"><img src='@img' style="width: 20px; background:@bgcolor;">&nbsp;@item.PayerName</td>
                                             <td>@item.amt</td>
                                             <td>@item.charge</td>
                                             <td>@item.finalpay</td>
@@ -772,35 +542,142 @@
                                             {
                                                 <td>@item.ApprovalRefNo</td>
                                             }
-                                            <td>@item.txndate</td>
+                                            <td class="vm-upi-nowrap">@item.txndate</td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
-
                             <div id="btnUPIreqnonetableSecond" style="display:none;">
-
                             </div>
-
-
                         </div>
-
+                        <div id="loadingdiv" style="display:none;margin:18px 0 20px;text-align:center;">
+                            <div class="vm-upi-loader">
+                                <span class="vm-upi-loader-ring"><span></span></span>
+                                <span class="vm-upi-loader-txt">Loading transactions<span class="vm-upi-loader-dots"><i>.</i><i>.</i><i>.</i></span></span>
+                                <span class="vm-upi-loader-bar"><span></span></span>
+                            </div>
+                        </div>
                     </div>
-
 
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<div id='myModal' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id='myModalContent'></div>
         </div>
     </div>
+    <div id="backtodashboardcall" data-request-url="@Url.Action("Dashboard", "Home")"></div>
+</section>
 
+<div class="modal fund-tr-history fundtransfer-retailerupi" id="fundtransfer" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="vm-txm-head-ico"><i class="fas fa-hand-holding-usd" aria-hidden="true"></i></span>
+                <div class="vm-txm-head-txt">
+                    <span class="vm-txm-title" id="mdhis">Manual UPI Purchase Request</span>
+                    <span class="vm-txm-sub">Submit your offline UPI payment details</span>
+                </div>
+                <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="vm-txm-stepsbar">
+                <div class="vm-txm-step"><i class="fa fa-pen" aria-hidden="true"></i><span>1. Fill details</span></div>
+                <div class="vm-txm-step"><i class="fa fa-shield-alt" aria-hidden="true"></i><span>2. Admin approval</span></div>
+                <div class="vm-txm-step"><i class="fa fa-wallet" aria-hidden="true"></i><span>3. Wallet update</span></div>
+            </div>
+            <div class="modal-body">
+                <div class="vm-txm-secure"><i class="fa fa-lock" aria-hidden="true"></i> 100% Secure &nbsp;•&nbsp; Admin verification in 5–30 min</div>
+                <div class="float-left width100">
+                    @using (Html.BeginForm("UPIManualFund", "Home", FormMethod.Post, new { id = "vmTxmForm", autocomplete = "off" }))
+                    {
+                        <div class="vm-txm-card">
+                            <div class="vm-txm-field">
+                                <div class="vm-txm-lbl"><span class="vm-txm-tag"><i class="fas fa-rupee-sign" aria-hidden="true"></i></span>Transferred Amount <span class="vm-txm-req">*</span><span class="vm-txm-hint">Min ₹100</span></div>
+                                <div class="vm-txm-box">
+                                    <span class="vm-txm-in-ico"><i class="fas fa-wallet" aria-hidden="true"></i></span>
+                                    @Html.TextBox("txtamount", "", new { @id = "txtamount", @class = "form-control", inputmode = "numeric", required = "required", placeholder = "e.g. 5000", maxlength = "7" })
+                                </div>
+                                <div class="vm-txm-chips">
+                                    <button type="button" class="vm-txm-chipbtn" data-amt="1000">₹1,000</button>
+                                    <button type="button" class="vm-txm-chipbtn" data-amt="2000">₹2,000</button>
+                                    <button type="button" class="vm-txm-chipbtn" data-amt="5000">₹5,000</button>
+                                    <button type="button" class="vm-txm-chipbtn" data-amt="10000">₹10,000</button>
+                                </div>
+                                <p class="vm-txm-field-err" id="err-txtamount" style="display:none !important;">Sahi amount likhein (sirf number).</p>
+                            </div>
+                            <div class="vm-txm-field">
+                                <div class="vm-txm-lbl"><span class="vm-txm-tag"><i class="fas fa-hashtag" aria-hidden="true"></i></span>Bank RRN (UTR Number) <span class="vm-txm-req">*</span><span class="vm-txm-hint">12-digit UTR</span></div>
+                                <div class="vm-txm-box">
+                                    <span class="vm-txm-in-ico"><i class="fas fa-university" aria-hidden="true"></i></span>
+                                    @Html.TextBox("txtbankrrn", "", new { @id = "txtbankrrn", @class = "form-control", required = "required", placeholder = "e.g. 410234567891", maxlength = "22", inputmode = "numeric" })
+                                </div>
+                                <p class="vm-txm-field-err" id="err-txtbankrrn" style="display:none !important;">UTR / RRN 12 digit ka hota hai.</p>
+                            </div>
+                            <div class="vm-txm-row">
+                                <div class="vm-txm-field">
+                                    <div class="vm-txm-lbl" id="mdPreremain"><span class="vm-txm-tag"><i class="fas fa-at" aria-hidden="true"></i></span>Sender VPA ID <span class="vm-txm-req">*</span></div>
+                                    <div class="vm-txm-box">
+                                        <span class="vm-txm-in-ico"><i class="fas fa-user" aria-hidden="true"></i></span>
+                                        @Html.TextBox("txtupiid", "", new { @id = "txtupiid", @class = "form-control", required = "required", placeholder = "name@upi" })
+                                    </div>
+                                </div>
+                                <div class="vm-txm-field">
+                                    <div class="vm-txm-lbl" id="mdPostremain"><span class="vm-txm-tag"><i class="fa fa-calendar" aria-hidden="true"></i></span>Transfer Date</div>
+                                    <div class="vm-txm-box input-daterange input-group">
+                                        <span class="vm-txm-in-ico"><i class="fa fa-clock" aria-hidden="true"></i></span>
+                                        @Html.TextBox("txttransfertime", "", new { @id = "txttransfertime", @class = "form-control", placeholder = "Payment Date" })
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="vm-txm-submit" id="vmTxmSubmit">Request Submit <span class="vm-txm-go"><i class="fa fa-arrow-right"></i></span></button>
+                            <p class="vm-txm-note"><i class="fa fa-info-circle" aria-hidden="true"></i><span>Request raise karne ke baad <b>&nbsp;admin approval&nbsp;</b> par wallet update hoga. Galat UTR par request reject ho sakti hai.</span></p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+(function () {
+    var amt = document.getElementById('txtamount');
+    var chips = document.querySelectorAll('#fundtransfer .vm-txm-chipbtn');
+    Array.prototype.forEach.call(chips, function (b) {
+        b.addEventListener('click', function () {
+            Array.prototype.forEach.call(chips, function (x) { x.classList.remove('active'); });
+            b.classList.add('active');
+            if (amt) { amt.value = b.getAttribute('data-amt'); amt.focus(); hideErr('txtamount'); }
+        });
+    });
+    function hideErr(id) { var e = document.getElementById('err-' + id); if (e) e.style.setProperty('display', 'none', 'important'); }
+    function showErr(id) { var e = document.getElementById('err-' + id); if (e) e.style.setProperty('display', 'block', 'important'); }
+    if (amt) {
+        amt.addEventListener('input', function () {
+            amt.value = amt.value.replace(/[^0-9]/g, '').slice(0, 7);
+            if (amt.value && parseInt(amt.value, 10) > 0) hideErr('txtamount'); 
+        });
+    }
+    var rrn = document.getElementById('txtbankrrn');
+    if (rrn) {
+        rrn.addEventListener('input', function () {
+            rrn.value = rrn.value.replace(/[^0-9]/g, '').slice(0, 22);
+            if (rrn.value.length >= 12) hideErr('txtbankrrn');
+        });
+    }
+    var form = document.getElementById('vmTxmForm');
+    if (form) {
+        form.addEventListener('submit', function (ev) {
+            var ok = true;
+            if (!amt || !/^[1-9][0-9]*$/.test(amt.value)) { showErr('txtamount'); ok = false; }
+            if (!rrn || rrn.value.length < 12) { showErr('txtbankrrn'); ok = false; }
+            if (!ok) { ev.preventDefault(); return false; }
+            var btn = document.getElementById('vmTxmSubmit');
+            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Submitting...'; }
+        });
+    }
+})();
+</script>
+<script>function oncliktoremovetext() { var el = document.getElementById("countDownShow"); if (el) { el.style.display = "none"; } }</script>
 
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
 <!-- Custom Js -->
@@ -810,81 +687,127 @@
 <script src="~/AdminDesign/js/demo.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 <!--Add State dropdown list-->
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 <script>
-    $(document).ready(function()
-    {
-
-        $('.input-daterange').datepicker({
+    function visibleUPIHistoryTable() {
+        var manualBox = document.getElementById('btnUPIreqnonetableSecond');
+        var manualVisible = manualBox && manualBox.style.display !== 'none' && manualBox.querySelector('table');
+        if (manualVisible) { return manualBox.querySelector('table'); }
+        return document.querySelector('#tblshowMasterUPI table#btnUPIreqnonetable');
+    }
+    function exportUPITransferExcel() {
+        var table = visibleUPIHistoryTable();
+        if (!table || !table.querySelector('tbody tr') || table.querySelector('.mreq-empty') && !table.querySelector('tbody tr:not(.mreq-empty)')) { alert('No data to export.'); return; }
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body>' + table.outerHTML + '</body></html>';
+        var blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = (document.getElementById('btnUPIreqnonetableSecond') && document.getElementById('btnUPIreqnonetableSecond').style.display !== 'none') ? 'ManualUPIRequests.xls' : 'UPITransferHistory.xls';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 100);
+    }
+    function printUPITransferHistory() {
+        window.print();
+    }
+    (function bindUPITransferExportButtons() {
+        var btnExport = document.getElementById('btnExport');
+        if (btnExport) {
+            btnExport.addEventListener('click', exportUPITransferExcel);
+            btnExport.onclick = exportUPITransferExcel;
+        }
+        var btnPDF = document.getElementById('btnPDF');
+        if (btnPDF) {
+            btnPDF.addEventListener('click', printUPITransferHistory);
+            btnPDF.onclick = printUPITransferHistory;
+        }
+    })();
+</script>
+<script>
+    $(document).ready(function () {
+        var dateOpts = {
             format: "yyyy-mm-dd",
             todayHighlight: true,
             autoclose: true,
             orientation: "bottom auto",
-
-        });
+            forceParse: false,
+            enableOnReadonly: true,
+            container: 'body'
+        };
+        if ($.fn.datepicker) {
+            $("#txt_frm_date, #txt_to_date").datepicker(dateOpts);
+            $('.input-daterange').datepicker(dateOpts);
+            $('.saas-fund-transfer-page .saas-acc-dp-icon').on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var $input = $(this).closest('.saas-acc-dp-field').find('.saas-acc-dp-input');
+                if ($input.length && $input.data('datepicker')) {
+                    $input.datepicker('show');
+                }
+            });
+        }
         var val = '@ViewBag.chk';
-        if (val != "post") {
+        if (val != "post" && $.fn.datepicker) {
             $("#txt_frm_date").datepicker("setDate", new Date());
             $("#txt_to_date").datepicker("setDate", new Date());
         }
-
     })
 </script>
-
-<style>
-
-    .tab-menur ul {
-        margin: 0;
-        padding: 0;
+<script>
+    function myFunction() {
+        var value = $('#myInput').val().toLowerCase();
+        $("#tblbody .tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+        // manual-req table search (AJAX wali)
+        $("#btnUPIreqnonetableSecond .mreq-table tbody tr").not('.mreq-empty').filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
     }
-
-
-
-        .tab-menur ul li {
-            width: 50%;
-            text-align: center;
-        }
-
-        .tab-menur ul li {
-            float: left;
-        }
-</style>
-
+</script>
+<script>
+    $('.third-design-dealer .third-design-table td').mouseenter(function () {
+        var $tr = $(this).parent();
+        if (!$tr.is('tr')) { return; }
+        var colIndex = $tr.children().index($(this)) + 1;
+        $tr.addClass('vm-upi-row-hover');
+        $tr.closest('table').find("tr").children(":nth-child(" + colIndex + ")").addClass('vm-upi-col-hover');
+    });
+    $('.third-design-dealer .third-design-table td').mouseleave(function () {
+        var $tr = $(this).parent();
+        if (!$tr.is('tr')) { return; }
+        var colIndex = $tr.children().index($(this)) + 1;
+        $tr.removeClass('vm-upi-row-hover');
+        $tr.closest('table').find("td:nth-child(" + colIndex + ")").removeClass('vm-upi-col-hover');
+    });
+</script>
 <script>
     $(document).ready(function () {
         var cchhh = '@ViewData["upi_msg"]';
-        if (cchhh != null) {
+        if (cchhh != null && cchhh != '') {
             $('#msgg').text(cchhh);
             setTimeout(() => {
-                document.getElementById('msgg').style.display = "none";
+                var msgEl = document.getElementById('msgg');
+                if (msgEl) { msgEl.style.display = "none"; }
             }, 4000)
         }
-
-         var cchhhcollect = '@TempData["UPICollect"]';
-        if (cchhhcollect != '') {
-
-
+        var cchhhcollect = '@TempData["UPICollect"]';
+        if (cchhhcollect != '' && document.getElementById('contentshowhide')) {
             if (`@TempData["GetUniqueid"]` != '') {
                 let xx = setInterval(() => {
-                    document.getElementById('upispinner22').style.display='block'
+                    document.getElementById('upispinner22').style.display = 'block'
                 })
                 setTimeout(() => {
                     clearInterval(xx);
                     document.getElementById('upispinner22').style.display = 'none'
-                },4000)
-
-
+                }, 4000)
                 let deadline = new Date().getTime() + 482000;
                 let x = setInterval(() => {
-
-
                     let requestUrlResp = '@TempData["GetUniqueid"]'
                     $.ajax({
                         url: '@Url.Action("UPIAUTOSERVICE", "Home")',
@@ -896,28 +819,28 @@
                             var upists = data.upists;
                             var refid = data.refid;
                             var amount = data.amount;
-
-
-                            let y = setInterval(() => {
-                                let now = new Date().getTime();
-                                let t = deadline - now;
-                                let seconds = Math.floor((t % (1000 * 482)) / 1000);
-                                document.getElementById("contentshowhide").style.display = "none";
-                                document.getElementById("gobackshow").style.display = "block";
-                                document.getElementById("msggcollect").innerHTML = "Please wait for " + seconds + " seconds to get the payment request response";
+                            if (window.__upiY) { clearInterval(window.__upiY); }
+                            var y = setInterval(function () {
+                                var now = new Date().getTime();
+                                var t = deadline - now;
+                                var seconds = Math.max(0, Math.floor(t / 1000));
+                                var cd = document.getElementById("contentshowhide");
+                                var gb = document.getElementById("gobackshow");
+                                var mc = document.getElementById("msggcollect");
+                                if (cd) { cd.style.display = "none"; }
+                                if (gb) { gb.style.display = "block"; }
+                                if (mc) { mc.innerHTML = "Please wait for " + seconds + " seconds to get the payment request response"; }
                                 if ((status == "SUCCESS")) {
                                     clearInterval(y);
                                     clearInterval(x);
-
+                                    window.__upiY = null;
                                     document.getElementById("msggcollect").style.display = "none";
                                     document.getElementById('hidemsg1212').style.display = 'none'
                                     if (upists == "FAILED" || upists == "Failed") {
-
                                         document.getElementById('MessageShoHidecollect').style.cssText = `display: block; color: red;`;
                                     }
                                     else {
                                         document.getElementById('MessageShoHidecollect').style.cssText = `display: block; color: green;`;
-
                                     }
                                     document.getElementById('MessageShoHidecollect').innerHTML = `STATUS: ${upists} <br> BANKRR NO : ${refid} <br> AMOUNT : ${amount} `;
                                     setTimeout(() => {
@@ -925,48 +848,38 @@
                                     }, 20000)
                                 }
                                 else if (status == "FAILED") {
-
                                     if (seconds <= 0) {
                                         clearInterval(y);
                                         clearInterval(x);
+                                        window.__upiY = null;
                                         document.getElementById("msggcollect").style.display = "none";
                                         document.getElementById('hidemsg1212').style.display = 'none'
                                         document.getElementById('MessageShoHidecollect').style.cssText = `display: block; color: red;`;
                                         document.getElementById('MessageShoHidecollect').innerHTML = "No Response Found Please Go Back";
                                     }
                                 }
-                            }, 1000)
-                            function oncliktoremovetext() {
-                                document.getElementById("countDownShow").style.display = "none";
-                            }
-
+                            }, 1000);
+                            window.__upiY = y;
                         }
                     })
-
                 }, 3000)
             }
         }
-
         var current = location.pathname;
         $('.report-list-change li a').each(function () {
             var $this = $(this);
             if ($this.attr('href').indexOf(current) !== -1) {
                 $this.addClass('active');
-
-
             }
         })
     });
 </script>
-
 <script>
     $('.scan-first').click(function () {
         $(this).hide();
         $('.scan-Second').show();
     });
 </script>
-
-
 <script>
     $(document).ready(function () {
         $(".date-sateclassee input").click(function () {
@@ -974,118 +887,82 @@
         });
     });
 </script>
-<div class="modal fund-tr-history  in fundtransfer-retailerupi" id="fundtransfer" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="margin:0px;float:right;margin-top:81px;">
-        <div class="modal-content width100 float-left">
-            <div class="modal-header width100 float-left ecomm-pop-head">
-                <h5 id="mdhis">Manual UPI Purchase Request</h5>
-                <button type="button" class="btn waves-effect " data-dismiss="modal" style="float:right;border:0px;color:var(--main-bg-lcolor);padding:0px; height:auto;">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                </button>
-            </div><!--.modal-header-->
-            <div class="modal-body width100 float-left ecomm-pop-body">
-                <div class="float-left width100">
-                    @using (Html.BeginForm("UPIManualFund", "Home", FormMethod.Post))
-                    {
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                <div class="form-group">
-                                    <label id="mdfrmname">Transferred&nbsp;Amount</label>
-                                    @Html.TextBox("txtamount", "", new { @class = "form-control", inputmode = "numeric", required = "required", @style = "border: 1px solid #535252;", placeholder = "Transferred Amount" })
-
-                                </div>
-                            </div>
-
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Bank RRN(UTR Number)</label>
-                                    @Html.TextBox("txtbankrrn", "", new { @class = "form-control", required = "required", @style = "border: 1px solid #535252;", placeholder = "Bank RRN" })
-                                </div>
-                            </div>
-
-                        </div><!--.row-->
-
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col" style="padding-left:6px;padding-right:6px;">
-                                <div class="form-group">
-                                    <label id="mdPreremain">SENDER VPA ID (Virtual Payment Address)</label>
-                                    @Html.TextBox("txtupiid", "", new { @class = "form-control", required = "required", @style = "border: 1px solid #535252;", placeholder = "Sender VPA ID" })
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2" style="padding-left:6px;padding-right:6px;">
-                                <div class="form-group">
-                                    <div class="input-daterange input-group">
-                                        <label id="mdPostremain">Payment Transfer Date & Time</label>
-                                        @Html.TextBox("txttransfertime", "", new { @class = "form-control", @style = "border: 1px solid #535252;", placeholder = "Payment Transfer Date" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <div class="form-group" style="width:100%;float:left;">
-                                    <input type="submit" value="Request Submit" class="btn btn-default" />
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    <!--=============-->
-
-                </div><!--.modal-body-->
-
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
 <script>
-    $('#btnUPIreq').click(function () {
-        $("#btnUPIreqnonetable").hide();
-        $("#btnUPIreqnonetableSecond").show();
-
-     $.ajax({
+    // Manual UPI requests toggle — FIXED v2 (single fetch, proper toggle, loader + error)
+    (function () {
+        var btn = document.getElementById('btnUPIreq');
+        if (!btn) { return; }
+        var isManual = false;
+        var loadedOnce = false;
+        var loading = false;
+        var origHtml = 'Manual REQ';
+        function setBtn(manual) {
+            isManual = manual;
+            btn.textContent = manual ? 'Show History' : origHtml;
+            btn.value = manual ? 'SHOW UPI HISTORY' : 'Show Manual UPI REQ';
+            btn.classList.toggle('vm-tx-mini-btn--primary', manual);
+            btn.setAttribute('title', manual ? 'Back to UPI history' : 'Show manual UPI requests');
+        }
+        btn.addEventListener('click', function () {
+            var mainTable = document.getElementById('btnUPIreqnonetable');
+            var secondBox = document.getElementById('btnUPIreqnonetableSecond');
+            var loader = document.getElementById('loadingdiv');
+            if (isManual) {
+                // back to history — no ajax needed
+                if (secondBox) { secondBox.style.display = 'none'; }
+                if (window.jQuery) { $("#btnUPIreqnonetable").show(); $("#btnUPIreqnonetableSecond").hide(); }
+                else if (mainTable) { mainTable.style.display = ''; }
+                setBtn(false);
+                if (window.jQuery) { $('#upiRecordCount').text($('#tblbody tr.tr').length); }
+                return;
+            }
+            if (loading) { return; }
+            if (!window.jQuery) {
+                if (mainTable) { mainTable.style.display = 'none'; }
+                if (secondBox) { secondBox.style.display = 'block'; }
+                setBtn(true);
+                return;
+            }
+            // show manual — fetch once, cache after
+            if (loadedOnce) {
+                $("#btnUPIreqnonetable").hide();
+                $("#btnUPIreqnonetableSecond").show();
+                setBtn(true);
+                return;
+            }
+            loading = true;
+            btn.disabled = true;
+            var oldTxt = btn.textContent;
+            btn.innerHTML = "<i class='fa fa-spinner fa-spin'></i> Loading...";
+            if (loader) { loader.style.display = 'block'; }
+            $.ajax({
                 url: '@Url.Action("Show_UPImanual_Request", "Home")',
                 type: 'POST',
-
-         success: function (data) {
-
-             $('#btnUPIreq').val($('#btnUPIreq').val() == 'Show Manual UPI REQ' ? 'SHOW UPI HISTORY' : 'Show Manual UPI REQ.');
-             if ($('#btnUPIreq').val() == "SHOW UPI HISTORY") {
-                 $("#btnUPIreqnonetable").hide();
-                 $('#btnUPIreq').val('SHOW UPI HISTORY')
-                 $("#btnUPIreqnonetableSecond").html(data)
-                 $("#btnUPIreqnonetableSecond").show();
-
-
-             }
-             else {
-                 $('#btnUPIreq').val('Show Manual UPI REQ')
-                 $("#btnUPIreqnonetable").show();
-                 $("#btnUPIreqnonetableSecond").hide();
-             }
-
-                },
-                error: function (data) {
-                }
+                cache: false
+            }).done(function (data) {
+                $("#btnUPIreqnonetable").hide();
+                $("#btnUPIreqnonetableSecond").html(data);
+                $("#btnUPIreqnonetableSecond").show();
+                loadedOnce = true;
+                setBtn(true);
+                // update record badge to manual count
+                var rows = $("#btnUPIreqnonetableSecond .mreq-table tbody tr").not('.mreq-empty').length;
+                $('#upiRecordCount').text(rows);
+                if (typeof myFunction === 'function') { myFunction(); }
+            }).fail(function (xhr) {
+                $("#btnUPIreqnonetableSecond").html("<div class='mreq-wrap'><div style='padding:26px;text-align:center;color:#b91c1c;font-weight:700;'>Manual requests load nahi hui. Dobara try karein. (" + (xhr.status || 'error') + ")</div></div>");
+                $("#btnUPIreqnonetable").hide();
+                $("#btnUPIreqnonetableSecond").show();
+                setBtn(true);
+            }).always(function () {
+                loading = false;
+                btn.disabled = false;
+                btn.textContent = isManual ? 'Show History' : origHtml;
+                if (loader) { loader.style.display = 'none'; }
             });
-
-    });
-
+        });
+    })();
 </script>
-@*<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script>
-           if (@ViewData["UPICollect"] != null) {
-
-               swal("Requested Successfully", "Please Check Your UPI App", "success");
-           }
-    </script>*@
 <script>
     function generateqr_opt() {
         $('#Requestedupiid').hide();
@@ -1095,7 +972,6 @@
         $('#upisubmit').text("Generate QR");
         document.getElementById("Requestedupiid").required = false;
     }
-
     let upicollectloader = "";
     function requestupi_opt() {
         $('#Requestedupiid').show();
@@ -1104,7 +980,6 @@
         $('#upisubmit').text("Request By UPI");
         document.getElementById("Requestedupiid").required = true;
         upicollectloader = "UpiLoader";
-
     }
     function requestdebit() {
         $('#Requestedupiid').hide();
@@ -1113,12 +988,10 @@
         $('#Requestedupiid').val('');
         $('#upisubmit').text("Debit Request");
         document.getElementById("Requestedupiid").required = false;
-
     }
     function spinnerhd1212() {
         let chkid = document.getElementById('txtgenerateamnt').value
         let chkupid22 = document.getElementById("Requestedupiid").value
-
         if (chkid != "" && chkupid22 != "" && upicollectloader == "UpiLoader") {
             document.getElementById('showspinner44').style.display = "block";
             setTimeout(() => {
@@ -1131,38 +1004,34 @@
                 document.getElementById('showspinner44').style.display = "none";
             }, 9000)
         }
-
     }
 </script>
-
 <script>
     function formatString(e) {
-        var inputChar = String.fromCharCode(event.keyCode);
-        var code = event.keyCode;
+        var ev = e || window.event;
+        var code = ev.keyCode || ev.which;
         var allowedKeys = [8];
         if (allowedKeys.indexOf(code) !== -1) {
             return;
         }
-
-        event.target.value = event.target.value.replace(
-            /^([1-9]\/|[2-9])$/g, '0$1/' // 3 > 03/
+        var tgt = ev.target || ev.srcElement;
+        tgt.value = tgt.value.replace(
+            /^([1-9]\/|[2-9])$/g, '0$1/'
         ).replace(
-            /^(0[1-9]|1[0-2])$/g, '$1/' // 11 > 11/
+            /^(0[1-9]|1[0-2])$/g, '$1/'
         ).replace(
-            /^([0-1])([3-9])$/g, '0$1/$2' // 13 > 01/3
+            /^([0-1])([3-9])$/g, '0$1/$2'
         ).replace(
-            /^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2' // 141 > 01/41
+            /^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2'
         ).replace(
-            /^([0]+)\/|[0]+$/g, '0' // 0/ > 0 and 00 > 0
+            /^([0]+)\/|[0]+$/g, '0'
         ).replace(
-            /[^\d\/]|^[\/]*$/g, '' // To allow only digits and `/`
+            /[^\d\/]|^[\/]*$/g, ''
         ).replace(
-            /\/\//g, '/' // Prevent entering more than 1 `/`
+            /\/\//g, '/'
         );
     }
-
 </script>
-
 <script>
     $('#txtdebitCardnumber').on('keyup', function (e) {
         var val = $(this).val();
@@ -1175,16 +1044,11 @@
         $(this).val(newval);
     });
 </script>
-
-
 <script>
-    if (`@TempData["GetUniqueid"]` != '') {
-
+    if (`@TempData["GetUniqueid"]` != '' && document.getElementById('countDownShow')) {
         let hitservice = 'NOTOK';
         let deadline = new Date().getTime() + 482000;
         let x = setInterval(() => {
-
-
             let requestUrlResp = '@TempData["GetUniqueid"]'
             $.ajax({
                 url: '@Url.Action("UPIAUTOSERVICE", "Home")',
@@ -1196,45 +1060,42 @@
                     var upists = data.upists;
                     var refid = data.refid;
                     var amount = data.amount;
-
-
-                    let y = setInterval(() => {
-                        let now = new Date().getTime();
-                        let t = deadline - now;
-                        let seconds = Math.floor((t % (1000 * 482)) / 1000);
+                    if (window.__upiY2) { clearInterval(window.__upiY2); }
+                    var y = setInterval(function () {
+                        var now = new Date().getTime();
+                        var t = deadline - now;
+                        var seconds = Math.max(0, Math.floor(t / 1000));
                         document.getElementById("countDownShow").innerHTML = "QR code disappear after " + seconds + " seconds ";
-                        if ((status == "SUCCESS") ) {
+                        if ((status == "SUCCESS")) {
                             clearInterval(y);
                             clearInterval(x);
+                            window.__upiY2 = null;
                             document.getElementById("countDownShow").style.display = "none";
                             document.getElementById("QrShowHide").style.display = "none";
                             if (upists == "FAILED" || upists == "Failed") {
-
-                            document.getElementById('MessageShoHide').style.cssText = `display: block; color: red;`;
+                                document.getElementById('MessageShoHide').style.cssText = `display: block; color: red;`;
                             }
                             else {
-                            document.getElementById('MessageShoHide').style.cssText = `display: block; color: green;`;
-
+                                document.getElementById('MessageShoHide').style.cssText = `display: block; color: green;`;
                             }
                             document.getElementById('MessageShoHide').innerHTML = `STATUS: ${upists} <br> BANKRR NO : ${refid} <br> AMOUNT : ${amount} `;
-
                         }
                         else if (status == "FAILED") {
-
-                            if(seconds <= 0) {
+                            if (seconds <= 0) {
                                 clearInterval(y);
                                 clearInterval(x);
+                                window.__upiY2 = null;
                                 document.getElementById("countDownShow").style.display = "none";
                                 document.getElementById("QrShowHide").style.display = "none";
                                 document.getElementById('MessageShoHide').style.cssText = `display: block; color: red;`;
                                 document.getElementById('MessageShoHide').innerHTML = "No Response Found Please Go Back";
                             }
                         }
-                    }, 1000)
-
+                    }, 1000);
+                    window.__upiY2 = y;
                 }
             })
-
         }, 3000)
     }
 </script>
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>

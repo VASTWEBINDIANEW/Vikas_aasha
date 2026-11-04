@@ -1,207 +1,87 @@
 ﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
 
 
-<style>
-
-    .loader {
-        position: fixed;
-        top: -90px;
-        left: 0;
-        background-color: rgba(255,255,255,0.7);
-        z-index: 999999999999;
-        display: none;
-        height: 100vw;
-        width: 100vw;
-    }
-
-    @@-webkit-keyframes spin {
-        from {
-            -webkit-transform: rotate(0deg);
-        }
-
-        to {
-            -webkit-transform: rotate(360deg);
-        }
-    }
-
-    @@keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    .loader::after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 48%;
-        top: 25%;
-        width: 100px;
-        height: 100px;
-        border-style: solid;
-        border-color: black;
-        border-top-color: transparent;
-        border-width: 4px;
-        border-radius: 50%;
-        -webkit-animation: spin .8s linear infinite;
-        animation: spin .8s linear infinite;
-    }
-</style>
-<div id="gasinfo" class="row" style="padding-left: 4px;">
-    <div class="newpipedgas" id="firstrediobuttonshow" style="display:block;">
-        <div class="col-md-4 elecpay-first gasinfo-class">
-            <div style="height:28px;position:absolute;">
-                <p id="gasmessage11" style="margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
-            </div>
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="input-group" style="">
-                    @Html.DropDownList("gasddltype", ViewBag.gas as SelectList, "Select Operators", new { id = "gasddltype", @class = "form-control", required = "required", onchange = "gasddl(this)" })
-
-                    <div class="input-group-addon in-addon">
-
-                    </div>
-                </div>
-
-
-                <!-- /.input group -->
-            </div>
-        </div>
-        <div class="col-md-3" id="divgasbilldiv">
+@* vm-rch: purana loader <style> hataya — retailer-recharge-modern.css (sec-12) me port *@
+<div id="gasinfo" class="fund-transfer-form">
+    <div class="newpipedgas vm-rch-formgrid vm-rch-gas-row vm-rch-gas-row--active" id="firstrediobuttonshow">
+        <div class="vm-rch-fcell vm-rch-fop elecpay-first gasinfo-class">
             <div>
-                <p id="gasmessage" style="top:-16px !important; margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
+                <p id="gasmessage11" class="vm-rch-err"></p>
             </div>
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="form-line txtelectricity1 form-line-after" style="margin-top:-1px; height:37px;">
-                    <input type="text" id="txtgasno" name="txtgasno" class="form-control" placeholder="Enter CA Number" onkeypress="return isNumber(event)" />
-                </div>
-            </div>
+            <i class="fa fa-fire vm-rch-in-ico vm-rch-in-ico--op" aria-hidden="true"></i>
+            @Html.DropDownList("gasddltype", ViewBag.gas as SelectList, "Select Operators", new { id = "gasddltype", @class = "form-control", required = "required", onchange = "gasddl(this)" })
         </div>
-        <div class="col-md-2 divbillgroupswidth" id="divbillgroup" style="display:none;">
+        <div class="vm-rch-fcell vm-rch-fnum" id="divgasbilldiv">
             <div>
-                <p id="billgroupmessage" style="top:-16px !important;  margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
+                <p id="gasmessage" class="vm-rch-err"></p>
             </div>
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="" style="margin-top:-1px;border:1px solid #dddddd; height:36px;">
-                    <input type="text" id="billgroup" name="billgroup" class="form-control" placeholder="Bill Group No" onkeypress="return isNumber(event)" style="padding-left:0px;" />
-                </div>
-            </div>
+            <i class="fa fa-id-card vm-rch-in-ico" aria-hidden="true"></i>
+            <input type="text" id="txtgasno" name="txtgasno" class="form-control" placeholder="Enter CA Number" onkeypress="return isNumber(event)" />
         </div>
-        <div class="col-md-2 gasamounterwidth" id="gasamount-input">
+        <div class="vm-rch-fcell vm-rch-fcircle divbillgroupswidth" id="divbillgroup" style="display:none;">
             <div>
-                <p id="gasamountmessage" style="top:-16px !important; margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
+                <p id="billgroupmessage" class="vm-rch-err"></p>
             </div>
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="txtelectricity1" style="margin-top:-1px; height:37px;">
-                    <input type="text" id="gasamount" name="gasamount" class="form-control" placeholder="Enter Amount" style="padding-left:0px;" />
-
-                    <!--add button vive-->
-                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 wamount-input-type" @*id="btngetviewbill"*@>
-                        <div class="form-group" style="margin-bottom:0px;">
-                            <div class="form-line" style="margin-top:39px; border-bottom:none;">
-                                <input type="button" id="btnnn3" class="btn bg-blue-grey" value="View Bill" style="height:37px;float:left;" onclick="GetGasviewbill('gasddltype')" />
-                            </div>
-                        </div>
-                    </div>
-                    <!--add button vive-->
-
-                </div>
+            <i class="fa fa-list-ol vm-rch-in-ico" aria-hidden="true"></i>
+            <input type="text" id="billgroup" name="billgroup" class="form-control" placeholder="Bill Group No" onkeypress="return isNumber(event)" />
+        </div>
+        <div class="vm-rch-fcell vm-rch-famt gasamounterwidth" id="gasamount-input">
+            <div>
+                <p id="gasamountmessage" class="vm-rch-err"></p>
+            </div>
+            <i class="fa fa-inr vm-rch-in-ico" aria-hidden="true"></i>
+            <input type="text" id="gasamount" name="gasamount" class="form-control" placeholder="Enter Amount" />
+            <div class="wamount-input-type">
+                <input type="button" id="btnnn3" class="btn bg-blue-grey" value="View Bill" onclick="GetGasviewbill('gasddltype')" />
             </div>
         </div>
-        <div class="col-md-1 col-sm-1 col-lg-1 col-xs-1 gasamount-input-before">
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="form-line" style="margin-top:-1px !important; border-bottom:none;">
-                    <input type="submit" id="btn3" class="btn bg-blue-grey" value="Continue" style="height:37px; float:left; margin-left:-20px;" onclick="getgascontinuebtn('gasddltype')" />
-                </div>
-            </div>
+        <div class="vm-rch-fcell vm-rch-fbtn2" id="btncontinue-gas">
+            <input type="button" id="btn3" class="btn bg-blue-grey" value="Continue" onclick="getgascontinuebtn('gasddltype')" />
         </div>
-
     </div>
 
-    <div class="gasinfo-class-newaddclass" id="showlpggassclass" style="display:none;">
-        <div class="col-md-3 elecpay-first gasinfo-class">
-            <div style="height:28px;position:absolute;">
-                <p id="lpggasmessage11" style="margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
-            </div>
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="input-group" style="">
-                    @Html.DropDownList("lpggasddltype", ViewBag.lpggas as SelectList, "Select Operators", new { id = "lpggasddltype", @class = "form-control", required = "required", onchange = "lpggasddl(this)" })
-
-
-                </div>
-
-
-                <!-- /.input group -->
-            </div>
-        </div>
-        <div class="col-md-2" id="divgasbilldiv">
+    <div class="gasinfo-class-newaddclass vm-rch-formgrid vm-rch-gas-row" id="showlpggassclass">
+        <div class="vm-rch-fcell vm-rch-fop elecpay-first gasinfo-class">
             <div>
-                <p id="lpggasmessage" style="position:absolute; top:-27px !important; margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
+                <p id="lpggasmessage11" class="vm-rch-err"></p>
             </div>
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="form-line txtelectricity1 form-line-after" style="margin-top:-1px; height:37px;">
-                    <input type="text" id="txtlpggasno" name="txtlpggasno" class="form-control" placeholder="Enter Consumer Number" />
-                </div>
-            </div>
+            <i class="fa fa-fire vm-rch-in-ico vm-rch-in-ico--op" aria-hidden="true"></i>
+            @Html.DropDownList("lpggasddltype", ViewBag.lpggas as SelectList, "Select Operators", new { id = "lpggasddltype", @class = "form-control", required = "required", onchange = "lpggasddl(this)" })
         </div>
-
-
-        <div class="col-md-2 divbillgroupswidth">
+        <div class="vm-rch-fcell vm-rch-fnum" id="divlpggasbilldiv">
             <div>
-                <p id="lpgbillgroupmessage" style="position:absolute; top:-27px !important;  margin-top:10px; color:#E91E63; font-size:10px; padding-right:1px;"></p>
+                <p id="lpggasmessage" class="vm-rch-err"></p>
             </div>
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="" style="margin-top:-1px;border:1px solid #dddddd; height:36px;">
-                    <input type="text" id="lpgbillgroup" name="lpgbillgroup" class="form-control" placeholder="Enter Distributor ID" style="padding-left:5px;" />
-                </div>
-            </div>
+            <i class="fa fa-id-card vm-rch-in-ico" aria-hidden="true"></i>
+            <input type="text" id="txtlpggasno" name="txtlpggasno" class="form-control" placeholder="Enter Consumer Number" />
         </div>
-
-        <div class="col-md-2 registergroupswidth">
+        <div class="vm-rch-fcell vm-rch-fcircle divbillgroupswidth">
             <div>
-                <p id="registermomessage" style="position:absolute; top:-27px !important;  margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
+                <p id="lpgbillgroupmessage" class="vm-rch-err"></p>
             </div>
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="" style="margin-top:-1px;border:1px solid #dddddd; height:36px;">
-                    <input type="number" id="registermogroup" name="registermogroup" class="form-control" placeholder="Register Mobile" style="padding-left:5px;" required />
-                </div>
-            </div>
+            <i class="fa fa-building vm-rch-in-ico" aria-hidden="true"></i>
+            <input type="text" id="lpgbillgroup" name="lpgbillgroup" class="form-control" placeholder="Enter Distributor ID" />
         </div>
-
-
-
-        <div class="col-md-2 gasamounterwidth" id="gasamount-input">
+        <div class="vm-rch-fcell vm-rch-fcircle registergroupswidth">
             <div>
-                <p id="lpggasamountmessage" style="position:absolute; top:-27px !important; margin-top:10px; color:#E91E63; font-size:10px; padding-left:1px;"></p>
+                <p id="registermomessage" class="vm-rch-err"></p>
             </div>
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="txtelectricity1" style="margin-top:-1px; height:37px;">
-                    <input type="text" id="lpggasamount" name="lpggasamount" class="form-control" placeholder="Enter Amount" style="padding-left:5px;" />
-
-                    <!--add button vive-->
-                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 wamount-input-type" @*id="btngetviewbill"*@>
-                        <div class="form-group" style="margin-bottom:0px;">
-                            <div class="form-line" style="margin-top:39px; border-bottom:none;">
-                                <input type="button" id="btnnn3" class="btn bg-blue-grey" value="View Bill" style="height:37px;float:left;" onclick="GetlpgGasviewbill('lpggasddltype')" />
-                            </div>
-                        </div>
-                    </div>
-                    <!--add button vive-->
-
-                </div>
+            <i class="fa fa-mobile vm-rch-in-ico" aria-hidden="true"></i>
+            <input type="number" id="registermogroup" name="registermogroup" class="form-control" placeholder="Register Mobile" required />
+        </div>
+        <div class="vm-rch-fcell vm-rch-famt gasamounterwidth" id="lpggasamount-input">
+            <div>
+                <p id="lpggasamountmessage" class="vm-rch-err"></p>
+            </div>
+            <i class="fa fa-inr vm-rch-in-ico" aria-hidden="true"></i>
+            <input type="text" id="lpggasamount" name="lpggasamount" class="form-control" placeholder="Enter Amount" />
+            <div class="wamount-input-type">
+                <input type="button" id="btnnn3lpg" class="btn bg-blue-grey" value="View Bill" onclick="GetlpgGasviewbill('lpggasddltype')" />
             </div>
         </div>
-        <div class="col-md-1 col-sm-1 col-lg-1 col-xs-1 gasamount-input-before">
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="form-line" style="margin-top:-1px !important; border-bottom:none;">
-                    <input type="submit" id="btn3" class="btn bg-blue-grey" value="Continue" style="height:37px; float:left; margin-left:-20px;" onclick="getlpggascontinuebtn('lpggasddltype')" />
-                </div>
-            </div>
+        <div class="vm-rch-fcell vm-rch-fbtn2" id="btncontinue-lpg">
+            <input type="button" id="btn3lpg" class="btn bg-blue-grey" value="Continue" onclick="getlpggascontinuebtn('lpggasddltype')" />
         </div>
-
     </div>
 
 
@@ -211,13 +91,36 @@
     <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" @*id="btngetviewbill"*@>
         <div class="form-group" style="margin-bottom:0px;">
             <div class="form-line" style="margin-top:39px; border-bottom:none;">
-                <input type="button" id="btnnn" class="btn bg-blue-grey" value="View Bill" style="height:37px;float:left;" onclick="GetGasviewbill('gasddltype')" />
+                <input type="button" id="btnnn" class="btn bg-blue-grey" value="View Bill" style="height:37px;float:left;border:0;border-radius:8px;background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;font-weight:700;" onclick="GetGasviewbill('gasddltype')" />
             </div>
         </div>
     </div>
     -->
 
 </div>
+
+<script>
+    /** Piped vs LPG — sirf active row dikhe (CSS display:flex !important se .hide() break hota tha) */
+    function vmRchSetGasBookMode(mode) {
+        var $piped = $('#firstrediobuttonshow');
+        var $lpg = $('#showlpggassclass');
+        if (!$piped.length || !$lpg.length) { return; }
+        if (mode === 'lpg') {
+            $piped.removeClass('vm-rch-gas-row--active');
+            $lpg.addClass('vm-rch-gas-row--active');
+        } else {
+            $lpg.removeClass('vm-rch-gas-row--active');
+            $piped.addClass('vm-rch-gas-row--active');
+        }
+    }
+    function vmRchSyncGasBookModeFromRadio() {
+        if ($('#pipedrediobutton').is(':checked')) {
+            vmRchSetGasBookMode('lpg');
+        } else {
+            vmRchSetGasBookMode('piped');
+        }
+    }
+</script>
 
 <div id="gasmsgBox" style="margin-top:10px;"></div>
 <div id="lpggasmsgBox" style="margin-top:10px;"></div>
@@ -262,9 +165,9 @@
             </td>
         }
 
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="gasprocessToPay()">Procces To Pay</button></td>
+        <td><button style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="gasprocessToPay()">Procces To Pay</button></td>
 
-        @*<td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="gasrechargeconfirm()">Procces To Pay</button></td>*@
+        @*<td><button style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="gasrechargeconfirm()">Procces To Pay</button></td>*@
 
     </tr>
 </table>
@@ -277,7 +180,7 @@
     <tr>
         <td style="font-size: 20px;"><b> <span id="rchstatuschkgas"></span> </b></td>
         <td class="border-centerbe border-centerbess" style="font-size: 20px;"><b><span id="rchmsggas"></span></b></td>
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagaingas()">Recharge Again</button></td>
+        <td><button style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagaingas()">Recharge Again</button></td>
     </tr>
 </table>
 
@@ -321,10 +224,10 @@
                 </span>
             </td>
         }
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="lpggasprocessToPay()">Procces To Pay</button></td>
+        <td><button style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="lpggasprocessToPay()">Procces To Pay</button></td>
 
 
-        @*<td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="lpggasrechargeconfirm()">Procces To Pay</button></td>*@
+        @*<td><button style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="lpggasrechargeconfirm()">Procces To Pay</button></td>*@
 
     </tr>
 </table>
@@ -337,7 +240,7 @@
     <tr>
         <td style="font-size: 20px;"><b> <span id="rchstatuschklpggas"></span> </b></td>
         <td class="border-centerbe border-centerbess" style="font-size: 20px;"><b><span id="rchmsglpggas"></span></b></td>
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagainlpggas()">Recharge Again</button></td>
+        <td><button style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagainlpggas()">Recharge Again</button></td>
     </tr>
 </table>
 
@@ -525,6 +428,7 @@
         $('#gasCustomerInfo').hide();
         $('#gasinfo').show();
         $('#confirmgas').hide();
+        vmRchSyncGasBookModeFromRadio();
     }
 </script>
 
@@ -776,7 +680,7 @@
     function backlpggas() {
         $('#lpggasCustomerInfo').hide();
         $('#lpggasinfo').show();
-        $('#showlpggassclass').show();
+        vmRchSetGasBookMode('lpg');
 
         $('#confirmlpggas').hide();
     }
@@ -803,7 +707,7 @@
             $('#lpggasduedate').text(duedate);
             $('#lpggasCustomerInfo').hide();
             $('#lpggasinfo').hide();
-            $('#showlpggassclass').hide();
+            $('#showlpggassclass').removeClass('vm-rch-gas-row--active');
             $('#confirmlpggas').show();
 
             //  Recharge(gasddl, eleddlvalue, txtgasno, gasamount, billgroup, "", "", "", "0", BillRefId);
@@ -929,7 +833,7 @@
         $('#txtlpggasno').text("");
         $('#lpgbillgroup').text("");
         $('#lpgbillgroup').text("");
-        $('#showlpggassclass').show();
+        vmRchSetGasBookMode('lpg');
         $('#rechargeconfirmlpggas').hide();
         $('#confirmlpggas').hide();
 

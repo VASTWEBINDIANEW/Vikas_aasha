@@ -1,64 +1,122 @@
-﻿
-
-<style>
-    #ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-    }
-
-        #ul li {
-            float: left;
-        }
-
-            #ul li a {
-                display: block;
-                text-align: center;
-                padding: 5px 10px;
-                text-decoration: none;
-                border: 1px solid #b1a6a638;
-                position: initial;
-            }
-
-                #ul li a:hover:not(.activee) {
-                    background-color: #FFC107;
-                    color: black;
-                    border: 1px solid #b1a6a6;
-                }
-
-    .activee {
-        background-color: var(--main-bg-lcolor);
-        color: white;
-        margin-bottom: 0px;
-    }
-    /*.activee:hover {
-            color: white;
-            border: 1px solid #00000026;
-        }*/
-</style>
-<div>
-    <div id="custnav">
-        <ul id="ul">
-            <li><a href="@Url.Action("BusBookingReport","Bus")">Booked</a></li>
-            <li><a href="@Url.Action("cancellationReport","Bus")">Canceled</a></li>
-
+﻿@using System;
+@{
+    var travelPath = (Request.Url != null ? Request.Url.AbsolutePath : "") ?? "";
+    var isBusReport = travelPath.IndexOf("BusBookingReport", StringComparison.OrdinalIgnoreCase) >= 0
+        || travelPath.IndexOf("cancellationReport", StringComparison.OrdinalIgnoreCase) >= 0
+        || travelPath.IndexOf("/Bus/", StringComparison.OrdinalIgnoreCase) >= 0;
+    var isHotelReport = travelPath.IndexOf("HotelReport", StringComparison.OrdinalIgnoreCase) >= 0
+        || travelPath.IndexOf("CancellationQueue", StringComparison.OrdinalIgnoreCase) >= 0
+        || travelPath.IndexOf("/Hotel/", StringComparison.OrdinalIgnoreCase) >= 0;
+    var isIrctcReport = travelPath.IndexOf("Travel", StringComparison.OrdinalIgnoreCase) >= 0
+        && !isBusReport && !isHotelReport;
+}
+<nav class="vm-ticket-nav-wrap" aria-label="Travel and bus report navigation">
+    <div id="ticket-travel-nav" class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line vm-ticket-travel-nav">
+        <ul class="vm-fin-nav__list" id="ticket-travel-nav-list">
+            <li>
+                <a class="vm-fin-nav__link" href="@Url.Action("TicketReport", "Air")" title="Flight">
+                    <i class="fas fa-plane vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Flight</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link" href="@Url.Action("BusBookingReport", "Bus")" title="Bus">
+                    <i class="fas fa-bus vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Bus</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link" href="@Url.Action("HotelReport", "Hotel")" title="Hotel">
+                    <i class="fas fa-hotel vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Hotel</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link" href="@Url.Action("Travel", "Home")" title="IRCTC">
+                    <i class="fas fa-train vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>IRCTC</span>
+                </a>
+            </li>
         </ul>
     </div>
-</div>
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('#custnav li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('activee');
-                $this.addClass('navbar');
-
+    <div id="ticket-flight-nav" class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line vm-ticket-flight-nav">
+        <ul class="vm-fin-nav__list" id="ticket-flight-nav-list">
+            @if (isIrctcReport)
+            {
+                <li>
+                    <a class="vm-fin-nav__link is-active" href="@Url.Action("Travel", "Home")" title="IRCTC reports">
+                        <i class="fas fa-train vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>IRCTC</span>
+                    </a>
+                </li>
             }
-        })
-    });
+            else if (isBusReport)
+            {
+                <li>
+                    <a class="vm-fin-nav__link" href="@Url.Action("BusBookingReport", "Bus")" title="Booked bus tickets">
+                        <i class="fas fa-ticket-alt vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Booked</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="vm-fin-nav__link" href="@Url.Action("cancellationReport", "Bus")" title="Canceled bus tickets">
+                        <i class="fas fa-ban vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Canceled</span>
+                    </a>
+                </li>
+            }
+            else if (isHotelReport)
+            {
+                <li>
+                    <a class="vm-fin-nav__link" href="@Url.Action("HotelReport", "Hotel")" title="Booked hotel tickets">
+                        <i class="fas fa-ticket-alt vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Booked</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="vm-fin-nav__link" href="@Url.Action("CancellationQueue", "Hotel")" title="Canceled hotel tickets">
+                        <i class="fas fa-ban vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Canceled</span>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a class="vm-fin-nav__link" href="@Url.Action("BusBookingReport", "Bus")" title="Booked tickets">
+                        <i class="fas fa-ticket-alt vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Booked</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="vm-fin-nav__link" href="@Url.Action("cancellationReport", "Bus")" title="Canceled tickets">
+                        <i class="fas fa-ban vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Canceled</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>
+<script>
+    (function () {
+        function markRetailerBusNavActive() {
+            var jq = window.jQuery;
+            if (!jq) { window.setTimeout(markRetailerBusNavActive, 50); return; }
+            var current = (window.location.pathname || '').toLowerCase();
+            jq('#ticket-travel-nav .vm-fin-nav__link, #ticket-flight-nav .vm-fin-nav__link').each(function () {
+                var $link = jq(this);
+                var href = ($link.attr('href') || '').toLowerCase().replace(/^~/, '');
+                if (!href) { return; }
+                if (current.indexOf(href) !== -1 || href.indexOf(current) !== -1) {
+                    $link.addClass('is-active');
+                }
+            });
+        }
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            markRetailerBusNavActive();
+        } else {
+            document.addEventListener('DOMContentLoaded', markRetailerBusNavActive);
+        }
+    })();
 </script>
-
-

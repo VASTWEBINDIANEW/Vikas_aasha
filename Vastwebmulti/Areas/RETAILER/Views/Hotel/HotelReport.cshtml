@@ -1,502 +1,476 @@
 ﻿@model List<Vastwebmulti.Models.proc_HotelReport_new_Result>
-    @*{
-    ViewBag.Title = "Hotel";
+@using System.Web.Mvc.Ajax;
+@{
+    ViewBag.Title = "Hotel Report";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
-    }*@
-
-
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var selStatus = (Request["ddl_status"] ?? "").Trim();
+    var selTicketStatus = (Request["ddl_status_ticket"] ?? "").Trim();
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var rows = Model == null ? new List<Vastwebmulti.Models.proc_HotelReport_new_Result>() : Model;
+}
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=38" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-
-    /* new css  */
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
+    /* Force hotel table to size by content (never squeeze) + scroll */
+    body.saas-admin-ui .saas-retailer-hotel-page #hotelBookingReport.vm-opr-data-table {
+        width: max-content !important;
+        min-width: 2500px !important;
+        max-width: none !important;
+        table-layout: auto !important;
     }
-
-    .h_menu-set {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        justify-content: space-between;
+    body.saas-admin-ui .saas-retailer-hotel-page #hotelBookingReport.vm-opr-data-table thead tr,
+    body.saas-admin-ui .saas-retailer-hotel-page #hotelBookingReport.vm-opr-data-table tbody tr {
+        display: table-row !important;
     }
-
-        .h_menu-set .page-header-third {
-            margin-left: 0;
-            margin-right: 0;
-        }
-
-    /* new css  */
-
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
+    body.saas-admin-ui .saas-retailer-hotel-page #hotelBookingReport.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-retailer-hotel-page #hotelBookingReport.vm-opr-data-table tbody td {
+        display: table-cell !important;
+        width: auto !important;
+        max-width: none !important;
+        white-space: nowrap !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
     }
-
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
+    /* Override operator-report 42px/52px first-two-col rule + room per column */
+    body.saas-admin-ui .saas-retailer-hotel-page #hotelBookingReport.vm-opr-data-table thead th:first-child {
+        width: auto !important;
+        min-width: 150px !important;
+        max-width: none !important;
     }
-
-    .dropdown-menu {
-        margin-top: 81px !important;
+    body.saas-admin-ui .saas-retailer-hotel-page #hotelBookingReport.vm-opr-data-table thead th:nth-child(2) {
+        width: auto !important;
+        min-width: 170px !important;
+        max-width: none !important;
+        text-align: center !important;
     }
-
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px;
+    body.saas-admin-ui .saas-retailer-hotel-page .vm-hotel-status-text {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 6px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #334155;
+        white-space: nowrap;
     }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    .modal {
-        top: 100px;
-    }
-
-    .selectborder-reta-second select {
-        border: 1px solid #ccc !important;
-        text-align:left !important;
-    }
-    .selectborder-reta-second {width: 12% !important;padding-left: 0px !important;}
-    .hotelretailer-modal-table table, .hotelretailer-modal-table table th, .hotelretailer-modal-table table td {
-        border: 1px solid #dbdbdb;
-        background: #f9f9f9;
-        margin-bottom: 0;
-    }
-    .hotelretailer-modal-table .modal-footer {
-        padding: 10px 25px;
-        padding-top: 0;
-    }
-
-        .hotelretailer-modal-table .modal-footer button {
-            background: #a4a0a0 !important;
-            font-size: 14px;
-            border-radius: 3px;
-        }    
-
-    .hotelretailer-modal-table .modal-header button {
-        color: #000;
-        opacity: 1;
-        margin-top: 0px;
-    }
-    .hotel-table-retailer table tr th {white-space:nowrap;}
-    .hotel-table-retailer table tr th, .hotel-table-retailer table tr td {
-        font-size: 14px;
-    }
-
-    @@media only screen and (max-width:1169px){
-
-        .layoutt-retailer section.content.aepsfullpage {
-            margin-left: 0% !important;
-        }
-        .container-fluid.hotel-newclassadd.hotel-newclassadd-respon {
-            padding-left: 15px;
-        }
-
-
-    }
-
-
-
 </style>
 
-<section class="content aepsfullpage all-chan-aepsfullpage" style="">
-    <div class="container-fluid hotel-newclassadd hotel-newclassadd-respon">
-        <div class="newtabsreport newtabsreportBusreport newtabsreport-hotel busreport-responshive dfffgffff-res">
-            <div class="container container-tabsrepor">
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;" aria-hidden="true">
+    <div class="vm-dmt-loader__panel" role="status" aria-live="polite" aria-label="Processing">
+        <div class="vm-dmt-table-loader__spinner" aria-hidden="true"></div>
+        <span class="vm-dmt-loader__text">Please wait…</span>
+    </div>
+</div>
 
-                <div class="h_menu-set">
-                    <div class="page-header-third">
-                        @Html.Partial("~/Areas/RETAILER/Views/Home/_Travelsview.cshtml")
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-hotel-report-page saas-retailer-hotel-page">
+    <div class="container-fluid vm-opr-page-shell">
+
+        @{
+            var hotelFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerHotelReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_hotel_frm_date" },
+                { "data-report-to", "#retailer_hotel_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("HotelReport", "Hotel", FormMethod.Post, hotelFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Travel &amp; Hotels</li>
+                        <li>Hotel Report</li>
+                    </ol>
+                    <div class="vm-dmt-fin-nav-row vm-ticket-travel-nav-row">
+                        @Html.Partial("_hotelpartialmenu")
                     </div>
+                </div>
 
-                    <div class="page-header-third">
-                        <div class="row clearfix flight-changecss">
-                            <div class="col-md-12">
-                                <div class="card bus-reportbus" id="cardbus-reportbus">
-                                    <div class="flight-changecss" id="ulstart">
-
-                                        @Html.Partial("_hotelpartialmenu")
-
-                                    </div>
-
-                                </div>
-                            </div>
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerHotelTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Booking totals (loaded rows)</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerHotelTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Publish Fare</span>
+                            <strong class="vm-opr-total-card__value" id="retailerHotelPublish">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Offer Fare</span>
+                            <strong class="vm-opr-total-card__value" id="retailerHotelOffer">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Records</span>
+                            <strong class="vm-opr-total-card__value" id="retailerHotelCount">0</strong>
                         </div>
                     </div>
                 </div>
 
-            </div>
-        </div>
-        <div class="tab-content tabsrepor-content tabsrepor-content-responshive" id="tabsrepor-contentss">
-            
-            <div class="row clearfix flight-secondcss" id="flight-secondcssee" style="margin:0;">
-                @using (Html.BeginForm("HotelReport", "Hotel", FormMethod.Post))
-                {
-                    <div class="col-md-12 hotelclasschange">
-                        <div class="card" style="">
-                            <div class="page-header-third">
-                                <div class="col-md-2" style="display:none;">
-                                    <div style="margin-left:-6px;">
-                                        <p style="font-size:20px;color:#aba8a8;margin-top:2px;">Hotel&nbsp;Report</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <div class="row" style="margin:0;">
-                                        <div class="col-md-2 bus-status bus-status2 selectborder-reta-second">
-                                            <div class="form-group">
-                                                <div class="" style="width:100%;border:1px solid #dddddd;">
-                                                    @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                                    {
-                                                   new SelectListItem{ Text="Status",Value="",},
-                                                   new SelectListItem{Text="SUCCESS",Value="Confirmed"},
-                                                   new SelectListItem{Text="PENDING",Value="PROCCESSED"},
-                                                   new SelectListItem{Text="FAILED",Value="Failed"}
-                                                    }, new { @class = "form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;height:34px;" })
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 bus-status bus-status2 selectborder-reta-second">
-                                            <div class="form-group">
-                                                <div class="" style="width:100%;border:1px solid #dddddd;">
-                                                    @Html.DropDownList("ddl_status_ticket", new List<SelectListItem>
-                                                    {
-                                                   new SelectListItem{ Text="Ticket Status",Value="",},
-                                                   new SelectListItem{Text="SUCCESS",Value="Success"},
-                                                   new SelectListItem{Text="PENDING",Value="PROCCESSED"},
-                                                   new SelectListItem{Text="Failed",Value="Failed"}
-                                                    }, new { @class = "form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;height:34px;" })
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 flightdate-show finacial-selectsss">
-                                            <div class="form-group" style="margin-bottom:0px;margin-top:0px;">
-                                                <div class="input-daterange input-group">
-                                                    <div class="datesate datesates">
-                                                        <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;height:33px;", autocomplete = "off" })
-                                                    </div>
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-exchange" style="padding-top:10px;"></i>
-                                                    </span>
-                                                    <div class="datesate datesatese">
-                                                        <div class="form-iconmy form-iconmyss" id="iconmyssee" style="left: 149px;top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;height:33px;", autocomplete = "off" })
-                                                    </div>
-                                                </div>
-                                                <!-- /.input group -->
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 flightdate-search">
-                                            <div class="form-group">
-                                                <div class="form-line" style="border-bottom:none;">
-                                                    <button type="submit" class="btn" id="btntype" name="btntype" style="margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                                                        <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                        <span style="top:-1px;color:black;">Search</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="col-md-3 buttonPdf col-md-3buttonPdf" style="width: 26%;float: right;text-align: right;">
-
-                                            <button id="btnPDF">PDF</button>
-                                            <button id="btnExport">Export</button>
-                                            <button>Total</button>
-                                        </div>
-
-                                    </div>
-                                </div>
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--hotel vm-rpt-filters-panel__bar">
+                        <div class="vm-opr-field vm-dmt-field" id="sts">
+                            @Html.DropDownList("ddl_status", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "All Status", Value = "", Selected = (selStatus == "") },
+                                new SelectListItem { Text = "Success", Value = "Confirmed", Selected = selStatus == "Confirmed" },
+                                new SelectListItem { Text = "Pending", Value = "PROCCESSED", Selected = selStatus == "PROCCESSED" },
+                                new SelectListItem { Text = "Failed", Value = "Failed", Selected = selStatus == "Failed" }
+                            }, new { id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control", title = "Booking status" })
+                        </div>
+                        <div class="vm-opr-field vm-dmt-field" id="stsTicket">
+                            @Html.DropDownList("ddl_status_ticket", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "Ticket Status", Value = "", Selected = (selTicketStatus == "") },
+                                new SelectListItem { Text = "Success", Value = "Success", Selected = selTicketStatus == "Success" },
+                                new SelectListItem { Text = "Pending", Value = "PROCCESSED", Selected = selTicketStatus == "PROCCESSED" },
+                                new SelectListItem { Text = "Failed", Value = "Failed", Selected = selTicketStatus == "Failed" }
+                            }, new { id = "ddl_status_ticket", @class = "vm-opr-select vm-dmt-select form-control", title = "Ticket status" })
+                        </div>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_hotel_frm_date", placeholder = "From", title = "From date" })
                             </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_hotel_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" value="Old" name="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
                     </div>
-                }
+                </div>
             </div>
-        </div>
-        <div class="row clearfix clearfix-hotelclass" style="margin:0;">
-            <div class="col-md-12" style="padding:0;">
-                <div class="card">
-                    <div class="body" style="padding: 0;">
+        }
 
-                        <div class="page-header-third">
-                            <div class="table-responsive hotel-responsive hotel-tablerespons tablethirddesign-newnew hotel-table-retailer" style="position:inherit;">
-                                <table id="example1" class="table table-bordered table-striped table-hover third-design-table" style="width:100%; font-size:12px;background:#f9f9f9;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>Booking Status</th>
-                                            <th>Hotel Name</th>
-                                            <th>Rooms</th>
-                                            <th>Publish Fare</th>
-                                            <th>Pre&nbsp;₹</th>
-                                            <th>Offer Fare</th>
-                                            <th>Debit Amount</th>
-                                            <th>Tds</th>
-                                            <th>Post&nbsp;₹</th>
-                                            <th>Booking&nbsp;Id</th>
-
-                                            <th>Ticket Status</th>
-                                            <th>Date</th>
-                                            <th>Check In Date</th>
-                                            <th>Check Out Date</th>
-                                            <th>View&nbsp;Guests</th>
-                                            <th>View&nbsp;Price</th>
-                                            <th>View&nbsp;Status</th>
-                                            <th>Cancel Ticket</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (Model != null && Model.Count > 0)
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-hotel" aria-hidden="true"></i>
+                        <span>Hotel booking report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-hotel-totals-btn" onclick="FindtotalRetailerHotel()" title="Show totals" aria-expanded="false" aria-controls="retailerHotelTotalsPanel"><i class="fas fa-chart-pie" aria-hidden="true"></i></button>
+                            <button type="button" id="btnRetailerHotelExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                            <button type="button" id="btnRetailerHotelPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="hotelBookingReport" class="table vm-opr-data-table" cellspacing="0" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Booking Status</th>
+                                    <th>Hotel Name</th>
+                                    <th>Rooms</th>
+                                    <th>Publish Fare &#8377;</th>
+                                    <th>Pre &#8377;</th>
+                                    <th>Offer Fare &#8377;</th>
+                                    <th>Debit Amount &#8377;</th>
+                                    <th>Tds &#8377;</th>
+                                    <th>Post &#8377;</th>
+                                    <th>Booking Id</th>
+                                    <th>Ticket Status</th>
+                                    <th>Date</th>
+                                    <th>Check In Date</th>
+                                    <th>Check Out Date</th>
+                                    <th>View Guests</th>
+                                    <th>View Price</th>
+                                    <th>View Status</th>
+                                    <th>Cancel Ticket</th>
+                                </tr>
+                            </thead>
+                            <tbody id="retailerHotelRows">
+                                @if (rows.Count > 0)
+                                {
+                                    foreach (var item in rows)
+                                    {
+                                        var hStatus = item.HotelBookingStatus ?? "";
+                                        var hTone = "pending";
+                                        var hFa = "fa-clock-o";
+                                        if (hStatus.Contains("Confirmed"))
                                         {
-                                            foreach (var item in Model)
-                                            {
-                                                var img = "";
-                                                var color = "";
-
-                                                if (item.HotelBookingStatus.Contains("Proccessed"))
-                                                {
-                                                    color = "#ff9600";
-                                                    img = "../../ashok-images/clkk.png";
-                                                }
-                                                if (item.HotelBookingStatus.Contains("Confirmed"))
-                                                {
-                                                    color = "green";
-                                                    img = "../../ashok-images/correct.svg";
-                                                }
-                                                if (item.HotelBookingStatus.Contains("Failed"))
-                                                {
-                                                    color = "red";
-                                                    img = "../../ashok-images/closes.svg";
-                                                }
-                                                if (item.HotelBookingStatus.Contains("Refund"))
-                                                {
-                                                    color = "#9C27B0";
-                                                    img = "../../ashok-images/undo.svg";
-                                                }
-                                                <tr>
-                                                    <td><img src="@img" style="background:@color;" />@*@item.HotelBookingStatus*@</td>
-                                                    <td style="white-space:nowrap;">@item.HotelName</td>
-                                                    <td>@item.NoOfRooms</td>
-                                                    <td>@item.totalpublishfare</td>
-                                                    <td>@item.rempre</td>
-                                                    <td>@item.totalOfferedFare</td>
-                                                    <td>@item.reminc</td>
-                                                    <td>@item.remtds</td>
-                                                    <td>@item.rempost</td>
-                                                    <td>@item.BookingId</td>
-
-                                                    <td>@item.TicketStatus</td>
-                                                    <td>@item.ticketdate</td>
-                                                    <td>@item.checkindate</td>
-                                                    <td>@item.checkoutdate</td>
-                                                    <td>@Ajax.ActionLink("View Guests", "GuestDetails", "Hotel", new { TXNID = item.TraceId }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnFailure = "OnFailed", UpdateTargetId = "guestDescription" }, new { @class = "btn btn-default", @style = "1px solid #c7c2c2" }) </td>
-                                                    <td>@Ajax.ActionLink("View Price", "HotelPriceDetails", "Hotel", new { TXNID = item.TraceId }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccessPrice", OnFailure = "OnFailedPrice", UpdateTargetId = "priceDescription" }, new { @class = "btn btn-default", @style = "1px solid #c7c2c2" }) </td>
-                                                    <td>@Ajax.ActionLink("View Status", "HotelBookingStatus", "Hotel", new { TXNID = item.TraceId }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccessStatus", OnFailure = "OnFailedStatus" }, new { @class = "btn btn-default", @style = "1px solid #c7c2c2" }) </td>
-                                                    @if (item.HotelBookingStatus == "Confirmed" && item.IsVoucherBooking == true)
-                                                    {
-                                                        <td>
-                                                            @Ajax.ActionLink("CANCEL", "BookingCancallation", "Hotel", new { id = item.idno, BookingId = item.BookingId },
-                                                     new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccessStatus", OnFailure = "OnFailedStatus" }, new { @class = "btn btn-default", @style = "1px solid #c7c2c2" })
-                                                        </td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td></td>
-                                                    }
-                                                </tr>
-                                            }
+                                            hTone = "success";
+                                            hFa = "fa-check";
                                         }
-                                    </tbody>
-                                </table>
-                                <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                    <div class="loadertablecssnew">Loading...</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        
+                                        else if (hStatus.Contains("Failed"))
+                                        {
+                                            hTone = "failed";
+                                            hFa = "fa-times";
+                                        }
+                                        else if (hStatus.Contains("Refund"))
+                                        {
+                                            hTone = "refund";
+                                            hFa = "fa-undo";
+                                        }
+                                        else if (hStatus.Contains("Proccessed"))
+                                        {
+                                            hTone = "pending";
+                                            hFa = "fa-clock-o";
+                                        }
+                                        <tr class="vm-dmt-row" data-amount="@(item.totalpublishfare ?? 0)" data-offer="@(item.totalOfferedFare ?? 0)">
+                                            <td class="vm-ticket-status-cell">
+                                                <span class="vm-dmt-status vm-dmt-status--@hTone" title="@hStatus"><i class="fa @hFa" aria-hidden="true"></i></span>
+                                                <span class="vm-hotel-status-text">@hStatus</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-consumer-text">@item.HotelName</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-refno-text">@(item.NoOfRooms.HasValue ? item.NoOfRooms.Value.ToString() : "—")</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @(item.totalpublishfare.HasValue ? Math.Round(item.totalpublishfare.Value, 2).ToString() : "0.00")</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @(item.rempre.HasValue ? Math.Round(item.rempre.Value, 2).ToString() : "0.00")</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @(item.totalOfferedFare.HasValue ? Math.Round(item.totalOfferedFare.Value, 2).ToString() : "0.00")</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @(item.reminc.HasValue ? Math.Round(item.reminc.Value, 2).ToString() : "0.00")</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @(item.remtds.HasValue ? Math.Round(item.remtds.Value, 2).ToString() : "0.00")</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @(item.rempost.HasValue ? Math.Round(item.rempost.Value, 2).ToString() : "0.00")</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-refno-text">@item.BookingId</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-refno-text">@item.TicketStatus</span>
+                                            </td>
+                                            <td class="vm-ticket-time-cell">
+                                                <span class="vm-dmt-refno-text">@(item.ticketdate.HasValue ? String.Format("{0:dd-MMM-yyyy HH:mm:ss}", item.ticketdate.Value) : "—")</span>
+                                            </td>
+                                            <td class="vm-ticket-time-cell">
+                                                <span class="vm-dmt-refno-text">@(item.checkindate.HasValue ? String.Format("{0:dd-MMM-yyyy}", item.checkindate.Value) : "—")</span>
+                                            </td>
+                                            <td class="vm-ticket-time-cell">
+                                                <span class="vm-dmt-refno-text">@(item.checkoutdate.HasValue ? String.Format("{0:dd-MMM-yyyy}", item.checkoutdate.Value) : "—")</span>
+                                            </td>
+                                            <td>
+                                                @Ajax.ActionLink("View Guests", "GuestDetails", "Hotel", new { TXNID = item.TraceId }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnFailure = "OnFailed", UpdateTargetId = "guestDescription" }, new { @class = "btn btn-default btn-sm vm-dmt-view-btn", title = "View guests" })
+                                            </td>
+                                            <td>
+                                                @Ajax.ActionLink("View Price", "HotelPriceDetails", "Hotel", new { TXNID = item.TraceId }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccessPrice", OnFailure = "OnFailedPrice", UpdateTargetId = "priceDescription" }, new { @class = "btn btn-default btn-sm vm-dmt-view-btn", title = "View price" })
+                                            </td>
+                                            <td>
+                                                @Ajax.ActionLink("View Status", "HotelBookingStatus", "Hotel", new { TXNID = item.TraceId }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccessStatus", OnFailure = "OnFailedStatus" }, new { @class = "btn btn-info btn-sm vm-dmt-info-btn", title = "View booking status" })
+                                            </td>
+                                            <td>
+                                                @if (item.HotelBookingStatus == "Confirmed" && item.IsVoucherBooking == true)
+                                                {
+                                                    @Ajax.ActionLink("CANCEL", "BookingCancallation", "Hotel", new { id = item.idno, BookingId = item.BookingId }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccessStatus", OnFailure = "OnFailedStatus" }, new { @class = "btn btn-danger btn-sm vm-dmt-cancel-btn", title = "Cancel ticket" })
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="18">
+                                            <div class="vm-opr-empty-state">
+                                                <i class="fas fa-hotel" aria-hidden="true"></i>
+                                                <span>No hotel booking records found</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
             </div>
         </div>
+
     </div>
 </section>
-<!-- Guest Modal -->
+
 <div id="guestDetailsModal" class="modal fade guestDetailsModalnew hotelretailer-modal-table" role="dialog">
     <div class="modal-dialog">
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-
                 <h4 class="modal-title" style="float:left;">Guest Details</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body" id="guestDescription">
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
             </div>
         </div>
-
     </div>
 </div>
-<!-- Price Modal -->
+
 <div id="guestPriceModal" class="modal fade guestDetailsModalnew hotelretailer-modal-table" role="dialog">
     <div class="modal-dialog">
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Hote Price Details</h4>
+                <h4 class="modal-title">Hotel Price Details</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-
             </div>
             <div class="modal-body" id="priceDescription">
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
             </div>
         </div>
-
     </div>
 </div>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
 
+@section PostVmScripts {
 <script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 <script>
-    function isNumber(evt) {
-        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
-            return false;
-        return true;
+    function retailerHotelFilters() {
+        return {
+            ddl_status: jQuery('#ddl_status').val() || '',
+            ddl_status_ticket: jQuery('#ddl_status_ticket').val() || '',
+            txt_frm_date: jQuery('#retailer_hotel_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_hotel_to_date').val() || ''
+        };
     }
-</script>
-<!--Calendar Javascript-->
-<script>
+
+    function hideRetailerHotelTotals() {
+        var $panel = jQuery('#retailerHotelTotalsPanel');
+        var $btn = jQuery('.vm-hotel-totals-btn');
+        $panel.removeClass('is-open').hide().attr('aria-hidden', 'true');
+        $btn.removeClass('is-active').attr({ title: 'Show totals', 'aria-expanded': 'false' });
+    }
+
+    function calcRetailerHotelTotals() {
+        var publish = 0, offer = 0, count = 0;
+        jQuery('#retailerHotelRows tr.vm-dmt-row').each(function () {
+            publish += parseFloat(jQuery(this).attr('data-amount')) || 0;
+            offer += parseFloat(jQuery(this).attr('data-offer')) || 0;
+            count += 1;
+        });
+        jQuery('#retailerHotelPublish').html('&#8377; ' + publish.toFixed(2));
+        jQuery('#retailerHotelOffer').html('&#8377; ' + offer.toFixed(2));
+        jQuery('#retailerHotelCount').text(count);
+    }
+
+    function FindtotalRetailerHotel() {
+        var $panel = jQuery('#retailerHotelTotalsPanel');
+        var $btn = jQuery('.vm-hotel-totals-btn');
+        if ($panel.hasClass('is-open')) {
+            hideRetailerHotelTotals();
+            return;
+        }
+        $panel.addClass('is-open').show().attr('aria-hidden', 'false');
+        $btn.addClass('is-active').attr({ title: 'Hide totals', 'aria-expanded': 'true' });
+        calcRetailerHotelTotals();
+    }
+
     function OnSuccess(data) {
-        //alert("success");
-        $("#guestDescription").html(data);
-        $("#guestDetailsModal").modal('show');
+        jQuery("#guestDescription").html(data);
+        jQuery("#guestDetailsModal").modal('show');
     }
     function OnFailed() {
-        swal("Oops!", "Failed to fatch data.", "error");
+        swal("Oops!", "Failed to fetch data.", "error");
     }
     function OnSuccessPrice(data) {
-        //alert("success");
-        $("#priceDescription").html(data);
-        $("#guestPriceModal").modal('show');
+        jQuery("#priceDescription").html(data);
+        jQuery("#guestPriceModal").modal('show');
     }
     function OnFailedPrice() {
-        swal("Oops!", "Failed to fatch data.", "error");
+        swal("Oops!", "Failed to fetch data.", "error");
     }
-    function OnSuccessStatus(data)
-    {
+    function OnSuccessStatus(data) {
         var respo = JSON.parse(data);
-        if(respo.Status == "Success")
-        {
+        if (respo.Status == "Success") {
             swal("Wow!", respo.Message, "success");
         } else {
             swal("Oops!", respo.Message, "error");
         }
     }
     function OnFailedStatus(data) {
-        swal("Oops!", "Failed to fatch data.", "error");
+        swal("Oops!", "Failed to fetch data.", "error");
     }
-    $(document).ready(function () {
 
-            var sts = '@TempData["Status"]';
+    function initRetailerHotelSelect2() {
+        jQuery('#ddl_status, #ddl_status_ticket').each(function () {
+            var $el = jQuery(this);
+            if (!$el.length || !jQuery.fn.select2) { return; }
+            if ($el.hasClass('select2-hidden-accessible')) {
+                try { $el.select2('destroy'); } catch (e) { }
+            }
+            $el.select2({ width: '100%', minimumResultsForSearch: 6 });
+        });
+    }
+
+    function initRetailerHotelDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerHotelDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerHotelReportForm',
+                '#retailer_hotel_frm_date',
+                '#retailer_hotel_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        var sts = '@TempData["Status"]';
         var msg = '@TempData["Message"]';
-        if (sts != null && sts != '')
-        {
-            if(sts == "Success")
-            {
+        if (sts != null && sts != '') {
+            if (sts == "Success") {
                 swal("Wow!", msg, "success");
             } else {
                 swal("Oops!", msg, "error");
             }
         }
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
+        initRetailerHotelSelect2();
+        initRetailerHotelDatepickers();
+        window.setTimeout(initRetailerHotelDatepickers, 150);
 
+        jQuery('#btnRetailerHotelExport').on('click', function (e) {
+            e.preventDefault();
+            var f = retailerHotelFilters();
+            location.href = '@Url.Action("ExcelHotelReport", "Hotel")?ddl_status=' + encodeURIComponent(f.ddl_status) + '&ddl_status_ticket=' + encodeURIComponent(f.ddl_status_ticket) + '&txt_frm_date=' + encodeURIComponent(f.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(f.txt_to_date);
         });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-
+        jQuery('#btnRetailerHotelPDF').on('click', function () {
+            var f = retailerHotelFilters();
+            window.open('@Url.Action("PDF_HotelReport", "Hotel")?ddl_status=' + encodeURIComponent(f.ddl_status) + '&ddl_status_ticket=' + encodeURIComponent(f.ddl_status_ticket) + '&txt_frm_date=' + encodeURIComponent(f.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(f.txt_to_date), '_blank');
+        });
     });
 </script>
-<script>
-    function reloadPage() {
-        location.reload();
-    }
-</script>
-
-<!--My Script-->
-
-<script>
-    $(".input-daterange").click(function () {
-        $(".datepicker").addClass('datepickerlast');
-    });
-
-
-</script>
-
-<script>
-    $(function () {
-        var loc = window.location.href; // returns the full URL
-        if ('/~/RETAILER/Hotel/HotelReport') {
-            $('.list.report-list-change li#rewertyd a').addClass('active');
-        }
-    });
-</script>
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-        var ddl_status = $('#ddl_status').val();
-        var ddl_status_ticket = $('#ddl_status_ticket').val();
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("ExcelHotelReport", "Hotel")?ddl_status=' + ddl_status + '&ddl_status_ticket=' + ddl_status_ticket + '&txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        location.href = url
-});
-</script>
-<script>
-    $("#btnPDF").click(function () {
-        var ddl_status = $('#ddl_status').val();
-        var ddl_status_ticket = $('#ddl_status_ticket').val();
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("PDF_HotelReport", "Hotel")?ddl_status=' + ddl_status + '&ddl_status_ticket=' + ddl_status_ticket + '&txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
-    });
-</script>
+}

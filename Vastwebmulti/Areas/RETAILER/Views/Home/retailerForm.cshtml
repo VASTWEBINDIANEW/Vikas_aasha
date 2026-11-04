@@ -2,289 +2,222 @@
 @using Vastwebmulti.Models;
 @{
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "retailerForm";
     VastwebmultiEntities DB1 = new VastwebmultiEntities();
     var servicelist = DB1.Formservices.ToList();
     var forminfo = DB1.AddForm_information.ToList();
-
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    @*<title>More_Option</title>*@
-    <style>
-
-        /* new css  */
-
-
-
-        .layoutt-retailer section.content {
-            margin-top: 95px;
-            padding-top: 5px;
-        }
-
-        .bread-same-all-page li {
-            margin: 6px 0;
-        }
-
-        .bread-same-all-page {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .bordered-2 form {
-            width: 100%;
-            float: left;
-            text-align: center;
-            padding-top: 10px;
-        }
-
-        .tmw-total-color-one {
-            -webkit-background-clip: text !important;
-            -moz-background-clip: text !important;
-            -webkit-text-fill-color: transparent;
-        }
-        .bread-same-all-page li {
-            float: left;
-            list-style: none;
-        }
-        .bordered-2 {
-            padding: 10px;
-            float: left;
-            width: 100%;
-        }
-
-
-        /* new css  */
-
-        .slab-first-tab {
-            background: #eaeaea;
-        }
-
-        .modal .modal-content .modal-body21 {
-            color: #777;
-            background: #ddd;
-            border-bottom: 2px solid;
-        }
-        .modal .modal-content .modal-body21 {
-            padding: 0px !important;
-        }
-        .slab-first-tab {
-            margin-left: 0px !important;
-        }
-
-
-
-        @@media only screen and (max-width:991px){
-            #axy {
-                float: left;
-                width: 100%;
-            }
-
-
-        }
-
-        @@media only screen and (max-width:767px){
-
-            .allpage-responshivenew {
-                padding: 0px 0;
-            }
-                .allpage-responshivenew ul li {
-                    margin-bottom: 6px;
-                }
-
-
-        }
-
-
-
-    </style>
-</head>
-
-<body>
-    <section class="content fourdesign-section-admin">
-        <div id="loadermoney" class="loadermoney" style="display:none;"></div>
-
-        <div class="col-md-12">
-
-            <!---   header menu    -->
-            <div class="page-header-third">
-                <div class="bread-same-all-page allpage-responshivenew">
-                    <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                        <ul style="margin:0;">
-                            <li class="smli">
-                                <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                                </a>
-                            </li>
-
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                Retailer Form
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="page-header-third">
-                <div id="custnav" class="col-md-2 slab-first-tab">
-
-                    <ul class="nav nav-tabs">
-                        @if (servicelist.Count() > 0)
-                        {
-                            <h2 class="reportadminclass" style="font-size: 23px; border-bottom: 2px solid #fff; padding: 3px 1px; text-transform: uppercase; background: white;">
-                                <span style="padding-left:8px;padding-left: 8px !important;">Addform<sup class="addmargin"></sup></span>
-                            </h2>
-
-                            foreach (var item in servicelist)
-                            {
-                                <li style="width:100%;float:left;">
-
-                                    <a href="#">
-                                        <button type="button" onclick="NameItemId('@item.idno')" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal786" style="padding: 0px !important; height: auto; margin: 0px; width: 35px !important; float:right;">
-                                            <p style=" margin: auto;">Add</p>
-                                        </button>
-                                        <button style="text-decoration: underline; border: none; background: none; color: #262424; ">@item.servicename </button>
-                                    </a>
-
-
-
-
-                                </li>
-                            }
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="myModal786" role="dialog">
-            <div class="modal-dialog" style="top:90px;">
-
-                <!-- Form Modal content-->
-                <div class="modal-content" style="height: 70vh;">
-                    <div class="modal-header" style="background: #c3c3c3;">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Modal Header</h4>
-                    </div>
-                    <div class="modal-body21">
-                        <div class="bordered-2 " style="">
-                            @using (Html.BeginForm("Retailer_Userinfomation", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                            {
-                                <input type="number" id="idnoInput1" name="idnoInput1" class="form-control" style="display:none;" />
-                                @*<input type="number" id="Name" name="Name" class="form-control" style="display:none;" />*@
-                                <div style="width:70%;float:left;">
-                                    <input name="Value" type="text" maxlength="17" required placeholder="Text" class="form-control" style=" height: 30px !important; width: 100%; padding: 10px; background: #ffffff; border: 1px solid #ccc; font-size: 12px; margin-top: -2px; } " @*onkeypress="return isNumber(event)"*@ />
-                                </div>
-                                <div style="width:30%;float:right;">
-                                    <button type="submit" id="manualsubmit11" class="btn llpo input-back-second" style="border: 1px solid #b1a6a638; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; color: white; height: 26px; font-size: 14px; padding: 2px 10px; ">
-                                        Save
-                                    </button>
-                                </div>
-
-                            }
-                            <div class="col-md-12" id="axy" style="margin-top: 21px; overflow-y: scroll; height: 50vh;padding:0;">
-                                <div class="table-responsive" style="position:inherit;">
-                                    <div class="" style="width: 100%; height: auto; overflow-y: auto;" id="retailerformedit">
-                                        @Html.Partial("_Retailerforminfo")
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-</body>
-</html>
-
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/dealer-dth-booking-report-modern.css?v=48" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+<style>
+    /* Retailer Form — services grid + premium modal (own scope, always wins) */
+    .saas-retailer-form-page .vm-rform-grid { display: grid !important; grid-template-columns: repeat(3, minmax(0,1fr)) !important; gap: 16px !important; margin: 0 !important; padding: 0 !important; }
+    .saas-retailer-form-page .vm-rform-svc { border: 1px solid #e5e9f2 !important; border-radius: 18px !important; background: #fff !important; box-shadow: 0 8px 24px rgba(15,23,42,.07) !important; padding: 16px !important; display: flex !important; align-items: center !important; gap: 12px !important; transition: transform .16s ease, box-shadow .16s ease !important; margin: 0 !important; }
+    .saas-retailer-form-page .vm-rform-svc:hover { transform: translateY(-2px) !important; box-shadow: 0 14px 32px rgba(15,23,42,.12) !important; }
+    .saas-retailer-form-page .vm-rform-svc__icon { display: inline-flex !important; width: 44px !important; height: 44px !important; min-width: 44px !important; border-radius: 13px !important; background: linear-gradient(135deg,#eef2ff,#e0e7ff) !important; border: 1px solid #c7d2fe !important; color: #4f46e5 !important; align-items: center !important; justify-content: center !important; font-size: 17px !important; }
+    .saas-retailer-form-page .vm-rform-svc__name { flex: 1 1 auto !important; min-width: 0 !important; font-size: 14.5px !important; font-weight: 800 !important; color: #0f172a !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+    .saas-retailer-form-page .vm-rform-add {
+        display: inline-flex !important; align-items: center !important; gap: 6px !important;
+        min-height: 36px !important; padding: 0 18px !important; border: none !important; border-radius: 10px !important;
+        background: linear-gradient(135deg,#2563eb,#1d4ed8) !important; color: #fff !important;
+        font-size: 13px !important; font-weight: 800 !important; cursor: pointer !important;
+        box-shadow: 0 6px 14px rgba(37,99,235,.35) !important; transition: all .15s ease !important; white-space: nowrap !important;
+    }
+    .saas-retailer-form-page .vm-rform-add:hover { background: linear-gradient(135deg,#1d4ed8,#1e40af) !important; box-shadow: 0 8px 18px rgba(37,99,235,.45) !important; transform: translateY(-1px) !important; }
+    .saas-retailer-form-page .vm-rform-empty { padding: 26px 10px !important; text-align: center !important; color: #94a3b8 !important; font-size: 13.5px !important; font-weight: 700 !important; }
+    /* Modal : premium */
+    .saas-retailer-form-page .vm-rform-modal .modal-dialog { margin-top: 70px !important; }
+    .saas-retailer-form-page .vm-rform-modal .modal-content { border: none !important; border-radius: 20px !important; overflow: hidden !important; box-shadow: 0 24px 60px rgba(15,23,42,.25) !important; }
+    .saas-retailer-form-page .vm-rform-modal .modal-header { background: linear-gradient(135deg,#4f46e5,#7c3aed) !important; color: #fff !important; border: none !important; padding: 16px 18px !important; display: flex !important; align-items: center !important; gap: 12px !important; }
+    .saas-retailer-form-page .vm-rform-modal .modal-header::before, .saas-retailer-form-page .vm-rform-modal .modal-header::after { display: none !important; }
+    .saas-retailer-form-page .vm-rform-modal__icon { display: inline-flex !important; width: 38px !important; height: 38px !important; min-width: 38px !important; border-radius: 11px !important; background: rgba(255,255,255,.18) !important; border: 1px solid rgba(255,255,255,.35) !important; color: #fff !important; align-items: center !important; justify-content: center !important; font-size: 15px !important; }
+    .saas-retailer-form-page .vm-rform-modal .modal-title { color: #fff !important; font-size: 16px !important; font-weight: 800 !important; margin: 0 !important; flex: 1 1 auto !important; }
+    .saas-retailer-form-page .vm-rform-modal .close { color: #fff !important; opacity: .85 !important; font-size: 24px !important; margin: 0 !important; padding: 0 4px !important; background: none !important; border: none !important; cursor: pointer !important; }
+    .saas-retailer-form-page .vm-rform-modal .close:hover { opacity: 1 !important; }
+    .saas-retailer-form-page .vm-rform-modal .modal-body { padding: 16px 18px 18px !important; max-height: 62vh !important; overflow-y: auto !important; }
+    /* Modal dialog khud scroll ho : neeche katna band */
+    .saas-retailer-form-page .vm-rform-modal .modal-dialog { margin-top: 40px !important; max-height: calc(100vh - 60px) !important; display: flex !important; flex-direction: column !important; }
+    .saas-retailer-form-page .vm-rform-modal .modal-content { max-height: calc(100vh - 60px) !important; display: flex !important; flex-direction: column !important; }
+    .saas-retailer-form-page .vm-rform-modal .modal-header { flex: 0 0 auto !important; }
+    .saas-retailer-form-page .vm-rform-modal .modal-body { flex: 1 1 auto !important; min-height: 0 !important; }
+    /* Andar ki table : compact rows — koi bahari CSS kheench nahi payegi */
+    body.saas-admin-ui .saas-retailer-form-page #myModal786 .vm-rform-info { line-height: 1.4 !important; margin-bottom: 0 !important; }
+    body.saas-admin-ui .saas-retailer-form-page #myModal786 .vm-rform-info thead th { padding: 8px 10px !important; line-height: 1.4 !important; height: auto !important; }
+    body.saas-admin-ui .saas-retailer-form-page #myModal786 .vm-rform-info tbody td { padding: 7px 10px !important; line-height: 1.4 !important; height: auto !important; font-size: 13px !important; vertical-align: middle !important; }
+    body.saas-admin-ui .saas-retailer-form-page #myModal786 .vm-rform-info tbody td .vm-rform-val { display: inline-block !important; line-height: 1.4 !important; }
+    body.saas-admin-ui .saas-retailer-form-page #myModal786 .vm-rform-info tbody td .vm-rform-val--empty { color: #94a3b8 !important; }
+    .saas-retailer-form-page .vm-rform-addrow { display: flex !important; gap: 10px !important; margin-bottom: 14px !important; }
+    .saas-retailer-form-page .vm-rform-addrow input[type="text"] {
+        flex: 1 1 auto !important; min-width: 0 !important; height: 42px !important; border-radius: 10px !important;
+        border: 1px solid #dbe2ec !important; background: #fff !important; color: #0f172a !important;
+        font-size: 13.5px !important; font-weight: 600 !important; padding: 0 12px !important; outline: none !important;
+    }
+    .saas-retailer-form-page .vm-rform-addrow input[type="text"]:focus { border-color: #2563eb !important; box-shadow: 0 0 0 3px rgba(37,99,235,.15) !important; }
+    .saas-retailer-form-page .vm-rform-save {
+        display: inline-flex !important; align-items: center !important; gap: 7px !important;
+        min-height: 42px !important; padding: 0 24px !important; border: none !important; border-radius: 10px !important;
+        background: linear-gradient(135deg,#059669,#10b981) !important; color: #fff !important;
+        font-size: 13.5px !important; font-weight: 800 !important; cursor: pointer !important;
+        box-shadow: 0 6px 14px rgba(16,185,129,.4) !important; transition: all .15s ease !important; white-space: nowrap !important;
+    }
+    .saas-retailer-form-page .vm-rform-save:hover { box-shadow: 0 8px 18px rgba(16,185,129,.5) !important; transform: translateY(-1px) !important; }
+    @@media screen and (max-width:1023px) {
+        .saas-retailer-form-page .vm-rform-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+    }
+    @@media screen and (max-width:640px) {
+        .saas-retailer-form-page .vm-rform-grid { grid-template-columns: 1fr !important; }
+        .saas-retailer-form-page .vm-rform-addrow { flex-direction: column !important; }
+        .saas-retailer-form-page .vm-rform-save { justify-content: center !important; }
+    }
+    /* Mobile + tablet : modal full-use, table swipe */
+    body.saas-admin-ui .saas-retailer-form-page #myModal786 .vm-rform-info tbody td:last-child { white-space: nowrap !important; }
+    @@media screen and (max-width:767px) {
+        .saas-retailer-form-page .vm-rform-modal .modal-dialog { margin: 10px !important; max-height: calc(100vh - 20px) !important; }
+        .saas-retailer-form-page .vm-rform-modal .modal-content { max-height: calc(100vh - 20px) !important; border-radius: 16px !important; }
+        .saas-retailer-form-page .vm-rform-modal .modal-header { padding: 12px 14px !important; }
+        .saas-retailer-form-page .vm-rform-modal .modal-body { padding: 12px 12px 14px !important; }
+        .saas-retailer-form-page .vm-rform-modal__icon { width: 34px !important; height: 34px !important; min-width: 34px !important; font-size: 14px !important; }
+        .saas-retailer-form-page .vm-rform-modal .modal-title { font-size: 14.5px !important; }
+        body.saas-admin-ui .saas-retailer-form-page #myModal786 .table-responsive { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+        body.saas-admin-ui .saas-retailer-form-page #myModal786 .vm-rform-info { min-width: 430px !important; }
+        .saas-retailer-form-page .vm-rform-svc { padding: 13px !important; }
+        .saas-retailer-form-page .vm-rform-svc__name { font-size: 13.5px !important; }
+        .saas-retailer-form-page .vm-rform-add { padding: 0 14px !important; }
+    }
+</style>
+<script>document.body.classList.add('saas-retailer-form-page');</script>
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-dth-booking-report-page saas-dealer-retailer-index-page saas-dealer-notification-page saas-retailer-form-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-dr-rem-toolbar-top">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Services</li>
+                    <li>Retailer Form</li>
+                </ol>
+            </div>
+        </div>
+
+        @if (servicelist.Count() > 0)
+        {
+            <div class="vm-rform-grid">
+                @foreach (var item in servicelist)
+                {
+                    <div class="vm-rform-svc">
+                        <span class="vm-rform-svc__icon"><i class="fas fa-wpforms" aria-hidden="true"></i></span>
+                        <span class="vm-rform-svc__name" title="@item.servicename">@item.servicename</span>
+                        <button type="button" onclick="NameItemId('@item.idno', '@Html.Raw(HttpUtility.JavaScriptStringEncode(Convert.ToString(item.servicename)))')" class="vm-rform-add" data-toggle="modal" data-target="#myModal786">
+                            <i class="fas fa-plus" aria-hidden="true"></i><span>Add</span>
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="vm-opr-main-card"><div class="vm-rform-empty">No services found.</div></div>
+        }
+
+    </div>
+</section>
+
+<div class="modal fade vm-rform-modal" id="myModal786" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="vm-rform-modal__icon"><i class="fas fa-wpforms" aria-hidden="true"></i></span>
+                <h4 class="modal-title" id="retailerFormModalTitle">Add Form</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Retailer_Userinfomation", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "retailerAddForm" }))
+                {
+                    <input type="number" id="idnoInput1" name="idnoInput1" class="form-control" style="display:none;" />
+                    <div class="vm-rform-addrow">
+                        <input name="Value" type="text" maxlength="17" required placeholder="Enter text" autocomplete="off" />
+                        <button type="submit" id="manualsubmit11" class="vm-rform-save">
+                            <i class="fas fa-check" aria-hidden="true"></i><span>Save</span>
+                        </button>
+                    </div>
+                }
+                <div id="axy">
+                    <div class="table-responsive" style="position:inherit;">
+                        <div style="width:100%;height:auto;overflow-y:auto;" id="retailerformedit">
+                            @Html.Partial("_Retailerforminfo")
+                        </div>
+                        <div class="vm-rform-info-empty" id="rformServiceEmpty" style="display:none;">Is service ke liye koi entry nahi hai — upar text likhkar Save dabao.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PostVmScripts {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 <script>
-    
-    $('#btnSave').click(function () {
-        debugger;
-        var formData = $('#retailerform').serialize();
+    var rformServiceId = '';
+    var rformListCache = '';
 
-       
-    $.ajax({
-        type: 'POST',
-        url: '@Url.Action("RetailerEdit_Data", "Home")', 
-        data: formData,
-        success: function() {
-            // handle success
-        },
-        error: function() {
-            // handle error
-        }
+    jQuery(function () {
+        /* Taza list sambhal ke rakho : modal band ho to stale edit-UI wapas na dikhe */
+        rformListCache = jQuery('#retailerformedit').html();
+        jQuery('#myModal786').on('hidden.bs.modal', function () {
+            if (rformListCache) { jQuery('#retailerformedit').html(rformListCache); }
+            jQuery('#rformServiceEmpty').hide();
+            var f = jQuery('#retailerAddForm');
+            if (f.length && f[0]) { f[0].reset(); }
+        });
     });
-});
 
-
-</script>
-<script>
-    $('#formbtnsave').click(function () {
-        $('#mictiatmsave-loader').show();
-    });
-</script>
-
-
-
-<script>
-    function NameItemId(id) {
-        $('#idnoInput1').val(id);
+    function NameItemId(id, name) {
+        jQuery('#idnoInput1').val(id);
+        if (name) { jQuery('#retailerFormModalTitle').text(name); }
+        /* Har service ka modal sirf apni entries dikhaye */
+        rformServiceId = (id === null || id === undefined) ? '' : jQuery.trim(id + '');
+        applyRformFilter();
     }
-</script>
 
-@*<script>
-    $('#chanenamelink').click(function () {
-        location.reload();
-    });
-</script>
+    /* Service filter : matching rows dikhao, baaki chhupao */
+    function applyRformFilter() {
+        var $rows = jQuery('#retailerformedit tr.hidelink');
+        if ($rows.length === 0) {
+            jQuery('#rformServiceEmpty').toggle(jQuery.trim(rformServiceId) !== '');
+            return;
+        }
+        var shown = 0;
+        $rows.each(function () {
+            var sid = jQuery(this).attr('data-serviceid') || '';
+            var match = (rformServiceId === '') || (sid === '') || (sid === rformServiceId);
+            jQuery(this).toggle(match);
+            if (match) { shown++; }
+        });
+        jQuery('#rformServiceEmpty').toggle(shown === 0);
+    }
 
-<script>
-
-    $('#Manualdelete').click(function () {
-        location.reload();
-    });
-
-</script>*@
-
-<script>
     function retailerform(id) {
-
-          $.ajax({
+        jQuery.ajax({
             url: '@Url.Action("RetailerEditAdd_Usebyid", "Home")',
-              data: {id:id},
-
-              success: function (data) {
-                  $('#retailerformedit').html(data);
+            data: { id: id },
+            success: function (data) {
+                jQuery('#retailerformedit').html(data);
+                applyRformFilter();
+            },
+            error: function () {
+                alert('Server se jawab nahi mila, dobara try karo.');
             }
         });
     }
-
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
+}

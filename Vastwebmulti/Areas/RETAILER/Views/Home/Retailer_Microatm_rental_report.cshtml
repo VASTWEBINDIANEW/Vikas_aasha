@@ -1,290 +1,326 @@
 ﻿@using Vastwebmulti.Models;
 @model IEnumerable<Vastwebmulti.Models.microatm_rental_report_Result>
 @{
-    ViewBag.Title = "Retailer_Microatm_rental_report";
+    ViewBag.Title = "MicroATM Rental Report";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
     VastwebmultiEntities DB1 = new VastwebmultiEntities();
     var usernname = DB1.Usernicknames.Where(aa => aa.Role == "Retailer").ToList();
-    var favimage = "";
-    if (usernname.Count() > 0)
+    var favimage = "Balance";
+    if (usernname.Count() > 0 && usernname.SingleOrDefault() != null)
     {
-        if (usernname.SingleOrDefault().Role == "Retailer")
-        {
-            favimage = usernname.SingleOrDefault().NickName;
-
-        }
+        favimage = usernname.SingleOrDefault().NickName;
     }
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var dateMode = !string.IsNullOrEmpty(Request["txt_frm_date"]) ? "post" : "get";
+    int i = 1;
 }
-
-
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=34" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=38" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=47" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-
-    /* new css  */
-
-
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
+    /* Rental toolbar: breadcrumb + dates + search — always one line on desktop */
+    body.saas-admin-ui .saas-retailer-rental-report-page .vm-radiant-toolbar-one-line {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+        flex-wrap: nowrap !important;
     }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
+    body.saas-admin-ui .saas-retailer-rental-report-page .vm-radiant-toolbar-one-line .vm-dmt-breadcrumb {
+        flex: 0 1 auto !important;
+        min-width: 0 !important;
+        margin-bottom: 0 !important;
     }
-
-    .card .body {
-        padding: 0px;
+    body.saas-admin-ui .saas-retailer-rental-report-page .vm-radiant-toolbar-filters {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex-wrap: nowrap !important;
+        margin-left: auto !important;
+        flex: 0 0 auto !important;
     }
-
-    .table {
-        margin-bottom: 0px;
-    }
-
-    .cardretailerlager {
-        margin-bottom: 0;
-    }
-
-    .cl_set {
-        width: 70%;
-    }
-
-    .col-md-2.despute-search {
-        float: left;
-        padding-left: 4px;
-    }
-
-    /* new css  */
-
-    .dropdown-menu {
-        margin-top: 97px !important;
-    }
-
-    .form-iconmy.form-iconmyss {
-        z-index: 9;
-    }
-
-    @@media only screen and (max-width:990px) {
-        .dispute-date {
-            width: 45%;
+    @@media (max-width: 991px) {
+        body.saas-admin-ui .saas-retailer-rental-report-page .vm-radiant-toolbar-one-line {
+            flex-wrap: wrap !important;
         }
-
-        .card.class-back-tra-fourdesign table {
-            margin-top: 4px;
-        }
-    }
-
-    @@media screen and (max-width:767px) {
-        .cardaddclass-res .bread-same-all-page {
+        body.saas-admin-ui .saas-retailer-rental-report-page .vm-radiant-toolbar-filters {
+            flex-wrap: wrap !important;
+            margin-left: 0 !important;
             width: 100% !important;
-            padding-top: 0px !important;
         }
-
-        .col-md-4.dispute-date.dispute-datelager.datelager-class {
-            margin-bottom: 10px;
-        }
-
-        .table-responsive.table-responsive-responshive.tablethirddesign-new table {
-            border: 1px solid var(--border-color);
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-
-        .cl_set {
-            width: 100%;
-            margin-bottom: 4px;
-        }
-
-        .dispute-date {
-            width: 70%;
-        }
-
-            .dispute-date.dispute-datelager.datelager-class input {
-                padding-right: 4px;
-                text-align: right;
-            }
     }
 </style>
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="overflow-x:hidden;">
-    <div class="container-fluid retailerledger-container" style="height:100vh;">
 
-        <!--Four-Design-Page-Header-Start-->
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;" aria-hidden="true">
+    <div class="vm-dmt-loader__panel" role="status" aria-live="polite" aria-label="Processing">
+        <div class="vm-dmt-table-loader__spinner" aria-hidden="true"></div>
+        <span class="vm-dmt-loader__text">Please wait…</span>
+    </div>
+</div>
 
-        <div class="page-title-box-fourde">
-            <h3>Microatm Rental Report</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">My Account 1&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">MicroAtm Rental Report</a></li>
-            </ul>
-        </div>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-retailer-rental-report-page">
+    <div class="container-fluid vm-opr-page-shell">
 
-        <!--Four-Design-Page-Header-End-->
-
-        <div class="page-header-third">
-
-            <div class="bread-same-all-page" style="width:auto;float:left;">
-                <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                    <ul style="margin:0;">
-                        <li class="smli">
-                            <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                            </a>
-                        </li>
-
-                        <li class="fullbodydycolorbg tmw-total-color-one">
-                            MicroAtm Rental Report
-                        </li>
-                    </ul>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="row clearfix" style="margin:0;">
-
-            <div class="page-header-third">
-
-                <div class="col-md-12" style="padding: 0; margin-bottom: 4px;">
-                    <div class="card cardretailerlager legar-responshivewidth cardaddclass-res class-back-tra-fourdesign fix-bootmmarg-fourdesign">
-
-
-
-                        @using (Html.BeginForm("Retailer_Microatm_rental_report", "Home", FormMethod.Post))
-                        {
-
-                            <div class="cl_set" style="float:left;">
-                                <div class="col-md-6 dispute-date dispute-datelager datelager-class" style="float:left;position: relative;padding:0;">
-                                    <div class="input-daterange input-group">
-                                        <div class="datesate datesates">
-                                            <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                        </div>
-                                        <span class="input-group-addon" style="display:none;">
-                                            <i class="fa fa-exchange" style="padding-top:8px;"></i>
-                                        </span>
-                                        <div class="datesate datesatese">
-                                            <div class="form-iconmy form-iconmyss" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 despute-search">
-                                    <center>
-                                        <button type="submit" class="btn bg-grey waves-effect retailer-search-second" style="margin-top: 4px; margin-left:-74px; height:36px;">
-                                            <i class="fa fa-search" style="top:1px;font-size:16px;color:black;"></i>
-                                            <span style="top:0px;color:black;">Search</span>
-                                        </button>
-                                    </center>
-                                </div>
-                            </div>
-
-                            <div class="dispute-right dispute-new">
-                                <div class="col-md-3 buttonPdf buttonPdfdispute retailer-pdf-second" style="text-align:right;">
-
-                                    <button style="color:#555;" id="btnPDF">PDF</button>
-                                    <button style="color:#555;" id="btnExport">Export</button>
-
-                                </div>
-
-
-                            </div>
-
-
-
-
-                        }
+        @{
+            var rentalFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerRentalReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_rental_frm_date" },
+                { "data-report-to", "#retailer_rental_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("Retailer_Microatm_rental_report", "Home", FormMethod.Post, rentalFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>My Account</li>
+                        <li>MicroATM Rental Report</li>
+                    </ol>
+                    <div class="vm-dmt-filter-search-group vm-radiant-toolbar-filters">
+                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                            @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_rental_frm_date", placeholder = "From", title = "From date" })
+                        </div>
+                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                            @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_rental_to_date", placeholder = "To", title = "To date" })
+                        </div>
+                        <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                            <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                        </button>
                     </div>
                 </div>
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0;">
-                    <div class="card class-back-tra-fourdesign">
-                        <div class="body" style="">
-                            <div class="table-responsive table-responsive-responshive tablethirddesign-new" style="position: inherit;">
-                                <table class="table table-bordered table-striped table-hover example-second third-design-table" style="width:100%;background:#eae9e9;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>S.N</th>
-                                            <th>Frm&nbsp;Name</th>
-                                            <th>DeviceId</th>
-                                            <th>Plan&nbsp;Name</th>
-                                            <th>Num.of&nbsp;Trans</th>
-                                            <th>Trans&nbsp;Date</th>
-                                            <th>Curr&nbsp;Date</th>
-                                            <th>@favimage&nbsp;Pre</th>
-                                            <th>@favimage&nbsp;Charge</th>
-                                            <th>@favimage&nbsp;GST</th>
-                                            <th>@favimage&nbsp;TDS</th>
-                                            <th>@favimage&nbsp;Post</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{int i = 1;}
-                                        @foreach (var item in Model)
-                                        {
-                                            <tr>
-                                                <td>@i</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Frm_Name)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.deviceid)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.planname)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.nooftrans)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.transdate)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.currdate)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.rempre)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.remcomm)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.remgst)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.remtds)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.rempost)</td>
-
-                                            </tr>
-                                            i++;
-                                        }
-                                    </tbody>
-                                </table>
-
-
-                                <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
-                                    <div class="loadertablecssnew">Loading...</div>
-                                </div>
-                            </div>
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerRentalTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Rental totals (loaded rows)</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerRentalTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Charge</span>
+                            <strong class="vm-opr-total-card__value" id="retailerRentalCharge">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">GST</span>
+                            <strong class="vm-opr-total-card__value" id="retailerRentalGst">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">TDS</span>
+                            <strong class="vm-opr-total-card__value" id="retailerRentalTds">&#8377; 0.00</strong>
                         </div>
                     </div>
                 </div>
 
             </div>
+        }
 
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-cash-register" aria-hidden="true"></i>
+                        <span>MicroATM rental report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn" onclick="FindtotalRetailerRental()" title="Show totals" aria-expanded="false" aria-controls="retailerRentalTotalsPanel"><i class="fas fa-chart-pie" aria-hidden="true"></i></button>
+                            <button type="button" id="btnRetailerRentalExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                            <button type="button" id="btnRetailerRentalPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="mmm" class="table vm-opr-data-table" cellspacing="0" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>S.R.</th>
+                                    <th>Firm Name</th>
+                                    <th>Device ID</th>
+                                    <th>Plan Name</th>
+                                    <th>Num. of Trans</th>
+                                    <th>Trans Date</th>
+                                    <th>Curr Date</th>
+                                    <th>@favimage Pre &#8377;</th>
+                                    <th>@favimage Charge &#8377;</th>
+                                    <th>@favimage GST &#8377;</th>
+                                    <th>@favimage TDS &#8377;</th>
+                                    <th>@favimage Post &#8377;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="retailerRentalRows">
+                                @if (Model != null && Model.Count() > 0)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr class="vm-dmt-row" data-charge="@item.remcomm" data-gst="@item.remgst" data-tds="@item.remtds">
+                                            <td class="vm-dmt-sr-cell">@i</td>
+                                            <td>@item.Frm_Name</td>
+                                            <td>@item.deviceid</td>
+                                            <td>@item.planname</td>
+                                            <td>@item.nooftrans</td>
+                                            <td>@item.transdate</td>
+                                            <td>@item.currdate</td>
+                                            <td class="vm-dmt-amt-cell">@item.rempre</td>
+                                            <td class="vm-dmt-amt-cell">@item.remcomm</td>
+                                            <td class="vm-dmt-amt-cell">@item.remgst</td>
+                                            <td class="vm-dmt-amt-cell">@item.remtds</td>
+                                            <td class="vm-dmt-amt-cell">@item.rempost</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="12" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <div class="vm-opr-empty-state">
+                                                <i class="fas fa-inbox" aria-hidden="true"></i>
+                                                <h3>Data not found</h3>
+                                                <p>Try a different date range.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-
 
     </div>
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
+@section PostVmScripts {
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<script>
+    function retailerRentalFilters() {
+        return {
+            txt_frm_date: jQuery('#retailer_rental_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_rental_to_date').val() || ''
+        };
+    }
 
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
+    function hideRetailerRentalTotals() {
+        var $panel = jQuery('#retailerRentalTotalsPanel');
+        var $btn = jQuery('.vm-dmt-totals-btn');
+        $panel.removeClass('is-open').hide().attr('aria-hidden', 'true');
+        $btn.removeClass('is-active').attr({ title: 'Show totals', 'aria-expanded': 'false' });
+    }
 
-               $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true
-
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-            }
-
-
+    function calcRetailerRentalTotals() {
+        var charge = 0, gst = 0, tds = 0;
+        jQuery('#retailerRentalRows tr.vm-dmt-row').each(function () {
+            charge += parseFloat(jQuery(this).attr('data-charge')) || 0;
+            gst += parseFloat(jQuery(this).attr('data-gst')) || 0;
+            tds += parseFloat(jQuery(this).attr('data-tds')) || 0;
         });
+        jQuery('#retailerRentalCharge').html('&#8377; ' + charge.toFixed(2));
+        jQuery('#retailerRentalGst').html('&#8377; ' + gst.toFixed(2));
+        jQuery('#retailerRentalTds').html('&#8377; ' + tds.toFixed(2));
+    }
+
+    function FindtotalRetailerRental() {
+        var $panel = jQuery('#retailerRentalTotalsPanel');
+        var $btn = jQuery('.vm-dmt-totals-btn');
+        if ($panel.hasClass('is-open')) {
+            hideRetailerRentalTotals();
+            return;
+        }
+        $panel.addClass('is-open').show().attr('aria-hidden', 'false');
+        $btn.addClass('is-active').attr({ title: 'Hide totals', 'aria-expanded': 'true' });
+        calcRetailerRentalTotals();
+    }
+
+    function retailerRentalTableHtml() {
+        return jQuery('#mmm').prop('outerHTML');
+    }
+
+    function initRetailerRentalDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerRentalDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerRentalReportForm',
+                '#retailer_rental_frm_date',
+                '#retailer_rental_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerRentalDatepickers();
+        window.setTimeout(initRetailerRentalDatepickers, 150);
+
+        jQuery('#btnRetailerRentalExport').on('click', function () {
+            if (jQuery('#retailerRentalRows tr.vm-dmt-row').length === 0) {
+                alert('Export ke liye koi data nahi hai. Pehle aisi date select karo jisme records hon.');
+                return;
+            }
+            var f = retailerRentalFilters();
+            var excelHtml = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">'
+                + '<head><meta charset="UTF-8"></head><body>'
+                + '<h3>MicroATM Rental Report (' + f.txt_frm_date + ' to ' + f.txt_to_date + ')</h3>'
+                + retailerRentalTableHtml() + '</body></html>';
+            var blob = new Blob(['\ufeff' + excelHtml], { type: 'application/vnd.ms-excel' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'MicroATM_Rental_Report_' + f.txt_frm_date + '_to_' + f.txt_to_date + '.xls';
+            document.body.appendChild(a);
+            a.click();
+            window.setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+        });
+        jQuery('#btnRetailerRentalPDF').on('click', function () {
+            if (jQuery('#retailerRentalRows tr.vm-dmt-row').length === 0) {
+                alert('PDF ke liye koi data nahi hai. Pehle aisi date select karo jisme records hon.');
+                return;
+            }
+            var f = retailerRentalFilters();
+            var w = window.open('', '_blank');
+            if (!w) {
+                alert('Popup block ho gaya hai. Browser me popup allow karo phir PDF dabao.');
+                return;
+            }
+            w.document.write('<html><head><title>MicroATM Rental Report</title>'
+                + '<style>body{font-family:Arial,sans-serif;}h3{text-align:center;}'
+                + 'table{border-collapse:collapse;width:100%;font-size:11px;}'
+                + 'td,th{border:1px solid #000;padding:4px 6px;text-align:left;}'
+                + 'thead tr{background:#eee;}</style>'
+                + '</head><body>'
+                + '<h3>MicroATM Rental Report (' + f.txt_frm_date + ' to ' + f.txt_to_date + ')</h3>'
+                + retailerRentalTableHtml()
+                + '<script>window.onload=function(){window.print();}<\/script>'
+                + '</body></html>');
+            w.document.close();
+            w.focus();
+        });
+    });
 </script>
+}

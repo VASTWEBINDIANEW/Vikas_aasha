@@ -1,0 +1,491 @@
+/* ============================================================
+   RETAILER • Account Opening (Axis / ICICI)
+   Extends section.vm-rmt-page — pair with retailer-money-transfer-modern.css
+   ============================================================ */
+
+body.saas-admin-ui section.vm-rao-page{
+  --vm-rao-left-h:650px;
+  --vm-rao-report-h:600px;
+  --vm-rao-tabs-h:92px;
+}
+
+/* Left column — fixed visual height (tabs + body) */
+body.saas-admin-ui section.vm-rao-page #full.vm-rmt-left-panel{
+  min-height:var(--vm-rao-left-h) !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+body.saas-admin-ui section.vm-rao-page #full.vm-rmt-left-panel .vm-rmt-left-shell{
+  flex:1 1 auto !important;
+  display:flex !important;
+  flex-direction:column !important;
+  min-height:0 !important;
+}
+body.saas-admin-ui section.vm-rao-page #full.vm-rmt-left-panel .vm-rmt-tab-pane.current{
+  flex:1 1 auto !important;
+  min-height:calc(var(--vm-rao-left-h) - var(--vm-rao-tabs-h)) !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+body.saas-admin-ui section.vm-rao-page .vm-rao-pane-body,
+body.saas-admin-ui section.vm-rao-page .vm-rao-pane-inner{
+  flex:1 1 auto !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:flex-start !important;
+  min-height:100% !important;
+  box-sizing:border-box !important;
+}
+
+/* Two bank tabs (not five like DMT) */
+body.saas-admin-ui section.vm-rmt-page.vm-rao-page ul.vm-rmt-service-tabs#tabsmyss{
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  flex:0 0 auto !important;
+}
+
+@media screen and (max-width:991px){
+  body.saas-admin-ui section.vm-rmt-page.vm-rao-page ul.vm-rmt-service-tabs#tabsmyss{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+  body.saas-admin-ui section.vm-rao-page #reportallinone.vm-rao-report-card__body{
+    max-height:var(--vm-rao-report-h) !important;
+  }
+}
+
+/* Left pane body */
+body.saas-admin-ui section.vm-rao-page .vm-rao-pane-body{
+  padding:14px 14px 18px !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-coming-soon{
+  padding:48px 20px !important;text-align:center !important;
+}
+body.saas-admin-ui section.vm-rao-page .vm-rao-coming-soon__title{
+  margin:0 0 8px !important;font-size:18px !important;font-weight:800 !important;color:#0f172a !important;
+}
+body.saas-admin-ui section.vm-rao-page .vm-rao-coming-soon__hint{
+  margin:0 !important;font-size:13px !important;color:#64748b !important;
+}
+
+/* Activate card */
+body.saas-admin-ui section.vm-rao-page #not_active{
+  display:none;
+  max-width:360px !important;width:100% !important;margin:auto !important;text-align:center !important;
+  padding:28px 22px !important;
+  background:linear-gradient(180deg,#f8fafc,#fff) !important;
+  border:1px solid #e2e8f0 !important;border-radius:14px !important;
+  box-shadow:0 8px 24px -12px rgba(15,23,42,.15) !important;
+}
+body.saas-admin-ui section.vm-rao-page #not_active .vm-rao-activate-title{
+  font-size:17px !important;font-weight:800 !important;color:#0f172a !important;margin:0 0 6px !important;
+}
+body.saas-admin-ui section.vm-rao-page #not_active .vm-rao-activate-hint{
+  font-size:13px !important;color:#64748b !important;margin:0 0 10px !important;
+}
+body.saas-admin-ui section.vm-rao-page #customer_acc_error{
+  display:block !important;font-size:12px !important;margin-bottom:12px !important;
+}
+body.saas-admin-ui section.vm-rao-page #account_opening_customer_btn{
+  min-width:160px !important;height:42px !important;border-radius:10px !important;border:0 !important;
+  background:linear-gradient(135deg,var(--main-bg-lcolor,#2563eb),var(--main-bg-rcolor,#1d4ed8)) !important;
+  color:#fff !important;font-size:15px !important;font-weight:700 !important;
+  box-shadow:0 4px 14px rgba(37,99,235,.35) !important;
+}
+
+/* Form */
+body.saas-admin-ui section.vm-rao-page #account_opening{
+  display:none;
+}
+body.saas-admin-ui section.vm-rao-page .vm-rao-form-head{
+  margin:0 0 12px !important;
+}
+body.saas-admin-ui section.vm-rao-page .vm-rao-form-head__title{
+  margin:0 0 4px !important;font-size:16px !important;font-weight:800 !important;color:#0f172a !important;
+}
+body.saas-admin-ui section.vm-rao-page .vm-rao-form-head__kyc{
+  margin:0 0 10px !important;font-size:11px !important;font-weight:600 !important;
+  color:#b45309 !important;line-height:1.45 !important;
+  animation:vmRaoKycBlink 1.2s step-start infinite;
+}
+@keyframes vmRaoKycBlink{
+  50%{ opacity:.55; }
+}
+body.saas-admin-ui section.vm-rao-page span.whight_line{
+  display:block !important;height:3px !important;border-radius:999px !important;margin:0 0 14px !important;
+  background:linear-gradient(to right,var(--main-bg-lcolor,#2563eb),var(--main-bg-rcolor,#1d4ed8)) !important;
+}
+body.saas-admin-ui section.vm-rao-page form#account_form{
+  display:grid !important;grid-template-columns:1fr 1fr !important;gap:10px 12px !important;
+  width:100% !important;float:none !important;
+}
+body.saas-admin-ui section.vm-rao-page form#account_form .input{
+  float:none !important;width:100% !important;margin:0 !important;
+}
+body.saas-admin-ui section.vm-rao-page form#account_form label{
+  font-size:11px !important;font-weight:700 !important;color:#475569 !important;
+  text-transform:uppercase !important;letter-spacing:.04em !important;margin:0 0 4px !important;padding:0 !important;
+}
+body.saas-admin-ui section.vm-rao-page form#account_form .form-control{
+  height:40px !important;border-radius:10px !important;border:1px solid #cbd5e1 !important;
+  font-size:13px !important;width:100% !important;box-shadow:none !important;
+}
+body.saas-admin-ui section.vm-rao-page form#account_form .form-control:focus{
+  border-color:#2563eb !important;outline:none !important;box-shadow:0 0 0 3px rgba(37,99,235,.15) !important;
+}
+body.saas-admin-ui section.vm-rao-page .vm-rao-form-actions{
+  grid-column:1 / -1 !important;display:flex !important;gap:10px !important;margin-top:4px !important;
+}
+body.saas-admin-ui section.vm-rao-page .vm-rao-form-actions .btn{
+  flex:1 1 0 !important;height:42px !important;border-radius:10px !important;font-weight:700 !important;
+}
+body.saas-admin-ui section.vm-rao-page #account_submit{
+  background:linear-gradient(135deg,var(--main-bg-lcolor,#2563eb),var(--main-bg-rcolor,#1d4ed8)) !important;
+  color:#fff !important;border:0 !important;
+}
+body.saas-admin-ui section.vm-rao-page #account_reset{
+  background:#fff !important;color:#334155 !important;border:1px solid #cbd5e1 !important;
+}
+body.saas-admin-ui section.vm-rao-page #account_submit_error{
+  grid-column:1 / -1 !important;display:block !important;font-size:12px !important;font-weight:600 !important;
+  margin:0 !important;min-height:18px !important;
+}
+
+/* Loader (partial) */
+body.saas-admin-ui section.vm-rao-page .loader.loaderpancard{
+  position:fixed !important;top:0 !important;left:0 !important;z-index:999999 !important;
+  display:none !important;width:100vw !important;height:100vh !important;
+  background:rgba(255,255,255,.75) !important;
+}
+body.saas-admin-ui section.vm-rao-page .loader.loaderpancard::after{
+  border-color:var(--main-bg-lcolor,#2563eb) !important;border-top-color:transparent !important;
+}
+
+/* Right: unified report card (title + filters + table) */
+body.saas-admin-ui section.vm-rao-page .vm-rao-report-shell{
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-report-card{
+  background:var(--vm-rmt-surface,#fff) !important;
+  border:1px solid var(--vm-rmt-border,#e2e8f0) !important;
+  border-radius:var(--vm-rmt-radius,16px) !important;
+  box-shadow:0 12px 32px -18px rgba(30,64,175,.22) !important;
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+  min-width:0 !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-report-card__head{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px 12px !important;
+  padding:12px 14px !important;
+  border-bottom:1px solid #e2e8f0 !important;
+  background:linear-gradient(180deg,#fff 0%,#f8fafc 100%) !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-report-card__title-wrap{
+  display:flex !important;align-items:center !important;gap:10px !important;
+  flex:0 0 auto !important;min-width:0 !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-report-card__title-icon{
+  width:36px !important;height:36px !important;border-radius:10px !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+  background:linear-gradient(135deg,#dbeafe,#eff6ff) !important;color:#1d4ed8 !important;
+  font-size:15px !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-report-card__title{
+  margin:0 !important;font-size:14px !important;font-weight:800 !important;
+  color:#0f172a !important;letter-spacing:.02em !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-report-toolbar{
+  display:flex !important;flex-wrap:wrap !important;align-items:center !important;
+  justify-content:flex-end !important;gap:6px !important;
+  margin:0 0 0 auto !important;padding:0 !important;
+  background:transparent !important;border:0 !important;box-shadow:none !important;
+  flex:1 1 320px !important;min-width:0 !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-search-field{
+  position:relative !important;flex:1 1 160px !important;max-width:220px !important;min-width:120px !important;
+  margin:0 !important;
+}
+body.saas-admin-ui section.vm-rao-page .vm-rao-search-field__icon{
+  position:absolute !important;left:11px !important;top:50% !important;transform:translateY(-50%) !important;
+  color:#94a3b8 !important;font-size:13px !important;pointer-events:none !important;
+}
+body.saas-admin-ui section.vm-rao-page .vm-rao-search-field__input{
+  height:38px !important;min-height:38px !important;max-height:38px !important;
+  width:100% !important;padding:8px 12px 8px 34px !important;
+  border:1px solid #d2d6de !important;border-radius:4px !important;
+  font-size:13px !important;background:#fff !important;
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.075) !important;
+}
+body.saas-admin-ui section.vm-rao-page .vm-rao-search-field__input:focus{
+  border-color:#66afe9 !important;outline:0 !important;
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6) !important;
+}
+
+/* Date inputs — same as ADMIN RadiantPrepay (saas-acc-dp + bootstrap datepicker) */
+body.saas-admin-ui section.vm-rao-page{
+  --vm-rao-filter-date-width:128px;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-date-filter-form{
+  flex:0 0 auto !important;margin:0 !important;padding:0 !important;border:0 !important;
+  background:transparent !important;display:flex !important;align-items:center !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group.vm-dmt-filter-search-group{
+  display:flex !important;flex-wrap:wrap !important;align-items:center !important;
+  gap:6px !important;margin:0 !important;padding:0 !important;
+  flex:0 0 auto !important;overflow:visible !important;
+  min-width:0 !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group .saas-acc-dp-field,
+body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group .vm-opr-dp-compact,
+body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group .vm-dmt-field--date{
+  flex:0 0 var(--vm-rao-filter-date-width) !important;
+  width:var(--vm-rao-filter-date-width) !important;
+  min-width:var(--vm-rao-filter-date-width) !important;
+  max-width:var(--vm-rao-filter-date-width) !important;
+  margin:0 !important;padding:0 !important;display:block !important;
+  position:relative !important;overflow:visible !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group .saas-acc-dp-field .saas-acc-dp-icon{
+  top:50% !important;transform:translateY(-50%) !important;left:8px !important;
+  z-index:3 !important;pointer-events:auto !important;cursor:pointer !important;
+}
+
+body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group .saas-acc-dp-input{
+  height:38px !important;min-height:38px !important;max-height:38px !important;
+  width:100% !important;position:relative !important;z-index:2 !important;
+  pointer-events:auto !important;cursor:pointer !important;
+}
+
+/* Search — match Radiant Prepay report button (compact, centered icon + label) */
+body.saas-admin-ui section.vm-rao-page button.vm-rao-report-search-btn{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:7px !important;
+  flex:0 0 auto !important;
+  width:auto !important;
+  min-width:92px !important;
+  max-width:none !important;
+  height:38px !important;
+  min-height:38px !important;
+  max-height:38px !important;
+  padding:0 16px !important;
+  margin:0 !important;
+  border:none !important;
+  border-radius:4px !important;
+  font-family:inherit !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+  cursor:pointer !important;
+  box-sizing:border-box !important;
+  vertical-align:middle !important;
+  -webkit-appearance:none !important;
+  appearance:none !important;
+  background:linear-gradient(135deg,#2563eb,#4f46e5) !important;
+  color:#fff !important;
+  box-shadow:0 6px 18px rgba(37,99,235,.28) !important;
+}
+body.saas-admin-ui section.vm-rao-page button.vm-rao-report-search-btn:hover{
+  color:#fff !important;
+  filter:brightness(1.04) !important;
+}
+body.saas-admin-ui section.vm-rao-page button.vm-rao-report-search-btn i,
+body.saas-admin-ui section.vm-rao-page button.vm-rao-report-search-btn span{
+  display:inline !important;
+  float:none !important;
+  position:static !important;
+  margin:0 !important;
+  padding:0 !important;
+  line-height:1 !important;
+  color:inherit !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+}
+body.saas-admin-ui section.vm-rao-page button.vm-rao-report-search-btn i{
+  font-size:12px !important;
+}
+
+/* Report body — override money-transfer #reportallinone chrome */
+body.saas-admin-ui section.vm-rao-page #reportallinone.vm-rao-report-card__body{
+  height:var(--vm-rao-report-h) !important;
+  min-height:var(--vm-rao-report-h) !important;
+  max-height:var(--vm-rao-report-h) !important;
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+  box-sizing:border-box !important;
+  padding:10px 12px 12px !important;
+  margin:0 !important;
+  background:#fff !important;
+  border:0 !important;border-radius:0 !important;box-shadow:none !important;
+  float:none !important;width:100% !important;
+}
+
+body.saas-admin-ui section.vm-rao-page #reportallinone::before{
+  content:none !important;display:none !important;
+}
+
+body.saas-admin-ui section.vm-rao-page #reportallinone .vm-rao-table-wrap{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  overflow-x:auto !important;
+  overflow-y:auto !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+
+body.saas-admin-ui section.vm-rao-page #account_axis_table.vm-rmt-data-table,
+body.saas-admin-ui section.vm-rao-page #account_axis_table{
+  display:table !important;width:max(100%,880px) !important;min-width:880px !important;table-layout:auto !important;
+  border-collapse:separate !important;border-spacing:0 !important;
+  background:#fff !important;border:1px solid #e2e8f0 !important;border-radius:14px !important;
+  overflow:hidden !important;margin:0 !important;
+}
+
+body.saas-admin-ui section.vm-rao-page #account_axis_table thead,
+body.saas-admin-ui section.vm-rao-page #account_axis_table tbody,
+body.saas-admin-ui section.vm-rao-page #account_axis_table tr{
+  display:table-row-group !important;width:auto !important;float:none !important;
+}
+body.saas-admin-ui section.vm-rao-page #account_axis_table thead{ display:table-header-group !important; }
+body.saas-admin-ui section.vm-rao-page #account_axis_table tbody{ display:table-row-group !important; }
+body.saas-admin-ui section.vm-rao-page #account_axis_table tr{ display:table-row !important; }
+
+body.saas-admin-ui section.vm-rao-page #account_axis_table thead th{
+  position:sticky !important;top:0 !important;z-index:2 !important;
+  background:linear-gradient(180deg,#f8fafc,#f1f5f9) !important;
+  color:#475569 !important;font-size:10.5px !important;font-weight:800 !important;
+  text-transform:uppercase !important;letter-spacing:.05em !important;
+  border-color:#e2e8f0 !important;padding:11px 10px !important;text-align:center !important;
+  white-space:nowrap !important;
+}
+body.saas-admin-ui section.vm-rao-page #account_axis_table tbody td{
+  font-size:12px !important;color:#334155 !important;border-color:#eef2f7 !important;
+  padding:10px 8px !important;vertical-align:middle !important;
+}
+body.saas-admin-ui section.vm-rao-page #account_axis_table tbody tr:nth-child(even) td{
+  background:#fafbff !important;
+}
+body.saas-admin-ui section.vm-rao-page #account_axis_table .vm-rao-status-cell{
+  display:flex !important;align-items:center !important;gap:6px !important;min-width:100px !important;
+}
+body.saas-admin-ui section.vm-rao-page #account_axis_table .vm-rao-status-cell img{
+  width:20px !important;height:20px !important;flex-shrink:0 !important;margin:0 !important;float:none !important;
+}
+body.saas-admin-ui section.vm-rao-page #account_axis_table .btn{
+  height:32px !important;padding:0 12px !important;border-radius:8px !important;font-size:12px !important;
+  background:#fff !important;border:1px solid #cbd5e1 !important;color:#334155 !important;font-weight:700 !important;
+}
+body.saas-admin-ui section.vm-rao-page #account_axis_table a{
+  font-weight:700 !important;color:#2563eb !important;
+}
+
+@media screen and (max-width:1199px){
+  body.saas-admin-ui section.vm-rao-page{
+    max-width:100% !important;overflow-x:hidden !important;
+    box-sizing:border-box !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rao-report-card,
+  body.saas-admin-ui section.vm-rao-page .vm-rmt-report-panel,
+  body.saas-admin-ui section.vm-rao-page .vm-rao-report-shell{
+    max-width:100% !important;min-width:0 !important;
+  }
+  body.saas-admin-ui section.vm-rao-page #full.vm-rmt-left-panel{
+    min-height:var(--vm-rao-left-h) !important;
+    width:100% !important;max-width:100% !important;
+  }
+  body.saas-admin-ui section.vm-rao-page #full.vm-rmt-left-panel .vm-rmt-tab-pane.current{
+    min-height:calc(var(--vm-rao-left-h) - var(--vm-rao-tabs-h)) !important;
+    overflow-y:auto !important;-webkit-overflow-scrolling:touch !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rmt-report-panel{
+    min-height:0 !important;
+  }
+  body.saas-admin-ui section.vm-rao-page #reportallinone.vm-rao-report-card__body{
+    height:var(--vm-rao-report-h) !important;
+    min-height:var(--vm-rao-report-h) !important;
+    max-height:var(--vm-rao-report-h) !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rao-report-card__head{
+    flex-direction:column !important;align-items:stretch !important;
+    overflow:visible !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rao-report-toolbar{
+    flex:1 1 100% !important;width:100% !important;max-width:100% !important;
+    flex-direction:column !important;align-items:stretch !important;
+    justify-content:flex-start !important;gap:8px !important;
+    margin:0 !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rao-search-field{
+    flex:1 1 100% !important;width:100% !important;max-width:100% !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rao-date-filter-form{
+    width:100% !important;max-width:100% !important;flex:1 1 100% !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group.vm-dmt-filter-search-group{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    gap:8px !important;
+    width:100% !important;max-width:100% !important;
+    flex:1 1 100% !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group .saas-acc-dp-field,
+  body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group .vm-opr-dp-compact,
+  body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group .vm-dmt-field--date{
+    flex:none !important;width:100% !important;min-width:0 !important;max-width:100% !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group .saas-acc-dp-input{
+    width:100% !important;min-width:0 !important;max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group .saas-acc-dp-field .saas-acc-dp-icon{
+    top:50% !important;bottom:auto !important;transform:translateY(-50%) !important;
+    left:8px !important;
+  }
+  body.saas-admin-ui section.vm-rao-page button.vm-rao-report-search-btn{
+    grid-column:1 / -1 !important;
+    width:100% !important;max-width:100% !important;
+    flex:none !important;
+  }
+}
+
+@media screen and (max-width:767px){
+  body.saas-admin-ui section.vm-rao-page{
+    --vm-rao-left-h:min(650px, calc(100vh - var(--admin-header-height, 58px) - 40px));
+    --vm-rao-report-h:min(480px, 58vh);
+    padding-left:8px !important;padding-right:8px !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rao-pane-body{
+    justify-content:flex-start !important;padding-top:20px !important;
+  }
+  body.saas-admin-ui section.vm-rao-page form#account_form{
+    grid-template-columns:1fr !important;
+  }
+  body.saas-admin-ui section.vm-rao-page .vm-rao-report-card__title-wrap{
+    width:100% !important;
+  }
+}
+
+@media screen and (max-width:479px){
+  body.saas-admin-ui section.vm-rao-page .vm-rao-dp-group.vm-dmt-filter-search-group{
+    grid-template-columns:1fr !important;
+  }
+}

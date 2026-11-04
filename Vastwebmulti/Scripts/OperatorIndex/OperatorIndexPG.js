@@ -13,7 +13,187 @@ $('[data-toggle="tabajax"]').click(function (e) {
     return false;
 });
 
+/** Category / service row toggles (modern OperatorIndex CSS + select2) */
+function oiPgCatVal($sel) {
+    return ($sel.val() || '').toString().trim();
+}
+function oiPgShow(sel) {
+    $(sel).each(function () {
+        $(this).show();
+        if (window.oiCondFieldShow) {
+            window.oiCondFieldShow(this);
+        } else {
+            this.style.setProperty('display', 'block', 'important');
+        }
+    });
+}
+function oiPgHide(sel) {
+    $(sel).each(function () {
+        $(this).hide();
+        if (window.oiCondFieldHide) {
+            window.oiCondFieldHide(this);
+        } else {
+            this.style.setProperty('display', 'none', 'important');
+        }
+    });
+}
+function oiPgReinitSelect2(selector) {
+    var $el = $(selector);
+    if (!$el.length) {
+        return;
+    }
+    if (window.oiInitOperatorIndexSelects) {
+        try {
+            if ($el.hasClass('select2-hidden-accessible') && $.fn.select2) {
+                $el.select2('destroy');
+            }
+        } catch (e1) { }
+        window.oiInitOperatorIndexSelects($el.closest('.tab-content, .OperatorIndex_Page'));
+        return;
+    }
+    if (!$.fn.select2) {
+        return;
+    }
+    try {
+        if ($el.hasClass('select2-hidden-accessible')) {
+            $el.select2('destroy');
+        }
+    } catch (e2) { }
+    $el.select2({
+        width: '100%',
+        dropdownParent: $(document.body),
+        minimumResultsForSearch: $el.find('option').length > 8 ? 0 : Infinity
+    });
+    if (window.forceAdminSelect2 && $el[0]) {
+        try {
+            window.forceAdminSelect2($el.closest('.tab-content')[0] || $el[0].form || document.body);
+        } catch (e3) { }
+    }
+}
+window.oiPgReinitSelect2 = oiPgReinitSelect2;
+window.oiPgShow = oiPgShow;
+window.oiPgHide = oiPgHide;
 
+function oiPgLoadServiceList(surl, name, $serviceSelect) {
+    $.ajax({
+        type: 'POST',
+        url: surl,
+        data: { name: name },
+        success: function (result) {
+            $serviceSelect.empty();
+            $serviceSelect.append($('<option></option>').text('Select Service').val(''));
+            $.each(result, function (i, item) {
+                $serviceSelect.append($('<option></option>').text(item.Text).val(item.Value));
+            });
+            oiPgReinitSelect2($serviceSelect);
+        }
+    });
+}
+
+function oiPgOnRoleCategoryChange(cfg) {
+    var $cat = $(cfg.categorySel);
+    if (!$cat.length) {
+        return;
+    }
+    var url = $cat.data('request-url') || cfg.fillUrl;
+    var surl = $cat.data('secondrequest-url') || cfg.bindUrl;
+    $(cfg.operatorSel).empty();
+    $(cfg.serviceSel).empty();
+    var name = oiPgCatVal($cat);
+    if (!name) {
+        if (cfg.serviceWrap) {
+            oiPgHide(cfg.serviceWrap);
+        }
+        if (cfg.operatorWrap) {
+            oiPgHide(cfg.operatorWrap);
+        }
+        return;
+    }
+    if (name === 'PrePaid') {
+        if (cfg.serviceWrap) {
+            oiPgHide(cfg.serviceWrap);
+        }
+        if (cfg.operatorWrap) {
+            oiPgShow(cfg.operatorWrap);
+        }
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { name: name },
+            success: function (result) {
+                var $op = $(cfg.operatorSel);
+                $op.empty();
+                $op.append($('<option></option>').text('All Operator').val(''));
+                $.each(result, function (i, item) {
+                    $op.append($('<option></option>').text(item.Text).val(item.Value));
+                });
+                oiPgReinitSelect2($op);
+            }
+        });
+        return;
+    }
+    if (name === 'Utility' || name === 'Finance' || name === 'Travels' || name === 'Others') {
+        $(cfg.operatorSel).empty();
+        if (cfg.operatorWrap) {
+            oiPgHide(cfg.operatorWrap);
+        }
+        if (cfg.serviceWrap) {
+            oiPgShow(cfg.serviceWrap);
+        }
+        oiPgLoadServiceList(surl, name, $(cfg.serviceSel));
+    }
+}
+
+function oiPgOnApiUserCategoryChange() {
+    oiPgOnRoleCategoryChange({
+        categorySel: '#APIUSERCategory',
+        operatorSel: '#APIUSEROperator',
+        serviceSel: '#APIUSERService',
+        serviceWrap: '#APIUSERservpro',
+        operatorWrap: '#APIUSERoperatorsselect'
+    });
+}
+
+function oiPgOnDCategoryChange() {
+    oiPgOnRoleCategoryChange({
+        categorySel: '#DCategory',
+        operatorSel: '#DOperator',
+        serviceSel: '#DService',
+        serviceWrap: '#Dservpro',
+        operatorWrap: '#DOperatorselect'
+    });
+}
+
+function oiPgOnWhiteLabelCategoryChange() {
+    oiPgOnRoleCategoryChange({
+        categorySel: '#WhiteLabelCategory',
+        operatorSel: '#WhitelabelOperator',
+        serviceSel: '#WhitelabelService',
+        serviceWrap: '#Whitelabelservpro',
+        operatorWrap: '#Whitelabeloperatorsselect'
+    });
+}
+
+function oiPgOnRetailerCategoryChange() {
+    oiPgOnRoleCategoryChange({
+        categorySel: '#RequireCategory',
+        operatorSel: '#operatornameid',
+        serviceSel: '#service123',
+        serviceWrap: '#servpro',
+        operatorWrap: '#operatorsselect'
+    });
+}
+
+$(function () {
+    var catIds = '#RequireCategory,#DCategory,#WhiteLabelCategory,#APIUSERCategory';
+    $(document).off('change.oiPgApi', '#APIUSERCategory').on('change.oiPgApi', '#APIUSERCategory', oiPgOnApiUserCategoryChange);
+    $(document).off('change.oiPgDist', '#DCategory').on('change.oiPgDist', '#DCategory', oiPgOnDCategoryChange);
+    $(document).off('change.oiPgWl', '#WhiteLabelCategory').on('change.oiPgWl', '#WhiteLabelCategory', oiPgOnWhiteLabelCategoryChange);
+    $(document).off('change.oiPgRet', '#RequireCategory').on('change.oiPgRet', '#RequireCategory', oiPgOnRetailerCategoryChange);
+    $(document).on('select2:select', catIds, function () {
+        $(this).trigger('change');
+    });
+});
 
 
 function fillservices2(name, id) {
@@ -154,119 +334,7 @@ function Distributor(dd) {
 }
 
 
-$('#DCategory').change(function () {
-    var url = $(this).data('request-url');
-    var surl = $(this).data('secondrequest-url');
-    $('#DOperator').empty();
-    $('#DService').empty();
-    var name = $('#DCategory').val();
-    if (name == "PrePaid") {
-        $('#Dservpro').hide();
-        $('#DOperatorselect').show();
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: { name: name },
-            success: function (result) {
-                var operatornameid = $('#DOperator');
-                operatornameid.empty(); // remove any existing options
-                operatornameid.append($('<option></option>').text('All Operator').val(''));
-                $.each(result, function (result, item) {
-                    operatornameid.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-
-                //window.location.reload(true);
-            }
-        });
-    }
-    if (name == "Utility") {
-        $('#DOperator').empty();
-        $('#Dservpro').show();
-        $('#DOperatorselect').hide();
-        $.ajax({
-            type: 'POST',
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#DService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-    if (name == "Finance") {
-
-        $('#DOperator').empty();
-        $('#Dservpro').show();
-        $('#DOperatorselect').hide();
-        $.ajax({
-            type: 'POST',
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#DService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-    if (name == "Travels") {
-        $('#DOperatorselect').hide();
-        $('#DOperator').empty();
-        $('#Dservpro').show();
-        $.ajax({
-            type: 'POST',
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#DService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-
-    if (name == "Others") {
-        $('#DOperatorselect').hide();
-        $('#DOperator').empty();
-        $('#Dservpro').show();
-        $.ajax({
-            type: 'POST',
-
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#DService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-
-
-
-})
+/* #DCategory — see oiPgOnDCategoryChange (delegated) */
 
 
 
@@ -527,121 +595,7 @@ function onTestSuccess2(data) {
 }
 
 
-$('#APIUSERCategory').change(function () {
-    
-    var url = $(this).data('request-url');
-    var surl = $(this).data('secondrequest-url');
-    $('#APIUSEROperator').empty();
-    $('#APIUSERService').empty();
-    var name = $('#APIUSERCategory').val();
-    if (name == "PrePaid") {
-        $('#APIUSERservpro').hide();
-        $('#APIUSERoperatorsselect').show();
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: { name: name },
-            success: function (result) {
-                var operatornameid = $('#APIUSEROperator');
-                operatornameid.empty(); // remove any existing options
-                operatornameid.append($('<option></option>').text('All Operator').val(''));
-
-                $.each(result, function (result, item) {
-                    operatornameid.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-
-                //window.location.reload(true);
-            }
-        });
-    }
-    if (name == "Utility") {
-        $('#APIUSEROperator').empty();
-        $('#APIUSERservpro').show();
-        $('#APIUSERoperatorsselect').hide();
-        $.ajax({
-            type: 'POST',
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#APIUSERService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-    if (name == "Finance") {
-
-        $('#APIUSEROperator').empty();
-        $('#APIUSERservpro').show();
-        $('#APIUSERoperatorsselect').hide();
-        $.ajax({
-            type: 'POST',
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#APIUSERService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-    if (name == "Travels") {
-        $('#APIUSERoperatorsselect').hide();
-        $('#APIUSEROperator').empty();
-        $('#APIUSERservpro').show();
-        $.ajax({
-            type: 'POST',
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#APIUSERService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-
-    if (name == "Others") {
-        $('#APIUSEROperatorselect').hide();
-        $('#APIUSEROperator').empty();
-        $('#APIUSERservpro').show();
-        $.ajax({
-            type: 'POST',
-
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#APIUSERService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-
-
-
-})
+/* #APIUSERCategory — see oiPgOnApiUserCategoryChange (delegated) */
 
 function BlockAPIUSERS(result) {
     if (result == 1) {
@@ -1103,120 +1057,7 @@ $('#WhitelabelService').change(function () {
 
 
 
-$('#WhiteLabelCategory').change(function () {
-    var url = $(this).data('request-url');
-    var surl = $(this).data('secondrequest-url');
-
-    $('#WhitelabelOperator').empty();
-    $('#WhitelabelService').empty();
-    var name = $('#WhiteLabelCategory').val();
-    if (name == "PrePaid") {
-        $('#Whitelabelservpro').hide();
-        $('#Whitelabeloperatorsselect').show();
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: { name: name },
-            success: function (result) {
-                var operatornameid = $('#WhitelabelOperator');
-                operatornameid.empty(); // remove any existing options
-                operatornameid.append($('<option></option>').text('All Operator').val(''));
-
-                $.each(result, function (result, item) {
-                    operatornameid.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-
-                //window.location.reload(true);
-            }
-        });
-    }
-    if (name == "Utility") {
-        $('#WhitelabelOperator').empty();
-        $('#Whitelabelservpro').show();
-        $('#Whitelabeloperatorsselect').hide();
-        $.ajax({
-            type: 'POST',
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#WhitelabelService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-    if (name == "Finance") {
-
-        $('#WhitelabelOperator').empty();
-        $('#Whitelabelservpro').show();
-        $('#Whitelabeloperatorsselect').hide();
-        $.ajax({
-            type: 'POST',
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#WhitelabelService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-    if (name == "Travels") {
-        $('#Whitelabeloperatorsselect').hide();
-        $('#WhitelabelOperator').empty();
-        $('#Whitelabelservpro').show();
-        $.ajax({
-            type: 'POST',
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#WhitelabelService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-
-    if (name == "Others") {
-        $('#Whitelabeloperatorsselect').show();
-        $('#WhitelabelOperator').empty();
-        $('#Whitelabelservpro').show();
-        $.ajax({
-            type: 'POST',
-            url: surl,
-            data: { name: name },
-            success: function (result) {
-                var service123 = $('#WhitelabelService');
-                service123.empty(); // remove any existing options
-                service123.append($('<option></option>').text('Select Service').val(''));
-                $.each(result, function (result, item) {
-                    service123.append($('<option></option>').text(item.Text).val(item.Value));
-
-                });
-                //window.location.reload(true);
-            }
-        });
-    }
-
-
-
-})
+/* #WhiteLabelCategory — see oiPgOnWhiteLabelCategoryChange (delegated) */
 
 
 $('#WhitelabeluserCategorylist').change(function () {

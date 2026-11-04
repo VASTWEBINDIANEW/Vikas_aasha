@@ -1,0 +1,995 @@
+/* ============================================================
+   RETAILER • ALL_CARDS (Gift + Prepaid)
+   Extends section.vm-rmt-page — pair with retailer-money-transfer-modern.css
+   ============================================================ */
+
+body.saas-admin-ui section.vm-all-cards-page{
+  --vm-cards-report-h:661px;
+  --vm-cards-report-table-h:calc(var(--vm-cards-report-h) - 56px);
+  --vm-cards-left-h:650px;
+}
+
+body.saas-admin-ui section.vm-all-cards-page > .page-title-box-fourde{
+  display:none !important;
+}
+
+/* vm-rmt-page flex row when prepaid split visible */
+body.saas-admin-ui section.vm-all-cards-page.is-prepaid .vm-all-cards-shell{
+  display:flex !important;
+  flex-direction:column !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page.is-prepaid .PREPAIDCARD{
+  display:flex !important;
+  flex:1 1 auto !important;
+  align-items:flex-start !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-shell{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+}
+
+/* Top tabs: Gift | Prepaid (2 cols) */
+body.saas-admin-ui section.vm-all-cards-page ul.vm-all-cards-top-tabs#myDIV1{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:8px !important;
+  margin:0 0 10px !important;
+  padding:10px !important;
+  list-style:none !important;
+  background:linear-gradient(145deg,#0f172a 0%,#1e3a8a 42%,#2563eb 100%) !important;
+  border-radius:var(--vm-rmt-radius,16px) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page ul.vm-all-cards-top-tabs#myDIV1 > li.allc{
+  float:none !important;
+  width:auto !important;
+  height:auto !important;
+  min-height:72px !important;
+  margin:0 !important;
+  padding:10px 8px !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+  border-radius:12px !important;
+  background:rgba(255,255,255,.08) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  cursor:pointer !important;
+  transition:background .2s ease,border-color .2s ease,transform .2s ease !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page ul.vm-all-cards-top-tabs#myDIV1 > li.allc a{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  text-decoration:none !important;
+  pointer-events:none !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page ul.vm-all-cards-top-tabs#myDIV1 > li.allc img{
+  width:32px !important;
+  height:32px !important;
+  margin:0 !important;
+  filter:brightness(0) invert(1) !important;
+  opacity:.92 !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page ul.vm-all-cards-top-tabs#myDIV1 > li.allc span{
+  color:#fff !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  letter-spacing:.03em !important;
+  line-height:1.2 !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page ul.vm-all-cards-top-tabs#myDIV1 > li.allc.active_box{
+  background:#fff !important;
+  border-color:#e2e8f0 !important;
+  box-shadow:0 6px 16px rgba(15,23,42,.12) !important;
+  transform:translateY(-1px) !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page ul.vm-all-cards-top-tabs#myDIV1 > li.allc.active_box img{
+  filter:brightness(0) saturate(100%) !important;
+  opacity:1 !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page ul.vm-all-cards-top-tabs#myDIV1 > li.allc.active_box span{
+  color:#0f172a !important;
+}
+
+/* Panels */
+body.saas-admin-ui section.vm-all-cards-page .giftcardss{
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+/* Unified gift panel — no floating gaps */
+body.saas-admin-ui .vm-gift-card-panel{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:0 !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:12px 12px 14px !important;
+  background:var(--vm-rmt-surface,#fff) !important;
+  border:1px solid var(--vm-rmt-border,#e2e8f0) !important;
+  border-radius:var(--vm-rmt-radius,16px) !important;
+  box-shadow:0 12px 32px -18px rgba(30,64,175,.2) !important;
+  box-sizing:border-box !important;
+  min-height:0 !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel__nav{
+  margin:0 0 10px !important;
+  padding:0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel__body.giftcardmain{
+  margin:0 !important;
+  padding:0 !important;
+  float:none !important;
+  width:100% !important;
+  min-height:0 !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel__head{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  flex-wrap:wrap !important;
+  margin:0 0 10px !important;
+  padding:0 0 10px !important;
+  border-bottom:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel__titles.tab-content{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel__titles > .tab-pane:not(.active){
+  display:none !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel__titles > .tab-pane.active{
+  display:block !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel__heading{
+  margin:0 !important;
+  font-size:16px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  line-height:1.35 !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel__head .vm-gift-card-toolbar{
+  margin:0 !important;
+  padding:0 !important;
+  flex:0 0 auto !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel__grid-wrap{
+  padding:0 !important;
+  margin:0 !important;
+  float:none !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel .tab-content-gift-secondclass > .tab-pane > .header{
+  display:none !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel .tab-content-gift-secondclass > .tab-pane{
+  padding:0 !important;
+  margin:0 !important;
+  min-height:0 !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel #container,
+body.saas-admin-ui .vm-gift-card-panel [id$="_container"]{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr)) !important;
+  gap:12px !important;
+  width:100% !important;
+  min-height:120px !important;
+  margin:0 !important;
+  padding:4px 0 0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel #container .col-sm-6,
+body.saas-admin-ui .vm-gift-card-panel [id$="_container"] .col-sm-6{
+  width:100% !important;
+  max-width:100% !important;
+  padding:0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel .thumbnail.thumbnailgift{
+  margin:0 !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  overflow:hidden !important;
+  box-shadow:0 4px 14px -10px rgba(15,23,42,.25) !important;
+  background:#fff !important;
+  transition:transform .15s ease,box-shadow .15s ease !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel .thumbnail.thumbnailgift:hover{
+  transform:translateY(-2px) !important;
+  box-shadow:0 10px 24px -12px rgba(37,99,235,.35) !important;
+}
+
+body.saas-admin-ui .vm-gift-card-panel .thumbnail.thumbnailgift .rategiftcards img{
+  height:120px !important;
+  width:100% !important;
+  object-fit:contain !important;
+  background:#f8fafc !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root .giftcardcategory ul li a::before,
+body.saas-admin-ui .vm-gift-card-root .giftcardcategory ul li.active a::before{
+  display:none !important;
+  content:none !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root .giftcardcategory ul,
+body.saas-admin-ui .vm-gift-card-root .giftcardcategory ul li,
+body.saas-admin-ui .vm-gift-card-root .giftcardcategory ul li a{
+  background-image:none !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .giftcardss .card.navbar,
+body.saas-admin-ui section.vm-all-cards-page .giftcardss .class-back-tra-fourdesign,
+body.saas-admin-ui section.vm-all-cards-page .giftcardss .page-header-third{
+  display:none !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .PREPAIDCARD{
+  display:none !important;
+  width:100% !important;
+  float:none !important;
+  padding:0 !important;
+  margin:0 !important;
+  flex-wrap:wrap !important;
+  align-items:flex-start !important;
+  gap:12px !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page.is-prepaid .giftcardss{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page.is-prepaid .PREPAIDCARD{
+  display:flex !important;
+}
+
+/* Gift partial chrome inside ALL_CARDS */
+body.saas-admin-ui section.vm-all-cards-page .giftcardss .vm-gift-card-embed,
+body.saas-admin-ui section.vm-all-cards-page .giftcardss .vm-gift-card-root{
+  margin:0 !important;
+  padding:0 !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .giftcardss .page-title-box-fourde,
+body.saas-admin-ui section.vm-all-cards-page .giftcardss .vm-gift-card-page-title{
+  display:none !important;
+}
+
+body.saas-admin-ui .vm-gift-card-page{
+  width:100% !important;
+  max-width:100% !important;
+}
+
+body.saas-admin-ui .vm-gift-card-page .vm-gift-card-page-title{
+  display:none !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root .giftul-third{
+  display:none !important;
+}
+
+/* Category menu — desktop grid; tablet/mobile 3 columns */
+body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar{
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  gap:8px !important;
+  margin:0 0 10px !important;
+  padding:10px !important;
+  list-style:none !important;
+  border:0 !important;
+  border-radius:14px !important;
+  background:linear-gradient(145deg,#0f172a 0%,#1e3a8a 42%,#2563eb 100%) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08) !important;
+  overflow:visible !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li{
+  float:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  box-shadow:none !important;
+  width:100% !important;
+  min-width:0 !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li > a{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:4px !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:none !important;
+  min-height:72px !important;
+  height:100% !important;
+  padding:8px 4px !important;
+  margin:0 !important;
+  border-radius:11px !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+  background:rgba(255,255,255,.08) !important;
+  color:#fff !important;
+  text-decoration:none !important;
+  box-sizing:border-box !important;
+  -webkit-tap-highlight-color:transparent !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li > a img{
+  height:32px !important;
+  width:auto !important;
+  margin:0 !important;
+  filter:brightness(0) invert(1) !important;
+  opacity:.92 !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li > a span{
+  font-size:9px !important;
+  font-weight:700 !important;
+  line-height:1.15 !important;
+  text-align:center !important;
+  color:#fff !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li.active > a,
+body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li > a:hover{
+  background:#fff !important;
+  border-color:#e2e8f0 !important;
+  box-shadow:0 4px 12px rgba(15,23,42,.12) !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li.active > a img,
+body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li > a:hover img{
+  filter:brightness(0) saturate(100%) !important;
+  opacity:1 !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li.active > a span,
+body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li > a:hover span{
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui .vm-gift-card-toolbar{
+  display:flex !important;
+  justify-content:flex-end !important;
+  margin:0 0 10px !important;
+  padding:0 4px !important;
+}
+
+body.saas-admin-ui .vm-gift-card-toolbar__btn{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-height:40px !important;
+  padding:0 14px !important;
+  border:1px solid #bfdbfe !important;
+  border-radius:10px !important;
+  background:#eff6ff !important;
+  color:#1d4ed8 !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  cursor:pointer !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui .vm-gift-card-toolbar__btn:hover{
+  background:#dbeafe !important;
+  border-color:#93c5fd !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root .giftcardmain .header h2{
+  font-size:16px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  margin:8px 0 12px !important;
+}
+
+body.saas-admin-ui .vm-gift-card-root .giftcardmain .card.class-back-tra-fourdesign{
+  margin-top:0 !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:14px !important;
+  box-shadow:0 8px 24px -16px rgba(30,64,175,.2) !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .giftcardss .card.navbar{
+  border:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+}
+
+/* Prepaid split — same flex as Money_transfer2 */
+body.saas-admin-ui section.vm-all-cards-page .PREPAIDCARD #full.vm-rmt-left-panel,
+body.saas-admin-ui section.vm-all-cards-page .PREPAIDCARD .vm-all-cards-prepaid-buy{
+  flex:0 1 calc(35% - 6px) !important;
+  max-width:35% !important;
+  width:calc(35% - 6px) !important;
+  min-height:var(--vm-cards-left-h) !important;
+  overflow:hidden !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .PREPAIDCARD .vm-rmt-report-panel{
+  flex:0 1 calc(65% - 6px) !important;
+  max-width:65% !important;
+  width:calc(65% - 6px) !important;
+  min-width:0 !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-prepaid-card{
+  height:100% !important;
+  min-height:var(--vm-cards-left-h) !important;
+  padding:18px 16px 20px !important;
+  background:var(--vm-rmt-surface,#fff) !important;
+  border:1px solid var(--vm-rmt-border,#e2e8f0) !important;
+  border-radius:var(--vm-rmt-radius,16px) !important;
+  box-shadow:0 12px 32px -18px rgba(30,64,175,.22) !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-prepaid-card__title{
+  margin:0 0 4px !important;
+  font-size:17px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  text-align:center !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-prepaid-card__hint{
+  margin:0 0 16px !important;
+  font-size:12px !important;
+  font-weight:500 !important;
+  color:#64748b !important;
+  text-align:center !important;
+  line-height:1.45 !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-prepaid-form{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:12px !important;
+  max-width:320px !important;
+  margin:0 auto !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-field label{
+  display:block !important;
+  margin:0 0 6px !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  color:#475569 !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-field input[type="number"]{
+  width:100% !important;
+  min-height:44px !important;
+  padding:8px 12px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-buy-btn{
+  width:100% !important;
+  min-height:44px !important;
+  margin-top:4px !important;
+  border:0 !important;
+  border-radius:12px !important;
+  background:linear-gradient(135deg,var(--vm-rmt-accent,#2563eb),var(--vm-rmt-accent-dark,#1d4ed8)) !important;
+  color:#fff !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  cursor:pointer !important;
+  box-shadow:0 8px 20px -8px rgba(37,99,235,.55) !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page #image{
+  display:none;
+  text-align:center !important;
+  margin:12px 0 0 !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page #image img{
+  max-width:120px !important;
+  height:auto !important;
+}
+
+/* Report card */
+body.saas-admin-ui section.vm-all-cards-page #reportallinone.vm-all-cards-report-card{
+  height:var(--vm-cards-report-h) !important;
+  min-height:var(--vm-cards-report-h) !important;
+  max-height:var(--vm-cards-report-h) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important;
+  padding:14px 14px 16px !important;
+  background:var(--vm-rmt-surface,#fff) !important;
+  border:1px solid var(--vm-rmt-border,#e2e8f0) !important;
+  border-radius:var(--vm-rmt-radius,16px) !important;
+  box-shadow:0 12px 32px -18px rgba(30,64,175,.22) !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page #reportallinone.vm-all-cards-report-card::before{
+  content:"Prepaid card transactions" !important;
+  display:block !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  margin:0 0 10px 2px !important;
+  flex:0 0 auto !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page #resultTarget{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-alert{
+  display:none;
+  margin:0 0 10px !important;
+  padding:10px 12px !important;
+  border-radius:10px !important;
+  background:#ecfdf5 !important;
+  border:1px solid #a7f3d0 !important;
+  color:#065f46 !important;
+  font-size:13px !important;
+  font-weight:600 !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-alert.is-visible{
+  display:flex !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-alert__ok{
+  flex:0 0 auto !important;
+  border:0 !important;
+  background:#059669 !important;
+  color:#fff !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  padding:6px 12px !important;
+  border-radius:8px !important;
+  cursor:pointer !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-table-wrap{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  max-height:var(--vm-cards-report-table-h) !important;
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-table{
+  width:100% !important;
+  min-width:640px !important;
+  border-collapse:separate !important;
+  border-spacing:0 !important;
+  font-size:12px !important;
+  margin:0 !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-table thead th{
+  position:sticky !important;
+  top:0 !important;
+  z-index:1 !important;
+  background:#f8fafc !important;
+  color:#475569 !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  letter-spacing:.06em !important;
+  text-transform:uppercase !important;
+  padding:10px 12px !important;
+  border-bottom:1px solid #e2e8f0 !important;
+  white-space:nowrap !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-table tbody td{
+  padding:10px 12px !important;
+  border-bottom:1px solid #f1f5f9 !important;
+  color:#0f172a !important;
+  font-weight:600 !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-table tbody tr:hover td{
+  background:#f8fafc !important;
+}
+
+body.saas-admin-ui section.vm-all-cards-page .vm-all-cards-empty{
+  padding:48px 16px !important;
+  text-align:center !important;
+  color:#64748b !important;
+  font-size:13px !important;
+  font-weight:600 !important;
+}
+
+/* —— Gift modals (vm-gift-modal) — kill legacy .giftcardcheckblance —— */
+body.saas-admin-ui .vm-gift-modal{
+  display:none !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  padding:24px 16px !important;
+}
+
+body.saas-admin-ui .vm-gift-modal.in,
+body.saas-admin-ui .vm-gift-modal.show{
+  display:block !important;
+}
+
+body.saas-admin-ui .vm-gift-modal--purchase{
+  z-index:11060 !important;
+}
+
+body.saas-admin-ui .vm-gift-modal--balance{
+  z-index:11070 !important;
+}
+
+body.saas-admin-ui.modal-open .modal-backdrop{
+  z-index:11055 !important;
+}
+
+body.saas-admin-ui.modal-open .vm-gift-modal--balance.in ~ .modal-backdrop,
+body.saas-admin-ui.modal-open .vm-gift-modal--balance.show ~ .modal-backdrop{
+  z-index:11065 !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__dialog{
+  margin:0 auto !important;
+  float:none !important;
+  width:calc(100% - 24px) !important;
+  max-width:920px !important;
+  position:relative !important;
+  top:auto !important;
+  right:auto !important;
+  left:auto !important;
+  transform:none !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__dialog--sm{
+  max-width:440px !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__content{
+  height:auto !important;
+  max-height:calc(100vh - 48px) !important;
+  border-radius:16px !important;
+  border:1px solid #e2e8f0 !important;
+  box-shadow:0 24px 48px -16px rgba(15,23,42,.4) !important;
+  overflow:hidden !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__header{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  padding:14px 16px !important;
+  border-bottom:1px solid #e2e8f0 !important;
+  background:#f8fafc !important;
+  float:none !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__header--balance{
+  align-items:center !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__title{
+  margin:0 !important;
+  font-size:17px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  line-height:1.3 !important;
+  text-align:left !important;
+  float:none !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__header-actions{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:8px !important;
+  flex:0 0 auto !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__tab-btn{
+  border:1px solid #cbd5e1 !important;
+  background:#fff !important;
+  color:#334155 !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  padding:6px 10px !important;
+  border-radius:8px !important;
+  cursor:pointer !important;
+  box-shadow:none !important;
+  margin:0 !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__tab-btn.activebutton,
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__tab-btn:hover{
+  border-color:#2563eb !important;
+  color:#2563eb !important;
+  background:#eff6ff !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__close{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:36px !important;
+  height:36px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  background:#fff !important;
+  color:#64748b !important;
+  cursor:pointer !important;
+  padding:0 !important;
+  box-shadow:none !important;
+  float:none !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__close:hover{
+  color:#ef4444 !important;
+  border-color:#fecaca !important;
+  background:#fef2f2 !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__body{
+  padding:16px !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__lead{
+  margin:0 0 14px !important;
+  font-size:13px !important;
+  font-weight:500 !important;
+  color:#475569 !important;
+  line-height:1.45 !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__field{
+  margin:0 0 12px !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__field label{
+  display:block !important;
+  margin:0 0 6px !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  color:#475569 !important;
+  text-transform:uppercase !important;
+  letter-spacing:.04em !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__err{
+  color:#dc2626 !important;
+  font-size:11px !important;
+  font-weight:600 !important;
+  text-transform:none !important;
+  letter-spacing:0 !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__input,
+body.saas-admin-ui .vm-gift-modal--purchase .vouchercontent .form-control,
+body.saas-admin-ui .vm-gift-modal--purchase .vouchercontent textarea{
+  width:100% !important;
+  min-height:42px !important;
+  padding:8px 12px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  background:#fff !important;
+  box-shadow:none !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui .vm-gift-modal--purchase .vouchercontent .retyyugfdw,
+body.saas-admin-ui .vm-gift-modal--purchase .vouchercontent .form-line,
+body.saas-admin-ui .vm-gift-modal--purchase .vouchercontent div[style*="border:1px"]{
+  border:0 !important;
+  margin-top:0 !important;
+}
+
+body.saas-admin-ui .vm-gift-modal--purchase .vouchercontent p{
+  margin:0 0 6px !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  color:#475569 !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__footer{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:10px !important;
+  padding:12px 16px 16px !important;
+  margin:0 !important;
+  border-top:1px solid #e2e8f0 !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__btn{
+  min-height:40px !important;
+  padding:0 16px !important;
+  border-radius:10px !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  cursor:pointer !important;
+  border:0 !important;
+  box-shadow:none !important;
+  margin:0 !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__btn--ghost{
+  background:#f1f5f9 !important;
+  color:#334155 !important;
+  border:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui .vm-gift-modal .vm-gift-modal__btn--primary{
+  background:linear-gradient(135deg,#2563eb,#1d4ed8) !important;
+  color:#fff !important;
+  box-shadow:0 6px 16px -6px rgba(37,99,235,.65) !important;
+}
+
+/* Legacy overrides inside purchase modal */
+body.saas-admin-ui .vm-gift-modal--purchase .voucherbutton .btn,
+body.saas-admin-ui .vm-gift-modal--purchase .voucherbutton button:not(.vm-gift-modal__btn){
+  display:none !important;
+}
+
+body.saas-admin-ui .giftcardcheckblance,
+body.saas-admin-ui #CheckbalModal.giftcardcheckblance{
+  top:auto !important;
+  padding-right:0 !important;
+}
+
+body.saas-admin-ui #CheckbalModal .modal-dialog.modal-sm{
+  margin:1.75rem auto !important;
+  float:none !important;
+  width:auto !important;
+  max-width:440px !important;
+}
+
+body.saas-admin-ui #CheckbalModal .modal-content{
+  height:auto !important;
+  min-height:0 !important;
+}
+
+body.saas-admin-ui #CheckbalModal .modal-footer{
+  margin-top:0 !important;
+}
+
+@media screen and (max-width:1199px){
+  body.saas-admin-ui section.vm-all-cards-page .PREPAIDCARD #full.vm-rmt-left-panel,
+  body.saas-admin-ui section.vm-all-cards-page .PREPAIDCARD .vm-all-cards-prepaid-buy,
+  body.saas-admin-ui section.vm-all-cards-page .PREPAIDCARD .vm-rmt-report-panel{
+    flex:1 1 100% !important;
+    max-width:100% !important;
+    width:100% !important;
+  }
+
+  /* Tablet + mobile: 3 category tabs per row */
+  body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    padding:8px !important;
+    gap:6px !important;
+  }
+
+  body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li > a{
+    min-height:68px !important;
+    padding:6px 4px !important;
+  }
+
+  body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li > a img{
+    height:28px !important;
+    width:auto !important;
+    margin-top:0 !important;
+  }
+
+  body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li > a span{
+    font-size:8px !important;
+    line-height:1.15 !important;
+    padding:0 !important;
+    margin:0 !important;
+    display:block !important;
+    text-align:center !important;
+  }
+
+  body.saas-admin-ui .vm-gift-card-panel__head{
+    flex-direction:column !important;
+    align-items:stretch !important;
+    gap:8px !important;
+  }
+
+  body.saas-admin-ui .vm-gift-card-panel__head .vm-gift-card-toolbar{
+    width:100% !important;
+  }
+
+  body.saas-admin-ui .vm-gift-card-toolbar__btn{
+    width:100% !important;
+    justify-content:center !important;
+  }
+
+  body.saas-admin-ui .vm-gift-card-panel #container,
+  body.saas-admin-ui .vm-gift-card-panel [id$="_container"]{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
+
+@media screen and (max-width:767px){
+  body.saas-admin-ui section.vm-all-cards-page{
+    --vm-cards-report-h:min(661px, calc(100vh - var(--admin-header-height, 58px) - 120px));
+  }
+
+  body.saas-admin-ui section.vm-all-cards-page ul.vm-all-cards-top-tabs#myDIV1 > li.allc{
+    min-height:64px !important;
+  }
+}
+
+@media screen and (max-width:479px){
+  body.saas-admin-ui .vm-gift-card-root ul.vm-gift-cat-tabs#leftulbar > li > a{
+    min-height:62px !important;
+  }
+}

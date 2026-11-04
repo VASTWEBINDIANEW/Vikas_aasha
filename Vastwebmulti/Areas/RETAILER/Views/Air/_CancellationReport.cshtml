@@ -1,98 +1,93 @@
 ﻿@model List<Vastwebmulti.Models.proc_FlightCancellationReport_Result>
 @using Newtonsoft.Json;
+@using System.Web.Mvc.Ajax;
 @{
     Layout = null;
+    var rows = Model == null ? new List<Vastwebmulti.Models.proc_FlightCancellationReport_Result>() : Model;
 }
-
-@if (Model != null && Model.Count > 0)
+@if (rows.Count > 0)
 {
-    foreach (var item in Model)
+    foreach (var item in rows)
     {
-        #region CssSettings
-        var color = "";
-        var fontweight = "";
-        var text = "";
-        var emailid = "";
-        var Retailername = "";
-        var framname = "";
-        var mobile = "";
-        var rolename = "";
-        var icon = "";
-        var rchtype = "";
-        var rchtypeicon = "";
-        var sts = "";
-        var refundcolor = "";
-        var dmtytpe = "";
-        var img = "";
-        var style = "";
-        var pendingColor = "";
-
-        sts = ((Vastwebmulti.Areas.RETAILER.Enums.ChangeRequestStatus)Convert.ToInt32(item.ChangeRequestStatus)).ToString();
-
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+        var dataStatus = "PENDING";
+        var sts = item.ChangeRequestStatus.HasValue
+            ? ((Vastwebmulti.Areas.RETAILER.Enums.ChangeRequestStatus)Convert.ToInt32(item.ChangeRequestStatus.Value)).ToString()
+            : "—";
         if (item.ChangeRequestStatus == 5)
         {
-            color = "red";
-            fontweight = "700";
-            img = "../../ashok-images/closes.svg";
-            style = "height:20px;width:20px;margin-right:3px;float:left;";
-            style = "font-size:0px !important;";
+            statusTone = "failed";
+            statusFa = "fa-times";
+            dataStatus = "FAILED";
         }
-        if (item.ChangeRequestStatus == 4)
+        else if (item.ChangeRequestStatus == 4)
         {
-            color = "green";
-            fontweight = "700";
-            img = "../../ashok-images/correct.svg";
-            style = "font-size:0px !important;float:left;margin-right: 5px;margin-left: 5px;";
+            statusTone = "success";
+            statusFa = "fa-check";
+            dataStatus = "SUCCESS";
         }
-        if (item.ChangeRequestStatus <= 3)
+        else if (item.ChangeRequestStatus <= 3)
         {
-            color = "#ff9600";
-            fontweight = "700";
-            img = "../../ashok-images/clkk.png";
-            style = "height:20px;width:20px;margin-right:3px;float:left;background-color:none;font-size:0px !important;";
-            pendingColor = "#fff8d1";
+            statusTone = "pending";
+            statusFa = "fa-clock-o";
+            dataStatus = "PENDING";
         }
-        if (item.ChangeRequestStatus == 6 || item.ChangeRequestStatus == 8)
+        else if (item.ChangeRequestStatus == 6 || item.ChangeRequestStatus == 8)
         {
-            color = "#9C27B0";
-            fontweight = "700";
+            statusTone = "refund";
+            statusFa = "fa-undo";
+            dataStatus = "FAILED";
         }
-        if (item.ChangeRequestStatus == 7)
+        else if (item.ChangeRequestStatus == 7)
         {
-            color = "#2196F3";
-            fontweight = "700";
+            statusTone = "info";
+            statusFa = "fa-info-circle";
+            dataStatus = "PENDING";
         }
-        #endregion
-        <tr style="font-weight:700;background-color:@pendingColor;">
-            <td><p style="font-size:13px;text-transform:uppercase;"><span style="color:@color;"><img style="@style background-color:@color;" src=@img />@sts</span>&nbsp;</p></td>
-            <td>
-                <p style="font-size:13px;">&nbsp;@item.RequestType&nbsp;</p>
+        <tr class="vm-dmt-row" data-amount="@(item.RefundedAmount ?? 0)" data-status="@dataStatus">
+            <td class="vm-cancel-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@sts"><i class="fa @statusFa" aria-hidden="true"></i></span>
+                <span class="vm-ticket-status-text vm-cancel-status-text">@sts</span>
             </td>
             <td>
-                <p style="font-size:13px;">@item.CancellationType</p>
+                <span class="vm-dmt-refno-text">@item.RequestType</span>
             </td>
-            <td style="font-size:13px;">@item.ChangeRequestId</td>
-            <td><p style="font-size:11px;margin-top:2px;">@String.Format("{0:dd-MMM HH:mm:ss}", item.CancellationRequestDate)&nbsp;&nbsp;<span style="color:green;font-weight:700;"></span></p></td>
-            <td><p style="font-size:11px;margin-top:2px;">@String.Format("{0:dd-MMM HH:mm:ss}", item.CancellationResponseDate)&nbsp;&nbsp;<span style="color:green;font-weight:700;"></span></p></td>
-
-            <td style="font-size:13px;">@item.RefundedAmount</td>
-            <td style="font-size:13px;">@item.CancellationCharge</td>
             <td>
-                <center>
-                    <div class="col-xs-3" style="margin-bottom:0px;">
-                        @Ajax.ActionLink("STATUS", "CancellationStatus", "Air", new { ChangeReqId = item.ChangeRequestId, idno = item.idno }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnFailure = "OnFailure", LoadingElementId = "loadermoney" }, new { @class = "btn btn-primary" })
-                    </div>
-                </center>
+                <span class="vm-dmt-refno-text">@item.CancellationType</span>
+            </td>
+            <td class="vm-cancel-id-cell">
+                <span class="vm-dmt-refno-text">@(item.ChangeRequestId.HasValue ? item.ChangeRequestId.Value.ToString() : "—")</span>
+            </td>
+            <td class="vm-cancel-time-cell">
+                <span class="vm-dmt-refno-text">@String.Format("{0:dd-MMM-yyyy HH:mm:ss}", item.CancellationRequestDate)</span>
+            </td>
+            <td class="vm-cancel-time-cell">
+                <span class="vm-dmt-refno-text">@(item.CancellationResponseDate.HasValue ? String.Format("{0:dd-MMM-yyyy HH:mm:ss}", item.CancellationResponseDate.Value) : "—")</span>
+            </td>
+            <td>
+                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @(item.RefundedAmount.HasValue ? Math.Round(item.RefundedAmount.Value, 2).ToString() : "0.00")</span>
+            </td>
+            <td>
+                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @(item.CancellationCharge.HasValue ? Math.Round(item.CancellationCharge.Value, 2).ToString() : "0.00")</span>
+            </td>
+            <td>
+                @if (item.ChangeRequestId.HasValue)
+                {
+                    @Ajax.ActionLink("STATUS", "CancellationStatus", "Air", new { ChangeReqId = item.ChangeRequestId.Value, idno = item.idno }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnFailure = "OnFailure", LoadingElementId = "loadermoney" }, new { @class = "btn btn-primary btn-sm vm-dmt-status-btn", title = "Check cancellation status" })
+                }
             </td>
         </tr>
     }
 }
-
 else
 {
-    <tr>
-        <td colspan="13"><h2 style="text-align:center;">Data Not Found</h2></td>
-
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="9">
+            <div class="vm-opr-empty-state">
+                <i class="fas fa-ban" aria-hidden="true"></i>
+                <span>No cancellation records found</span>
+            </div>
+        </td>
     </tr>
-
 }

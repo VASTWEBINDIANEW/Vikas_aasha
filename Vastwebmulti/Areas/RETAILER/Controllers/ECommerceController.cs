@@ -363,7 +363,19 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 model.CataTitle = db.SubCatagories.SingleOrDefault(a => a.SubCatID == SubCatId)?.SubCatName;
             }
-            model.lstProducts = db.proc_ProductList(0, "", SubCatId ?? null, null, null, ProductName ?? null).Where(a => a.IsApproved == 1 && a.ShowOnHome == true).ToList();
+            var productQuery = db.proc_ProductList(0, "", SubCatId ?? null, null, null, ProductName ?? null)
+                .Where(a => a.IsApproved == 1 && a.ShowOnHome == true)
+                .ToList();
+            if (productQuery.Count == 0
+                && (SubCatId == null || SubCatId <= 0)
+                && string.IsNullOrWhiteSpace(ProductName))
+            {
+                productQuery = db.proc_ProductList(0, "", null, null, null, null)
+                    .Where(a => a.IsApproved == 1)
+                    .ToList();
+            }
+            model.lstProducts = productQuery;
+            ViewBag.EcommSortBy = SortBy;
             if (SortBy != null && !string.IsNullOrWhiteSpace(SortBy) && model.lstProducts.Count > 0)
             {
                 if (SortBy.Contains("Date"))

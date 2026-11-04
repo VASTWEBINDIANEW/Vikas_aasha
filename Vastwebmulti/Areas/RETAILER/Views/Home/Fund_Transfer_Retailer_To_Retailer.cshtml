@@ -10,1131 +10,710 @@
         if (usernname.SingleOrDefault().Role == "Retailer")
         {
             favimage = usernname.SingleOrDefault().NickName;
-
         }
     }
 }
-
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=21" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page', 'saas-dealer-fund-transfer-page', 'saas-retailer-fund-transfer-page', 'saas-fund-transfer-page', 'saas-retailer-r2r-page');</script>
 
 <style>
+    .datepicker table tr td span { color: #555 !important; }
+    .datepicker table tr td span.active { color: #fff !important; }
 
-    /* new css  */
+    /* ===== R2R LEFT PANEL (same premium language as UPITRANSFER) ===== */
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-panel { background: #fff; padding: 12px 10px; display: flex; flex-direction: column; gap: 10px; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-mode-tabs { display: flex; background: #eef1f7; border-radius: 10px; padding: 3px; gap: 3px; list-style: none; margin: 0; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-mode-tabs li { flex: 1 1 0; text-align: center; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-mode-tabs li a { display: block; padding: 8px 2px; border-radius: 8px; font-size: 11px; font-weight: 800; color: #fff !important; background: linear-gradient(135deg,#4f46e5,#7c3aed); cursor: pointer; text-decoration: none; box-shadow: 0 4px 10px rgba(79,70,229,.4); }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-field label { display: block; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 5px 2px; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-input.form-control { height: 42px; border: none; background: transparent; font-size: 13.5px; font-weight: 600; color: #0f172a; padding: 0; box-shadow: none; width: 100%; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-input.form-control::placeholder { color: #94a3b8; font-weight: 500; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-input.form-control:focus { border: none; background: transparent; box-shadow: none; outline: none; }
+    body.saas-admin-ui .saas-retailer-r2r-page textarea.vm-tx-input.form-control { height: auto; min-height: 64px; padding: 0; resize: vertical; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-box { position: relative; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-in-ico { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 9px; background: #eef2ff; color: #4f46e5; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; z-index: 2; }
+    body.saas-admin-ui .saas-retailer-r2r-page textarea.vm-tx-input.form-control ~ .vm-tx-in-ico { top: 22px; transform: none; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-usercard { background: #f8faff; border: 1px solid #e3e8f2; border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-usercard table { width: 100%; border-collapse: collapse; margin: 0; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-usercard table td { padding: 4px 6px; font-size: 12px; border: none; background: none; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-usercard table td:first-child label { color: #64748b; font-weight: 700; margin: 0; font-size: 11px; text-transform: uppercase; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-usercard table td:last-child label { color: #0f172a; font-weight: 800; margin: 0; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-submit-btn { min-height: 44px; border: none; border-radius: 10px; background: linear-gradient(135deg,#4f46e5 0%,#6d28d9 60%,#7c3aed 100%); color: #fff !important; font-size: 14px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 16px rgba(79,70,229,.35); padding: 10px 22px; transition: transform .15s ease, filter .15s ease; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-submit-btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.06); }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-submit-btn:disabled { opacity: .55; cursor: not-allowed; box-shadow: none; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-cancel-btn { min-height: 44px; border: 1.5px solid #e2e8f0; background: #fff; color: #475569 !important; font-size: 14px; font-weight: 800; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; padding: 10px 22px; text-decoration: none; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-cancel-btn:hover { border-color: #4f46e5; color: #4f46e5 !important; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-btnrow { display: flex; gap: 10px; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-btnrow > * { flex: 1 1 0; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-otpbtn { border: 1.5px solid #e2e8f0; background: #eef2ff; color: #4f46e5; font-weight: 800; font-size: 13px; border-radius: 10px; padding: 9px 14px; cursor: pointer; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-otpbtn:hover { background: #e0e7ff; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-eye { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; cursor: pointer; font-size: 15px; z-index: 3; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-msg { font-size: 12.5px; font-weight: 700; margin: 0; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-mini-btn { border: 1.5px solid #e2e8f0; background: #fff; color: #475569; font-size: 12px; font-weight: 800; border-radius: 9px; padding: 7px 12px; cursor: pointer; white-space: nowrap; }
+    body.saas-admin-ui .saas-retailer-r2r-page .vm-tx-mini-btn:hover { border-color: #4f46e5; color: #4f46e5; }
 
+    /* ===== New premium loader (same as UPITRANSFER) ===== */
+    .vm-upi-loader { display: inline-flex; flex-direction: column; align-items: center; gap: 10px; background: #fff; border: 1px solid #e5e9f2; border-radius: 16px; padding: 20px 42px; box-shadow: 0 8px 24px rgba(15,23,42,.08); }
+    .vm-upi-loader-ring { width: 46px; height: 46px; border-radius: 50%; background: conic-gradient(#1e40ff,#7c3aed,#1e40ff); display: inline-flex; align-items: center; justify-content: center; animation: vm-upi-spin 0.9s linear infinite; }
+    .vm-upi-loader-ring > span { width: 36px; height: 36px; border-radius: 50%; background: #fff; display: inline-flex; align-items: center; justify-content: center; }
+    .vm-upi-loader-ring > span::after { content: ''; width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg,#4f46e5,#7c3aed); animation: vm-upi-pulse 1s ease-in-out infinite; }
+    @@keyframes vm-upi-spin { to { transform: rotate(360deg); } }
+    @@keyframes vm-upi-pulse { 0%,100% { transform: scale(.7); opacity: .6; } 50% { transform: scale(1.15); opacity: 1; } }
+    .vm-upi-loader-txt { font-size: 12.5px; font-weight: 800; color: #334155; }
+    .vm-upi-loader-bar { width: 170px; height: 6px; border-radius: 999px; background: #eef1f6; overflow: hidden; }
+    .vm-upi-loader-bar > span { display: block; width: 40%; height: 100%; border-radius: 999px; background: linear-gradient(90deg,#1e40ff,#7c3aed); animation: vm-upi-slide 1.1s ease-in-out infinite; }
+    @@keyframes vm-upi-slide { 0% { margin-left: -40%; } 100% { margin-left: 100%; } }
+    #outer-loader { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; background: rgba(15,23,42,.45) !important; z-index: 9999 !important; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+    #outer-loader[style*="block"] { display: flex !important; }
 
+    /* ===== R2R detail modal — same premium as UPITRANSFER manual modal ===== */
+    #m-d-fund-transfer .modal-dialog { max-width: 500px !important; margin: 48px auto !important; float: none !important; width: calc(100% - 28px) !important; }
+    #m-d-fund-transfer .modal-content { border: none !important; border-radius: 22px !important; overflow: hidden !important; box-shadow: 0 30px 80px rgba(15,23,42,.35) !important; background: #fff !important; animation: vm-r2r-pop .3s cubic-bezier(.21,1.02,.73,1) !important; display: flex !important; flex-direction: column !important; max-height: 92vh !important; }
+    @@keyframes vm-r2r-pop { 0% { opacity: 0; transform: translateY(24px) scale(.97); } 100% { opacity: 1; transform: none; } }
+    #m-d-fund-transfer .modal-header { background: linear-gradient(135deg,#1e40ff 0%,#4f46e5 50%,#7c3aed 100%) !important; border: none !important; padding: 16px !important; display: flex !important; align-items: center !important; gap: 12px !important; position: relative !important; overflow: hidden !important; flex: 0 0 auto !important; }
+    #m-d-fund-transfer .modal-header::before { content: '' !important; position: absolute !important; right: -50px !important; top: -70px !important; width: 180px !important; height: 180px !important; border-radius: 50% !important; background: radial-gradient(circle,rgba(255,255,255,.22) 0%,rgba(255,255,255,0) 70%) !important; pointer-events: none !important; }
+    #m-d-fund-transfer .vm-r2r-head-ico { width: 46px !important; height: 46px !important; min-width: 46px !important; border-radius: 14px !important; background: rgba(255,255,255,.18) !important; border: 1px solid rgba(255,255,255,.35) !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; font-size: 19px !important; color: #fff !important; position: relative !important; z-index: 2 !important; }
+    #m-d-fund-transfer .vm-r2r-head-txt { flex: 1 1 auto !important; min-width: 0 !important; position: relative !important; z-index: 2 !important; }
+    #m-d-fund-transfer .vm-r2r-title { display: block !important; margin: 0 !important; font-size: 15.5px !important; font-weight: 800 !important; color: #fff !important; line-height: 1.3 !important; border: none !important; background: none !important; padding: 0 !important; }
+    #m-d-fund-transfer .vm-r2r-sub { display: block !important; font-size: 11.5px !important; font-weight: 500 !important; color: rgba(255,255,255,.85) !important; margin-top: 2px !important; }
+    #m-d-fund-transfer .modal-header .vm-r2r-close { background: rgba(255,255,255,.16) !important; border: 1px solid rgba(255,255,255,.28) !important; color: #fff !important; width: 32px !important; height: 32px !important; min-width: 32px !important; border-radius: 50% !important; cursor: pointer !important; font-size: 12px !important; position: relative !important; z-index: 2 !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; opacity: 1 !important; margin: 0 !important; padding: 0 !important; }
+    #m-d-fund-transfer .modal-header .vm-r2r-close:hover { background: #fff !important; color: #4f46e5 !important; transform: rotate(90deg) !important; }
+    #m-d-fund-transfer .modal-body { padding: 16px !important; background: #f3f5fa !important; flex: 1 1 auto !important; overflow-y: auto !important; overflow-x: hidden !important; scrollbar-width: thin !important; scrollbar-color: #4f46e5 #eef1f6 !important; }
+    #m-d-fund-transfer .modal-body::-webkit-scrollbar { width: 7px !important; }
+    #m-d-fund-transfer .modal-body::-webkit-scrollbar-track { background: #eef1f6 !important; border-radius: 999px !important; }
+    #m-d-fund-transfer .modal-body::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#4f46e5,#7c3aed) !important; border-radius: 999px !important; }
+    #m-d-fund-transfer .vm-r2r-hero { display: flex !important; align-items: center !important; gap: 12px !important; background: linear-gradient(135deg,#1e40ff 0%,#6d28d9 70%) !important; border-radius: 16px !important; padding: 14px 16px !important; margin-bottom: 12px !important; color: #fff !important; position: relative !important; overflow: hidden !important; }
+    #m-d-fund-transfer .vm-r2r-hero::after { content: '' !important; position: absolute !important; right: -40px !important; top: -50px !important; width: 140px !important; height: 140px !important; border-radius: 50% !important; background: rgba(255,255,255,.14) !important; }
+    #m-d-fund-transfer .vm-r2r-hero-ico { width: 44px !important; height: 44px !important; min-width: 44px !important; border-radius: 13px !important; background: rgba(255,255,255,.2) !important; border: 1px solid rgba(255,255,255,.3) !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; font-size: 18px !important; position: relative !important; z-index: 1 !important; }
+    #m-d-fund-transfer .vm-r2r-hero-amt { display: block !important; font-size: 21px !important; font-weight: 800 !important; line-height: 1.2 !important; position: relative !important; z-index: 1 !important; }
+    #m-d-fund-transfer .vm-r2r-hero-lbl { display: block !important; font-size: 11px !important; font-weight: 600 !important; color: rgba(255,255,255,.8) !important; position: relative !important; z-index: 1 !important; }
+    #m-d-fund-transfer .vm-r2r-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+    #m-d-fund-transfer .vm-r2r-grid .vm-r2r-full { grid-column: 1 / -1 !important; }
+    #m-d-fund-transfer .vm-r2r-fld { position: relative !important; background: #fff !important; border: 1px solid #e5e9f2 !important; border-radius: 14px !important; padding: 10px 12px 10px 46px !important; box-shadow: 0 2px 8px rgba(15,23,42,.05) !important; }
+    #m-d-fund-transfer .vm-r2r-fld label { display: block !important; font-size: 10px !important; font-weight: 800 !important; letter-spacing: .5px !important; text-transform: uppercase !important; color: #64748b !important; margin: 0 0 3px 0 !important; padding: 0 !important; border: none !important; background: none !important; line-height: 1.3 !important; }
+    #m-d-fund-transfer .vm-r2r-fld .form-control { border: none !important; box-shadow: none !important; background: transparent !important; padding: 0 !important; margin: 0 !important; height: 24px !important; font-size: 13.5px !important; font-weight: 800 !important; color: #0f172a !important; width: 100% !important; }
+    #m-d-fund-transfer .vm-r2r-ico { position: absolute !important; left: 10px !important; top: 50% !important; transform: translateY(-50%) !important; width: 28px !important; height: 28px !important; border-radius: 9px !important; background: #eef2ff !important; color: #4f46e5 !important; font-size: 12px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+    #m-d-fund-transfer .vm-r2r-amt .form-control { color: #1d4ed8 !important; font-size: 15px !important; }
+    #m-d-fund-transfer .vm-r2r-note { grid-column: 1 / -1 !important; display: flex !important; gap: 9px !important; font-size: 11.5px !important; line-height: 1.55 !important; color: #64748b !important; font-weight: 600 !important; background: #f8fafc !important; border: 1px dashed #cbd5e1 !important; border-radius: 12px !important; padding: 10px 12px !important; margin: 0 !important; }
+    #m-d-fund-transfer .vm-r2r-note i { color: #4f46e5 !important; font-size: 14px !important; margin-top: 1px !important; }
 
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
+    /* ===== R2R form fields FIX v3 — flexbox icon (overlap impossible) ===== */
+    .saas-retailer-r2r-page .vm-tx-box { position: relative !important; display: flex !important; align-items: center !important; gap: 9px !important; background: #f8fafc !important; border: 1.5px solid #dbe2ef !important; border-radius: 13px !important; padding: 0 12px 0 8px !important; transition: border-color .15s ease, box-shadow .15s ease, background .15s ease !important; }
+    .saas-retailer-r2r-page .vm-tx-box:focus-within { border-color: #4f46e5 !important; background: #fff !important; box-shadow: 0 0 0 4px rgba(79,70,229,.14) !important; }
+    .saas-retailer-r2r-page .vm-tx-in-ico { position: static !important; left: auto !important; top: auto !important; transform: none !important; width: 30px !important; height: 30px !important; min-width: 30px !important; border-radius: 10px !important; background: linear-gradient(135deg,#eef2ff,#e0e7ff) !important; color: #4f46e5 !important; font-size: 13px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; pointer-events: none !important; z-index: 2 !important; margin: 0 !important; }
+    .saas-retailer-r2r-page .vm-tx-input.form-control { flex: 1 1 auto !important; min-width: 0 !important; height: 46px !important; border: none !important; border-radius: 0 !important; background: transparent !important; font-size: 14px !important; font-weight: 600 !important; color: #0f172a !important; padding: 0 !important; box-shadow: none !important; width: auto !important; margin: 0 !important; outline: none !important; }
+    .saas-retailer-r2r-page .vm-tx-input.form-control::placeholder { color: #9aa6bb !important; font-weight: 500 !important; }
+    .saas-retailer-r2r-page .vm-tx-input.form-control:focus { border: none !important; background: transparent !important; box-shadow: none !important; outline: none !important; }
+    .saas-retailer-r2r-page input[type="password"].vm-tx-input.form-control { padding-right: 34px !important; }
+    .saas-retailer-r2r-page .vm-tx-box--area { align-items: flex-start !important; padding-top: 8px !important; padding-bottom: 8px !important; }
+    .saas-retailer-r2r-page textarea.vm-tx-input.form-control { height: auto !important; min-height: 76px !important; resize: vertical !important; line-height: 1.5 !important; padding-top: 4px !important; }
+    .saas-retailer-r2r-page .vm-tx-box input.vm-tx-input,
+    .saas-retailer-r2r-page .vm-tx-box textarea.vm-tx-input { border: 0 !important; border-color: transparent !important; outline: none !important; box-shadow: none !important; background: transparent !important; }
+    /* Beat legacy theme input rule (admin-fund-transfer-modern.css) — higher specificity */
+    body.saas-admin-ui .saas-fund-transfer-page.saas-retailer-r2r-page .fund-transfer-form input[type="text"],
+    body.saas-admin-ui .saas-fund-transfer-page.saas-retailer-r2r-page .fund-transfer-form input[type="password"],
+    body.saas-admin-ui .saas-fund-transfer-page.saas-retailer-r2r-page .fund-transfer-form textarea { border: none !important; border-color: transparent !important; background: transparent !important; box-shadow: none !important; outline: none !important; height: 46px !important; padding: 0 !important; font-size: 14px !important; }
+    body.saas-admin-ui .saas-fund-transfer-page.saas-retailer-r2r-page .fund-transfer-form textarea { height: auto !important; min-height: 76px !important; padding-top: 4px !important; }
+    body.saas-admin-ui .saas-fund-transfer-page.saas-retailer-r2r-page .fund-transfer-form input[type="text"]:focus,
+    body.saas-admin-ui .saas-fund-transfer-page.saas-retailer-r2r-page .fund-transfer-form input[type="password"]:focus,
+    body.saas-admin-ui .saas-fund-transfer-page.saas-retailer-r2r-page .fund-transfer-form textarea:focus { border: none !important; box-shadow: none !important; outline: none !important; background: transparent !important; }
+    .saas-retailer-r2r-page .vm-r2r-eye { position: absolute !important; right: 12px !important; top: 50% !important; transform: translateY(-50%) !important; color: #94a3b8 !important; cursor: pointer !important; font-size: 15px !important; z-index: 3 !important; }
+    .saas-retailer-r2r-page .vm-r2r-eye:hover { color: #4f46e5 !important; }
+    .saas-retailer-r2r-page .vm-tx-field > label { display: flex !important; align-items: center !important; gap: 6px !important; font-size: 11px !important; font-weight: 800 !important; color: #1e293b !important; text-transform: uppercase !important; letter-spacing: .5px !important; margin: 0 0 7px 2px !important; padding: 0 !important; border: none !important; background: none !important; }
+    .saas-retailer-r2r-page .vm-tx-field > label::before { content: '' !important; width: 4px !important; height: 14px !important; border-radius: 999px !important; background: linear-gradient(180deg,#4f46e5,#7c3aed) !important; display: inline-block !important; }
+    .saas-retailer-r2r-page .vm-r2r-usercard { background: linear-gradient(180deg,#f8faff,#fff) !important; border: 1px solid #e3e8f2 !important; border-radius: 14px !important; padding: 12px 14px !important; margin-top: 10px !important; box-shadow: 0 4px 14px rgba(15,23,42,.06) !important; }
+    .saas-retailer-r2r-page .vm-r2r-usercard table { width: 100% !important; border-collapse: collapse !important; margin: 0 !important; background: none !important; border: none !important; }
+    .saas-retailer-r2r-page .vm-r2r-usercard table tr { background: none !important; }
+    .saas-retailer-r2r-page .vm-r2r-usercard table td { padding: 5px 6px !important; font-size: 12.5px !important; border: none !important; border-bottom: 1px dashed #e5e9f2 !important; background: none !important; }
+    .saas-retailer-r2r-page .vm-r2r-usercard table tr:last-child td { border-bottom: none !important; }
+    .saas-retailer-r2r-page .vm-r2r-usercard table td:first-child label { color: #64748b !important; font-weight: 700 !important; margin: 0 !important; font-size: 10.5px !important; text-transform: uppercase !important; letter-spacing: .4px !important; }
+    .saas-retailer-r2r-page .vm-r2r-usercard table td:last-child label { color: #0f172a !important; font-weight: 800 !important; margin: 0 !important; }
+    .saas-retailer-r2r-page .vm-tx-submit-btn { min-height: 48px !important; border: none !important; border-radius: 13px !important; background: linear-gradient(135deg,#1e40ff 0%,#6d28d9 60%,#7c3aed 100%) !important; color: #fff !important; font-size: 14.5px !important; font-weight: 800 !important; cursor: pointer !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; box-shadow: 0 8px 20px rgba(79,70,229,.4) !important; padding: 10px 22px !important; width: 100% !important; }
+    .saas-retailer-r2r-page .vm-tx-submit-btn:hover:not(:disabled) { transform: translateY(-1px) !important; filter: brightness(1.07) !important; }
+    .saas-retailer-r2r-page .vm-tx-submit-btn:disabled { opacity: .55 !important; cursor: not-allowed !important; box-shadow: none !important; }
+    .saas-retailer-r2r-page .vm-tx-cancel-btn { min-height: 48px !important; border: 1.5px solid #e2e8f0 !important; background: #fff !important; color: #475569 !important; font-size: 14px !important; font-weight: 800 !important; border-radius: 13px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; padding: 10px 22px !important; text-decoration: none !important; width: 100% !important; }
+    .saas-retailer-r2r-page .vm-tx-cancel-btn:hover { border-color: #4f46e5 !important; color: #4f46e5 !important; }
+    .saas-retailer-r2r-page .vm-r2r-otpbtn { border: 1.5px dashed #c7d2fe !important; background: #eef2ff !important; color: #4f46e5 !important; font-weight: 800 !important; font-size: 13px !important; border-radius: 10px !important; padding: 10px 16px !important; cursor: pointer !important; width: 100% !important; }
+    .saas-retailer-r2r-page .vm-r2r-otpbtn:hover { background: #e0e7ff !important; }
+
+    /* ===== Responsive (same as UPITRANSFER) ===== */
+    @@media screen and (max-width:1024px) {
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-layout { display: flex !important; flex-direction: column !important; gap: 14px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-form-col,
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-history-col { width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-page-toolbar { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-search-wrap { width: 100% !important; max-width: 100% !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-search-wrap .form-control { width: 100% !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-history-toolbar__filters { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-history-toolbar__head { flex-wrap: wrap !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-export-group { display: flex !important; flex-wrap: wrap !important; gap: 8px !important; }
     }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
+    @@media screen and (max-width:767px) {
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-page-shell { padding-left: 10px !important; padding-right: 10px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-history-toolbar__head { flex-wrap: wrap !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-history-toolbar__filters { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-date-search-group { flex-wrap: wrap !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-dmt-field--date { flex: 1 1 46% !important; min-width: 140px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-search-btn { flex: 1 1 100% !important; min-height: 42px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-export-group { display: flex !important; gap: 8px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-export-btn { width: 46px !important; height: 42px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page #tblshowMasterD { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; border-radius: 12px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page #tblshowMasterD table { min-width: 640px !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page #tblshowMasterD table th,
+        body.saas-admin-ui .saas-retailer-r2r-page #tblshowMasterD table td { font-size: 12px !important; padding: 9px 10px !important; }
+        #m-d-fund-transfer .modal-dialog { margin: 16px auto !important; }
+        #m-d-fund-transfer .vm-r2r-grid { grid-template-columns: 1fr !important; }
+        #m-d-fund-transfer .vm-r2r-hero-amt { font-size: 18px !important; }
     }
-
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    @@media screen and (max-width:480px) {
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-r2r-btnrow { flex-direction: column !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-dmt-field--date { flex: 1 1 100% !important; }
     }
-
-
-
-    /* new css  */
-
-    span {
-        color: #fff !important;
-    }
-
-    section.content {
-        margin: 87px 0px 0 164px;
-    }
-
-    .datepicker table tr td span {
-        color: #555 !important;
-    }
-
-        .datepicker table tr td span.active {
-            color: #fff !important;
-        }
-
-    .dropdown-menu.datepicker-dropdown.datepicker {
-        margin-top: 87px !important;
-    }
-
-    .tab-menur li a::before {
-        content: '';
-        width: 12px;
-        height: 12px;
-        display: inline-block;
-        border: 2px solid #bbb;
-        border-radius: 50%;
-        margin: 2px 6px 0px 0px;
-    }
-
-    .tab-menur li a.active-ar::before {
-        border-color: var(--main-bg-lcolor);
-        background: var(--main-bg-lcolor);
-    }
-
-    .tab-menur li a.active-ar {
-        color: var(--main-bg-lcolor);
-    }
-
-    .fund-t-dalear input {
-        border: 1px solid #bbb;
-        height: 32px;
-        padding: 0px 5px;
-        padding-top: 0px !important;
-        width: 100%;
-        padding-left: 40px;
-    }
-
-    .fund-t-dalear button {
-        height: 32px;
-        border: 1px solid #c7c2c2;
-        background: #fff;
-    }
-
-    .for-change-fund {
-        margin: 0px;
-        width: 100%;
-    }
-
-    .fund-fistory {
-        float: left;
-        margin-top: 0px;
-        font-size: 18px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-        .fund-fistory sub {
-            position: absolute;
-            bottom: 4px !important;
-            top: 24px;
-            line-height: 8px;
-            left: 11px;
-            font-size: 9px;
-        }
-
-    .nav-tabs li.active .for-change-fund .fa {
-        float: left;
-        font-size: 44px;
-        transform: rotate(-90deg);
-        margin-left: 5px;
-        color: var(--main-bg-lcolor) !important;
-        margin-top: -2px;
-        line-height: 36px;
-    }
-
-    .fund-trasfer-right .nav-tabs + .tab-content {
-        padding: 5px !important;
-    }
-
-    .fund-trasfer-right .tab-content {
-        height: 74vh;
-    }
-</style>
-<style type="text/css">
-
-    @@keyframes ldio-zdyd6mf6t5 {
-        0% {
-            top: 96px;
-            left: 96px;
-            width: 0;
-            height: 0;
-            opacity: 1;
-        }
-
-        100% {
-            top: 18px;
-            left: 18px;
-            width: 156px;
-            height: 156px;
-            opacity: 0;
-        }
-    }
-
-    .ldio-zdyd6mf6t5 div {
-        position: absolute;
-        border-width: 4px;
-        border-style: solid;
-        opacity: 1;
-        border-radius: 50%;
-        animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
-    }
-
-        .ldio-zdyd6mf6t5 div:nth-child(1) {
-            border-color: #e90c59
-        }
-
-        .ldio-zdyd6mf6t5 div:nth-child(2) {
-            border-color: #46dff0;
-            animation-delay: -0.5s;
-        }
-
-    .loadingio-spinner-ripple-92ar2pfqk5j {
-        width: 200px;
-        height: 200px;
-        display: inline-block;
-        overflow: hidden;
-        background: transparent;
-    }
-
-    .ldio-zdyd6mf6t5 {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform: translateZ(0) scale(1);
-        backface-visibility: hidden;
-        transform-origin: 0 0; /* see note above */
-    }
-
-        .ldio-zdyd6mf6t5 div {
-            box-sizing: content-box;
-        }
-
-    .errorss {
-        color: #fff;
-        background: red;
-        width: 100%;
-    }
-
-    .errorss1 {
-        color: #fff;
-        background: green;
-        width: 100%;
-    }
-
-    #showinformation .col-md-12, #DIstribotorshowinformation .col-md-12, #Retailershowinformation .col-md-12 {
-        border-bottom: 1px solid #bbb;
-        margin: 0px 3% !important;
-        width: 94%;
-        margin-bottom: 6px !important;
-        padding: 0px !important;
-        padding-bottom: 10px !important;
-    }
-
-        #showinformation .col-md-12 button, #DIstribotorshowinformation .col-md-12 button, #Retailershowinformation .col-md-12 button {
-            margin-top: 20px;
-        }
-
-        #showinformation .col-md-12 label:last-child, #DIstribotorshowinformation .col-md-12 label:last-child, #Retailershowinformation .col-md-12 label:last-child {
-            text-align: right;
-            font-weight: 800;
-        }
-
-    .fund-trasfer-right .tab-content {
-        height: 80vh;
-    }
-
-    input[type="password"] {
-        background-color: transparent;
-        border: 1px solid var(--main-bg-lcolor);
-        box-shadow: none;
-    }
-
-    .col-md-3.date-sateclassee.trypurchasecewq.trypurchasecewq-new {
-        float: left;
-        padding-right: 5px;
-        width: 27%;
-    }
-
-    .fund-t-dalear .col-md-3.date-sateclassee.trypurchasecewq.trypurchasecewq-new input {
-        padding-left: 34px;
-    }
-
-    .col-md-3.apiclass-satenew.last-nwwefrespomg {
-        width: 19%;
-        float: left;
-    }
-
-    .fundtransfer-rtailer-date .trypurchasecewq-new input {
-        border: 1px solid #555 !important;
-    }
-
-    .fundtransfer-rtailer-date .date-sateclassee.trypurchasecewq .custom-date-icon {
-        border-color: #555 !important;
-        height: 31px !important;
-        top: 1px !important;
-    }
-
-    .fundtransfer-rtailer-date .last-nwwefrespomg button {
-        border: 1px solid #555;
-    }
-
-    .fundtransfer-rtailer-date .trypurchasecewq-new {
-        width: 25% !important;
-    }
-
-    .col-md-3.apiclass-satenew.last-nwwefrespomg {
-        width: 15%;
-        float: left;
-    }
-
-    .fundtransfer-rtailer-date .trypurchasecewq-new {
-        width: 20% !important;
-        float: left;
-    }
-
-    .fundretailer-pdf input {
-        background-color: #fff !important;
-    }
-
-
-
-
-    @@media screen and (max-width:1366px) {
-        .bread-same-all-page.allpage-responshivenew {
-            margin-top: 0px;
-        }
-
-        .fourthdesign-retailer-allnone .fundtransfer-rtailer-date {
-            width: 72% !important;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        .allpage-responshivenew {
-            padding: 0px 0;
-        }
-
-            .allpage-responshivenew ul li {
-                margin-bottom: 6px;
-            }
-
-        .col-md-8, .col-md-4.servicepaidreport {
-            padding-left: 15px;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .fundpdf-retailer ul.responsive-sateulce li.firstclassactive {
-            width: 100% !important;
-            border: 0px;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-        }
-
-        .fundpdf-retailer ul.responsive-sateulce li.fundtransfer-rtailer-date {
-            width: 100% !important;
-            float: left;
-            padding: 0 5px;
-        }
-
-            .fundpdf-retailer ul.responsive-sateulce li.fundtransfer-rtailer-date .date-sateclassee.trypurchasecewq-new {
-                width: 100% !important;
-                float: left;
-                margin-bottom: 5px;
-            }
-
-            .fundpdf-retailer ul.responsive-sateulce li.fundtransfer-rtailer-date form .date-sateclassee.trypurchasecewq.trypurchasecewq-new {
-                width: 50% !important;
-                float: left;
-            }
-
-            .fundpdf-retailer ul.responsive-sateulce li.fundtransfer-rtailer-date .last-nwwefrespomg {
-                width: auto;
-                float: left;
-            }
-
-                .fundpdf-retailer ul.responsive-sateulce li.fundtransfer-rtailer-date .last-nwwefrespomg button {
-                    padding: 0 10px !important;
-                }
-
-        .fundretailer-pdf {
-            padding-right: 5px !important;
-        }
-
-        .fundpdf-retailer ul.responsive-sateulce li.fundtransfer-rtailer-date form .date-sateclassee.trypurchasecewq.trypurchasecewq-new input {
-            text-align: center;
-        }
-
-        .fourthdesign-retailer-allnone .fundtransfer-rtailer-date .row.fund-t-dalear {
-            width: 100% !important;
-        }
-
-        .fourthdesign-retailer-allnone .col-md-4, .fourthdesign-retailer-allnone .col-md-8 {
-            padding: 0;
-        }
-    }
-
-    @@media screen and (max-width:580px) {
-        .fund-t-dalear .col-md-3.date-sateclassee.trypurchasecewq.trypurchasecewq-new input {
-            padding-left: 5px !important;
-            font-size: 12px;
-        }
-    }
-
-    @@media screen and (max-width:420px) {
+    @@media print {
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-form-col,
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-page-toolbar,
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-history-toolbar__filters,
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-export-group,
+        body.saas-admin-ui .saas-retailer-r2r-page #m-d-fund-transfer { display: none !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-layout { display: block !important; }
+        body.saas-admin-ui .saas-retailer-r2r-page .vm-ft-history-col { width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important; }
     }
 </style>
 
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section">
-    <div class="container-fluid">
-        <!--Four-Design-Page-Header-Start-->
+<section class="content saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium saas-dealer-fund-transfer-page saas-retailer-fund-transfer-page saas-retailer-r2r-page">
+    <div class="container-fluid vm-ft-page-shell">
 
-        <div class="page-title-box-fourde">
-            <h3>Transfer R to R</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Transfer R to R</a></li>
-            </ul>
-        </div>
-
-        <!--Four-Design-Page-Header-End-->
-        <div class="page-header-third">
-            <div class="bread-same-all-page allpage-responshivenew">
-                <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                    <ul style="margin:0;">
-                        <li class="smli">
-                            <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                            </a>
-                        </li>
-
-                        <li class="fullbodydycolorbg tmw-total-color-one">
-                            R<sup style="top: -5px;left: 2px;">2</sup>&nbsp;R Transfer
-                        </li>
-                    </ul>
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <div>
+                    <ol class="vm-ft-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Report's</li>
+                        <li>R<sup style="top:-5px;left:2px;">2</sup>&nbsp;R Transfer</li>
+                    </ol>
                 </div>
-
+            </div>
+            <div class="vm-ft-search-wrap">
+                <input class="form-control" type="text" value="" id="myInput" name="myInput" placeholder="Search by name, amount, TxnId..." autocomplete="off" onkeyup="myFunction2()" />
             </div>
         </div>
 
-    </div>
+        <div class="vm-ft-layout-wrap">
+        <div class="vm-ft-layout vm-ft-layout--full">
+            <div class="vm-ft-form-col">
+                <div class="fund-trasfer-left vm-ft-form-card">
+                    <div class="vm-ft-form-card-header">
+                        <div class="vm-ft-form-card-header__icon" aria-hidden="true">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div>
+                            <span class="vm-ft-form-card-header__title">R2R Transfer</span>
+                            <span class="vm-ft-form-card-header__sub">@favimage To&nbsp;@favimage Fund Transfer</span>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs fullbodydycolorbg1 tab-seconddesign tab-third-design vm-ft-role-tabs fulltabchange tabtypeschages" id="tabs">
+                        <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--active current active tabChangeType" data-tabname="ReatilertoRetailer" data-href="@Url.Action("MDTODealer","Home",new { tabtype="ReatilertoRetailer"})" data-tab="tab-1" role="presentation" style="width:100% !important;">
+                            <a data-toggle="tab" href="#home" class="vm-ft-role-tab" aria-expanded="true" aria-selected="true">Retailer To Retailer</a>
+                        </li>
+                    </ul>
 
-    <div class="col-md-12">
-
-        <div class="row clearfix four-design-table-design">
-            <div class="col-md-4">
-                <div class="page-header-third">
-                    <div class="fund-trasfer-left fund-user-left">
-                        <ul class="nav nav-tabs tabtypeschages" id="tabs">
-                            <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tabname="ReatilertoRetailer" data-href="@Url.Action("MDTODealer","Home",new { tabtype="ReatilertoRetailer"})" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true">@favimage To&nbsp;@favimage Fund Transfer</a></li>
-
-
-
-
-                        </ul>
-
-                        <div class="width100 float-left ">
-
-                            <div id="home" class="width100 float-left tab-pane fade active in">
-
-                                @using (Ajax.BeginForm("retailer_To_retailer_fund_transfer", "Home",
-                                  new AjaxOptions
-                                  {
-                                      InsertionMode = InsertionMode.Replace,
-                                      OnSuccess = "OnSuccess",
-                                      OnFailure = "OnFailure",
-                                      LoadingElementId = "outer-loader",
-                                      UpdateTargetId = "tblshowMasterD",
-                                      // LoadingElementId = "progress"
-                                  }))
-                                {
-
-
-                                    <div class="fund-transfer-form minheight-responsivehe changeback-four-design" id="frmdata">
-
-                                        <div class="col-md-3 retailer-first retailer-toretailerclass">
-                                            <div class="fullclassdata">
-                                                <div class="">
-                                                    <label class="satefontsize">User&nbsp;Email&nbsp;/&nbsp;Mobile</label>
-                                                    <input class="form-control" id="RetailerId" name="RetailerId" placeholder="Enter Email ID / Mobile No" minlength="6" required="required" style="padding-top:4px;height:30px;" type="text">
-
-                                                </div>
-                                                <div class="col-md-12 show-data">
-                                                    <div class="row" id="retailerinform" style="display:none;">
-                                                        <div class="nameshow">
-                                                            <table border="1">
-                                                                <tr>
-                                                                    <td><label>Firm&nbsp;Name&nbsp;:</label></td>
-                                                                    <td><label id="lblfrmname"></label></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><label>Retailer&nbsp;Name:&nbsp;</label></td>
-                                                                    <td> <label id="lblreatilername"></label></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><label>Email:&nbsp;</label></td>
-                                                                    <td><label id="lblemail"></label></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><label>Mobile:&nbsp;</label> </td>
-                                                                    <td><label id="lblmobile"></label></td>
-                                                                </tr>
-                                                            </table>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                            <label>Enter Amount </label>
-                                            <div>
-                                                <input type="text" id="Retaileramount" required name="Retaileramount" placeholder="Enter Amount" />
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12 col-sm-12 col-xs-12 fund-comment">
-                                            <label>Comments</label>
-                                            <div>
-                                                <textarea id="txtRetailercomment" style="outline:none;" required name="txtRetailercomment"></textarea>
-                                            </div>
-                                        </div>
-
-
-                                        @if (ViewBag.dmtpin_otp != null)
-                                        {
-                                            if (ViewBag.dmtpin_otp.status == true)
+                    <div class="width100 float-left tabcurrent-seconddesign input-border-third">
+                        <div id="home" class="width100 float-left tab-pane vm-ft-left-tab-pane fade remove-activein active in">
+                            <div class="fund-transfer-form vm-dealer-ft-form-fs14">
+                                <div class="scan-outer">
+                                    <div class="vm-tx-panel">
+                                        @using (Ajax.BeginForm("retailer_To_retailer_fund_transfer", "Home",
+                                            new AjaxOptions
                                             {
-                                                <div class="col-md-12 col-sm-12 col-xs-12 fund-comment" style="display:none;" id="otpsubmithideshowr2r">
-                                                    <label>Enter OTP</label>
-                                                    <div style="position:relative;">
-
-
-                                                        <input type="password" id="txtRetailerdmtpin" required name="txtRetailerdmtpin" autocomplete="new-password" placeholder="Enter OTP" style="background-color: white;" />
-                                                        <i class="bi bi-eye-slash" id="togglePassword" onclick="viewpassotp()" style="position: absolute; right: 5px; top: 5px;"></i>
-                                                    </div>
+                                                InsertionMode = InsertionMode.Replace,
+                                                OnSuccess = "OnSuccess",
+                                                OnFailure = "OnFailure",
+                                                LoadingElementId = "outer-loader",
+                                                UpdateTargetId = "tblshowMasterD"
+                                            }))
+                                        {
+                                            <div class="vm-tx-field">
+                                                <label for="RetailerId">User&nbsp;Email&nbsp;/&nbsp;Mobile</label>
+                                                <div class="vm-tx-box">
+                                                    <span class="vm-tx-in-ico"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                                    <input class="form-control vm-tx-input" id="RetailerId" name="RetailerId" placeholder="Enter Email ID / Mobile No" minlength="6" required="required" type="text" autocomplete="off">
                                                 </div>
-
-                                                <div class="col-md-12" id="resendotpr2r" style="display:none;">
-                                                    <div class="form-group" style="margin-top:4px;">
-                                                        <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
-                                                            <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsendr2r('SECOND','R2RPINOTP')">Resend OTP</a>
+                                                <div class="vm-r2r-usercard" id="retailerinform" style="display:none;">
+                                                    <table border="0">
+                                                        <tr>
+                                                            <td><label>Firm&nbsp;Name&nbsp;:</label></td>
+                                                            <td><label id="lblfrmname"></label></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><label>Retailer&nbsp;Name:&nbsp;</label></td>
+                                                            <td><label id="lblreatilername"></label></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><label>Email:&nbsp;</label></td>
+                                                            <td><label id="lblemail"></label></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><label>Mobile:&nbsp;</label></td>
+                                                            <td><label id="lblmobile"></label></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="vm-tx-field" style="margin-top:10px;">
+                                                <label for="Retaileramount">Enter Amount</label>
+                                                <div class="vm-tx-box">
+                                                    <span class="vm-tx-in-ico"><i class="fas fa-rupee-sign" aria-hidden="true"></i></span>
+                                                    <input class="form-control vm-tx-input" type="text" id="Retaileramount" required name="Retaileramount" placeholder="Enter Amount" inputmode="numeric" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                            <div class="vm-tx-field" style="margin-top:10px;">
+                                                <label for="txtRetailercomment">Comments</label>
+                                                <div class="vm-tx-box vm-tx-box--area">
+                                                    <span class="vm-tx-in-ico"><i class="fa fa-comment" aria-hidden="true"></i></span>
+                                                    <textarea class="form-control vm-tx-input" id="txtRetailercomment" style="outline:none;" required name="txtRetailercomment" placeholder="Enter comment"></textarea>
+                                                </div>
+                                            </div>
+                                            if (ViewBag.dmtpin_otp != null)
+                                            {
+                                                if (ViewBag.dmtpin_otp.status == true)
+                                                {
+                                                    <div class="vm-tx-field" style="margin-top:10px;display:none;" id="otpsubmithideshowr2r">
+                                                        <label for="txtRetailerdmtpin">Enter OTP</label>
+                                                        <div class="vm-tx-box">
+                                                            <span class="vm-tx-in-ico"><i class="fa fa-key" aria-hidden="true"></i></span>
+                                                            <input class="form-control vm-tx-input" type="password" id="txtRetailerdmtpin" required name="txtRetailerdmtpin" autocomplete="new-password" placeholder="Enter OTP" style="background-color: white;" />
+                                                            <i class="bi bi-eye-slash vm-r2r-eye" id="togglePassword" onclick="viewpassotp()"></i>
                                                         </div>
                                                     </div>
-                                                </div>
-
-                                                <div class="col-md-12" id="hideshowotpbtnr2r">
-                                                    <div class="form-group" style="margin-top:4px;">
-                                                        <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
-                                                            <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsendr2r('FIRST','R2RPINOTP')">Send OTP</a>
+                                                    <div id="resendotpr2r" style="display:none;">
+                                                        <div class="form-group" style="margin-top:4px;">
+                                                            <button type="button" class="vm-r2r-otpbtn" onclick="otpsendr2r('SECOND','R2RPINOTP')">Resend OTP</button>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    <div id="hideshowotpbtnr2r">
+                                                        <div class="form-group" style="margin-top:4px;">
+                                                            <button type="button" class="vm-r2r-otpbtn" onclick="otpsendr2r('FIRST','R2RPINOTP')">Send OTP</button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="vm-tx-field" style="margin-top:10px;">
+                                                        <label for="txtRetailerdmtpin">Transaction PIN</label>
+                                                        <div class="vm-tx-box">
+                                                            <span class="vm-tx-in-ico"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                                                            <input class="form-control vm-tx-input" type="password" id="txtRetailerdmtpin" required name="txtRetailerdmtpin" autocomplete="new-password" placeholder="Enter Transaction PIN" style="background-color: white;" />
+                                                            <i class="bi bi-eye-slash vm-r2r-eye" id="togglePassword" onclick="viewpassotp()"></i>
+                                                        </div>
+                                                    </div>
+                                                }
                                             }
                                             else
                                             {
-                                                <div class="col-md-12 col-sm-12 col-xs-12 fund-comment">
-                                                    <label>Transaction PIN</label>
-                                                    <div style="position:relative;">
-
-
-                                                        <input type="password" id="txtRetailerdmtpin" required name="txtRetailerdmtpin" autocomplete="new-password" placeholder="Enter Transaction PIN" style="background-color: white;" />
-                                                        <i class="bi bi-eye-slash" id="togglePassword" onclick="viewpassotp()" style="position: absolute; right: 5px; top: 5px;"></i>
+                                                <div class="vm-tx-field" style="margin-top:10px;">
+                                                    <label for="txtRetailerdmtpin">Transaction PIN</label>
+                                                    <div class="vm-tx-box">
+                                                        <span class="vm-tx-in-ico"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                                                        <input class="form-control vm-tx-input" type="password" id="txtRetailerdmtpin" required name="txtRetailerdmtpin" autocomplete="new-password" placeholder="Enter Transaction PIN" style="background-color: white;" />
+                                                        <i class="bi bi-eye-slash vm-r2r-eye" id="togglePassword" onclick="viewpassotp()"></i>
                                                     </div>
                                                 </div>
                                             }
+                                            <p class="vm-tx-msg vm-r2r-msg" id="dmtsuccesscodeotpr2r" style="display:none;color:green;margin-top:8px;"></p>
+                                            <p class="vm-tx-msg vm-r2r-msg" id="dmterrorcodeotpr2r" style="color:red;"></p>
+                                            <p class="vm-tx-msg vm-r2r-msg" id="demor2r" style="color:red;"></p>
+                                            <div class="vm-r2r-btnrow" style="margin-top:12px;">
+                                                <a class="vm-tx-cancel-btn" href="@Url.Action("Fund_Transfer_Retailer_To_Retailer", "Home")">Cancel</a>
+                                                <button class="vm-tx-submit-btn" id="shownoneclass" type="submit" disabled="disabled">Transfer&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+                                            </div>
+                                            <p class="vm-tx-msg" style="color:red;" id="errorss"></p>
+                                            <input type="hidden" id="latss" name="latss" />
+                                            <input type="hidden" id="longloc" name="longloc" />
                                         }
-                                        else
-                                        {
-                                            <div class="col-md-12 col-sm-12 col-xs-12 fund-comment">
-                                                <label>Transaction PIN</label>
-                                                <div style="position:relative;">
-
-
-                                                    <input type="password" id="txtRetailerdmtpin" required name="txtRetailerdmtpin" autocomplete="new-password" placeholder="Enter Transaction PIN" style="background-color: white;" />
-                                                    <i class="bi bi-eye-slash" id="togglePassword" onclick="viewpassotp()" style="position: absolute; right: 5px; top: 5px;"></i>
-                                                </div>
-                                            </div>
-                                        }
-                                        <div id="dmtsuccesscodeotpr2r" style="display: none; color: green; margin-left: 17px;"></div>
-                                        <div id="dmterrorcodeotpr2r" style="color: red; margin-left: 17px;"></div>
-                                        <div id="demor2r" style="color: red; margin-left: 17px;"></div>
-
-
-
-                                        <div class="col-md-12 col-sm-12 col-xs-12">
-                                            @*<div>
-                                                    <button id="btnnshowmaster1" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
-                                                        Submit
-                                                    </button>
-                                                </div>*@
-                                            <div class="new-nextbutton">
-                                                <button class="waves-effect" style="background-color: white;"><a href="@Url.Action("Fund_Transfer_Retailer_To_Retailer", "Home")"> Cancel</a></button>
-                                                <button class="fullbodydycolorbg waves-effect" id="shownoneclass" type="submit" disabled="disabled">Transfer</button>
-
-                                            </div>
-
-                                        </div>
-                                        <label id="errorss"></label>
-
-                                    </div>
-                                    <input type="hidden" id="latss" required name="latss" />
-                                    <input type="hidden" id="longloc" required name="longloc" />
-                                }
-                            </div>
-
-
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="outer-loader" style="position: absolute;background: rgba(0,0,0,.5);right: 15px;left: 15px;bottom: 0px;top: 0px;display:none;">
-                <div id="loader" style="position: absolute; right: 30%; top: 50%; transform: translate(0%, -50%);">
-                    <div class="loadingio-spinner-ripple-92ar2pfqk5j">
-                        <div class="ldio-zdyd6mf6t5">
-                            <div></div><div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-8">
-                <div class="page-header-third">
-                    <div class="fund-trasfer-right fund-user-right fundpdf-retailer">
-                        <ul class="nav nav-tabs responsive-sateulce" id="tabs">
-                            <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
-                                <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
-
-                                    <label class="for-change-fund">
-                                        <span class="fund-fistory">History<sub class="tmw-total-color-one fullbodydycolorbg">Fund Transfer</sub></span>
-                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
-                                    </label>
-                                </a>
-                            </li>
-                            <li class="fundtransfer-rtailer-date" style="width: auto;float: right;margin-top: 4px;padding-right: 5px;width:70%;">
-
-                                <div class="row fund-t-dalear" style="margin:0px;">
-
-
-                                    <div class="col-md-3 date-sateclassee trypurchasecewq trypurchasecewq-new" style="padding-left: 0px;">
-                                        <div class="for-search">
-                                            <input id="myInput" name="myInput" type="text" placeholder="Search..." onkeyup="myFunction2()" style="padding-left:5px !important;height:33px !important;" />
-
-                                        </div>
-
-                                    </div>
-                                    @using (Ajax.BeginForm("MDTODealer", "Home",
-                                                      new AjaxOptions
-                                                      {
-                                                          InsertionMode = InsertionMode.Replace,
-                                                          UpdateTargetId = "tblshowMasterD"
-
-                                                          // LoadingElementId = "progress"
-                                                      }))
-                                    {
-
-                                        <div class="col-md-3 date-sateclassee trypurchasecewq trypurchasecewq-new" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            <input type="datetime" id="txt_frm_date" name="txt_frm_date" style="margin-top:1px;border:1px solid #fff;" />
-                                        </div>
-                                        <div class="col-md-3 date-sateclassee trypurchasecewq trypurchasecewq-new" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            <input type="datetime" id="txt_to_date" name="txt_to_date" style=" margin-top: 1px !important;border:1px solid #fff;" />
-                                        </div>
-
-                                        <div class="col-md-3 apiclass-satenew last-nwwefrespomg" style="padding:0px;">
-                                            <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height: 31px;margin-top:0px" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
-                                            </button>
-                                        </div>
-                                    }
-                                    <div class="fundretailer-pdf" style="width:auto;float:right;padding-right:0;">
-
-                                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #7b7777;background:#b1a6a638;width:auto;background-image: url(../../images/reportimage/xls.png);
-                background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;margin-bottom:5px;" />
-                                        <input type="button" id="" value="PDF" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #7b7777;background:#b1a6a638;width:auto;background-image: url(../../ashok-images/pdf.png);
-                 background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;margin-bottom:5px;" />
-
-
                                     </div>
                                 </div>
-
-                            </li>
-
-                        </ul>
-                        <div id="tab-1" class="width100 float-left tab-content current responsiveinherithe" style="height:74vh;min-height:585px;overflow:auto;">
-                            <div class="for-un">
-                                @*<table>
-                                        <tr>
-                                            <td>
-
-                                                <input type="datetime" id="txt_frm_date" name="txt_frm_date" />
-                                            </td>
-                                            <td>
-                                                <input type="datetime" id="txt_to_date" name="txt_to_date" />
-                                            </td>
-                                            <td>
-                                                <button type="button" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                    <i class="fa fa-search"></i>
-
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </table>*@
-
-                            </div>
-                            <div id="tblshowMasterD" class="table-responsive tblshowMasterclassadd table-rsponsive-paddfont tablethirddesign-newnew" style="width:100%;">
-                                @Html.Partial("_Purchase_OrderReports")
-
-                            </div>
-                            <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
-                                <img src="~/img/ajax-loader.gif" />
                             </div>
                         </div>
-
-
                     </div>
                 </div>
+            </div>
 
+            <div class="vm-ft-history-col">
+                <div class="fund-trasfer-right vm-ft-history-panel">
+                    <div id="tab-1" class="vm-ft-history-body">
+                        <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium">
+                            <div class="vm-ft-history-toolbar__head">
+                                <i class="fas fa-history" aria-hidden="true"></i>
+                                <div>
+                                    <span class="vm-ft-history-toolbar__title">R2R History</span>
+                                    <span class="vm-ft-history-toolbar__sub">View, filter &amp; export retailer transfers</span>
+                                </div>
+                                <span class="vm-radiant-record-badge" title="Total records">
+                                    Records: <strong id="r2rRecordCount">0</strong>
+                                </span>
+                            </div>
+                            @using (Ajax.BeginForm("MDTODealer", "Home",
+                                new AjaxOptions
+                                {
+                                    InsertionMode = InsertionMode.Replace,
+                                    UpdateTargetId = "tblshowMasterD",
+                                    OnSuccess = "r2rHistoryDone",
+                                    OnFailure = "r2rHistoryFail"
+                                }))
+                            {
+                                <div class="vm-ft-history-toolbar__filters vm-ft-history-filters-row">
+                                    <div class="vm-dmt-filter-search-group vm-ft-date-search-group input-daterange">
+                                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date date-sateclassee">
+                                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control saas-acc-dp-input", autocomplete = "off", placeholder = "From", title = "From date" })
+                                        </div>
+                                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date date-sateclassee">
+                                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control saas-acc-dp-input", autocomplete = "off", placeholder = "To", title = "To date" })
+                                        </div>
+                                        <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-ft-search-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                            <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                                        </button>
+                                    </div>
+                                    <div class="vm-ft-export-group">
+                                        <button type="button" id="btnExport" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i></button>
+                                        <button type="button" id="btnPDF" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div id="tblshowMasterD" class="third-design-dealer vm-ft-table-wrap table-responsive tableseconddes-dealer tableseconddes-admin tblshowMasterclassadd table-rsponsive-paddfont tablethirddesign-newnew" style="width:100%;">
+                            @Html.Partial("_Purchase_OrderReports")
+                        </div>
+                        <div id="loadingdiv" style="display:none;margin:18px 0 20px;text-align:center;">
+                            <div class="vm-upi-loader">
+                                <span class="vm-upi-loader-ring"><span></span></span>
+                                <span class="vm-upi-loader-txt">Loading transactions...</span>
+                                <span class="vm-upi-loader-bar"><span></span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-    </div>
-    <!----------master distributor fund transfer----->
-
-    <div class="modal fund-tr-history  in" id="m-d-fund-transfer" tabindex="-1" role="dialog" style="display: none;">
-        <div class="modal-dialog" role="document" style="margin:0px;float:right;margin-top: 77px;">
-
-            <div class="modal-content width100 float-left">
-                <div class="modal-header width100 float-left ecomm-pop-head">
-
-                    <h5 id="mdhis">Retailer Fund Transfered History</h5>
-
-
-                    <button type="button" class="btn waves-effect " data-dismiss="modal" style="float:right;border:0px;color:var(--main-bg-lcolor);padding:0px; height:auto;">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                    </button>
-
-
-                </div><!--.modal-header-->
-                <div class="modal-body width100 float-left ecomm-pop-body">
-                    <div class="float-left width100">
-                        <form class="first-form">
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                    <div class="form-group">
-                                        <label id="mdfrmname">Retailer Firm Name</label>
-
-                                        <input class="form-control" readonly="readonly" required="required" id="txtmdfirmnameshow" type="text">
-
-                                    </div>
-                                </div>
-
-                            </div><!--.row-->
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Total Amount</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txttotalamountshow">
-                                    </div>
-                                </div>
-
-                            </div><!--.row-->
-
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPreremain">Reatiler Pre Remain</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtMDPREREMAINshow">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label id="mdPostremain">Reatiler Post Remain</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtMDPOSTREMAINshow">
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label id="mdPrecredit">Your Pre Balance</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtMDPRECREDITshow">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label id="mdPostcredit">Your Post Balance</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtMDPOSTCREDITshow">
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Request Timing</label>
-                                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtREQUESTTIMINGshow">
-                                    </div>
-                                </div>
-                                @*<div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                        <div class="form-group">
-                                            <label>Transfered Timing</label>
-                                            <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtTRANSFERTIMINGshow">
-                                        </div>
-                                    </div>*@
-                            </div><!--.row-->
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                    <div class="form-group">
-                                        <label>Comments</label>
-
-                                        <input class="form-control" readonly="readonly" required="required" type="text" value="" id="txtCOMMNETSshow" style="height:50px;">
-
-                                    </div>
-                                </div>
-
-                            </div><!--.row-->
-
-
-
-                        </form>
-
-                        <!--=============-->
-
-                    </div><!--.modal-body-->
-
-
-                </div>
-
-            </div>
         </div>
     </div>
-
     <div id="backtodashboardcall" data-request-url="@Url.Action("Dashboard", "Home")"></div>
-
-
 </section>
-<div id="outer-loader" style="position: absolute;background: rgba(0,0,0,.5);right: 0px;left: 0px;bottom: 0px;top: 0px;display:none;">
-    <div id="loader" style="position: absolute; right: 65%; top: 50%; transform: translate(0%, -50%);">
-        <div class="loadingio-spinner-ripple-92ar2pfqk5j">
-            <div class="ldio-zdyd6mf6t5">
-                <div></div><div></div>
+
+<div id="outer-loader">
+    <div class="vm-upi-loader">
+        <span class="vm-upi-loader-ring"><span></span></span>
+        <span class="vm-upi-loader-txt">Processing transfer...</span>
+        <span class="vm-upi-loader-bar"><span></span></span>
+    </div>
+</div>
+
+<div class="modal fund-tr-history" id="m-d-fund-transfer" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="vm-r2r-head-ico"><i class="fas fa-receipt" aria-hidden="true"></i></span>
+                <div class="vm-r2r-head-txt">
+                    <span class="vm-r2r-title">Retailer Fund Transferred History</span>
+                    <span class="vm-r2r-sub">Transfer ka pura detail</span>
+                </div>
+                <button type="button" class="vm-r2r-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="vm-r2r-hero">
+                    <span class="vm-r2r-hero-ico"><i class="fas fa-rupee-sign" aria-hidden="true"></i></span>
+                    <span>
+                        <span class="vm-r2r-hero-amt" id="vmR2rHeroAmt">Rs. 0</span>
+                        <span class="vm-r2r-hero-lbl" id="vmR2rHeroFirm">Retailer Transfer</span>
+                    </span>
+                </div>
+                <div class="vm-r2r-grid">
+                    <div class="vm-r2r-fld vm-r2r-full">
+                        <span class="vm-r2r-ico"><i class="fa fa-building" aria-hidden="true"></i></span>
+                        <label id="mdfrmname">Retailer Firm Name</label>
+                        <input class="form-control" readonly="readonly" required="required" id="txtmdfirmnameshow" type="text">
+                    </div>
+                    <div class="vm-r2r-fld vm-r2r-amt">
+                        <span class="vm-r2r-ico"><i class="fas fa-rupee-sign" aria-hidden="true"></i></span>
+                        <label>Total Amount</label>
+                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txttotalamountshow">
+                    </div>
+                    <div class="vm-r2r-fld">
+                        <span class="vm-r2r-ico"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                        <label>Request Timing</label>
+                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtREQUESTTIMINGshow">
+                    </div>
+                    <div class="vm-r2r-fld">
+                        <span class="vm-r2r-ico"><i class="fa fa-wallet" aria-hidden="true"></i></span>
+                        <label id="mdPreremain">Retailer Pre Remain</label>
+                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtMDPREREMAINshow">
+                    </div>
+                    <div class="vm-r2r-fld">
+                        <span class="vm-r2r-ico"><i class="fa fa-wallet" aria-hidden="true"></i></span>
+                        <label id="mdPostremain">Retailer Post Remain</label>
+                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtMDPOSTREMAINshow">
+                    </div>
+                    <div class="vm-r2r-fld">
+                        <span class="vm-r2r-ico"><i class="fa fa-user" aria-hidden="true"></i></span>
+                        <label id="mdPrecredit">Your Pre Balance</label>
+                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtMDPRECREDITshow">
+                    </div>
+                    <div class="vm-r2r-fld">
+                        <span class="vm-r2r-ico"><i class="fa fa-user" aria-hidden="true"></i></span>
+                        <label id="mdPostcredit">Your Post Balance</label>
+                        <input class="form-control" readonly="readonly" required="required" style="text-transform:uppercase" type="text" id="txtMDPOSTCREDITshow">
+                    </div>
+                    <div class="vm-r2r-fld vm-r2r-full">
+                        <span class="vm-r2r-ico"><i class="fa fa-comment" aria-hidden="true"></i></span>
+                        <label>Comments</label>
+                        <input class="form-control" readonly="readonly" required="required" type="text" value="" id="txtCOMMNETSshow" style="height:50px;">
+                    </div>
+                    <p class="vm-r2r-note"><i class="fa fa-info-circle" aria-hidden="true"></i><span>Ye transfer retailer-to-retailer hua hai. Koi doubt ho to Transection time ke saath support par raise karein.</span></p>
+                </div>
             </div>
         </div>
     </div>
-
 </div>
+
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
 <script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
 <script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 <script src="~/AdminDesign/js/demo.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<!--Add State dropdown list-->
 <script src="~/Swalalert/sweetalert-dev.js"></script>
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>
 
 <script>
     function viewpassotp() {
-
-        const togglePassword = document.querySelector('#togglePassword');
-        const password = document.querySelector('#txtRetailerdmtpin');
-        togglePassword.addEventListener('click', function (e) {
-            // toggle the type attribute
-            const type = password.getAttribute('type') == 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            // toggle the eye / eye slash icon
-            this.classList.toggle('bi-eye');
-        });
-    };
-
+        var password = document.getElementById('txtRetailerdmtpin');
+        var eye = document.getElementById('togglePassword');
+        if (!password) { return; }
+        var type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        if (eye) { eye.classList.toggle('bi-eye'); eye.classList.toggle('bi-eye-slash'); }
+    }
 </script>
-
 
 <script>
     $('#btnExport').click(function () {
-
-
-
         var usernm = $('#myInput').val();
-
-        var url = '@Url.Action("ExportExcellFundtransfer", "Home")?tabtype=ReatilertoRetailer&txt_frm_date=' + $('#txt_frm_date').val() + '&txt_to_date=' + $('#txt_to_date').val() +'&ddtrnsfrom='+ usernm;
+        var url = '@Url.Action("ExportExcellFundtransfer", "Home")?tabtype=ReatilertoRetailer&txt_frm_date=' + encodeURIComponent($('#txt_frm_date').val() || '') + '&txt_to_date=' + encodeURIComponent($('#txt_to_date').val() || '') + '&ddtrnsfrom=' + encodeURIComponent(usernm || '');
         location.href = url;
-
-    })
-
-
+    });
+    $('#btnPDF').click(function () {
+        window.print();
+    });
 </script>
-
 
 <script>
     $(document).ready(function () {
-
-
-         $.ajax({
-          url: "@Url.Action("MDTODealer","Home")",
-          data: { tabtype: "ReatilertoRetailer", txt_frm_date: $('#txt_frm_date').val(),txt_to_date: $('#txt_to_date').val() },
+        $.ajax({
+            url: "@Url.Action("MDTODealer","Home")",
+            data: { tabtype: "ReatilertoRetailer", txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val() },
             success: function (data) {
-                $('#tblshowMasterD').html(data)
-
+                $('#tblshowMasterD').html(data);
+                r2rRefreshCount();
+            },
+            error: function () {
+                $('#tblshowMasterD').html("<div style='padding:26px;text-align:center;color:#b91c1c;font-weight:700;'>History load nahi hui. Dobara try karein.</div>");
             }
-
-        })
-
-    })
-
-    $('#btnchangetabbutton').click(function (e) {
-
-        var tabtype = $("ul.tabtypeschages li.tab-link.active").attr('data-tabname')
-
-      $.ajax({
-          url: "@Url.Action("MDTODealer","Home")",
-          data: { tabtype: tabtype, txt_frm_date: $('#txt_frm_date').val(),txt_to_date: $('#txt_to_date').val() },
-            success: function (data) {
-                $('#tblshowMasterD').html(data)
-
-            }
-
-        })
-
-
+        });
     });
 
+    $('#btnchangetabbutton').click(function (e) {
+        var tabtype = $("ul.tabtypeschages li.tab-link.active").attr('data-tabname') || "ReatilertoRetailer";
+        e.preventDefault();
+        $('#loadingdiv').show();
+        $.ajax({
+            url: "@Url.Action("MDTODealer","Home")",
+            data: { tabtype: tabtype, txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val() },
+            success: function (data) {
+                $('#tblshowMasterD').html(data);
+                r2rRefreshCount();
+                myFunction2();
+            },
+            error: function (xhr) {
+                $('#tblshowMasterD').html("<div style='padding:26px;text-align:center;color:#b91c1c;font-weight:700;'>History load nahi hui. (" + (xhr.status || 'error') + ")</div>");
+            },
+            complete: function () {
+                $('#loadingdiv').hide();
+            }
+        });
+    });
 
-
+    function r2rRefreshCount() {
+        var n = jQuery('#tblshowMasterD #tblbody tr.tr').length;
+        jQuery('#r2rRecordCount').text(n);
+    }
+    function r2rHistoryDone() {
+        r2rRefreshCount();
+        myFunction2();
+    }
+    function r2rHistoryFail(xhr) {
+        $('#tblshowMasterD').html("<div style='padding:26px;text-align:center;color:#b91c1c;font-weight:700;'>History load nahi hui. (" + (xhr && xhr.status ? xhr.status : 'error') + ")</div>");
+    }
 </script>
 
 <script>
-    $(document).ready(function()
-    {
-
-
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
+    $(document).ready(function () {
+        var dateOpts = { format: "yyyy-mm-dd", todayHighlight: true, autoclose: true, orientation: "bottom auto", forceParse: false, enableOnReadonly: true, container: 'body' };
+        if ($.fn.datepicker) {
+            $("#txt_frm_date, #txt_to_date").datepicker(dateOpts);
+            $('.input-daterange').datepicker(dateOpts);
+            $('.saas-fund-transfer-page .saas-acc-dp-icon').on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var $input = $(this).closest('.saas-acc-dp-field').find('.saas-acc-dp-input');
+                if ($input.length && $input.data('datepicker')) { $input.datepicker('show'); }
+            });
+        }
         var val = '@ViewBag.chk';
-        if (val != "post") {
+        if (val != "post" && $.fn.datepicker) {
             $("#txt_frm_date").datepicker("setDate", new Date());
             $("#txt_to_date").datepicker("setDate", new Date());
         }
-
-    })
+    });
 </script>
 
 <script>
     var fewSeconds = 10;
     $(document).ajaxStart(function () {
-
-        $("#shownoneclass").prop('disabled', true);
         $("#btnsendpurorder").prop('disabled', true);
         setTimeout(function () {
-
             $("#btnsendpurorder").prop('disabled', false);
-
         }, fewSeconds * 1000);
     });
-
-
+    $(document).ajaxComplete(function () {
+        // Transfer button ko sirf tab enable rakho jab retailer verify ho chuka ho
+        if (jQuery('#retailerinform').is(':visible')) {
+            jQuery('#shownoneclass').prop('disabled', false);
+        }
+    });
 </script>
-
-
 
 <script>
     function tablerowshowdetail(frmname, total, remainfromnew, remainfromold, remtoold, remotonew, comment, date) {
-
-
-
         $('#txtmdfirmnameshow').val(frmname);
-
         $('#txttotalamountshow').val(total);
-
         $('#txtMDPREREMAINshow').val(remtoold);
         $('#txtMDPOSTREMAINshow').val(remotonew);
         $('#txtMDPRECREDITshow').val(remainfromold);
         $('#txtMDPOSTCREDITshow').val(remainfromnew);
-        $('#txtCOMMNETSshow').val(comment)
-        $('#txtREQUESTTIMINGshow').val(date)
-        //   $('#txtmdfirmnameshow').val(frmname);
-        //$('#txtmdfirmnameshow').val(frmname);
-        //   $('#txtmdfirmnameshow').val(frmname);
-        //  $('#txtmdfirmnameshow').val(frmname);
+        $('#txtCOMMNETSshow').val(comment);
+        $('#txtREQUESTTIMINGshow').val(date);
+        try { jQuery('#vmR2rHeroAmt').text('Rs. ' + total); jQuery('#vmR2rHeroFirm').text(frmname || 'Retailer Transfer'); } catch (e) { }
+        jQuery('#m-d-fund-transfer').modal('show');
     }
-
-
-
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <script>
     $('.tabChangeType').click(function () {
+        var href = $(this).attr('data-href');
+        if (!href) { return; }
+        $('#loadingdiv').show();
         $.ajax({
-            url: $(this).attr('data-href'),
+            url: href,
             success: function (data) {
-                $('#tblshowMasterD').html(data)
-
-            }
-
-        })
-
-
-
-    })
-</script>
-
-
-
-
-<script>
-    function buttonClick(theButton) {
-
-        $('#hdtype').val(theButton.name);
-
-        //alert(theButton.name+"  "+$('#hdidno').val())
-
-
-        return true;
-    }
-
-
-
-
-</script>
-
-
-<script>
-
-     $("#RetailerId").blur(function (event) {
-        //  var character = String.fromCharCode(event.keyCode);
-        var mobemail = $("#RetailerId").val()
-
-
-
-            //   alert(mobemail.val())
-            $.ajax({
-                url: "@Url.Action("CheckRetailerEmailMobile")",
-                data: { emailmobile:mobemail},
-                success: function (txt) {
-
-
-
-
-                    //debugger
-                    if (txt != '') {
-                                  var data = JSON.parse(txt);
-                        $('#retailerinform').show();
-                        $('#lblfrmname').text(data.frm_name);
-                          $('#lblreatilername').text(data.retailername);
-                        $('#lblemail').text(data.email);
-                        $('#lblmobile').text(data.mobile)
-                        // $('#shownoneclass').removeattr('disabled');
-                           $('#shownoneclass').prop('disabled', false);
-                    }
-                    else {
-                        $('#retailerinform').hide();
-                       // $('#shownoneclass').attr('disabled', 'disabled');
-
-                        $('#shownoneclass').prop('disabled', true);
-                    }
-
-
-                },
-                 error: function(xhr){
-        alert('Request Status: ' + xhr.status + ' Status Text: ' + xhr.statusText + ' ' + xhr.responseText);
-                     }
-
-
-
-
-            })
-
-
-});
-
-
-</script>
-
-
-
-
-<script>
-    $(document).ready(function () {
-        $('.tab-ar').click(function () {
-
-            $(".tabr").removeClass('tab-activer');
-            $(".tabr[data-id='" + $(this).attr('data-id') + "']").addClass("tab-activer");
-            $(".tab-ar").removeClass('active-ar');
-            $(this).parent().find(".tab-ar").addClass('active-ar');
-            var usertype = $(this).attr('data-usertype')
-            if (usertype == 'Admin') {
-                $('#Payto').val('Admin')
-
-            }
-            else if (usertype == 'Distributor') {
-                $('#Payto').val('Distributor')
+                $('#tblshowMasterD').html(data);
+                r2rRefreshCount();
+            },
+            error: function () {
+                $('#tblshowMasterD').html("<div style='padding:26px;text-align:center;color:#b91c1c;font-weight:700;'>History load nahi hui.</div>");
+            },
+            complete: function () {
+                $('#loadingdiv').hide();
             }
         });
     });
 </script>
 
+<script>
+    function buttonClick(theButton) {
+        $('#hdtype').val(theButton.name);
+        return true;
+    }
+</script>
 
 <script>
+    $("#RetailerId").blur(function (event) {
+        var mobemail = $("#RetailerId").val();
+        if (!mobemail || mobemail.length < 6) { $('#retailerinform').hide(); $('#shownoneclass').prop('disabled', true); return; }
+        $.ajax({
+            url: "@Url.Action("CheckRetailerEmailMobile")",
+            data: { emailmobile: mobemail },
+            success: function (txt) {
+                if (txt != '') {
+                    var data = JSON.parse(txt);
+                    $('#retailerinform').show();
+                    $('#lblfrmname').text(data.frm_name);
+                    $('#lblreatilername').text(data.retailername);
+                    $('#lblemail').text(data.email);
+                    $('#lblmobile').text(data.mobile);
+                    $('#shownoneclass').prop('disabled', false);
+                }
+                else {
+                    $('#retailerinform').hide();
+                    $('#shownoneclass').prop('disabled', true);
+                }
+            },
+            error: function (xhr) {
+                alert('Request Status: ' + xhr.status + ' Status Text: ' + xhr.statusText + ' ' + xhr.responseText);
+            }
+        });
+    });
+</script>
 
+<script>
+    $(document).ready(function () {
+        $('.tab-ar').click(function () {
+            $(".tabr").removeClass('tab-activer');
+            $(".tabr[data-id='" + $(this).attr('data-id') + "']").addClass("tab-activer");
+            $(".tab-ar").removeClass('active-ar');
+            $(this).parent().find(".tab-ar").addClass('active-ar');
+            var usertype = $(this).attr('data-usertype');
+            if (usertype == 'Admin') { $('#Payto').val('Admin'); }
+            else if (usertype == 'Distributor') { $('#Payto').val('Distributor'); }
+        });
+    });
+</script>
 
+<script>
     function changemasterd(value) {
         var mas = $(value).val();
-        if (mas == '') {
-            $('.old-crd').hide();
-
-        } else {
-            $('.old-crd').show();
-        }
+        if (mas == '') { $('.old-crd').hide(); }
+        else { $('.old-crd').show(); }
     }
-
 </script>
 
 <script>
     $(document).ready(function () {
         $('.new-nextbutton button#shownoneclass').prop('disabled', true);
         $('.fullclassdata input#RetailerId').keyup(function () {
-            if ($(this).val() != '') {
-                $('.new-nextbutton button#shownoneclass').prop('disabled', false);
-            }
+            if ($(this).val() != '') { $('.new-nextbutton button#shownoneclass').prop('disabled', false); }
         });
+        $('#Retaileramount').on('input', function () {
+            this.value = this.value.replace(/[^0-9.]/g, '').slice(0, 10);
+        });
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (pos) {
+                $('#latss').val(pos.coords.latitude);
+                $('#longloc').val(pos.coords.longitude);
+            });
+        }
     });
 </script>
 
@@ -1142,73 +721,43 @@
     function OnSuccess(result) {
         $("#errorss").text(result);
         $("#home").find("input[type=text]").val('');
-
+        $("#home").find("input[type=password]").val('');
+        $("#home").find("textarea").val('');
         $('#retailerinform').hide();
         $('#shownoneclass').attr('disabled', 'disabled');
-        // cahangeTab('menu1');
-
         $.ajax({
             url: "@Url.Action("MDTODealer","Home",new { tabtype="ReatilertoRetailer"})",
             success: function (data) {
-                $('#tblshowMasterD').html(data)
+                $('#tblshowMasterD').html(data);
                 $('#outer-loader').hide();
-
+                r2rRefreshCount();
             }
-
-        })
+        });
+    }
+    function OnFailure(xhr) {
+        $("#errorss").text("Transfer fail ho gaya. (" + (xhr && xhr.status ? xhr.status : 'error') + ") Dobara try karein.");
+        $('#outer-loader').hide();
     }
 </script>
-
-
-
-<style>
-
-    .tab-menur ul {
-        margin: 0;
-        padding: 0;
-    }
-
-
-
-        .tab-menur ul li {
-            width: 50%;
-            text-align: center;
-        }
-
-        .tab-menur ul li {
-            float: left;
-        }
-</style>
-
-
-
-<!--Active_Class_jQuery-->
 
 <script>
     $(document).ready(function () {
         var current = location.pathname;
         $('.report-list-change li a').each(function () {
             var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('active');
-
-
-            }
-        })
+            if ($this.attr('href').indexOf(current) !== -1) { $this.addClass('active'); }
+        });
     });
 </script>
+
 <script>
     function myFunction2() {
-
-        //  var value = $(this).val().toLowerCase();
         var value = $('#myInput').val().toLowerCase();
-
-        $("#tblbody .tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        $("#tblshowMasterD #tblbody .tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
+        try { r2rRefreshCount(); } catch (e) { }
     }
-
-
 </script>
 
 <script>
@@ -1222,58 +771,37 @@
                 var status = data.status;
                 var msg = data.Message;
                 if (status == "Success") {
-                    msg = data.Message
-
-                    setTimeout(() => {
-                        let deadline = new Date().getTime() + 60000;
-                        let x = setInterval(function () {
-                            let now = new Date().getTime();
-                            let t = deadline - now;
-                            let seconds = Math.floor((t % (1000 * 60)) / 1000);
-                            document.getElementById("demor2r").innerHTML = "Resend OTP after " + seconds + " seconds ";
-                            if (seconds < 0) {
+                    msg = data.Message;
+                    setTimeout(function () {
+                        var deadline = new Date().getTime() + 60000;
+                        var x = setInterval(function () {
+                            var now = new Date().getTime();
+                            var t = deadline - now;
+                            var seconds = Math.max(0, Math.floor(t / 1000));
+                            var demo = document.getElementById("demor2r");
+                            if (demo) { demo.innerHTML = "Resend OTP after " + seconds + " seconds "; }
+                            if (seconds <= 0) {
                                 clearInterval(x);
-                                document.getElementById("demor2r").style.display = "none";
-                                document.getElementById('hideshowotpbtnr2r').style.display = "none"
-                                document.getElementById('resendotpr2r').style.display = "block"
+                                var d = document.getElementById("demor2r");
+                                if (d) { d.style.display = "none"; }
+                                document.getElementById('hideshowotpbtnr2r').style.display = "none";
+                                document.getElementById('resendotpr2r').style.display = "block";
                             }
                         }, 1000);
-                    }, 4000)
-
-
-                    setTimeout(() => {
-                        document.getElementById('hideshowotpbtnr2r').style.display = "none"
-                        document.getElementById('otpsubmithideshowr2r').style.display = 'block'
-                        document.getElementById('dmtsuccesscodeotpr2r').style.display = "block"
+                    }, 4000);
+                    setTimeout(function () {
+                        document.getElementById('hideshowotpbtnr2r').style.display = "none";
+                        document.getElementById('otpsubmithideshowr2r').style.display = 'block';
+                        document.getElementById('dmtsuccesscodeotpr2r').style.display = "block";
                         $('#dmtsuccesscodeotpr2r').text(msg);
-                        setTimeout(() => {
-                            document.getElementById('dmtsuccesscodeotpr2r').style.display = "none"
-                        }, 5000)
+                        setTimeout(function () { document.getElementById('dmtsuccesscodeotpr2r').style.display = "none"; }, 5000);
                     });
                 }
                 else {
                     $('#dmterrorcodeotpr2r').text(msg);
-                    setTimeout(() => {
-                        document.getElementById('dmterrorcodeotpr2r').style.display = "none"
-                    }, 4000)
+                    setTimeout(function () { document.getElementById('dmterrorcodeotpr2r').style.display = "none"; }, 4000);
                 }
             }
-        })
-    }
-</script>
-
-
-<script type="text/javascript">
-    $(document).ready(function () {
-               $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-            }
         });
+    }
 </script>

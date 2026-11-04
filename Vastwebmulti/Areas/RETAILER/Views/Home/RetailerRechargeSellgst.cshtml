@@ -1,167 +1,193 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.rem_purchase_info_pre_Result>
+@using System.Linq
 @{
     ViewBag.Title = "RetailerRechargeSellgst";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var rgstRows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.rem_purchase_info_pre_Result>();
+    var rgstCount = rgstRows.Count;
 }
 
-
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=38" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-    section.content {
-        margin: 87px 0px 0 164px;
+    /* Recharge Sell GST : RetailerSellgst / Money_Transfer_Report design me filter + table */
+    body.saas-admin-ui .saas-retailer-gst-page .vm-dmt-filter-search-group { justify-content: flex-start !important; margin-left: 0 !important; padding-left: 0 !important; }
+    body.saas-admin-ui .saas-dmt-report-page.saas-retailer-gst-page .vm-dmt-filter-search-group .vm-gst-filter-field { flex: 1 1 0 !important; min-width: 170px !important; max-width: none !important; }
+    body.saas-admin-ui .saas-retailer-gst-page .vm-gst-filter-field .form-control { width: 100% !important; }
+    body.saas-admin-ui .saas-retailer-gst-page .vm-gst-filter-field .select2-container { width: 100% !important; }
+    body.saas-admin-ui .saas-retailer-gst-page .vm-gst-search-btn { flex: 0 0 auto !important; }
+    body.saas-admin-ui .saas-retailer-gst-page #rechargeSellGstReport.vm-opr-data-table {
+        table-layout: fixed !important; width: 100% !important;
+        min-width: 0 !important; max-width: 100% !important;
     }
-
-    span {
-        color: #fff !important;
+    body.saas-admin-ui .saas-retailer-gst-page #rechargeSellGstReport.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-retailer-gst-page #rechargeSellGstReport.vm-opr-data-table tbody td {
+        text-align: center !important; vertical-align: middle !important;
+        white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;
     }
-
-    .second-design .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .inputpdfbu-retailer-second button {
-        border-color: #555 !important;
+    body.saas-admin-ui .saas-retailer-gst-page #rechargeSellGstReport.vm-opr-data-table thead th:nth-child(1),
+    body.saas-admin-ui .saas-retailer-gst-page #rechargeSellGstReport.vm-opr-data-table tbody td:nth-child(1) { width: 40% !important; }
+    body.saas-admin-ui .saas-retailer-gst-page #rechargeSellGstReport.vm-opr-data-table thead th:nth-child(2),
+    body.saas-admin-ui .saas-retailer-gst-page #rechargeSellGstReport.vm-opr-data-table tbody td:nth-child(2) { width: 45% !important; }
+    body.saas-admin-ui .saas-retailer-gst-page #rechargeSellGstReport.vm-opr-data-table thead th:nth-child(3),
+    body.saas-admin-ui .saas-retailer-gst-page #rechargeSellGstReport.vm-opr-data-table tbody td:nth-child(3) { width: 15% !important; }
+    body.saas-admin-ui .saas-retailer-gst-page .vm-gst-pdf-btn {
+        width: 34px !important; height: 34px !important; display: inline-flex !important;
+        align-items: center !important; justify-content: center !important;
+        border-radius: 9px !important; border: 1px solid #fecaca !important;
+        background: #fef2f2 !important; color: #dc2626 !important; cursor: pointer !important;
+        transition: all .15s ease !important;
     }
-
-    .for-search input {
-        box-shadow: none !important;
-        outline: none !important;
-        border-radius: 0;
-        border: 1px solid #aaa4a4;
+    body.saas-admin-ui .saas-retailer-gst-page .vm-gst-pdf-btn:hover {
+        background: #dc2626 !important; border-color: #dc2626 !important; color: #fff !important;
+        box-shadow: 0 4px 10px rgba(220,38,38,.35) !important;
     }
+    body.saas-admin-ui .saas-retailer-gst-page .vm-gst-pdf-btn .fa { font-size: 17px !important; }
 
-    .form-control:focus {
-        border-color: #ccc;
-    }
 
-    .datepicker table tr td span {
-        color: #555 !important;
-    }
 
-        .datepicker table tr td span.active {
-            color: #fff !important;
-        }
 
-    .trypurchasecewq-newadd select {
-        padding-left: 1px;
-    }
-
-    @@media screen and (max-width:766px) {
-        .fund-tr-history .modal-dialog {
-            width: 100% !important;
-        }
-    }
-
-    @@media screen and (max-width:480px) {
-        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq.trypurchasecewq-newadd {
-            width: 100% !important;
-            margin-bottom: 10px;
-        }
-    }
-
-    @@media screen and (max-width:420px) {
-        #leftsidebar.sidebar.retailer-header-left, .second-design #leftsidebar.retailer-header-left.header-left-newresponshive.newresponshive-secondde {
-            margin-top: -88px !important;
-        }
-    }
 </style>
 
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section">
-    <div class="container-fluid">
-        <!--Four-Design-Page-Header-Start-->
-
-        <div class="page-title-box-fourde">
-            <h3>Wallet History</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Wallet History</a></li>
-            </ul>
-        </div>
-
-        <!--Four-Design-Page-Header-End-->
-        <div class="bread-same-all-page wallethistory-newadd wallethistory-responshive wallethistory-newadd-four">
-
-            <ul>
-                <li class="smli four-design-noneclass">
-                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                    </a>
-                </li>
-
-                <li class="fullbodydycolorbg tmw-total-color-one four-design-noneclass">
-                     Sell GST
-                </li>
-                <li>
-                    @using (Html.BeginForm("RetailerRechargeSellgst", "Home", FormMethod.Post))
-                    {
-                        <div class="row fund-t-dalear fund-t-dalear-erfrdfgdf">
-
-
-                            <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
-                                @Html.DropDownList("Month", ViewBag.month as SelectList, new { @class = " form-control", @style = "border:1px solid #8e7f7f4d;" })
-
-                            </div>
-                            <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
-                                @Html.DropDownList("Year", ViewBag.year as SelectList, new { @class = " form-control", @style = "border:1px solid #8e7f7f4d;" })
-
-                            </div>
-                            <div class="col-md-2 apiclass-satenew" style="padding:0px;">
-                                <input type="hidden" id="tabtype" name="tabtype" value="FundTranferAllReport" />
-                                <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height:30px;margin-top:2px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
-                                </button>
-                            </div>
-
-
-
-                        </div>
-                    }
-                </li>
-            </ul>
-
-        </div>
-
-    </div>
-    @Html.Partial("_menu_invoice")
-    <div class=" col-md-12" style="width:100%;float:left;">
-        <div class="row clearfix">
-            <div class=" col-md-12 padding-both-none-four">
-                <div class="wallet-history" style="padding:0;">
-                    <div class="table-responsive">
-                        <div id="tblshowMasterD" class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
-                            <table class="table table-bordered table-striped table-hover third-design-table table-white-third">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Firm Name</th>
-                                        <th>Email</th>
-                                        <th>#</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-
-                                        <tr>
-                                            <td>@item.Frm_Name</td>
-                                            <td>@item.Email</td>
-                                            <td>
-                                                <button onclick="Download('@item.RetailerId')" type="button" target="_blank" class="btn btn-sm btn-success" style="border-color:transparent !important;background-color:transparent !important;">
-                                                    <i class="fa fa-file-pdf-o fa-2x" style="color:red;"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-retailer-gst-page">
+    <div class="container-fluid vm-opr-page-shell">
+        @using (Html.BeginForm("RetailerRechargeSellgst", "Home", FormMethod.Post, new { id = "rechargeSellGstForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>GST</li>
+                    <li>Recharge Sell GST</li>
+                </ol>
+                <div class="vm-dmt-fin-nav-row">
+                    <nav class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line" id="invoice-gst-nav" aria-label="GST reports">
+                        <ul class="vm-fin-nav__list" id="invoice-gst-nav-list">
+                            <li>
+                                <a class="vm-fin-nav__link" href="@Url.Action("RetailerSellgst", "Home")" title="Sell Gst">
+                                    <i class="fas fa-file-invoice vm-fin-nav__ico" aria-hidden="true"></i>
+                                    <span>Sell Gst</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="vm-fin-nav__link" href="@Url.Action("retailerPurchasegst", "Home")" title="Purchase Gst">
+                                    <i class="fas fa-shopping-cart vm-fin-nav__ico" aria-hidden="true"></i>
+                                    <span>Purchase Gst</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="vm-fin-nav__link" href="@Url.Action("uploadgst", "Home")" title="Upload Gst">
+                                    <i class="fas fa-upload vm-fin-nav__ico" aria-hidden="true"></i>
+                                    <span>Upload Gst</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="vm-fin-nav__link" href="@Url.Action("RetailerRechargeSellgst", "Home")" title="Recharge Sell Gst">
+                                    <i class="fas fa-mobile-alt vm-fin-nav__ico" aria-hidden="true"></i>
+                                    <span>Recharge Sell Gst</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="vm-fin-nav__link" href="@Url.Action("Rechargeuploadgst", "Home")" title="Recharge Upload Gst">
+                                    <i class="fas fa-cloud-upload-alt vm-fin-nav__ico" aria-hidden="true"></i>
+                                    <span>Recharge Upload Gst</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <script>
+                        (function () {
+                            try {
+                                var navList = document.getElementById('invoice-gst-nav-list');
+                                if (!navList) { return; }
+                                var current = (window.location.pathname || '').toLowerCase();
+                                var links = navList.querySelectorAll('a.vm-fin-nav__link');
+                                var best = null, bestLen = 0;
+                                for (var i = 0; i < links.length; i++) {
+                                    var href = (links[i].getAttribute('href') || '').toLowerCase().split('?')[0].split('#')[0];
+                                    if (!href || href.indexOf('javascript:') === 0) { continue; }
+                                    if (current === href || current.indexOf(href) !== -1) {
+                                        if (href.length > bestLen) { bestLen = href.length; best = links[i]; }
                                     }
-                                </tbody>
-                            </table>
+                                }
+                                if (best) { best.classList.add('is-active'); }
+                            } catch (e) { }
+                        })();
+                    </script>
+                </div>
+            </div>
+                <div class="vm-rpt-filters-panel">
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-rpt-filters-panel__bar">
+                    <div class="vm-dmt-filter-search-group">
+                        <div class="saas-acc-dp-field vm-gst-filter-field">
+                            @Html.DropDownList("Month", ViewBag.month as SelectList, new { @class = "form-control saas-acc-dp-input" })
                         </div>
+                        <div class="saas-acc-dp-field vm-gst-filter-field">
+                            @Html.DropDownList("Year", ViewBag.year as SelectList, new { @class = "form-control saas-acc-dp-input" })
+                        </div>
+                        <input type="hidden" id="tabtype" name="tabtype" value="FundTranferAllReport" />
+                        <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="saas-acc-btn saas-acc-btn--search vm-gst-search-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" title="Search">
+                            <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                        </button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        }
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-file-invoice" aria-hidden="true"></i>
+                        <span>Recharge Sell GST</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rgstCount</strong>
+                        </span>
+                    </div>
+                </div>
 
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="rechargeSellGstReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Firm Name</th>
+                                    <th>Email</th>
+                                    <th>PDF</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in rgstRows)
+                                {
+                                    <tr>
+                                        <td title="@item.Frm_Name">@item.Frm_Name</td>
+                                        <td title="@item.Email">@item.Email</td>
+                                        <td>
+                                            <button onclick="Download('@item.RetailerId')" type="button" class="vm-gst-pdf-btn" title="Download GST PDF">
+                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
-    <!-------------orderrecive-->
-
-
-
-
-
+    <!--orderrecive-->
 </section>
 
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
@@ -175,7 +201,6 @@
 <script src="~/Swalalert/sweetalert-dev.js">
 </script>
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
@@ -202,5 +227,3 @@
             window.open(url, '_blank');
     }
 </script>
-
-

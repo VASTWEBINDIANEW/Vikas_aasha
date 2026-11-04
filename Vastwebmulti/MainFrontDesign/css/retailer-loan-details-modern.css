@@ -1,0 +1,425 @@
+/* RETAILER — Loan application details (Admin Loan Details parity) */
+body.saas-admin-ui .saas-loan-details-page .vm-opr-page-shell {
+  max-width: 100% !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px 3px 7px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-status .vm-loan-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: currentColor;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-status.is-new {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-status.is-process {
+  background: #e0edff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-status.is-approved {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-status.is-disbursed {
+  background: #d1fae5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-status.is-rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-status.is-hold {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #e2e8f0;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  background: linear-gradient(120deg, #1e3a8a 0%, #2867c9 55%, #0ea5e9 100%);
+  color: #fff;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 12px 32px rgba(30, 58, 138, 0.28);
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-hero:before {
+  content: "";
+  position: absolute;
+  right: -70px;
+  top: -70px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-hero:after {
+  content: "";
+  position: absolute;
+  right: 40px;
+  bottom: -90px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-hero__in {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-id {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-hero h3 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 800;
+  color: #fff !important;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-hero .sub {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-hero .sub b {
+  color: #fff;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-hero__right {
+  text-align: right;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-hero__amt {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-hero__amt small {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 4px;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-hero .vm-loan-status {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  margin-top: 8px;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  align-items: start;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-card__head {
+  align-items: center;
+  border-bottom: 2px solid #dbe4f0;
+  display: flex;
+  gap: 10px;
+  padding: 13px 18px;
+  background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-card__head .icon {
+  align-items: center;
+  background: #e8f0fd;
+  border-radius: 8px;
+  color: #1d4ed8;
+  display: inline-flex;
+  font-size: 14px;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
+  flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-card__head h4 {
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-card__body {
+  padding: 16px 18px;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-info {
+  display: grid;
+  gap: 12px 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-info label {
+  color: #64748b;
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-info div.val {
+  color: #1d4ed8;
+  font-size: 14px;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-banner {
+  align-items: center;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 14px 18px;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-banner__text {
+  align-items: flex-start;
+  display: flex;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-banner i.fa-exclamation-triangle {
+  color: #b45309;
+  font-size: 20px;
+  margin-top: 2px;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-banner strong {
+  color: #92400e;
+  font-size: 14px;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-banner p {
+  color: #78350f;
+  font-size: 12.5px;
+  margin: 4px 0 0;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-banner--reject {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-banner--reject strong,
+body.saas-admin-ui .saas-loan-details-page .vm-loan-banner--reject p {
+  color: #991b1b;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff !important;
+  background: #b45309;
+  text-decoration: none !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-upload-btn:hover {
+  opacity: 0.92;
+  color: #fff !important;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-timeline li {
+  border-left: 2px solid #e2e8f0;
+  padding: 0 0 16px 16px;
+  position: relative;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-timeline li:last-child {
+  border-left-color: transparent;
+  padding-bottom: 0;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-timeline li:before {
+  background: #1d4ed8;
+  border-radius: 50%;
+  content: "";
+  height: 10px;
+  left: -6px;
+  position: absolute;
+  top: 3px;
+  width: 10px;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-timeline .tl-status {
+  color: #1e293b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-timeline .tl-date {
+  color: #64748b;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-timeline .tl-remarks {
+  color: #475569;
+  font-size: 12px;
+  margin-top: 5px;
+  word-break: break-word;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-timeline .tl-remarks a {
+  color: #1d4ed8;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-timeline .tl-remarks a:hover {
+  text-decoration: underline;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-empty {
+  color: #64748b;
+  font-size: 13px;
+  padding: 10px 0;
+  text-align: center;
+}
+
+body.saas-admin-ui .saas-loan-details-page .saas-acc-btn--back {
+  background: #64748b;
+  border-color: #64748b;
+  text-decoration: none;
+}
+
+body.saas-admin-ui .saas-loan-details-page .vm-loan-toolbar-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+body.saas-admin-ui .saas-loan-details-page .saas-acc-btn--upload-outline {
+  background: #fff !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
+  text-decoration: none !important;
+}
+
+@media (max-width: 991px) {
+  body.saas-admin-ui .saas-loan-details-page .vm-loan-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body.saas-admin-ui .saas-loan-details-page .vm-loan-hero__right {
+    text-align: left;
+  }
+
+  body.saas-admin-ui .saas-loan-details-page .vm-loan-info {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body.saas-admin-ui .saas-loan-details-page .vm-dmt-filter-search-group {
+    flex-wrap: wrap !important;
+  }
+}
+
+@media (max-width: 575px) {
+  body.saas-admin-ui .saas-loan-details-page .vm-loan-banner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  body.saas-admin-ui .saas-loan-details-page .vm-loan-upload-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

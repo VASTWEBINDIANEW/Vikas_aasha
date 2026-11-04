@@ -10,7 +10,7 @@
         display: flex;
         align-items: center;
     }
-    #Corrections input {
+    #Corrections input:not([type="radio"]):not([type="file"]) {
         width: 100%;
     }
 
@@ -274,6 +274,82 @@
         s1[t].style.display = 'block';
 
     }
+
+    function vmRmtPancardSelect2Parent() {
+        var $tab = $('#tab-4');
+        if ($tab.length) {
+            return $tab;
+        }
+        return $('section.vm-rmt-page').first();
+    }
+
+    function vmRmtDestroyPancardSelect2($selects) {
+        if (!$selects || !$selects.length || !window.jQuery) {
+            return;
+        }
+        $selects.each(function () {
+            var $s = $(this);
+            if ($s.hasClass('select2-hidden-accessible')) {
+                try {
+                    $s.select2('destroy');
+                } catch (ignore) { }
+            }
+            $s.nextAll('.select2-container').remove();
+        });
+    }
+
+    window.vmRmtInitPancardManualSelect2 = function () {
+        if (!window.jQuery || !$.fn.select2) {
+            return;
+        }
+        var $manual = $('#manual');
+        if (!$manual.length || $manual.css('display') === 'none') {
+            return;
+        }
+        var $selects = $manual.find('select.vm-rmt-pancard-select');
+        $selects.removeAttr('data-no-select2');
+        vmRmtDestroyPancardSelect2($selects);
+        var opts = { dropdownParent: vmRmtPancardSelect2Parent(), width: '100%' };
+        if (typeof window.applyAdminSelect2 === 'function') {
+            window.applyAdminSelect2($selects, opts, true);
+        } else {
+            $selects.select2(opts);
+        }
+    };
+
+    $(document).off('change.vmRmtPancardFile', '#Corrections .vm-rmt-pancard-file-input');
+    $(document).on('change.vmRmtPancardFile', '#Corrections .vm-rmt-pancard-file-input', function () {
+        var $wrap = $(this).closest('.vm-rmt-pancard-file-upload');
+        var $name = $wrap.find('.vm-rmt-pancard-file-upload__name');
+        var placeholder = $name.attr('data-placeholder') || 'No file chosen';
+        var file = this.files && this.files[0];
+        if (file) {
+            $name.text(file.name);
+            $wrap.addClass('has-file');
+        } else {
+            $name.text(placeholder);
+            $wrap.removeClass('has-file');
+        }
+    });
+
+    window.vmRmtInitPancardCorrectionSelect2 = function () {
+        if (!window.jQuery || !$.fn.select2) {
+            return;
+        }
+        var $corr = $('#Corrections');
+        if (!$corr.length || $corr.css('display') === 'none') {
+            return;
+        }
+        var $selects = $corr.find('select.vm-rmt-pancard-select');
+        $selects.removeAttr('data-no-select2');
+        vmRmtDestroyPancardSelect2($selects);
+        var opts = { dropdownParent: vmRmtPancardSelect2Parent(), width: '100%' };
+        if (typeof window.applyAdminSelect2 === 'function') {
+            window.applyAdminSelect2($selects, opts, true);
+        } else {
+            $selects.select2(opts);
+        }
+    };
 </script>
 
 <div class="manual_form">
@@ -294,78 +370,80 @@
     </div>
 </div>
 
-<div class="manual_form_m " id="manual" style="display:none">
+<div class="manual_form_m vm-rmt-pancard-manual" id="manual" style="display:none">
+    <div class="vm-rmt-pancard-manual__card">
+        <div class="vm-rmt-pancard-manual__grid">
 
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="panmarrigests">Title</label>
+                <select name="Title" id="panmarrigests" class="form-control vm-rmt-pancard-select" data-no-select2="true" data-placeholder="-Select Title-">
+                    <option value="">-Select Title-</option>
+                    <option value="Shri">Shri</option>
+                    <option value="Smt.">Smt.</option>
+                    <option value="Kumari">Kumari</option>
+                </select>
+            </div>
 
-    <div class="manual_w">
-        <label>Title</label>
-        <select name="Title" id="panmarrigests">
-            <option value="">-Select Title-</option>
-            <option value="Shri">Shri</option>
-            <option value="Smt.">Smt.</option>
-            <option value="Kumari">Kumari</option>
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="panadharno">Aadhaar Number</label>
+                <input type="number" id="panadharno" name="panadharno" class="form-control vm-rmt-pancard-input" maxlength="12" placeholder="12-digit Aadhaar" value="" />
+            </div>
 
-        </select>
+            <div class="manual_w Gender vm-rmt-pancard-manual__field vm-rmt-pancard-manual__field--gender" id="panradio">
+                <label>Gender</label>
+                <div class="vm-rmt-pancard-gender">
+                    <label class="vm-rmt-pancard-gender__opt"><input type="radio" name="gender" value="male" checked="checked" /> Male</label>
+                    <label class="vm-rmt-pancard-gender__opt"><input type="radio" name="gender" value="female" /> Female</label>
+                </div>
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="panname">Name (As Per Aadhaar)</label>
+                <input type="text" id="panname" name="panname" class="form-control vm-rmt-pancard-input" placeholder="Full name as on Aadhaar" value="" />
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="pandob">DOB (As Per Aadhaar)</label>
+                <input type="date" id="pandob" name="pandob" class="form-control vm-rmt-pancard-input" value="" />
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="panmobno">Aadhaar Register Mobile No.</label>
+                <input type="number" id="panmobno" name="panmobno" class="form-control vm-rmt-pancard-input" maxlength="10" placeholder="10-digit mobile" value="" />
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="panfathername">Father Name</label>
+                <input type="text" id="panfathername" name="panfathername" class="form-control vm-rmt-pancard-input" placeholder="Father's name" value="" />
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="panemail">Customer Email Id</label>
+                <input type="email" id="panemail" name="panemail" class="form-control vm-rmt-pancard-input" placeholder="email@example.com" value="" />
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="pancustmno">Customer Mobile No.</label>
+                <input type="number" id="pancustmno" name="pancustmno" class="form-control vm-rmt-pancard-input" maxlength="10" placeholder="10-digit mobile" value="" />
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="UserState">State</label>
+                <select name="State" id="UserState" class="form-control vm-rmt-pancard-select" data-no-select2="true" data-placeholder="-Select State-">
+                    <option value="">-Select State-</option>
+                    @foreach (var item in State)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="sub_b vm-rmt-pancard-manual__footer">
+            <button type="button" class="vm-rmt-pancard-manual__submit" onclick="pancardsbt()">Submit</button>
+            <div id="mess" class="vm-rmt-pancard-manual__error" role="alert"></div>
+        </div>
     </div>
-
-    <div class="manual_w">
-        <label>Aadhaar Number</label>
-        <input type="number" id="panadharno" name="name" value="" />
-    </div>
-
-    <div class="manual_w Gender" id="panradio">
-        <label>Gender</label>
-        <input type="radio" name="gender" value="male" checked="checked"> Male
-        <input type="radio" name="gender" value="female"> Female
-    </div>
-
-    <div class="manual_w">
-        <label>Name (As Per Aadhaar)</label>
-        <input type="text" name="name" value="" id="panname" />
-    </div>
-
-    <div class="manual_w">
-        <label>DOB (As Per Aadhaar)</label>
-        <input type="date" name="name" value="" id="pandob" />
-    </div>
-
-    <div class="manual_w">
-        <label>Aadhaar Register Mobile No.</label>
-        <input type="number" name="name" value="" id="panmobno" />
-    </div>
-
-    <div class="manual_w">
-        <label>Father Name</label>
-        <input type="text" name="name" value="" id="panfathername" />
-    </div>
-
-    <div class="manual_w">
-        <label>customer Email Id </label>
-        <input type="email" name="name" value="" id="panemail" />
-    </div>
-
-    <div class="manual_w">
-        <label>customer Mobile No.</label>
-        <input type="number" name="name" value="" id="pancustmno" />
-    </div>
-
-    <div class="manual_w">
-        <label>State</label>
-        <select name="Title" id="UserState">
-            <option value="">-Select State-</option>
-            @foreach (var item in State)
-            {
-                <option value="@item">@item</option>
-            }
-
-        </select>
-    </div>
-
-    <div class="sub_b">
-        <button type="submit" onclick="pancardsbt()">Submit</button>
-    </div>
-    <div id="mess" style="color:red"></div>
-
 </div>
 
 <div id="manualw1">
@@ -551,27 +629,22 @@
                 </div>
 
                 <!--register now page-->
-                <div id="pendingsts" class="register-page register-responshiveclass" style="display:none;">
-                    <div class="container-fluid aeps">
-                        <div class="col-md-12 aeps-start">
-                            <div class="col-md-10 aeps_id fdgfgfgfga">
-                                <div class="col-md-12 amount amount_strong"><strong style="">PSA ID</strong><span>User Registration pending</span></div>
-                            </div>
+                <div id="pendingsts" class="register-page register-responshiveclass vm-rmt-pancard-pending" style="display:none;">
+                    <div class="vm-rmt-pancard-pending__psa aeps_id">
+                        <div class="col-md-12 amount amount_strong vm-rmt-pancard-pending__psa-row">
+                            <strong>PSA ID</strong>
+                            <span id="pendingPsaidText">User Registration pending</span>
                         </div>
                     </div>
-                    <div class="avtar avtar-first avtar-first-responshive">
-                        <img src="~/ashok-images/duration.svg" />
-                        <h2>Approval pending</h2>
-                        <p>Your PAN Card Service Registration pending for Approval</p>
+                    <div class="vm-rmt-pancard-pending__body avtar avtar-first avtar-first-responshive">
+                        <img src="~/ashok-images/duration.svg" alt="" class="vm-rmt-pancard-pending__clock" />
+                        <h2 class="vm-rmt-pancard-pending__title">Approval pending</h2>
+                        <p class="vm-rmt-pancard-pending__text">Your PAN Card service registration is pending for approval.</p>
                     </div>
-                    <div class="container-fluid transaction-button transaction-responshive">
-                        @*<button id="transaction-back" onclick="PANCARD()">Back</button>*@
-                        @*<button class="fullbodydycolorbg" onclick="updatepsasts()">Update PSA</button>*@
-                        <button class="fullbodydycolorbg" onclick="checkstatus()">Check Live Status</button>
+                    <div class="vm-rmt-pancard-pending__actions transaction-button transaction-responshive">
+                        <button type="button" class="fullbodydycolorbg vm-rmt-pancard-pending__btn" onclick="checkstatus()">Check Live Status</button>
                     </div>
-                    <div>
-                        <label id="pendingstserror" style="color:red;"></label>
-                    </div>
+                    <label id="pendingstserror" class="vm-rmt-pancard-pending__err" role="alert"></label>
                 </div>
                 <!--register now page-->
                 <!--Update Page-->
@@ -679,108 +752,138 @@
     </div>
     <!---------------Final Payment-------------------------->
 </div>
-<div id="Corrections" style="display: none;">
-    <!-- Basic Identification Details -->
-    <div class="manual_w">
-        <label for="Title">Title</label>
-        @Html.DropDownList("Title", new List<SelectListItem>
-        {
-           new SelectListItem{ Text="Select Title",Value="",},
-           new SelectListItem{Text="Shri",Value="Shri"},
-           new SelectListItem{Text="Smt",Value="Smt"},
-           new SelectListItem{Text="Kumari",Value="Kumari"}
-        }, new { @class = "form-control" })
-    </div>
-    <div class="manual_w">
-        <label for="NameAsPerAadhar">Name as per Aadhaar</label>
-        @Html.TextBox("NameAsPerAadhar", null, new { @placeholder = "Enter Name As Per Aadhar", @class = "form-control" })
-    </div>
-    <div class="manual_w">
-        <label for="DateOfBirth">Date of Birth</label>
-        @Html.TextBox("DateOfBirth", null, new { @type = "date", @class = "form-control", @placeholder = "Select your DOB" })
-    </div>
-    <div class="manual_w">
-        <label for="FatherName">Father's Name</label>
-        @Html.TextBox("FatherName", null, new { @placeholder = "Enter Father Name", @class = "form-control" })
-    </div>
-    <div class="manual_w">
-        <label for="Gender">Gender</label>
-        @Html.DropDownList("Gender", new List<SelectListItem>
-        {
-           new SelectListItem{ Text="Select Gender",Value="",},
-           new SelectListItem{Text="Male",Value="Male"},
-           new SelectListItem{Text="Female",Value="Female"},
-           new SelectListItem{Text="Other",Value="Other"}
-        }, new { @class = "form-control" })
-    </div>
-    <div class="manual_w">
-        <label for="AadharNo">Aadhaar Number</label>
-        @Html.TextBox("AadharNo", null, new { @placeholder = "Enter Aadhaar Number", @class = "form-control" })
-    </div>
-    <div class="manual_w">
-        <label for="AAdharRegisterNo">Aadhaar Register Number</label>
-        @Html.TextBox("AAdharRegisterNo", null, new { @placeholder = "Enter Aadhaar Register Number", @class = "form-control" })
-    </div>
+<div id="Corrections" class="manual_form_m vm-rmt-pancard-manual vm-rmt-pancard-correction" style="display: none;">
+    <div class="vm-rmt-pancard-manual__card">
+        <div class="vm-rmt-pancard-manual__grid">
 
-    <!-- Contact Information -->
-    <div class="manual_w">
-        <label for="CustomerMobileNo">Customer Mobile Number</label>
-        @Html.TextBox("CustomerMobileNo", null, new { @placeholder = "Enter Customer Mobile Number", @class = "form-control" })
-    </div>
-    <div class="manual_w">
-        <label for="UserState">State</label>
-        @Html.DropDownList("StateDropDown", new SelectList(State, ""), "-Select State-", new { @id = "StateDropDown", @class = "form-control" })
-    </div>
-    <div class="manual_w">
-        <label for="EmailId">Customer Email ID</label>
-        @Html.TextBox("EmailId", null, new { @placeholder = "Enter Customer Email Id", @class = "form-control" })
-    </div>
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="Title">Title</label>
+                @Html.DropDownList("Title", new List<SelectListItem>
+                {
+                   new SelectListItem{ Text="-Select Title-",Value="",},
+                   new SelectListItem{Text="Shri",Value="Shri"},
+                   new SelectListItem{Text="Smt.",Value="Smt."},
+                   new SelectListItem{Text="Kumari",Value="Kumari"}
+                }, new { @class = "form-control vm-rmt-pancard-select", data_no_select2 = "true", data_placeholder = "-Select Title-" })
+            </div>
 
-    <!-- Documents -->
-    <div class="manual_w">
-        <label for="PanCardNo">PAN Card Number</label>
-        @Html.TextBox("PanCardNo", null, new { @placeholder = "Enter PanCard Number", @class = "form-control" })
-    </div>
-    <div class="manual_w">
-        <label for="AAdharFrontImg">Aadhaar Front Image</label>
-        @Html.TextBox("AAdharFrontImg", null, new { type = "file", @class = "form-control", @placeholder = "Enter Aadhar Front Image" })
-    </div>
-    <div class="manual_w">
-        <label for="AAdharBackImg">Aadhaar Back Image</label>
-        @Html.TextBox("AAdharBackImg", null, new { type = "file", @class = "form-control", @placeholder = "Enter Aadhar Back Image" })
-    </div>
-    <div class="manual_w">
-        <label for="SupportingDocument">Upload Supporting Document</label>
-        @Html.TextBox("SupportingDocument", null, new { type = "file", @class = "form-control", @placeholder = "Supporting Document" })
-    </div>
-    <div class="manual_w">
-        <label for="SupportingDocumentName">Supporting Document</label>
-        @Html.DropDownList("SupportingDocumentName", new List<SelectListItem>
-        {
-           new SelectListItem{ Text="Select Document Type",Value="",},
-           new SelectListItem{Text="Voter Id",Value="Voter Id"},
-           new SelectListItem{Text="Pass Port",Value="Pass Port"},
-           new SelectListItem{Text="10th MarkSheet",Value="10th MarkSheet"},
-           new SelectListItem{Text="Driving Licence",Value="Driving Licence"},
-           new SelectListItem{Text="Ration Card",Value="Ration Card"},
-           new SelectListItem{Text="Other",Value="Other"}
-        }, new { @class = "form-control" })
-    </div>
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="NameAsPerAadhar">Name as per Aadhaar</label>
+                @Html.TextBox("NameAsPerAadhar", null, new { @placeholder = "Enter name as per Aadhaar", @class = "form-control vm-rmt-pancard-input" })
+            </div>
 
-    <!-- Corrections -->
-    <div class="manual_w">
-        <label for="CorrectionsType">Correction Type</label>
-        @Html.DropDownList("CorrectionsType", new List<SelectListItem>
-        {
-           new SelectListItem{ Text="Select Correction",Value="",},
-           new SelectListItem{Text="Name",Value="Name"},
-           new SelectListItem{Text="Father Name",Value="Father Name"},
-           new SelectListItem{Text="DOB",Value="DOB"},
-           new SelectListItem{Text="Address",Value="Address"}
-        }, new { @class = "form-control" })
-    </div>
-    <div class="manual_w">
-        <button type="submit" class="btn btn-primary" onclick="SubmitCorrectionFrom()">Submit</button>
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="DateOfBirth">Date of Birth</label>
+                @Html.TextBox("DateOfBirth", null, new { @type = "date", @class = "form-control vm-rmt-pancard-input" })
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="FatherName">Father's Name</label>
+                @Html.TextBox("FatherName", null, new { @placeholder = "Enter father name", @class = "form-control vm-rmt-pancard-input" })
+            </div>
+
+            <div class="manual_w Gender vm-rmt-pancard-manual__field vm-rmt-pancard-manual__field--gender vm-rmt-pancard-manual__field--full">
+                <label>Gender</label>
+                <div class="vm-rmt-pancard-gender">
+                    <label class="vm-rmt-pancard-gender__opt"><input type="radio" name="CorrectionGender" value="Male" checked="checked" /> Male</label>
+                    <label class="vm-rmt-pancard-gender__opt"><input type="radio" name="CorrectionGender" value="Female" /> Female</label>
+                    <label class="vm-rmt-pancard-gender__opt"><input type="radio" name="CorrectionGender" value="Other" /> Other</label>
+                </div>
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field vm-rmt-pancard-manual__field--full">
+                <label for="AadharNo">Aadhaar Number</label>
+                @Html.TextBox("AadharNo", null, new { @placeholder = "12-digit Aadhaar", @class = "form-control vm-rmt-pancard-input", maxlength = "12" })
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="AAdharRegisterNo">Aadhaar Register Number</label>
+                @Html.TextBox("AAdharRegisterNo", null, new { @placeholder = "Registered mobile on Aadhaar", @class = "form-control vm-rmt-pancard-input", maxlength = "10" })
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="CustomerMobileNo">Customer Mobile Number</label>
+                @Html.TextBox("CustomerMobileNo", null, new { @placeholder = "10-digit mobile", @class = "form-control vm-rmt-pancard-input", maxlength = "10" })
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="StateDropDown">State</label>
+                @Html.DropDownList("StateDropDown", new SelectList(State, ""), "-Select State-", new { @id = "StateDropDown", @class = "form-control vm-rmt-pancard-select", data_no_select2 = "true", data_placeholder = "-Select State-" })
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="EmailId">Customer Email ID</label>
+                @Html.TextBox("EmailId", null, new { @placeholder = "email@example.com", @class = "form-control vm-rmt-pancard-input" })
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field vm-rmt-pancard-manual__field--half">
+                <label for="PanCardNo">PAN Card Number</label>
+                @Html.TextBox("PanCardNo", null, new { @placeholder = "Enter PAN number", @class = "form-control vm-rmt-pancard-input" })
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field vm-rmt-pancard-manual__field--half">
+                <label for="AAdharFrontImg">Aadhaar Front Image</label>
+                <div class="vm-rmt-pancard-file-upload">
+                    <input type="file" id="AAdharFrontImg" name="AAdharFrontImg" class="vm-rmt-pancard-file-input" accept="image/*" />
+                    <div class="vm-rmt-pancard-file-upload__inner">
+                        <span class="vm-rmt-pancard-file-upload__chip">Choose file</span>
+                        <span class="vm-rmt-pancard-file-upload__name" data-placeholder="No file chosen">No file chosen</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field vm-rmt-pancard-manual__field--half">
+                <label for="AAdharBackImg">Aadhaar Back Image</label>
+                <div class="vm-rmt-pancard-file-upload">
+                    <input type="file" id="AAdharBackImg" name="AAdharBackImg" class="vm-rmt-pancard-file-input" accept="image/*" />
+                    <div class="vm-rmt-pancard-file-upload__inner">
+                        <span class="vm-rmt-pancard-file-upload__chip">Choose file</span>
+                        <span class="vm-rmt-pancard-file-upload__name" data-placeholder="No file chosen">No file chosen</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field vm-rmt-pancard-manual__field--half">
+                <label for="SupportingDocument">Upload Supporting Document</label>
+                <div class="vm-rmt-pancard-file-upload">
+                    <input type="file" id="SupportingDocument" name="SupportingDocument" class="vm-rmt-pancard-file-input" accept="image/*,.pdf" />
+                    <div class="vm-rmt-pancard-file-upload__inner">
+                        <span class="vm-rmt-pancard-file-upload__chip">Choose file</span>
+                        <span class="vm-rmt-pancard-file-upload__name" data-placeholder="No file chosen">No file chosen</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="SupportingDocumentName">Supporting Document Type</label>
+                @Html.DropDownList("SupportingDocumentName", new List<SelectListItem>
+                {
+                   new SelectListItem{ Text="-Select Document Type-",Value="",},
+                   new SelectListItem{Text="Voter Id",Value="Voter Id"},
+                   new SelectListItem{Text="Pass Port",Value="Pass Port"},
+                   new SelectListItem{Text="10th MarkSheet",Value="10th MarkSheet"},
+                   new SelectListItem{Text="Driving Licence",Value="Driving Licence"},
+                   new SelectListItem{Text="Ration Card",Value="Ration Card"},
+                   new SelectListItem{Text="Other",Value="Other"}
+                }, new { @class = "form-control vm-rmt-pancard-select", data_no_select2 = "true", data_placeholder = "-Select Document Type-" })
+            </div>
+
+            <div class="manual_w vm-rmt-pancard-manual__field">
+                <label for="CorrectionsType">Correction Type</label>
+                @Html.DropDownList("CorrectionsType", new List<SelectListItem>
+                {
+                   new SelectListItem{ Text="-Select Correction-",Value="",},
+                   new SelectListItem{Text="Name",Value="Name"},
+                   new SelectListItem{Text="Father Name",Value="Father Name"},
+                   new SelectListItem{Text="DOB",Value="DOB"},
+                   new SelectListItem{Text="Address",Value="Address"}
+                }, new { @class = "form-control vm-rmt-pancard-select", data_no_select2 = "true", data_placeholder = "-Select Correction-" })
+            </div>
+        </div>
+
+        <div class="sub_b vm-rmt-pancard-manual__footer">
+            <button type="button" class="vm-rmt-pancard-manual__submit" onclick="SubmitCorrectionFrom()">Submit</button>
+        </div>
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
@@ -822,7 +925,7 @@
     formData.append('NameAsPerAadhar', $('#NameAsPerAadhar').val());
     formData.append('DateOfBirth', $('#DateOfBirth').val());
     formData.append('FatherName', $('#FatherName').val());
-    formData.append('Gender', $('#Gender').val());
+    formData.append('Gender', $('#Corrections input[name="CorrectionGender"]:checked').val() || '');
     formData.append('AadharNo', $('#AadharNo').val());
     formData.append('AAdharRegisterNo', $('#AAdharRegisterNo').val());
     formData.append('CustomerMobileNo', $('#CustomerMobileNo').val());
@@ -831,9 +934,12 @@
     formData.append('PanCardNo', $('#PanCardNo').val());
     formData.append('SupportingDocumentName', $('#SupportingDocumentName').val());
     formData.append('CorrectionsType', $('#CorrectionsType').val());
-    formData.append('AAdharFrontImg', $('#AAdharFrontImg')[0].files[0]);
-    formData.append('AAdharBackImg', $('#AAdharBackImg')[0].files[0]);
-    formData.append('SupportingDocument', $('#SupportingDocument')[0].files[0]);
+    var frontFile = $('#AAdharFrontImg')[0] && $('#AAdharFrontImg')[0].files[0];
+    var backFile = $('#AAdharBackImg')[0] && $('#AAdharBackImg')[0].files[0];
+    var supportFile = $('#SupportingDocument')[0] && $('#SupportingDocument')[0].files[0];
+    if (frontFile) { formData.append('AAdharFrontImg', frontFile); }
+    if (backFile) { formData.append('AAdharBackImg', backFile); }
+    if (supportFile) { formData.append('SupportingDocument', supportFile); }
     $.ajax({
         url: '@Url.Action("CorrectionSubmit", "PANCARD")',
         type: "POST",
@@ -860,6 +966,14 @@
         document.getElementById('manual').style.display = 'none';
         document.getElementById('manualw1').style.display = 'none';
         document.getElementById('Corrections').style.display = 'block';
+        vmRmtDestroyPancardSelect2($('#manual select'));
+        $('#manual select.vm-rmt-pancard-select').attr('data-no-select2', 'true');
+        window.setTimeout(function () {
+            if (typeof window.vmRmtInitPancardCorrectionSelect2 === 'function') {
+                window.vmRmtInitPancardCorrectionSelect2();
+            }
+        }, 0);
+        window.setTimeout(window.vmRmtInitPancardCorrectionSelect2, 200);
     }
     const div = document.getElementsByClassName('myDiv123')[0];
     var i = 0;
@@ -1060,6 +1174,8 @@
                     $('#unregister').show();
                 }
                 else if (status == "PENDING") {
+                    $('#pendingPsaidText').text(message || 'User Registration pending');
+                    $('#pendingstserror').text('');
                     $('#pendingsts').show();
                 }
                 else if (status == "NOTKYC") {
@@ -1142,6 +1258,8 @@
                     $('#unregister').show();
                 }
                 else if (status == "PENDING") {
+                    $('#pendingPsaidText').text(message || 'User Registration pending');
+                    $('#pendingstserror').text('');
                     $('#pendingsts').show();
                 }
                 else if (status == "NOTKYC") {
@@ -1177,8 +1295,19 @@
             document.getElementsByClassName('btmd')[0].classList.remove('backgroundss');
             document.getElementsByClassName('btmd')[1].classList.add('backgroundss');
             document.getElementsByClassName('btmd')[2].classList.remove('backgroundss');
-            document.getElementById('manual').style.display = 'block';
-            document.getElementById('manualw1').style.display = 'none';
+            if ($('#pendingsts').is(':visible') || $('#unregister').is(':visible') || $('#purchase').is(':visible') || $('#notkyc').is(':visible') || $('#resgisterform').is(':visible') || $('#firstpur1').is(':visible') || $('#ALLpur1').is(':visible') || $('#BOTHpur1').is(':visible') || $('#failedpancard').is(':visible')) {
+                document.getElementById('manual').style.display = 'none';
+                document.getElementById('manualw1').style.display = 'block';
+            } else {
+                document.getElementById('manual').style.display = 'block';
+                document.getElementById('manualw1').style.display = 'none';
+                window.setTimeout(function () {
+                    if (typeof window.vmRmtInitPancardManualSelect2 === 'function') {
+                        window.vmRmtInitPancardManualSelect2();
+                    }
+                }, 0);
+                window.setTimeout(window.vmRmtInitPancardManualSelect2, 200);
+            }
              $.ajax({
             url: '@Url.Action("PANCARDreportnew_manual", "Home")',
             cache: false,
@@ -1256,24 +1385,37 @@
 </script>
 <script>
     function checkstatus() {
-     $.ajax({
+        $('#pendingstserror').text('');
+        $.ajax({
             url: '@Url.Action("CheckStatus","PANCARD")',
             cache: false,
-         type: "POST",
-              beforeSend: function() {
-                  $('.loader').show();
-             },
-         success: function (data) {
-             $('.loader').hide();
-                var output = JSON.parse(data);
+            type: "POST",
+            beforeSend: function () {
+                $('.loader').show();
+            },
+            success: function (data) {
+                $('.loader').hide();
+                var output = data;
+                if (typeof data === 'string') {
+                    try {
+                        output = JSON.parse(data);
+                    } catch (e) {
+                        $('#pendingstserror').text('Invalid response from server.');
+                        return;
+                    }
+                }
                 if (output.Status == "Success") {
-                   PANCARD();
+                    PANCARD();
                 }
                 else {
-                    $('#pendingstserror').text(output.Message)
+                    $('#pendingstserror').text(output.Message || 'Status check failed. Please try again.');
                 }
+            },
+            error: function () {
+                $('.loader').hide();
+                $('#pendingstserror').text('Unable to check status. Please try again.');
             }
-        })
+        });
     }
 </script>
 <script>
@@ -1451,51 +1593,53 @@
 
 <script>
         function pancardsbt() {
-            var panmarrigests = document.getElementById('panmarrigests').value;
-            var panadharno = document.getElementById('panadharno').value;
-            var panradio = document.querySelector('input[name="gender"]:checked').value;
-            var panname = document.getElementById('panname').value;
-            var pandob = document.getElementById('pandob').value;
-            var panmobno = document.getElementById('panmobno').value;
-            var panfathername = document.getElementById('panfathername').value;
-            var panemail = document.getElementById('panemail').value;
-            var pancustmno = document.getElementById('pancustmno').value;
-            var userstate = document.getElementById('UserState').value;
+            $('#mess').text('');
+            var panmarrigests = $('#panmarrigests').val() || '';
+            var panadharno = $('#panadharno').val() || '';
+            var panradio = $('input[name="gender"]:checked').val() || '';
+            var panname = $('#panname').val() || '';
+            var pandob = $('#pandob').val() || '';
+            var panmobno = $('#panmobno').val() || '';
+            var panfathername = $('#panfathername').val() || '';
+            var panemail = $('#panemail').val() || '';
+            var pancustmno = $('#pancustmno').val() || '';
+            var userstate = $('#UserState').val() || '';
+            var $mess = $('#mess');
 
             if (isBlank(panmarrigests)) {
-                document.getElementById('mess').innerHTML = 'Please Select Title';
+                $mess.text('Please Select Title');
             }
             else {
                 if (isBlank(panadharno)) {
-                    document.getElementById('mess').innerHTML = 'Please Enter Aadhaar Card No.';
+                    $mess.text('Please Enter Aadhaar Card No.');
                 }
                 else {
                     if (isBlank(panname)) {
-                        document.getElementById('mess').innerHTML = 'Please Enter Name';
+                        $mess.text('Please Enter Name');
                     }
                     else {
                         if (isBlank(pandob)) {
-                            document.getElementById('mess').innerHTML = 'Please Enter Dob';
+                            $mess.text('Please Enter Dob');
                         }
                         else {
                             if (isBlank(panmobno)) {
-                                document.getElementById('mess').innerHTML = 'Please Enter Mobile No.';
+                                $mess.text('Please Enter Mobile No.');
                             }
                             else {
                                 if (isBlank(panfathername)) {
-                                    document.getElementById('mess').innerHTML = 'Please Enter Father Name';
+                                    $mess.text('Please Enter Father Name');
                                 }
                                 else {
                                     if (isBlank(panemail)) {
-                                        document.getElementById('mess').innerHTML = 'Please Enter Email id';
+                                        $mess.text('Please Enter Email id');
                                     }
                                     else {
                                         if (isBlank(pancustmno)) {
-                                            document.getElementById('mess').innerHTML = 'Please Enter Customer Mobile No.';
+                                            $mess.text('Please Enter Customer Mobile No.');
                                         }
                                         else {
                                             if (isBlank(userstate)) {
-                                                document.getElementById('mess').innerHTML = 'Please Select State.'
+                                                $mess.text('Please Select State.');
                                             }
                                             else {
                                                 $.ajax({
@@ -1504,12 +1648,14 @@
                                                     cache: false,
                                                     type: "POST",
                                                     dataType: 'json',
-
                                                     success: function (data) {
-                                                    document.getElementById('mess').innerHTML = data.message;
-                                                       if (data.status = "Pending") {
-                                                           PANCARD_manual();
-                                                       }
+                                                        $mess.text(data.message || '');
+                                                        if (data.status === 'Pending' || data.status === 'pending') {
+                                                            PANCARD_manual();
+                                                        }
+                                                    },
+                                                    error: function () {
+                                                        $mess.text('Unable to submit. Please try again.');
                                                     }
                                                 });
                                             }

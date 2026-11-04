@@ -39,9 +39,17 @@ body.saas-admin-ui .OperatorIndex_Page.saas-fund-transfer-page {
 
 body.saas-admin-ui .OperatorIndex_Page .oprindex-left.vm-ft-form-card,
 body.saas-admin-ui .OperatorIndex_Page .oprindex-right.fund-trasfer-right.vm-ft-history-panel {
-    height: 600px !important;
-    min-height: 600px !important;
-    max-height: 600px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+}
+
+/* Legacy Dashcustom .op-c { height:600px } — card content ke hisaab se height */
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left .op-c,
+.OpertorIndex-page.OperatorIndex_Page .oprindex-left .op-c {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
 }
 
 /* Left form card */
@@ -138,9 +146,9 @@ body.saas-admin-ui .OperatorIndex_Page .oprindex-left .Same-design-form.tab-cont
     align-content: flex-start !important;
     gap: 8px !important;
     padding: 4px 12px 14px !important;
-    flex: 1 1 auto !important;
+    flex: 0 1 auto !important;
     min-height: 0 !important;
-    overflow-y: auto !important;
+    overflow: visible !important;
 }
 
 body.saas-admin-ui .OperatorIndex_Page .oprindex-left > .op-c > .tab-content:not(.current),
@@ -395,6 +403,22 @@ body.saas-admin-ui .OperatorIndex_Page .Same-design-form.tab-content {
 
 body.saas-admin-ui .OperatorIndex_Page .Same-design-form.tab-content > form {
     display: contents !important;
+}
+
+/* Conditional service/operator rows must participate in flex when visible */
+body.saas-admin-ui .OperatorIndex_Page .Same-design-form.tab-content .items.oi-cond-visible,
+.OpertorIndex-page.OperatorIndex_Page .Same-design-form.tab-content .items.oi-cond-visible,
+body.saas-admin-ui .OperatorIndex_Page #APIUSERservpro.oi-cond-visible,
+body.saas-admin-ui .OperatorIndex_Page #servpro.oi-cond-visible,
+body.saas-admin-ui .OperatorIndex_Page #Dservpro.oi-cond-visible,
+body.saas-admin-ui .OperatorIndex_Page #Whitelabelservpro.oi-cond-visible,
+body.saas-admin-ui .OperatorIndex_Page #operatorsselect.oi-cond-visible,
+body.saas-admin-ui .OperatorIndex_Page #DOperatorselect.oi-cond-visible,
+body.saas-admin-ui .OperatorIndex_Page #Whitelabeloperatorsselect.oi-cond-visible,
+body.saas-admin-ui .OperatorIndex_Page #APIUSERoperatorsselect.oi-cond-visible {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
 }
 
 body.saas-admin-ui .OperatorIndex_Page .Same-design-form.tab-content .items {
@@ -955,7 +979,9 @@ body.saas-admin-ui .OperatorIndex_Page.oi-history-open .oi-history-head .vm-ft-h
     display: none !important;
 }
 
-/* Keep conditional form fields hidden when JS toggles them */
+/* Conditional fields — class + inline (old page jQuery .show/.hide) */
+body.saas-admin-ui .OperatorIndex_Page .items.oi-cond-hidden,
+.OpertorIndex-page.OperatorIndex_Page .items.oi-cond-hidden,
 body.saas-admin-ui .OperatorIndex_Page #servpro[style*="display: none"],
 body.saas-admin-ui .OperatorIndex_Page #servpro[style*="display:none"],
 body.saas-admin-ui .OperatorIndex_Page #operatorsselect[style*="display: none"],
@@ -973,6 +999,28 @@ body.saas-admin-ui .OperatorIndex_Page #APIUSERservpro[style*="display:none"],
 body.saas-admin-ui .OperatorIndex_Page #APIUSERoperatorsselect[style*="display: none"],
 body.saas-admin-ui .OperatorIndex_Page #APIUSERoperatorsselect[style*="display:none"] {
     display: none !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .items.oi-cond-visible,
+.OpertorIndex-page.OperatorIndex_Page .items.oi-cond-visible {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left .left-button,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left .right-button,
+.OpertorIndex-page.OperatorIndex_Page .oprindex-left .left-button,
+.OpertorIndex-page.OperatorIndex_Page .oprindex-left .right-button {
+    margin-top: 4px !important;
+}
+
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left .left-button button,
+body.saas-admin-ui .OperatorIndex_Page .oprindex-left .right-button button,
+.OpertorIndex-page.OperatorIndex_Page .oprindex-left .left-button button,
+.OpertorIndex-page.OperatorIndex_Page .oprindex-left .right-button button {
+    margin-top: 0 !important;
 }
 
 body.saas-admin-ui .OperatorIndex_Page .for-un > ul,

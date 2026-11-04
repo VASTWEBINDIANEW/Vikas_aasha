@@ -1,700 +1,474 @@
 ﻿@model List<Vastwebmulti.Models.Sp_Recharge_info_LazyLoad_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "RechargeReport";
+    ViewBag.Title = "Prepaid & Utility Report";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var selStatus = (Request["ddl_status"] ?? "").Trim();
+    var selOperator = (Request["Operator"] ?? "").Trim();
+    var selMob = (Request["txtmob"] ?? "").Trim();
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
 }
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <style>
-
-    /* new css */
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
-
-
-    /* new css */
-
-
-
-    .toast-top-right1 {
-        top: 78px;
-        left: 81%;
-    }
-
-    .datepicker-orient-bottom {
-        top: 173px !important;
-    }
-
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 147px !important;
-        }
-
-    .recharge-report-rtailer th {
-        border-bottom: 0px !important;
-    }
-
-    .table-responsive table tr, .table-responsive table, .table-responsive table tr td, .table-responsive table tr th {
-        border-color: #aaa4a4 !important;
-    }
-
-    .noexel-newclass img {
-        border-radius: 50% !important;
-    }
-
-    .datepicker.datepicker-dropdown.dropdown-menu.datepickerrecharge.datepicker-orient-left.datepicker-orient-bottom {
-        margin-top: -21px !important;
-    }
-
-    @@media only screen and (max-width:767px) {
-
-        .col-lg-4.col-md-4.col-sm-4.col-xs-4.rechargepdfexal {
-            display: block;
-        }
-
-        .rechargefirst {
-            width: 50%;
-        }
-
-        .col-md-3.rechargesecond {
-            width: 50%;
-        }
-
-        .col-md-2.rechargefiveclass {
-            width: 50%;
-            padding-top: 5px;
-        }
-
-        .col-md-3.rechargethrees {
-            width: 50%;
-            padding-top: 5px;
-        }
-
-        .col-md-2.rechargefive {
-            width: 50%;
-            padding-top: 5px;
-            padding-right: 4px;
-        }
-
-        .rechargepdfexal {
-            width: 50%;
-            padding-top: 5px;
-            padding-right: 5px;
-        }
-    }
-
-
-    @@media screen and (max-width:766px) {
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 151px !important;
-        }
-    }
-
-    @@media screen and (max-width:580px) {
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 194px !important;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-
-        .rechargefirst {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0;
-            margin-bottom: 5px;
-        }
-
-        .col-md-3.rechargesecond {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0;
-            margin-bottom: 5px;
-        }
-
-        .col-md-2.rechargefiveclass {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0;
-            margin-bottom: 5px;
-        }
-
-        .col-md-3.rechargethrees {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0;
-            margin-bottom: 5px;
-        }
-
-        .col-md-2.rechargefive {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0px;
-            margin-bottom: 5px;
-        }
-
-        .rechargepdfexal {
-            width: 100%;
-            padding-top: 0px;
-            padding-right: 0px;
-        }
+    /* Consumer number is a text input, not a select — kill the select chevron from .vm-dmt-filter-row .form-control */
+    body.saas-admin-ui .saas-retailer-recharge-report-page .vm-dmt-filter-row input.vm-rch-consumer-text.form-control {
+        background-image: none !important;
+        cursor: text !important;
+        padding: 0 10px !important;
     }
 </style>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="">
-    <div class="container-fluid retailer-page fundtranfer rechargefirstclass fundtranfer-responshive" style="height:100vh;">
-        <!--Four-Design-Page-Header-Start-->
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
-        <div class="page-title-box-fourde">
-            <h3>Prepaid & Utility</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Prepaid & Utility</a></li>
-            </ul>
-        </div>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-retailer-recharge-report-page">
 
-        <!--Four-Design-Page-Header-End-->
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card class-back-tra-fourdesign page-header-third" style="float: left;width: 100%;">
-                    @using (Html.BeginForm("RechargeReport", "Home", FormMethod.Post))
-                    {
-                        <div class="">
-                            <div class="col-md-2 rechargefirst">
-                                <div class="form-group">
-                                    <div class="" style="">
-                                        @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                {
-                                new SelectListItem{ Text="ALL Status",Value="",},
-                                new SelectListItem{Text="SUCCESS",Value="SUCCESS"},
-                                new SelectListItem{Text="Pending",Value="PENDING"},
-                                new SelectListItem{Text="FAILED",Value="FAILED"}
-                                }, new { @class = "form-control", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
+    <div class="container-fluid vm-opr-page-shell">
 
-                                    </div>
-                                </div>
+        @{
+            var rchFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerRechargeReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_rch_frm_date" },
+                { "data-report-to", "#retailer_rch_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("RechargeReport", "Home", FormMethod.Post, rchFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-                            </div>
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-                            <div class="col-md-3 rechargesecond">
-                                <div class="form-group">
-                                    <div class="" style="">
-                                        @Html.DropDownList("Operator", ViewBag.Operator as SelectList, "ALL OPERATORS", new { id = "Operator", @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Reports</li>
+                        <li>Prepaid &amp; Utility</li>
+                    </ol>
 
-                            <div class="col-md-2 rechargefiveclass">
-                                <div class="form-group">
-                                    <div class="" style="border: 1px solid #ccc;">
-                                        @Html.TextBox("txtmob", "", new { @class = "form-control", @placeholder = "Consumer Number", @style = "height:30px;" })
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 rechargethrees">
-                                <div class="form-group" style="margin-bottom:0px;margin-top:1px;">
-                                    <div class="input-daterange input-group">
-                                        <div class="datesate datesates focused">
-                                            <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                        </div>
-                                        <span class="input-group-addon" style="display:none;">
-                                            <i class="fa fa-exchange" style="padding-top:8px;"></i>
-                                        </span>
-                                        <div class="datesate datesatese">
-                                            <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                        </div>
-                                    </div>
-                                    <!-- /.input group -->
-                                </div>
-                            </div>
-                            <div class="col-md-2 rechargefive">
-                                <div class="form-group">
-                                    <div class="form-line" style="border-bottom:none;margin-top:0px;">
-                                        <center>
-                                            <button value="LIVE" type="submit" class="btn" id="btntype" name="btntype" style="margin-top:5px; margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                <span style="top:-1px;color:black;">Search</span>
-                                            </button>
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
 
-                                        </center>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("ddl_status", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "All Status", Value = "", Selected = string.IsNullOrEmpty(selStatus) },
+                                new SelectListItem { Text = "Success", Value = "SUCCESS", Selected = selStatus == "SUCCESS" },
+                                new SelectListItem { Text = "Pending", Value = "PENDING", Selected = selStatus == "PENDING" },
+                                new SelectListItem { Text = "Failed", Value = "FAILED", Selected = selStatus == "FAILED" }
+                            }, new { id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control", title = "Status" })
                         </div>
-                    }
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 rechargepdfexal">
-                        <div class="spanpdfbuttob-secondreta" style="float:right;">
-                            <span><img src="~/ashok-images/pdf.png" /><input type="button" id="btnPDF" value="PDF" style="margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;color:#555;" /></span>
-                            <span>
-                                <img src="~/ashok-images/xls.png" /><input type="button" id="btnExport" value="Export" style="margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;color:#555;" />
-                            </span>
 
-                            <button onclick="findtotal()" class="btn" id="pdfblock" style=" margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                                <span class="displaypdf" style="top:-1px;color:#555 !important;">TOTAL</span>
-                                <strong class="pdfblocks" style="display:none;float:right;"><span id="successtotal" style="color:#555 !important;"></span><span id="Failedtotal" style="color:#555 !important;"></span><span id="Pendingtotal" style="color:#555 !important;"></span></strong>
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("Operator", ViewBag.Operator as SelectList, "All Operators", new { id = "Operator", @class = "vm-opr-select vm-dmt-select form-control", title = "Operator" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-opr-field--text">
+                            @Html.TextBox("txtmob", selMob, new { @class = "form-control vm-rch-consumer-text", placeholder = "Consumer number", autocomplete = "off", id = "txtmob", title = "Consumer number", onkeypress = "return isNumber(event)" })
+                        </div>
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_rch_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_rch_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
                             </button>
                         </div>
 
                     </div>
 
-
                 </div>
-            </div>
-        </div>
-        <div class="row clearfix" style="display:none;">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
 
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerRechargeTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Recharge totals</span>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                            <span>SUCCESS : </span>
-
-
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerRechargeTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Amount</span>
+                            <strong class="vm-opr-total-card__value" id="retailerRchTotalAmount">0.00</strong>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                            <span>FAILED : </span>
-
-
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value" id="retailerRchSuccessAmount">0.00</strong>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                            <span>PENDING : </span>
-
-
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value" id="retailerRchFailedAmount">0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="retailerRchPendingAmount">0.00</strong>
                         </div>
                     </div>
                 </div>
 
             </div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card class-back-tra-fourdesign">
-                    <div class="body change-iconrech-report change-iconrech-responshive" style="padding:12px;padding-left: 0;padding-right: 0;padding-top: 15px;">
-                        <div class="table-responsive recharge-responsive retailer-table-seconddesign tablethirddesign-new page-header-third" style="position:inherit;">
-                            <table id="tbldata" class="table table-bordered table-striped table-hover dataTable example-second retailer-whitespa-second third-design-table" cellspacing="0" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr class="recharge-report-rtailer">
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">#&nbsp;Category</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Consumer&nbsp;/&nbsp;Circle</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Operator&nbsp;Name</th>
+        }
 
-
-                                        @*<th style="padding-left:2px; padding-right:2px;text-align:center;">Opt&nbsp;Type</th>*@
-
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Net&nbsp;Amt</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Debit/Credit</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Earn</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Extra Comm</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Remain Pre</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Remain Pos</th>
-                                        @*<th style="padding-left:2px; padding-right:2px;text-align:center;">Type</th>*@
-
-                                        @*<th style="padding-left:2px; padding-right:2px;text-align:center;">Operator&nbsp;ID</th>*@
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Transition</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Request&nbsp;Date</th>
-                                        <th style="padding-left:2px; padding-right:2px;text-align:center;">Resp&nbsp;Date</th>
-                                        <th class="noExl" style="padding-left:2px; padding-right:2px;text-align:center;width:76px;">Action</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody id="trow">
-                                    @{
-                                        Html.RenderAction("_Rechargereport", "Home", new { Model = Model });
-                                    }
-                                </tbody>
-                            </table>
-
-
-
-                            <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                <div class="loadertablecssnew">Loading...</div>
-                            </div>
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-bolt" aria-hidden="true"></i>
+                        <span>Prepaid &amp; utility report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-inline-total" title="Total of current filter">
+                            Total: <strong>&#8377; <span id="retailerRchInlineTotal">0.00</span></strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn" onclick="findtotalRetailerRecharge()" title="Show totals" aria-expanded="false" aria-controls="retailerRechargeTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnRetailerRchExcel" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnRetailerRchPdf" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
                         </div>
+                    </div>
+                </div>
 
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerRechargeReport" class="table vm-opr-data-table" cellspacing="0" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Consumer<br>Circle</th>
+                                    <th>Operator<br>Name</th>
+                                    <th>Net&nbsp;Amt<br>&#8377;</th>
+                                    <th>Debit<br>Credit</th>
+                                    <th>Earn<br>&#8377;</th>
+                                    <th>Extra<br>Comm</th>
+                                    <th>Remain<br>Pre&nbsp;&#8377;</th>
+                                    <th>Remain<br>Post&nbsp;&#8377;</th>
+                                    <th>Trans.<br>ID</th>
+                                    <th>Request<br>Date</th>
+                                    <th>Resp<br>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="retailerRechargeRows">
+                                @{ Html.RenderAction("_Rechargereport", "Home", new { txt_frm_date = frmDate, txt_to_date = toDate, ddl_status = selStatus, Operator = selOperator, txtmob = selMob }); }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="retailerRchLoading" style="text-align:center;display:none;padding:14px;">
+                        <span class="loadertablecssnew">Loading…</span>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
+<!-- Dispute modal (single, page level) -->
+<div class="modal fade vm-admin-modal" id="retailerRchDisputeModal" tabindex="-1" role="dialog" aria-labelledby="retailerRchDisputeTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="retailerRchDisputeTitle">Raise complaint</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted" id="retailerRchDisputeSub">Enter details to raise a complaint.</p>
+                <input type="hidden" id="retailerRchDisputeId" />
+                <input type="hidden" id="retailerRchDisputeMobile" />
+                <input type="hidden" id="retailerRchDisputeOp" />
+                <input type="hidden" id="retailerRchDisputeAmt" />
+                <div class="form-group">
+                    <label for="retailerRchDisputeText">Description</label>
+                    <textarea id="retailerRchDisputeText" class="form-control" rows="3" placeholder="Enter detailed complaint…"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="saas-acc-btn" data-dismiss="modal">Close</button>
+                <button type="button" class="saas-acc-btn saas-acc-btn--search" onclick="submitRetailerRchDispute()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Complaint success modal -->
+<div class="modal fade vm-admin-modal" id="retailerRchComplaintSuccessModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Success</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"><strong>Complaint submitted successfully!</strong></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-
-<!--Dispute Reason Model-->
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+@section PostVmScripts {
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-@*<script>
-        $('#tbldata').DataTable({
-            dom: 'Bfrtip',
-
-             "paging":   false,
-            "ordering": false,
-            "info": false,
-              //"searching": false,
-        buttons: [
-            'excel'
-            ],
-          buttons: [
-                {
-                    extend: 'excelHtml5',
-                    exportOptions: {
-                         columns: [0,1,2,3,4,5,6,7,8,9,10 ]
-                    }
-                },
-                {
-                    extend: 'pdfHtml5',
-                    exportOptions: {
-                                columns: [0,1,2,3,4,5,6,7,8,9,10 ]
-                    }
-                },
-                  {
-                    extend: 'print',
-                    exportOptions: {
-                                columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10 ]
-                    }
-                }
-            ]
-    });
-    </script>*@
-
 <script>
-    function ToastrMessage() {
-        toastr.options = {
-            "closeButton": false,
-            "debug": false,
-            "positionClass": "toast-top-right1",
-            "newestOnTop": false,
-            "progressBar": true,
-            "preventDuplicates": true,
-            "onclick": null,
-            "showDuration": "200",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "show",
-            "hideMethod": "hide"
-        };
-        //toastr.info('MY MESSAGE!');
-    }
-</script>
+    window.retailerRchBaseUrl = '@Url.Action("RechargeReport", "Home")';
+    var retailerRchPageIndex = 2;
+    var retailerRchNoMore = false;
+    var retailerRchBusy = false;
 
-<script>
-    function confirm(e) {
-        $('#disp-'+e).hide();
-        $('#confirm-'+e).show();
-        $('#close-'+e).show();
-    }
-    function cancel(e) {
-          $('#disp-'+e).show();
-        $('#confirm-'+e).hide();
-        $('#close-' + e).hide();
-    }
-     function disputedata(e, mobileno, optname, amount) {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var ddl_status = $('#ddl_status').val();
-        var Operator = $('#Operator').val();
-        var txtmob = $('#txtmob').val();
-
-        // Description input
-        let descript = prompt('Enter Description');
-
-        if (descript != null && descript.trim() != "") {
-            // Row se values uthao
-
-
-            $.post("@Url.Action("dispute","Home")",
-                {
-                    "id": e,
-                    "txtregion": descript,
-                    "mobileno": mobileno,
-                    "optname": optname,
-                    "amount": amount
-                },
-                function (data) {
-                    ToastrMessage();
-                    toastr.info(data);
-
-                    // Refresh report after dispute
-                    $.post("@Url.Action("InfiniteScroll","Home")",
-                        {
-                            "pageindex": pageindex,
-                            "txt_frm_date": txt_frm_date,
-                            "txt_to_date": txt_to_date,
-                            "ddl_status": ddl_status,
-                            "Operator": Operator,
-                            "txtmob": txtmob
-                        },
-                        function (data) {
-                            $("#trow").html(data.HTMLString);
-                        });
-                })
-                .fail(function (xhr) {
-                    toastr.error("Error: " + xhr.responseText);
-                });
-        } else {
-            toastr.warning("Please enter a description!");
-        }
-    }
-
-</script>
-
-<script>
-  $(document).ready(function () {
-    $('#Complaint_Form').on('submit', function (e) {
-        e.preventDefault();
-        console.log("Form submitted");
-
-        let id = $('#complaintId').val();
-        var txtregion = $('#txtdescription').val();
-
-        if (id) {
-            $.post('@Url.Action("dispute", "Home")',
-                { id: id, txtregion: txtregion },
-                function (response) {
-                    console.log("Server response:", response);
-
-                    if (response === "Success") {
-                        $('#complaintSuccessModal').modal('show'); // Show Bootstrap success modal
-                        $('#Complaint_Form')[0].reset(); // Reset form
-                        $('.Complaint_box').hide(); // Hide form popup
-                    } else if (response === "Already Disputed") {
-                        toastr.warning("Complaint already submitted!");
-                    } else {
-                        toastr.error("Unexpected response: " + response);
-                    }
-                }
-            ).fail(function () {
-                toastr.error("Error while submitting complaint.");
-            });
-        } else {
-            alert("Please enter both ID and Description.");
-        }
-    });
-});
-
-
-</script>
-
-<script>
-    $('select').select2();
-</script>
-<script>
-    var txt_frm_date = $('#txt_frm_date').val();
-    var txt_to_date = $('#txt_to_date').val();
-    var ddl_status = $('#ddl_status').val();
-    var Operator = $('#Operator').val();
-    var txtmob = $('#txtmob').val();
-        var pageindex = 2;
-        var NoMoredata = false;
-        var inProgress = false;
-    $(window).scroll(function () {
-            if ($(window).scrollTop() > Number($("#tbldata").height()) / 4 && !NoMoredata && !inProgress) {
-                inProgress = true;
-                $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScroll","Home")",
-             { "pageindex": pageindex, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date,"ddl_status":ddl_status,"Operator":Operator,"txtmob":txtmob },
-                    function (data) {
-                        pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#trow").append(data.HTMLString);
-                        $("#loadingdiv").hide();
-                        inProgress = false;
-                    });
-            }
-        });
-</script>
-<script type="text/javascript">
-    function GotoPDFRecharge(e) {
-                       // alert(e)
-                       var idno = e.toString();
-                       var url = '@Url.Action("RechargePDF", "Home")?Idno=' + idno + '';
-                       //window.location.href = url,;
-                       window.open(url, '_blank');
-                   }
-</script>
-
-<script>
     function isNumber(evt) {
-        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode;
+        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57)) {
             return false;
+        }
         return true;
     }
-</script>
-<script type="text/javascript">
-    $(document).ready(function () {
 
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-
-   });
-
-</script>
-
-<!--Dispute Id-->
-<script>
-    function findtotal() {
-         var txt_frm_date = $('#txt_frm_date').val();
-         var txt_to_date = $('#txt_to_date').val();
-         var ddl_status = $('#ddl_status').val();
-         var Operator = $('#Operator').val();
-         var txtmob = $('#txtmob').val();
-             $.post("@Url.Action("FindTotal","Home")",
-             {"txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date,"ddl_status":ddl_status,"Operator":Operator,"txtmob":txtmob},
-                 function (data) {
-                     $('#successtotal').text(data.success);
-                     $('#Failedtotal').text(data.failed);
-                       $('#Pendingtotal').text(data.pending);
-                    });
+    function retailerRchFilters() {
+        return {
+            txt_frm_date: jQuery('#retailer_rch_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_rch_to_date').val() || '',
+            ddl_status: jQuery('#ddl_status').val() || '',
+            Operator: jQuery('#Operator').val() || '',
+            txtmob: jQuery('#txtmob').val() || ''
+        };
     }
-</script>
 
-<!--Genertae Invoice-->
-<script type="text/javascript">
+    function formatRchAmount(value) {
+        var num = parseFloat(value);
+        if (isNaN(num)) { return '0.00'; }
+        return num.toFixed(2);
+    }
+
+    function applyRetailerRchTotals(data) {
+        if (!data) { return; }
+        var success = parseFloat(data.success) || 0;
+        var failed = parseFloat(data.failed) || 0;
+        var pending = parseFloat(data.pending) || 0;
+        jQuery('#retailerRchSuccessAmount').text(formatRchAmount(success));
+        jQuery('#retailerRchFailedAmount').text(formatRchAmount(failed));
+        jQuery('#retailerRchPendingAmount').text(formatRchAmount(pending));
+        jQuery('#retailerRchTotalAmount').text(formatRchAmount(success + failed + pending));
+        jQuery('#retailerRchInlineTotal').text(formatRchAmount(success + failed + pending));
+    }
+
+    function collectRetailerRchTotalsFromTable() {
+        var success = 0, failed = 0, pending = 0;
+        jQuery('#retailerRechargeRows tr.vm-dmt-row').each(function () {
+            var amount = parseFloat(jQuery(this).attr('data-amount'));
+            if (isNaN(amount)) { amount = 0; }
+            var status = (jQuery(this).attr('data-status') || '').toString().toUpperCase();
+            if (status === 'SUCCESS') { success += amount; }
+            else if (status === 'FAILED') { failed += amount; }
+            else { pending += amount; }
+        });
+        return { success: success, failed: failed, pending: pending };
+    }
+
+    function findtotalRetailerRecharge() {
+        var panel = jQuery('#retailerRechargeTotalsPanel');
+        var btn = jQuery('.vm-opr-totals-btn');
+        if (panel.is(':visible')) {
+            hideRetailerRechargeTotals();
+            return;
+        }
+        jQuery('#loadermoney').show();
+        jQuery.post('@Url.Action("FindTotal", "Home")', retailerRchFilters())
+            .done(function (data) {
+                applyRetailerRchTotals(data);
+                panel.slideDown(180).attr('aria-hidden', 'false');
+                btn.attr('aria-expanded', 'true');
+            })
+            .fail(function () {
+                applyRetailerRchTotals(collectRetailerRchTotalsFromTable());
+                panel.slideDown(180).attr('aria-hidden', 'false');
+                btn.attr('aria-expanded', 'true');
+            })
+            .always(function () {
+                jQuery('#loadermoney').hide();
+            });
+    }
+
+    function hideRetailerRechargeTotals() {
+        jQuery('#retailerRechargeTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        jQuery('.vm-opr-totals-btn').attr('aria-expanded', 'false');
+    }
+
+    function buildRetailerRchExportQuery() {
+        var f = retailerRchFilters();
+        return 'txt_frm_date=' + encodeURIComponent(f.txt_frm_date)
+            + '&txt_to_date=' + encodeURIComponent(f.txt_to_date)
+            + '&ddl_status=' + encodeURIComponent(f.ddl_status)
+            + '&Operator=' + encodeURIComponent(f.Operator)
+            + '&txtmob=' + encodeURIComponent(f.txtmob);
+    }
+
+    function GotoPDFRecharge(e) {
+        var idno = e.toString();
+        var url = '@Url.Action("RechargePDF", "Home")?Idno=' + idno;
+        window.open(url, '_blank');
+    }
+
     function GenrateInvoice(ultra_request_id, RechargeTo, OptName, amt, OptID, Date) {
-       var url = '@Url.Action("GotoInvoicePDF1", "Home")?Id=' + ultra_request_id + '&RechargeTo=' + RechargeTo + '&OptName=' + OptName + '&amt=' + amt + '&OptID=' + OptID + '&Date=' + Date + '';
-            window.open(url, '_blank');
-     }
-</script>
-<script>
-    $("#btnExport").click(function(){
-   var txt_frm_date = $('#txt_frm_date').val();
-         var txt_to_date = $('#txt_to_date').val();
-         var ddl_status = $('#ddl_status').val();
-         var Operator = $('#Operator').val();
-        var txtmob = $('#txtmob').val();
-        var url = '@Url.Action("ExcelRechargereport","Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddl_status=' + ddl_status + '&Operator=' + Operator + '&txtmob=' + txtmob;
-        location.href = url;
-});
-</script>
-<script>
-    $("#btnPDF").click(function () {
-     var txt_frm_date = $('#txt_frm_date').val();
-         var txt_to_date = $('#txt_to_date').val();
-         var ddl_status = $('#ddl_status').val();
-         var Operator = $('#Operator').val();
-        var txtmob = $('#txtmob').val();
-        var url = '@Url.Action("PDFRechargereport","Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddl_status=' + ddl_status + '&Operator=' + Operator + '&txtmob=' + txtmob;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('.report-list-change li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('active');
+        var url = '@Url.Action("GotoInvoicePDF1", "Home")?Id=' + ultra_request_id + '&RechargeTo=' + RechargeTo + '&OptName=' + OptName + '&amt=' + amt + '&OptID=' + OptID + '&Date=' + Date;
+        window.open(url, '_blank');
+    }
 
+    function Heavyrefreshbtn(optname, mobile) {
+        jQuery.ajax({
+            url: '@Url.Action("HeavyRefreshurldth", "Home")',
+            type: 'POST',
+            data: { optname: optname, mobileno: mobile },
+            success: function (response) {
+                if (response === 'OK') {
+                    alert('Heavy Request Successfully Sent');
+                }
+            }
+        });
+    }
 
+    function openRetailerRchDispute(id, mobile, opname, amount, category) {
+        jQuery('#retailerRchDisputeId').val(id);
+        jQuery('#retailerRchDisputeMobile').val(mobile);
+        jQuery('#retailerRchDisputeOp').val(opname);
+        jQuery('#retailerRchDisputeAmt').val(amount);
+        jQuery('#retailerRchDisputeText').val('');
+        jQuery('#retailerRchDisputeSub').text((category || 'Recharge') + ' • ' + opname + ' • ' + mobile + ' • ₹' + amount);
+        jQuery('#retailerRchDisputeModal').modal('show');
+    }
+
+    function submitRetailerRchDispute() {
+        var id = jQuery('#retailerRchDisputeId').val();
+        var txtregion = jQuery.trim(jQuery('#retailerRchDisputeText').val());
+        if (!txtregion) {
+            if (window.toastr) { toastr.warning('Please enter a description!'); }
+            else { alert('Please enter a description!'); }
+            return;
+        }
+        jQuery('#loadermoney').show();
+        jQuery.post('@Url.Action("dispute", "Home")', {
+            id: id,
+            txtregion: txtregion,
+            mobileno: jQuery('#retailerRchDisputeMobile').val(),
+            optname: jQuery('#retailerRchDisputeOp').val(),
+            amount: jQuery('#retailerRchDisputeAmt').val()
+        })
+        .done(function (data) {
+            jQuery('#retailerRchDisputeModal').modal('hide');
+            if (data === 'Success') {
+                jQuery('#retailerRchComplaintSuccessModal').modal('show');
+            } else if (window.toastr) {
+                toastr.info(data);
+            } else {
+                alert(data);
             }
         })
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $("#pdfblock").click(function () {
-            $(".pdfblocks").css("display", "block");
+        .fail(function (xhr) {
+            if (window.toastr) { toastr.error('Error: ' + xhr.responseText); }
+            else { alert('Error: ' + xhr.responseText); }
+        })
+        .always(function () {
+            jQuery('#loadermoney').hide();
+        });
+    }
 
+    function initRetailerRchSelect2() {
+        jQuery('#ddl_status, #Operator').each(function () {
+            var $el = jQuery(this);
+            if (!$el.length || !jQuery.fn.select2) { return; }
+            if ($el.hasClass('select2-hidden-accessible')) {
+                try { $el.select2('destroy'); } catch (e) { }
+            }
+            $el.select2({ width: '100%', minimumResultsForSearch: 6 });
+        });
+    }
+
+    function initRetailerRchDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerRchDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerRechargeReportForm',
+                '#retailer_rch_frm_date',
+                '#retailer_rch_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerRchSelect2();
+        initRetailerRchDatepickers();
+        window.setTimeout(initRetailerRchDatepickers, 150);
+
+        jQuery('#btnRetailerRchExcel').on('click', function () {
+            location.href = '@Url.Action("ExcelRechargereport", "Home")?' + buildRetailerRchExportQuery();
+        });
+        jQuery('#btnRetailerRchPdf').on('click', function () {
+            window.open('@Url.Action("PDFRechargereport", "Home")?' + buildRetailerRchExportQuery(), '_blank');
+        });
+
+        applyRetailerRchTotals(collectRetailerRchTotalsFromTable());
+
+        jQuery(window).on('scroll', function () {
+            if (retailerRchNoMore || retailerRchBusy) { return; }
+            var nearBottom = jQuery(window).scrollTop() + jQuery(window).height() > jQuery(document).height() - 400;
+            if (!nearBottom) { return; }
+            retailerRchBusy = true;
+            jQuery('#retailerRchLoading').show();
+            var payload = retailerRchFilters();
+            payload.pageindex = retailerRchPageIndex;
+            jQuery.post('@Url.Action("InfiniteScroll", "Home")', payload)
+                .done(function (data) {
+                    retailerRchPageIndex = retailerRchPageIndex + 1;
+                    retailerRchNoMore = data.NoMoredata;
+                    if (data.HTMLString) {
+                        jQuery('#retailerRechargeRows').append(data.HTMLString);
+                        applyRetailerRchTotals(collectRetailerRchTotalsFromTable());
+                    }
+                })
+                .always(function () {
+                    jQuery('#retailerRchLoading').hide();
+                    retailerRchBusy = false;
+                });
         });
     });
 </script>
-<script>
-    $(document).ready(function () {
-        $(".rechargefirst span.select2-selection").click(function () {
-            $(".select2-dropdown").addClass('selectcutomere');
-        });
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $(".rechargesecond span.select2-selection").click(function () {
-            $(".select2-dropdown").addClass('selectcutomeress');
-        });
-    });
-</script>
-
-
-<script>
-    $(document).ready(function () {
-        $(".rechargethrees input").click(function () {
-            $(".datepicker").addClass('datepickerrecharge');
-        });
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $(".fundtranfer-responshive .rechargefirst .select2").click(function () {
-            $(".select2-dropdown.select2-dropdown--below.selectcutomere").addClass('parepaidstatus');
-
-        });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $(".fundtranfer-responshive .col-md-3.rechargesecond .select2").click(function () {
-            $(".select2-dropdown.select2-dropdown--below.selectcutomeress").addClass('parepaidstatussecond');
-
-        });
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
-        });
-    });
-
-</script>
+}

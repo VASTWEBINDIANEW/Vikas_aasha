@@ -1,500 +1,419 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.pancard_transation_manual>
 @{
-    ViewBag.Title = "TokenPurchaseReport";
+    ViewBag.Title = "Token Purchase Report Manual";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var selStatus = (Request["ddl_status"] ?? "").Trim();
+    if (selStatus == "" || selStatus == "Status") { selStatus = "ALL"; }
+    var dateMode = !string.IsNullOrEmpty(Request["txt_frm_date"]) ? "post" : "get";
 }
-<link href="~/RetailerCss/financialcss-retailer.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=34" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=38" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-pancard-report-modern.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-
-
-    /* new css */
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
+    body.saas-admin-ui .saas-retailer-pancard-manual-page #pancardNew .vm-dmt-txntype {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 6px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #334155;
+        white-space: nowrap;
     }
-
-    .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav {
-        margin-bottom: 0;
+    body.saas-admin-ui .saas-retailer-pancard-manual-page .vm-opr-mini-tabs {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
     }
-
-    /* new css */
-
-
-    .dropdown-menu {
-        margin-top: 130px !important;
+    body.saas-admin-ui .saas-retailer-pancard-manual-page .vm-opr-mini-tabs a {
+        padding: 5px 14px;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: #475569;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        text-decoration: none !important;
     }
-
-    .container-fluid.Financial-page .newtabsreport ul li a span {
-        font-size: 13px;
+    body.saas-admin-ui .saas-retailer-pancard-manual-page .vm-opr-mini-tabs a.is-active {
+        color: #fff;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        border-color: #1d4ed8;
     }
-
-
-    .col-md-2.aeps-statusclass button, .col-md-2.aeps-statusclass .btn-group.bootstrap-select.form-control.open button {
-        background-size: 10px !important;
+    /* MANUAL: 18 columns must fit page width — fixed layout + wrapping headers, no overlap */
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table {
+        min-width: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        table-layout: fixed !important;
     }
-
-    .Financial-pagetabs *, .Financial-pagetabs .btn.dropdown-toggle.btn-default span, .Financial-pagetabs .aeps-status-search button i, .Financial-pagetabs .aeps-status-search button span {
-        color: #555 !important;
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th {
+        white-space: normal !important;
+        word-break: break-word !important;
+        line-height: 1.25 !important;
+        padding: 8px 3px !important;
+        font-size: 0.66rem !important;
+        text-align: center !important;
+        vertical-align: middle !important;
     }
-
-    .Financial-pagetabs .enteraddarnumber input::placeholder {
-        color: #555 !important;
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table tbody td {
+        white-space: normal !important;
+        word-break: break-word !important;
+        overflow-wrap: anywhere !important;
+        padding: 7px 3px !important;
+        font-size: 0.78rem !important;
+        text-align: center !important;
+        vertical-align: middle !important;
     }
-
-    .form-iconmy.form-iconmyss {
-        z-index: 9;
-    }
-
-    @@media screen and (max-width:1366px) {
-        .newtabsreport-second {
-            width: 100% !important;
-            float: left;
-            margin-bottom: 10px;
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(1) { width: 3%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(2) { width: 7%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(3) { width: 8%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(4) { width: 9%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(5) { width: 8%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(6) { width: 6%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(7) { width: 5%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(8) { width: 6%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(9) { width: 4%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(10) { width: 4.5%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(11) { width: 7%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(12) { width: 7%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(13) { width: 4.5%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(14) { width: 4%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(15) { width: 3.5%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(16) { width: 4.5%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(17) { width: 4.5%; }
+    body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th:nth-child(18) { width: 4.5%; }
+    /* Mobile/Tablet: fit band — horizontal scroll, no letter-by-letter break */
+    @@media (max-width: 1199px) {
+        body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table {
+            table-layout: auto !important;
+            width: auto !important;
+            min-width: 1180px !important;
+            max-width: none !important;
         }
-
-
-        body .col-md-9.Financial-pagetab .aeps-statusclass .btn-group button {
-            background-size: 10px !important;
+        body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table thead th {
+            white-space: nowrap !important;
+            word-break: normal !important;
+            width: auto !important;
+            font-size: 0.62rem !important;
+            padding: 8px 10px !important;
         }
-
-        .aeps-report-responshive {
-            padding-right: 0px;
+        body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page #pancardNew.vm-opr-data-table tbody td {
+            white-space: nowrap !important;
+            word-break: normal !important;
+            font-size: 0.74rem !important;
+            padding: 7px 10px !important;
         }
-
-            .aeps-report-responshive .col-md-12 {
-                padding-right: 0px;
-            }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .layoutt-retailer section.content.aepsfullpage {
-            margin-left: 0% !important;
-        }
-
-        .aepsfullpage .container-fluid.Financial-page {
-            padding-left: 15px !important;
-        }
-    }
-
-    @@media only screen and (max-width:990px) {
-
-        .row.clearfix.rewrere.rewreress {
-            margin: 0;
-        }
-
-        .rewreress .col-md-12 {
-            padding-left: 0px !important;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-
-        .newtabsreport-aepsclass ul {
-            margin-bottom: 0px !important;
-        }
-
-        .allfinancial-report-resons .col-md-2 {
-            width: 50% !important;
-            float: left;
-        }
-
-        .allfinancial-report-resons .col-md-3 {
-            width: 100% !important;
-            float: left;
-            padding: 0 !important;
-        }
-
-
-            .allfinancial-report-resons .col-md-3 .form-group {
-                margin: 8px 0 !important;
-            }
-
-        .Financial-pagess-responshive {
-            padding-right: 15px;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .allfinancial-report-resons .col-md-12 .col-md-12 {
-            padding-left: 0;
-            width: 100%;
-            float: left;
-        }
-
-        .allfinancial-report-resons {
-            padding-left: 0 !important;
-        }
-
-        .aeps-report-responshive .col-md-12 {
-            padding-right: 10px;
-        }
-
-        .pancardtablestatusee table tr td {
-            white-space: normal !important;
-        }
-    }
-
-    .new_old a {
-        padding: 6px 12px;
-        border: 1px solid #ccc;
-        float: left;
-        margin-right: 4px;
-    }
-
-    @@media only screen and (max-width:480px) {
-
-
-        .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li {
-            width: 50% !important;
-            margin-bottom: 10px !important;
-        }
-
-        .money-transfer-retailer ul.nav.nav-tabs.tabsrepor-nav li {
-            padding-right: 0px;
-        }
-
-        .allfinancial-report-resons .col-md-2 {
-            width: 100% !important;
-        }
-
-        .aeps-report-responshive .aeps-status-search button span {
-            font-size: 12px !important;
+        body.saas-admin-ui .saas-pancard-new-page.saas-retailer-pancard-manual-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch;
         }
     }
 </style>
 
-<section class="content aepsfullpage content-margin-second content-fourdesign-page allpage-four-design-section" style="overflow: initial;">
-    <div class="container-fluid Financial-page Financial-pagess Financial-pagess-responshive">
-        <!--Four-Design-Page-Header-Start-->
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;" aria-hidden="true">
+    <div class="vm-dmt-loader__panel" role="status" aria-live="polite" aria-label="Processing">
+        <div class="vm-dmt-table-loader__spinner" aria-hidden="true"></div>
+        <span class="vm-dmt-loader__text">Please wait…</span>
+    </div>
+</div>
 
-        <div class="page-title-box-fourde">
-            <h3>Token Purchase Report</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Token Purchase Report</a></li>
-            </ul>
-        </div>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-pancard-report-page saas-pancard-new-page saas-retailer-pancard-manual-page">
+    <div class="container-fluid vm-opr-page-shell">
 
-        <!--Four-Design-Page-Header-End-->
-        <div class="newtabsreport newtabsreport-aepsclass newtabsreport-second" style="width:100%;">
-            <div class="container container-tabsrepor money-transfer-retailer" style="padding:0px;">
-                @Html.Partial("~/Areas/RETAILER/Views/Home/_menuFinicalReport.cshtml")
-            </div>
-        </div>
-        <div class="new_old">
-            <div class="page-header-third">
-                @Html.ActionLink("NEW", "TokenPurchaseReport_new", "PANCARD")
-
-                @Html.ActionLink("OLD", "TokenPurchaseReport", "PANCARD")
-                @Html.ActionLink("MANUAL", "TokenPurchaseReport_new_manual", "PANCARD", new { @style = "background: var(--main-bg-lcolor);color: #fff;" })
-            </div>
-        </div>
-        <div class="row clearfix aeps-report-responshive aeps-report-second allfinancial-report-resons" style="margin:0px;">
-            <div class="page-header-third">
-                @using (Html.BeginForm("TokenPurchaseReport_new_manual", "PANCARD", FormMethod.Post))
-                {
-                    <div class="col-md-12 Financial-pagetabs aeps-report-responshive" style="padding:0;">
-                        <div class="card class-back-tra-fourdesign" style="width:100%;float:left;margin-bottom:0px;">
-                            <div class="">
-                                @*<div class="col-md-2" style="display:none;">
-                                        <div style="margin-left:-6px;">
-                                            <p style="font-size:20px;color:#aba8a8;margin-top:2px;">Pancard&nbsp;Report</p>
-                                        </div>
-                                    </div>*@
-
-                                <div class="col-md-12" style="padding: 0;">
-                                    <div class="row" style="margin:0;">
-
-                                        <div class="col-md-2 aeps-statusclass" style="padding-right:0px;">
-                                            <div class="form-group">
-                                                <div class="" style="margin-top:5px;width:100%;border:1px solid #dddddd;">
-                                                    @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                    {
-                            new SelectListItem{ Text="Status",Value="ALL",},
-                            new SelectListItem{Text="SUCCESS",Value="SUCCESS"},
-                            new SelectListItem{Text="PENDING",Value="PENDING"},
-                            new SelectListItem{Text="FAILED",Value="FAILED"}
-                             }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;height:34px;" })
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-md-3 aeps-status finacial-selectsss" style="margin:0px !important;padding-left:3px;">
-                                            <div class="form-group" style="margin-bottom:0px;margin-top:0px;">
-                                                <div class="input-daterange input-group">
-                                                    <div class="datesate datesates">
-                                                        <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", autocomplete = "off" })
-                                                    </div>
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-exchange" style="padding-top:10px;"></i>
-                                                    </span>
-                                                    <div class="datesate datesatese">
-                                                        <div class="form-iconmy form-iconmyss" id="form-iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;left: 142px"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", autocomplete = "off" })
-                                                    </div>
-                                                </div>
-                                                <!-- /.input group -->
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1 aeps-status-search">
-                                            <div class="form-group">
-                                                <div class="form-line" style="border-bottom:none;">
-                                                    <button type="submit" class="btn" id="btntype" name="btntype" style="margin-top:5px; margin-left:2px; height:32px;border:1px solid #c7c2c2;background:#dedddd;">
-                                                        <i class="fa fa-search" style="top:0px;font-size:13px;color:black;"></i>
-                                                        <span style="top:-1px;color:black;">Search</span>
-                                                    </button>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3 buttonPdf buttonPdfss retailer-pdf-second" style="float: right;">
-
-                                            <button id="btnPDF">PDF</button>
-                                            <button id="btnExport">Export</button>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        @{
+            var panManFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerPanManualReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_panman_frm_date" },
+                { "data-report-to", "#retailer_panman_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("TokenPurchaseReport_new_manual", "PANCARD", FormMethod.Post, panManFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Financial Services</li>
+                        <li>Pan Card Manual Report</li>
+                    </ol>
+                    <div class="vm-dmt-fin-nav-row">
+                        @Html.Partial("~/Areas/RETAILER/Views/Home/_menuFinicalReport.cshtml")
                     </div>
-                }
-            </div>
-        </div>
-        <div class="row clearfix rewrere rewreress rewrere-aeps-responshive">
-            <div class="col-md-12" style="padding: 0 15px 0 30px;">
-                <div class="card class-back-tra-fourdesign">
-                    <div class="body" style="margin-top:10px;padding:0px;">
-                        <div class="page-header-third">
-                            <div class="table-responsive pancardtablestatusee tablethirddesign-newnew" style="position:inherit;">
-                                <table id="example1" class="table table-bordered table-striped table-hover third-design-table" style="width:100%; font-size:12px;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>S. No.</th>
-                                            <th>Status</th>
-                                            <th>Name</th>
-                                            <th>Mobile</th>
-                                            <th>Email</th>
-                                            <th>Father Name</th>
-                                            <th>DOB</th>
-                                            <th>Aadhaar</th>
-                                            <th>Gender</th>
-                                            <th>Amount</th>
+                </div>
 
-                                            <th>Request id</th>
-
-                                            <th>Request Time</th>
-
-                                            <th>Remain&nbsp;Pre</th>
-                                            <th>Comm</th>
-                                            <th>TDS</th>
-                                            <th>Remain&nbsp;Post&nbsp;₹</th>
-                                            <th>Final</th>
-                                            <th>Doc</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="trow">
-                                        @{ var s = 0;
-                                            foreach (var i in Model)
-                                            {
-                                                s++;
-                                                <tr>
-                                                    <td>@s</td>
-
-                                                    @{
-                                                        var sts = i.status;
-
-
-                                                        if (i.status.Contains("Refund"))
-                                                        {
-                                                            sts = "Refund";
-                                                        }
-                                                    }
-
-
-
-
-
-                                                    <td>
-                                                        @if (i.status.Contains("PENDING"))
-                                                        {
-                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png"> @sts
-
-
-                                                        }
-                                                        @if (i.status.Contains("Refund"))
-                                                        {
-                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown" src="../../ashok-images/backresnd.svg"> @sts
-
-                                                        }
-                                                        @if (i.status.Contains("Failed"))
-                                                        {
-                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red" src="../../ashok-images/closes.svg"> @sts
-
-                                                        }
-                                                        @if (i.status.Contains("Success"))
-                                                        {
-                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green" src="../../ashok-images/correct.svg"> @sts
-
-                                                        }
-                                                    </td>
-                                                    <td>@i.Title @i.Name</td>
-                                                    <td>AAdhar=@i.AadharregNumber<br />Customer =@i.Mobile</td>
-                                                    <td>@i.Email</td>
-                                                    <td>@i.Fathername</td>
-                                                    <td>@i.DOB</td>
-                                                    <td>@i.Aadharno</td>
-                                                    <td>@i.Gender</td>
-                                                    <td>@i.Amount</td>
-
-                                                    <td>@i.requestid</td>
-                                                    <td>@i.request_time</td>
-                                                    <td>@i.Rem_pre</td>
-                                                    <td>@i.Rem_comm</td>
-                                                    <td>@i.Rem_tds</td>
-                                                    <td>@i.rem_post</td>
-                                                    <td>@i.Rem_final</td>
-                                                    <td>
-                                                        @if (i.status.Contains("Failed"))
-                                                        {
-
-                                                            <div>@i.imageurl</div>
-
-                                                        }
-                                                        else if (i.status.Contains("Success"))
-                                                        {
-                                                            if (i.imageurl.Contains("/SlipPanCard/"))
-                                                            {
-                                                                <button onclick="views(@i.idno)">View</button>
-                                                            }
-                                                            else
-                                                            {
-                                                                <a href="~/@i.imageurl" target="_blank">  <button>View</button></a>
-                                                            }
-
-                                                        }
-                                                        else
-                                                        {
-
-                                                        }
-                                                    </td>
-                                                </tr>
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
-                                <script>
-                        function views(i) {
-                             
-                            $.ajax({
-                                url: '@Url.Action("slipview", "Home")',
-                                type: "POST",
-                                data: { Idno: i },
-                                cache: false,
-                                success: function (Response) {
-                                    window.open(Response, '_blank');
-                                    window.location.reload();
-
-
-                                }
-                            });
-                        }
-
-                                </script>
-                            </div>
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerPanManTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Transaction totals (loaded rows)</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerPanManTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value" id="retailerPanManSuccess">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value" id="retailerPanManFailed">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="retailerPanManPending">&#8377; 0.00</strong>
                         </div>
                     </div>
                 </div>
 
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-rpt-filters-panel__bar">
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("ddl_status", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "All Status", Value = "ALL", Selected = (selStatus == "ALL") },
+                                new SelectListItem { Text = "Success", Value = "SUCCESS", Selected = selStatus == "SUCCESS" },
+                                new SelectListItem { Text = "Pending", Value = "PENDING", Selected = selStatus == "PENDING" },
+                                new SelectListItem { Text = "Failed", Value = "FAILED", Selected = selStatus == "FAILED" }
+                            }, new { id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control", title = "Status" })
+                        </div>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_panman_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_panman_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-id-card" aria-hidden="true"></i>
+                        <span>Pan card manual applications</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-opr-mini-tabs">
+                            @Html.ActionLink("NEW", "TokenPurchaseReport_new", "PANCARD", null, new { })
+                            @Html.ActionLink("OLD", "TokenPurchaseReport", "PANCARD", null, new { })
+                            @Html.ActionLink("MANUAL", "TokenPurchaseReport_new_manual", "PANCARD", null, new { @class = "is-active" })
+                        </div>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn" onclick="FindtotalRetailerPanMan()" title="Show totals" aria-expanded="false" aria-controls="retailerPanManTotalsPanel"><i class="fas fa-chart-pie" aria-hidden="true"></i></button>
+                            <button type="button" id="btnRetailerPanManExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                            <button type="button" id="btnRetailerPanManPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="pancardNew" class="table vm-opr-data-table" cellspacing="0" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>S.R.</th>
+                                    <th>Status</th>
+                                    <th>Name</th>
+                                    <th>Mobile</th>
+                                    <th>Email</th>
+                                    <th>Father Name</th>
+                                    <th>DOB</th>
+                                    <th>Aadhaar</th>
+                                    <th>Gender</th>
+                                    <th>Amount &#8377;</th>
+                                    <th>Request ID</th>
+                                    <th>Request Time</th>
+                                    <th>Rem Pre &#8377;</th>
+                                    <th>Comm &#8377;</th>
+                                    <th>TDS &#8377;</th>
+                                    <th>Rem Post &#8377;</th>
+                                    <th>Final &#8377;</th>
+                                    <th>Doc</th>
+                                </tr>
+                            </thead>
+                            <tbody id="retailerPanManRows">
+                                @if (Model != null && Model.Count() > 0)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        var rawStatus = (item.status ?? "");
+                                        var sts = rawStatus.Contains("Refund") ? "Refund" : rawStatus;
+                                        var upper = rawStatus.ToUpper();
+                                        var tone = "pending";
+                                        var toneFa = "fa-clock-o";
+                                        var normStatus = "PENDING";
+                                        if (upper.Contains("SUCCESS"))
+                                        {
+                                            tone = "success"; toneFa = "fa-check"; normStatus = "SUCCESS";
+                                        }
+                                        else if (upper.Contains("FAILED"))
+                                        {
+                                            tone = "failed"; toneFa = "fa-times"; normStatus = "FAILED";
+                                        }
+                                        else if (upper.Contains("REFUND"))
+                                        {
+                                            tone = "failed"; toneFa = "fa-undo"; normStatus = "FAILED";
+                                        }
+                                        <tr class="vm-dmt-row vm-dmt-row--@tone" data-amount="@item.Amount" data-status="@normStatus">
+                                            <td class="vm-dmt-sr-cell"></td>
+                                            <td>
+                                                <span class="vm-dmt-status vm-dmt-status--@tone" title="@rawStatus"><i class="fa @toneFa" aria-hidden="true"></i></span>
+                                                <span class="vm-dmt-txntype">@sts</span>
+                                            </td>
+                                            <td>@item.Title @item.Name</td>
+                                            <td>Aadhar=@item.AadharregNumber<br />Customer=@item.Mobile</td>
+                                            <td>@item.Email</td>
+                                            <td>@item.Fathername</td>
+                                            <td>@item.DOB</td>
+                                            <td>@item.Aadharno</td>
+                                            <td>@item.Gender</td>
+                                            <td class="vm-dmt-amt-cell">@item.Amount</td>
+                                            <td>@item.requestid</td>
+                                            <td>@item.request_time</td>
+                                            <td class="vm-dmt-amt-cell">@item.Rem_pre</td>
+                                            <td class="vm-dmt-amt-cell">@item.Rem_comm</td>
+                                            <td class="vm-dmt-amt-cell">@item.Rem_tds</td>
+                                            <td class="vm-dmt-amt-cell">@item.rem_post</td>
+                                            <td class="vm-dmt-amt-cell">@item.Rem_final</td>
+                                            <td class="vm-dmt-action-cell">
+                                                <div class="vm-dmt-action-bar">
+                                                    @if (upper.Contains("FAILED"))
+                                                    {
+                                                        <span class="vm-dmt-txntype">@item.imageurl</span>
+                                                    }
+                                                    else if (upper.Contains("SUCCESS"))
+                                                    {
+                                                        if ((item.imageurl ?? "").Contains("/SlipPanCard/"))
+                                                        {
+                                                            <button type="button" class="vm-dmt-act-btn" title="View slip" onclick="views(@item.idno)"><i class="material-icons">visibility</i></button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="~/@item.imageurl" target="_blank" class="vm-dmt-act-btn" title="View document"><i class="material-icons">visibility</i></a>
+                                                        }
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="18" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <div class="vm-opr-empty-state">
+                                                <i class="fas fa-inbox" aria-hidden="true"></i>
+                                                <h3>Data not found</h3>
+                                                <p>Try a different date range or filter.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-
+@section PostVmScripts {
 <script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 <script>
-    var txt_frm_date = $('#txt_frm_date').val();
-    var txt_to_date = $('#txt_to_date').val();
-    var ddl_status = $('#ddl_status').val();
+    function retailerPanManFilters() {
+        return {
+            txt_frm_date: jQuery('#retailer_panman_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_panman_to_date').val() || '',
+            ddl_status: jQuery('#ddl_status').val() || 'ALL'
+        };
+    }
 
-        var pageindex = 2;
-        var NoMoredata = false;
-        var inProgress = false;
-    $(window).scroll(function () {
-            if ($(window).scrollTop() > Number($("#tbldata").height()) / 4 && !NoMoredata && !inProgress) {
-                inProgress = true;
-                $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScroll","Home")",
-             { "pageindex": pageindex, "txt_frm_date":txt_frm_date,"txt_to_date":txt_to_date,"ddl_status":ddl_status},
-                    function (data) {
-                        pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#trow").append(data.HTMLString);
-                        $("#loadingdiv").hide();
-                        inProgress = false;
-                    });
+    function renumberRetailerPanManSr() {
+        jQuery('#retailerPanManRows tr.vm-dmt-row').each(function (i) {
+            jQuery(this).find('.vm-dmt-sr-cell').first().text(i + 1);
+        });
+    }
+
+    function hideRetailerPanManTotals() {
+        var $panel = jQuery('#retailerPanManTotalsPanel');
+        var $btn = jQuery('.vm-dmt-totals-btn');
+        $panel.removeClass('is-open').hide().attr('aria-hidden', 'true');
+        $btn.removeClass('is-active').attr({ title: 'Show totals', 'aria-expanded': 'false' });
+    }
+
+    function calcRetailerPanManTotals() {
+        var success = 0, failed = 0, pending = 0;
+        jQuery('#retailerPanManRows tr.vm-dmt-row').each(function () {
+            var amt = parseFloat(jQuery(this).attr('data-amount')) || 0;
+            var st = (jQuery(this).attr('data-status') || '').toUpperCase();
+            if (st === 'SUCCESS') { success += amt; }
+            else if (st === 'FAILED') { failed += amt; }
+            else { pending += amt; }
+        });
+        jQuery('#retailerPanManSuccess').html('&#8377; ' + success.toFixed(2));
+        jQuery('#retailerPanManFailed').html('&#8377; ' + failed.toFixed(2));
+        jQuery('#retailerPanManPending').html('&#8377; ' + pending.toFixed(2));
+    }
+
+    function FindtotalRetailerPanMan() {
+        var $panel = jQuery('#retailerPanManTotalsPanel');
+        var $btn = jQuery('.vm-dmt-totals-btn');
+        if ($panel.hasClass('is-open')) {
+            hideRetailerPanManTotals();
+            return;
+        }
+        $panel.addClass('is-open').show().attr('aria-hidden', 'false');
+        $btn.addClass('is-active').attr({ title: 'Hide totals', 'aria-expanded': 'true' });
+        calcRetailerPanManTotals();
+    }
+
+    function views(i) {
+        jQuery.ajax({
+            url: '@Url.Action("slipview", "Home")',
+            type: 'POST',
+            data: { Idno: i },
+            cache: false,
+            success: function (Response) {
+                window.open(Response, '_blank');
+                window.location.reload();
             }
         });
-</script>
-<script>
-    function isNumber(evt) {
-        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
-            return false;
-        return true;
     }
-</script>
-<!--Calendar Javascript-->
-<script>
-    $(document).ready(function () {
 
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-
-    });
-</script>
-<script>
     function tokenStatus(id) {
-        var url = '@Url.Action("GetTokenStatus", "PANCARD")'
-        var jqxhr = $.post(url, {id : id}, function (data) {
+        var url = '@Url.Action("GetTokenStatus", "PANCARD")';
+        jQuery.post(url, { id: id }, function (data) {
             var response = JSON.parse(data);
             if (response.RESULT == "0") {
                 swal("Wow!", response.ADDINFO, "success");
@@ -506,55 +425,52 @@
                 swal("Oops!!!", response.ADDINFO, "error");
             }
         })
-       .fail(function (jqXHR, textStatus, errorThrown) {
-
-           swal("Oops!!!", jqXHR.responseText, "error");
-
-       })
-
+        .fail(function (jqXHR) {
+            swal("Oops!!!", jqXHR.responseText, "error");
+        });
     }
-</script>
 
+    function initRetailerPanManSelect2() {
+        jQuery('#ddl_status').each(function () {
+            var $el = jQuery(this);
+            if (!$el.length || !jQuery.fn.select2) { return; }
+            if ($el.hasClass('select2-hidden-accessible')) {
+                try { $el.select2('destroy'); } catch (e) { }
+            }
+            $el.select2({ width: '100%', minimumResultsForSearch: 6 });
+        });
+    }
 
-
-<!--My Script-->
-<script>
-    $(".input-daterange").click(function () {
-        $(".datepicker").addClass('datepickerpancard');
-    });
-
-
-</script>
-
-
-<script>
-    $(function () {
-        var loc = window.location.href; // returns the full URL
-        if ('/~/RETAILER/PANCARD/TokenPurchaseReport') {
-            $('.list.report-list-change li#classtravelactive a').addClass('active');
+    function initRetailerPanManDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerPanManDatepickers, 50);
+            return;
         }
-    });
-</script>
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var ddl_status = $('#ddl_status').val();
-        var url = '@Url.Action("Excel_TokenPurchase_Report1_manual", "PANCARD")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddl_status=' + ddl_status;
-        location.href = url
-});
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerPanManualReportForm',
+                '#retailer_panman_frm_date',
+                '#retailer_panman_to_date',
+                true
+            );
+        }
+    }
 
-</script>
-<script>
-    $("#btnPDF").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var ddl_status = $('#ddl_status').val();
-        var url = '@Url.Action("PDF_TokenPurchaseReport1_manual", "PANCARD")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddl_status=' + ddl_status;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
+    jQuery(function () {
+        initRetailerPanManSelect2();
+        initRetailerPanManDatepickers();
+        window.setTimeout(initRetailerPanManDatepickers, 150);
+        renumberRetailerPanManSr();
+
+        jQuery('#btnRetailerPanManExport').on('click', function (e) {
+            e.preventDefault();
+            var f = retailerPanManFilters();
+            location.href = '@Url.Action("Excel_TokenPurchase_Report1_manual", "PANCARD")?txt_frm_date=' + encodeURIComponent(f.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(f.txt_to_date) + '&ddl_status=' + encodeURIComponent(f.ddl_status);
+        });
+        jQuery('#btnRetailerPanManPDF').on('click', function () {
+            var f = retailerPanManFilters();
+            window.open('@Url.Action("PDF_TokenPurchaseReport1_manual", "PANCARD")?txt_frm_date=' + encodeURIComponent(f.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(f.txt_to_date) + '&ddl_status=' + encodeURIComponent(f.ddl_status), '_blank');
+        });
     });
 </script>
+}

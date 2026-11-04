@@ -1,393 +1,293 @@
-﻿
-@model List<Vastwebmulti.Models.proc_FlightCancellationReport_Result>
+﻿@model List<Vastwebmulti.Models.proc_FlightCancellationReport_Result>
 @using Newtonsoft.Json;
 @{
-    ViewBag.Title = "Flight Cancellation";
+    ViewBag.Title = "Flight Cancellation Report";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var selStatus = (Request["ddl_status"] ?? "ALL").Trim();
+    if (string.IsNullOrEmpty(selStatus)) { selStatus = "ALL"; }
+    var selPNR = (Request["PNR"] ?? "").Trim();
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
 }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=38" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-cancellation-report-modern.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-
-    /* new css  */
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
+    body.saas-admin-ui .saas-dmt-report-page .vm-dmt-filter-row input.vm-cancel-text-input.form-control {
+        background-image: none !important;
+        cursor: text !important;
+        padding: 0 12px !important;
     }
-
-    .h_menu-set {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        justify-content: space-between;
+    body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport .vm-cancel-status-text {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 6px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #334155;
+        white-space: nowrap;
     }
-
-        .h_menu-set .page-header-third {
-            margin-left: 0;
-            margin-right: 0;
+    /* Retailer has only 9 columns (ADMIN css targets 25 cols with 3400px min-width) */
+    /* Desktop (>=1024px): fit-to-width, no scroll */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table {
+            min-width: 0 !important;
+            table-layout: fixed !important;
         }
-
-    .air-cancellation .container-fluid {
-        padding-left: 10px;
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table tbody td {
+            min-width: 0 !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(1),
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table tbody td:nth-child(1) { width: 17% !important; }
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(2),
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table tbody td:nth-child(2) { width: 9% !important; }
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table tbody td:nth-child(3) { width: 9% !important; }
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(4),
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table tbody td:nth-child(4) { width: 12% !important; }
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(5),
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table tbody td:nth-child(5) { width: 13% !important; }
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(6),
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table tbody td:nth-child(6) { width: 13% !important; }
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(7),
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table tbody td:nth-child(7) { width: 11% !important; }
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(8),
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table tbody td:nth-child(8) { width: 8% !important; }
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(9),
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table tbody td:nth-child(9) { width: 8% !important; }
     }
-
-
-    /* new css  */
-
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .dropdown-menu {
-        margin-top: 90px !important;
-    }
-
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table {
+            min-width: 1020px !important;
+            width: max-content !important;
+            table-layout: auto !important;
+        }
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-cancel-report-page #cancellationReport.vm-opr-data-table tbody td {
+            min-width: 0 !important;
+            width: auto !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+            white-space: nowrap !important;
+        }
+        body.saas-admin-ui .saas-retailer-cancel-report-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
+        }
     }
 </style>
-<style type="text/css">
-    .loadermoney {
-        position: fixed;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 199999;
-        background: url('../../images/mmmm.svg') 50% 50% no-repeat rgba(249, 249, 249, 0.9);
-    }
 
-    .ss :hover {
-        color: green;
-    }
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;" aria-hidden="true">
+    <div class="vm-dmt-loader__panel" role="status" aria-live="polite" aria-label="Processing">
+        <div class="vm-dmt-table-loader__spinner" aria-hidden="true"></div>
+        <span class="vm-dmt-loader__text">Please wait…</span>
+    </div>
+</div>
 
-    .ff :hover {
-        color: red;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-cancellation-report-page saas-retailer-cancel-report-page">
+    <div class="container-fluid vm-opr-page-shell">
 
-    .ress :hover {
-        color: #ff9600;
-    }
-
-    .view :hover {
-        color: #3F51B5;
-    }
-
-    @@media only screen and (max-width:1169px){
-
-        .air-cancellation .container-fluid {
-            padding-left: 15px;
+        @{
+            var cancelFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerCancelReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_cancel_frm_date" },
+                { "data-report-to", "#retailer_cancel_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
-
-    }
-
-
-    @@media only screen and (max-width:991px) {
-
-        .flight-secondcss .col-md-2 {
-            float: left;
-        }
-    }
-
-
-
-   @@media screen and (max-width:767px){
-    .flight-secondcss .col-md-2 {
-        margin-right: 0px;
-    }
-    .flighcancel-second .flightdate-show.finacial-selectsss {
-        padding-left: 0px !important;
-    }
-    .flighcancel-second #sts.col-md-2.flightcancelclass {
-        padding-left: 0 !important;width: 50% !important;float: left;
-    }
-    .flighcancel-second .flightcancelclass button.btn.dropdown-toggle.btn-default {background-size: 10px !important;}
-    .flighcancel-second .col-md-2.pnrclass {width: 50% !important;float: left !important;}
-    .flighcancel-second .flightdate-show.finacial-selectsss {
-        width: 100% !important;margin-top: 5px;margin-bottom: 5px;
-    }
-    .flighcancel-second .flightdate-search button span {
-        text-align: center !important;position: static !important;float: none;
-    }
-    .flighcancel-second .flightdate-search button i{display:none;}
-    .col-md-2.flightdate-search {
-        padding-left: 0px !important;
-    }
-   }
-   @@media screen and (max-width:766px){
-    .flighcancel-second .row.clearfix.flight-changecss {
-        position: static !important;
-        width: 100% !important;
-        float: left;
-        margin-top: 10px;
-    }
-    .flighcancel-second .row.clearfix.flight-changecss .card{margin-bottom:0px !important;}
-    .flighcancel-second .newtabsreport.newtabsreportBusreport {
-        width: 100% !important;
-        float: left;
-    }
-    
-    .air-cancellation {position: relative;}
-        .air-cancellation .row.clearfix.flight-secondcss {
-            margin: 0px;width: 100%;float: left;position: static !important;
-        }
-        .air-cancellation .flightdate-search {width: auto !important;float: left;}
-    .col-md-3.buttonPdf {display: block;}
-        .col-md-3.buttonPdf button:nth-child(2) {margin: 0px 3px;}
-
-   }
-
-   @@media screen and (max-width:480px){
-
-    .h_menu-set {
-        display: block;
-    }
-    #tabsrepor-navs li {
-        margin-right: 0px !important;
-        padding-right: 2px;
-        width: 33.333%;
-        float: left;
-    }
-    #ul li {
-        margin-left: 0px !important;
-        padding-right: 2px;
-        width: 50%;
-    }
-
-    #tabsrepor-navs li a{
-        width: 100%;
-        float: left;
-    }
-
-    .flighcancel-second #sts.col-md-2.flightcancelclass {
-        width: 100% !important;
-    }
-    .flighcancel-second .col-md-2.pnrclass {
-        width: 100% !important;
-    }
-
-    .flight-secondcss .pnrclass {
-        padding-left: 0px !important;
-        padding-top: 6px;
-    }
-
-   }
-
-
-</style>
-
-<div id="loadermoney" class="loadermoney" style="display:none;"></div>
-<section class="content content-margin-second flighcancel-second air-cancellation" style="">
-    <div class="container-fluid">
-        <div class="newtabsreport newtabsreportBusreport">
-            <div class="container container-tabsrepor cancelreport-retailer" id="flightaddclass">
-
-                <div class="h_menu-set">
-                    <div class="page-header-third">
-                        @Html.Partial("~/Areas/RETAILER/Views/Home/_Travelsview.cshtml")
+        @using (Html.BeginForm("CancellationReport", "Air", FormMethod.Post, cancelFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Travel &amp; Hotels</li>
+                        <li>Cancellation Report</li>
+                    </ol>
+                    <div class="vm-dmt-fin-nav-row vm-ticket-travel-nav-row">
+                        @Html.Partial("_FlightMenu")
                     </div>
+                </div>
 
-                    <div class="page-header-third">
-                        <div class="clearfix flight-changecss">
-                            <div class="changepadding changepadding-cancel" style="">
-                                <div class="card">
-                                    <div class="col-md-12 flight-changecsscolmd" id="addnewclass">
-                                        <div class="flightmenu-rtailer" style="">
-                                            @Html.Partial("_FlightMenu")
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerCancelTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Refunded totals (loaded rows)</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerCancelTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value" id="retailerCancelSuccess">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value" id="retailerCancelFailed">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="retailerCancelPending">&#8377; 0.00</strong>
                         </div>
                     </div>
                 </div>
 
-            </div>
-        </div>
-        <div class="tab-content tabsrepor-content" id="flightreportcss">
-            
-            <div class="row clearfix flight-secondcss" style="margin:0;">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0;">
-                    <div class="card">
-                        @using (Html.BeginForm("CancellationReport", "Air", FormMethod.Post))
-                        {
-                        <div class="page-header-third">
-
-
-
-                            <div class="col-md-2 flightcancelclass" id="sts" style="width:12%;">
-                                <div class="" style="margin-top:6px;margin-left:-13px;width:108%;padding-bottom:10px;">
-                                    @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                {
-                        new SelectListItem{ Text="Status",Value="ALL",},
-                        new SelectListItem{Text="Success",Value="SUCCESS"},
-                        new SelectListItem{Text="Pending",Value="PENDING"},
-                        new SelectListItem{Text="Failed",Value="FAILED"}
-                         }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;" })
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-2 pnrclass" style="width:12%;">
-                                <div class="input-group" style="border:1px solid #bfbebe;margin-top:6px;width:100%;">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-search" style="margin-left:3px;color:#9999b3;padding-top:3px;"></i>
-                                    </span>
-                                    <div class="">
-                                        @Html.TextBox("PNR", "", new { @class = "form-control", @placeholder = "PNR", @style = "height:30px;margin-left:-8px;padding:0px; background:none;font-size:12px;padding-top:4px;" })
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2 flightdate-show finacial-selectsss" style="padding-left:3px;">
-                                <div class="form-group" style="margin-bottom:0px;width:100%;margin-top:2px;">
-                                    <div class="input-daterange input-group">
-                                        <div class="datesate datesates">
-                                            <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height:32px;", autocomplete = "off" })
-                                        </div>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-exchange" style="padding-top:10px;"></i>
-                                        </span>
-                                        <div class="datesate datesatese">
-                                            <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;height:32px;", autocomplete = "off" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2 flightdate-search">
-
-
-                                <div class="col-md-6">
-                                    <center>
-                                        <button type="submit" value="Old" name="submit" class="btn retailer-search-second" style="margin-left:-9px; height:31px;border:1px solid #c7c2c2;background:#dedddd;">
-                                            <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                            <span style="top:-2px;color:black;">Search</span>
-                                        </button>
-                                    </center>
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-3 buttonPdf retailer-pdf-second" style="width: 30%;float: right;text-align: right;">
-
-                                <button id="btnPDF">PDF</button>
-                                <button id="btnExport">Export</button>
-                                <button>Total</button>
-                            </div>
-
-
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--cancel vm-rpt-filters-panel__bar">
+                        <div class="vm-opr-field vm-dmt-field" id="sts">
+                            @Html.DropDownList("ddl_status", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "All Status", Value = "ALL", Selected = (selStatus == "ALL") },
+                                new SelectListItem { Text = "Success", Value = "SUCCESS", Selected = selStatus == "SUCCESS" },
+                                new SelectListItem { Text = "Pending", Value = "PENDING", Selected = selStatus == "PENDING" },
+                                new SelectListItem { Text = "Failed", Value = "FAILED", Selected = selStatus == "FAILED" }
+                            }, new { id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control", title = "Status" })
                         </div>
-                        }
+                        <div class="vm-opr-field vm-dmt-field vm-dmt-field--pnr">
+                            @Html.TextBox("PNR", selPNR, new { @class = "form-control vm-dmt-search-input vm-cancel-pnr-input vm-cancel-text-input", placeholder = "Enter PNR", autocomplete = "off", title = "PNR", id = "PNR" })
+                        </div>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_cancel_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_cancel_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" value="Old" name="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="">
-                <div class="card">
-                    @*<div class="">
-                        <ol class="breadcrumb breadcrumb-col-blue-grey" style="margin-left:5px;margin-top:9px;">
-                            <li class="active" style="color:#9E9E9E; font-size:12px;">FLIGHT&nbsp;CANCELLATIONS&nbsp;REPORT&nbsp;></li>
-                        </ol> 
-                    </div>*@
-                    <div class="row clearfix">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="">
-                            <div class="page-header-third">
-                                <div class="table-responsive flightcancel-responsive" style="position:inherit;">
-                                    <table id="example" class="table table-bordered table-striped table-hover" cellspacing="0" style="width:100%;font-size:12px;">
-                                        <thead style="color:black;position:inherit;background-color:whitesmoke;">
-                                            <tr>
-                                                <th>Live&nbsp;Status</th>
-                                                <th>Request&nbsp;Type</th>
-                                                <th>Cancel&nbsp;Type</th>
-                                                <th>Cancellation&nbsp;Id</th>
-                                                <th>Request&nbsp;Date</th>
-                                                <th>Response&nbsp;Date</th>
-                                                <th>Refunded&nbsp;Amount</th>
-                                                <th>Charge</th>
-                                                <th>#</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="trow">
-                                            @{
-                                                Html.RenderAction("_CancellationReport", "Air", new { Model = Model });
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-ban" aria-hidden="true"></i>
+                        <span>Flight cancellation report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-cancel-totals-btn" onclick="FindtotalRetailerCancel()" title="Show totals" aria-expanded="false" aria-controls="retailerCancelTotalsPanel"><i class="fas fa-chart-pie" aria-hidden="true"></i></button>
+                            <button type="button" id="btnRetailerCancelExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                            <button type="button" id="btnRetailerCancelPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="cancellationReport" class="table vm-opr-data-table" cellspacing="0" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Live Status</th>
+                                    <th>Request Type</th>
+                                    <th>Cancel Type</th>
+                                    <th>Cancellation Id</th>
+                                    <th>Request Date</th>
+                                    <th>Response Date</th>
+                                    <th>Refunded Amount &#8377;</th>
+                                    <th>Charge &#8377;</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody id="retailerCancelRows">
+                                @{ Html.RenderAction("_CancellationReport", "Air", new { txt_frm_date = frmDate, txt_to_date = toDate, ddl_status = selStatus, PNR = selPNR }); }
+                            </tbody>
+                        </table>
+                        <div id="retailerCancelLoading" class="vm-opr-table-loading vm-dmt-table-loading" style="display:none;">
+                            <div class="vm-dmt-table-loader" role="status" aria-live="polite" aria-label="Loading cancellations">
+                                <div class="vm-dmt-table-loader__spinner" aria-hidden="true"></div>
+                                <span class="vm-dmt-table-loader__text">Loading cancellations…</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
 
     </div>
-
 </section>
 
-
-
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-@*<script src="http://localhost/HotelDemo/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+@section PostVmScripts {
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 <script>
-    var txt_frm_date = $('#txt_frm_date').val();
-    var txt_to_date = $('#txt_to_date').val();
-    var ddl_status = $('#ddl_status').val();
-    var PNR = $('#PNR').val();
-        var pageindex = 2;
-        var NoMoredata = false;
-        var inProgress = false;
-    $(window).scroll(function () {
-            if ($(window).scrollTop() > Number($("#tbldata").height()) / 4 && !NoMoredata && !inProgress) {
-                inProgress = true;
-                $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScroll_cancelticket","Home")",
-                    { "pageindex": pageindex, "PNR": PNR,"ddl_status":ddl_status, "frm_date": txt_frm_date, "to_date": txt_to_date },
-                    function (data) {
-                        pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#trow").append(data.HTMLString);
-                        $("#loadingdiv").hide();
-                        inProgress = false;
-                    });
-            }
+    var retailerCancelPageIndex = 2;
+    var retailerCancelNoMore = false;
+    var retailerCancelBusy = false;
+
+    function retailerCancelFilters() {
+        return {
+            txt_frm_date: jQuery('#retailer_cancel_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_cancel_to_date').val() || '',
+            ddl_status: jQuery('#ddl_status').val() || 'ALL',
+            PNR: jQuery('#PNR').val() || ''
+        };
+    }
+
+    function hideRetailerCancelTotals() {
+        var $panel = jQuery('#retailerCancelTotalsPanel');
+        var $btn = jQuery('.vm-cancel-totals-btn');
+        $panel.removeClass('is-open').hide().attr('aria-hidden', 'true');
+        $btn.removeClass('is-active').attr({ title: 'Show totals', 'aria-expanded': 'false' });
+    }
+
+    function calcRetailerCancelTotals() {
+        var success = 0, failed = 0, pending = 0;
+        jQuery('#retailerCancelRows tr.vm-dmt-row').each(function () {
+            var amt = parseFloat(jQuery(this).attr('data-amount')) || 0;
+            var st = (jQuery(this).attr('data-status') || '').toUpperCase();
+            if (st === 'SUCCESS') { success += amt; }
+            else if (st === 'FAILED') { failed += amt; }
+            else { pending += amt; }
         });
-</script>
-<script>
+        jQuery('#retailerCancelSuccess').html('&#8377; ' + success.toFixed(2));
+        jQuery('#retailerCancelFailed').html('&#8377; ' + failed.toFixed(2));
+        jQuery('#retailerCancelPending').html('&#8377; ' + pending.toFixed(2));
+    }
+
+    function FindtotalRetailerCancel() {
+        var $panel = jQuery('#retailerCancelTotalsPanel');
+        var $btn = jQuery('.vm-cancel-totals-btn');
+        if ($panel.hasClass('is-open')) {
+            hideRetailerCancelTotals();
+            return;
+        }
+        $panel.addClass('is-open').show().attr('aria-hidden', 'false');
+        $btn.addClass('is-active').attr({ title: 'Hide totals', 'aria-expanded': 'true' });
+        calcRetailerCancelTotals();
+    }
+
     function OnSuccess(data) {
-        //alert("s");
         var respo = JSON.parse(data);
         if (respo.Status == "Success") {
             swal("Wow!", respo.Message, "success");
@@ -399,81 +299,77 @@
         }
     }
     function OnFailure() {
-        swal("Oops!", "Unable to fatch data", "error");
+        swal("Oops!", "Unable to fetch data", "error");
     }
-</script>
 
-<script>
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-
-    });
-</script>
-
-
-<script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('#custnav li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('activee');
-                $this.addClass('navbar');
-
+    function initRetailerCancelSelect2() {
+        jQuery('#ddl_status').each(function () {
+            var $el = jQuery(this);
+            if (!$el.length || !jQuery.fn.select2) { return; }
+            if ($el.hasClass('select2-hidden-accessible')) {
+                try { $el.select2('destroy'); } catch (e) { }
             }
-        })
+            $el.select2({ width: '100%', minimumResultsForSearch: 6 });
+        });
+    }
+
+    function initRetailerCancelDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerCancelDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerCancelReportForm',
+                '#retailer_cancel_frm_date',
+                '#retailer_cancel_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerCancelSelect2();
+        initRetailerCancelDatepickers();
+        window.setTimeout(initRetailerCancelDatepickers, 150);
+
+        jQuery('#btnRetailerCancelExport').on('click', function (e) {
+            e.preventDefault();
+            var f = retailerCancelFilters();
+            location.href = '@Url.Action("Excel_Cancellation_Report", "Air")?txt_frm_date=' + encodeURIComponent(f.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(f.txt_to_date) + '&ddl_status=' + encodeURIComponent(f.ddl_status) + '&PNR=' + encodeURIComponent(f.PNR);
+        });
+        jQuery('#btnRetailerCancelPDF').on('click', function () {
+            var f = retailerCancelFilters();
+            window.open('@Url.Action("PDF_CancellationReport", "Air")?txt_frm_date=' + encodeURIComponent(f.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(f.txt_to_date) + '&ddl_status=' + encodeURIComponent(f.ddl_status) + '&PNR=' + encodeURIComponent(f.PNR), '_blank');
+        });
+
+        jQuery(window).on('scroll', function () {
+            if (retailerCancelNoMore || retailerCancelBusy) { return; }
+            var nearBottom = jQuery(window).scrollTop() + jQuery(window).height() > jQuery(document).height() - 400;
+            if (!nearBottom) { return; }
+            retailerCancelBusy = true;
+            jQuery('#retailerCancelLoading').show();
+            var f = retailerCancelFilters();
+            jQuery.post('@Url.Action("InfiniteScroll_cancelticket", "Air")',
+                { pageindex: retailerCancelPageIndex, PNR: f.PNR, ddl_status: f.ddl_status, frm_date: f.txt_frm_date, to_date: f.txt_to_date },
+                function (data) {
+                    retailerCancelPageIndex = retailerCancelPageIndex + 1;
+                    retailerCancelNoMore = data.NoMoredata;
+                    var html = data.HTMLString || '';
+                    if (html && html.indexOf('vm-opr-table-empty-row') === -1) {
+                        jQuery('#retailerCancelRows .vm-opr-table-empty-row').remove();
+                        jQuery('#retailerCancelRows').append(html);
+                    } else {
+                        retailerCancelNoMore = true;
+                    }
+                    jQuery('#retailerCancelLoading').hide();
+                    retailerCancelBusy = false;
+                })
+                .fail(function () {
+                    jQuery('#retailerCancelLoading').hide();
+                    retailerCancelBusy = false;
+                });
+        });
     });
 </script>
-
-
-<script>
-    $(function() {
-  var loc = window.location.href; // returns the full URL
-  if('/RETAILER/Air/CancellationReport') {
-    $('#flightaddclass ul li:first-child a, .list.report-list-change li#rewertyd a').addClass('active');
-  }
-});
-</script>
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-        
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var ddl_status = $('#ddl_status').val();
-        var PNR = $('#PNR').val();
-        var bookingid = $('#bookingid').val();
-        var cancelreqid = $('#cancelreqid').val();
-        var tracid = $('#tracid').val();
-        var url = '@Url.Action("Excel_Cancellation_Report", "Air")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddl_status=' + ddl_status + '&PNR=' + PNR + '&bookingid=' + bookingid + '&cancelreqid=' + cancelreqid + '&tracid=' + tracid;
-        location.href = url;
-});
-</script>
-<script>
-    $("#btnPDF").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var ddl_status = $('#ddl_status').val();
-        var PNR = $('#PNR').val();
-        var bookingid = $('#bookingid').val();
-        var cancelreqid = $('#cancelreqid').val();
-        var tracid = $('#tracid').val();
-        var url = '@Url.Action("PDF_CancellationReport", "Air")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddl_status=' + ddl_status + '&PNR=' + PNR + '&bookingid=' + bookingid + '&cancelreqid=' + cancelreqid + '&tracid=' + tracid;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
-    });
-</script>
-
+}

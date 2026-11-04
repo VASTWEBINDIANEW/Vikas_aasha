@@ -1,0 +1,923 @@
+/* RETAILER — Loan create (Admin loan report theme + application form) */
+body.saas-admin-ui .saas-retailer-loan-create-page .case-funding-summary {
+  margin-top: 15px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .funding-hint strong {
+  font-weight: 700;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .funding-error {
+  background: #fff1f2 !important;
+  border-left-color: #dc2626 !important;
+  color: #991b1b !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .funding-success {
+  background: #f0fdf4 !important;
+  border-left-color: #16a34a !important;
+  color: #166534 !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .topup-highlight {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-request-page {
+  --loan-primary: var(--main-bg-lcolor, #2563eb);
+  --loan-ink: #1e293b;
+  --loan-muted: #64748b;
+  --loan-line: #e2e8f0;
+  --loan-soft: #f8fafc;
+  padding: 0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-request-page *,
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-request-page *:before,
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-request-page *:after {
+  box-sizing: border-box;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-shell {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-hero {
+  display: none !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-kicker {
+  color: var(--loan-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-hero h3 {
+  color: var(--loan-ink);
+  font-size: 25px;
+  font-weight: 700;
+  margin: 5px 0 0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  color: var(--loan-muted);
+  font-size: 13px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-breadcrumb a {
+  color: var(--loan-muted);
+  text-decoration: none;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-breadcrumb a:hover {
+  color: var(--loan-primary);
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-breadcrumb .current {
+  color: var(--loan-ink);
+  font-weight: 600;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-back-btn {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  color: #475569;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 700;
+  gap: 8px;
+  padding: 10px 18px;
+  text-decoration: none;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-back-btn:hover {
+  color: var(--loan-primary);
+  border-color: var(--loan-primary);
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form-card {
+  background: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form-intro {
+  display: none !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form-intro .intro-icon {
+  align-items: center;
+  background: var(--loan-primary);
+  border-radius: 10px;
+  color: #fff;
+  display: flex;
+  font-size: 18px;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form-intro h4 {
+  color: var(--loan-ink);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 3px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form-intro p {
+  color: var(--loan-muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form {
+  padding: 4px 20px 28px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-section {
+  border-bottom: 1px solid var(--loan-line);
+  padding: 25px 0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-section-heading {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-section-number {
+  align-items: center;
+  background: #e8f0fd;
+  border-radius: 50%;
+  color: var(--loan-primary);
+  display: flex;
+  font-size: 12px;
+  font-weight: 700;
+  height: 28px;
+  justify-content: center;
+  width: 28px;
+  flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-section-heading h4 {
+  color: var(--loan-ink);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-section-heading span {
+  color: var(--loan-muted);
+  display: block;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field-grid {
+  display: grid;
+  gap: 18px 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field-grid .wide {
+  grid-column: 1 / -1;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field label {
+  color: #334155;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0 0 7px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .required {
+  color: #dc2626;
+  margin-left: 2px;
+}
+
+/* Form inputs / selects — Radiant Prepay report filter parity (not textarea) */
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field input.form-control:not(.saas-acc-dp-input),
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field select.form-control:not(.select2-hidden-accessible) {
+  width: 100% !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  border-radius: 9px !important;
+  border: 1px solid #dbe4f0 !important;
+  background: #f8fafc !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  color: var(--loan-ink);
+  display: block;
+  padding: 0 10px !important;
+  box-shadow: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field textarea.form-control {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 88px !important;
+  max-height: none !important;
+  line-height: 1.45 !important;
+  resize: vertical;
+  border-radius: 9px !important;
+  border: 1px solid #dbe4f0 !important;
+  background: #f8fafc !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  color: var(--loan-ink);
+  display: block;
+  padding: 10px 12px !important;
+  box-shadow: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .form-control:focus {
+  border-color: #2563eb !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+  outline: 0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field select.form-control:not(.select2-hidden-accessible) {
+  appearance: none;
+  background-color: #f8fafc !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748b' d='M1.4.6 6 5.2 10.6.6 12 2l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field {
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  display: block;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field .saas-acc-dp-icon {
+  position: absolute !important;
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important;
+  left: 10px !important;
+  z-index: 3 !important;
+  color: #337ab7;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  font-size: 14px !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field .saas-acc-dp-icon i,
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field .saas-acc-dp-icon .fa {
+  line-height: 1 !important;
+  display: block !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field .saas-acc-dp-input,
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field .form-control.saas-acc-dp-input {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
+  padding: 8px 12px 8px 34px !important;
+  border: 1px solid #dbe4f0 !important;
+  border-radius: 9px !important;
+  background: #f8fafc !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field.is-active .saas-acc-dp-input,
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field .saas-acc-dp-input:focus {
+  border-color: #2563eb !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+  outline: 0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form .select2-container {
+  width: 100% !important;
+  z-index: 30;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form .select2-container--default .select2-selection--single {
+  min-height: 38px !important;
+  height: 38px !important;
+  border: 1px solid #dbe4f0 !important;
+  border-radius: 9px !important;
+  background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form .select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 36px !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  padding-left: 10px !important;
+  color: #334155 !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form .select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 36px !important;
+  right: 6px !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form .select2-container--default.select2-container--open .select2-selection--single,
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-form .select2-container--default.select2-container--focus .select2-selection--single {
+  border-color: #2563eb !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .text-danger {
+  display: block;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-help {
+  color: #64748b;
+  display: block;
+  font-size: 11px;
+  margin-top: 5px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-type-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-type-tab {
+  flex: 1 1 180px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-type-tab a {
+  align-items: center;
+  background: #fff;
+  border: 1.5px solid var(--loan-line);
+  border-radius: 10px;
+  color: var(--loan-ink);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 8px;
+  padding: 18px 14px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: 0.18s ease;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-type-tab a:hover {
+  border-color: var(--loan-primary);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+  transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-type-tab .tab-icon {
+  align-items: center;
+  background: #eef2f7;
+  border-radius: 50%;
+  color: var(--loan-muted);
+  display: flex;
+  font-size: 17px;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-type-tab.active a {
+  background: linear-gradient(135deg, #eef5ff, #f5f9ff);
+  border-color: var(--loan-primary);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.18);
+  color: var(--loan-primary);
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-type-tab.active .tab-icon {
+  background: var(--loan-primary);
+  color: #fff;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-type-tab.active a:after {
+  content: "\f00c";
+  font-family: FontAwesome;
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 11px;
+  color: var(--loan-primary);
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-card {
+  position: relative;
+  display: flex;
+  gap: 15px;
+  padding: 20px;
+  border: 1.5px solid #dbe3ef;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-card:hover {
+  border-color: var(--loan-primary);
+  box-shadow: 0 5px 18px rgba(37, 99, 235, 0.12);
+  transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-card.active {
+  border-color: var(--loan-primary);
+  background: #f5f9ff;
+  box-shadow: 0 5px 18px rgba(37, 99, 235, 0.15);
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 10px;
+  background: #eef4ff;
+  color: var(--loan-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-content {
+  flex: 1;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-content h4 {
+  margin: 0 0 6px;
+  color: #1e293b;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-content p {
+  margin: 0 0 10px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-example {
+  background: #f8fafc;
+  border-radius: 7px;
+  padding: 9px 10px;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-info {
+  margin-top: 10px;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-radio {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .used-case-radio input {
+  width: 18px;
+  height: 18px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-type-section {
+  margin-top: 20px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-sub-heading {
+  margin-bottom: 14px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-sub-heading h4 {
+  margin: 0 0 4px;
+  color: #1e293b;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-sub-heading span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-type-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-type-card {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 17px;
+  border: 1.5px solid #dbe3ef;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-type-card:hover {
+  border-color: var(--loan-primary);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.1);
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-type-card.active {
+  border-color: var(--loan-primary);
+  background: #f5f9ff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.14);
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-type-icon {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 8px;
+  background: #eef4ff;
+  color: var(--loan-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-type-content {
+  padding-right: 18px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-type-content h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-type-content p {
+  margin: 0 0 8px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-example {
+  padding: 8px;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-radio {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .refinance-radio input {
+  width: 17px;
+  height: 17px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .vehicle-panel {
+  background: #fbfdff;
+  border: 1px solid #dbeafe;
+  border-radius: 9px;
+  margin-top: 22px;
+  padding: 0 20px 20px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .vehicle-panel .loan-section-heading {
+  background: #f0f6ff;
+  margin: 0 -20px 20px;
+  padding: 15px 20px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-note {
+  background: var(--loan-soft);
+  border-left: 3px solid var(--loan-primary);
+  border-radius: 0 6px 6px 0;
+  color: var(--loan-muted);
+  font-size: 12px;
+  margin: 15px 0;
+  padding: 10px 12px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .policy-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .policy-box {
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .policy-box .title {
+  color: #64748b;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .policy-box .value {
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .funding-hint {
+  display: none;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 7px;
+  background: #eff6ff;
+  border-left: 3px solid var(--loan-primary);
+  color: #1e40af;
+  font-size: 12px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .eligibility-status {
+  display: none;
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding-top: 24px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-actions .btn {
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 18px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-actions .btn-primary {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  border-color: #2563eb;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-actions .btn-primary:hover {
+  opacity: 0.92;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .loan-actions .btn-default {
+  background: #fff;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+/* Page shell / toolbar */
+body.saas-admin-ui .saas-retailer-loan-create-page .vm-opr-page-shell {
+  max-width: 100% !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .vm-retailer-loan-create-main {
+  margin-top: 0;
+  border-radius: 12px !important;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .vm-retailer-loan-create-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .vm-retailer-loan-create-head__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .vm-retailer-loan-create-head__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  color: #fff;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .vm-retailer-loan-create-head h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .vm-retailer-loan-create-head p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .vm-loan-create-toolbar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .saas-acc-btn--back {
+  background: #64748b !important;
+  border-color: #64748b !important;
+  text-decoration: none !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-create-page .validation-summary-errors {
+  margin: 16px 20px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  body.saas-admin-ui .saas-retailer-loan-create-page .refinance-type-cards {
+    grid-template-columns: 1fr;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .policy-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  body.saas-admin-ui .saas-retailer-loan-create-page .vm-opr-page-shell {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .vm-opr-toolbar-unified {
+    padding: 6px 8px 8px !important;
+    margin-bottom: 12px !important;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .vm-dmt-breadcrumb {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    border-right: none !important;
+    padding-right: 0 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding-bottom: 6px !important;
+    margin-bottom: 2px !important;
+    flex-wrap: wrap !important;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .vm-ecomm-toolbar-one-line,
+  body.saas-admin-ui .saas-retailer-loan-create-page .vm-dmt-toolbar-head--one-line {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .vm-loan-create-toolbar-actions {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .vm-loan-create-toolbar-actions .saas-acc-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .loan-form {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  /* Override admin-report-datepicker mobile icon (bottom) — keep centered in form */
+  body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field .saas-acc-dp-icon {
+    top: 50% !important;
+    bottom: auto !important;
+    transform: translateY(-50%) !important;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field .saas-acc-dp-input,
+  body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field .form-control.saas-acc-dp-input {
+    height: 44px !important;
+    min-height: 44px !important;
+    max-height: 44px !important;
+    font-size: 16px !important;
+    padding: 10px 12px 10px 38px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  body.saas-admin-ui .saas-retailer-loan-create-page .loan-field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .loan-field-grid .wide {
+    grid-column: auto;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .loan-type-tab {
+    flex: 1 1 100%;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .used-case-cards {
+    grid-template-columns: 1fr;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .policy-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .loan-actions {
+    flex-direction: column-reverse;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .loan-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  body.saas-admin-ui .saas-retailer-loan-create-page .loan-field .saas-acc-dp-field .saas-acc-dp-icon {
+    top: 50% !important;
+    bottom: auto !important;
+    transform: translateY(-50%) !important;
+    font-size: 16px !important;
+  }
+}

@@ -1,8 +1,17 @@
 ﻿@{
-    ViewBag.Title = "Gift_Card";
-    Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+    var giftCardEmbed = ViewBag.GiftCardEmbed as bool? ?? false;
+    if (!giftCardEmbed)
+    {
+        ViewBag.Title = "Gift_Card";
+        Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+    }
 }
+@if (!giftCardEmbed)
+{
 <link href="~/AdminDesign/giftcardslider/giftcard.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-money-transfer-modern.css?v=45" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-all-cards-modern.css?v=7" rel="stylesheet" />
+}
 <style>
 
     /* new css */
@@ -130,45 +139,21 @@
         }
     }
 </style>
-<section class=" Gift_Cardd Gift_Cardd-reshponshive content-fourdesign-page allpage-four-design-section" style="margin:0px 0px 0px 0px; ">
-
-    <!--Four-Design-Page-Header-Start-->
-
-    <div class="page-title-box-fourde">
+<div class="vm-gift-card-root third-design Gift_Cardd-reshponshive @(giftCardEmbed ? "vm-gift-card-embed" : "vm-gift-card-page")">
+@if (!giftCardEmbed)
+{
+    <div class="page-title-box-fourde vm-gift-card-page-title">
         <h3>Gift Cards</h3>
         <ul>
-            <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-            <li><a href="javascript:void(0);">Pages&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
+            <li><a href="@Url.Action("Dashboard", "Home")">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
+            <li><a href="javascript:void(0);">Cards&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
             <li><a href="javascript:void(0);">Gift Cards</a></li>
         </ul>
     </div>
-
-    <!--Four-Design-Page-Header-End-->
-
-    <div class="">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left:0;">
-            <div class="card navbar" style="position:initial;">
-                <div class="body Gift_Carddbody">
-
-                    @*Third_Design-Start*@
-
-                    <div class="svg-container-third-design">
-                        <svg viewBox="0 0 202.9 45.5">
-                            <clipPath id="menu" clipPathUnits="objectBoundingBox" transform="scale(0.0049285362247413 0.021978021978022)">
-                                <path d="M6.7,45.5c5.7,0.1,14.1-0.4,23.3-4c5.7-2.3,9.9-5,18.1-10.5c10.7-7.1,11.8-9.2,20.6-14.3c5-2.9,9.2-5.2,15.2-7
-          c7.1-2.1,13.3-2.3,17.6-2.1c4.2-0.2,10.5,0.1,17.6,2.1c6.1,1.8,10.2,4.1,15.2,7c8.8,5,9.9,7.1,20.6,14.3c8.3,5.5,12.4,8.2,18.1,10.5
-          c9.2,3.6,17.6,4.2,23.3,4H6.7z" />
-                            </clipPath>
-                        </svg>
-                    </div>
-
-                    @*Third_Design-End*@
-
-                    <div class="row">
-                        <div class="col-md-12 giftcardcategory giftcardtab-thirddesign" style="margin-bottom:0px;">
-                            <center class="page-header-third">
-                                <ul id="leftulbar" class="nav nav-tabs tab-col-orange fullbodydycolorbg giftul-third-block" role="tablist" style="background:#607D8B;border-bottom:none;-webkit-box-shadow:0px 0px 4px 0px rgb(96, 125, 139);
-box-shadow: 0px 0px 4px 0px rgb(96, 125, 139); padding-bottom:0px; border-radius:2px;">
+}
+    <div class="vm-gift-card-panel Gift_Carddbody third-design">
+        <div class="vm-gift-card-panel__nav giftcardcategory giftcardtab-thirddesign">
+            <ul id="leftulbar" class="nav nav-tabs vm-gift-cat-tabs tab-col-orange giftul-third-block" role="tablist">
                                     <li role="presentation" class="active" style="margin-left:22px;">
                                         <a href="#All" data-toggle="tab" aria-expanded="false">
                                             <img src="~/ashok-images/gift.svg" style="height:45px; margin-top:-5px;" />
@@ -237,104 +222,32 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139); padding-bottom:0px; border-radius
                                             <span style="margin-left:-8px;">Travel&nbsp;&&nbsp;Restaurants</span>
                                         </a>
                                     </li>
-                                </ul>
-                            </center>
+            </ul>
+        </div>
 
-                            @*Gift-Card-Third-Design-Start*@
-
-                            <center>
-                                <ul id="leftulbar" class="nav nav-tabs tab-col-orange fullbodydycolorbg giftul-third" role="tablist" style="background:#607D8B;border-bottom:none;-webkit-box-shadow:0px 0px 4px 0px rgb(96, 125, 139);
-box-shadow: 0px 0px 4px 0px rgb(96, 125, 139); padding-bottom:0px; border-radius:2px;">
-                                    <li role="presentation" class="active" style="margin-left:22px;">
-                                        <a href="#All" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="~/ashok-images/gift.svg" /></i>
-
-                                            <span id="alltab" style="padding-left:5px;">ALL</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:36px;">
-                                        <a href="#onlineshopping" onclick="showdata('onlineshopping')" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="~/ashok-images/internet.svg" /></i>
-                                            <span>Ecommerece&nbsp;&&nbsp;Online</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:19px;">
-                                        <a href="#entertainment" onclick="showdata('entertainment')" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="~/ashok-images/video.svg" /></i>
-
-                                            <span style="padding-left:5px;">Entertainment</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:32px;">
-                                        <a href="#fashion" onclick="showdata('fashion')" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="~/ashok-images/supermarket.svg" /></i>
-
-                                            <span>Grocery&nbsp;&&nbsp;Homeneeds</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:26px;">
-                                        <a href="#retail" onclick="showdata('retail')" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="~/ashok-images/ayurvedic.svg" /></i>
-
-                                            <span>Health</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:8px;box-shadow:none;">
-                                        <a href="#healthbeauty" onclick="showdata('healthbeauty')" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="~/ashok-images/fashion-designer.svg" /></i>
-                                            <span>Fashion&nbsp;&&nbsp;Lifestyle</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:19px;">
-                                        <a href="#jewellery" onclick="showdata('jewellery')" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="~/ashok-images/wedding.svg" /></i>
-
-                                            <span>Jewellery</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:39px;">
-                                        <a href="#travels" onclick="showdata('travels')" data-toggle="tab" aria-expanded="true">
-                                            <i><img src="~/ashok-images/sneakers.svg" /></i>
-
-                                            <span>Sportswear&nbsp;&&nbsp;Footwear</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:19px;">
-                                        <a href="#electronics" onclick="showdata('electronics')" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="~/ashok-images/home-theater.svg" /></i>
-
-                                            <span>Electronics</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation" class="" style="margin-left:10px;box-shadow:none;padding-bottom:2px;">
-                                        <a href="#hotelrestaurant" onclick="showdata('hotelrestaurant')" data-toggle="tab" aria-expanded="false">
-                                            <i><img src="~/ashok-images/plane(1).svg" /></i>
-
-                                            <span>Travel&nbsp;&&nbsp;Restaurants</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </center>
-
-                            @*Gift-Card-Third-Design-End*@
-
-
-                        </div>
-                    </div>
+        <div class="row clearfix giftcardmain vm-gift-card-panel__body">
+            <div class="vm-gift-card-panel__head">
+                <div class="vm-gift-card-panel__titles tab-content tab-content-gift-titles">
+                    <div role="tabpanel" class="tab-pane active" id="vmGiftTitleAll"><h2 class="vm-gift-card-panel__heading">All Digital Gift Card Vouchers</h2></div>
+                    <div role="tabpanel" class="tab-pane" id="vmGiftTitlefashion"><h2 class="vm-gift-card-panel__heading">Grocery &amp; Homeneeds Digital Gift Card Vouchers</h2></div>
+                    <div role="tabpanel" class="tab-pane" id="vmGiftTitleonlineshopping"><h2 class="vm-gift-card-panel__heading">Ecommerce &amp; Online Digital Gift Card Vouchers</h2></div>
+                    <div role="tabpanel" class="tab-pane" id="vmGiftTitleentertainment"><h2 class="vm-gift-card-panel__heading">Entertainment Digital Gift Card Vouchers</h2></div>
+                    <div role="tabpanel" class="tab-pane" id="vmGiftTitletravels"><h2 class="vm-gift-card-panel__heading">Sportswear &amp; Footwear Digital Gift Card Vouchers</h2></div>
+                    <div role="tabpanel" class="tab-pane" id="vmGiftTitleretail"><h2 class="vm-gift-card-panel__heading">Health Digital Gift Card Vouchers</h2></div>
+                    <div role="tabpanel" class="tab-pane" id="vmGiftTitlehealthbeauty"><h2 class="vm-gift-card-panel__heading">Fashion &amp; Lifestyle Digital Gift Card Vouchers</h2></div>
+                    <div role="tabpanel" class="tab-pane" id="vmGiftTitlehotelrestaurant"><h2 class="vm-gift-card-panel__heading">Travel &amp; Restaurants Gift Card Vouchers</h2></div>
+                    <div role="tabpanel" class="tab-pane" id="vmGiftTitleelectronics"><h2 class="vm-gift-card-panel__heading">Electronics</h2></div>
+                    <div role="tabpanel" class="tab-pane" id="vmGiftTitlejewellery"><h2 class="vm-gift-card-panel__heading">Jewellery</h2></div>
+                </div>
+                <div class="vm-gift-card-toolbar">
+                    <button type="button" class="vm-gift-card-toolbar__btn" onclick="ShowCheckbalModalPopup()">
+                        <i class="fa fa-credit-card" aria-hidden="true"></i>
+                        <span>Check voucher balance</span>
+                    </button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row clearfix giftcardmain">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="card class-back-tra-fourdesign" style="margin-top:-14px;">
-                <div class="page-header-third">
-                    <div class="body">
-                        <div class="row clearfix">
-                            <div class="col-md-12 tab-contentup">
-                                <!-- Tab panes -->
-                                <div class="tab-content tab-content-gift-secondclass">
+            <div class="col-md-12 tab-contentup vm-gift-card-panel__grid-wrap">
+                <div class="tab-content tab-content-gift-secondclass">
                                     <div role="tabpanel" class="tab-pane flipInX animated bounceIn active" id="All">
                                         <div class="header changeback-four-design padding-both-four-in">
 
@@ -516,29 +429,24 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139); padding-bottom:0px; border-radius
                                         <div id="jewellery_container"></div>
                                     </div>
 
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-</section>
+</div>
 <input type="hidden" id="HDServicesname" name="HDServicesname" value="" />
 
 
-<div class="modal fade in" id="defaultModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static" style="padding-top:100px;">
-    <div class="modal-dialog dialogsecond-gift second-gift-responshive" role="document">
-        <div class="modal-content">
-            <div class="modal-header vouchername">
-                <h2 class="modal-title" id="optname"></h2>
-                <button id="termsconditionshow" style="margin-left:1%;">Terms & Condition</button>
-                <button id="">How To Redeem</button>
+<div class="modal fade vm-gift-modal vm-gift-modal--purchase" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="optname" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog vm-gift-modal__dialog dialogsecond-gift second-gift-responshive" role="document">
+        <div class="modal-content vm-gift-modal__content">
+            <div class="modal-header vm-gift-modal__header vouchername">
+                <h2 class="modal-title vm-gift-modal__title" id="optname"></h2>
+                <div class="vm-gift-modal__header-actions">
+                    <button type="button" class="vm-gift-modal__tab-btn" id="termsconditionshow">Terms &amp; Condition</button>
+                    <button type="button" class="vm-gift-modal__tab-btn" id="vmGiftHowToRedeem">How To Redeem</button>
+                    <button type="button" class="vm-gift-modal__close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </div>
             </div>
             <div class="modal-body">
 
@@ -667,17 +575,11 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139); padding-bottom:0px; border-radius
                                 </div>
                                 <div class="help-info left"><span id="charactersytres">200</span>&nbsp;characters remaining</div>
                             </div>
-                            <div class="modal-footer voucherbutton" style="padding-right:0;">
+                            <div class="modal-footer vm-gift-modal__footer voucherbutton">
 
-                                <button type="button" class="btn bg-grey waves-effect closebacjew" style="margin-top: 4px; margin-right: 12px; height:34px;" data-dismiss="modal">
-                                    <span style="top:-2px;color:black;">cancel</span>
-                                </button>
-                                <button type="button" id="buynow" onclick="buychk()" class="btn bg-grey waves-effect fullbodydycolorbg" style="margin-top: 4px;height:34px;">
-                                    <span id="textshowcontentnone" style="top:-2px;color:black;">Buy Now</span>
-                                </button>
-                                <button type="button" id="areyousure" class="btn bg-grey waves-effect fullbodydycolorbg" style="margin-top: 4px;height:34px; display:none;" onclick="Buynow()">
-                                    <span id="textshowcontentnone" style="top:-2px;color:black;">Are You Sure</span>
-                                </button>
+                                <button type="button" class="vm-gift-modal__btn vm-gift-modal__btn--ghost closebacjew" data-dismiss="modal">Cancel</button>
+                                <button type="button" id="buynow" onclick="buychk()" class="vm-gift-modal__btn vm-gift-modal__btn--primary">Buy now</button>
+                                <button type="button" id="areyousure" class="vm-gift-modal__btn vm-gift-modal__btn--primary" style="display:none;" onclick="Buynow()">Are you sure</button>
 
                             </div>
 
@@ -741,52 +643,38 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139); padding-bottom:0px; border-radius
 
 
 <!--Check Balance Modal-->
-<div class="modal fade in giftcardcheckblance" id="CheckbalModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">GIFT CARD BALANCE</h4>
-                <button type="button" class="btn waves-effect" data-dismiss="modal">
-                    <i class="fa fa-times fulltextbodycolor fullbodydycolorbg" style="color:#ff003d;" aria-hidden="true"></i>
-                </button>
+<div class="modal fade vm-gift-modal vm-gift-modal--balance" id="CheckbalModal" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog vm-gift-modal__dialog vm-gift-modal__dialog--sm" role="document">
+        <div class="modal-content vm-gift-modal__content">
+            <div class="modal-header vm-gift-modal__header vm-gift-modal__header--balance">
+                <h4 class="modal-title vm-gift-modal__title" id="largeModalLabel">Gift card balance</h4>
+                <button type="button" class="vm-gift-modal__close" data-dismiss="modal" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <p style="font-size:13px;color:#0d72b9;">Received a gift card? Check balance in your card</p>
-                    <div class="col-md-12">
-                        <div class="form-group form-float" style="margin-bottom:8px;">
-                            <p class="">Gift Card Number<span style="margin-left:18px;font-size:11px;color:red;" id="giftcardno_validate"></span></p>
-                            <div class="" style="border:1px solid #b5b5b56b;">
-                                <input type="text" class="form-control" name="Giftcardno" id="Giftcardno" onkeypress="return isNumber(event)">
-                            </div>
-                        </div>
-                        <div class="form-group form-float">
-                            <p class="">Gift Card Pin<span style="margin-left:71px;font-size:11px;color:red;" id="pin_validate"></span></p>
-                            <div class="" style="border:1px solid #b5b5b56b;">
-                                <input type="password" placeholder="Enter Pin" class="form-control" name="Pin" id="Pin" onkeypress="return isNumber(event)" autocomplete="off" />
-                            </div>
-
-                        </div>
-                    </div>
+            <div class="modal-body vm-gift-modal__body">
+                <p class="vm-gift-modal__lead">Received a gift card? Enter card number and PIN to check balance.</p>
+                <div class="vm-gift-modal__field">
+                    <label for="Giftcardno">Gift card number <span class="vm-gift-modal__err" id="giftcardno_validate"></span></label>
+                    <input type="text" class="vm-gift-modal__input form-control" name="Giftcardno" id="Giftcardno" onkeypress="return isNumber(event)" autocomplete="off" />
+                </div>
+                <div class="vm-gift-modal__field">
+                    <label for="Pin">Gift card PIN <span class="vm-gift-modal__err" id="pin_validate"></span></label>
+                    <input type="password" placeholder="Enter PIN" class="vm-gift-modal__input form-control" name="Pin" id="Pin" onkeypress="return isNumber(event)" autocomplete="off" />
                 </div>
             </div>
-            <div class="modal-footer" style="margin-top:-54px;">
-                <button type="button" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-right: 12px; height:34px;" data-dismiss="modal">
-                    <span style="top:-2px;color:black;">close</span>
-                </button>
-                <button type="button" class="btn bg-grey waves-effect fullbodydycolorbg" style="margin-top: 4px; margin-right: 12px; height:34px;" onclick="CheckBalVoucher()">
-                    <span style="top:-2px;color:black;">Check Balance</span>
-                </button>
-
-
+            <div class="modal-footer vm-gift-modal__footer">
+                <button type="button" class="vm-gift-modal__btn vm-gift-modal__btn--ghost" data-dismiss="modal">Close</button>
+                <button type="button" class="vm-gift-modal__btn vm-gift-modal__btn--primary" onclick="CheckBalVoucher()">Check balance</button>
             </div>
-            <div id="backtodashboardcall" data-request-url="@Url.Action("Dashboard", "Home")"></div>
-            <input type="hidden" id="latss" required name="latss" />
-            <input type="hidden" id="longloc" required name="longloc" />
         </div>
     </div>
 </div>
+<div id="backtodashboardcall" data-request-url="@Url.Action("Dashboard", "Home")"></div>
+<input type="hidden" id="latss" required name="latss" />
+<input type="hidden" id="longloc" required name="longloc" />
+@if (!giftCardEmbed)
+{
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
+}
 <script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 <script src="~/Swalalert/sweetalert.min.js"></script>
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
@@ -1038,8 +926,10 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139); padding-bottom:0px; border-radius
 </script>
 <script>
     function showdata(opttype) {
-
-        $('#'+opttype).html("");
+        var containerId = (opttype === 'All' || !opttype) ? 'container' : (opttype + '_container');
+        var $box = $('#' + containerId);
+        if (!$box.length) return;
+        $box.empty();
       $.ajax({
             type: "POST",
             url: "@Url.Action("GiftCard_details", "Home")",
@@ -1051,7 +941,7 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139); padding-bottom:0px; border-radius
                     var addinfo = resp.Content.ADDINFO;
                     if (addinfo != "") {
                         $.each(addinfo, function (i, item) {
-                            $('#'+opttype).append("<div class='col-sm-6 col-md-3'>" +
+                            $box.append("<div class='col-sm-6 col-md-3'>" +
                                 "<a href='javascript:void(0)' onclick=brand_details('" + item.OptCode + "') style='text-decoration:none;'>" +
                                 "<div class='thumbnail thumbnailgift'>" +
                                 "<div class='rategiftcards'>" +
@@ -1195,9 +1085,20 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139); padding-bottom:0px; border-radius
 
 <!--Check Balance Voucher Modal Popup-->
 <script>
+    function vmGiftEnsureModalOnBody(selector) {
+        var $m = $(selector);
+        if ($m.length && !$m.parent().is('body')) {
+            $m.appendTo('body');
+        }
+        return $m;
+    }
+
     function ShowCheckbalModalPopup() {
         $("#Pin").val("");
-        $("#CheckbalModal").modal();
+        $("#Giftcardno").val("");
+        $("#giftcardno_validate, #pin_validate").html("");
+        $('#defaultModal').modal('hide');
+        vmGiftEnsureModalOnBody('#CheckbalModal').modal({ backdrop: 'static', keyboard: false, show: true });
     }
 </script>
 
@@ -1296,7 +1197,38 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139); padding-bottom:0px; border-radius
 
 <script>
 
-    $('.vouchername button').on('click', function () {
-        $(this).addClass('activebutton').siblings().removeClass('activebutton');
+    $('.vouchername .vm-gift-modal__tab-btn').on('click', function () {
+        $(this).addClass('activebutton').siblings('.vm-gift-modal__tab-btn').removeClass('activebutton');
+    });
+</script>
+
+<script>
+    $(function () {
+        if (!$('section.vm-all-cards-page').length) {
+            $('body').addClass('vm-all-cards-active');
+        }
+        $('#defaultModal, #CheckbalModal').removeClass('in show').attr('aria-hidden', 'true').css('display', 'none');
+        $('.modal-backdrop').remove();
+
+        function vmGiftSyncTitlePane(tabHref) {
+            if (!tabHref) return;
+            var key = tabHref.replace('#', '');
+            var titleId = key === 'All' ? 'vmGiftTitleAll' : ('vmGiftTitle' + key);
+            $('.vm-gift-card-panel__titles > .tab-pane').removeClass('active');
+            $('#' + titleId).addClass('active');
+        }
+
+        $('#leftulbar a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var href = $(e.target).attr('href') || '#All';
+            vmGiftSyncTitlePane(href);
+            var key = href.replace('#', '');
+            if (key !== 'All' && typeof showdata === 'function') {
+                var cid = key + '_container';
+                if ($('#' + cid).length && $('#' + cid).children().length === 0) {
+                    showdata(key);
+                }
+            }
+        });
+        vmGiftSyncTitlePane($('#leftulbar li.active a').attr('href') || '#All');
     });
 </script>

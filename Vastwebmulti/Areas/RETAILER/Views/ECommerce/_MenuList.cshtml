@@ -1,69 +1,58 @@
 ﻿@model Vastwebmulti.Areas.RETAILER.ViewModels.MenuVM
-@using Microsoft.AspNet.Identity
-@using Vastwebmulti.Models;
-<!--<section>
-    @{
-        var userid = User.Identity.GetUserId();
-        var comnyname = "";
-        VastwebmultiEntities DB = new VastwebmultiEntities();
-        var companyname = DB.tblContects.ToList();
-        if (companyname.Count > 0)
+@{
+    var hasAnySub = Model != null && Model.lstCatagory != null && Model.subCata != null
+        && Model.lstCatagory.Any(c => Model.subCata.Any(s => (s.CatID ?? 0) == c.CatID));
+}
+
+<div class="vm-ecomm-sidebar-shell">
+    <div class="vm-ecomm-categories">
+        <button type="button" id="Catagories_li" class="vm-ecomm-categories__all is-active" aria-pressed="true">
+            <i class="material-icons" aria-hidden="true">apps</i>
+            <span>All categories</span>
+        </button>
+
+        @if (hasAnySub)
         {
-            comnyname = companyname.FirstOrDefault().CompnayName;
-            ViewBag.companyname = comnyname;
+            <div class="vm-ecomm-categories__filter-wrap">
+                <i class="material-icons" aria-hidden="true">search</i>
+                <input type="text" id="vmEcommCatFilter" class="vm-ecomm-categories__filter" placeholder="Filter categories…" autocomplete="off" />
+            </div>
+            <div class="vm-ecomm-accordion" id="vmEcommAccordion">
+                @foreach (var catagory in Model.lstCatagory)
+                {
+                    var subs = Model.subCata.Where(a => (a.CatID ?? 0) == catagory.CatID).ToList();
+                    if (subs.Count == 0)
+                    {
+                        continue;
+                    }
+                    var panelId = "vmEcommCat_" + catagory.CatID;
+                    <div class="vm-ecomm-accordion__item" data-cat-name="@catagory.CatName">
+                        <button type="button" class="vm-ecomm-accordion__head" data-toggle="collapse" data-target="#@panelId" aria-expanded="true">
+                            <span class="vm-ecomm-accordion__head-text">@catagory.CatName</span>
+                            <span class="vm-ecomm-accordion__count">@subs.Count</span>
+                            <i class="material-icons vm-ecomm-accordion__chev" aria-hidden="true">expand_more</i>
+                        </button>
+                        <div id="@panelId" class="vm-ecomm-accordion__body collapse in">
+                            <ul class="vm-ecomm-categories__subs">
+                                @foreach (var subcatagory in subs)
+                                {
+                                    <li data-sub-name="@subcatagory.SubCatagoryName">
+                                        <a href="javascript:void(0);" class="vm-ecomm-sub-link" onclick="getProductBySubCataID(@subcatagory.SubcatID)" data-sub-id="@subcatagory.SubcatID">@subcatagory.SubCatagoryName</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
         }
         else
         {
-            comnyname = "";
+            <div class="vm-ecomm-sidebar-empty">
+                <i class="material-icons" aria-hidden="true">inventory_2</i>
+                <p>No categories yet</p>
+                <span>Admin se categories add hone par yahan dikhengi.</span>
+            </div>
         }
-       
-    }
-    <!-- Left Sidebar -->
-    <!--<aside id="leftsidebar" class="sidebar">-->
-        <!-- Menu -->
-       <!--@* <div class="menu navbar" style="position:initial;">
-            <ul class="list">
-                @if (Model != null)
-                {
-                    <li class="header" id="Catagories_li" style="cursor: pointer; font-size:18px; background-color:white;">All Catagories</li>
-                    foreach (var catagory in Model.lstCatagory)
-                    {
-                        <li>
-                            <a href="javascript:void(0);" class="menu-toggle">
-                           <span style="color:white; text-transform:uppercase;">@catagory.CatName</span>
-                            </a>
-                            <ul class="ml-menu">
-                                @foreach (var subcatagory in Model.subCata.Where(a=>a.CatID == catagory.CatID).ToList())
-                                {
-                                    <li>
-                                        <a href="javascript:void(0);" onclick="getProductBySubCataID(@subcatagory.SubcatID)">
-                                            <span style="color:white; text-transform:uppercase;">@subcatagory.SubCatagoryName</span>
-                                        </a>
-                                    </li>
-                                }
-                                
-                            </ul>
-                        </li>
-                    }
-
-                }
-               
-            </ul>
-        </div>*@-->
-        <!-- #Menu -->
-        <!-- Footer -->
-        <!--<div class="legal">
-            <div class="copyright" style="margin-top:-4px;">
-                Copyright&nbsp;&nbsp;2017 - <span>@DateTime.Now.Year.ToString()</span>
-            </div>
-            <div class="copyright">
-                <a href="javascript:void(0);">@comnyname</a>.
-            </div>
-            <div class="navbar" style="position:inherit;margin-top:52px; height:33px;">
-
-            </div>
-        </div>-->
-        <!-- #Footer -->
-    <!--</aside>-->
-    <!-- #END# Left Sidebar -->
-<!--</section>-->
+    </div>
+</div>

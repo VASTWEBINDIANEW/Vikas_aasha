@@ -1,96 +1,26 @@
 ﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
-<style>
-
-
-    .loader {
-        position: fixed;
-        top: -90px;
-        left: 0;
-        background-color: rgba(255,255,255,0.7);
-        z-index: 999999999999;
-        display: none;
-        height: 100vw;
-        width: 100vw;
-
-    }
-
-    @@-webkit-keyframes spin {
-        from {
-            -webkit-transform: rotate(0deg);
-        }
-
-        to {
-            -webkit-transform: rotate(360deg);
-        }
-    }
-
-    @@keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    .loader::after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 48%;
-        top: 25%;
-        width: 100px;
-        height: 100px;
-        border-style: solid;
-        border-color: black;
-        border-top-color: transparent;
-        border-width: 4px;
-        border-radius: 50%;
-        -webkit-animation: spin .8s linear infinite;
-        animation: spin .8s linear infinite;
-    }
-</style>
-<style>
-    .for-prepaid tr th {
-        font-size: 10px;
-        text-transform: uppercase;
-    }
-
-    .for-prepaid {
-        width: 100%;
-        float: left;
-    }
-</style>
-
-<div id="Rechargeform" class="row">
-    <div class="col-md-4 Rechargeform-second">
+@* vm-rch: purane loader/for-prepaid <style> hata diye — retailer-recharge-modern.css (sec-12) me port *@
+<div id="Rechargeform" class="vm-rch-formgrid fund-transfer-form">
+    <div class="vm-rch-fcell vm-rch-fnum Rechargeform-second">
         <div class="txtmobilemessage2">
-            <p id="txtmobilemessage" class="txtmobilemessage1" style="margin-top:10px; color:#E91E63; font-size:10px; padding-left:5px;"></p>
+            <p id="txtmobilemessage" class="txtmobilemessage1 vm-rch-err"></p>
         </div>
-        <div class="form-group" style="margin-bottom:0px;">
-            <div class="" style="margin-top:-2px; margin-left:4px; height:37px;">
-                <input type="text" id="txtmobile" name="txtmobile" required class="form-control pp" maxlength="10" placeholder="Mobile Number (+91)" onkeypress="return isNumber(event)" autocomplete="off" />
-
-                <div style="float:right;margin-top:-30px; margin-right:8px;" id="ddlradio">
-
-                    <i class="fa fa-circle-o-notch fa-spin" id="rchspinner" style="font-size:14px;display:none;"></i>
-                    <input name="radiogroup" type="radio" id="radio_1" class="with-gap radio-col-blue-grey radioOptType" value="PrePaid">
-                    <label for="radio_1">Prepaid</label>
-                    <input name="radiogroup" type="radio" id="radio_2" class="with-gap radio-col-blue-grey radioOptType" value="PostPaid">
-                    <label id="postionchangebe" for="radio_2">Postpaid</label>
-                </div>
-            </div>
+        <input type="text" id="txtmobile" name="txtmobile" required class="form-control pp" maxlength="10" placeholder="Mobile Number (+91)" onkeypress="return isNumber(event)" autocomplete="off" />
+        <i class="fa fa-mobile vm-rch-in-ico" aria-hidden="true"></i>
+        <div class="vm-rch-radioinline" id="ddlradio">
+            <i class="fa fa-circle-o-notch fa-spin" id="rchspinner" style="font-size:14px;display:none;"></i>
+            <input name="radiogroup" type="radio" id="radio_1" class="with-gap radio-col-blue-grey radioOptType" value="PrePaid">
+            <label for="radio_1">Prepaid</label>
+            <input name="radiogroup" type="radio" id="radio_2" class="with-gap radio-col-blue-grey radioOptType" value="PostPaid">
+            <label id="postionchangebe" for="radio_2">Postpaid</label>
         </div>
-
     </div>
 
-    <div class="col-md-7" style="margin-bottom:0px;">
-        <div class="row">
-            <div style="visibility:inherit;">
-                <p id="mobileoptddl" style="color:#E91E63;margin-top:10px; font-size:10px; padding-left:16px;"></p>
-            </div>
-            <div class="col-md-4" id="Divprepaid" style="margin-bottom:0px;">
+    <div class="vm-rch-fcell vm-rch-fop">
+        <div>
+            <p id="mobileoptddl" class="vm-rch-err"></p>
+        </div>
+        <div id="Divprepaid">
                 <div id="dropprepaid">
 
                     @Html.DropDownList("mobileoperatorPrepaid", (IEnumerable<SelectListItem>)ViewBag.perpaid, "Select Operators", new { @class = "form-control", @style = "border-radius:none;display:block;", })
@@ -99,10 +29,12 @@
 
                     @Html.DropDownList("mobileoperatorPostpaid", (IEnumerable<SelectListItem>)ViewBag.postpaid, "Select Operators", new { @class = "form-control", @style = "border-radius:none;display:block;" })
                 </div>
-            </div>
-            <div class="col-md-4 dropprepaid-first">
-                <div style="visibility:inherit;position: absolute;top: 10px;">
-                    <p id="mobileCircleddl" style="margin-top:-28px; color:#E91E63; font-size:10px; padding-left:1px;visibility:inherit;"></p>
+        </div>
+    </div>
+
+    <div class="vm-rch-fcell vm-rch-fcircle">
+                <div>
+                    <p id="mobileCircleddl" class="vm-rch-err"></p>
                 </div>
                 <div>
 
@@ -137,49 +69,21 @@
 
                 </div>
             </div>
-            <div class="col-md-4 full-poporewq">
-                <div style="height:28px;visibility:inherit;position:absolute;top:-11px;clear:both;">
-                    <p id="txtmobileamtemessage" style="margin-top:-28px; color:#E91E63; font-size:10px; padding-left:1px;visibility:inherit;"></p>
-                </div>
-                <div class="form-group" style="margin-bottom:0px;">
-                    <div class="" style="margin-top:-2px;height:37px;">
-                        <input type="text" id="txtmobileamount" name="txtmobileamount" class="form-control" placeholder="Amount" onkeypress="return isNumber(event)" />
-                    </div>
-                    <input type="hidden" id="commvalue" />
-                </div>
-                <div id="viewplan" style="display:none;width:10px;">
-                    <div class="form-group" style="margin-bottom:0px;">
-                        <div class="form-line" style="top:11px; border-bottom:none; margin-left:56px;">
-                            <a href="#" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>" class="view-plans-button" style="text-decoration:none; font-size:11px;padding:5px; border:1px solid #ccc !important;border-radius:1px;" onclick="getbestViewofferplan()">View&nbsp;Plans</a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+    <div class="vm-rch-fcell vm-rch-famt">
+        <div>
+            <p id="txtmobileamtemessage" class="vm-rch-err"></p>
         </div>
+        <input type="text" id="txtmobileamount" name="txtmobileamount" class="form-control" placeholder="Amount" onkeypress="return isNumber(event)" />
+        <i class="fa fa-inr vm-rch-in-ico" aria-hidden="true"></i>
+        <input type="hidden" id="commvalue" />
     </div>
 
-    <div class="col-md-1 rechargebutton">
-        <div>
-            @*<div class="col-md-4" id="viewplan" style="display:none;">
-                    <div class="form-group" style="margin-bottom:0px;">
-                        <div class="form-line" style="top:11px; border-bottom:none; margin-left:-23px;">
-                            <a href="#" style="text-decoration:none; font-size:11px;border:1px solid #ffc107;padding:11px 4px 11px 4px; color: #ffc107;" onclick="getbestViewofferplan()">View&nbsp;Plans</a>
-                        </div>
+    <div class="vm-rch-fcell vm-rch-fbtn2 vm-rch-fbtn2--aux" id="viewplan" style="display:none;">
+        <a href="#" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>" class="vm-rch-linkbtn vm-rch-linkbtn--plan view-plans-button" onclick="getbestViewofferplan(); return false;">View&nbsp;Plans</a>
+    </div>
 
-                    </div>
-                </div>*@
-
-            <div>
-                <div class="form-group" style="margin-bottom:0px;">
-                    <div class="form-line" style=" border-bottom:none;">
-                        <input type="submit" id="btn" class="btn bg-blue-grey greyss" value="Continue" style="margin-left:-21px; height:35px; margin-top:-3px; border:none;border-radius:2px;padding:9px 15px;" onclick="getmobilepreandpostcontinuebtn()" />
-                    </div>
-                </div>
-            </div>
-
-        </div>
+    <div class="vm-rch-fcell vm-rch-fbtn2 rechargebutton">
+        <input type="submit" id="btn" class="btn bg-blue-grey greyss" value="Continue" onclick="getmobilepreandpostcontinuebtn()" />
     </div>
 
 
@@ -227,12 +131,12 @@
 
     <td>
         <button type="button"
-                style="width: 190px; float: right;background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor));border: 0; color: #fff; padding: 4px 19px; font-size: 20px;"
+                style="width: 190px; float: right;background: linear-gradient(135deg, #1e40af, #3b82f6);border: 0; color: #fff; padding: 4px 19px; font-size: 20px;"
                 onclick="processToPay()"> Procces To Pay
         </button>
     </td>
         @*<td>
-            <button style=" width: 190px; float: right; background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; border: 0px; color: #fff; padding: 4px 19px; font-size: 20px;"
+            <button style=" width: 190px; float: right; background: linear-gradient(135deg, #1e40af, #3b82f6) !important; border: 0px; color: #fff; padding: 4px 19px; font-size: 20px;"
             onclick="processToPay()"> Procces To Pay </button>
         </td>*@
 
@@ -251,7 +155,7 @@
     <tr>
         <td style="font-size: 20px;"><b> <span id="rchstatuschkpre"></span> </b></td>
         <td class="border-centerbe border-centerbess" style="font-size: 20px;"><b><span id="rchmsgprepaid"></span></b></td>
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagain()">Recharge Again</button></td>
+        <td><button style="float: right;background: linear-gradient(135deg, #1e40af, #3b82f6) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagain()">Recharge Again</button></td>
     </tr>
 </table>
 
@@ -332,10 +236,23 @@
 
 <script>
     var j = $.noConflict();
-    $("#txtmobile").on('keypress blur keyup', function (e) {
-        $('#commvalue').val("");
+    function vmRchSyncMobileNumberCard() {
+        var val = ($("#txtmobile").val() || "").trim();
+        var $card = $("#my-index .vm-rch-number");
+        if (val.length > 0) {
+            $("#numbershowmobile").text(val);
+            $card.addClass("vm-rch-number--visible");
+        } else {
+            $("#numbershowmobile").text("");
+            $card.removeClass("vm-rch-number--visible");
+        }
+    }
+    window.vmRchSyncMobileNumberCard = vmRchSyncMobileNumberCard;
+    $(function () { vmRchSyncMobileNumberCard(); });
 
-        $('#numbershowmobile').text($(this).val());
+    $("#txtmobile").on("input keypress blur keyup", function (e) {
+        $('#commvalue').val("");
+        vmRchSyncMobileNumberCard();
         var k = e.keyCode || e.which;
         var id = $(this)[0].id;
         var str = $(this)[0].value;
@@ -495,7 +412,7 @@
                        for (var i = 0; i < jsonObj.length; i++) {
                            var newRow =
                          "<tr>" +
-                          "<td><button type='button' style='width:100%;color:white;' onclick='offershowforplan(this)' class='btn bg-blue-grey waves-effect' value='" + jsonObj[i]['name'] + ","+ optname + "," + circlename + "'> " + jsonObj[i]['name'] + "</button></td>" +
+                          "<td><button type='button' onclick='offershowforplan(this)' class='btn bg-blue-grey waves-effect vm-rch-plan-type-btn' value='" + jsonObj[i]['name'] + ","+ optname + "," + circlename + "'> " + jsonObj[i]['name'] + "</button></td>" +
                            "</tr>";
                            $('#Viewplanoffertable').append(newRow);
                            $("#circle").html(circlename);
@@ -520,6 +437,10 @@
     function offershowforplan(objButton,m) {
         var offervalue = "";
         $('#Viewplanoffertable2').empty();
+        if (objButton && objButton.classList) {
+            $('#Viewplanoffertable .vm-rch-plan-type-btn').removeClass('active addcls');
+            $(objButton).addClass('active');
+        }
         if (objButton == "")
         {
             offervalue = m;
@@ -551,7 +472,7 @@
                        "<td style='text-align:center;'>" + jsonObj[i]['Talktime'] + "</td>" +
                        "<td style='text-align:center;'>" + jsonObj[i]['Validity'] + "</td>" +
                        "<td style='text-align:center;'>" + jsonObj[i]['description'] + "</td>" +
-                       "<td><button type='button' style='width:100%;color:white;' onclick='offershowforplan1(this)' class='btn bg-blue-grey waves-effect' value='" + jsonObj[i]['price'] + "'> " + jsonObj[i]['price'] + "</button></td>" +
+                       "<td style='text-align:center;'><button type='button' onclick='offershowforplan1(this)' class='btn bg-blue-grey waves-effect vm-rch-plan-price-btn' value='" + jsonObj[i]['price'] + "'> ₹ " + jsonObj[i]['price'] + "</button></td>" +
                         "</tr>";
                         $('#Viewplanoffertable2').append(newRow);
                         $("#circle").html(circlename);
@@ -619,11 +540,17 @@
                         document.getElementById("PrePaidbestplan").style.display = "block";
                        $('#BestOfferTbl').empty();
                            for (var i = 0; i < jsonObj.length; i++) {
+                               var planPrice = jsonObj[i]['price'];
+                               var planOffer = jsonObj[i]['offer'] || '';
+                               var planVal = planPrice + "||" + jsonObj[i]['commAmount'];
                                var newRow =
-                                   "<div class='col-sm-4' style='text-align: left;'>" +
-                                   "<button type='button' style='color:white;' onclick='offerval(this)' class='btn bg-blue-grey waves-effect' value='" + jsonObj[i]['price'] + "||" + jsonObj[i]['commAmount'] + "'>₹  " + jsonObj[i]['price'] + "</button>" +
-                                   "<div>" + jsonObj[i]['offer'] + "</div>" +
-                                   "</div>"
+                                   "<div class='vm-rch-plan-offer'>" +
+                                   "<button type='button' class='vm-rch-plan-offer__card' onclick='offerval(this)' value='" + planVal + "'>" +
+                                   "<span class='vm-rch-plan-offer__price'>₹ " + planPrice + "</span>" +
+                                   "<span class='vm-rch-plan-offer__desc'>" + planOffer + "</span>" +
+                                   "<span class='vm-rch-plan-offer__action'>Apply</span>" +
+                                   "</button>" +
+                                   "</div>";
                                $('#BestOfferTbl').append(newRow);
                            }
                       }
@@ -836,6 +763,8 @@
 
         $("#txtmobileamount").val(offervalue);
         $("#commvalue").val(allvalue);
+        $('#BestOfferTbl .vm-rch-plan-offer').removeClass('is-selected');
+        $(objButton).closest('.vm-rch-plan-offer').addClass('is-selected');
         $("#offerModal").modal('hide');
     }
 </script>

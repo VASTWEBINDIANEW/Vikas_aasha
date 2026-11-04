@@ -1,94 +1,73 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.PAN_CARD_IPAY_Token_report_paging_Result>
 @{
-
     Layout = null;
 }
 @if (Model != null && Model.ToList().Count > 0)
 {
-    int sno = 0;
     foreach (var item in Model)
     {
-        sno += 1;
-        var sts = "";
-        var color = "";
-        var img = "";
-        var style = "";
-        var pendingColor = "";
-        if (item.Particulars.Contains("Pending"))
+        var part = (item.Particulars ?? "");
+        var upper = part.ToUpper();
+        var tone = "pending";
+        var toneFa = "fa-clock-o";
+        var normStatus = "PENDING";
+        var label = "Pending";
+        if (upper.Contains("SUCCESS"))
         {
-            color = "#ff9600";
-            sts = "Pending";
-            img = "../../ashok-images/clkk.png";
-            style = "height:20px;width:20px;margin-right:3px;float:left;";
-            pendingColor = "#fff8d1";
-
+            tone = "success"; toneFa = "fa-check"; normStatus = "SUCCESS"; label = "Success";
         }
-        if (item.Particulars.Contains("Success"))
+        else if (upper.Contains("FAILED"))
         {
-            color = "green";
-            sts = "Success";
-            img = "../../ashok-images/correct.svg";
-            style = "height:20px;width:20px;margin-right:3px;float:left;";
+            tone = "failed"; toneFa = "fa-times"; normStatus = "FAILED"; label = "Failed";
         }
-        if (item.Particulars.Contains("Failed"))
+        else if (upper.Contains("REFUND"))
         {
-            color = "red";
-            sts = "Failed";
-            img = "../../ashok-images/closes.svg";
-            style = "height:20px;width:20px;margin-right:3px;float:left;";
+            tone = "failed"; toneFa = "fa-undo"; normStatus = "FAILED"; label = "Refund";
         }
-        if (item.Particulars.Contains("Refund"))
-        {
-            color = "#9C27B0";
-            sts = "Refund";
-            img = "../../ashok-images/undo.svg";
-            style = "height:20px;width:20px;margin-right:3px;float:left;";
-        }
-<tr style="background-color:@pendingColor">
-    <td>@sno</td>
-    <td class="pancardtablestatus"><p style="color:;font-size:15px;font-weight:700;"><img style="@style background-color:@color;" src=@img /><span style="font-size:0;">@sts</span><span class="addtxnid">@Html.DisplayFor(modelItem => item.MerchantTxnId)</span></p></td>
-    <td style="display:none;">@Html.DisplayFor(modelItem => item.Email)</td>
-    <td>@Html.DisplayFor(modelItem => item.ProcessingFees)</td>
-    <td>@Html.DisplayFor(modelItem => item.PhysicalCount)</td>
-    <td>@Html.DisplayFor(modelItem => item.DigitalCount)</td>
-    <td style="display:none;">@Html.DisplayFor(modelItem => item.MerchantTxnId)</td>
-    <td>@Html.DisplayFor(modelItem => item.UTI_TXN_ID)</td>
-    <td>@Html.DisplayFor(modelItem => item.CouponStatus)</td>
-    <td>@Html.DisplayFor(modelItem => item.Date)</td>
-    @{
-        var sd = item.ProcessingFees - item.RetailerIncome;
-    }
-    <td>@Html.DisplayFor(modelItem => sd)</td>
-    <td style="display:none;">
-        <button class="btn btn default" id="tokenStatus" onclick="tokenStatus('@item.idno')" style="margin-left:2px;  background-color:transparent; border:none;border:1px solid #c7c2c2;margin-top:4px; padding:1px 6px 1px 6px;" title="View Pancard Status">
-            View
-        </button>
-    </td>
-    <td>@Html.DisplayFor(modelItem => item.retailer_remain_pre)</td>
-    <td>@Html.DisplayFor(modelItem => item.RetailerIncome)</td>
-    <td>@Html.DisplayFor(modelItem => item.retailer_remain_post)</td>
-
-
-    <td class="aepsprintbutton nextaepsbutton">
-        <i class="material-icons" style="cursor:pointer;">print</i>
-        <button class="btn btn default" id="tokenStatus" onclick="tokenStatus('@item.idno')" style="margin-left:2px;  background-color:transparent; border:none;border:1px solid #c7c2c2;margin-top:4px; padding:1px 6px 1px 6px;" title="View Pancard Status">
-            View
-        </button>
-    </td>
-</tr>
+        var total = 0m;
+        try { total = Convert.ToDecimal(item.ProcessingFees) - Convert.ToDecimal(item.RetailerIncome); } catch { }
+        <tr class="vm-dmt-row vm-dmt-row--@tone" data-amount="@item.ProcessingFees" data-status="@normStatus">
+            <td class="vm-dmt-sr-cell"></td>
+            <td>
+                <span class="vm-dmt-status vm-dmt-status--@tone" title="@part"><i class="fa @toneFa" aria-hidden="true"></i></span>
+                <span class="vm-dmt-txntype">@item.MerchantTxnId</span>
+            </td>
+            <td class="vm-dmt-amt-cell">@item.ProcessingFees</td>
+            <td>@item.PhysicalCount</td>
+            <td>@item.DigitalCount</td>
+            <td>@item.UTI_TXN_ID</td>
+            <td>@item.CouponStatus</td>
+            <td>@item.Date</td>
+            <td class="vm-dmt-amt-cell">@total</td>
+            <td class="vm-dmt-amt-cell">@item.retailer_remain_pre</td>
+            <td class="vm-dmt-amt-cell">@item.RetailerIncome</td>
+            <td class="vm-dmt-amt-cell">@item.retailer_remain_post</td>
+            <td class="vm-dmt-action-cell">
+                <div class="vm-dmt-action-bar">
+                    <button type="button" class="vm-dmt-act-btn" title="View Pancard Status" onclick="tokenStatus('@item.idno')"><i class="material-icons">visibility</i></button>
+                </div>
+            </td>
+        </tr>
     }
 }
 else
 {
-<tr>
-    @if (@ViewBag.checkdata != null)
-    {
-        <td colspan="13"><h3 style="text-align:center;">No Data For Current Search</h3></td>
-    }
-    else
-    {
-        <td colspan="13"><h3 style="text-align:center;">Data Not Found</h3></td>
-    }
-</tr>
-
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="13" class="vm-opr-table-empty vm-dmt-table-empty">
+            <div class="vm-opr-empty-state">
+                <i class="fas fa-inbox" aria-hidden="true"></i>
+                <h3>
+                    @if (ViewBag.checkdata != null)
+                    {
+                        <text>No data for current search</text>
+                    }
+                    else
+                    {
+                        <text>Data not found</text>
+                    }
+                </h3>
+                <p>Try a different date range or filter.</p>
+            </div>
+        </td>
+    </tr>
 }

@@ -1,19 +1,7 @@
 ﻿@model Vastwebmulti.Models.AccountOpeningRecentReport
 
-
-<style>
-    #account_axis_table tbody tr td {
-        padding: 10px;
-    }
-    #account_axis_table thead tr th {
-        text-align: center;
-    }
-    .table-bordered {
-        border-top: 1px solid var(--border-color);
-        overflow: scroll;
-    }
-</style>
-<table id="account_axis_table" class="table table-striped table-bordered" style="width: 100%; display: block;">
+<div class="vm-rao-table-wrap">
+<table id="account_axis_table" class="table table-striped table-bordered vm-rmt-data-table">
     @if (Model != null && Model.Recent_report_axis != null)
     {
         <thead>
@@ -69,9 +57,11 @@
 
 
             <tr>
-                <td style="width: 100px;">
-                    <img style="@style background-color:@color;" src=@img />
-                    @Html.DisplayFor(modelItem => item.status)
+                <td>
+                    <span class="vm-rao-status-cell">
+                        <img style="@style background-color:@color;" src=@img alt="" />
+                        @Html.DisplayFor(modelItem => item.status)
+                    </span>
                 </td>
 
                 <td>@Html.DisplayFor(modelItem => item.fname)&nbsp;@Html.DisplayFor(modelItem => item.lname)</td>
@@ -179,6 +169,7 @@
     }
 
 </table>
+</div>
 
 
 @*<div class="modal mastetr222Modal in" id="aepstableclickpop" tabindex="-1" role="dialog" style="display: none;">

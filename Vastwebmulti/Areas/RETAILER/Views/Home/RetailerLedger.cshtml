@@ -1,354 +1,333 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Sp_ledgerreport_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
     ViewBag.Title = "RetailerLedger";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.Sp_ledgerreport_Result>();
+    var rowCount = reports.Count;
+    decimal totalCredit = reports.Sum(m => (decimal?)m.Credit ?? 0m);
+    decimal totalDebit = reports.Sum(m => (decimal?)m.Debit ?? 0m);
 }
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-
-    /* new css  */
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
-    }
-
-    .h_menu-set {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .table { 
-        margin-bottom: 0px;
-    }
-
-    .retailerledger-container .col-md-4.dispute-date {
-        display: flex;
-        align-items: center;
-    }
-    .col-md-2.despute-search {
-        width: 18%;
-        padding-left: 4px;
-    }
-    .dropdown-menu {
-        margin-top: 144px !important;
-    }
-
-    /* new css  */
-
-    .card .body {
-        padding: 0px;
-    }
-
-    .container-fluid.retailerledger-container {
-        padding-left: 10px;
-    }
-    .dropdown-menu {
-        margin-top: 97px !important;
-    }
-
-    .form-iconmy.form-iconmyss {
-        z-index: 9;
-    }
-
-    .datepicker.datepicker-dropdown.dropdown-menu.lgdatepickedatbookre.datepicker-orient-left.datepicker-orient-bottom {
-        top: 42px !important;
-    }
-
-    #btncolor a {
-        text-decoration: none;
-        color: #fff !important;
-    }
-    @@media only screen and (max-width:1169px) {
-
-        .container-fluid.retailerledger-container {
-            padding-left: 15px;
-        }
-
-    }
-    
-    
-    @@media only screen and (max-width:767px) {
-        .cardaddclass-res .bread-same-all-page {
+    /* Ledger rows : credit green-tint, debit red-tint */
+    body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport tbody tr.vm-ledger-row--credit { background: #f6fef9 !important; }
+    body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport tbody tr.vm-ledger-row--debit { background: #fff7f7 !important; }
+    body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport tbody tr:hover { background: #f6f9ff !important; }
+    body.saas-admin-ui .saas-retailer-ledger-page .vm-ledger-cd { display: inline-flex !important; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 800; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+    body.saas-admin-ui .saas-retailer-ledger-page .vm-ledger-cd--cr { background: #e7f7ee !important; color: #15803d !important; }
+    body.saas-admin-ui .saas-retailer-ledger-page .vm-ledger-cd--dr { background: #fdecec !important; color: #c62828 !important; }
+    body.saas-admin-ui .saas-retailer-ledger-page .vm-ledger-nav { display: inline-flex !important; align-items: center; gap: 6px; min-height: 34px; padding: 0 14px; border-radius: 9px; border: 1px solid #dbe2ec; background: #fff; color: #475569; font-size: 12.5px; font-weight: 800; text-decoration: none !important; transition: all .15s ease; white-space: nowrap; }
+    body.saas-admin-ui .saas-retailer-ledger-page .vm-ledger-nav:hover { border-color: #2563eb; color: #2563eb; box-shadow: 0 4px 12px rgba(37,99,235,.18); }
+    /* Desktop (>=1024px): fit-to-width, no scroll, tight columns */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table {
             width: 100% !important;
-            padding-top: 0px !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
         }
-
-
-
-        .table-responsive.table-responsive-responshive.tablethirddesign-new table {
-            border: 1px solid var(--border-color);
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
         }
-
-        #btncolor a {
-            text-decoration: none;
-            color: #fff !important;
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table thead th:nth-child(1),
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table tbody td:nth-child(1) { width: 28% !important; }
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table thead th:nth-child(2),
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table tbody td:nth-child(2) { width: 12% !important; }
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table tbody td:nth-child(3) { width: 12% !important; }
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table thead th:nth-child(4),
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table tbody td:nth-child(4) { width: 12% !important; }
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table thead th:nth-child(5),
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table tbody td:nth-child(5) { width: 14% !important; }
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table thead th:nth-child(6),
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table tbody td:nth-child(6) { width: 22% !important; }
+    }
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table {
+            width: max-content !important;
+            min-width: 900px !important;
+            max-width: none !important;
+            table-layout: auto !important;
+        }
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-ledger-page #retailerLedgerReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+        }
+        body.saas-admin-ui .saas-retailer-ledger-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
         }
     }
-
-    @@media only screen and (max-width:480px){
-        .retailerledger-container .col-md-4.dispute-date {
-            width: 100%;
-            display: block;
-        }
-        .input-daterange.input-group {
-            width: 70% !important;
-            margin-bottom: 4px;
-        }
-        .col-md-2.despute-search {
-            width: 30%;
-            padding-left: 4px;
-            float: left;
-        }
-        .dispute-date.dispute-datelager.datelager-class input {
-            padding-right: 4px;
-            text-align: right;
-        }
-
-
-    }
-
-
 </style>
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="overflow-x:hidden;">
-    <div class="container-fluid retailerledger-container" style="height:100vh;">
 
-        <!--Four-Design-Page-Header-Start-->
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-retailer-ecomm-transaction-page saas-retailer-ledger-page">
 
-        <div class="page-title-box-fourde">
-            <h3>Retailer Ledger</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">My Account 1&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Retailer Ledger</a></li>
-            </ul>
-        </div>
+    <div class="container-fluid vm-opr-page-shell">
 
-        <!--Four-Design-Page-Header-End-->
+        @{
+            var ledgerFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerLedgerForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_ledger_frm_date" },
+                { "data-report-to", "#retailer_ledger_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("RetailerLedger", "Home", FormMethod.Post, ledgerFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-        <div class="page-header-third">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
 
-            <div class="h_menu-set">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>My Account</li>
+                        <li>Retailer Ledger</li>
+                    </ol>
 
-                <div class="bread-same-all-page" style="width:auto;float:left;">
-                    <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                        <ul style="margin:0;">
-                            <li class="smli">
-                                <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                                </a>
-                            </li>
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
 
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                Ledger Report
-                            </li>
-                        </ul>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_ledger_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_ledger_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
                     </div>
 
                 </div>
-                <div class="admin-ledger-page-btn responcive-fifty widthauto-search-thi" style="float:left;">
-                    <button id="btncolor" style="font-size: 14px; height: 32px; border: 1px solid #c7c2c2; padding-left: 10px; padding-right: 10px;top: 0px; color: white !important; background: var(--main-bg-lcolor);"> @Html.ActionLink("CMS Ledger", "CMSLedger")</button>
 
-
-                </div>
-
-                <div class="admin-ledger-page-btn responcive-fifty widthauto-search-thi" style="float:left;">
-                    <button id="btncolor" style="font-size: 14px; height: 32px; border: 1px solid #c7c2c2; padding-left: 10px; padding-right: 10px;top: 0px; color: white !important; background: var(--main-bg-lcolor);"> @Html.ActionLink("Pos Ledger", "PosLedger")</button>
-
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="row clearfix" style="margin:0;">
-            
-            <div class="page-header-third">
-
-                <div class="col-md-12" style="padding:0;">
-                    <div class="card cardretailerlager legar-responshivewidth cardaddclass-res class-back-tra-fourdesign fix-bootmmarg-fourdesign">
-
-                        @using (Html.BeginForm("RetailerLedger", "Home", FormMethod.Post))
-                        {
-
-                            <div class="col-md-4 dispute-date dispute-datelager datelager-class" style="float:left;position: relative;padding:0;">
-                                <div class="input-daterange input-group" style="width:auto;float:left; ">
-                                    <div class="datesate datesates">
-                                        <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                    </div>
-                                    <span class="input-group-addon" style="display:none;">
-                                        <i class="fa fa-exchange" style="padding-top:8px;"></i>
-                                    </span>
-                                    <div class="datesate datesatese">
-                                        <div class="form-iconmy form-iconmyss" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2 despute-search">
-                                    <center>
-                                        <button type="submit" class="btn bg-grey waves-effect retailer-search-second" style="margin-top: 4px; margin-left:-74px; height:36px;">
-                                            <i class="fa fa-search" style="top:1px;font-size:16px;color:black;"></i>
-                                            <span style="top:0px;color:black;">Search</span>
-                                        </button>
-                                    </center>
-                                </div>
-
-                            </div>
-
-                            <div class="dispute-right dispute-new">
-                                <div class="col-md-3 buttonPdf buttonPdfdispute retailer-pdf-second" style="text-align:right;">
-
-                                    <button style="color:#555;" id="btnPDF">PDF</button>
-                                    <button style="color:#555;" id="btnExport">Export</button>
-
-                                </div>
-
-
-                            </div>
-
-
-                        }
-
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerLedgerTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Ledger totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerLedgerTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
                     </div>
-                </div>
-
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0;">
-                    <div class="card class-back-tra-fourdesign">
-                        <div class="body" style="">
-                            <div class="table-responsive table-responsive-responshive tablethirddesign-new" style="position: inherit;margin-top:4px;">
-                                <table id="example" class="table table-bordered example-second third-design-table" style="width:100%;background:#f5f5f5;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            @* <th>Sr.No</th>*@
-                                            @*<th>Request&nbsp;Id</th>*@
-                                            <th>Particular</th>
-                                            <th>₹&nbsp;Amount</th>
-                                            <th>Credit</th>
-                                            <th>Debit</th>
-                                            <th>Balance</th>
-                                            <th>Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="trow">
-                                        @{
-                                            Html.RenderAction("_RetailerLedger", "Home", new { Model = Model });
-                                        }
-                                    </tbody>
-                                </table>
-                                <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
-                                    <div class="loadertablecssnew">Loading...</div>
-                                </div>
-                            </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Total credit</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totalCredit.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Total debit</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totalDebit.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Records</span>
+                            <strong class="vm-opr-total-card__value">@rowCount</strong>
                         </div>
                     </div>
                 </div>
 
             </div>
+        }
 
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-book" aria-hidden="true"></i>
+                        <span>Retailer ledger</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="retailerLedgerRowCount">@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total credit">
+                            Cr: <strong>&#8377; @totalCredit.ToString("N2")</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total debit">
+                            Dr: <strong>&#8377; @totalDebit.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <a class="vm-ledger-nav" href="@Url.Action("CMSLedger", "Home")" title="CMS Ledger"><i class="fas fa-university" aria-hidden="true"></i> CMS Ledger</a>
+                            <a class="vm-ledger-nav" href="@Url.Action("PosLedger", "Home")" title="Pos Ledger"><i class="fas fa-credit-card" aria-hidden="true"></i> Pos Ledger</a>
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-ecomm-totals-btn" onclick="showRetailerLedgerTotals()" title="Show totals" aria-expanded="false" aria-controls="retailerLedgerTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportRetailerLedger" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFRetailerLedger" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerLedgerReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Particular</th>
+                                    <th>Amount &#8377;</th>
+                                    <th>Credit</th>
+                                    <th>Debit</th>
+                                    <th>Balance</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trow">
+                                @{
+                                    Html.RenderAction("_RetailerLedger", "Home", new { Model = Model });
+                                }
+                            </tbody>
+                        </table>
+                        <div id="loadingdiv" class="vm-opr-table-loading vm-dmt-table-loading" style="display:none;">
+                            <div class="vm-dmt-table-loader" role="status" aria-live="polite" aria-label="Loading ledger">
+                                <div class="vm-dmt-table-loader__spinner" aria-hidden="true"></div>
+                                <span class="vm-dmt-table-loader__text">Loading more records…</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        
     </div>
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
+@section PostVmScripts {
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<script>
+    var retailerLedgerPageIndex = 2;
+    var retailerLedgerNoMore = false;
+    var retailerLedgerBusy = false;
 
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
+    function hideRetailerLedgerTotals() {
+        var $panel = jQuery('#retailerLedgerTotalsPanel');
+        var $btn = jQuery('.saas-retailer-ledger-page .vm-ecomm-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
 
-               $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true
+    function showRetailerLedgerTotals() {
+        var $panel = jQuery('#retailerLedgerTotalsPanel');
+        var $btn = jQuery('.saas-retailer-ledger-page .vm-ecomm-totals-btn');
+        if ($panel.is(':visible')) {
+            hideRetailerLedgerTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
 
+    function retailerLedgerDates() {
+        return {
+            txt_frm_date: jQuery('#retailer_ledger_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_ledger_to_date').val() || ''
+        };
+    }
+
+    function loadMoreRetailerLedger() {
+        if (retailerLedgerNoMore || retailerLedgerBusy) { return; }
+        retailerLedgerBusy = true;
+        jQuery('#loadingdiv').show();
+        var d = retailerLedgerDates();
+        jQuery.post('@Url.Action("InfiniteScrollLedger", "Home")',
+            { pageindex: retailerLedgerPageIndex, txt_frm_date: d.txt_frm_date, txt_to_date: d.txt_to_date },
+            function (data) {
+                retailerLedgerPageIndex = retailerLedgerPageIndex + 1;
+                if (data) {
+                    retailerLedgerNoMore = data.NoMoredata;
+                    if (data.HTMLString) { jQuery('#trow').append(data.HTMLString); }
+                } else {
+                    retailerLedgerNoMore = true;
+                }
+                jQuery('#loadingdiv').hide();
+                retailerLedgerBusy = false;
+            }, 'json').fail(function () {
+                jQuery('#loadingdiv').hide();
+                retailerLedgerBusy = false;
             });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-            }
+    }
 
+    function initRetailerLedgerDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerLedgerDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerLedgerForm',
+                '#retailer_ledger_frm_date',
+                '#retailer_ledger_to_date',
+                true
+            );
+        }
+    }
 
-        });
-</script>
-
-
-
-
-<script>
-    var txt_frm_date = $('#txt_frm_date').val();
-    var txt_to_date = $('#txt_to_date').val();
-
-        var pageindex = 2;
-        var NoMoredata = false;
-        var inProgress = false;
-    $(window).scroll(function () {
-            if ($(window).scrollTop() > Number($("#tbldata").height()) / 4 && !NoMoredata && !inProgress) {
-                inProgress = true;
-                $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScrollLedger","Home")",
-             { "pageindex": pageindex, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date },
-                    function (data) {
-                        pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#trow").append(data.HTMLString);
-                        $("#loadingdiv").hide();
-                        inProgress = false;
-                    });
+    jQuery(function () {
+        initRetailerLedgerDatepickers();
+        window.setTimeout(initRetailerLedgerDatepickers, 150);
+        jQuery(window).on('scroll', function () {
+            if (jQuery(window).scrollTop() + jQuery(window).height() > jQuery(document).height() - 250) {
+                loadMoreRetailerLedger();
             }
         });
-</script>
-<script>
-    $(".input-daterange").click(function () {
-        $(".datepicker").addClass('lgdatepickedatbookre');
-    });
-
-
-</script>
-
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
+        jQuery('#btnExportRetailerLedger').on('click', function (e) {
+            e.preventDefault();
+            var d = retailerLedgerDates();
+            location.href = '@Url.Action("Excel_Retailer_Ledger", "Home")?txt_frm_date=' + encodeURIComponent(d.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(d.txt_to_date);
+        });
+        jQuery('#btnPDFRetailerLedger').on('click', function () {
+            var d = retailerLedgerDates();
+            window.open('@Url.Action("PDF_RetailerLedger", "Home")?txt_frm_date=' + encodeURIComponent(d.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(d.txt_to_date), '_blank');
         });
     });
-
 </script>
-
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("Excel_Retailer_Ledger", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        location.href = url;
-});
-</script>
-<script>
-    $("#btnPDF").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("PDF_RetailerLedger", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
-    });
-</script>
+}

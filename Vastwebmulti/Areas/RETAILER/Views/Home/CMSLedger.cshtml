@@ -1,302 +1,355 @@
 ﻿@model IEnumerable<Vastwebmulti.Areas.ADMIN.Models.cmsledgermodel>
+@using System.Linq
+@using System.Collections.Generic
 @{
     ViewBag.Title = "CMSLedger";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model != null ? Model.ToList() : new List<Vastwebmulti.Areas.ADMIN.Models.cmsledgermodel>();
+    var rowCount = reports.Count;
+    decimal totalCredit = 0m, totalDebit = 0m;
+    foreach (var m in reports)
+    {
+        try { totalCredit += Convert.ToDecimal(m.Credit); } catch { }
+        try { totalDebit += Convert.ToDecimal(m.Debit); } catch { }
+    }
 }
-
-
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-
-    /* new css  */
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
-    }
-
-    .input-daterange.input-group {
-        width: 40%;
-    }
-
-    .table {
-        margin-bottom: 0px;
-    }
-
-    .retailerledger-container .col-md-4.dispute-date {
-        display: flex;
-        align-items: center;
-    }
-
-    .col-md-2.despute-search {
-        width: 18%;
-        padding-left: 4px;
-    }
-
-    .dropdown-menu {
-        margin-top: 144px !important;
-    }
-
-    .container-fluid.retailerledger-container {
-        padding-left: 10px;
-    }
-
-    /* new css  */
-
-    .dropdown-menu {
-        margin-top: 97px !important;
-    }
-
-    .form-iconmy.form-iconmyss {
-        z-index: 9;
-    }
-
-    @@media only screen and (max-width:1169px) {
-        .container-fluid.retailerledger-container {
-            padding-left: 15px;
-        }
-    }
-
-
-    @@media screen and (max-width:767px) {
-        .cardaddclass-res .bread-same-all-page {
+    /* CMS ledger rows : credit green-tint, debit red-tint */
+    body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport tbody tr.vm-ledger-row--credit { background: #f6fef9 !important; }
+    body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport tbody tr.vm-ledger-row--debit { background: #fff7f7 !important; }
+    body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport tbody tr:hover { background: #f6f9ff !important; }
+    body.saas-admin-ui .saas-retailer-cms-page .vm-ledger-cd { display: inline-flex !important; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 800; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+    body.saas-admin-ui .saas-retailer-cms-page .vm-ledger-cd--cr { background: #e7f7ee !important; color: #15803d !important; }
+    body.saas-admin-ui .saas-retailer-cms-page .vm-ledger-cd--dr { background: #fdecec !important; color: #c62828 !important; }
+    body.saas-admin-ui .saas-retailer-cms-page .vm-ledger-nav { display: inline-flex !important; align-items: center; gap: 6px; min-height: 34px; padding: 0 14px; border-radius: 9px; border: 1px solid #dbe2ec; background: #fff; color: #475569; font-size: 12.5px; font-weight: 800; text-decoration: none !important; transition: all .15s ease; white-space: nowrap; }
+    body.saas-admin-ui .saas-retailer-cms-page .vm-ledger-nav:hover { border-color: #2563eb; color: #2563eb; box-shadow: 0 4px 12px rgba(37,99,235,.18); }
+    /* Desktop (>=1024px): fit-to-width, no scroll, tight columns */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table {
             width: 100% !important;
-            padding-top: 0px !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
         }
-
-        .input-daterange.input-group {
-            width: 60%;
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
         }
-
-        .table-responsive.table-responsive-responshive.tablethirddesign-new table {
-            border: 1px solid var(--border-color);
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
         }
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead th:nth-child(1),
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody td:nth-child(1) { width: 5% !important; }
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead th:nth-child(2),
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody td:nth-child(2) { width: 11% !important; }
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody td:nth-child(3) { width: 19% !important; }
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead th:nth-child(4),
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody td:nth-child(4) { width: 9% !important; }
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead th:nth-child(5),
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody td:nth-child(5) { width: 9% !important; }
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead th:nth-child(6),
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody td:nth-child(6) { width: 9% !important; }
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead th:nth-child(7),
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody td:nth-child(7) { width: 9% !important; }
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead th:nth-child(8),
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody td:nth-child(8) { width: 9% !important; }
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead th:nth-child(9),
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody td:nth-child(9) { width: 20% !important; }
     }
-
-    @@media only screen and (max-width:600px) {
-
-        .input-daterange.input-group {
-            width: 80%;
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table {
+            width: max-content !important;
+            min-width: 1100px !important;
+            max-width: none !important;
+            table-layout: auto !important;
         }
-    }
-
-    @@media only screen and (max-width:480px) {
-
-        .input-daterange.input-group {
-            width: 74%;
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
         }
-
-        .retailerledger-container .col-md-4.dispute-date {
-            width: 100%;
-            padding-bottom: 4px !important;
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-cms-page #retailerCmsLedgerReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
         }
-
-        .col-md-2.despute-search {
-            width: 26%;
-        }
-    }
-
-    @@media only screen and (max-width:400px) {
-
-        .datesate.datesates #txt_frm_date {
-            padding-right: 8px !important;
-            text-align: end !important;
-        }
-
-        .datesate.datesatese #txt_to_date {
-            padding-right: 8px !important;
-            text-align: end !important;
+        body.saas-admin-ui .saas-retailer-cms-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
         }
     }
 </style>
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="overflow-x:hidden;">
-    <div class="container-fluid retailerledger-container" style="height:100vh;">
 
-        <!--Four-Design-Page-Header-Start-->
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-retailer-ecomm-transaction-page saas-retailer-cms-page">
 
-        <div class="page-title-box-fourde">
-            <h3>Microatm Rental Report</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">My Account 1&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">CMS Ledger Reportt</a></li>
-            </ul>
-        </div>
+    <div class="container-fluid vm-opr-page-shell">
 
-        <!--Four-Design-Page-Header-End-->
+        @{
+            var cmsFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerCmsForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_cms_frm_date" },
+                { "data-report-to", "#retailer_cms_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("CMSLedger", "Home", FormMethod.Post, cmsFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="page-header-third">
-                    <div class="bread-same-all-page" style="width:auto;float:left;">
-                        <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                            <ul style="margin:0;">
-                                <li class="smli">
-                                    <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                                    </a>
-                                </li>
-                                <li class="smli">
-                                    <a href="@Url.Action("RetailerLedger", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                        Back&nbsp;To&nbsp;Main&nbsp;Ledger&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                                    </a>
-                                </li>
-                                <li class="fullbodydycolorbg tmw-total-color-one">
-                                    CMS Ledger Report
-                                </li>
-                            </ul>
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li><a href="@Url.Action("RetailerLedger", "Home")">Retailer Ledger</a></li>
+                        <li>CMS Ledger</li>
+                    </ol>
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_cms_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_cms_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerCmsTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>CMS totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerCmsTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Total credit</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totalCredit.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Total debit</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totalDebit.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Records</span>
+                            <strong class="vm-opr-total-card__value">@rowCount</strong>
                         </div>
                     </div>
                 </div>
 
-
             </div>
-        </div>
+        }
 
-        <div class="row clearfix clearfix-ledger">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                <div class="page-header-third">
-                    <div class="card cardretailerlager legar-responshivewidth cardaddclass-res class-back-tra-fourdesign fix-bootmmarg-fourdesign" style="float: left; width: 100%;">
-
-                        @using (Html.BeginForm("CMSLedger", "Home", FormMethod.Post))
-                        {
-                            <div class="col-md-4 dispute-date dispute-datelager datelager-class" style="float:left;position: relative;padding:0;">
-                                <div class="input-daterange input-group">
-                                    <div class="datesate datesates">
-                                        <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                    </div>
-                                    <span class="input-group-addon" style="display:none;">
-                                        <i class="fa fa-exchange" style="padding-top:8px;"></i>
-                                    </span>
-                                    <div class="datesate datesatese">
-                                        <div class="form-iconmy form-iconmyss" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
-                                    </div>
-                                </div>
-                                <div class="col-md-2 despute-search">
-                                    <center>
-                                        <button type="submit" class="btn bg-grey waves-effect retailer-search-second" style="margin-top: 4px; margin-left:-74px; height:36px;">
-                                            <i class="fa fa-search" style="top:1px;font-size:16px;color:black;"></i>
-                                            <span style="top:0px;color:black;">Search</span>
-                                        </button>
-                                    </center>
-                                </div>
-                            </div>
-
-                            <div class="dispute-right dispute-new">
-                                <div class="col-md-3 buttonPdf buttonPdfdispute retailer-pdf-second" style="text-align:right;">
-
-                                    <button style="color:#555;" id="btnPDF">PDF</button>
-                                    <button style="color:#555;" id="btnExport">Export</button>
-
-                                </div>
-
-
-                            </div>
-
-                        }
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-university" aria-hidden="true"></i>
+                        <span>CMS ledger</span>
                     </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total credit">
+                            Cr: <strong>&#8377; @totalCredit.ToString("N2")</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total debit">
+                            Dr: <strong>&#8377; @totalDebit.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <a class="vm-ledger-nav" href="@Url.Action("RetailerLedger", "Home")" title="Back to main ledger"><i class="fas fa-arrow-left" aria-hidden="true"></i> Main Ledger</a>
+                            <a class="vm-ledger-nav" href="@Url.Action("PosLedger", "Home")" title="Pos Ledger"><i class="fas fa-credit-card" aria-hidden="true"></i> Pos Ledger</a>
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-ecomm-totals-btn" onclick="showRetailerCmsTotals()" title="Show totals" aria-expanded="false" aria-controls="retailerCmsTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportRetailerCms" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFRetailerCms" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-
-                    <div class="card class-back-tra-fourdesign" style="float: left; width: 100%;padding-top:4px;">
-                        <div class="body" style="padding:0;">
-                            <div class="table-responsive table-responsive-responshive tablethirddesign-new" style="position: inherit;margin-top:-18px;">
-                                <table class="table table-bordered table-striped table-hover example-second third-design-table" style="width:100%;background:#eae9e9;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>Sr.&nbsp;No</th>
-                                            <th>Userid&nbsp;Id</th>
-                                            <th>Description</th>
-                                            <th>₹&nbsp;Amount</th>
-                                            <th>Credit</th>
-                                            <th>Debit</th>
-                                            <th>Remain Pre</th>
-                                            <th>Remain Post</th>
-                                            <th>Date&nbsp;&&nbsp;Time</th>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerCmsLedgerReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No</th>
+                                    <th>User Id</th>
+                                    <th>Description</th>
+                                    <th>Amount &#8377;</th>
+                                    <th>Credit</th>
+                                    <th>Debit</th>
+                                    <th>Remain Pre</th>
+                                    <th>Remain Post</th>
+                                    <th>Date &amp; Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (reports.Count > 0)
+                                {
+                                    int idno = 1;
+                                    foreach (var item in reports)
+                                    {
+                                        decimal cr = 0m, dr = 0m;
+                                        try { cr = Convert.ToDecimal(item.Credit); } catch { }
+                                        try { dr = Convert.ToDecimal(item.Debit); } catch { }
+                                        var tone = cr > 0 ? "vm-ledger-row--credit" : (dr > 0 ? "vm-ledger-row--debit" : "");
+                                        <tr class="vm-dmt-row vm-ledger-row @tone">
+                                            <td><span class="vm-dmt-refno-text">@idno</span></td>
+                                            <td><span class="vm-dmt-refno-text" title="@item.Frm_Name">@item.Frm_Name</span></td>
+                                            <td><span class="vm-dmt-consumer-text" title="@item.Description">@item.Description</span></td>
+                                            <td><span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @item.Amount</span></td>
+                                            <td>
+                                                @if (cr > 0)
+                                                {
+                                                    <span class="vm-ledger-cd vm-ledger-cd--cr"><i class="fa fa-arrow-up" aria-hidden="true"></i>@item.Credit</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="vm-dmt-amount-text">@item.Credit</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (dr > 0)
+                                                {
+                                                    <span class="vm-ledger-cd vm-ledger-cd--dr"><i class="fa fa-arrow-down" aria-hidden="true"></i>@item.Debit</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="vm-dmt-amount-text">@item.Debit</span>
+                                                }
+                                            </td>
+                                            <td><span class="vm-dmt-amount-text">@item.RemainPre</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.RemainPost</span></td>
+                                            <td class="vm-ticket-time-cell"><span class="vm-dmt-refno-text">@item.Insertdate</span></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{
-                                            int idno = 1;
-                                        }
-                                        @foreach (var item in Model)
-                                        {
-                                            <tr>
-                                                <td>@idno</td>
-                                                <td>@item.Frm_Name</td>
-                                                <td>@item.Description</td>
-                                                <td>@item.Amount</td>
-                                                <td>@item.Credit</td>
-                                                <td>@item.Debit</td>
-                                                <td>@item.RemainPre</td>
-                                                <td>@item.RemainPost</td>
-                                                <td>@item.Insertdate</td>
-                                            </tr>
-                                            idno++;
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                        idno++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="9" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-university" aria-hidden="true"></i>
+                                            <span>No CMS ledger records found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
             </div>
-
         </div>
+
     </div>
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
+@section PostVmScripts {
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<script>
+    function hideRetailerCmsTotals() {
+        var $panel = jQuery('#retailerCmsTotalsPanel');
+        var $btn = jQuery('.saas-retailer-cms-page .vm-ecomm-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
 
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
+    function showRetailerCmsTotals() {
+        var $panel = jQuery('#retailerCmsTotalsPanel');
+        var $btn = jQuery('.saas-retailer-cms-page .vm-ecomm-totals-btn');
+        if ($panel.is(':visible')) {
+            hideRetailerCmsTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
 
-               $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true
+    function retailerCmsDates() {
+        return {
+            txt_frm_date: jQuery('#retailer_cms_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_cms_to_date').val() || ''
+        };
+    }
 
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-            }
+    function initRetailerCmsDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerCmsDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerCmsForm',
+                '#retailer_cms_frm_date',
+                '#retailer_cms_to_date',
+                true
+            );
+        }
+    }
 
-
+    jQuery(function () {
+        initRetailerCmsDatepickers();
+        window.setTimeout(initRetailerCmsDatepickers, 150);
+        jQuery('#btnExportRetailerCms').on('click', function (e) {
+            e.preventDefault();
+            var d = retailerCmsDates();
+            location.href = '@Url.Action("ExcelRetailerposreport", "Home")?txt_frm_date=' + encodeURIComponent(d.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(d.txt_to_date);
         });
-</script>
-
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("ExcelRetailerposreport", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        location.href = url;
-});
-</script>
-
-<script>
-    $("#btnPDF").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("PDFRetailerposreport", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
+        jQuery('#btnPDFRetailerCms').on('click', function () {
+            var d = retailerCmsDates();
+            window.open('@Url.Action("PDFRetailerposreport", "Home")?txt_frm_date=' + encodeURIComponent(d.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(d.txt_to_date), '_blank');
+        });
     });
 </script>
+}

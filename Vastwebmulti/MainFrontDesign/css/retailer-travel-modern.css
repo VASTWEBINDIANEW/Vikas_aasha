@@ -1,0 +1,4051 @@
+/* ============================================================
+
+   RETAILER • Travel — Money_transfer2 layout (vm-rmt-page shell)
+
+   ============================================================ */
+
+
+
+body.saas-admin-ui section.vm-travel-page{
+
+  --vm-travel-left-h:650px;
+
+  --vm-travel-report-h:661px;
+
+  --vm-travel-report-body-offset:60px;
+
+  --vm-travel-report-table-h:calc(var(--vm-travel-report-h) - var(--vm-travel-report-body-offset));
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page .page-title-box-fourde{
+
+  display:none !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page > br{
+
+  display:none !important;
+
+}
+
+
+
+/* Left / right use section.vm-rmt-page flex (same as Money_transfer2) */
+
+body.saas-admin-ui section.vm-travel-page #full.vm-rmt-left-panel{
+
+  min-height:var(--vm-travel-left-h) !important;
+
+  overflow:hidden !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page #full.vm-rmt-left-panel .vm-rmt-left-shell{
+
+  min-height:var(--vm-travel-left-h) !important;
+
+}
+
+
+
+/* Four travel tabs (not five DMT tabs) */
+
+body.saas-admin-ui section.vm-travel-page ul.vm-rmt-service-tabs#tabsmyss{
+
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+
+}
+
+/* Active service tab: dark icon on white pill (Flight/Hotel/Bus/IRCTC) */
+body.saas-admin-ui section.vm-travel-page ul.vm-rmt-service-tabs#tabsmyss > li.vm-rmt-tab-item.current .vm-rmt-tab-icon--active{
+  display:block !important;
+  filter:brightness(0) saturate(100%) !important;
+  opacity:1 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page ul.vm-rmt-service-tabs#tabsmyss > li.vm-rmt-tab-item.current .vm-rmt-tab-icon--idle{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page ul.vm-rmt-service-tabs#tabsmyss > li.vm-rmt-tab-item.current .vm-rmt-tab-icon-wrap{
+  background:#f1f5f9 !important;
+  border:1px solid #e2e8f0 !important;
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page #full.vm-rmt-left-panel .vm-rmt-tab-pane.current{
+
+  max-height:calc(var(--vm-travel-left-h) - 92px) !important;
+
+  overflow-y:auto !important;
+
+  overflow-x:hidden !important;
+
+  -webkit-overflow-scrolling:touch !important;
+
+  padding:10px 12px 14px !important;
+
+  scroll-behavior:smooth !important;
+
+}
+
+body.saas-admin-ui section.vm-travel-page #full.vm-rmt-left-panel .vm-rmt-tab-pane.current.vm-travel-tab-pane--picker-open{
+
+  padding-bottom:28px !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page .travel-customestart .tab-content{
+
+  background:transparent !important;
+
+}
+
+
+
+/* Report card — fixed height like Money_transfer2 / Account Opening */
+
+body.saas-admin-ui section.vm-travel-page #reportallinone.vm-travel-report-all{
+
+  height:var(--vm-travel-report-h) !important;
+
+  min-height:var(--vm-travel-report-h) !important;
+
+  max-height:var(--vm-travel-report-h) !important;
+
+  overflow:hidden !important;
+
+  display:flex !important;
+
+  flex-direction:column !important;
+
+  box-sizing:border-box !important;
+
+  padding:14px 14px 16px !important;
+
+  background:var(--vm-rmt-surface,#fff) !important;
+
+  border:1px solid var(--vm-rmt-border,#e2e8f0) !important;
+
+  border-radius:var(--vm-rmt-radius,16px) !important;
+
+  box-shadow:0 12px 32px -18px rgba(30,64,175,.22) !important;
+
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-report-panel.loader-pagefull{
+  min-height:var(--vm-travel-report-h) !important;
+  height:auto !important;
+  align-self:stretch !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-report-panel .vm-rmt-report-shell{
+  width:100% !important;
+  min-width:0 !important;
+  min-height:var(--vm-travel-report-h) !important;
+  height:100% !important;
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page #reportallinone.vm-travel-report-all::before{
+
+  content:"Recent travel bookings" !important;
+
+  display:block !important;
+
+  font-size:13px !important;
+
+  font-weight:800 !important;
+
+  color:var(--vm-rmt-text,#0f172a) !important;
+
+  margin:0 0 10px 2px !important;
+
+  letter-spacing:.02em !important;
+
+  flex:0 0 auto !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page #reportallinone .vm-travel-report-pane{
+
+  flex:1 1 auto !important;
+
+  min-height:0 !important;
+
+  display:none !important;
+
+  flex-direction:column !important;
+
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone .vm-travel-report-pane.vm-travel-report-active{
+
+  display:flex !important;
+
+}
+
+body.saas-admin-ui section.vm-travel-page #full.vm-rmt-left-panel .vm-rmt-tab-pane:not(.current){
+
+  display:none !important;
+
+  visibility:hidden !important;
+
+  pointer-events:none !important;
+
+}
+
+body.saas-admin-ui section.vm-travel-page #full.vm-rmt-left-panel .vm-rmt-tab-pane.current{
+
+  display:block !important;
+
+  visibility:visible !important;
+
+  pointer-events:auto !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page .travel-page-report{
+
+  background:transparent !important;
+
+  min-height:var(--vm-travel-report-table-h) !important;
+
+  height:100% !important;
+
+  flex:1 1 auto !important;
+
+  overflow:visible !important;
+
+  -webkit-overflow-scrolling:touch !important;
+
+  margin:0 !important;
+
+  padding:0 !important;
+
+  min-width:0 !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page .travel-page-report table,
+
+body.saas-admin-ui section.vm-travel-page #reportallinone table{
+
+  border-collapse:separate !important;
+
+  border-spacing:0 !important;
+
+  width:max(100%,720px) !important;
+
+  min-width:720px !important;
+
+  background:#fff !important;
+
+  border:1px solid #e2e8f0 !important;
+
+  border-radius:14px !important;
+
+  overflow:hidden !important;
+
+  font-size:12px !important;
+
+  margin:0 !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page #reportallinone thead th{
+
+  position:sticky !important;
+
+  top:0 !important;
+
+  z-index:2 !important;
+
+  background:linear-gradient(180deg,#f8fafc,#f1f5f9) !important;
+
+  color:#475569 !important;
+
+  font-size:10.5px !important;
+
+  font-weight:800 !important;
+
+  text-transform:uppercase !important;
+
+  letter-spacing:.05em !important;
+
+  border-color:#e2e8f0 !important;
+
+  padding:11px 10px !important;
+
+  white-space:nowrap !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page #reportallinone tbody td{
+
+  padding:10px 8px !important;
+
+  border-color:#eef2f7 !important;
+
+  color:#334155 !important;
+
+  vertical-align:middle !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page #reportallinone tbody tr:nth-child(even) td{
+
+  background:#fafbff !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page #reportallinone tbody td img{
+
+  float:none !important;
+
+  display:inline-block !important;
+
+  vertical-align:middle !important;
+
+  width:20px !important;
+
+  height:20px !important;
+
+  margin:0 6px 0 0 !important;
+
+  border-radius:6px !important;
+
+  padding:2px !important;
+
+  box-sizing:border-box !important;
+
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone .vm-travel-report-table-wrap{
+  flex:1 1 auto !important;
+  min-height:var(--vm-travel-report-table-h) !important;
+  max-height:var(--vm-travel-report-table-h) !important;
+  height:var(--vm-travel-report-table-h) !important;
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch !important;
+  border-radius:14px !important;
+  background:#f8fafc !important;
+  border:1px solid #eef2f7 !important;
+  padding:8px !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone table.vm-travel-report-table{
+  width:100% !important;
+  min-width:640px !important;
+  border:0 !important;
+  box-shadow:0 4px 14px -10px rgba(15,23,42,.18) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone .table-striped > tbody > tr:nth-of-type(odd){
+  background:transparent !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone tbody tr:not(.vm-travel-report-empty):hover td{
+  background:#eff6ff !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone tbody tr.vm-travel-report-empty td{
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone .vm-travel-report-empty__box{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  min-height:calc(var(--vm-travel-report-table-h) - 16px) !important;
+  padding:28px 20px !important;
+  text-align:center !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone .vm-travel-report-empty__icon{
+  width:52px !important;
+  height:52px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:14px !important;
+  background:linear-gradient(145deg,#dbeafe 0%,#eff6ff 100%) !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  font-size:22px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone .vm-travel-report-empty__title{
+  margin:0 !important;
+  font-size:15px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone .vm-travel-report-empty__hint{
+  font-size:12px !important;
+  font-weight:600 !important;
+  color:#64748b !important;
+  max-width:280px !important;
+  line-height:1.45 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone tbody td h2{
+  font-size:15px !important;
+  font-weight:700 !important;
+  margin:24px 0 !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone tbody td:first-child{
+  font-weight:700 !important;
+  white-space:nowrap !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone tbody td input[type="button"]{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  margin:6px 0 0 !important;
+  padding:6px 10px !important;
+  border:1px solid #cbd5e1 !important;
+  border-radius:8px !important;
+  background:#fff !important;
+  color:#334155 !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  text-transform:none !important;
+  cursor:pointer !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #reportallinone tbody td input[type="button"]:hover{
+  border-color:#93c5fd !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  background:#eff6ff !important;
+}
+
+
+
+/* Left form — tame legacy four-design chrome inside RMT shell */
+
+body.saas-admin-ui section.vm-travel-page .travel-customestart .tab-content center{
+
+  display:block !important;
+
+  text-align:left !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page .travel-customestart .only-back-transfer-four,
+
+body.saas-admin-ui section.vm-travel-page .changeback-four-design{
+
+  box-shadow:none !important;
+
+  background:transparent !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-tab-pane .chekboxaddclass{
+
+  display:flex !important;
+
+  flex-wrap:wrap !important;
+
+  gap:8px 14px !important;
+
+  list-style:none !important;
+
+  padding:0 0 8px !important;
+
+  margin:0 0 10px !important;
+
+  border-bottom:1px solid var(--vm-rmt-border,#e2e8f0) !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-tab-pane .form-control,
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-tab-pane input[type="text"],
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-tab-pane select{
+
+  border-radius:10px !important;
+
+  border:1px solid #e2e8f0 !important;
+
+  min-height:38px !important;
+
+}
+
+
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-tab-pane input[type="submit"],
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-tab-pane button.btn-primary,
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-tab-pane .search-btn-travel{
+
+  border-radius:10px !important;
+
+  font-weight:700 !important;
+
+}
+
+
+
+@media screen and (max-width:1199px){
+
+  body.saas-admin-ui section.vm-travel-page #full.vm-rmt-left-panel,
+  body.saas-admin-ui section.vm-travel-page .vm-rmt-left-panel,
+  body.saas-admin-ui section.vm-travel-page .vm-rmt-report-panel.loader-pagefull{
+    flex:1 1 100% !important;
+    max-width:100% !important;
+    width:100% !important;
+  }
+
+}
+
+@media screen and (max-width:991px){
+
+  body.saas-admin-ui section.vm-travel-page ul.vm-rmt-service-tabs#tabsmyss{
+
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+
+  }
+
+  body.saas-admin-ui section.vm-travel-page{
+    --vm-travel-report-h:661px;
+    --vm-travel-report-body-offset:60px;
+  }
+
+  body.saas-admin-ui section.vm-travel-page #reportallinone.vm-travel-report-all{
+    height:var(--vm-travel-report-h) !important;
+    min-height:var(--vm-travel-report-h) !important;
+    max-height:var(--vm-travel-report-h) !important;
+  }
+
+  body.saas-admin-ui section.vm-travel-page #reportallinone .vm-travel-report-table-wrap{
+    min-height:var(--vm-travel-report-table-h) !important;
+    max-height:var(--vm-travel-report-table-h) !important;
+    height:var(--vm-travel-report-table-h) !important;
+  }
+
+}
+
+
+
+@media screen and (max-width:767px){
+
+  body.saas-admin-ui section.vm-travel-page{
+
+    --vm-travel-left-h:min(650px, calc(100vh - var(--admin-header-height, 58px) - 48px));
+
+    --vm-travel-report-h:661px;
+
+    --vm-travel-report-body-offset:60px;
+
+  }
+
+  body.saas-admin-ui section.vm-travel-page .vm-rmt-report-panel.loader-pagefull,
+  body.saas-admin-ui section.vm-travel-page .vm-rmt-report-panel .vm-rmt-report-shell,
+  body.saas-admin-ui section.vm-travel-page #reportallinone.vm-travel-report-all{
+    width:100% !important;
+    max-width:100% !important;
+    min-height:var(--vm-travel-report-h) !important;
+    height:var(--vm-travel-report-h) !important;
+    max-height:var(--vm-travel-report-h) !important;
+    box-sizing:border-box !important;
+  }
+
+  body.saas-admin-ui section.vm-travel-page #reportallinone .vm-travel-report-table-wrap{
+    min-height:var(--vm-travel-report-table-h) !important;
+    max-height:var(--vm-travel-report-table-h) !important;
+    height:var(--vm-travel-report-table-h) !important;
+  }
+
+}
+
+
+
+@media screen and (max-width:479px){
+
+  body.saas-admin-ui section.vm-travel-page ul.vm-rmt-service-tabs#tabsmyss{
+
+    grid-template-columns:1fr 1fr !important;
+
+  }
+
+}
+
+/* —— Flight / Hotel / Bus booking forms (fix legacy float + giant icons) —— */
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form{
+  width:100% !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form,
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form{
+  width:100% !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice.vm-travel-hotel-form{
+  overflow:visible !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .row,
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form .row,
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form .row{
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form [class*="col-md-"],
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form [class*="col-md-"],
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form [class*="col-md-"]{
+  width:100% !important;
+  max-width:100% !important;
+  float:none !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
+  margin-bottom:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form.colmdformsert > .row[style*="margin-bottom"]{
+  margin-bottom:8px !important;
+  position:relative !important;
+  padding-right:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form.colmdformsert{
+  width:100% !important;
+  float:none !important;
+  position:relative !important;
+  padding-bottom:4px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .form-start,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .goto{
+  width:100% !important;
+  float:none !important;
+  margin-bottom:10px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .input-group,
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form .input-group,
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form .input-group{
+  display:flex !important;
+  align-items:stretch !important;
+  width:100% !important;
+  float:none !important;
+  margin:0 !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  overflow:hidden !important;
+  background:#fff !important;
+  min-height:42px !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .input-group-addon.group-addonmy,
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form .input-group-addon,
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form .input-group-addon{
+  float:none !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 44px !important;
+  width:44px !important;
+  min-width:44px !important;
+  max-width:44px !important;
+  padding:0 !important;
+  border:0 !important;
+  border-right:1px solid #e2e8f0 !important;
+  background:#f8fafc !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .input-group-addon.group-addonmy::after,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form #addonmy-img::after{
+  display:none !important;
+  content:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .group-addonmy img,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form #addonmy-img img{
+  width:22px !important;
+  height:22px !important;
+  max-width:22px !important;
+  max-height:22px !important;
+  object-fit:contain !important;
+  transform:none !important;
+  float:none !important;
+  display:block !important;
+  margin:0 auto !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .addonmy-input,
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form .addonmy-input{
+  float:none !important;
+  flex:1 1 auto !important;
+  width:auto !important;
+  min-width:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .addonmy-input input,
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form .input-group input.form-control,
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form .input-group input.form-control{
+  width:100% !important;
+  float:none !important;
+  border:0 !important;
+  box-shadow:none !important;
+  min-height:42px !important;
+  height:42px !important;
+  font-size:14px !important;
+  padding:8px 12px !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .col-md-12.button-rotate{
+  position:absolute !important;
+  right:8px !important;
+  top:auto !important;
+  bottom:-20px !important;
+  transform:none !important;
+  width:auto !important;
+  padding:0 !important;
+  margin:0 !important;
+  z-index:5 !important;
+  pointer-events:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .button-rotate a#buttonmy{
+  pointer-events:auto !important;
+  width:34px !important;
+  height:34px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:50% !important;
+  background:#fff !important;
+  box-shadow:0 2px 8px rgba(15,23,42,.08) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .button-rotate a#buttonmy img{
+  width:16px !important;
+  height:16px !important;
+  margin:0 !important;
+  transform:rotate(-90deg) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .button-rotate a#buttonmy.rotate-180 img{
+  transform:rotate(90deg) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form ul.chekboxaddclass{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:6px !important;
+  padding:0 0 12px !important;
+  margin:0 0 12px !important;
+  border-bottom:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form ul.chekboxaddclass li{
+  float:none !important;
+  width:auto !important;
+  flex:1 1 auto !important;
+  min-width:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form label{
+  width:auto !important;
+  height:auto !important;
+  min-height:36px !important;
+  padding:6px 10px 6px 28px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  background:#f8fafc !important;
+  margin:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form input[type="radio"]:checked + label,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form input[type="radio"].with-gap:checked + label{
+  border-color:var(--vm-rmt-accent,#2563eb) !important;
+  background:rgba(37,99,235,.08) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form input[type="radio"]:checked + label p,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form label p{
+  color:var(--vm-rmt-text,#0f172a) !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  text-transform:none !important;
+  margin:0 !important;
+  padding-left:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparmentdatedate{
+  width:100% !important;
+  margin-top:4px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparmentdatedate > .row{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:10px 12px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparmentdatedate > .row > .col-md-12:first-child{
+  grid-column:1 / -1 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .groupdeparments .input-daterange.input-group{
+  display:block !important;
+  border:0 !important;
+  background:transparent !important;
+  min-height:0 !important;
+  overflow:visible !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .groupdeparments .input-daterange::before,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .groupdeparments .input-daterange::after{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparmentdatedate .spanfontsatecolmd,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparmentdatedate .spanfontsatecolmdtwo{
+  width:100% !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .spanfontsate{
+  display:block !important;
+  float:none !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  color:#64748b !important;
+  text-transform:uppercase !important;
+  letter-spacing:.04em !important;
+  margin:0 0 4px 2px !important;
+}
+
+/* —— Flight date row (Departure / Return) —— */
+body.saas-admin-ui section.vm-travel-page .vm-travel-date-block{
+  margin:10px 0 14px !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-date-grid.input-daterange{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:12px !important;
+  width:100% !important;
+  border:0 !important;
+  background:transparent !important;
+  min-height:0 !important;
+  overflow:visible !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-date-field{
+  min-width:0 !important;
+  width:auto !important;
+  float:none !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-date-field__label{
+  display:block !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  letter-spacing:.04em !important;
+  color:#64748b !important;
+  margin:0 0 6px 2px !important;
+  line-height:1.2 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-dp-field.saas-acc-dp-field{
+  position:relative !important;
+  display:block !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-dp-field .saas-acc-dp-icon,
+body.saas-admin-ui section.vm-travel-page .vm-travel-dp-field .form-iconmy{
+  position:absolute !important;
+  left:11px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  margin:0 !important;
+  z-index:3 !important;
+  width:18px !important;
+  height:18px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  pointer-events:none !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  background:transparent !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-dp-field .saas-acc-dp-icon i,
+body.saas-admin-ui section.vm-travel-page .vm-travel-dp-field .form-iconmy i{
+  font-size:14px !important;
+  line-height:1 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-dp-input.saas-acc-dp-input,
+body.saas-admin-ui section.vm-travel-page .vm-travel-date-field input.vm-travel-dp-input{
+  width:100% !important;
+  height:44px !important;
+  min-height:44px !important;
+  max-height:44px !important;
+  margin:0 !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff !important;
+  box-shadow:none !important;
+  text-align:left !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  color:var(--vm-rmt-text,#0f172a) !important;
+  padding:8px 12px 8px 38px !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-dp-input:focus{
+  border-color:var(--vm-rmt-accent,#2563eb) !important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.12) !important;
+  outline:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-return-slot{
+  position:relative !important;
+  min-height:44px !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-dp-field--return{
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-return-hint.returndate-up{
+  width:100% !important;
+  float:none !important;
+  margin:0 !important;
+  min-height:44px !important;
+  height:44px !important;
+  border:1px dashed #cbd5e1 !important;
+  border-radius:12px !important;
+  background:linear-gradient(180deg,#f8fafc,#f1f5f9) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:8px !important;
+  padding:0 12px !important;
+  box-sizing:border-box !important;
+  cursor:pointer !important;
+  transition:border-color .15s ease,background .15s ease !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-return-hint.returndate-up:hover,
+body.saas-admin-ui section.vm-travel-page .vm-travel-return-hint.returndate-up:focus{
+  border-color:var(--vm-rmt-accent,#2563eb) !important;
+  background:rgba(37,99,235,.06) !important;
+  outline:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-return-hint__icon{
+  font-size:12px !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  flex:0 0 auto !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-return-hint.returndate-up span{
+  font-size:11px !important;
+  font-weight:600 !important;
+  color:#64748b !important;
+  line-height:1.25 !important;
+}
+
+/* One-way vs round-trip — class toggled by vmTravelApplyDateMode() */
+body.saas-admin-ui section.vm-travel-page .vm-travel-date-grid.vm-travel-date-card{
+  padding:12px !important;
+  border-radius:14px !important;
+  border:1px solid #e2e8f0 !important;
+  background:linear-gradient(180deg,#f8fafc 0%,#fff 100%) !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-date-field--ret{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:0 !important;
+  min-width:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-date-field--ret .vm-travel-return-hint{
+  display:none !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-height:44px !important;
+  height:44px !important;
+  margin:0 !important;
+  padding:0 12px !important;
+  border:1px dashed #cbd5e1 !important;
+  border-radius:12px !important;
+  background:linear-gradient(180deg,#f8fafc,#f1f5f9) !important;
+  cursor:pointer !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-date-field--ret .vm-travel-dp-field--return{
+  display:none !important;
+  margin:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-date-block.is-oneway .vm-travel-date-field--ret .vm-travel-return-hint{
+  display:flex !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-date-block.is-oneway .vm-travel-date-field--ret .vm-travel-dp-field--return{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-date-block.is-roundtrip .vm-travel-date-field--ret .vm-travel-return-hint{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-date-block.is-roundtrip .vm-travel-date-field--ret .vm-travel-dp-field--return{
+  display:block !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-date-block.is-roundtrip .vm-travel-dp-input--return{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .travelFirstclass .form-group,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .spanfontsatecolmd .form-group{
+  margin-bottom:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .travelFirstclass .input-group,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .spanfontsatecolmd .input-group{
+  min-height:42px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .bootstrap-select > .dropdown-toggle,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form select.form-control{
+  min-height:42px !important;
+  border-radius:12px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .header-dropdown{
+  position:absolute !important;
+  top:50% !important;
+  right:6px !important;
+  transform:translateY(-50%) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .spanfontsatecolmd .input-group{
+  position:relative !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .spanfontsatecolmd .header{
+  width:100% !important;
+  padding:8px 36px 8px 12px !important;
+  min-height:42px !important;
+  display:flex !important;
+  align-items:center !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form button.cssbuttonww{
+  width:100% !important;
+  max-width:100% !important;
+  float:none !important;
+  margin:14px 0 0 !important;
+  height:44px !important;
+  border:0 !important;
+  border-radius:12px !important;
+  background:linear-gradient(135deg,var(--vm-rmt-accent,#2563eb),var(--vm-rmt-accent-dark,#1d4ed8)) !important;
+  color:#fff !important;
+  font-weight:800 !important;
+  letter-spacing:.02em !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  overflow:hidden !important;
+  box-shadow:0 8px 20px -8px rgba(37,99,235,.55) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form button.cssbuttonww .button_imgcustome{
+  width:18px !important;
+  height:18px !important;
+  left:0 !important;
+  position:static !important;
+  filter:brightness(0) invert(1) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-tab-pane .waves-effect{
+  overflow:hidden !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-tab-pane .waves-ripple{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #firstpur2,
+body.saas-admin-ui section.vm-travel-page #ALLpur2,
+body.saas-admin-ui section.vm-travel-page #BOTHpur2,
+body.saas-admin-ui section.vm-travel-page #firstpur3,
+body.saas-admin-ui section.vm-travel-page #firstpur4{
+  width:100% !important;
+  float:none !important;
+  padding:12px 8px !important;
+}
+
+@media screen and (max-width:520px){
+  body.saas-admin-ui section.vm-travel-page .vm-travel-date-grid.input-daterange{
+    grid-template-columns:1fr !important;
+  }
+  body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparmentdatedate > .row{
+    grid-template-columns:1fr !important;
+  }
+  body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form ul.chekboxaddclass li{
+    flex:1 1 100% !important;
+  }
+}
+
+/* —— Flight / Hotel / Bus booking forms (fix legacy float + huge icons) —— */
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form{
+  width:100% !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form,
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form{
+  width:100% !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .row,
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form .row,
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form .row{
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form [class*="col-md-"],
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form [class*="col-md-"],
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form [class*="col-md-"]{
+  width:100% !important;
+  max-width:100% !important;
+  float:none !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
+  position:relative !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form.colmdformsert > .row[style*="margin-bottom"]{
+  margin-bottom:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form.colmdformsert{
+  position:relative !important;
+  padding-right:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .form-start,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .goto{
+  margin-bottom:10px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .input-group,
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form .input-group,
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form .input-group{
+  display:flex !important;
+  align-items:stretch !important;
+  width:100% !important;
+  float:none !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  overflow:hidden !important;
+  background:#fff !important;
+  margin:0 !important;
+  height:auto !important;
+  min-height:42px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .input-group-addon.group-addonmy,
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form .input-group-addon,
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form .input-group-addon{
+  float:none !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 44px !important;
+  width:44px !important;
+  min-width:44px !important;
+  max-width:44px !important;
+  padding:0 !important;
+  border:0 !important;
+  border-right:1px solid #e2e8f0 !important;
+  background:#f8fafc !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .input-group-addon.group-addonmy::after{
+  display:none !important;
+  content:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .group-addonmy img,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form #addonmy-img img{
+  width:22px !important;
+  height:22px !important;
+  max-width:22px !important;
+  max-height:22px !important;
+  object-fit:contain !important;
+  transform:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .addonmy-input{
+  float:none !important;
+  flex:1 1 auto !important;
+  width:auto !important;
+  min-width:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .addonmy-input .form-control,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .input-group .form-control{
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  height:42px !important;
+  min-height:42px !important;
+  font-size:14px !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .col-md-12.button-rotate{
+  position:absolute !important;
+  top:50% !important;
+  right:6px !important;
+  transform:translateY(calc(-50% + 4px)) !important;
+  width:auto !important;
+  margin:0 !important;
+  padding:0 !important;
+  z-index:3 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .button-rotate a#buttonmy{
+  width:34px !important;
+  height:34px !important;
+  border:1px solid #e2e8f0 !important;
+  background:#fff !important;
+  box-shadow:0 2px 8px rgba(15,23,42,.08) !important;
+  padding-top:5px !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .button-rotate a#buttonmy img{
+  width:16px !important;
+  margin-top:2px !important;
+  transform:rotate(-90deg) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form .chekboxaddclass li{
+  float:none !important;
+  width:auto !important;
+  flex:1 1 auto !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form label p{
+  font-size:12px !important;
+  font-weight:700 !important;
+  text-transform:none !important;
+  color:#334155 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form input[type="radio"]:checked + label p,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form [type="radio"].with-gap:checked + label p{
+  color:var(--vm-rmt-accent,#2563eb) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .return-form [type="radio"].with-gap:checked + label::before{
+  background:var(--vm-rmt-accent,#2563eb) !important;
+  border-color:var(--vm-rmt-accent,#2563eb) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparmentdatedate .row{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:10px 12px !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparmentdatedate .row > .col-md-12:first-child{
+  grid-column:1 / -1 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparmentdatedate .input-daterange.input-group.pp{
+  display:contents !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparcherdatetr,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparcherdatetrqwe,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .spanfontsatecolmd,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .spanfontsatecolmdtwo{
+  width:100% !important;
+  padding:0 !important;
+  margin:0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .spanfontsate{
+  display:block !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  color:#64748b !important;
+  margin:0 0 4px 2px !important;
+  float:none !important;
+  text-transform:uppercase !important;
+  letter-spacing:.04em !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparcherdatetr .form-control,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparcherdatetrqwe .form-control{
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  height:42px !important;
+  text-align:left !important;
+  padding-left:36px !important;
+  margin-top:0 !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .form-iconmy:not(.saas-acc-dp-icon){
+  top:28px !important;
+  left:12px !important;
+  z-index:2 !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .travelFirstclass .form-group,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .spanfontsatecolmd .form-group{
+  width:100% !important;
+  border:0 !important;
+  height:auto !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .travelFirstclass .input-group,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .spanfontsatecolmd .input-group{
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  height:42px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .bootstrap-select .dropdown-toggle,
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form select.form-control{
+  height:42px !important;
+  border-radius:12px !important;
+  border:1px solid #e2e8f0 !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .header-dropdown{
+  position:absolute !important;
+  top:50% !important;
+  right:4px !important;
+  transform:translateY(-50%) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form button.cssbuttonww{
+  width:100% !important;
+  float:none !important;
+  margin:14px 0 0 !important;
+  height:44px !important;
+  border:0 !important;
+  border-radius:12px !important;
+  background:linear-gradient(135deg,var(--vm-rmt-accent,#2563eb),var(--vm-rmt-accent-dark,#1d4ed8)) !important;
+  color:#fff !important;
+  font-weight:800 !important;
+  letter-spacing:.02em !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  overflow:hidden !important;
+  box-shadow:0 8px 22px -8px rgba(37,99,235,.55) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form button.cssbuttonww .button_imgcustome{
+  width:18px !important;
+  left:0 !important;
+  position:static !important;
+  filter:brightness(0) invert(1);
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .waves-effect,
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form .waves-effect,
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form .waves-effect{
+  overflow:hidden !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-rmt-tab-pane .remitter_button{
+  padding:12px 8px !important;
+  text-align:center !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-hotel-form .hotel-htmlfirst,
+body.saas-admin-ui section.vm-travel-page .vm-travel-bus-form .input-group .form-control{
+  border-radius:12px !important;
+}
+
+@media screen and (max-width:479px){
+  body.saas-admin-ui section.vm-travel-page .vm-travel-flight-form .deparmentdatedate .row{
+    grid-template-columns:1fr !important;
+  }
+}
+
+/* —— Flight shell (latest unified layout) —— */
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-shell{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:14px !important;
+  width:100% !important;
+  padding:2px 0 4px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-field-label,
+body.saas-admin-ui section.vm-travel-page .vm-travel-date-field__label{
+  display:block !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  letter-spacing:.04em !important;
+  color:#64748b !important;
+  margin:0 0 6px 2px !important;
+  line-height:1.2 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-journey-bar{
+  margin:0 !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-journey-tabs.chekboxaddclass{
+  display:flex !important;
+  gap:8px !important;
+  margin:0 !important;
+  padding:0 0 12px !important;
+  border-bottom:1px solid #e2e8f0 !important;
+  list-style:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-journey-tabs > li{
+  flex:1 1 0 !important;
+  width:auto !important;
+  float:none !important;
+  margin:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-route-card{
+  position:relative !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+  padding:12px !important;
+  border-radius:14px !important;
+  border:1px solid #e2e8f0 !important;
+  background:linear-gradient(180deg,#f8fafc 0%,#fff 100%) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-route-field{
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-route-card .vm-travel-route-swap.button-rotate{
+  position:absolute !important;
+  right:10px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  width:auto !important;
+  padding:0 !important;
+  margin:0 !important;
+  z-index:4 !important;
+  pointer-events:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-input-shell.input-group{
+  min-height:44px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-text-input.form-control{
+  font-size:14px !important;
+  font-weight:600 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-section{
+  margin:0 !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-meta-grid{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:12px !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-meta-grid.vm-travel-meta-card{
+  padding:12px !important;
+  border-radius:14px !important;
+  border:1px solid #e2e8f0 !important;
+  background:linear-gradient(180deg,#f8fafc 0%,#fff 100%) !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-meta-field{
+  min-width:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  float:none !important;
+  width:auto !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-picker-control,
+body.saas-admin-ui section.vm-travel-page .vm-travel-class-control{
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-picker-shell{
+  display:block !important;
+  width:100% !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff !important;
+  min-height:44px !important;
+  position:relative !important;
+  overflow:visible !important;
+  margin:0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-picker-value{
+  display:flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  width:100% !important;
+  min-height:44px !important;
+  padding:0 40px 0 12px !important;
+  margin:0 !important;
+  border:0 !important;
+  box-sizing:border-box !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  color:var(--vm-rmt-text,#0f172a) !important;
+  background:transparent !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-picker-count{
+  font-size:16px !important;
+  font-weight:800 !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  line-height:1 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-picker-suffix{
+  font-size:11px !important;
+  font-weight:600 !important;
+  color:#64748b !important;
+  text-transform:lowercase !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-picker-menu,
+body.saas-admin-ui section.vm-travel-page .vm-travel-picker-shell .header-dropdown{
+  position:absolute !important;
+  top:50% !important;
+  right:2px !important;
+  transform:translateY(-50%) !important;
+  margin:0 !important;
+  padding:0 !important;
+  list-style:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-picker-toggle{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:32px !important;
+  height:32px !important;
+  border-radius:8px !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-picker-toggle:hover{
+  background:#f1f5f9 !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-picker-shell .dropdown-menu{
+  margin-top:6px !important;
+  border-radius:12px !important;
+  border:1px solid #e2e8f0 !important;
+  box-shadow:0 12px 28px -12px rgba(15,23,42,.25) !important;
+  padding:8px !important;
+  min-width:240px !important;
+  left:auto !important;
+  right:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-class-select{
+  display:block !important;
+  width:100% !important;
+  min-height:44px !important;
+  height:44px !important;
+  margin:0 !important;
+  padding:0 36px 0 12px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748b' d='M1.4.6 6 5.2 10.6.6 12 2l-6 6-6-6z'/%3E%3C/svg%3E") no-repeat right 12px center !important;
+  background-size:12px 8px !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  color:var(--vm-rmt-text,#0f172a) !important;
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  -moz-appearance:none !important;
+  cursor:pointer !important;
+  box-shadow:none !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-class-select:focus{
+  border-color:var(--vm-rmt-accent,#2563eb) !important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.12) !important;
+  outline:0 !important;
+}
+
+/* Kill legacy bootstrap-select chrome inside flight meta row */
+body.saas-admin-ui section.vm-travel-page .vm-travel-meta-field--class .bootstrap-select,
+body.saas-admin-ui section.vm-travel-page .vm-travel-meta-field--class .btn-group{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-special-panel{
+  width:100% !important;
+  margin:8px 0 0 !important;
+  padding:0 !important;
+  float:none !important;
+  overflow:visible !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice #divForSpacialReturn .vm-travel-meta-field--special{
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-dropdown{
+  position:relative !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-dropdown.open{
+  z-index:25 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice #ddlSpecialReturn.vm-travel-picker-trigger{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+  width:100% !important;
+  min-height:44px !important;
+  margin:0 !important;
+  padding:8px 12px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff !important;
+  box-shadow:none !important;
+  text-align:left !important;
+  cursor:pointer !important;
+  box-sizing:border-box !important;
+  position:static !important;
+  top:auto !important;
+  right:auto !important;
+  height:auto !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice #ddlSpecialReturn.vm-travel-picker-trigger::after{
+  display:none !important;
+  content:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-menu.dropdown-menu{
+  display:none !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  margin:0 !important;
+  padding:12px 14px !important;
+  min-width:0 !important;
+  width:100% !important;
+  max-width:100% !important;
+  left:0 !important;
+  right:0 !important;
+  top:auto !important;
+  bottom:auto !important;
+  float:none !important;
+  position:absolute !important;
+  border-radius:12px !important;
+  border:1px solid #e2e8f0 !important;
+  box-shadow:0 16px 40px -12px rgba(15,23,42,.35) !important;
+  box-sizing:border-box !important;
+  background:#fff !important;
+  background-color:#fff !important;
+  background-image:none !important;
+  z-index:10050 !important;
+  max-height:360px !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior:contain !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-dropdown.open .vm-travel-special-menu.dropdown-menu{
+  display:block !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+  top:auto !important;
+  bottom:calc(100% + 6px) !important;
+  transform:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-dropdown.open .vm-travel-picker-chevron i{
+  transform:rotate(180deg);
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-menu > li.vm-travel-special-menu__section{
+  display:block !important;
+  width:100% !important;
+  margin:0 0 10px !important;
+  padding:0 !important;
+  list-style:none !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-menu > li.vm-travel-special-menu__section:last-child{
+  margin-bottom:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice #divForSpacialReturn{
+  padding:0 !important;
+  margin:8px 0 0 !important;
+  float:none !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice #divForSpacialReturn .vm-travel-special-menu.dropdown-menu{
+  left:0 !important;
+  right:0 !important;
+  width:100% !important;
+  float:none !important;
+  border-top:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice #divForSpacialReturn .vm-travel-special-menu__section{
+  width:100% !important;
+  float:none !important;
+  border-top:0 !important;
+  padding-top:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-type{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  gap:8px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-radio-row{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  margin:0 !important;
+  padding:8px 10px !important;
+  float:none !important;
+  width:100% !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-radio-row input{
+  margin:0 !important;
+  flex-shrink:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-radio-row label{
+  flex:1 1 auto !important;
+  float:none !important;
+  margin:0 !important;
+  padding-left:28px !important;
+  font-size:13px !important;
+  font-weight:600 !important;
+  color:var(--vm-rmt-text,#0f172a) !important;
+  cursor:pointer !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice #divForSpacialReturn #LCCcheckBoxes,
+body.saas-admin-ui section.vm-travel-page #flightservice #divForSpacialReturn #GDScheckBoxes,
+body.saas-admin-ui section.vm-travel-page #flightservice #divForSpacialReturn #LCCcheckBoxesee{
+  float:none !important;
+  width:100% !important;
+  text-align:left !important;
+  padding:8px 0 0 !important;
+  margin:0 !important;
+  border-top:1px solid #eef2f7 !important;
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:8px 14px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-airlines label{
+  float:none !important;
+  margin:0 12px 0 0 !important;
+  min-width:0 !important;
+  width:auto !important;
+  font-size:13px !important;
+  font-weight:600 !important;
+  color:var(--vm-rmt-text,#0f172a) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-airlines .demo-checkbox{
+  display:block !important;
+  width:100% !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-flight-actions{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:8px !important;
+  margin-top:4px !important;
+  padding-top:4px !important;
+  border-top:1px solid #eef2f7 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-search-btn.cssbuttonww{
+  width:100% !important;
+  margin:0 !important;
+  float:none !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:10px !important;
+  min-height:46px !important;
+  padding:10px 16px !important;
+  border:0 !important;
+  border-radius:12px !important;
+  line-height:1.2 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-search-btn.cssbuttonww > i.fa,
+body.saas-admin-ui section.vm-travel-page .vm-travel-search-btn.cssbuttonww > .fa{
+  margin:0 !important;
+  padding:0 !important;
+  font-size:15px !important;
+  flex:0 0 auto !important;
+  position:static !important;
+  top:auto !important;
+  left:auto !important;
+  transform:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-search-btn.cssbuttonww > span,
+body.saas-admin-ui section.vm-travel-page .vm-travel-search-btn.cssbuttonww > .serarchmyy{
+  margin:0 !important;
+  padding:0 !important;
+  flex:0 0 auto !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-search-btn.cssbuttonww > .button_imgcustome{
+  margin:0 !important;
+  flex:0 0 auto !important;
+  position:static !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-form-error{
+  display:block !important;
+  font-size:12px !important;
+  font-weight:600 !important;
+  color:#dc2626 !important;
+  min-height:18px !important;
+  text-align:center !important;
+}
+
+@media screen and (max-width:520px){
+  body.saas-admin-ui section.vm-travel-page .vm-travel-meta-grid{
+    grid-template-columns:1fr !important;
+  }
+  body.saas-admin-ui section.vm-travel-page .vm-travel-journey-tabs > li,
+  body.saas-admin-ui section.vm-travel-page .vm-travel-journey-tabs .vm-travel-journey-option{
+    flex:1 1 100% !important;
+  }
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-journey-tabs{
+  display:flex !important;
+  gap:8px !important;
+  margin:0 !important;
+  padding:0 0 12px !important;
+  list-style:none !important;
+  border-bottom:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-journey-option{
+  flex:1 1 0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  float:none !important;
+  width:auto !important;
+  position:relative !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-journey-radio{
+  position:absolute !important;
+  opacity:0 !important;
+  width:1px !important;
+  height:1px !important;
+  pointer-events:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-journey-label{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:38px !important;
+  padding:8px 10px !important;
+  margin:0 !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  background:#f8fafc !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  color:#334155 !important;
+  cursor:pointer !important;
+  text-transform:none !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-journey-label p{
+  margin:0 !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-journey-radio:checked + .vm-travel-journey-label{
+  border-color:var(--vm-rmt-accent,#2563eb) !important;
+  background:rgba(37,99,235,.08) !important;
+  color:var(--vm-rmt-accent-dark,#1d4ed8) !important;
+  box-shadow:0 0 0 1px rgba(37,99,235,.15) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-field-control{
+  display:flex !important;
+  align-items:center !important;
+  width:100% !important;
+  min-height:44px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-field-icon{
+  flex:0 0 44px !important;
+  width:44px !important;
+  height:44px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-right:1px solid #e2e8f0 !important;
+  background:#f8fafc !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-field-icon img{
+  width:22px !important;
+  height:22px !important;
+  max-width:22px !important;
+  object-fit:contain !important;
+  display:block !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-text-input{
+  flex:1 1 auto !important;
+  width:100% !important;
+  min-width:0 !important;
+  min-height:44px !important;
+  border:0 !important;
+  margin:0 !important;
+  padding:8px 12px !important;
+  background:#fff !important;
+  box-shadow:none !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  color:var(--vm-rmt-text,#0f172a) !important;
+  border-radius:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-text-input:focus{
+  outline:0 !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-field-control:focus-within{
+  border-color:var(--vm-rmt-accent,#2563eb) !important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.12) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-swap-btn{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:36px !important;
+  height:36px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:50% !important;
+  background:#fff !important;
+  box-shadow:0 2px 8px rgba(15,23,42,.08) !important;
+  cursor:pointer !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-swap-btn img{
+  width:16px !important;
+  height:16px !important;
+  transition:transform .25s ease !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-card .vm-travel-route-swap{
+  position:absolute !important;
+  right:10px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  z-index:3 !important;
+  width:auto !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-swap-btn.rotate-180 img,
+body.saas-admin-ui section.vm-travel-page #flightservice #buttonmy.rotate-180 img,
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-swap-btn.rotate-180 i,
+body.saas-admin-ui section.vm-travel-page #flightservice #buttonmy.rotate-180 i{
+  transform:rotate(180deg) !important;
+}
+
+/* —— Route card v2 (unified From / To + center swap) —— */
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-card--v2{
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  gap:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-unified{
+  position:relative !important;
+  display:block !important;
+  width:100% !important;
+  border:1px solid #dbeafe !important;
+  border-radius:18px !important;
+  background:linear-gradient(165deg,#ffffff 0%,#f8fafc 48%,#ffffff 100%) !important;
+  overflow:hidden !important;
+  box-shadow:0 10px 28px -16px rgba(37,99,235,.35),inset 0 1px 0 rgba(255,255,255,.9) !important;
+  padding:6px 56px 6px 6px !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-unified::before{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  top:12px !important;
+  bottom:12px !important;
+  width:3px !important;
+  border-radius:0 4px 4px 0 !important;
+  background:linear-gradient(180deg,#2563eb 0%,#7c3aed 100%) !important;
+  z-index:1 !important;
+  pointer-events:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg{
+  display:block !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:8px 10px 8px 12px !important;
+  box-sizing:border-box !important;
+  position:relative !important;
+  z-index:2 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg--from{
+  border-bottom:1px dashed #e2e8f0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg__label{
+  display:block !important;
+  margin:0 0 6px 4px !important;
+  padding:0 !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  color:#64748b !important;
+  line-height:1.2 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg--from .vm-travel-route-leg__label{
+  color:#2563eb !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg--to .vm-travel-route-leg__label{
+  color:#7c3aed !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg__control{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  width:100% !important;
+  min-height:52px !important;
+  margin:0 !important;
+  padding:6px 10px 6px 8px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg__control:focus-within{
+  border-color:var(--vm-rmt-accent,#2563eb) !important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.14) !important;
+  transform:translateY(-1px) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg__icon{
+  flex:0 0 42px !important;
+  width:42px !important;
+  height:42px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:12px !important;
+  border:0 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg__icon--from{
+  background:linear-gradient(145deg,#dbeafe 0%,#eff6ff 100%) !important;
+  color:#1d4ed8 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg__icon--to{
+  background:linear-gradient(145deg,#ede9fe 0%,#f5f3ff 100%) !important;
+  color:#6d28d9 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg__icon i{
+  font-size:18px !important;
+  line-height:1 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg__icon img{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg__input,
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg .vm-travel-text-input{
+  flex:1 1 auto !important;
+  width:100% !important;
+  min-width:0 !important;
+  min-height:40px !important;
+  height:40px !important;
+  margin:0 !important;
+  padding:0 4px 0 0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  font-size:15px !important;
+  font-weight:600 !important;
+  color:var(--vm-rmt-text,#0f172a) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-leg__input::placeholder{
+  color:#94a3b8 !important;
+  font-weight:500 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-unified .vm-travel-route-swap.vm-travel-swap-btn{
+  position:absolute !important;
+  right:12px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  z-index:6 !important;
+  width:42px !important;
+  height:42px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:1px solid #bfdbfe !important;
+  border-radius:14px !important;
+  background:linear-gradient(145deg,#2563eb 0%,#1d4ed8 100%) !important;
+  color:#fff !important;
+  box-shadow:0 8px 20px -8px rgba(37,99,235,.65) !important;
+  cursor:pointer !important;
+  pointer-events:auto !important;
+  transition:transform .2s ease,box-shadow .2s ease !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-unified .vm-travel-route-swap.vm-travel-swap-btn:hover{
+  transform:translateY(-50%) scale(1.04) !important;
+  box-shadow:0 10px 24px -8px rgba(37,99,235,.75) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-unified .vm-travel-route-swap.vm-travel-swap-btn i{
+  font-size:15px !important;
+  line-height:1 !important;
+  transition:transform .25s ease !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-route-unified .vm-travel-route-swap.vm-travel-swap-btn img{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-dp-field{
+  position:relative !important;
+  display:block !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-dp-icon{
+  position:absolute !important;
+  left:11px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  z-index:2 !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  pointer-events:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-dp-input{
+  width:100% !important;
+  min-height:44px !important;
+  height:44px !important;
+  padding:8px 12px 8px 38px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-date-section{
+  margin:0 !important;
+  padding:0 !important;
+}
+
+/* Flight travellers picker (single chevron, full-width trigger) */
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-dropdown{
+  position:relative !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-dropdown.open{
+  z-index:20 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice #ddlTravellers.vm-travel-picker-trigger{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+  width:100% !important;
+  min-height:44px !important;
+  height:auto !important;
+  margin:0 !important;
+  padding:8px 12px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff !important;
+  box-shadow:none !important;
+  text-align:left !important;
+  cursor:pointer !important;
+  box-sizing:border-box !important;
+  position:static !important;
+  top:auto !important;
+  right:auto !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice #ddlTravellers.vm-travel-picker-trigger:hover,
+body.saas-admin-ui section.vm-travel-page #flightservice #ddlTravellers.vm-travel-picker-trigger:focus{
+  border-color:#cbd5e1 !important;
+  outline:none !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice #ddlTravellers.vm-travel-picker-trigger::after{
+  display:none !important;
+  content:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-picker-text{
+  display:flex !important;
+  align-items:baseline !important;
+  flex-wrap:wrap !important;
+  gap:4px 6px !important;
+  min-width:0 !important;
+  flex:1 1 auto !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-picker-chevron{
+  flex:0 0 auto !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:24px !important;
+  height:24px !important;
+  color:#64748b !important;
+  font-size:11px !important;
+  pointer-events:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-menu.dropdown-menu{
+  display:none !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  margin:0 !important;
+  padding:8px 10px !important;
+  min-width:0 !important;
+  width:100% !important;
+  max-width:100% !important;
+  left:0 !important;
+  right:0 !important;
+  top:auto !important;
+  position:absolute !important;
+  float:none !important;
+  border-radius:12px !important;
+  border:1px solid #e2e8f0 !important;
+  box-shadow:0 16px 40px -12px rgba(15,23,42,.35) !important;
+  box-sizing:border-box !important;
+  background:#fff !important;
+  background-color:#fff !important;
+  background-image:none !important;
+  z-index:10050 !important;
+  max-height:240px !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior:contain !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-dropdown.open .vm-travel-travellers-menu.dropdown-menu{
+  display:block !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+  top:calc(100% + 6px) !important;
+  bottom:auto !important;
+  transform:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-dropdown.open .vm-travel-picker-chevron i{
+  transform:rotate(180deg);
+}
+
+/* Kill legacy .change-css on flight travellers menu if still present */
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-menu.change-css,
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-menu{
+  position:absolute !important;
+  background:#fff !important;
+  box-shadow:0 12px 28px -12px rgba(15,23,42,.25) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-menu > li.vm-travel-travellers-row{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  padding:10px 4px !important;
+  margin:0 !important;
+  list-style:none !important;
+  border-bottom:1px solid #f1f5f9 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-menu > li.vm-travel-travellers-row:last-child{
+  border-bottom:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-row__label{
+  font-size:13px !important;
+  font-weight:600 !important;
+  color:var(--vm-rmt-text,#0f172a) !important;
+  text-align:left !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-row__label small{
+  font-size:10px !important;
+  font-weight:500 !important;
+  color:#94a3b8 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-row__actions{
+  display:inline-flex !important;
+  align-items:center !important;
+  flex-shrink:0 !important;
+  gap:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-step-btn{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:32px !important;
+  height:32px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:1px solid #e2e8f0 !important;
+  background:#fff !important;
+  box-shadow:none !important;
+  color:#64748b !important;
+  cursor:pointer !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-step-btn + .vm-travel-step-btn{
+  border-left:0 !important;
+  border-radius:0 8px 8px 0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-step-btn:first-of-type{
+  border-radius:8px 0 0 8px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-step-btn:hover:not(:disabled){
+  background:#f8fafc !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-step-btn:disabled{
+  opacity:.45 !important;
+  cursor:not-allowed !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-step-btn i{
+  font-size:10px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-menu.dropdown-menu,
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-menu.dropdown-menu{
+  margin-top:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-meta-field--travellers,
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-meta-field--class{
+  position:relative !important;
+  overflow:hidden !important;
+  z-index:auto !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-meta-field--travellers:has(.vm-travel-travellers-dropdown.open){
+  overflow:visible !important;
+  z-index:30 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-meta-field--special:has(.vm-travel-special-dropdown.open){
+  overflow:visible !important;
+  z-index:30 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-dropdown.open{
+  z-index:31 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-dropdown.open{
+  z-index:31 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-dropdown.open,
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-dropdown.open{
+  z-index:10051 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-menu.dropdown-menu::-webkit-scrollbar,
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-menu.dropdown-menu::-webkit-scrollbar{
+  width:6px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-travellers-menu.dropdown-menu::-webkit-scrollbar-thumb,
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-special-menu.dropdown-menu::-webkit-scrollbar-thumb{
+  background:#cbd5e1 !important;
+  border-radius:999px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #flightservice .vm-travel-picker--up .vm-travel-picker-chevron i{
+  transform:rotate(180deg) !important;
+}
+
+/* —— Bus booking form (modern shell) —— */
+body.saas-admin-ui section.vm-travel-page #busservice.vm-travel-bus-form{
+  width:100% !important;
+  overflow:visible !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-shell{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:14px !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-route-card{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:12px !important;
+  padding:12px !important;
+  border:1px solid #dbeafe !important;
+  border-radius:16px !important;
+  background:linear-gradient(165deg,#fff 0%,#f8fafc 100%) !important;
+  box-shadow:0 8px 22px -14px rgba(37,99,235,.28) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-field{
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-control{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  min-height:52px !important;
+  padding:6px 10px 6px 8px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  box-sizing:border-box !important;
+  transition:border-color .2s ease,box-shadow .2s ease !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-control:focus-within{
+  border-color:var(--vm-rmt-accent,#2563eb) !important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.12) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-icon{
+  flex:0 0 42px !important;
+  width:42px !important;
+  height:42px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:12px !important;
+  font-size:18px !important;
+  line-height:1 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-icon--from{
+  background:linear-gradient(145deg,#dcfce7 0%,#ecfdf5 100%) !important;
+  color:#15803d !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-icon--to{
+  background:linear-gradient(145deg,#ffedd5 0%,#fff7ed 100%) !important;
+  color:#c2410c !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-input.form-control{
+  flex:1 1 auto !important;
+  width:100% !important;
+  min-width:0 !important;
+  height:40px !important;
+  min-height:40px !important;
+  margin:0 !important;
+  padding:0 8px 0 0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  font-size:15px !important;
+  font-weight:600 !important;
+  color:var(--vm-rmt-text,#0f172a) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-date-field{
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-dp-field{
+  position:relative !important;
+  display:block !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-dp-icon{
+  position:absolute !important;
+  left:12px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  z-index:2 !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  pointer-events:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-dp-input.form-control{
+  width:100% !important;
+  min-height:48px !important;
+  height:48px !important;
+  padding:8px 12px 8px 40px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-dp-input:focus{
+  border-color:var(--vm-rmt-accent,#2563eb) !important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.12) !important;
+  outline:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .form-iconmy.fullbodydycolorbg,
+body.saas-admin-ui section.vm-travel-page #busservice .form-iconmy-hotel{
+  background:transparent !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-actions{
+  margin-top:2px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-search-btn.cssbuttonww{
+  width:100% !important;
+  min-height:46px !important;
+  height:auto !important;
+  margin:0 !important;
+  float:none !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  border:0 !important;
+  border-radius:12px !important;
+  background:linear-gradient(135deg,var(--vm-rmt-accent,#2563eb),var(--vm-rmt-accent-dark,#1d4ed8)) !important;
+  color:#fff !important;
+  font-weight:800 !important;
+  letter-spacing:.02em !important;
+  box-shadow:0 8px 22px -8px rgba(37,99,235,.55) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-secondary{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:10px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-link-btn{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:40px !important;
+  padding:8px 10px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  background:#fff !important;
+  color:#475569 !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  text-decoration:none !important;
+  transition:background .2s ease,border-color .2s ease,color .2s ease !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-link-btn:hover{
+  border-color:#cbd5e1 !important;
+  background:#f8fafc !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+}
+
+@media screen and (min-width:520px){
+  body.saas-admin-ui section.vm-travel-page #busservice .vm-travel-bus-route-card{
+    grid-template-columns:1fr 1fr !important;
+  }
+}
+
+/* —— Hotel booking form —— */
+body.saas-admin-ui section.vm-travel-page #hotelservice.vm-travel-hotel-form{
+  width:100% !important;
+  overflow:visible !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-shell{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:14px !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-location-card{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:12px !important;
+  padding:12px !important;
+  border:1px solid #dbeafe !important;
+  border-radius:16px !important;
+  background:linear-gradient(165deg,#fff 0%,#f8fafc 100%) !important;
+  box-shadow:0 8px 22px -14px rgba(37,99,235,.28) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-control{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  min-height:52px !important;
+  padding:6px 10px 6px 8px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-control:focus-within{
+  border-color:var(--vm-rmt-accent,#2563eb) !important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.12) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-icon{
+  flex:0 0 42px !important;
+  width:42px !important;
+  height:42px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:12px !important;
+  font-size:18px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-icon--city{
+  background:linear-gradient(145deg,#dbeafe 0%,#eff6ff 100%) !important;
+  color:#1d4ed8 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-icon--nat{
+  background:linear-gradient(145deg,#dcfce7 0%,#ecfdf5 100%) !important;
+  color:#15803d !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-input.form-control{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  height:40px !important;
+  min-height:40px !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  font-size:15px !important;
+  font-weight:600 !important;
+  padding:0 8px 0 0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-dates-card{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+  padding:12px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:14px !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-dates-row--stay{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) !important;
+  gap:8px !important;
+  align-items:end !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-date-field{
+  min-width:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-date-field--nights{
+  flex:0 0 auto !important;
+  width:auto !important;
+  min-width:76px !important;
+  max-width:96px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-nights,
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-nights--bridge{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:4px !important;
+  width:100% !important;
+  min-height:48px !important;
+  height:48px !important;
+  padding:0 10px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#f8fafc !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-nights-input{
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  font-size:16px !important;
+  font-weight:800 !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  padding:0 !important;
+  height:auto !important;
+  min-height:0 !important;
+  width:1.6em !important;
+  min-width:1.6em !important;
+  max-width:2.5em !important;
+  text-align:right !important;
+  flex:0 0 auto !important;
+  line-height:1 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-nights-unit{
+  font-size:12px !important;
+  font-weight:700 !important;
+  color:#64748b !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+  flex:0 0 auto !important;
+}
+
+@media screen and (max-width:420px){
+  body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-dates-row--stay{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    grid-template-areas:
+      "checkin checkout"
+      "nights nights" !important;
+  }
+  body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-dates-row--stay .vm-travel-hotel-date-field:nth-child(1){
+    grid-area:checkin !important;
+  }
+  body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-dates-row--stay .vm-travel-hotel-date-field--nights{
+    grid-area:nights !important;
+    max-width:none !important;
+    min-width:0 !important;
+  }
+  body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-dates-row--stay .vm-travel-hotel-date-field:nth-child(3){
+    grid-area:checkout !important;
+  }
+  body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-nights--bridge{
+    max-width:110px !important;
+    margin:0 auto !important;
+  }
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-dp-field{
+  position:relative !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-dp-icon{
+  position:absolute !important;
+  left:12px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  pointer-events:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-dp-input.form-control{
+  width:100% !important;
+  min-width:0 !important;
+  min-height:48px !important;
+  height:48px !important;
+  padding:8px 10px 8px 38px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  font-size:13px !important;
+  font-weight:600 !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-meta-row{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) !important;
+  gap:10px !important;
+  align-items:stretch !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-rooms-pill{
+  justify-content:center !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-star-select{
+  display:block !important;
+  width:100% !important;
+  min-height:44px !important;
+  padding:0 36px 0 12px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748b' d='M1.4.6 6 5.2 10.6.6 12 2l-6 6-6-6z'/%3E%3C/svg%3E") no-repeat right 12px center !important;
+  appearance:none !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-rooms-pill{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-height:44px !important;
+  padding:0 14px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#f8fafc !important;
+  color:#475569 !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  white-space:nowrap !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-rooms-pill strong{
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  font-size:16px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-guests-card{
+  padding:12px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  max-height:280px !important;
+  overflow-y:auto !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-guests-title{
+  margin:0 0 10px !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+  letter-spacing:.06em !important;
+  text-transform:uppercase !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic > .row,
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic > .row.vm-travel-hotel-room-row{
+  margin:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+  width:100% !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-room-head{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  margin:0 0 8px !important;
+  padding:0 2px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-room-num{
+  font-size:12px !important;
+  font-weight:800 !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-room-remove{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  padding:6px 10px !important;
+  border:1px solid #fecaca !important;
+  border-radius:999px !important;
+  background:#fff1f2 !important;
+  color:#be123c !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  cursor:pointer !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-room-remove:hover{
+  background:#ffe4e6 !important;
+  border-color:#fda4af !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-room-block--extra,
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic > .row.vm-travel-hotel-room-row .vm-travel-hotel-room-block{
+  width:100% !important;
+  max-width:100% !important;
+  float:none !important;
+  margin:0 !important;
+  padding:10px !important;
+  border:1px solid #dbeafe !important;
+  border-radius:12px !important;
+  background:#f8fafc !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-child-ages{
+  display:none !important;
+  flex-direction:column !important;
+  gap:8px !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-child-ages.vm-travel-hotel-child-ages--visible{
+  display:flex !important;
+  margin-top:8px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-child-age{
+  display:none !important;
+  grid-template-columns:minmax(0,1fr) minmax(88px,120px) !important;
+  align-items:center !important;
+  gap:10px !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:10px 12px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  background:#fff !important;
+  box-sizing:border-box !important;
+  position:static !important;
+  top:auto !important;
+  left:auto !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-child-age.vm-travel-hotel-child-age--show{
+  display:grid !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-child-age label{
+  margin:0 !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  color:#475569 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-age-select{
+  width:100% !important;
+  min-height:38px !important;
+  padding:6px 28px 6px 10px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:8px !important;
+  font-size:13px !important;
+  font-weight:600 !important;
+  background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748b' d='M1.4.6 6 5.2 10.6.6 12 2l-6 6-6-6z'/%3E%3C/svg%3E") no-repeat right 10px center !important;
+  appearance:none !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic ul.satediv li.adult-postion,
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic ul.satediv li.adult-postion2,
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic ul.satediv li.adult-postionss,
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic ul.satediv li.adult-postionsss{
+  position:static !important;
+  top:auto !important;
+  left:auto !important;
+  margin:0 !important;
+  z-index:auto !important;
+  width:auto !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic .satediv{
+  width:100% !important;
+  float:none !important;
+  display:flex !important;
+  margin-bottom:0 !important;
+  padding-left:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-stepper-wrap + .vm-travel-hotel-stepper-wrap{
+  margin-left:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-guest-line__label,
+body.saas-admin-ui section.vm-travel-page #hotelservice .startulwidth > li.vm-travel-hotel-guest-line__label{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  padding:0 6px 0 4px !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  color:#334155 !important;
+  float:none !important;
+  width:auto !important;
+  text-align:left !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-guest-line__label .showHotelChildCount,
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-guest-line__label .showHotelAdultCount,
+body.saas-admin-ui section.vm-travel-page #hotelservice .startulwidth .showHotelAdultCount{
+  flex:0 0 auto !important;
+  min-width:22px !important;
+  font-weight:800 !important;
+  font-size:15px !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  margin:0 !important;
+  padding:0 !important;
+  text-align:center !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-guest-type{
+  flex:0 1 auto !important;
+  font-weight:600 !important;
+  color:#475569 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-room-block--extra,
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic > .row.vm-travel-hotel-room-row .vm-travel-hotel-room-block{
+  padding:12px !important;
+  border:1px solid #dbeafe !important;
+  border-radius:14px !important;
+  background:linear-gradient(180deg,#fff 0%,#f8fafc 100%) !important;
+  box-shadow:0 6px 18px -14px rgba(37,99,235,.35) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic .add-roomclasssecond{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic .adult-full,
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic .adult-fullertw,
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic .adult-fullertw-responshive{
+  width:100% !important;
+  max-width:100% !important;
+  float:none !important;
+  margin:0 !important;
+  padding:10px !important;
+  border:1px solid #eef2f7 !important;
+  border-radius:12px !important;
+  background:#f8fafc !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-room-block{
+  padding:0 !important;
+  margin:0 !important;
+  border:0 !important;
+  background:transparent !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic .adult-full ul,
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic .startulwidth,
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic .satediv{
+  width:100% !important;
+  float:none !important;
+  position:static !important;
+  padding-left:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .startulwidth,
+body.saas-admin-ui section.vm-travel-page #hotelservice .satediv,
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclasssecond{
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:6px !important;
+  list-style:none !important;
+  margin:0 0 8px !important;
+  padding:10px 12px 10px 14px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  background:#fff !important;
+  min-height:46px !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic .startulwidth li:first-child,
+body.saas-admin-ui section.vm-travel-page #hotelservice #roomGuestDynamic .satediv li:first-child{
+  width:auto !important;
+  float:none !important;
+  padding-top:0 !important;
+  margin-right:0 !important;
+  text-align:left !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .startulwidth > li.btnHotelAdultMinus,
+body.saas-admin-ui section.vm-travel-page #hotelservice .satediv > li.btnHotelChildMinus{
+  margin-left:auto !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-stepper-wrap{
+  flex:0 0 auto !important;
+  display:flex !important;
+  align-items:center !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-stepper-wrap .btmPlusMinus{
+  border-radius:10px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .startulwidth > li.btnHotelAdultMinus .btmPlusMinus,
+body.saas-admin-ui section.vm-travel-page #hotelservice .satediv > li.btnHotelChildMinus .btmPlusMinus{
+  border-top-right-radius:0 !important;
+  border-bottom-right-radius:0 !important;
+  border-right:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .startulwidth > li.btnHotelAdlutPlus .btmPlusMinus,
+body.saas-admin-ui section.vm-travel-page #hotelservice .satediv > li.btnHotelChildPlus .btmPlusMinus{
+  border-top-left-radius:0 !important;
+  border-bottom-left-radius:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-room-head{
+  margin-bottom:10px !important;
+  padding:0 4px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .satediv{
+  margin-bottom:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .startulwidth > li:first-child,
+body.saas-admin-ui section.vm-travel-page #hotelservice .satediv > li:first-child{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  padding-top:0 !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  color:#334155 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .startulwidth > li.btnHotelAdultMinus,
+body.saas-admin-ui section.vm-travel-page #hotelservice .startulwidth > li.btnHotelAdlutPlus,
+body.saas-admin-ui section.vm-travel-page #hotelservice .satediv > li.btnHotelChildMinus,
+body.saas-admin-ui section.vm-travel-page #hotelservice .satediv > li.btnHotelChildPlus{
+  flex:0 0 auto !important;
+  display:flex !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclass,
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclasscbghuy,
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-gfgf-responshive{
+  margin:0 !important;
+  padding:0 !important;
+  list-style:none !important;
+  width:100% !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclass li,
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclasscbghuy li{
+  width:100% !important;
+  float:none !important;
+  padding:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclass .form-group{
+  margin:0 !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclass button,
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclasscbghuy button{
+  width:100% !important;
+  min-height:42px !important;
+  margin:0 !important;
+  float:none !important;
+  border:1px dashed #93c5fd !important;
+  border-radius:12px !important;
+  background:#eff6ff !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  font-weight:800 !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclasscbghuy button span{
+  margin:0 4px 0 0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .btmPlusMinus,
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclasssecond li button{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:36px !important;
+  width:36px !important;
+  min-height:36px !important;
+  height:36px !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:1px solid #cbd5e1 !important;
+  border-radius:10px !important;
+  background:#f8fafc !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .btmPlusMinus:hover,
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclasssecond li button:hover{
+  background:#eff6ff !important;
+  border-color:#93c5fd !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .btmPlusMinus i.fa,
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclasssecond li button i.fa{
+  font-size:11px !important;
+  color:#475569 !important;
+  top:0 !important;
+  position:static !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .add-roomclasssecond{
+  height:auto !important;
+  min-height:0 !important;
+  padding:8px 10px !important;
+  margin:0 0 8px !important;
+  border:1px solid #eef2f7 !important;
+  border-radius:12px !important;
+  background:#f8fafc !important;
+  flex-wrap:wrap !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-search-btn{
+  width:100% !important;
+  min-height:48px !important;
+  gap:10px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-search-btn .fa-search{
+  margin-right:2px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotelservice .bootstrap-select,
+body.saas-admin-ui section.vm-travel-page #hotelservice .selectpicker{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotel .vm-travel-service-expired.remitter_button{
+  width:100% !important;
+  float:none !important;
+  margin:0 !important;
+  padding:28px 20px !important;
+  border:1px solid #fecaca !important;
+  border-radius:16px !important;
+  background:linear-gradient(180deg,#fff 0%,#fff1f2 100%) !important;
+  box-shadow:0 8px 24px -16px rgba(220,38,38,.25) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotel .vm-travel-service-expired img{
+  width:72px !important;
+  height:auto !important;
+  margin:0 auto 12px !important;
+  display:block !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotel .vm-travel-service-expired .bodycolormy{
+  display:block !important;
+  font-size:20px !important;
+  font-weight:800 !important;
+  color:#be123c !important;
+  margin:8px 0 12px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #hotel .vm-travel-service-expired p{
+  font-size:13px !important;
+  line-height:1.5 !important;
+  color:#64748b !important;
+  max-width:420px !important;
+  margin:0 auto 16px !important;
+}
+
+@media screen and (min-width:520px){
+  body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-location-card{
+    grid-template-columns:1.2fr .8fr !important;
+  }
+  body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-meta-row{
+    grid-template-columns:minmax(0,1fr) auto !important;
+    align-items:end !important;
+  }
+  body.saas-admin-ui section.vm-travel-page #hotelservice .vm-travel-hotel-rooms-pill{
+    width:auto !important;
+    justify-content:flex-start !important;
+  }
+}
+
+/* —— Service purchase payment panel —— */
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-panel{
+  width:100% !important;
+  float:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  text-align:left !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-card{
+  width:100% !important;
+  padding:18px 16px 16px !important;
+  border:1px solid #dbeafe !important;
+  border-radius:18px !important;
+  background:linear-gradient(165deg,#ffffff 0%,#f8fafc 55%,#eff6ff 100%) !important;
+  box-shadow:0 12px 32px -18px rgba(37,99,235,.35) !important;
+  box-sizing:border-box !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-card__head{
+  text-align:center !important;
+  margin-bottom:16px !important;
+  padding-bottom:14px !important;
+  border-bottom:1px solid #e2e8f0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-card__icon{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:48px !important;
+  height:48px !important;
+  margin:0 auto 10px !important;
+  border-radius:14px !important;
+  background:linear-gradient(145deg,#2563eb 0%,#1d4ed8 100%) !important;
+  color:#fff !important;
+  font-size:20px !important;
+  box-shadow:0 8px 20px -10px rgba(37,99,235,.65) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-card__title{
+  margin:0 0 4px !important;
+  font-size:18px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  line-height:1.25 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-card__sub{
+  margin:0 !important;
+  font-size:12px !important;
+  font-weight:600 !important;
+  color:#64748b !important;
+  line-height:1.4 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-rows{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+  margin-bottom:16px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-row{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  padding:12px 14px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-row--amount{
+  border-color:#bfdbfe !important;
+  background:linear-gradient(180deg,#fff 0%,#f0f9ff 100%) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-row__label{
+  font-size:12px !important;
+  font-weight:800 !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-row__value{
+  font-size:15px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  text-align:right !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-row--amount .vm-travel-payment-row__value{
+  font-size:18px !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-actions{
+  display:grid !important;
+  grid-template-columns:1fr 1.2fr !important;
+  gap:10px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-back{
+  min-height:44px !important;
+  margin:0 !important;
+  padding:0 12px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff !important;
+  color:#475569 !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  cursor:pointer !important;
+  box-shadow:none !important;
+  transition:background .2s ease,border-color .2s ease,color .2s ease !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-back:hover{
+  border-color:#cbd5e1 !important;
+  background:#f8fafc !important;
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-pay{
+  min-height:44px !important;
+  margin:0 !important;
+  padding:0 14px !important;
+  border:0 !important;
+  border-radius:12px !important;
+  background:linear-gradient(135deg,var(--vm-rmt-accent,#2563eb),var(--vm-rmt-accent-dark,#1d4ed8)) !important;
+  color:#fff !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  cursor:pointer !important;
+  box-shadow:0 8px 22px -8px rgba(37,99,235,.55) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-pay:hover{
+  filter:brightness(1.03) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-error{
+  margin:12px 0 0 !important;
+  padding:0 !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  color:#dc2626 !important;
+  text-align:center !important;
+  min-height:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-error:empty{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-panel .lavbrd,
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-panel .coldebuttonnew,
+body.saas-admin-ui section.vm-travel-page .vm-travel-payment-panel .bacbuttonrrt{
+  display:none !important;
+}
+
+/* —— IRCTC registration panel —— */
+body.saas-admin-ui section.vm-travel-page #Packegenewid.vm-rmt-tab-pane,
+body.saas-admin-ui section.vm-travel-page #IRCTCservice.vm-travel-irctc-form{
+  width:100% !important;
+  overflow:visible !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-panel{
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-shell{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:12px !important;
+  width:100% !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-head{
+  display:flex !important;
+  align-items:flex-start !important;
+  gap:12px !important;
+  padding:12px 14px !important;
+  border:1px solid #dbeafe !important;
+  border-radius:14px !important;
+  background:linear-gradient(145deg,#eff6ff 0%,#fff 100%) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-head__icon{
+  flex:0 0 42px !important;
+  width:42px !important;
+  height:42px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:12px !important;
+  background:linear-gradient(145deg,#1e3a8a 0%,#2563eb 100%) !important;
+  color:#fff !important;
+  font-size:18px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-head__title{
+  margin:0 0 4px !important;
+  font-size:16px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-head__sub{
+  margin:0 !important;
+  font-size:12px !important;
+  line-height:1.45 !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-charges{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  padding:12px 14px !important;
+  border:1px solid #bfdbfe !important;
+  border-radius:12px !important;
+  background:#f8fafc !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-charges__label{
+  font-size:12px !important;
+  font-weight:700 !important;
+  color:#475569 !important;
+  text-transform:uppercase !important;
+  letter-spacing:.04em !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-charges__value{
+  font-size:20px !important;
+  font-weight:800 !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-section{
+  padding:12px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:14px !important;
+  background:#fff !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-section__title{
+  margin:0 0 10px !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+  letter-spacing:.06em !important;
+  text-transform:uppercase !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:8px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-field{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:4px !important;
+  padding:8px 10px !important;
+  border:1px solid #eef2f7 !important;
+  border-radius:10px !important;
+  background:#f8fafc !important;
+  min-width:0 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-field--full{
+  grid-column:1 / -1 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-label{
+  font-size:11px !important;
+  font-weight:700 !important;
+  color:#64748b !important;
+  float:none !important;
+  text-align:left !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-value{
+  font-size:13px !important;
+  font-weight:700 !important;
+  color:#0f172a !important;
+  line-height:1.45 !important;
+  word-break:break-word !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-docs{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:10px !important;
+  margin-top:10px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-doc__frame{
+  margin-top:6px !important;
+  min-height:96px !important;
+  padding:8px !important;
+  border:1px dashed #cbd5e1 !important;
+  border-radius:10px !important;
+  background:#fff !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-doc__img{
+  max-width:100% !important;
+  max-height:120px !important;
+  width:auto !important;
+  height:auto !important;
+  object-fit:contain !important;
+  border-radius:6px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-doc__img.is-empty{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-doc__frame:has(.vm-travel-irctc-doc__img.is-empty){
+  color:#94a3b8 !important;
+  font-size:12px !important;
+  font-weight:600 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-doc__frame:has(.vm-travel-irctc-doc__img.is-empty)::after{
+  content:"No document uploaded" !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-input-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:10px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-input.form-control{
+  min-height:44px !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:10px !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-section--submit{
+  padding-bottom:14px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-actions{
+  margin-top:12px !important;
+  padding-top:4px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice #btnsubmit.vm-travel-irctc-submit,
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-submit.cssbuttonww{
+  width:100% !important;
+  min-height:48px !important;
+  height:auto !important;
+  margin:0 !important;
+  padding:12px 16px !important;
+  float:none !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  border:0 !important;
+  border-radius:12px !important;
+  background:linear-gradient(135deg,var(--vm-rmt-accent,#2563eb),var(--vm-rmt-accent-dark,#1d4ed8)) !important;
+  color:#fff !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  letter-spacing:.02em !important;
+  line-height:1.2 !important;
+  text-transform:none !important;
+  box-shadow:0 8px 22px -8px rgba(37,99,235,.55) !important;
+  cursor:pointer !important;
+  appearance:none !important;
+  -webkit-appearance:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice #btnsubmit.vm-travel-irctc-submit:hover:not(:disabled){
+  filter:brightness(1.05) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice #btnsubmit.vm-travel-irctc-submit:disabled{
+  opacity:.65 !important;
+  cursor:not-allowed !important;
+  box-shadow:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice.packegeimgclass > img{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice.packegeimgclass img{
+  max-width:none !important;
+  margin-top:0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-status{
+  width:100% !important;
+  padding:0 !important;
+  margin:0 !important;
+  float:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-status__card{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  gap:12px !important;
+  padding:22px 16px 18px !important;
+  border:1px solid #fde68a !important;
+  border-radius:18px !important;
+  background:linear-gradient(180deg,#fffbeb 0%,#fff 42%,#f8fafc 100%) !important;
+  text-align:center !important;
+  box-shadow:0 12px 32px -18px rgba(245,158,11,.35) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-status__badge{
+  width:76px !important;
+  height:76px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:50% !important;
+  background:linear-gradient(145deg,#fb923c 0%,#f97316 100%) !important;
+  box-shadow:0 10px 24px -10px rgba(249,115,22,.55) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-status__clock{
+  width:44px !important;
+  height:44px !important;
+  max-width:44px !important;
+  margin:0 !important;
+  object-fit:contain !important;
+  display:block !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-status__title{
+  margin:0 !important;
+  font-size:15px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  letter-spacing:.01em !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-status__msg{
+  margin:0 !important;
+  padding:10px 12px !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  font-size:13px !important;
+  line-height:1.55 !important;
+  font-weight:600 !important;
+  color:#475569 !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:12px !important;
+  background:#fff !important;
+  min-height:44px !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-status__msg:empty{
+  display:none !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-tbo-link{
+  display:block !important;
+  width:100% !important;
+  text-decoration:none !important;
+  color:inherit !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-tbo-card{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  padding:12px 14px !important;
+  border:1px solid #dbeafe !important;
+  border-radius:14px !important;
+  background:linear-gradient(180deg,#fff 0%,#f8fafc 100%) !important;
+  box-shadow:0 8px 20px -14px rgba(37,99,235,.35) !important;
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-tbo-link:hover .vm-travel-irctc-tbo-card{
+  transform:translateY(-1px) !important;
+  border-color:#93c5fd !important;
+  box-shadow:0 12px 26px -12px rgba(37,99,235,.4) !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-tbo-logo{
+  flex:0 0 auto !important;
+  width:auto !important;
+  max-width:96px !important;
+  max-height:32px !important;
+  margin:0 !important;
+  object-fit:contain !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-tbo-copy{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  gap:2px !important;
+  text-align:left !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-tbo-copy strong{
+  display:block !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+  color:var(--vm-rmt-accent,#2563eb) !important;
+  line-height:1.2 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-tbo-copy small{
+  display:block !important;
+  font-size:11px !important;
+  font-weight:600 !important;
+  color:#64748b !important;
+  line-height:1.3 !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-tbo-arrow{
+  flex:0 0 auto !important;
+  font-size:14px !important;
+  color:#64748b !important;
+}
+
+body.saas-admin-ui section.vm-travel-page #IRCTCservice .row,
+body.saas-admin-ui section.vm-travel-page #IRCTCservice [class*="col-md-"]{
+  margin:0 !important;
+  padding:0 !important;
+  width:100% !important;
+  max-width:100% !important;
+  float:none !important;
+}
+
+@media screen and (min-width:520px){
+  body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-grid{
+    grid-template-columns:1fr 1fr !important;
+  }
+  body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-docs{
+    grid-template-columns:1fr 1fr !important;
+  }
+  body.saas-admin-ui section.vm-travel-page #IRCTCservice .vm-travel-irctc-input-grid{
+    grid-template-columns:1fr 1fr !important;
+  }
+}
+
+

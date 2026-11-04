@@ -1,350 +1,323 @@
 ﻿@model List<Vastwebmulti.Models.BusCancellationDetail>
 @{
-    ViewBag.Title = "Bus";
+    ViewBag.Title = "Bus Cancellation Report";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var rows = Model == null ? new List<Vastwebmulti.Models.BusCancellationDetail>() : Model;
 }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=38" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-
-    /* new css  */
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
+    /* Force bus-cancel table to size by content (never squeeze) + scroll */
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table {
+        width: max-content !important;
+        min-width: 1900px !important;
+        max-width: none !important;
+        table-layout: auto !important;
     }
-
-    .h_menu-set {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        justify-content: space-between;
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead tr,
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table tbody tr {
+        display: table-row !important;
     }
-
-        .h_menu-set .page-header-third {
-            margin-left: 0;
-            margin-right: 0;
-        }
-
-    .air-cancellation .container-fluid {
-        padding-left: 10px;
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table tbody td {
+        display: table-cell !important;
+        width: auto !important;
+        max-width: none !important;
+        white-space: nowrap !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
     }
-
-
-    /* new css  */
-
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
+    /* Override operator-report 42px/52px first-two-col rule + room per column */
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:first-child {
+        width: auto !important;
+        min-width: 70px !important;
+        max-width: none !important;
     }
-
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:nth-child(2) {
+        width: auto !important;
+        min-width: 130px !important;
+        max-width: none !important;
+        text-align: center !important;
     }
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    @@media only screen and (max-width:1169px){
-
-        .newtabsreport.newtabsreport-ticketreport .container.container-tabsrepor, .buscancelcss {
-            padding-left: 15px;
-        }
-
-
-    }
-
-    @@media only screen and (max-width:991px){
-        .col-md-2.flightdate-search {
-            float: left;
-        }
-        .flightdate-show {
-            float: left;
-        }
-
-
-    }
-
-    @@media only screen and (max-width:990px) {
-
-        .row.clearfix.clearfix-tableresponshive.clearfix-tableresponshive-respons {
-            margin: 0;
-        }
-
-            .row.clearfix.clearfix-tableresponshive.clearfix-tableresponshive-respons .col-md-12 {
-                padding: 0;
-            }
-        .flightreportcssaaa-respo .flightsecond-srarch button span {
-            font-size: 14px !important;
-        }
-        .flightdate-show {
-            width: 100%;
-            margin-bottom: 4px;
-        }
-            .flightdate-show #txt_frm_date {
-                width: 100% !important;
-            }
-        .col-md-2.flightdate-search {
-            padding-left: 0px !important;
-        }
-
-    }
-
-
-    @@media only screen and (max-width:480px) {
-
-        .h_menu-set {
-            display: block;
-        }
-        #tabsrepor-navs li {
-            margin-right: 0px !important;
-            padding-right: 2px;
-            width: 33.333%;
-            float: left;
-        }
-
-        #ul li {
-            margin-left: 0px !important;
-            padding-right: 2px;
-            width: 50%;
-        }
-        #tabsrepor-navs li a {
-            width: 100%;
-            float: left;
-        }
-
-
-
-
-
-    }
-
-
-
-
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:nth-child(3) { min-width: 160px !important; }
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:nth-child(4) { min-width: 130px !important; }
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:nth-child(5) { min-width: 130px !important; }
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:nth-child(6) { min-width: 210px !important; }
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:nth-child(7) { min-width: 110px !important; }
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:nth-child(8) { min-width: 110px !important; }
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:nth-child(9) { min-width: 100px !important; }
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:nth-child(10) { min-width: 100px !important; }
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:nth-child(11) { min-width: 175px !important; }
+    body.saas-admin-ui .saas-retailer-bus-cancel-page #busBookingReport.vm-opr-data-table thead th:nth-child(12) { min-width: 175px !important; }
 </style>
-<section class="content content-margin-second" style="overflow-x:hidden;">
-    <div class="container-fluid buscancelcss hotelcsschange-responsive">
 
-        <div class="newtabsreport newtabsreportBusreport" id="flightaddclass">
-            <div class="container container-tabsrepor">
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;" aria-hidden="true">
+    <div class="vm-dmt-loader__panel" role="status" aria-live="polite" aria-label="Processing">
+        <div class="vm-dmt-table-loader__spinner" aria-hidden="true"></div>
+        <span class="vm-dmt-loader__text">Please wait…</span>
+    </div>
+</div>
 
-                <div class="h_menu-set">
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-bus-booking-report-page saas-retailer-bus-cancel-page">
+    <div class="container-fluid vm-opr-page-shell">
 
-                    <div class="page-header-third">
-                        @Html.Partial("~/Areas/RETAILER/Views/Home/_Travelsview.cshtml")
+        @{
+            var busCancelFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerBusCancelForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_buscan_frm_date" },
+                { "data-report-to", "#retailer_buscan_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("cancellationReport", "Bus", FormMethod.Post, busCancelFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Travel &amp; Hotels</li>
+                        <li>Bus Cancellation Report</li>
+                    </ol>
+                    <div class="vm-dmt-fin-nav-row vm-ticket-travel-nav-row">
+                        @Html.Partial("_Buspartialmenu")
                     </div>
-
-                    <div class="page-header-third">
-                        <div class="row clearfix flight-changecss Cancellations Cancellations-responshive" style="margin:0;">
-                            
-                                @Html.Partial("_Buspartialmenu")
-                            
-                        </div>
-                    </div>
-
-
                 </div>
 
-                
-            </div>
-        </div>
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerBusCanTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Cancellation totals (loaded rows)</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerBusCanTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Fare Amount</span>
+                            <strong class="vm-opr-total-card__value" id="retailerBusCanFare">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Cancel Charge</span>
+                            <strong class="vm-opr-total-card__value" id="retailerBusCanCharge">&#8377; 0.00</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Records</span>
+                            <strong class="vm-opr-total-card__value" id="retailerBusCanCount">0</strong>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="row clearfix tabsrepor-content flightreportcssaaa flightreportcssaaa-respo" style="margin:0;">
-            <div class="col-md-12" style="padding: 0;">
-                <div class="card" style="width:100%;float:left;">
-                    
-                    <div class="row clearfix flight-secondcss flightdatesecond flightdatesecond-responshiveee" style="margin:0;">
-                        @using (Html.BeginForm("cancellationReport", "Bus", FormMethod.Post))
-                        {
-                            <div class="page-header-third">
-                                <div class="col-md-5  flightdate-show ">
-                                    <div class="form-group" style="margin-bottom:0px;margin-left:-10px;width:100%;margin-top:2px;">
-                                        <div class="input-daterange input-group">
-                                            <div class="datesate datesates">
-                                                <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i>
-                                                </div>
-                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;width:99%;float:right; margin-top:4px;height:32px;", autocomplete = "off" })
-                                            </div>
-                                            <span class="input-group-addon" style="display:none;">
-                                                <i class="fa fa-exchange" style="padding-top:10px;"></i>
-                                            </span>
-                                            <div class="datesate datesates">
-                                                <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left:138px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;width:99%;float:right; margin-top:4px;height:32px;", autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 flightdate-search flightsecond-srarch classretbuttonbor-second">
-                                    <center>
-                                        <button type="submit" value="Old" name="submit" class="btn retailer-search-second" style="margin-top:7px;height:31px;border:1px solid #c7c2c2;background:#dedddd;">
-                                            <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                            <span style="top:-2px;color:black;">Search</span>
-                                        </button>
-                                    </center>
-                                </div>
-
-                                <div class="col-md-3 buttonPdf buttonPdfs retailer-pdf-second" style="width: 30%;float: right;text-align: right;">
-
-                                    <button id="btnPDF">PDF</button>
-                                    <button id="btnExport">Export</button>
-                                    <button>Total</button>
-                                </div>
-
-
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--bus vm-rpt-filters-panel__bar">
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_buscan_frm_date", placeholder = "From", title = "From date" })
                             </div>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row clearfix clearfix-tableresponshive clearfix-tableresponshive-respons">
-            <div class="col-md-12">
-                <div class="card" style="">
-
-                    <div class="page-header-third">
-                        <div class="body table-responsive " style="position:inherit;padding:0px;">
-                            <table id="example" class="table table-bordered table-striped table-hover" cellspacing="0" style="width:100%;font-size:12px;">
-                                <thead style="color:black;position:inherit;background-color:whitesmoke;">
-                                    <tr>
-                                        <th>S.R.</th>
-                                        <th>Passanger&nbsp;Name</th>
-                                        <th>PNR</th>
-                                        <th>Source</th>
-                                        <th>Destination</th>
-                                        <th>DOJ</th>
-                                        <th>Fare</th>
-                                        <th>Charge</th>
-                                        <th>Pre</th>
-                                        <th>Post</th>
-                                        <th>Date</th>
-                                        <th>Cancellation&nbsp;Date</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody id="myTable">
-                                    @{ int i = 1;}
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>@i</td>
-                                            <td>@Html.DisplayFor(modelItem => item.LeadPaxFirstName)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.PNR)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.sourceStationName)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.destinationStationName)</td>
-                                            <td>@item.dateOfJourney.ToString("dddd,dd MMMM yyyy")</td>
-                                            <td>@Html.DisplayFor(modelItem => item.FareAmount)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.CancallationCharge)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.RemPre)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.RemPost)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.TicketDate)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.CancellationDate)</td>
-                                        </tr>
-                                        i++;
-                                    }
-
-                                </tbody>
-                            </table>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_buscan_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" value="Old" name="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-ban" aria-hidden="true"></i>
+                        <span>Bus cancellation report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-bus-totals-btn" onclick="FindtotalRetailerBusCan()" title="Show totals" aria-expanded="false" aria-controls="retailerBusCanTotalsPanel"><i class="fas fa-chart-pie" aria-hidden="true"></i></button>
+                            <button type="button" id="btnRetailerBusCanExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                            <button type="button" id="btnRetailerBusCanPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="busBookingReport" class="table vm-opr-data-table" cellspacing="0" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>S.R.</th>
+                                    <th>Passenger Name</th>
+                                    <th>PNR</th>
+                                    <th>Source</th>
+                                    <th>Destination</th>
+                                    <th>DOJ</th>
+                                    <th>Fare &#8377;</th>
+                                    <th>Charge &#8377;</th>
+                                    <th>Pre &#8377;</th>
+                                    <th>Post &#8377;</th>
+                                    <th>Date</th>
+                                    <th>Cancellation Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="retailerBusCanRows">
+                                @if (rows.Count > 0)
+                                {
+                                    var sr = 1;
+                                    foreach (var item in rows)
+                                    {
+                                        <tr class="vm-dmt-row" data-amount="@item.FareAmount" data-charge="@item.CancallationCharge">
+                                            <td class="vm-dmt-sr-cell">@sr</td>
+                                            <td>
+                                                <span class="vm-dmt-consumer-text">@item.LeadPaxFirstName</span>
+                                            </td>
+                                            <td class="vm-ticket-pnr-cell">
+                                                <span class="vm-dmt-refno-text">@item.PNR</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-refno-text">@item.sourceStationName</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-refno-text">@item.destinationStationName</span>
+                                            </td>
+                                            <td class="vm-ticket-time-cell">
+                                                <span class="vm-dmt-refno-text">@item.dateOfJourney.ToString("dddd, dd MMMM yyyy")</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.FareAmount, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.CancallationCharge, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.RemPre, 2)</span>
+                                            </td>
+                                            <td>
+                                                <span class="vm-dmt-amount-text"><span class="vm-dmt-rupee">&#8377;</span> @Math.Round(item.RemPost, 2)</span>
+                                            </td>
+                                            <td class="vm-ticket-time-cell">
+                                                <span class="vm-dmt-refno-text">@String.Format("{0:dd-MMM-yyyy HH:mm:ss}", item.TicketDate)</span>
+                                            </td>
+                                            <td class="vm-ticket-time-cell">
+                                                <span class="vm-dmt-refno-text">@String.Format("{0:dd-MMM-yyyy HH:mm:ss}", item.CancellationDate)</span>
+                                            </td>
+                                        </tr>
+                                        sr++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="12">
+                                            <div class="vm-opr-empty-state">
+                                                <i class="fas fa-ban" aria-hidden="true"></i>
+                                                <span>No cancellation records found</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </section>
 
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+@section PostVmScripts {
 <script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 <script>
-    function isNumber(evt) {
-        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
-            return false;
-        return true;
+    function retailerBusCanFilters() {
+        return {
+            txt_frm_date: jQuery('#retailer_buscan_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_buscan_to_date').val() || ''
+        };
     }
-</script>
-<!--Calendar Javascript-->
-<!--Calendar Javascript-->
-<script>
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
 
+    function hideRetailerBusCanTotals() {
+        var $panel = jQuery('#retailerBusCanTotalsPanel');
+        var $btn = jQuery('.vm-bus-totals-btn');
+        $panel.removeClass('is-open').hide().attr('aria-hidden', 'true');
+        $btn.removeClass('is-active').attr({ title: 'Show totals', 'aria-expanded': 'false' });
+    }
+
+    function calcRetailerBusCanTotals() {
+        var fare = 0, charge = 0, count = 0;
+        jQuery('#retailerBusCanRows tr.vm-dmt-row').each(function () {
+            fare += parseFloat(jQuery(this).attr('data-amount')) || 0;
+            charge += parseFloat(jQuery(this).attr('data-charge')) || 0;
+            count += 1;
         });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+        jQuery('#retailerBusCanFare').html('&#8377; ' + fare.toFixed(2));
+        jQuery('#retailerBusCanCharge').html('&#8377; ' + charge.toFixed(2));
+        jQuery('#retailerBusCanCount').text(count);
+    }
+
+    function FindtotalRetailerBusCan() {
+        var $panel = jQuery('#retailerBusCanTotalsPanel');
+        var $btn = jQuery('.vm-bus-totals-btn');
+        if ($panel.hasClass('is-open')) {
+            hideRetailerBusCanTotals();
+            return;
         }
+        $panel.addClass('is-open').show().attr('aria-hidden', 'false');
+        $btn.addClass('is-active').attr({ title: 'Hide totals', 'aria-expanded': 'true' });
+        calcRetailerBusCanTotals();
+    }
 
-    });
-</script>
-
-<!--My Script-->
-<script>
-    $(".input-daterange").click(function () {
-        $(".datepicker").addClass('datepickersecondcancel');
-    });
-
-
-</script>
-<script>
-    $(function () {
-        var loc = window.location.href; // returns the full URL
-        if ('/~/RETAILER/Bus/cancellationReport') {
-            $('#flightaddclass ul li:nth-child(2) a ,.list.report-list-change li#rewertyd a').addClass('active');
+    function initRetailerBusCanDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerBusCanDatepickers, 50);
+            return;
         }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerBusCancelForm',
+                '#retailer_buscan_frm_date',
+                '#retailer_buscan_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerBusCanDatepickers();
+        window.setTimeout(initRetailerBusCanDatepickers, 150);
+
+        jQuery('#btnRetailerBusCanExport').on('click', function (e) {
+            e.preventDefault();
+            var f = retailerBusCanFilters();
+            location.href = '@Url.Action("ExcelancellationReport", "Bus")?txt_frm_date=' + encodeURIComponent(f.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(f.txt_to_date);
+        });
+        jQuery('#btnRetailerBusCanPDF').on('click', function () {
+            var f = retailerBusCanFilters();
+            window.open('@Url.Action("PDFCancellationReport", "Bus")?txt_frm_date=' + encodeURIComponent(f.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(f.txt_to_date), '_blank');
+        });
     });
 </script>
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("ExcelancellationReport", "Bus")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        location.href = url;
-});
-</script>
-<script>
-    $("#btnPDF").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("PDFCancellationReport", "Bus")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
-    });
-</script>
-
-
+}

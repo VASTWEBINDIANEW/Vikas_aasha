@@ -1,358 +1,382 @@
 ﻿@model Vastwebmulti.Areas.RETAILER.Models.Daybookretailerrreport
+@using System.Linq
+@using System.Collections.Generic
 @{
     ViewBag.Title = "Retailer_Daybook_Report";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    bool isLive = Model != null && Model.Daybooklive != null;
+    int rowCount = 0;
+    decimal totalOpen = 0m, totalClose = 0m;
+    try
+    {
+        if (isLive) { rowCount = Model.Daybooklive.Count(); }
+        else if (Model != null && Model.DayboolOLD != null) { rowCount = Model.DayboolOLD.Count(); }
+    }
+    catch { }
+    try
+    {
+        if (isLive)
+        {
+            foreach (var m in Model.Daybooklive)
+            {
+                try { totalOpen += Convert.ToDecimal(m.openbal); } catch { }
+                try { totalClose += Convert.ToDecimal(m.closebal); } catch { }
+            }
+        }
+        else if (Model != null && Model.DayboolOLD != null)
+        {
+            foreach (var m in Model.DayboolOLD)
+            {
+                try { totalOpen += Convert.ToDecimal(m.openbal); } catch { }
+                try { totalClose += Convert.ToDecimal(m.closebal); } catch { }
+            }
+        }
+    }
+    catch { }
 }
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=43" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 <style>
-
-
-    /* new css  */
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
-    }
-
-    .table {
-        margin-bottom: 0px;
-    }
-
-    .container-fluid.retailerledger-container {
-        padding-left: 10px;
-    }
-    .col-md-1customerightsearch, .col-md-2.customerightdate {
-        float: left;
-    }
-        .col-md-1customerightsearch button {
-            height: 32px !important;
+    /* Daybook rows */
+    body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport tbody tr:hover { background: #f6f9ff !important; }
+    body.saas-admin-ui .saas-retailer-daybook-page .vm-db-neg { color: #c62828 !important; font-weight: 800 !important; }
+    body.saas-admin-ui .saas-retailer-daybook-page .vm-db-zero { color: #94a3b8 !important; }
+    /* Desktop (>=1024px): fit-to-width, no scroll, tight columns */
+    @@media (min-width: 1024px) {
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            table-layout: fixed !important;
         }
-    .datesates {
-        padding-right: 0px;
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(1),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(1) { width: 12% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(2),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(2) { width: 8% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(3),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(3) { width: 8% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(4),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(4) { width: 7% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(5),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(5) { width: 6% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(6),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(6) { width: 7% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(7),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(7) { width: 6% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(8),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(8) { width: 8% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(9),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(9) { width: 8% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(10),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(10) { width: 8% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(11),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(11) { width: 7% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(12),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(12) { width: 7% !important; }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th:nth-child(13),
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td:nth-child(13) { width: 8% !important; }
     }
-
-    /* new css  */
-
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px;
+    /* Mobile + tablet (<=1023px): natural widths, full text, horizontal scroll */
+    @@media (max-width: 1023.98px) {
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table {
+            width: max-content !important;
+            min-width: 1300px !important;
+            max-width: none !important;
+            table-layout: auto !important;
+        }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead tr,
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody tr {
+            display: table-row !important;
+        }
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table thead th,
+        body.saas-admin-ui .saas-retailer-daybook-page #retailerDaybookReport.vm-opr-data-table tbody td {
+            display: table-cell !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+        }
+        body.saas-admin-ui .saas-retailer-daybook-page .vm-opr-table-scroll {
+            overflow-x: auto !important;
+        }
     }
 </style>
-<style>
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
 
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-retailer-ecomm-transaction-page saas-retailer-daybook-page">
 
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 4px 5px;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    @@media only screen and (max-width:1169px){
-        .container-fluid.retailerledger-container {
-            padding-left: 15px;
+        @{
+            var daybookFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "retailerDaybookForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-report-date-form", "" },
+                { "data-report-from", "#retailer_daybook_frm_date" },
+                { "data-report-to", "#retailer_daybook_to_date" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
+        @using (Html.BeginForm("Retailer_Daybook_Report", "Home", FormMethod.Post, daybookFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
 
-    @@media only screen and (max-width:767px){
-        .table-responsive.tablethirddesign-new {
-            border: 1px solid var(--border-color);
-            border-top: 0;
-            border-bottom: 0;
-        }
-        
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>My Account</li>
+                        <li>Day Book</li>
+                    </ol>
 
-    }
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
 
-    @@media screen and (max-width:766px){
-        .col-md-3.buttonPdf {
-            display: block;
-        }
-    }
-
-    @@media only screen and (max-width:480px){
-        .customeright {
-            width: 100%;
-            padding-bottom:4px;
-        }
-            .customeright .col-md-1customerightsearch {
-                width: 39%;
-            }
-            .customeright .col-md-2.customerightdate input {
-                text-align: center !important;
-            }
-
-    }
-
-
-</style>
-<section class="content retailerdaybook content-margin-second content-fourdesign-page allpage-four-design-section" style="overflow-x:hidden;">
-    <div class="container-fluid retailerledger-container" style="height:100vh;">
-        <!--Four-Design-Page-Header-Start-->
-
-        <div class="page-title-box-fourde">
-            <h3>Day Book</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">My Account 1&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Day Book</a></li>
-            </ul>
-        </div>
-
-        <!--Four-Design-Page-Header-End-->
-        <div class="row clearfix">
-            <div class="col-md-12">
-
-                <div class="page-header-third">
-
-                    <div class="bread-same-all-page" style="width:auto;float:left;">
-                        <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                            <ul>
-                                <li class="smli">
-                                    <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                        Dashboard&nbsp;<img src="../../ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                                    </a>
-                                </li>
-
-                                <li class="fullbodydycolorbg tmw-total-color-one">
-                                    DayBook Report
-                                </li>
-                            </ul>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_daybook_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "retailer_daybook_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
 
                     </div>
 
                 </div>
 
-                
-            </div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:0px;">
-                
-                <div class="page-header-third">
-                    <div class="card cardretailerlager class-back-tra-fourdesign fix-bootmmarg-fourdesign" style="float:left;width:100%;">
-
-
-
-                        @using (Html.BeginForm("Retailer_Daybook_Report", "Home", FormMethod.Post))
-                        {
-                            <div class="customeright rightcustomeclass" style="float:left;">
-                                <div class="col-md-2 customerightdate" style="padding-left:0;">
-                                    <div class="input-daterange input-group">
-                                        <div class="datesate datesates">
-                                            <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                        </div>
-                                        <span class="input-group-addon" style="display:none;">
-                                            <i class="fa fa-exchange" style="padding-top:10px;"></i>
-                                        </span>
-                                        <div class="datesate datesatese">
-                                            <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-1customerightsearch">
-                                    <center>
-                                        <button type="submit" class="btn bg-grey waves-effect retailer-search-second" style="margin-top: 4px; margin-left:-74px; height:33px;">
-                                            <i class="fa fa-search" style="top:1px;font-size:16px;color:black;"></i>
-                                            <span style="top:0px;color:black;">Search</span>
-                                        </button>
-                                    </center>
-                                </div>
-
-
-
-                            </div>
-
-                            <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;float:right;width:auto;">
-
-                                <button style="color:#555;" id="btnPDF">PDF</button>
-                                <button style="padding-left:16px;color:#555;" id="btnExport">Export</button>
-
-                            </div>
-
-                        }
-
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerDaybookTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Daybook totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerDaybookTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
                     </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Total opening bal</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totalOpen.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Total closing bal</span>
+                            <strong class="vm-opr-total-card__value">&#8377; @totalClose.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Records</span>
+                            <strong class="vm-opr-total-card__value">@rowCount</strong>
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="card class-back-tra-fourdesign" style="float:left;width:100%;">
+            </div>
+        }
 
-                        <div class="body" style="padding: 7px; padding-left: 0; padding-right: 0; padding-top: 4px;">
-                            <div class="table-responsive tablethirddesign-new" style="position:inherit;">
-                                <table class="table table-bordered table-striped table-hover" style="width:100%;font-size:12px;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>Firm&nbsp;Name</th>
-                                            <th>Recharge&nbsp;&&nbsp;Bill</th>
-                                            <th>IMPS</th>
-                                            <th>AEPS</th>
-                                            <th>M&nbsp;-&nbsp;POS</th>
-                                            <th>Pancard</th>
-                                            <th>Travel</th>
-                                            <th>Purchase</th>
-                                            <th>Opening&nbsp;Bal</th>
-                                            <th>Closing&nbsp;Bal</th>
-                                            <th>Old&nbsp;Day&nbsp;Refund</th>
-                                            <th>Old&nbsp;Day&nbsp;Failed</th>
-                                            <th>Diff</th>
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-book-open" aria-hidden="true"></i>
+                        <span>Day book report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-ecomm-totals-btn" onclick="showRetailerDaybookTotals()" title="Show totals" aria-expanded="false" aria-controls="retailerDaybookTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportRetailerDaybook" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFRetailerDaybook" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="retailerDaybookReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Firm Name</th>
+                                    <th>Recharge &amp; Bill</th>
+                                    <th>IMPS</th>
+                                    <th>AEPS</th>
+                                    <th>M-POS</th>
+                                    <th>Pancard</th>
+                                    <th>Travel</th>
+                                    <th>Purchase</th>
+                                    <th>Opening Bal</th>
+                                    <th>Closing Bal</th>
+                                    <th>Old Day Refund</th>
+                                    <th>Old Day Failed</th>
+                                    <th>Diff</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (isLive)
+                                {
+                                    foreach (var item in Model.Daybooklive)
+                                    {
+                                        string firmName = item.Frm_Name == null ? Convert.ToString(item.RetailerName) : Convert.ToString(item.Frm_Name);
+                                        string diffCls = "";
+                                        try { if (Convert.ToDecimal(item.DIFF) < 0) { diffCls = "vm-db-neg"; } } catch { }
+                                        <tr class="vm-dmt-row">
+                                            <td><span class="vm-dmt-consumer-text" title="@firmName">@firmName</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.RCH</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.IMPS</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.AEPS</span></td>
+                                            <td><span class="vm-dmt-amount-text vm-db-zero">0.00</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.PAN</span></td>
+                                            <td><span class="vm-dmt-amount-text vm-db-zero">0.00</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.PURCHASE</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.openbal</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.closebal</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.OLDDAYREFUND</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.OLDDAYFAILED</span></td>
+                                            <td><span class="vm-dmt-amount-text @diffCls">@item.DIFF</span></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (Model.Daybooklive != null)
-                                        {
-                                            foreach (var item in Model.Daybooklive)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        @if (item.Frm_Name == null)
-                                                        {
-                                                            @item.RetailerName
-                                                        }
-                                                        else
-                                                        {
-                                                            @item.Frm_Name
-                                                        }
-                                                    </td>
-                                                    <td>@item.RCH</td>
-                                                    <td>@item.IMPS</td>
-                                                    <td>@item.AEPS</td>
-                                                    <td>0.00</td>
-                                                    <td>@item.PAN</td>
-                                                    <td>0.00</td>
-                                                    <td>@item.PURCHASE</td>
-                                                    <td>@item.openbal</td>
-                                                    <td>@item.closebal</td>
-                                                    <td>@item.OLDDAYREFUND</td>
-                                                    <td>@item.OLDDAYFAILED</td>
-                                                    <td>@item.DIFF</td>
-                                                </tr>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            foreach (var item in Model.DayboolOLD)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        @if (item.RetailerName == null)
-                                                        {
-                                                            @item.RetailerName
-                                                        }
-                                                        else
-                                                        {
-                                                            @item.Frm_Name
-                                                        }
-                                                    </td>
-                                                    <td>@item.RCH</td>
-                                                    <td>@item.IMPS</td>
-                                                    <td>@item.AEPS</td>
-                                                    <td>0.00</td>
-                                                    <td>@item.PAN</td>
-                                                    <td>0.00</td>
-                                                    <td>@item.PURCHASE</td>
-                                                    <td>@item.openbal</td>
-                                                    <td>@item.closebal</td>
-                                                    <td>@item.OLDDAYREFUND</td>
-                                                    <td>@item.OLDDAYFAILED</td>
-                                                    <td>@item.DIFF</td>
-                                                </tr>
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                    }
+                                }
+                                else if (Model != null && Model.DayboolOLD != null)
+                                {
+                                    foreach (var item in Model.DayboolOLD)
+                                    {
+                                        string firmName = item.Frm_Name == null ? Convert.ToString(item.RetailerName) : Convert.ToString(item.Frm_Name);
+                                        string diffCls = "";
+                                        try { if (Convert.ToDecimal(item.DIFF) < 0) { diffCls = "vm-db-neg"; } } catch { }
+                                        <tr class="vm-dmt-row">
+                                            <td><span class="vm-dmt-consumer-text" title="@firmName">@firmName</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.RCH</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.IMPS</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.AEPS</span></td>
+                                            <td><span class="vm-dmt-amount-text vm-db-zero">0.00</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.PAN</span></td>
+                                            <td><span class="vm-dmt-amount-text vm-db-zero">0.00</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.PURCHASE</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.openbal</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.closebal</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.OLDDAYREFUND</span></td>
+                                            <td><span class="vm-dmt-amount-text">@item.OLDDAYFAILED</span></td>
+                                            <td><span class="vm-dmt-amount-text @diffCls">@item.DIFF</span></td>
+                                        </tr>
+                                    }
+                                }
+                                @if (rowCount == 0)
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="13" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-book-open" aria-hidden="true"></i>
+                                            <span>No daybook records found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
             </div>
         </div>
+
     </div>
 </section>
-<script type="text/javascript">
-    $(document).ready(function () {
 
-               $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true
+@section PostVmScripts {
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<script>
+    function hideRetailerDaybookTotals() {
+        var $panel = jQuery('#retailerDaybookTotalsPanel');
+        var $btn = jQuery('.saas-retailer-daybook-page .vm-ecomm-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
 
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-            }
+    function showRetailerDaybookTotals() {
+        var $panel = jQuery('#retailerDaybookTotalsPanel');
+        var $btn = jQuery('.saas-retailer-daybook-page .vm-ecomm-totals-btn');
+        if ($panel.is(':visible')) {
+            hideRetailerDaybookTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
 
+    function retailerDaybookDates() {
+        return {
+            txt_frm_date: jQuery('#retailer_daybook_frm_date').val() || '',
+            txt_to_date: jQuery('#retailer_daybook_to_date').val() || ''
+        };
+    }
 
+    function initRetailerDaybookDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initRetailerDaybookDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm(
+                '#retailerDaybookForm',
+                '#retailer_daybook_frm_date',
+                '#retailer_daybook_to_date',
+                true
+            );
+        }
+    }
+
+    jQuery(function () {
+        initRetailerDaybookDatepickers();
+        window.setTimeout(initRetailerDaybookDatepickers, 150);
+        jQuery('#btnExportRetailerDaybook').on('click', function (e) {
+            e.preventDefault();
+            var d = retailerDaybookDates();
+            location.href = '@Url.Action("Excel_Retailer_Daybook_Report", "Home")?txt_frm_date=' + encodeURIComponent(d.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(d.txt_to_date);
         });
-</script>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-
-<script>
-    $(".input-daterange").click(function () {
-        $(".datepicker").addClass('datepickedatbookre');
-    });
-
-
-</script>
-
-<script>
-    $("#btnExport").click(function (e) {
-        e.preventDefault()
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("Excel_Retailer_Daybook_Report", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        location.href = url;
-});
-</script>
-<script>
-    $("#btnPDF").click(function () {
-     var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("PDF_Retailer_Day_Book_Report", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
+        jQuery('#btnPDFRetailerDaybook').on('click', function () {
+            var d = retailerDaybookDates();
+            window.open('@Url.Action("PDF_Retailer_Day_Book_Report", "Home")?txt_frm_date=' + encodeURIComponent(d.txt_frm_date) + '&txt_to_date=' + encodeURIComponent(d.txt_to_date), '_blank');
+        });
     });
 </script>
+}

@@ -1,173 +1,49 @@
-﻿<style>
-    .listtryp {
-        width: 11.1% !important;
-        margin-top: -2px;
-    }
-    @@-webkit-keyframes blinker {
-  from { opacity: 5.0; }
-  to { opacity: 0.0; }
-}
-
-.waitingForConnection {
-  -webkit-animation-name: blinker;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: cubic-bezier(.5, 0, 1, 1);
-  -webkit-animation-duration: 1.7s;
-}
-    .loader {
-        position: fixed;
-        top: -90px;
-        left: 0;
-        background-color: rgba(255,255,255,0.7);
-        z-index: 999999999999;
-        display: none;
-        height: 100vw;
-        width: 100vw;
-        -webkit-animation: spin .8s linear infinite;
-        animation: spin .8s linear infinite;
-    }
-
-    @@-webkit-keyframes spin {
-        from {
-            -webkit-transform: rotate(0deg);
-        }
-
-        to {
-            -webkit-transform: rotate(360deg);
-        }
-    }
-
-    @@keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    .loader::after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 48%;
-        top: 25%;
-        width: 100px;
-        height: 100px;
-        border-style: solid;
-        border-color: black;
-        border-top-color: transparent;
-        border-width: 4px;
-        border-radius: 50%;
-        -webkit-animation: spin .8s linear infinite;
-        animation: spin .8s linear infinite;
-    }
-
-    .aeps-start .fdgfgfgfga {
-        width: 60% !important;
-    }
-
-    .my-trans {
-        width: 100%;
-        float: left;
-        border: 5px solid #fff;
-        padding: 10px;
-        margin-top: 15px;
-    }
-
-    .update-page .container-fluid.transaction-button .update-page5, .update-page .container-fluid.transaction-button .update-page3 {
-        background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
-        color: #fff !important;
-    }
-
-    .update-page .container-fluid.transaction-button {
-        margin-top: 0px;
-    }
-
-    .my-trans.introoo .custome-none-class1 {
-        display: none;
-    }
-
-    .my-trans.introoo .custome-none-class {
-        display: block !important;
-    }
-</style>
-<style>
-    .form-set_1 {
-        width: 100%;
-        float: left;
-        
-    }
-    form#account_form {
-        width: 100%;
-        float: left;
-    }
-        form#account_form label {
-            padding: 0px;
-            margin: 0px;
-            margin-top: 5px;
-        }
-    span.whight_line {
-        background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
-    }
-
-    
-</style>
-
-<div class="loader loaderpancard"></div>
-<div style="display: grid; align-items: center; height: 50vh">
+﻿<div class="loader loaderpancard"></div>
+<div class="vm-rao-pane-inner">
     <div id="not_active" style="display: none;">
-        <div style="margin: auto; display: grid;">
-            <p style="font-size: 20px; text-align: center">Your Account is not activated.</p>
-            <p style="text-align: center">Activate your Account first</p>
-            <span class="text-danger" style="text-align: center; font-size: 11px;" id="customer_acc_error"></span>
-            <button class="btn" style="background: var(--main-bg-lcolor); color: white; margin: auto; font-size: 18px;margin-top: 20px" id="account_opening_customer_btn">Activate</button>
-        </div>
+        <p class="vm-rao-activate-title">Your account is not activated</p>
+        <p class="vm-rao-activate-hint">Activate your account first to open saving accounts for customers.</p>
+        <span class="text-danger" id="customer_acc_error"></span>
+        <button type="button" class="btn" id="account_opening_customer_btn">Activate</button>
     </div>
     <div id="account_opening" style="display: none;">
-        <h3 style="  margin-top: -10px; ">Axis bank Saving Account Opening</h3>
-        <h4 style="font-weight: 400; font-size: 11px; letter-spacing: 0.1px; line-height: 3; animation: blink 1s step-start 0s infinite; display: initial; ">Please enter correct information as per customer/consumer KYC documents below.</h4>
-       <span class="whight_line" style="padding:2px 0px;"></span>
+        <div class="vm-rao-form-head">
+            <h3 class="vm-rao-form-head__title">Axis bank saving account opening</h3>
+            <p class="vm-rao-form-head__kyc">Please enter correct information as per customer KYC documents below.</p>
+        </div>
+        <span class="whight_line"></span>
         <div class="form-set_1">
             <form id="account_form">
                 <div class="input">
-                    <label>First Name</label>
-                    <input class="form-control" type="text" name="fname" value="" style="width: 100%; height: 34px;" required placeholder="Customer First Name" />
+                    <label for="rao_fname">First name</label>
+                    <input class="form-control" type="text" name="fname" id="rao_fname" value="" required placeholder="Customer first name" />
                 </div>
                 <div class="input">
-                    <label>Last Name</label>
-                    <input class="form-control" type="text" name="lname" value=""style="width: 100%; height: 34px;" required placeholder="Customer Last Name"/>
+                    <label for="rao_lname">Last name</label>
+                    <input class="form-control" type="text" name="lname" id="rao_lname" value="" required placeholder="Customer last name" />
                 </div>
                 <div class="input">
-                    <label>Email</label>
-                    <input class="form-control" type="text" name="email" value=""style="width: 100%; height: 34px;" required placeholder="Customer Email I'd"/>
+                    <label for="rao_email">Email</label>
+                    <input class="form-control" type="text" name="email" id="rao_email" value="" required placeholder="Customer email" />
                 </div>
                 <div class="input">
-                    <label>Mobile</label>
-                    <input class="form-control" type="text" name="mobile" value=""style="width: 100%; height: 34px;" required placeholder="Customer Mobile Number" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                    <label for="rao_mobile">Mobile</label>
+                    <input class="form-control" type="text" name="mobile" id="rao_mobile" value="" required placeholder="10-digit mobile" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
                 </div>
                 <div class="input">
-                    <label>DOB (DD,MM,YYYY)</label>
-                    <input class="form-control" type="date" name="dob" value=""style="width: 100%; height: 34px;" required />
+                    <label for="rao_dob">DOB</label>
+                    <input class="form-control" type="date" name="dob" id="rao_dob" value="" required />
                 </div>
                 <div class="input">
-                    <label> Area Pincode</label>
-                    <input class="form-control" type="text"placeholder="Customer Area Pincode" name="pincode" value=""style="width: 100%; height: 34px;"  required maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                    <label for="rao_pincode">Area pincode</label>
+                    <input class="form-control" type="text" name="pincode" id="rao_pincode" value="" required placeholder="6-digit pincode" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
                 </div>
-                <div style="width: 50%; float: left; padding-top: 16px;">
-                    <input class="btn" type="button" value="Submit" id="account_submit" style="width: 98%; height: 34px; background: var(--main-bg-lcolor) !important;" />
+                <div class="vm-rao-form-actions">
+                    <input class="btn" type="button" value="Submit" id="account_submit" />
+                    <input class="btn" type="reset" value="Reset" id="account_reset" />
                 </div>
-                <div style="width: 50%; float: right; padding-top: 16px;">                   
-                    <input class="btn" type="reset" value="Reset" style="width: 98%; height: 34px;  " id="account_reset" />
-                </div>
-                <div>
-                    <span style="font-size: 11px; position: absolute; left: 13px; margin-top: 55px;font-weight:600;" class="text-danger" id="account_submit_error"></span>
-                </div>
+                <span class="text-danger" id="account_submit_error"></span>
             </form>
         </div>
-    </div>
-    <div>
-
     </div>
 </div>

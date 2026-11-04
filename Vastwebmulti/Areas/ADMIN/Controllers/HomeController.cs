@@ -109954,7 +109954,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             }
             string txt_frm_date = DateTime.Now.ToString();
             string txt_to_date = DateTime.Now.ToString();
-            string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString("yyyy-MM-dd");
+            string frm_date = Convert.ToDateTime(txt_frm_date).AddDays(-30).Date.ToString("yyyy-MM-dd");
             string to_date = Convert.ToDateTime(txt_to_date).AddDays(1).ToString("yyyy-MM-dd");
             ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null);
             var entries = db.WalletUnloadReportAdmin(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), type, "ALL", "ALL").ToList();
@@ -110129,6 +110129,36 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
                         db.proc_InsertWalletToBankAmountTransferRefund(pendingRetailer.Idno, outStatus, outMsg);
 
                         return Json(new { status = true, message = "Wallet Unload Rejected & Refunded" });
+                    }
+
+                    var pendingWlAdmin = db.Whitelabel_WalletToBankAmountTransferRequestsToAdmin
+                        .Where(a => a.RequestId == reqId && a.Status == "Pending")
+                        .FirstOrDefault();
+
+                    if (pendingWlAdmin != null)
+                    {
+                        var wlRetailer = db.Whitelabel_WalletToBankAmountTransferRequests
+                            .Where(a => a.RequestId == pendingWlAdmin.RequestId && a.Status == "Pending")
+                            .FirstOrDefault();
+
+                        var refundStatus = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                        var refundMsg = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+
+                        var wlAdminResp = db.proc_Whitelabel_InsertWalletToBankAmountTransferToAdminRefund(pendingWlAdmin.Idno, refundStatus, refundMsg).FirstOrDefault();
+                        if (wlAdminResp != null && wlAdminResp.Status == "Success")
+                        {
+                            if (pendingWlAdmin.type == "Admin" && wlRetailer != null)
+                            {
+                                var wlResp = db.proc_Whitelabel_InsertWalletToBankAmountTransferRefund(wlRetailer.Idno, refundStatus, refundMsg).FirstOrDefault();
+                                if (wlResp != null && wlResp.Status == "Success")
+                                {
+                                    return Json(new { status = true, message = "Wallet Unload Rejected & Refunded" });
+                                }
+                                return Json(new { status = false, message = wlResp != null ? wlResp.Message : "Refund failed" });
+                            }
+                            return Json(new { status = true, message = "Wallet Unload Rejected & Refunded" });
+                        }
+                        return Json(new { status = false, message = wlAdminResp != null ? wlAdminResp.Message : "Refund failed" });
                     }
 
                     return Json(new { status = false, message = "No pending request found!" });

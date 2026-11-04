@@ -2,819 +2,54 @@
 @{ ViewBag.Title = "Request Loan";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml"; }
 
-<style>
-    .case-funding-summary {
-        margin-top: 15px;
-    }
-
-    .funding-hint strong {
-        font-weight: 700;
-    }
-
-    .funding-error {
-        background: #fff1f2 !important;
-        border-left-color: #dc2626 !important;
-        color: #991b1b !important;
-    }
-
-    .funding-success {
-        background: #f0fdf4 !important;
-        border-left-color: #16a34a !important;
-        color: #166534 !important;
-    }
-
-    .topup-highlight {
-        font-size: 15px;
-        font-weight: 700;
-    }
-
-    .loan-request-page {
-        --loan-primary: var(--main-bg-lcolor, #2867c9);
-        --loan-ink: #1e293b;
-        --loan-muted: #64748b;
-        --loan-line: #e2e8f0;
-        --loan-soft: #f8fafc;
-        padding: 26px 20px 42px;
-    }
-
-        .loan-request-page *,
-        .loan-request-page *:before,
-        .loan-request-page *:after {
-            box-sizing: border-box;
-        }
-
-    .loan-shell {
-        max-width: 1120px;
-        margin: 0 auto;
-    }
-
-    /* =========================
-       HEADER
-       ========================= */
-
-    .loan-hero {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 24px;
-        margin-bottom: 22px;
-    }
-
-    .loan-kicker {
-        color: var(--loan-primary);
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: .11em;
-        text-transform: uppercase;
-    }
-
-    .loan-hero h3 {
-        color: var(--loan-ink);
-        font-size: 25px;
-        font-weight: 700;
-        margin: 5px 0 0;
-    }
-
-    .loan-breadcrumb {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 7px;
-        color: var(--loan-muted);
-        font-size: 13px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-        .loan-breadcrumb a {
-            color: var(--loan-muted);
-            text-decoration: none;
-        }
-
-            .loan-breadcrumb a:hover {
-                color: var(--loan-primary);
-            }
-
-        .loan-breadcrumb .current {
-            color: var(--loan-ink);
-            font-weight: 600;
-        }
-
-    .loan-back-btn {
-        align-items: center;
-        background: #fff;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        color: #475569;
-        display: inline-flex;
-        font-size: 13px;
-        font-weight: 700;
-        gap: 8px;
-        padding: 10px 18px;
-        text-decoration: none;
-    }
-
-        .loan-back-btn:hover {
-            color: var(--loan-primary);
-            border-color: var(--loan-primary);
-        }
-
-    /* =========================
-       FORM CARD
-       ========================= */
-
-    .loan-form-card {
-        background: #fff;
-        border: 1px solid var(--loan-line);
-        border-radius: 12px;
-        box-shadow: 0 8px 28px rgba(15, 23, 42, .07);
-        overflow: hidden;
-    }
-
-    .loan-form-intro {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        background: linear-gradient(135deg, #f8fbff, #f3f7fc);
-        border-bottom: 1px solid var(--loan-line);
-        padding: 20px 26px;
-    }
-
-        .loan-form-intro .intro-icon {
-            align-items: center;
-            background: var(--loan-primary);
-            border-radius: 10px;
-            color: #fff;
-            display: flex;
-            font-size: 18px;
-            height: 40px;
-            justify-content: center;
-            width: 40px;
-        }
-
-        .loan-form-intro h4 {
-            color: var(--loan-ink);
-            font-size: 16px;
-            font-weight: 700;
-            margin: 0 0 3px;
-        }
-
-        .loan-form-intro p {
-            color: var(--loan-muted);
-            font-size: 13px;
-            margin: 0;
-        }
-
-    .loan-form {
-        padding: 4px 26px 26px;
-    }
-
-    /* =========================
-       SECTIONS
-       ========================= */
-
-    .loan-section {
-        border-bottom: 1px solid var(--loan-line);
-        padding: 25px 0;
-    }
-
-    .loan-section-heading {
-        align-items: center;
-        display: flex;
-        gap: 10px;
-        margin: 0 0 18px;
-    }
-
-    .loan-section-number {
-        align-items: center;
-        background: #e8f0fd;
-        border-radius: 50%;
-        color: var(--loan-primary);
-        display: flex;
-        font-size: 12px;
-        font-weight: 700;
-        height: 28px;
-        justify-content: center;
-        width: 28px;
-        flex-shrink: 0;
-    }
-
-    .loan-section-heading h4 {
-        color: var(--loan-ink);
-        font-size: 16px;
-        font-weight: 700;
-        margin: 0;
-    }
-
-    .loan-section-heading span {
-        color: var(--loan-muted);
-        display: block;
-        font-size: 12px;
-        margin-top: 2px;
-    }
-
-    /* =========================
-       GRID
-       ========================= */
-
-    .loan-field-grid {
-        display: grid;
-        gap: 18px 20px;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-        .loan-field-grid .wide {
-            grid-column: 1 / -1;
-        }
-
-    .loan-field label {
-        color: #334155;
-        display: inline-block;
-        font-size: 12px;
-        font-weight: 700;
-        margin: 0 0 7px;
-    }
-
-    .required {
-        color: #dc2626;
-        margin-left: 2px;
-    }
-
-    .loan-field .form-control {
-        border: 1px solid #cbd5e1;
-        border-radius: 7px;
-        box-shadow: none;
-        color: var(--loan-ink);
-        display: block;
-        font-size: 14px;
-        height: 40px;
-        padding: 8px 11px;
-        transition: border-color .2s, box-shadow .2s;
-        width: 100%;
-    }
-
-    .loan-field textarea.form-control {
-        height: auto;
-        min-height: 76px;
-        resize: vertical;
-    }
-
-    .loan-field .form-control:focus {
-        border-color: var(--loan-primary);
-        box-shadow: 0 0 0 3px rgba(40,103,201,.12);
-        outline: 0;
-    }
-
-    .loan-field select.form-control {
-        background-color: #fff;
-    }
-
-    .loan-field .text-danger {
-        display: block;
-        font-size: 12px;
-        margin-top: 5px;
-    }
-
-    .loan-help {
-        color: #64748b;
-        display: block;
-        font-size: 11px;
-        margin-top: 5px;
-    }
-
-    /* =========================
-       LOAN TYPE
-       ========================= */
-
-    .loan-type-tabs {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .loan-type-tab {
-        flex: 1 1 180px;
-    }
-
-        .loan-type-tab a {
-            align-items: center;
-            background: #fff;
-            border: 1.5px solid var(--loan-line);
-            border-radius: 10px;
-            color: var(--loan-ink);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            font-size: 14px;
-            font-weight: 600;
-            gap: 8px;
-            padding: 18px 14px;
-            position: relative;
-            text-align: center;
-            text-decoration: none;
-            transition: .18s ease;
-        }
-
-            .loan-type-tab a:hover {
-                border-color: var(--loan-primary);
-                box-shadow: 0 4px 14px rgba(40,103,201,.12);
-                transform: translateY(-1px);
-            }
-
-        .loan-type-tab .tab-icon {
-            align-items: center;
-            background: #eef2f7;
-            border-radius: 50%;
-            color: var(--loan-muted);
-            display: flex;
-            font-size: 17px;
-            height: 40px;
-            justify-content: center;
-            width: 40px;
-        }
-
-        .loan-type-tab.active a {
-            background: linear-gradient(135deg,#eef5ff,#f5f9ff);
-            border-color: var(--loan-primary);
-            box-shadow: 0 4px 14px rgba(40,103,201,.18);
-            color: var(--loan-primary);
-        }
-
-        .loan-type-tab.active .tab-icon {
-            background: var(--loan-primary);
-            color: #fff;
-        }
-
-        .loan-type-tab.active a:after {
-            content: "\f00c";
-            font-family: FontAwesome;
-            position: absolute;
-            top: 8px;
-            right: 10px;
-            font-size: 11px;
-            color: var(--loan-primary);
-        }
-
-    /* =========================
-       USED CAR CASE
-       ========================= */
-
-    .used-case-cards {
-        display: grid;
-        grid-template-columns: repeat(2,minmax(0,1fr));
-        gap: 18px;
-    }
-
-    .used-case-card {
-        position: relative;
-        display: flex;
-        gap: 15px;
-        padding: 20px;
-        border: 1.5px solid #dbe3ef;
-        border-radius: 12px;
-        background: #fff;
-        cursor: pointer;
-        transition: .2s ease;
-    }
-
-        .used-case-card:hover {
-            border-color: var(--loan-primary);
-            box-shadow: 0 5px 18px rgba(40,103,201,.12);
-            transform: translateY(-1px);
-        }
-
-        .used-case-card.active {
-            border-color: var(--loan-primary);
-            background: #f5f9ff;
-            box-shadow: 0 5px 18px rgba(40,103,201,.15);
-        }
-
-    .used-case-icon {
-        width: 44px;
-        height: 44px;
-        min-width: 44px;
-        border-radius: 10px;
-        background: #eef4ff;
-        color: var(--loan-primary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 19px;
-    }
-
-    .used-case-content {
-        flex: 1;
-    }
-
-        .used-case-content h4 {
-            margin: 0 0 6px;
-            color: #1e293b;
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .used-case-content p {
-            margin: 0 0 10px;
-            color: #64748b;
-            font-size: 13px;
-            line-height: 1.55;
-        }
-
-    .used-case-example {
-        background: #f8fafc;
-        border-radius: 7px;
-        padding: 9px 10px;
-        color: #475569;
-        font-size: 12px;
-        line-height: 1.5;
-    }
-
-    .used-case-info {
-        margin-top: 10px;
-        color: #2867c9;
-        font-size: 12px;
-        font-weight: 600;
-    }
-
-    .used-case-radio {
-        position: absolute;
-        top: 18px;
-        right: 18px;
-    }
-
-        .used-case-radio input {
-            width: 18px;
-            height: 18px;
-        }
-
-    /* =========================
-       REFINANCE TYPES
-       ========================= */
-
-    .refinance-type-section {
-        margin-top: 20px;
-    }
-
-    .loan-sub-heading {
-        margin-bottom: 14px;
-    }
-
-        .loan-sub-heading h4 {
-            margin: 0 0 4px;
-            color: #1e293b;
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        .loan-sub-heading span {
-            color: #64748b;
-            font-size: 12px;
-        }
-
-    .refinance-type-cards {
-        display: grid;
-        grid-template-columns: repeat(3,minmax(0,1fr));
-        gap: 14px;
-    }
-
-    .refinance-type-card {
-        position: relative;
-        display: flex;
-        gap: 12px;
-        padding: 17px;
-        border: 1.5px solid #dbe3ef;
-        border-radius: 10px;
-        background: #fff;
-        cursor: pointer;
-        transition: .2s ease;
-    }
-
-        .refinance-type-card:hover {
-            border-color: var(--loan-primary);
-            box-shadow: 0 4px 14px rgba(40,103,201,.10);
-        }
-
-        .refinance-type-card.active {
-            border-color: var(--loan-primary);
-            background: #f5f9ff;
-            box-shadow: 0 4px 14px rgba(40,103,201,.14);
-        }
-
-    .refinance-type-icon {
-        width: 38px;
-        height: 38px;
-        min-width: 38px;
-        border-radius: 8px;
-        background: #eef4ff;
-        color: var(--loan-primary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .refinance-type-content {
-        padding-right: 18px;
-    }
-
-        .refinance-type-content h4 {
-            margin: 0 0 6px;
-            font-size: 14px;
-            color: #1e293b;
-            font-weight: 700;
-        }
-
-        .refinance-type-content p {
-            margin: 0 0 8px;
-            color: #64748b;
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-    .refinance-example {
-        padding: 8px;
-        border-radius: 6px;
-        background: #f8fafc;
-        color: #475569;
-        font-size: 11px;
-        line-height: 1.45;
-    }
-
-    .refinance-radio {
-        position: absolute;
-        top: 14px;
-        right: 14px;
-    }
-
-        .refinance-radio input {
-            width: 17px;
-            height: 17px;
-        }
-
-    /* =========================
-       VEHICLE
-       ========================= */
-
-    .vehicle-panel {
-        background: #fbfdff;
-        border: 1px solid #dbeafe;
-        border-radius: 9px;
-        margin-top: 22px;
-        padding: 0 20px 20px;
-    }
-
-        .vehicle-panel .loan-section-heading {
-            background: #f0f6ff;
-            margin: 0 -20px 20px;
-            padding: 15px 20px;
-        }
-
-    /* =========================
-       INFO / POLICY
-       ========================= */
-
-    .loan-note {
-        background: var(--loan-soft);
-        border-left: 3px solid var(--loan-primary);
-        border-radius: 0 6px 6px 0;
-        color: var(--loan-muted);
-        font-size: 12px;
-        margin: 15px 0;
-        padding: 10px 12px;
-    }
-
-    .policy-grid {
-        display: grid;
-        grid-template-columns: repeat(4,1fr);
-        gap: 10px;
-        margin-top: 15px;
-    }
-
-    .policy-box {
-        border: 1px solid #e2e8f0;
-        background: #fff;
-        border-radius: 8px;
-        padding: 12px;
-    }
-
-        .policy-box .title {
-            color: #64748b;
-            font-size: 11px;
-            margin-bottom: 4px;
-        }
-
-        .policy-box .value {
-            color: #1e293b;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-    .funding-hint {
-        display: none;
-        margin-top: 10px;
-        padding: 10px 12px;
-        border-radius: 7px;
-        background: #eff6ff;
-        border-left: 3px solid var(--loan-primary);
-        color: #1e40af;
-        font-size: 12px;
-    }
-
-    .eligibility-status {
-        display: none;
-        margin-top: 15px;
-        padding: 12px;
-        border-radius: 8px;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-    }
-
-    /* =========================
-       ACTIONS
-       ========================= */
-
-    .loan-actions {
-        align-items: center;
-        display: flex;
-        gap: 10px;
-        justify-content: flex-end;
-        padding-top: 24px;
-    }
-
-        .loan-actions .btn {
-            border-radius: 7px;
-            font-size: 13px;
-            font-weight: 700;
-            padding: 10px 18px;
-        }
-
-        .loan-actions .btn-primary {
-            background: var(--loan-primary);
-            border-color: var(--loan-primary);
-        }
-
-        .loan-actions .btn-default {
-            background: #fff;
-            border-color: #cbd5e1;
-            color: #475569;
-        }
-
-    /* =========================
-       RESPONSIVE
-       ========================= */
-
-    @@media (max-width: 900px) {
-
-        .refinance-type-cards {
-            grid-template-columns: 1fr;
-        }
-
-        .policy-grid {
-            grid-template-columns: repeat(2,1fr);
-        }
-    }
-
-    @@media (max-width: 767px) {
-
-        .loan-request-page {
-            padding: 18px 12px 28px;
-        }
-
-        .loan-hero {
-            align-items: flex-start;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-            .loan-hero h3 {
-                font-size: 22px;
-            }
-
-        .loan-form-intro,
-        .loan-form {
-            padding-left: 18px;
-            padding-right: 18px;
-        }
-
-        .loan-field-grid {
-            grid-template-columns: 1fr;
-        }
-
-            .loan-field-grid .wide {
-                grid-column: auto;
-            }
-
-        .loan-type-tab {
-            flex: 1 1 100%;
-        }
-
-        .used-case-cards {
-            grid-template-columns: 1fr;
-        }
-
-        .policy-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .loan-actions {
-            flex-direction: column-reverse;
-        }
-
-            .loan-actions .btn {
-                width: 100%;
-                text-align: center;
-            }
-    }
-</style>
-<section class="content loan-request-page">
-
-    <div class="loan-shell">
-
-        <!-- HEADER -->
-        <div class="loan-hero">
-
-            <div>
-
-                <div class="loan-kicker">
-                    Loan Centre
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-loan-report-modern.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-loan-create-modern.css?v=5" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-loan-report-page saas-retailer-loan-create-page vm-loan-create-radiant-fields">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Loan</li>
+                    <li><a href="@Url.Action("Index", "Loan", new { area = "RETAILER" })">My Applications</a></li>
+                    <li>New Request</li>
+                </ol>
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
+                    <div class="vm-dmt-filter-search-group vm-loan-create-toolbar-actions">
+                        <a href="@Url.Action("Index", "Loan", new { area = "RETAILER" })" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn saas-acc-btn--back" title="Back to list">
+                            <i class="fas fa-arrow-left" aria-hidden="true"></i><span>Back</span>
+                        </a>
+                    </div>
                 </div>
-
-                <h3>
-                    Request a New Loan
-                </h3>
-
-                <ul class="loan-breadcrumb">
-
-                    <li>
-                        <a href="@Url.Action("Dashboard", "Home")">
-                            Home
-                        </a>
-                    </li>
-
-                    <li>
-                        <i class="fa fa-angle-right"></i>
-                    </li>
-
-                    <li>
-                        <a href="@Url.Action("Index", "Loan")">
-                            Loan Applications
-                        </a>
-                    </li>
-
-                    <li>
-                        <i class="fa fa-angle-right"></i>
-                    </li>
-
-                    <li class="current">
-                        New Request
-                    </li>
-
-                </ul>
-
             </div>
-
-
-            <a href="@Url.Action("Index", "Loan")"
-               class="loan-back-btn">
-
-                <i class="fa fa-arrow-left"></i>
-
-                Back to list
-
-            </a>
-
         </div>
 
+        <div class="vm-opr-main-card vm-retailer-loan-create-main">
 
-        <!-- FORM CARD -->
-        <div class="loan-form-card">
-
-
-
-
-            <div class="loan-form-intro">
-
-                <div class="intro-icon">
-                    <i class="fa fa-file-text-o"></i>
+            <div class="vm-retailer-loan-create-head vm-dmt-table-panel__head">
+                <div class="vm-retailer-loan-create-head__title">
+                    <div class="vm-retailer-loan-create-head__icon" aria-hidden="true"><i class="fas fa-file-signature"></i></div>
+                    <div>
+                        <h3>Request a New Loan</h3>
+                        <p>Complete the details below to submit your application.</p>
+                    </div>
                 </div>
-
-                <div>
-
-                    <h4>
-                        Application Details
-                    </h4>
-
-                    <p>
-                        Complete the details below to begin your loan application.
-                    </p>
-
-                </div>
-
             </div>
 
+            <div class="loan-request-page">
+                <div class="loan-shell">
+                    <div class="loan-form-card">
 
             @using (Html.BeginForm(
                 "Create",
@@ -834,7 +69,7 @@
                 @Html.ValidationSummary(
                                         true,
                                         "",
-                                        new { @class = "text-danger" }
+                                        new { @class = "text-danger validation-summary-errors" }
                                     )
                                 <!-- =====================================================
                                 1. LOAN TYPE
@@ -1442,18 +677,19 @@
 
                                                                                                                                                                                             <span class="required">*</span>
 
-                                                                                                                                                                                            @Html.TextBoxFor(
-                                                                                                                                                                                                                    m => m.Application.DOB,
-                                                                                                                                                                                                                    "{0:yyyy-MM-dd}",
-                                                                                                                                                                                                                    new
-                                                                                                                                                                                                                    {
-                                                                                                                                                                                                                        @class = "form-control",
-                                                                                                                                                                                                                        type = "date",
-                                                                                                                                                                                                                        max = DateTime.Today
-                                                                                                                                                                                                                            .AddYears(-18)
-                                                                                                                                                                                                                            .ToString("yyyy-MM-dd")
-                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                )
+                                                                                                                                                                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date vm-loan-form-date">
+                                                                                                                                                                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                                                                                                                                                                @Html.TextBoxFor(
+                                                                                                                                                                                                                        m => m.Application.DOB,
+                                                                                                                                                                                                                        "{0:yyyy-MM-dd}",
+                                                                                                                                                                                                                        new
+                                                                                                                                                                                                                        {
+                                                                                                                                                                                                                            @class = "form-control saas-acc-dp-input vm-loan-form-date-input",
+                                                                                                                                                                                                                            autocomplete = "off",
+                                                                                                                                                                                                                            placeholder = "Date of birth"
+                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                    )
+                                                                                                                                                                                            </div>
 
                                                                                                                                                                                             @Html.ValidationMessageFor(
                                                                                                                                                                                                                     m => m.Application.DOB,
@@ -2190,18 +1426,21 @@ new
                                                                                                                                                                                                                                                                                                 <span class="required">*</span>
                                                                                                                                                                                                                                                                                             </label>
 
-                                                                                                                                                                                                                                                                                            @Html.TextBoxFor(
-                                                                                                                                                                                                                                                                                                                    m => m.Vehicle.RegistrationDate,
-                                                                                                                                                                                                                                                                                                                    "{0:yyyy-MM-dd}",
-                                                                                                                                                                                                                                                                                                                    new
-                                                                                                                                                                                                                                                                                                                    {
-                                                                                                                                                                                                                                                                                                                        @class =
-                                                                                                                                                                                                                                                                                                                            "form-control used-car-required",
-                                                                                                                                                                                                                                                                                                                        type = "date"
-                                                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                                                )
+                                                                                                                                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date vm-loan-form-date">
+                                                                                                                                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                                                                                                                                @Html.TextBoxFor(
+                                                                                                                                                                                        m => m.Vehicle.RegistrationDate,
+                                                                                                                                                                                        "{0:yyyy-MM-dd}",
+                                                                                                                                                                                        new
+                                                                                                                                                                                        {
+                                                                                                                                                                                            @class = "form-control saas-acc-dp-input vm-loan-form-date-input used-car-required",
+                                                                                                                                                                                            autocomplete = "off",
+                                                                                                                                                                                            placeholder = "Registration date"
+                                                                                                                                                                                        }
+                                                                                                                                                                                    )
+                                                                                                                                                            </div>
 
-                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                        </div>
 
 
                                                                                                                                                                                                                                                                                         <!-- Fuel : ALWAYS VISIBLE -->
@@ -2578,10 +1817,15 @@ new
                                                                                                                                                                                                                                                                                                                                 Last EMI Paid Date
                                                                                                                                                                                                                                                                                                                             </label>
 
-                                                                                                                                                                                                                                                                                                                            <input type="date"
-                                                                                                                                                                                                                                                                                                                                   id="LastEMIPaidDate"
-                                                                                                                                                                                                                                                                                                                                   name="ExistingLoan.LastEMIPaidDate"
-                                                                                                                                                                                                                                                                                                                                   class="form-control" />
+                                                                                                                                                                                                                                                                                                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date vm-loan-form-date">
+                                                                                                                                                                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                                                                                                                                                                <input type="text"
+                                                                                                                                                                                                                                                                                                                                       id="LastEMIPaidDate"
+                                                                                                                                                                                                                                                                                                                                       name="ExistingLoan.LastEMIPaidDate"
+                                                                                                                                                                                                                                                                                                                                       class="form-control saas-acc-dp-input vm-loan-form-date-input"
+                                                                                                                                                                                                                                                                                                                                       autocomplete="off"
+                                                                                                                                                                                                                                                                                                                                       placeholder="Last EMI date" />
+                                                                                                                                                                                            </div>
 
                                                                                                                                                                                                                                                                                                                         </div>
 
@@ -2622,10 +1866,15 @@ new
                                                                                                                                                                                                                                                                                                                                 <span class="required">*</span>
                                                                                                                                                                                                                                                                                                                             </label>
 
-                                                                                                                                                                                                                                                                                                                            <input type="date"
-                                                                                                                                                                                                                                                                                                                                   id="LoanClosureDate"
-                                                                                                                                                                                                                                                                                                                                   name="ExistingLoan.LoanClosureDate"
-                                                                                                                                                                                                                                                                                                                                   class="form-control close-bt-required" />
+                                                                                                                                                                                                                                                                                                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date vm-loan-form-date">
+                                                                                                                                                                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                                                                                                                                                                <input type="text"
+                                                                                                                                                                                                                                                                                                                                       id="LoanClosureDate"
+                                                                                                                                                                                                                                                                                                                                       name="ExistingLoan.LoanClosureDate"
+                                                                                                                                                                                                                                                                                                                                       class="form-control saas-acc-dp-input vm-loan-form-date-input close-bt-required"
+                                                                                                                                                                                                                                                                                                                                       autocomplete="off"
+                                                                                                                                                                                                                                                                                                                                       placeholder="Closure date" />
+                                                                                                                                                                                            </div>
 
                                                                                                                                                                                                                                                                                                                             <small class="loan-help">
                                                                                                                                                                                                                                                                                                                                 Previous loan must have been closed within
@@ -2976,7 +2225,7 @@ new
                                                                                                                                                                                                                                                                                                                                                                                                     @Html.ActionLink(
                                                                                                                                                                                                                                                                                                                                                                                                                             "Cancel",
                                                                                                                                                                                                                                                                                                                                                                                                                             "Index",
-                                                                                                                                                                                                                                                                                                                                                                                                                            null,
+                                                                                                                                                                                                                                                                                                                                                                                                                            new { area = "RETAILER" },
                                                                                                                                                                                                                                                                                                                                                                                                                             new { @class = "btn btn-default" }
                                                                                                                                                                                                                                                                                                                                                                                                                         )
 
@@ -2991,6 +2240,9 @@ new
 
                                                                                                                                                                                                                                                                                                                                                                                                 </div>}
 
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -3027,6 +2279,141 @@ new
         }
 
     };
+
+
+    var loanCreateDobMaxDate = "@DateTime.Today.AddYears(-18).ToString("yyyy-MM-dd")";
+
+    var loanCreateDatePickerOpts = {
+        format: "yyyy-mm-dd",
+        todayHighlight: true,
+        autoclose: true,
+        orientation: "bottom auto",
+        forceParse: false,
+        keyboardNavigation: true,
+        enableOnReadonly: true,
+        container: "body"
+    };
+
+
+    function bindLoanCreateDatePicker($input) {
+
+        if (!$input || !$input.length || !$.fn.datepicker) {
+            return;
+        }
+
+        if ($input.data("datepicker")) {
+            return;
+        }
+
+        var opts = $.extend({}, loanCreateDatePickerOpts);
+
+        if ($input.attr("name") === "Application.DOB") {
+            opts.endDate = loanCreateDobMaxDate;
+        }
+
+        $input.prop("readonly", true);
+        $input.datepicker(opts);
+
+        var setActive = function (on) {
+            $input.closest(".saas-acc-dp-field").toggleClass("is-active", !!on);
+        };
+
+        $input
+            .off("show.loanCreateDate shown.loanCreateDate hide.loanCreateDate changeDate.loanCreateDate")
+            .on("show.loanCreateDate shown.loanCreateDate", function () {
+                setActive(true);
+                if (typeof window.repositionAdminDatepicker === "function") {
+                    window.repositionAdminDatepicker(this);
+                }
+            })
+            .on("hide.loanCreateDate changeDate.loanCreateDate", function () {
+                setActive(false);
+            });
+    }
+
+
+    function showLoanCreateDatePicker($input) {
+
+        if (!$input || !$input.length) {
+            return;
+        }
+
+        bindLoanCreateDatePicker($input);
+
+        if ($input.data("datepicker")) {
+            $input.datepicker("show");
+        }
+    }
+
+
+    function initLoanCreateDatePickers(context) {
+
+        var $scope = context ? $(context) : $("#loanCreateForm");
+
+        if (!$scope.length || !$.fn.datepicker) {
+            return;
+        }
+
+        $scope.find(".vm-loan-form-date .saas-acc-dp-input").each(function () {
+
+            var $input = $(this);
+
+            if (!$input.is(":visible")) {
+                return;
+            }
+
+            bindLoanCreateDatePicker($input);
+        });
+    }
+
+
+    function destroyLoanCreateSelect2($el) {
+        if ($el && $el.length && $el.data("select2")) {
+            $el.select2("destroy");
+        }
+    }
+
+
+    function initLoanCreateSelect2(context) {
+
+        var $scope = context ? $(context) : $("#loanCreateForm");
+
+        if (!$scope.length) {
+            return;
+        }
+
+        $scope.find("select.form-control:visible").each(function () {
+
+            var $el = $(this);
+
+            $el.addClass("vm-opr-select vm-dmt-select");
+
+            if ($el.hasClass("select2-hidden-accessible")) {
+                return;
+            }
+
+            if (typeof window.applyAdminSelect2 === "function") {
+                window.applyAdminSelect2(
+                    $el,
+                    {
+                        width: "100%",
+                        minimumResultsForSearch: 8,
+                        dropdownParent: $el.closest(".loan-form")
+                    },
+                    true
+                );
+                return;
+            }
+
+            if ($.fn.select2) {
+                $el.select2({
+                    width: "100%",
+                    minimumResultsForSearch: 8,
+                    dropdownParent: $el.closest(".loan-form")
+                });
+            }
+        });
+    }
 
 
     var tenureLimits = {
@@ -3221,6 +2608,9 @@ new
 
 
         updateTenureLimits();
+
+        initLoanCreateSelect2();
+        initLoanCreateDatePickers();
 
     }
 
@@ -3535,6 +2925,12 @@ new
 
 
         updateFundingSummary();
+
+        window.setTimeout(function () {
+            initLoanCreateDatePickers("#existingLoanSection");
+            initLoanCreateDatePickers("#lastEmiDateContainer");
+            initLoanCreateDatePickers("#loanClosureDateContainer");
+        }, 220);
 
     }
 
@@ -4102,8 +3498,31 @@ new
        DOCUMENT READY
        ========================================================= */
 
+    $(document).on(
+        "click.loanCreateDate",
+        "#loanCreateForm .vm-loan-form-date .saas-acc-dp-input",
+        function (e) {
+            e.preventDefault();
+            showLoanCreateDatePicker($(this));
+        }
+    );
+
+
+    $(document).on(
+        "click.loanCreateDate",
+        "#loanCreateForm .vm-loan-form-date .saas-acc-dp-icon",
+        function (e) {
+            e.preventDefault();
+            var $input = $(this).closest(".saas-acc-dp-field").find(".saas-acc-dp-input").first();
+            showLoanCreateDatePicker($input);
+        }
+    );
+
+
     $(document).ready(function () {
 
+        initLoanCreateSelect2();
+        initLoanCreateDatePickers();
 
         /* Default Loan Type */
 

@@ -2,17 +2,172 @@
 @{
     ViewBag.Title = "UPICollection";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+    var upiRows = (Model ?? Enumerable.Empty<Vastwebmulti.Models.show_upi_txn_details_Result>()).ToList();
+    var upiRowCount = upiRows.Count;
 }
-<style>
-    #button {
-        display: block;
-        margin: 20px auto;
-        padding: 10px 30px;
-        background-color: #eee;
-        border: solid #ccc 1px;
-        cursor: pointer;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=21" rel="stylesheet" />
+<script>document.body.classList.add('saas-sell-rch-dp-page', 'saas-dealer-fund-transfer-page', 'saas-retailer-fund-transfer-page', 'saas-retailer-upi-page', 'saas-retailer-upi-collect-page');</script>
 
+<style type="text/css">
+    @@keyframes ldio-zdyd6mf6t5 {
+        0% { top: 96px; left: 96px; width: 0; height: 0; opacity: 1; }
+        100% { top: 18px; left: 18px; width: 156px; height: 156px; opacity: 0; }
+    }
+    .ldio-zdyd6mf6t5 div {
+        position: absolute;
+        border-width: 4px;
+        border-style: solid;
+        opacity: 1;
+        border-radius: 50%;
+        animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
+    }
+    .ldio-zdyd6mf6t5 div:nth-child(1) { border-color: #e90c59; }
+    .ldio-zdyd6mf6t5 div:nth-child(2) { border-color: #46dff0; animation-delay: -0.5s; }
+    .loadingio-spinner-ripple-92ar2pfqk5j {
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        overflow: hidden;
+        background: transparent;
+    }
+    .ldio-zdyd6mf6t5 {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform: translateZ(0) scale(1);
+        backface-visibility: hidden;
+        transform-origin: 0 0;
+    }
+    .ldio-zdyd6mf6t5 div { box-sizing: content-box; }
+</style>
+
+<style>
+    .datepicker table tr td span { color: #555 !important; }
+    .datepicker table tr td span.active { color: #fff !important; }
+
+    /* ===== MODERN UPI COLLECT FORM (latest design) ===== */
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-form { display: flex; flex-direction: column; gap: 10px; padding: 14px 14px 15px; background: #fff; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-field label { display: block; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: .6px; margin: 0 0 5px 2px; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-req { color: #ef4444; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-inputwrap { position: relative; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-input.form-control { height: 38px; border-radius: 9px; border: 1.5px solid #e2e8f0; background: #f8fafc; font-size: 13.5px; font-weight: 600; color: #0f172a; padding: 0 12px; box-shadow: none; transition: border-color .18s ease, box-shadow .18s ease, background .18s ease; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-input.form-control::placeholder { color: #94a3b8; font-weight: 500; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-input.form-control:focus { border-color: #4f46e5; background: #fff; box-shadow: 0 0 0 4px rgba(79,70,229,.13); outline: none; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-input--icon.form-control { padding-left: 48px !important; text-overflow: ellipsis; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #6366f1; font-size: 13px; pointer-events: none; background: #eef2ff; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border-radius: 7px; z-index: 2; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-id-group { display: flex; gap: 9px; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-id-group .vm-upi-modern-input { flex: 1 1 auto; min-width: 0; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-verify-btn { flex: 0 0 auto; height: 38px; padding: 0 14px; border: none; border-radius: 9px; background: linear-gradient(135deg,#4f46e5,#7c3aed); color: #fff !important; font-size: 12.5px; font-weight: 800; letter-spacing: .3px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(79,70,229,.3); transition: transform .15s ease, box-shadow .15s ease, filter .15s ease; white-space: nowrap; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-verify-btn:hover { transform: translateY(-1px); filter: brightness(1.07); box-shadow: 0 9px 18px rgba(79,70,229,.42); color: #fff !important; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-verify-btn:active { transform: translateY(0); }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-rupee { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 800; color: #4f46e5; pointer-events: none; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-input--rupee.form-control { padding-left: 32px; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-input--rupee.form-control::-webkit-outer-spin-button,
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-input--rupee.form-control::-webkit-inner-spin-button { opacity: 1; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-submit-btn { height: 42px; border: none; border-radius: 10px; background: linear-gradient(135deg,#4f46e5 0%,#6d28d9 60%,#7c3aed 100%); color: #fff !important; font-size: 14px; font-weight: 800; letter-spacing: .4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 16px rgba(79,70,229,.35); transition: transform .15s ease, box-shadow .15s ease, filter .15s ease; margin-top: 2px; width: 100%; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-submit-btn:hover { transform: translateY(-2px); filter: brightness(1.06); box-shadow: 0 14px 28px rgba(79,70,229,.48); color: #fff !important; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-submit-btn:active { transform: translateY(0); }
+
+    /* UPI history table + hover (same pattern as UPI QR page) */
+    body.saas-admin-ui .saas-retailer-upi-collect-page #tblshowMasterUPI table { min-width: 820px; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page #tblshowMasterUPI tbody td { font-size: 13px; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page #tblshowMasterUPI tbody td.vm-upi-nowrap { white-space: nowrap !important; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page #tblshowMasterUPI tbody tr.vm-upi-row-hover td { background: #eff6ff !important; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page #tblshowMasterUPI tbody td.vm-upi-col-hover { background: #dbeafe !important; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .status-failsuccessa img { border-radius: 50%; padding: 3px; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page #tblshowMasterUPI .vm-opr-table-empty-row td {
+        text-align: center !important;
+        padding: 26px 10px !important;
+        color: #64748b !important;
+        font-weight: 600 !important;
+    }
+    /* Charges card table (left panel) — latest design */
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-charges-table {
+        width: 100% !important;
+        margin: 10px 0 4px !important;
+        border-collapse: separate !important;
+        border-spacing: 0;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 10px;
+        overflow: hidden;
+        font-size: 13px;
+        background: #fff;
+    }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-charges-table th {
+        background: linear-gradient(180deg, #f1f5f9, #e2e8f0) !important;
+        color: #334155 !important;
+        font-weight: 800 !important;
+        font-size: 12px !important;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        text-align: center !important;
+        padding: 9px 10px !important;
+        border: none !important;
+        border-bottom: 2px solid #cbd5e1 !important;
+    }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-charges-table td {
+        padding: 8px 12px !important;
+        border: none !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        color: #475569 !important;
+    }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-charges-table tr:last-child td {
+        border-bottom: none !important;
+    }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-charges-table td:last-child {
+        font-weight: 800 !important;
+        text-align: right !important;
+        color: #0f172a !important;
+        white-space: nowrap !important;
+    }
+    /* Collect-status panel (UPIAUTOSERVICE polling flow) */
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-status-panel { background: #f8fafc; border: 1.5px dashed #c7d2fe; border-radius: 10px; padding: 12px 14px; margin: 4px 0 8px; text-align: center; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-status-spinner { display: flex; justify-content: center; margin-bottom: 6px; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-status-spin { display: inline-block; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-status-msg { color: #4f46e5; font-weight: 700; font-size: 13px; margin: 0 0 4px; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-status-count { color: #64748b; font-weight: 600; font-size: 12.5px; margin: 0; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-status-final { font-weight: 800; font-size: 13.5px; margin: 0 0 6px; }
+    body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-status-back { display: inline-block; margin-top: 8px; font-weight: 800; color: #4f46e5; font-size: 13.5px; }
+
+    @@media screen and (max-width:767px) {
+        body.saas-admin-ui .saas-retailer-upi-collect-page #tblshowMasterUPI table { min-width: 680px; }
+        body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-form { padding: 12px 12px 13px; gap: 10px; }
+        body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-id-group { flex-wrap: nowrap; }
+        body.saas-admin-ui .saas-retailer-upi-collect-page .vm-upi-modern-verify-btn { padding: 0 14px; font-size: 12.5px; }
+    }
+    /* Clean print (PDF) — only history table prints */
+    @@media print {
+        body.saas-admin-ui .saas-retailer-upi-collect-page .vm-ft-form-col,
+        body.saas-admin-ui .saas-retailer-upi-collect-page .vm-ft-page-toolbar,
+        body.saas-admin-ui .saas-retailer-upi-collect-page .vm-ft-history-toolbar__filters,
+        body.saas-admin-ui .saas-retailer-upi-collect-page .vm-ft-export-group,
+        body.saas-admin-ui .saas-retailer-upi-collect-page #overlay {
+            display: none !important;
+        }
+        body.saas-admin-ui .saas-retailer-upi-collect-page .vm-ft-layout {
+            display: block !important;
+        }
+        body.saas-admin-ui .saas-retailer-upi-collect-page .vm-ft-history-col {
+            width: 100% !important;
+            max-width: 100% !important;
+            flex: 0 0 100% !important;
+        }
+        body.saas-admin-ui .saas-retailer-upi-collect-page #tblshowMasterUPI {
+            overflow: visible !important;
+            max-height: none !important;
+        }
+        body.saas-admin-ui .saas-retailer-upi-collect-page #tblshowMasterUPI table {
+            min-width: 0 !important;
+            width: 100% !important;
+        }
+    }
+</style>
+<style>
     #overlay {
         position: fixed;
         top: 0;
@@ -22,14 +177,12 @@
         display: none;
         background: rgba(0,0,0,0.6);
     }
-
     .cv-spinner {
         height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
     }
-
     .spinner {
         width: 40px;
         height: 40px;
@@ -38,515 +191,59 @@
         border-radius: 50%;
         animation: sp-anime 0.8s infinite linear;
     }
-
     @@keyframes sp-anime {
         100% {
             transform: rotate(360deg);
         }
     }
-
     .is-hide {
         display: none;
     }
 </style>
-<style>
 
-    /* new css  */
-
-
-
-    .layoutt-retailer section.content {
-        margin-top: 95px;
-        padding-top: 5px;
-    }
-
-    .bread-same-all-page li {
-        margin: 6px 0;
-    }
-
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-
-
-    /* new css  */
-
-    .loaders443 {
-        width: 31px;
-        height: 30px;
-        border: 5px solid #FFF;
-        border-bottom-color: #FF3D00;
-        border-radius: 50%;
-        display: inline-block;
-        box-sizing: border-box;
-        animation: rotation 1s linear infinite;
-    }
-
-    @@keyframes rotation {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    span {
-        color: #fff !important;
-    }
-
-    section.content {
-        margin: 87px 0px 0 164px;
-    }
-
-    .datepicker table tr td span {
-        color: #555 !important;
-    }
-
-        .datepicker table tr td span.active {
-            color: #fff !important;
-        }
-
-
-    .tab-menur li a::before {
-        content: '';
-        width: 12px;
-        height: 12px;
-        display: inline-block;
-        border: 2px solid #bbb;
-        border-radius: 50%;
-        margin: 2px 6px 0px 0px;
-    }
-
-    .tab-menur li a.active-ar::before {
-        border-color: var(--main-bg-lcolor);
-        background: var(--main-bg-lcolor);
-    }
-
-    .tab-menur li a.active-ar {
-        color: var(--main-bg-lcolor);
-    }
-
-    .fund-t-dalear input {
-        border: 1px solid #bbb;
-        height: 32px;
-        padding: 0px 5px;
-        padding-top: 0px !important;
-        width: 100%;
-        padding-left: 40px;
-    }
-
-    .fund-t-dalear button {
-        height: 32px;
-        border: 1px solid #c7c2c2;
-        background: #fff;
-    }
-
-    .for-change-fund {
-        margin: 0px;
-        width: 100%;
-    }
-
-    .fund-fistory {
-        float: left;
-        margin-top: 0px;
-        font-size: 18px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-        .fund-fistory sub {
-            position: absolute;
-            bottom: 4px !important;
-            top: 24px;
-            line-height: 8px;
-            left: 11px;
-            font-size: 9px;
-        }
-
-    .nav-tabs li.active .for-change-fund .fa {
-        float: left;
-        font-size: 44px;
-        transform: rotate(-90deg);
-        margin-left: 5px;
-        color: var(--main-bg-lcolor) !important;
-        margin-top: -2px;
-        line-height: 36px;
-    }
-
-    .fund-trasfer-right .nav-tabs + .tab-content {
-        padding: 5px !important;
-    }
-
-    .fund-trasfer-right .tab-content {
-        height: 74vh;
-    }
-
-    .retailer-upitransfer {
-        padding-right: 0;
-    }
-
-        .retailer-upitransfer .col-md-3 {
-            padding-right: 0;
-        }
-
-            .retailer-upitransfer .col-md-3 label {
-                font-size: 10px;
-                text-transform: uppercase;
-                margin-bottom: 0px !important;
-            }
-
-            .retailer-upitransfer .col-md-3 input {
-                height: auto !important;
-                min-height: 28px;
-            }
-
-        .retailer-upitransfer .col-md-3 {
-            padding-left: 5px;
-        }
-
-    .retailer-upitransfer {
-        margin-bottom: 8px;
-        margin-top: -7px;
-    }
-
-    .retailer-upilastclass .fund-t-dalearretailer .date-sateclassee {
-        width: 24%;
-        padding-right: 5px;
-    }
-
-    .retailer-upilastclass .fund-t-dalearretailer .apiclass-satenew.apiclass-satenew-responshive.retailer-addupiclass {
-        width: 24%;
-        padding-right: 5px !important;
-    }
-
-    .retailer-upilastclass .apiclass-satenew.apiclass-satenew-responshive.apiclass-satenewnewclas {
-        width: 16%;
-    }
-
-    .retailer-upilastclass .fund-t-dalearretailer .apiclass-satenew.apiclass-satenew-responshive.retailer-addupiclass button {
-        background: var(--main-bg-lcolor);
-        color: #fff;
-    }
-
-    .retailer-upitransfer .col-md-3 .btn.btn-success {
-        background: #eeebeb !important;
-        color: #555 !important;
-    }
-
-    .fundtransfer-retailerupi .modal-dialog {
-        width: 40%;
-        float: right;
-    }
-
-        .fundtransfer-retailerupi .modal-dialog .form-group label {
-            font-size: 13px;
-        }
-
-        .fundtransfer-retailerupi .modal-dialog .col-md-12 {
-            padding-left: 6px;
-            padding-right: 6px;
-        }
-
-        .fundtransfer-retailerupi .modal-dialog .modal-header {
-            padding: 15px 15px;
-        }
-
-    .fundtransfer-retailerupi .modal-dialog {
-        width: 40%;
-    }
-
-        .fundtransfer-retailerupi .modal-dialog .form-group input.btn.btn-default {
-            background: #ddd !important;
-            float: right;
-            padding: 8px 15px;
-            height: auto;
-        }
-
-    .dropdown-menu.datepicker-dropdown.datepicker {
-        margin-top: 99px !important;
-    }
-
-    .upi-retailer-date .date-sateclassee input {
-        border: 1px solid #555;
-    }
-
-    .upi-retailer-date .apiclass-satenewnewclas button {
-        border-color: #555 !important;
-    }
-
-    .upi-retailer-date .date-sateclassee .custom-date-icon {
-        border-color: #555 !important;
-        height: 29px !important;
-        top: 1px !important;
-    }
-
-    .upi-retailer-datepdf .col-md-4.date-sateclassee {
-        width: 20%;
-        float: left;
-    }
-
-    .upi-retailer-datepdf .col-md-2.apiclass-satenew {
-        width: 14% !important;
-    }
-
-    .upi-retailer-datepdf .col-md-4.date-sateclassee input {
-        text-align: right;
-        font-size: 14px;
-    }
-
-    .upi-retailer-datepdf .col-md-2.apiclass-satenew.apiclass-satenew-responshive.retailer-addupiclass {
-        width: 24% !important;
-    }
-
-    .upi-retailer-datepdf .col-md-3.buttonPdf.retailer-pdf-second {
-        padding-left: 0px !important;
-        padding-right: 5px;
-        padding-top: 1px !important;
-    }
-
-        .upi-retailer-datepdf .col-md-3.buttonPdf.retailer-pdf-second button {
-            background-color: #fff !important;
-            border: 1px solid #555 !important;
-            color: #555;
-            height: 30px;
-        }
-
-
-    @@media screen and (max-width:1366px) {
-        .retailer-upitransfer {
-            margin-top: 0;
-        }
-
-        .bread-same-all-page.allpage-responshivenew ul {
-            margin-top: 5px;
-        }
-
-        .upi-retailer-datepdf .col-md-4.date-sateclassee .custom-date-icon {
-            width: 26px;
-        }
-    }
-
-    @@media screen and (max-width:992px) {
-        .retailer-upitransfer {
-            width: 100% !important;
-            float: left;
-        }
-
-            .retailer-upitransfer .col-md-3 {
-                width: 25%;
-                float: left;
-            }
-
-                .retailer-upitransfer .col-md-3 label, .retailer-upitransfer .col-md-3 input {
-                    width: 100%;
-                    float: left;
-                }
-
-        .col-md-12.retailer-upitransfer {
-            padding: 0;
-        }
-    }
-
-    @@media screen and (max-width:767px) {
-        .allpage-responshivenew {
-            padding: 0px 0;
-        }
-
-            .allpage-responshivenew ul li {
-                margin-bottom: 6px;
-            }
-
-        .col-md-8, .col-md-4.servicepaidreport {
-            padding-left: 15px;
-        }
-    }
-
-
-    @@media screen and (max-width:766px) {
-        .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li {
-            width: 100% !important;
-            float: left !important;
-            border: 0px !important;
-            text-align: center;
-        }
-
-            .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li a {
-                width: 100% !important;
-                float: none !important;
-                text-align: center;
-            }
-
-                .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li a label .fund-fistory sub {
-                    position: static;
-                    display: block;
-                }
-
-                .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li a .fund-fistory {
-                    text-align: center;
-                    width: 100%;
-                }
-
-                .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li a label .fa.fa-caret-down {
-                    display: none;
-                }
-
-        .retailer-upilastclass-second ul.responsive-sateulce li .col-md-4, .retailer-upilastclass-second ul.responsive-sateulce li .col-md-2 {
-            float: left;
-        }
-
-        .retailer-upilastclass-second ul.responsive-sateulce {
-            padding-bottom: 10px;
-            padding-left: 4px;
-        }
-
-        .bread-same-all-page.allpage-responshivenew ul {
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-
-        .upi-retailer-datepdf .col-md-3.buttonPdf.retailer-pdf-second {
-            display: block;
-        }
-
-        .upi-retailer-datepdf .col-md-4.date-sateclassee {
-            width: 50%;
-            margin-bottom: 5px;
-        }
-
-            .upi-retailer-datepdf .col-md-4.date-sateclassee input {
-                text-align: center;
-            }
-
-        .upi-retailer-datepdf .col-md-2.apiclass-satenew.apiclass-satenew-responshive.retailer-addupiclass {
-            width: auto !important;
-        }
-
-            .upi-retailer-datepdf .col-md-2.apiclass-satenew.apiclass-satenew-responshive.retailer-addupiclass button {
-                padding: 0 4px !important;
-            }
-
-        .fourthdesign-retailer-allnone .col-md-4, .fourthdesign-retailer-allnone .col-md-8 {
-            padding-left: 0;
-        }
-    }
-
-    @@media screen and (max-width:480px) {
-        .scan-outer form .col-md-12.col-sm-12.col-xs-12 .col-md-3.col-sm-3.col-xs-3 {
-            padding: 0;
-        }
-
-        .retailer-upilastclass-second ul.responsive-sateulce li .col-md-4 {
-            width: 50%;
-            margin-bottom: 5px;
-        }
-
-        .retailer-upilastclass-second ul.responsive-sateulce li .col-md-2 {
-            width: auto !important;
-            float: left;
-        }
-
-            .retailer-upilastclass-second ul.responsive-sateulce li .col-md-2 button {
-                padding: 0 15px !important;
-            }
-
-        .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li {
-            padding: 0px !important;
-        }
-    }
-
-
-    @@media screen and (max-width:420px) {
-        #leftsidebar.sidebar.retailer-header-left, .second-design #leftsidebar.retailer-header-left.header-left-newresponshive.newresponshive-secondde {
-            margin-top: -78px !important;
-        }
-    }
-
-    @@media screen and (max-width:375px) {
-        .retailer-upitransfer .col-md-3 {
-            width: 50%;
-            float: left;
-        }
-    }
-</style>
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section">
-    <div class="container-fluid">
-        <!--Four-Design-Page-Header-Start-->
-        <div class="page-title-box-fourde">
-            <h3>Upi Transfer</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);background: transparent;margin: 0;padding: 0;">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);" style="background: transparent; margin: 0; padding: 0;">Upi Transfer</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Page-Header-End-->
-        <div class="page-header-third">
-            <div class="bread-same-all-page allpage-responshivenew">
-                <ul style="width:auto;float:left;margin:0;">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                        </a>
-                    </li>
-                    <li class="smli">
-                        <a href="@Url.Action("UPICollection","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Add Wallet By UPI Collection&nbsp;
-                        </a>
-                    </li>
-                    @* <li><input type="button" id="btnUPIreq" class="btn btn-success" name="btnUPIreq" value="Show Manual UPI REQ" /></li>*@
-                </ul>
-                @*<div class="col-md-12 retailer-upitransfer" style="float:right;width:auto;">
-                        <div class="col-md-3">
-                            <label>TOTAL SUCCESS</label> <input type="button" class="btn btn-success col-md-12" style="color:white;" value="@totalsuccess" />
-                        </div>
-                        <div class="col-md-3">
-                            <label>TOTAL Pending</label> <input type="button" class="btn btn-warning  col-md-12" style="color:white;" value="@penamount" />
-                        </div>
-
-                        <div class="col-md-3">
-                            <label>TOTAL Failed</label>  <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalfailamnt" />
-                        </div>
-
-                        <div class="col-md-3">
-                            <label>TOTAL Charges</label> <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalcharges" />
-                        </div>
-
-                    </div>*@
+<section class="content saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium saas-dealer-fund-transfer-page saas-retailer-fund-transfer-page saas-retailer-upi-page saas-retailer-upi-collect-page">
+
+    <div class="container-fluid vm-ft-page-shell">
+
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <div>
+                    <ol class="vm-ft-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Report's</li>
+                        <li>UPI Collection</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="vm-ft-search-wrap">
+                <input class="form-control" type="text" value="" id="myInput" name="myInput" placeholder="Search by name, amount, RRN..." autocomplete="off" onkeyup="myFunction()" />
             </div>
         </div>
 
-    </div>
+        <div class="vm-ft-layout-wrap">
+        <div class="vm-ft-layout vm-ft-layout--full">
+            <div class="vm-ft-form-col">
+                <div class="fund-trasfer-left vm-ft-form-card">
+                    <div class="vm-ft-form-card-header">
+                        <div class="vm-ft-form-card-header__icon" aria-hidden="true">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <div>
+                            <span class="vm-ft-form-card-header__title">UPI Collection</span>
+                            <span class="vm-ft-form-card-header__sub">Collect payment via UPI ID</span>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs fullbodydycolorbg1 tab-seconddesign tab-third-design vm-ft-role-tabs fulltabchange" id="tabs">
+                        <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--active current active" data-tab="tab-1" role="presentation" style="width:100% !important;">
+                            <a data-toggle="tab" href="#home" class="vm-ft-role-tab" aria-expanded="true" aria-selected="true">Add Wallet By UPI Collection</a>
+                        </li>
+                    </ul>
 
-    <div class="col-md-12">
-
-        <div class="row clearfix four-design-table-design">
-            <div class="col-md-4">
-                <div class="page-header-third">
-                    <div class="fund-trasfer-left fund-user-left">
-
-                        @*<ul class="nav nav-tabs tabtypeschages" id="tabs">
-                                @if (UPIQRBASEPRICEset == null)
-                                {
-                                    <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true" style="font-size: 18px !important;font-weight: 600;">+ Wallet By QR Code (UPI)</a></li>
-                                }
-                                else if (UPIQRBASEPRICEset != null && UPIQRBASEPRICEset.status == true)
-                                {
-
-                                    <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true" style="font-size: 18px !important;font-weight: 600;">+ Price Base QR Code(UPI)</a></li>
-
-
-                                }
-                            </ul>*@
-                        <div class="width100 float-left ">
-                            @*@if (UPIQRBASEPRICEset == null)
-                                {*@
-                            <div id="home" class="width100 float-left tab-pane fade active in newaddclasstghghg changeback-four-design" style="background: var(--second-bg-color);min-height:599px;">
+                    <div class="width100 float-left tabcurrent-seconddesign input-border-third">
+                        <div id="home" class="width100 float-left tab-pane vm-ft-left-tab-pane fade remove-activein active in">
+                            <div class="fund-transfer-form vm-dealer-ft-form-fs14">
                                 <div class="scan-outer">
+                                    <p id="msgg" style="color:#b45309;text-align:center;font-weight:bold;margin:0;"></p>
                                     @if (ViewBag.msg == "OK")
                                     {
                                         if (ViewBag.Api == "RADIANT")
@@ -555,41 +252,32 @@
                                             {
                                                 using (Html.BeginForm("Add_balance_UPI_Collection", "Home", FormMethod.Post))
                                                 {
-                                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                                        <div class="col-md-3 col-sm-3 col-xs-3">
-                                                            <label>UPI ID</label>
+                                                    <div class="vm-upi-modern-form">
+                                                        <div class="vm-upi-modern-field">
+                                                            <label for="txtupi_id">UPI ID <span class="vm-upi-modern-req">*</span></label>
+                                                            <div class="vm-upi-id-group">
+                                                                @Html.TextBox("txtupi_id", "", new { @class = "form-control vm-upi-modern-input", placeholder = "example@upi", @required = true, autocomplete = "off" })
+                                                                <button type="button" onclick="Verifynm()" class="vm-upi-modern-verify-btn">
+                                                                    <i class="fa fa-check-circle"></i> Verify
+                                                                </button>
+                                                            </div>
                                                         </div>
-
-                                                        <div class="col-md-6 col-sm-6 col-xs-6">
-                                                            @Html.TextBox("txtupi_id", "", new { @class = "form-control", placeholder = "Enter UPI ID", @required = true })
+                                                        <div class="vm-upi-modern-field">
+                                                            <label for="txtupi_name">Payer Name <span class="vm-upi-modern-req">*</span></label>
+                                                            <div class="vm-upi-modern-inputwrap">
+                                                                <i class="fa fa-user vm-upi-modern-input-icon"></i>
+                                                                @Html.TextBox("txtupi_name", "", new { @class = "form-control vm-upi-modern-input vm-upi-modern-input--icon", placeholder = "Auto-filled after Verify", @required = true, autocomplete = "off", @style = "padding-left: 41px !important;" })
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-3 col-sm-3 col-xs-3">
-                                                            <button type="button" onclick="Verifynm()" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;line-height: 22px;">
-
-                                                                Verify
-                                                            </button>
+                                                        <div class="vm-upi-modern-field">
+                                                            <label for="txtupi_amount">Amount <span class="vm-upi-modern-req">*</span></label>
+                                                            <div class="vm-upi-modern-inputwrap">
+                                                                <span class="vm-upi-modern-rupee">₹</span>
+                                                                @Html.TextBox("txtupi_amount", "", new { @class = "form-control vm-upi-modern-input vm-upi-modern-input--rupee", placeholder = "Enter Amount", @type = "number", @min = "1", @required = true })
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
-                                                        <div class="col-md-3 col-sm-3 col-xs-3">
-                                                            <label>Name</label>
-                                                        </div>
-                                                        <div class="col-md-9 col-sm-9 col-xs-9">
-                                                            @Html.TextBox("txtupi_name", "", new { @class = "form-control", placeholder = "Enter Name", @required = true })
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
-
-                                                        <div class="col-md-3 col-sm-3 col-xs-3">
-                                                            <label>Amount</label>
-                                                        </div>
-                                                        <div class="col-md-9 col-sm-9 col-xs-9">
-                                                            @Html.TextBox("txtupi_amount", "", new { @class = "form-control", placeholder = "Enter Amount", @type = "number", @required = true })
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
-                                                        <button type="submit" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
-                                                            Submit
+                                                        <button type="submit" class="vm-upi-modern-submit-btn">
+                                                            Collect Payment <i class="fa fa-arrow-right"></i>
                                                         </button>
                                                     </div>
                                                 }
@@ -604,6 +292,23 @@
                                                 {
                                                     <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.chkmsg </p>
                                                 }
+                                                @* Collect-status panel (UPIAUTOSERVICE polling flow) — only when a collect txn is in progress *@
+                                                if (TempData["GetUniqueid"] != null)
+                                                {
+                                                    <div class="vm-upi-status-panel" id="contentshowhide">
+                                                        <div class="vm-upi-status-spinner" id="upispinner22" style="display:none;"><span class="spinner vm-upi-status-spin"></span></div>
+                                                        <div id="hidemsg1212">
+                                                            <p id="msggcollect" class="vm-upi-status-msg"></p>
+                                                            <p id="countDownShow" class="vm-upi-status-count"></p>
+                                                            <div id="QrShowHide"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="vm-upi-status-panel vm-upi-status-result" id="gobackshow" style="display:none;">
+                                                        <p id="MessageShoHidecollect" class="vm-upi-status-final" style="display:none;"></p>
+                                                        <p id="MessageShoHide" class="vm-upi-status-final" style="display:none;"></p>
+                                                        <a href="@Url.Action("UPICollection", "Home")" class="vm-upi-status-back">&larr; Go Back</a>
+                                                    </div>
+                                                }
                                             }
                                         }
                                     }
@@ -617,9 +322,9 @@
                                             <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
                                             <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
                                         </ol>
-                                        <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
+                                        <table class="table vm-upi-charges-table">
                                             <tr>
-                                                <th colspan="2"><center>Charges</center></th>
+                                                <th colspan="2">Charges</th>
                                             </tr>
                                             <tr>
                                                 <td>Minimum Fix Charge (In Rupees)</td>
@@ -633,283 +338,130 @@
                                     </div>
                                 </div>
                             </div>
-                            @* }*@
-                            @*else if (UPIQRBASEPRICEset != null && UPIQRBASEPRICEset.status == true)
-                                {
-
-                                    <div id="home" class="width100 float-left tab-pane fade active in newaddclasstghghg changeback-four-design" style="background: var(--second-bg-color);min-height:599px;">
-                                        <div class="scan-outer">
-                                            @if (ViewBag.set == "NOTOK")
-                                            {
-                                                <div class="" id="contentshowhide" style="margin: 36px;">
-                                                    <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabs" style="display: flex; padding: 0px;">
-                                                        @if (cfreeapi != null || phonepeapi != null)
-                                                        {
-                                                            <li class="tab-link active hovof" data-tab="tab-1" style="width: 50%; border-right: 1px solid #fff; cursor: pointer; text-align: center; background: #c1c1c1;"><a style="cursor: pointer;" data-toggle="tab" onclick="generateqr_opt();">QR&nbsp;Code</a></li>
-                                                            <li class="tab-link hovof" style="width: 50%; text-align: center; background: #c1c1c1; cursor: pointer;"><a style="cursor: pointer;" data-toggle="tab" onclick="requestupi_opt()">UPI&nbsp;Request</a></li>
-                                                            if (phonepeapi != null)
-                                                            {
-
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            <li class="tab-link active hovof" data-tab="tab-1" style="width: 100%; border-right: 1px solid #fff; cursor: pointer; text-align: center; background: #c1c1c1;"><a style="cursor: pointer;" data-toggle="tab" onclick="generateqr_opt();">QR&nbsp;Code</a></li>
-                                                        }
-                                                    </ul>
-
-                                                    @using (Html.BeginForm("GenerateQrBasePrice", "Home", FormMethod.Post))
-                                                    {
-                                                        <div class="genrateamt" style="text-align: center; width: 100%; margin-top: 35px;">
-                                                            <label style="display: block; float: left; margin-top: 35px;">Enter Amount</label>
-                                                            <input class="form-control" type="number" id="txtgenerateamnt" name="txtgenerateamnt" value="" required placeholder="Enter Amount" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                        </div>
-                                                        <div class="genrateamt" style="text-align: center; width: 100%; display:none; " id="cardbox">
-
-
-                                                            <div>
-                                                                <label style="display: block; float: left; margin-top: 15px;">Card Number</label>
-                                                                <input class="form-control" type="text" id="txtdebitCardnumber" name="txtdebitCardnumber" value="" placeholder="Enter Card Number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="19" autocomplete="off" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                            </div>
-                                                            <div>
-                                                                <label style="display: block; float: left; margin-top: 15px;">Name on Card</label>
-                                                                <input class="form-control" type="text" id="txtdebitCardname" name="txtdebitCardname" value="" placeholder="Enter name as on card" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                            </div>
-                                                            <div style="display:flex; flex-direction:row; margin-top: 15px; width:100%;">
-                                                                <div style="flex-direction: column; width: 50%; float: left; margin-right: 20px; ">
-                                                                    <label style="display: block; float: left !important;">Expiry</label><br />
-                                                                    <input class="form-control" type="text" id="inputExpDate" name="inputExpDate" value="" maxlength='5' placeholder="MM/YY" onkeyup="formatString(event);"
-                                                                           style="height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                                </div>
-                                                                <div style="display:flex; flex-direction:column; float:left; width:50%;">
-                                                                    <label style="display: block; float: left !important; width: 10px;">CVV</label>
-                                                                    <input class="form-control" type="password" id="inputcvv" name="inputcvv" value="" maxlength='3' placeholder="CVV" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                                                                           style="height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="genrateamt" style="text-align: center; width: 100%; display: none; margin-top: 14px; " id="upibox">
-                                                            <label style="display: block; float:left;">Enter UPI ID</label>
-                                                            <input class="form-control" type="text" id="Requestedupiid" name="Requestedupiid" value="" placeholder="Enter UPI ID" style="display: none; width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                        </div>
-                                                        <div style="display:flex;">
-                                                            <button onclick="spinnerhd1212()" type="submit" id="upisubmit"
-                                                                    style=" border-radius: 50px; border: none; color: #fff; padding: 5px 10px; width: 100%; margin-top: 20px; font-size: 19px; font-weight: 600; text-align: center; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; }">
-                                                                Generate QR
-                                                            </button>
-                                                            <i id="showspinner44" class="loaders443" style=" margin: 24px 0 0 -37px;display:none;"></i>
-                                                        </div>
-                                                    }
-
-                                                </div>
-                                                <div id="upispinner22" style=" display: none; width: 100%; height: 91px; position: absolute; top: -63px; left: 0; ">
-                                                    <img src="~/AdminDesign/images/spinner.gif" style="width: 100%; filter: opacity(0.5); " />
-
-                                                </div>
-                                                <a href="@Url.Action("UPITRANSFER", "Home")" onclick="oncliktoremovetext()" id="gobackshow" class="fullbodydycolorbg tmw-total-color-one" style="font-size: 18px; font-weight: bold; margin-left: 10px; margin-top: 15px; display: none; ">
-                                                    Go Back&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
-                                                </a>
-                                                <div id="MessageShoHidecollect" style="display: none; margin: 7px 89px;"></div>
-                                                <div id="hidemsg1212" style="margin-top: 21px !important; font-size: 20px; font-family: serif; text-align:center;">
-                                                    <span id="msgg" style="color: red !important;"></span>
-                                                    <span id="msggcollect" style="color: red !important; background-color: white;"></span>
-                                                </div>
-                                            }
-                                            <p style="color:red;text-align:center; font-weight:bold;">@ViewBag.msg </p>
-                                            @if (TempData["QRCodeImage"] != null)
-                                            {
-                                                <a href="@Url.Action("UPITRANSFER", "Home")" onclick="oncliktoremovetext()" class="fullbodydycolorbg tmw-total-color-one" style="font-size: 18px; font-weight: bold; margin-left: 10px;">
-                                                    Go Back&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
-                                                </a>
-                                            }
-                                            <div style="width: 60%;float:none;text-align: center;padding-bottom: 15px;padding-top: 10px;margin: 0px auto;">
-                                                @if (TempData["QRCodeImage"] != null)
-                                                {
-                                                    <div id="QrShowHide">
-                                                        <img src="@TempData["QRCodeImage"]" alt="" style=" border:5px solid black;max-width:100%;margin-bottom:21px;" />
-                                                        <div>
-                                                            <span id="countDownShow" style="color: red !important; background-color: white; font-size: 20px; font-family: serif;"></span>
-                                                        </div>
-                                                    </div>
-                                                    <div id="MessageShoHide" style="display:none;"></div>
-
-                                                }
-
-
-                                            <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
-                                                <ol>
-                                                    <li>You can update the amount in your wallet by scanning the QR code.</li>
-                                                    <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
-                                                    <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
-                                                </ol>
-                                                <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
-                                                    <tr>
-                                                        <th><center>Min Amount</center></th>
-                                                        <th><center>Max Amount</center></th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>@UPIQRBASEPRICEset.minmium</td>
-                                                        <td>@UPIQRBASEPRICEset.maximium</td>
-                                                    </tr>
-
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                }*@
-
                         </div>
+
                     </div>
                 </div>
             </div>
 
+            <div class="vm-ft-history-col">
+                <div class="fund-trasfer-right vm-ft-history-panel">
 
-            <div class="col-md-8 retailer-upilastclass retailer-upilastclass-second">
-                <div class="page-header-third">
-                    <div class="fund-trasfer-right fund-user-right">
+                    <div id="tab-1" class="vm-ft-history-body">
 
-
-                        <ul class="nav nav-tabs responsive-sateulce" id="tabs">
-                            <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
-                                <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
-                                    <label class="for-change-fund">
-                                        <span class="fund-fistory">History<sub class="tmw-total-color-one fullbodydycolorbg">By upi QR Code</sub></span>
-                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
-                                    </label>
-                                </a>
-                            </li>
-                            <li class="upi-retailer-date upi-retailer-datepdf" style="width:75%;float: right;margin-top: 4px;margin-right:1px;">
-                                <div class="row fund-t-dalear fund-t-dalearretailer" style="margin:0;">
-                                    @using (Html.BeginForm("UPITRANSFER", "Home", FormMethod.Post))
-                                    {
-                                        <div class="input-daterange input-group">
-                                            <div class="col-md-4 date-sateclassee" style="padding-left: 0px;">
-                                                <div class="custom-date-icon" style="height: 32px;border-top: 0;border-bottom: 0;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_frm_date")
-
-                                            </div>
-                                            <div class="col-md-4 date-sateclassee" style="padding-left: 0px;">
-                                                <div class="custom-date-icon" style="height: 32px;border-top: 0;border-bottom: 0;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_to_date", "", new { @style = " margin-top: 1px !important;" })
-
-                                            </div>
-
-                                            <div class="col-md-2 apiclass-satenew apiclass-satenew-responshive apiclass-satenewnewclas" style="padding:0px;">
-                                                <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="border:1px solid #fff;padding:0px 15px;float:left;position:relative;height: 30px;top: 1px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
-                                                </button>
-                                            </div>
-                                            <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;padding-top: 3px;padding-left: 5px;">
-
-                                                <button>PDF</button>
-                                                <button>Export</button>
-
-                                            </div>
-                                            @*<div class="col-md-2 apiclass-satenew apiclass-satenew-responshive retailer-addupiclass" style="padding:0px;float:right;">
-                                                    <button type="button" class="btnssl22" data-toggle="modal" data-target="#fundtransfer" style="border:1px solid #fff;padding:0px 15px;float:left;position:relative;height: 30px;top: 1px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                        UPI Manual Request
-                                                    </button>
-                                                </div>*@
-
-                                        </div>
-
-
-                                    }
+                        <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium">
+                            <div class="vm-ft-history-toolbar__head">
+                                <i class="fas fa-history" aria-hidden="true"></i>
+                                <div>
+                                    <span class="vm-ft-history-toolbar__title">UPI History</span>
+                                    <span class="vm-ft-history-toolbar__sub">View, filter &amp; export UPI transactions</span>
                                 </div>
-                            </li>
+                                <span class="vm-radiant-record-badge" title="Total records" style="margin-left:auto;">
+                                    Records: <strong id="upiRecordCount">@upiRowCount</strong>
+                                </span>
+                            </div>
+                            @using (Html.BeginForm("UPITRANSFER", "Home", FormMethod.Post))
+                            {
+                                <div class="vm-ft-history-toolbar__filters vm-ft-history-filters-row">
+                                    <div class="vm-dmt-filter-search-group vm-ft-date-search-group">
+                                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control saas-acc-dp-input", autocomplete = "off", placeholder = "From", title = "From date" })
+                                        </div>
+                                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control saas-acc-dp-input", autocomplete = "off", placeholder = "To", title = "To date" })
+                                        </div>
+                                        <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-ft-search-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                            <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                                        </button>
+                                    </div>
+                                    <div class="vm-ft-export-group">
+                                        <button type="button" id="btnExport" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i></button>
+                                        <button type="button" id="btnPDF" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
 
-                        </ul>
-                        <div id="tab-1" class="width100 float-left tab-content current changeback-four-design" style="overflow:auto;">
-
-
-                            <div class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
-                                <table id="btnUPIreqnonetable" class="table table-bordered table-striped table-hover fourdesign-data-table">
-                                    <thead style="background-color:whitesmoke;">
-
-
-                                        <tr>
-
-                                            <th>Payer&nbsp;Name</th>
-                                            @*<th>Payer&nbsp;Mobile</th>*@
-                                            <th>Amount</th>
-                                            <th>Charges</th>
-                                            <th>Net&nbsp;Received</th>
-                                            <th>Bank RRN</th>
-                                            <th>Transaction&nbsp;Time</th>
-
+                        <div id="tblshowMasterUPI" class="third-design-dealer vm-ft-table-wrap table-responsive tableseconddes-dealer tableseconddes-admin">
+                            <table id="btnUPIreqnonetable" class="table table-bordered table-striped table-hover fourdesign-data-table fundtransfer-tableclass third-design-table vm-ft-table">
+                                <thead>
+                                    <tr>
+                                        <th>Payer&nbsp;Name</th>
+                                        <th>Amount</th>
+                                        <th>Charges</th>
+                                        <th>Net&nbsp;Received</th>
+                                        <th>Bank RRN</th>
+                                        <th>Transaction&nbsp;Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblbody">
+                                    @if (upiRowCount == 0)
+                                    {
+                                        <tr class="vm-opr-table-empty-row">
+                                            <td colspan="6">No UPI transactions found for the selected filters.</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model)
+                                    }
+                                    @foreach (var item in upiRows)
+                                    {
+                                        var img = "";
+                                        var bgcolor = "";
+                                        var txnStatus = (item.status ?? "").ToUpper();
+                                        if (txnStatus == "SUCCESS")
                                         {
-                                            var img = "";
-                                            var bgcolor = "";
-                                            if (item.status.ToUpper() == "SUCCESS")
+                                            img = "../../ashok-images/correct.svg";
+                                            bgcolor = "green";
+                                        }
+                                        else if (txnStatus == "PENDING")
+                                        {
+                                            img = "../../ashok-images/clkk.png";
+                                            bgcolor = "#FF9800";
+                                        }
+                                        else
+                                        {
+                                            img = "../../ashok-images/closes.svg";
+                                            bgcolor = "red";
+                                        }
+                                        <tr class="tr">
+                                            <td class="status-failsuccessa vm-upi-nowrap"><img src='@img' style="width: 20px; background:@bgcolor;">&nbsp;@item.PayerName</td>
+                                            <td>@item.amt</td>
+                                            <td>@item.charge</td>
+                                            <td>@item.finalpay</td>
+                                            @if (item.ApprovalRefNo == null || item.ApprovalRefNo == "null" || item.ApprovalRefNo == "")
                                             {
-                                                img = "../../ashok-images/correct.svg";
-                                                bgcolor = "green";
-
-                                            }
-                                            else if (item.status.ToUpper() == "PENDING")
-                                            {
-                                                img = "../../ashok-images/clkk.png";
-                                                bgcolor = "#FF9800";
+                                                <td>@item.BankRRN</td>
                                             }
                                             else
                                             {
-                                                img = "../../ashok-images/closes.svg";
-                                                bgcolor = "red";
+                                                <td>@item.ApprovalRefNo</td>
                                             }
-                                            <tr>
-                                                <td class="status-failsuccessa"><img src='@img' style="width: 20px; background:@bgcolor;">&nbsp;@item.PayerName</td>
-                                                @*<td>9166940603</td>*@
-                                                <td>@item.amt</td>
-                                                <td>@item.charge</td>
-                                                <td>@item.finalpay</td>
-                                                @if (item.ApprovalRefNo == null || item.ApprovalRefNo == "null" || item.ApprovalRefNo == "")
-                                                {
-                                                    <td>@item.BankRRN</td>
-                                                }
-                                                else
-                                                {
-                                                    <td>@item.ApprovalRefNo</td>
-                                                }
-                                                <td>@item.txndate</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-
-                                <div id="btnUPIreqnonetableSecond" style="display:none;">
-
-                                </div>
-
-
+                                            <td class="vm-upi-nowrap">@item.txndate</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div id="btnUPIreqnonetableSecond" style="display:none;">
                             </div>
-
                         </div>
-
-
+                        <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
+                            <img src="~/img/ajax-loader.gif" />
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
+        </div>
     </div>
 </section>
+
 <div id="overlay">
     <div class="cv-spinner">
         <span class="spinner"></span>
     </div>
 </div>
+
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
 <!-- Custom Js -->
 <script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
@@ -926,74 +478,117 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
+<script>
+    function exportUPICollectExcel() {
+        var table = document.querySelector('#tblshowMasterUPI table#btnUPIreqnonetable');
+        if (!table) { alert('No data to export.'); return; }
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body>' + table.outerHTML + '</body></html>';
+        var blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'UPICollectionHistory.xls';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 100);
+    }
+    function printUPICollectHistory() {
+        window.print();
+    }
+    (function bindUPICollectExportButtons() {
+        var btnExport = document.getElementById('btnExport');
+        if (btnExport) {
+            btnExport.addEventListener('click', exportUPICollectExcel);
+            btnExport.onclick = exportUPICollectExcel;
+        }
+        var btnPDF = document.getElementById('btnPDF');
+        if (btnPDF) {
+            btnPDF.addEventListener('click', printUPICollectHistory);
+            btnPDF.onclick = printUPICollectHistory;
+        }
+    })();
+</script>
 
 <script>
-    $(document).ready(function()
-    {
-
-        $('.input-daterange').datepicker({
+    $(document).ready(function () {
+        var dateOpts = {
             format: "yyyy-mm-dd",
             todayHighlight: true,
             autoclose: true,
             orientation: "bottom auto",
-
-        });
+            forceParse: false,
+            enableOnReadonly: true,
+            container: 'body'
+        };
+        if ($.fn.datepicker) {
+            $("#txt_frm_date, #txt_to_date").datepicker(dateOpts);
+            $('.input-daterange').datepicker(dateOpts);
+            $('.saas-fund-transfer-page .saas-acc-dp-icon').on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var $input = $(this).closest('.saas-acc-dp-field').find('.saas-acc-dp-input');
+                if ($input.length && $input.data('datepicker')) {
+                    $input.datepicker('show');
+                }
+            });
+        }
         var val = '@ViewBag.chk';
-        if (val != "post") {
+        if (val != "post" && $.fn.datepicker) {
             $("#txt_frm_date").datepicker("setDate", new Date());
             $("#txt_to_date").datepicker("setDate", new Date());
         }
-
     })
 </script>
 
-<style>
-
-    .tab-menur ul {
-        margin: 0;
-        padding: 0;
+<script>
+    function myFunction() {
+        var value = $('#myInput').val().toLowerCase();
+        $("#tblbody .tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
     }
+</script>
 
-
-
-        .tab-menur ul li {
-            width: 50%;
-            text-align: center;
-        }
-
-        .tab-menur ul li {
-            float: left;
-        }
-</style>
+<script>
+    $('.third-design-dealer .third-design-table td').mouseenter(function () {
+        var $tr = $(this).parent();
+        if (!$tr.is('tr')) { return; }
+        var colIndex = $tr.children().index($(this)) + 1;
+        $tr.addClass('vm-upi-row-hover');
+        $tr.closest('table').find("tr").children(":nth-child(" + colIndex + ")").addClass('vm-upi-col-hover');
+    });
+    $('.third-design-dealer .third-design-table td').mouseleave(function () {
+        var $tr = $(this).parent();
+        if (!$tr.is('tr')) { return; }
+        var colIndex = $tr.children().index($(this)) + 1;
+        $tr.removeClass('vm-upi-row-hover');
+        $tr.closest('table').find("td:nth-child(" + colIndex + ")").removeClass('vm-upi-col-hover');
+    });
+</script>
 
 <script>
     $(document).ready(function () {
         var cchhh = '@ViewData["upi_msg"]';
-        if (cchhh != null) {
+        if (cchhh != null && cchhh != '') {
             $('#msgg').text(cchhh);
             setTimeout(() => {
-                document.getElementById('msgg').style.display = "none";
+                var msgEl = document.getElementById('msgg');
+                if (msgEl) { msgEl.style.display = "none"; }
             }, 4000)
         }
 
-         var cchhhcollect = '@TempData["UPICollect"]';
+        var cchhhcollect = '@TempData["UPICollect"]';
         if (cchhhcollect != '') {
-
-
             if (`@TempData["GetUniqueid"]` != '') {
                 let xx = setInterval(() => {
-                    document.getElementById('upispinner22').style.display='block'
+                    document.getElementById('upispinner22').style.display = 'block'
                 })
                 setTimeout(() => {
                     clearInterval(xx);
                     document.getElementById('upispinner22').style.display = 'none'
-                },4000)
-
+                }, 4000)
 
                 let deadline = new Date().getTime() + 482000;
                 let x = setInterval(() => {
-
-
                     let requestUrlResp = '@TempData["GetUniqueid"]'
                     $.ajax({
                         url: '@Url.Action("UPIAUTOSERVICE", "Home")',
@@ -1005,8 +600,6 @@
                             var upists = data.upists;
                             var refid = data.refid;
                             var amount = data.amount;
-
-
                             let y = setInterval(() => {
                                 let now = new Date().getTime();
                                 let t = deadline - now;
@@ -1017,16 +610,13 @@
                                 if ((status == "SUCCESS")) {
                                     clearInterval(y);
                                     clearInterval(x);
-
                                     document.getElementById("msggcollect").style.display = "none";
                                     document.getElementById('hidemsg1212').style.display = 'none'
                                     if (upists == "FAILED" || upists == "Failed") {
-
                                         document.getElementById('MessageShoHidecollect').style.cssText = `display: block; color: red;`;
                                     }
                                     else {
                                         document.getElementById('MessageShoHidecollect').style.cssText = `display: block; color: green;`;
-
                                     }
                                     document.getElementById('MessageShoHidecollect').innerHTML = `STATUS: ${upists} <br> BANKRR NO : ${refid} <br> AMOUNT : ${amount} `;
                                     setTimeout(() => {
@@ -1034,7 +624,6 @@
                                     }, 20000)
                                 }
                                 else if (status == "FAILED") {
-
                                     if (seconds <= 0) {
                                         clearInterval(y);
                                         clearInterval(x);
@@ -1048,10 +637,8 @@
                             function oncliktoremovetext() {
                                 document.getElementById("countDownShow").style.display = "none";
                             }
-
                         }
                     })
-
                 }, 3000)
             }
         }
@@ -1061,8 +648,6 @@
             var $this = $(this);
             if ($this.attr('href').indexOf(current) !== -1) {
                 $this.addClass('active');
-
-
             }
         })
     });
@@ -1074,7 +659,6 @@
         $('.scan-Second').show();
     });
 </script>
-
 
 <script>
     $(document).ready(function () {
@@ -1088,43 +672,29 @@
     $('#btnUPIreq').click(function () {
         $("#btnUPIreqnonetable").hide();
         $("#btnUPIreqnonetableSecond").show();
-
-     $.ajax({
-                url: '@Url.Action("Show_UPImanual_Request", "Home")',
-                type: 'POST',
-
-         success: function (data) {
-
-             $('#btnUPIreq').val($('#btnUPIreq').val() == 'Show Manual UPI REQ' ? 'SHOW UPI HISTORY' : 'Show Manual UPI REQ.');
-             if ($('#btnUPIreq').val() == "SHOW UPI HISTORY") {
-                 $("#btnUPIreqnonetable").hide();
-                 $('#btnUPIreq').val('SHOW UPI HISTORY')
-                 $("#btnUPIreqnonetableSecond").html(data)
-                 $("#btnUPIreqnonetableSecond").show();
-
-
-             }
-             else {
-                 $('#btnUPIreq').val('Show Manual UPI REQ')
-                 $("#btnUPIreqnonetable").show();
-                 $("#btnUPIreqnonetableSecond").hide();
-             }
-
-                },
-                error: function (data) {
+        $.ajax({
+            url: '@Url.Action("Show_UPImanual_Request", "Home")',
+            type: 'POST',
+            success: function (data) {
+                $('#btnUPIreq').val($('#btnUPIreq').val() == 'Show Manual UPI REQ' ? 'SHOW UPI HISTORY' : 'Show Manual UPI REQ.');
+                if ($('#btnUPIreq').val() == "SHOW UPI HISTORY") {
+                    $("#btnUPIreqnonetable").hide();
+                    $('#btnUPIreq').val('SHOW UPI HISTORY')
+                    $("#btnUPIreqnonetableSecond").html(data)
+                    $("#btnUPIreqnonetableSecond").show();
                 }
-            });
-
+                else {
+                    $('#btnUPIreq').val('Show Manual UPI REQ')
+                    $("#btnUPIreqnonetable").show();
+                    $("#btnUPIreqnonetableSecond").hide();
+                }
+            },
+            error: function (data) {
+            }
+        });
     });
-
 </script>
-@*<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script>
-           if (@ViewData["UPICollect"] != null) {
 
-               swal("Requested Successfully", "Please Check Your UPI App", "success");
-           }
-    </script>*@
 <script>
     function generateqr_opt() {
         $('#Requestedupiid').hide();
@@ -1143,7 +713,6 @@
         $('#upisubmit').text("Request By UPI");
         document.getElementById("Requestedupiid").required = true;
         upicollectloader = "UpiLoader";
-
     }
     function requestdebit() {
         $('#Requestedupiid').hide();
@@ -1152,12 +721,10 @@
         $('#Requestedupiid').val('');
         $('#upisubmit').text("Debit Request");
         document.getElementById("Requestedupiid").required = false;
-
     }
     function spinnerhd1212() {
         let chkid = document.getElementById('txtgenerateamnt').value
         let chkupid22 = document.getElementById("Requestedupiid").value
-
         if (chkid != "" && chkupid22 != "" && upicollectloader == "UpiLoader") {
             document.getElementById('showspinner44').style.display = "block";
             setTimeout(() => {
@@ -1170,7 +737,6 @@
                 document.getElementById('showspinner44').style.display = "none";
             }, 9000)
         }
-
     }
 </script>
 
@@ -1182,24 +748,22 @@
         if (allowedKeys.indexOf(code) !== -1) {
             return;
         }
-
         event.target.value = event.target.value.replace(
-            /^([1-9]\/|[2-9])$/g, '0$1/' // 3 > 03/
+            /^([1-9]\/|[2-9])$/g, '0$1/'
         ).replace(
-            /^(0[1-9]|1[0-2])$/g, '$1/' // 11 > 11/
+            /^(0[1-9]|1[0-2])$/g, '$1/'
         ).replace(
-            /^([0-1])([3-9])$/g, '0$1/$2' // 13 > 01/3
+            /^([0-1])([3-9])$/g, '0$1/$2'
         ).replace(
-            /^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2' // 141 > 01/41
+            /^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2'
         ).replace(
-            /^([0]+)\/|[0]+$/g, '0' // 0/ > 0 and 00 > 0
+            /^([0]+)\/|[0]+$/g, '0'
         ).replace(
-            /[^\d\/]|^[\/]*$/g, '' // To allow only digits and `/`
+            /[^\d\/]|^[\/]*$/g, ''
         ).replace(
-            /\/\//g, '/' // Prevent entering more than 1 `/`
+            /\/\//g, '/'
         );
     }
-
 </script>
 
 <script>
@@ -1215,15 +779,11 @@
     });
 </script>
 
-
 <script>
     if (`@TempData["GetUniqueid"]` != '') {
-
         let hitservice = 'NOTOK';
         let deadline = new Date().getTime() + 482000;
         let x = setInterval(() => {
-
-
             let requestUrlResp = '@TempData["GetUniqueid"]'
             $.ajax({
                 url: '@Url.Action("UPIAUTOSERVICE", "Home")',
@@ -1235,32 +795,26 @@
                     var upists = data.upists;
                     var refid = data.refid;
                     var amount = data.amount;
-
-
                     let y = setInterval(() => {
                         let now = new Date().getTime();
                         let t = deadline - now;
                         let seconds = Math.floor((t % (1000 * 482)) / 1000);
                         document.getElementById("countDownShow").innerHTML = "QR code disappear after " + seconds + " seconds ";
-                        if ((status == "SUCCESS") ) {
+                        if ((status == "SUCCESS")) {
                             clearInterval(y);
                             clearInterval(x);
                             document.getElementById("countDownShow").style.display = "none";
                             document.getElementById("QrShowHide").style.display = "none";
                             if (upists == "FAILED" || upists == "Failed") {
-
-                            document.getElementById('MessageShoHide').style.cssText = `display: block; color: red;`;
+                                document.getElementById('MessageShoHide').style.cssText = `display: block; color: red;`;
                             }
                             else {
-                            document.getElementById('MessageShoHide').style.cssText = `display: block; color: green;`;
-
+                                document.getElementById('MessageShoHide').style.cssText = `display: block; color: green;`;
                             }
                             document.getElementById('MessageShoHide').innerHTML = `STATUS: ${upists} <br> BANKRR NO : ${refid} <br> AMOUNT : ${amount} `;
-
                         }
                         else if (status == "FAILED") {
-
-                            if(seconds <= 0) {
+                            if (seconds <= 0) {
                                 clearInterval(y);
                                 clearInterval(x);
                                 document.getElementById("countDownShow").style.display = "none";
@@ -1270,10 +824,8 @@
                             }
                         }
                     }, 1000)
-
                 }
             })
-
         }, 3000)
     }
 </script>
@@ -1282,7 +834,7 @@
     Verifynm = () => {
         var upiid = $('#txtupi_id').val();
         if (upiid != "") {
-            $("#overlay").fadeIn(300);　
+            $("#overlay").fadeIn(300);
             $.ajax({
                 url: '@Url.Action("VerifyUPIID", "Home")',
                 data: { upiid },
@@ -1294,12 +846,16 @@
                     var Message = data.Message;
                     var sts = data.sts;
                     if (sts == true) {
+                        $('#txtmsg').text('');
                         $('#txtupi_name').val(name);
                     }
                     else {
                         $('#txtmsg').text(Message);
                     }
-
+                },
+                error: function () {
+                    $("#overlay").fadeOut(300);
+                    $('#txtmsg').text('Something went wrong. Please try again.');
                 }
             })
         }
@@ -1308,3 +864,4 @@
         }
     }
 </script>
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js?v=3"></script>

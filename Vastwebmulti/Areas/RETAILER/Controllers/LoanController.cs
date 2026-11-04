@@ -399,6 +399,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             if (details == null)
                 return HttpNotFound();
 
+            ViewBag.Documents = _repo.GetDocumentsByLoanApplicationId(id);
             return View(details);
         }
         public string getAuthToken()
