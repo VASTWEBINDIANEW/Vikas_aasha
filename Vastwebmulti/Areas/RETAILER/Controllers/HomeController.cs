@@ -34422,50 +34422,57 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                         }
                     }
-                    else if ((api1 == "chagans" && api1sts == true)&& (api1local == "chagans" && api1stslocal == true))
+                    else if ((api1 == "chagans" && api1sts == true) && (api1local == "chagans" && api1stslocal == true))
                     {
 
                         var Requestinfo = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
-                        string ouletid = Requestinfo.merchantid;
-                        var client = new RestClient(VastbazaarBaseUrl + "api/AEPSChagan/LoginStatus?Merchantid=" + ouletid + "");
-                        var request = new RestRequest(Method.POST);
-                        request.AddHeader("content-type", "application/json");
-                        request.AddHeader("cache-control", "no-cache");
-                        request.AddHeader("authorization", "bearer " + token);//OAUTH token
-                        var response = client.Execute(request);
-                        dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
+                        if (Requestinfo != null)
+                        {
+                            string ouletid = Requestinfo.merchantid;
+                            var client = new RestClient(VastbazaarBaseUrl + "api/AEPSChagan/LoginStatus?Merchantid=" + ouletid + "");
+                            var request = new RestRequest(Method.POST);
+                            request.AddHeader("content-type", "application/json");
+                            request.AddHeader("cache-control", "no-cache");
+                            request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                            var response = client.Execute(request);
+                            dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
 
-                        ViewBag.aepsapinm = "chagans";
-                        var check = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
-                        if (check == null)
-                        {
-                            ViewBag.req = "REQUIREDEKYC";
-                        }
-                        else if (check.kycStatus == "PENDING")
-                        {
-                            ViewBag.req = "REQUIREDSCAN";
-                        }
-                        else if (check.kycStatus == "APPROVED")
-                        {
-                            string twofastatus = check.twofastatus;
-                            DateTime? twofatime = check.twofatime;
+                            ViewBag.aepsapinm = "chagans";
+                            var check = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
+                            if (check == null)
+                            {
+                                ViewBag.req = "REQUIREDEKYC";
+                            }
+                            else if (check.kycStatus == "PENDING")
+                            {
+                                ViewBag.req = "REQUIREDSCAN";
+                            }
+                            else if (check.kycStatus == "APPROVED")
+                            {
+                                string twofastatus = check.twofastatus;
+                                DateTime? twofatime = check.twofatime;
 
-                            if (string.IsNullOrEmpty(twofastatus)
+                                if (string.IsNullOrEmpty(twofastatus)
                                 || twofastatus == "Pending"
                                 || (twofastatus == "Success"
-                                    && twofatime.HasValue
-                                    && twofatime.Value.Date < DateTime.Today))
-                            {
-                                ViewBag.req = "2FAREQUIRED";
+                                && twofatime.HasValue
+                                && twofatime.Value.Date < DateTime.Today))
+                                {
+                                    ViewBag.req = "2FAREQUIRED";
+                                }
+                                else
+                                {
+                                    ViewBag.req = "DONE";
+                                }
                             }
-                            else
+                            else if (check.kycStatus == "APPROVAL-PENDING")
                             {
-                                ViewBag.req = "DONE";
+                                ViewBag.req = "APPROVAL-PENDING";
                             }
                         }
-                        else if (check.kycStatus == "APPROVAL-PENDING")
+                        else
                         {
-                            ViewBag.req = "APPROVAL-PENDING";
+                            ViewBag.req = "REQUIREDEKYC";
                         }
                     }
                     else
