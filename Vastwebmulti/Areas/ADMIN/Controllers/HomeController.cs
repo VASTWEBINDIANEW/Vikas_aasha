@@ -30981,8 +30981,19 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             var check = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerId && aa.ISDeleteuser == false).SingleOrDefault();
             string userid = User.Identity.GetUserId();
             var msg = "";
-            if (check != null)
+            string chkstats = "OK";
+            var ekycstschk = db.ekycChecks.Where(x => x.userid == RetailerId).SingleOrDefault();
+            if (ekycstschk != null)
             {
+                if (ekycstschk.isvalid == true)
+                {
+                    chkstats = "NOTOK";
+                }
+            }
+            if (chkstats == "OK")
+            {
+                if (check != null)
+                {
                     var statusSendSmsuserdelete = db.SMSSendAlls.Where(a => a.ServiceName == "DeleteUserOTP").SingleOrDefault();
                     var statusSendEmailuserdelete = db.EmailSendAlls.Where(a => a.ServiceName == "DeleteUserOTP1").SingleOrDefault().Status;
 
@@ -31020,11 +31031,21 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                     return Json(msg, JsonRequestBehavior.AllowGet);
 
+                }
+                else
+                {
+
+                    msg = "Failed";
+
+                    return Json(msg, JsonRequestBehavior.AllowGet);
+                }
             }
+            else
+            {
+                msg = "Failed Due to Ekyc Exists";
 
-            msg = "Failed";
-
-            return Json(msg, JsonRequestBehavior.AllowGet);
+                return Json(msg, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public async Task<ActionResult> ConfirmDeleteRetailerOTP(string RetailerIddelete, string Deleteotp)
@@ -31034,59 +31055,83 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             {
 
                 var chk = await db.MobileOtps.Where(aa => aa.Otp == Deleteotp).Take(1).OrderByDescending(aa => aa.Date).SingleOrDefaultAsync();
+                string chkstats = "OK";
                 if (chk != null)
                 {
-                    //  db.delete_Retailer(RetailerIddelete);
-
-                    System.Data.Entity.Core.Objects.ObjectParameter output = new
-                           System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-
-                    var msgres = db.Retailer_delete_Only_change_Status(RetailerIddelete, output).SingleOrDefault().msg;
-
-
-
-                    if (msgres.ToUpper() == "SUCCESS")
+                    var ekycstschk = await db.ekycChecks.Where(x => x.userid == RetailerIddelete).SingleOrDefaultAsync();
+                    if (ekycstschk != null)
                     {
-                        //for logout from all devices web
-                        UserManager.UpdateSecurityStamp(RetailerIddelete);
-
-                        var retailersss = await db.Retailer_Details.Where(x => x.RetailerId == RetailerIddelete).SingleOrDefaultAsync();
-
-                        string path = Server.MapPath("~/" + retailersss.videokycpath);
-
-
-                        //   System.IO.DirectoryInfo di = new DirectoryInfo(path);
-
-                        if (System.IO.File.Exists(path))
+                        if (ekycstschk.isvalid == true)
                         {
-                            System.IO.File.Delete(path);
-                            retailersss.videokycpath = null;
-                            db.SaveChanges();
+                            chkstats = "NOTOK";
                         }
+                    }
+                    if (chkstats == "OK")
+                    {
+                        //  db.delete_Retailer(RetailerIddelete);
+
+                        System.Data.Entity.Core.Objects.ObjectParameter output = new
+                               System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+                        var msgres = db.Retailer_delete_Only_change_Status(RetailerIddelete, output).SingleOrDefault().msg;
+
+
+
+                        if (msgres.ToUpper() == "SUCCESS")
+                        {
+                            //for logout from all devices web
+                            UserManager.UpdateSecurityStamp(RetailerIddelete);
+
+                            var retailersss = await db.Retailer_Details.Where(x => x.RetailerId == RetailerIddelete).SingleOrDefaultAsync();
+
+                            string path = Server.MapPath("~/" + retailersss.videokycpath);
+
+
+                            //   System.IO.DirectoryInfo di = new DirectoryInfo(path);
+
+                            if (System.IO.File.Exists(path))
+                            {
+                                System.IO.File.Delete(path);
+                                retailersss.videokycpath = null;
+                                db.SaveChanges();
+                            }
+
+                        }
+                        viewmodel.select_retailer_details_paging = db.Select_Retailer_Details_all_paging(1, 500, "ADMIN").ToList();
+                        viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
+                        viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
+                                                                 join tbl1 in db.Service_BlockUserwise
+                                                                 on tbl.idno equals tbl1.Show_Service_name_id
+                                                                 select new Service_BlockUserwisecls
+                                                                 {
+                                                                     idno = tbl.idno,
+                                                                     servicename = tbl.servicename,
+                                                                     serviceidno = tbl1.Show_Service_name_id,
+                                                                     remid = tbl1.remid,
+                                                                     servicestatus = tbl1.status,
+                                                                     basedupdate_id = tbl1.idno
+
+
+
+                                                                 };
+
+                        return PartialView("_Retailerlist", viewmodel);
+                    }
+                    else
+                    {
+
+                        throw new HttpException(404, "Product not found");
 
                     }
-                    viewmodel.select_retailer_details_paging = db.Select_Retailer_Details_all_paging(1, 500, "ADMIN").ToList();
-                    viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
-                    viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
-                                                             join tbl1 in db.Service_BlockUserwise
-                                                             on tbl.idno equals tbl1.Show_Service_name_id
-                                                             select new Service_BlockUserwisecls
-                                                             {
-                                                                 idno = tbl.idno,
-                                                                 servicename = tbl.servicename,
-                                                                 serviceidno = tbl1.Show_Service_name_id,
-                                                                 remid = tbl1.remid,
-                                                                 servicestatus = tbl1.status,
-                                                                 basedupdate_id = tbl1.idno
 
 
-
-                                                             };
-
-                    return PartialView("_Retailerlist", viewmodel);
                 }
+                else
+                {
 
-                throw new HttpException(404, "Product not found");
+                    throw new HttpException(404, "Product not found");
+
+                }
 
 
             }
@@ -95248,93 +95293,50 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
                             foreach (var m in model2.Retaileruser)
                             {
-                                var dealerRetailerIds = db.Retailer_Details
-                                    .Where(r => r.DealerId == ddlUserId)
-                                    .Select(r => r.RetailerId)
-                                    .ToList();
-                                var dealerRetailerSlabs = db.Aeps_comm_userwise_UPI
-                                    .Where(a => dealerRetailerIds.Contains(a.Userid))
-                                    .ToList();
-                                foreach (var slab in dealerRetailerSlabs)
+                                db.Update_AEPS_dlm_rem_userSlab_again_UPI(ddlUserId, m.aadharpay, m.ministatement, m.per_500_999, m.rs_500_999,
+                            m.maxrs_500_999, m.Type_500_999, m.per_1000_1499, m.rs_1000_1499, m.maxrs_1000_1499,
+                            m.Type_1000_1499, m.per_1500_1999, m.rs_1500_1999, m.maxrs_1500_1999, m.Type_1500_1999,
+                            m.per_2000_2499, m.rs_2000_2499, m.maxrs_2000_2499, m.Type_2000_2499, m.per_2500_2999,
+                            m.rs_2500_2999, m.maxrs_2500_2999, m.Type_2500_2999, m.per_3000_3499, m.rs_3000_3499,
+                            m.maxrs_3000_3499, m.Type_3000_3499, m.per_3500_5000, m.rs_3500_5000, m.maxrs_3500_5000,
+                            m.Type_3500_5000, m.per_5001_10000, m.rs_5001_10000, m.maxrs_5001_10000, m.Type_5001_10000);
+                                if (Button == "Update Existing & New Users")
                                 {
-                                    slab.aadharpay = m.aadharpay;
-                                    slab.ministatement = m.ministatement;
-                                    slab.per_500_999 = m.per_500_999;
-                                    slab.rs_500_999 = m.rs_500_999;
-                                    slab.maxrs_500_999 = m.maxrs_500_999;
-                                    slab.Type_500_999 = m.Type_500_999;
-                                    slab.per_1000_1499 = m.per_1000_1499;
-                                    slab.rs_1000_1499 = m.rs_1000_1499;
-                                    slab.maxrs_1000_1499 = m.maxrs_1000_1499;
-                                    slab.Type_1000_1499 = m.Type_1000_1499;
-                                    slab.per_1500_1999 = m.per_1500_1999;
-                                    slab.rs_1500_1999 = m.rs_1500_1999;
-                                    slab.maxrs_1500_1999 = m.maxrs_1500_1999;
-                                    slab.Type_1500_1999 = m.Type_1500_1999;
-                                    slab.per_2000_2499 = m.per_2000_2499;
-                                    slab.rs_2000_2499 = m.rs_2000_2499;
-                                    slab.maxrs_2000_2499 = m.maxrs_2000_2499;
-                                    slab.Type_2000_2499 = m.Type_2000_2499;
-                                    slab.per_2500_2999 = m.per_2500_2999;
-                                    slab.rs_2500_2999 = m.rs_2500_2999;
-                                    slab.maxrs_2500_2999 = m.maxrs_2500_2999;
-                                    slab.Type_2500_2999 = m.Type_2500_2999;
-                                    slab.per_3000_3499 = m.per_3000_3499;
-                                    slab.rs_3000_3499 = m.rs_3000_3499;
-                                    slab.maxrs_3000_3499 = m.maxrs_3000_3499;
-                                    slab.Type_3000_3499 = m.Type_3000_3499;
-                                    slab.per_3500_5000 = m.per_3500_5000;
-                                    slab.rs_3500_5000 = m.rs_3500_5000;
-                                    slab.maxrs_3500_5000 = m.maxrs_3500_5000;
-                                    slab.Type_3500_5000 = m.Type_3500_5000;
-                                    slab.per_5001_10000 = m.per_5001_10000;
-                                    slab.rs_5001_10000 = m.rs_5001_10000;
-                                    slab.maxrs_5001_10000 = m.maxrs_5001_10000;
-                                    slab.Type_5001_10000 = m.Type_5001_10000;
-                                }
-                                db.SaveChanges();
-
-                                var dlmRemEntry = db.Aeps_comm_Dlm_rem_UPI.FirstOrDefault(a => a.dealerid == ddlUserId);
-                                if (dlmRemEntry == null)
-                                {
-                                    dlmRemEntry = new Vastwebmulti.Models.Aeps_comm_Dlm_rem_UPI { dealerid = ddlUserId };
-                                    db.Aeps_comm_Dlm_rem_UPI.Add(dlmRemEntry);
-                                }
-                                {
-                                    dlmRemEntry.aadharpay = m.aadharpay;
-                                    dlmRemEntry.ministatement = m.ministatement;
-                                    dlmRemEntry.per_500_999 = m.per_500_999;
-                                    dlmRemEntry.rs_500_999 = m.rs_500_999;
-                                    dlmRemEntry.maxrs_500_999 = m.maxrs_500_999;
-                                    dlmRemEntry.Type_500_999 = m.Type_500_999;
-                                    dlmRemEntry.per_1000_1499 = m.per_1000_1499;
-                                    dlmRemEntry.rs_1000_1499 = m.rs_1000_1499;
-                                    dlmRemEntry.maxrs_1000_1499 = m.maxrs_1000_1499;
-                                    dlmRemEntry.Type_1000_1499 = m.Type_1000_1499;
-                                    dlmRemEntry.per_1500_1999 = m.per_1500_1999;
-                                    dlmRemEntry.rs_1500_1999 = m.rs_1500_1999;
-                                    dlmRemEntry.maxrs_1500_1999 = m.maxrs_1500_1999;
-                                    dlmRemEntry.Type_1500_1999 = m.Type_1500_1999;
-                                    dlmRemEntry.per_2000_2499 = m.per_2000_2499;
-                                    dlmRemEntry.rs_2000_2499 = m.rs_2000_2499;
-                                    dlmRemEntry.maxrs_2000_2499 = m.maxrs_2000_2499;
-                                    dlmRemEntry.Type_2000_2499 = m.Type_2000_2499;
-                                    dlmRemEntry.per_2500_2999 = m.per_2500_2999;
-                                    dlmRemEntry.rs_2500_2999 = m.rs_2500_2999;
-                                    dlmRemEntry.maxrs_2500_2999 = m.maxrs_2500_2999;
-                                    dlmRemEntry.Type_2500_2999 = m.Type_2500_2999;
-                                    dlmRemEntry.per_3000_3499 = m.per_3000_3499;
-                                    dlmRemEntry.rs_3000_3499 = m.rs_3000_3499;
-                                    dlmRemEntry.maxrs_3000_3499 = m.maxrs_3000_3499;
-                                    dlmRemEntry.Type_3000_3499 = m.Type_3000_3499;
-                                    dlmRemEntry.per_3500_5000 = m.per_3500_5000;
-                                    dlmRemEntry.rs_3500_5000 = m.rs_3500_5000;
-                                    dlmRemEntry.maxrs_3500_5000 = m.maxrs_3500_5000;
-                                    dlmRemEntry.Type_3500_5000 = m.Type_3500_5000;
-                                    dlmRemEntry.per_5001_10000 = m.per_5001_10000;
-                                    dlmRemEntry.rs_5001_10000 = m.rs_5001_10000;
-                                    dlmRemEntry.maxrs_5001_10000 = m.maxrs_5001_10000;
-                                    dlmRemEntry.Type_5001_10000 = m.Type_5001_10000;
+                                    var entry = db.Aeps_comm_Dlm_rem_UPI.Single(a => a.dealerid == ddlUserId);
+                                    entry.aadharpay = m.aadharpay;
+                                    entry.ministatement = m.ministatement;
+                                    entry.per_500_999 = m.per_500_999;
+                                    entry.rs_500_999 = m.rs_500_999;
+                                    entry.maxrs_500_999 = m.maxrs_500_999;
+                                    entry.Type_500_999 = m.Type_500_999;
+                                    entry.per_1000_1499 = m.per_1000_1499;
+                                    entry.rs_1000_1499 = m.rs_1000_1499;
+                                    entry.maxrs_1000_1499 = m.maxrs_1000_1499;
+                                    entry.Type_1000_1499 = m.Type_1000_1499;
+                                    entry.per_1500_1999 = m.per_1500_1999;
+                                    entry.rs_1500_1999 = m.rs_1500_1999;
+                                    entry.maxrs_1500_1999 = m.maxrs_1500_1999;
+                                    entry.Type_1500_1999 = m.Type_1500_1999;
+                                    entry.per_2000_2499 = m.per_2000_2499;
+                                    entry.rs_2000_2499 = m.rs_2000_2499;
+                                    entry.maxrs_2000_2499 = m.maxrs_2000_2499;
+                                    entry.Type_2000_2499 = m.Type_2000_2499;
+                                    entry.per_2500_2999 = m.per_2500_2999;
+                                    entry.rs_2500_2999 = m.rs_2500_2999;
+                                    entry.maxrs_2500_2999 = m.maxrs_2500_2999;
+                                    entry.Type_2500_2999 = m.Type_2500_2999;
+                                    entry.per_3000_3499 = m.per_3000_3499;
+                                    entry.rs_3000_3499 = m.rs_3000_3499;
+                                    entry.maxrs_3000_3499 = m.maxrs_3000_3499;
+                                    entry.Type_3000_3499 = m.Type_3000_3499;
+                                    entry.per_3500_5000 = m.per_3500_5000;
+                                    entry.rs_3500_5000 = m.rs_3500_5000;
+                                    entry.maxrs_3500_5000 = m.maxrs_3500_5000;
+                                    entry.Type_3500_5000 = m.Type_3500_5000;
+                                    entry.per_5001_10000 = m.per_5001_10000;
+                                    entry.rs_5001_10000 = m.rs_5001_10000;
+                                    entry.maxrs_5001_10000 = m.maxrs_5001_10000;
+                                    entry.Type_5001_10000 = m.Type_5001_10000;
                                     db.SaveChanges();
                                 }
                             }

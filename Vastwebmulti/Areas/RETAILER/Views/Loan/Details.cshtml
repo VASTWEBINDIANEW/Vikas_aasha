@@ -3,7 +3,35 @@
     ViewBag.Title = "Loan Application Details";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
     var a = Model.Application;
-    var docs = ViewBag.Documents as IEnumerable<Vastwebmulti.Areas.RETAILER.Models.LoanDocumentVm>;
+    var docs = (Model.Documents != null && Model.Documents.Any())
+        ? Model.Documents
+        : (ViewBag.Documents as IEnumerable<Vastwebmulti.Areas.RETAILER.Models.LoanDocumentVm>) ?? new List<Vastwebmulti.Areas.RETAILER.Models.LoanDocumentVm>();
+
+    var docLabels = new Dictionary<string, string>
+    {
+        { "PAN_CARD", "PAN Card" },
+        { "AADHAAR_FRONT", "Aadhaar Card - Front" },
+        { "AADHAAR_BACK", "Aadhaar Card - Back" },
+        { "SALARY_SLIP_1", "Salary Slip - Month 1" },
+        { "SALARY_SLIP_2", "Salary Slip - Month 2" },
+        { "SALARY_SLIP_3", "Salary Slip - Month 3" },
+        { "BANK_STATEMENT_6M", "6 Month Bank Statement" },
+        { "FORM_16", "Form 16" },
+        { "EXISTING_LOAN_STATEMENT", "Existing Loan Statement" },
+        { "GA55", "GA55" },
+        { "ITR_YEAR_1", "ITR with Computation - Latest Year" },
+        { "ITR_YEAR_2", "ITR with Computation - Previous Year" },
+        { "ITR_YEAR_3", "ITR with Computation - Year Before" },
+        { "CONSULTATION_FORM", "Consultation Form" },
+        { "RC_COPY", "RC (Registration Certificate)" },
+        { "INSURANCE_COPY", "Insurance" }
+    };
+
+    string maskedAadhaar = "-";
+    if (!string.IsNullOrEmpty(a.AadhaarNo) && a.AadhaarNo.Length >= 4)
+    {
+        maskedAadhaar = "XXXX XXXX " + a.AadhaarNo.Substring(a.AadhaarNo.Length - 4);
+    }
     var statusUpper = ((a != null && a.Status != null) ? a.Status : "").ToUpper();
     var statusCls = "is-hold";
     if (statusUpper == "APPROVED") { statusCls = "is-approved"; }
@@ -22,11 +50,24 @@
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/retailer-loan-details-modern.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-loan-details-modern.css?v=2" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-loan-report-page saas-loan-details-page saas-retailer-loan-details-page">
 
     <div class="container-fluid vm-opr-page-shell">
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="vm-retailer-loan-alert" role="status">
+                <i class="fas fa-check-circle" aria-hidden="true"></i> @TempData["Success"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="vm-retailer-loan-alert vm-retailer-loan-alert--error" role="alert">
+                <i class="fas fa-exclamation-circle" aria-hidden="true"></i> @TempData["Error"]
+            </div>
+        }
 
         <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
             <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
@@ -39,6 +80,12 @@
                 <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
                     <div class="vm-dmt-filter-search-group vm-loan-toolbar-actions">
                         <span class="vm-loan-status @statusCls"><span class="vm-loan-dot"></span>@statusText</span>
+                        @if (string.Equals(a.Status, "CORRECTION_REQUIRED", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <a href="@Url.Action("Edit", "Loan", new { area = "RETAILER", id = a.Id })" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn saas-acc-btn--upload-outline" title="Edit and resubmit">
+                                <i class="fas fa-pen" aria-hidden="true"></i><span>Edit &amp; Resubmit</span>
+                            </a>
+                        }
                         @if (string.Equals(a.Status, "DOCUMENT_REQUIRED", StringComparison.OrdinalIgnoreCase))
                         {
                             <a href="@Url.Action("UploadDocuments", "Loan", new { area = "RETAILER", id = a.Id })" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn saas-acc-btn--upload-outline" title="Upload documents">
@@ -75,6 +122,33 @@
             </div>
         </div>
 
+        @if (string.Equals(a.Status, "CORRECTION_REQUIRED", StringComparison.OrdinalIgnoreCase))
+        {
+            <div class="vm-loan-banner vm-loan-banner--correction">
+                <div class="vm-loan-banner__text">
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    <div>
+                        <strong>Correction required</strong>
+                        <p>@(string.IsNullOrWhiteSpace(a.Remarks) ? "Some of the submitted information is incorrect. Please correct it and resubmit." : Vastwebmulti.Areas.RETAILER.Models.LoanRemarkFormatter.FormatForDisplay(a.Remarks))</p>
+                    </div>
+                </div>
+                <a href="@Url.Action("Edit", "Loan", new { area = "RETAILER", id = a.Id })" class="vm-loan-upload-btn">
+                    <i class="fa fa-pencil" aria-hidden="true"></i> Edit &amp; Resubmit
+                </a>
+            </div>
+        }
+        @if (string.Equals(a.Status, "RESUBMITTED", StringComparison.OrdinalIgnoreCase))
+        {
+            <div class="vm-loan-banner vm-loan-banner--resubmit">
+                <div class="vm-loan-banner__text">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                    <div>
+                        <strong>Sent for re-verification</strong>
+                        <p>Your corrected information has been sent to the reviewer.</p>
+                    </div>
+                </div>
+            </div>
+        }
         @if (string.Equals(a.Status, "DOCUMENT_REQUIRED", StringComparison.OrdinalIgnoreCase))
         {
             <div class="vm-loan-banner">
@@ -118,6 +192,10 @@
                             <div><label>Date of Birth</label><div class="val">@(a.DOB.HasValue ? a.DOB.Value.ToString("dd MMM yyyy") : "-")</div></div>
                             <div><label>Gender</label><div class="val">@(a.Gender ?? "-")</div></div>
                             <div><label>PAN</label><div class="val">@(a.PAN ?? "-")</div></div>
+                            @if (!string.IsNullOrEmpty(a.AadhaarNo))
+                            {
+                                <div><label>Aadhaar</label><div class="val">@maskedAadhaar</div></div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -280,25 +358,72 @@
             </div>
 
             <div>
-                <div class="vm-loan-card">
+                <div class="vm-loan-card" id="documents">
                     <div class="vm-loan-card__head">
                         <div class="icon"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
                         <h4>Documents</h4>
                     </div>
                     <div class="vm-loan-card__body">
-                        @if (docs != null && docs.Any())
+                        @{
+                            var rejectedDocs = docs.Count(x => string.Equals(x.VerificationStatus, "REJECTED", StringComparison.OrdinalIgnoreCase));
+                        }
+                        @if (rejectedDocs > 0)
                         {
-                            <ul class="vm-loan-timeline">
-                                @foreach (var d in docs)
-                                {
-                                    <li>
-                                        <div class="tl-status">@d.DocumentType.Replace("_", " ")</div>
-                                        <div class="tl-remarks">
-                                            <a href="@Url.Action("ViewDocument", "Loan", new { area = "RETAILER", id = d.Id })" target="_blank" rel="noopener">@d.FileName</a>
-                                        </div>
-                                    </li>
-                                }
-                            </ul>
+                            <div class="vm-retailer-loan-alert vm-retailer-loan-alert--error" style="margin-bottom:12px;">
+                                <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                                @rejectedDocs document(s) rejected. Re-upload PDF, JPG or PNG (max 5 MB).
+                            </div>
+                        }
+                        @if (docs.Any())
+                        {
+                            <div class="vm-loan-doc-wrap table-responsive">
+                                <table class="table vm-loan-doc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Document</th>
+                                            <th>File</th>
+                                            <th>Status</th>
+                                            <th>Uploaded</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var d in docs)
+                                        {
+                                            var label = docLabels.ContainsKey(d.DocumentType) ? docLabels[d.DocumentType] : d.DocumentType.Replace("_", " ");
+                                            var vs = string.IsNullOrEmpty(d.VerificationStatus) ? "PENDING" : d.VerificationStatus;
+                                            <tr>
+                                                <td>@label</td>
+                                                <td>@d.FileName</td>
+                                                <td>
+                                                    <span class="vm-loan-doc-status vm-loan-doc-status--@vs.ToLower()">@vs.Replace("_", " ")</span>
+                                                    @if (!string.IsNullOrEmpty(d.VerificationRemarks))
+                                                    {
+                                                        <div class="vm-loan-doc-remark">@d.VerificationRemarks</div>
+                                                    }
+                                                </td>
+                                                <td>@d.UploadedDate.ToString("dd MMM yyyy")</td>
+                                                <td class="vm-loan-doc-actions">
+                                                    <a href="@Url.Action("ViewDocument", "Loan", new { area = "RETAILER", id = d.Id })" target="_blank" rel="noopener" class="vm-loan-doc-link">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i> View
+                                                    </a>
+                                                    @if (vs == "REJECTED")
+                                                    {
+                                                        using (Html.BeginForm("ReuploadDocument", "Loan", new { area = "RETAILER", id = d.Id }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "vm-loan-reupload-form" }))
+                                                        {
+                                                            @Html.AntiForgeryToken()
+                                                            <input type="file" name="ReuploadFile" accept=".pdf,.jpg,.jpeg,.png" class="vm-loan-reupload-input" onchange="if(this.files.length){this.form.submit();}" />
+                                                            <a href="javascript:void(0);" class="vm-loan-doc-link vm-loan-doc-link--danger" onclick="var inp=$(this).closest('form').find('input[type=file]'); if(inp.length){inp.click();}">
+                                                                <i class="fa fa-upload" aria-hidden="true"></i> Re-upload
+                                                            </a>
+                                                        }
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         }
                         else
                         {

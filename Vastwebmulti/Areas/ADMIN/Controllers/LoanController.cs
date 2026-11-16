@@ -44,6 +44,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         {
             var details = _repo.GetLoanApplicationDetails(id, null);
             if (details == null) return HttpNotFound();
+            ViewBag.Documents = details.Documents;
             return View(details);
         }
 

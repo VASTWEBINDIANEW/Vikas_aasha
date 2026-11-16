@@ -1,0 +1,368 @@
+﻿@model Vastwebmulti.Areas.RETAILER.Models.LoanEditVm
+@{
+    ViewBag.Title = "Correct & Resubmit";
+    Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    bool isPersonal = Model.LoanTypeCode == "PERSONAL";
+    bool isCar = Model.Vehicle != null;
+    bool isUsed = isCar && Model.Vehicle.VehicleType == "USED";
+
+    var tenures = isPersonal ? new[] { 24, 36, 48, 72 } : new[] { 24, 36, 48 };
+    var tenureItems = tenures.Select(t => new SelectListItem { Text = t + " Months", Value = t.ToString() }).ToList();
+    var manufacturers = new[]
+    {
+        "Maruti Suzuki", "Hyundai", "Tata Motors", "Mahindra", "Honda", "Toyota", "Kia", "Renault",
+        "Volkswagen", "Skoda", "Nissan", "MG Motor", "Ford", "Chevrolet", "Jeep", "Datsun", "Other"
+    }.Select(x => new SelectListItem { Text = x, Value = x }).ToList();
+}
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-loan-report-modern.css?v=15" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-loan-create-modern.css?v=6" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-loan-report-page saas-retailer-loan-create-page saas-retailer-loan-edit-page vm-loan-create-radiant-fields">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Loan</li>
+                    <li><a href="@Url.Action("Index", "Loan", new { area = "RETAILER" })">My Applications</a></li>
+                    <li><a href="@Url.Action("Details", "Loan", new { area = "RETAILER", id = Model.Application.Id })">@Model.Application.ApplicationNo</a></li>
+                    <li>Edit</li>
+                </ol>
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
+                    <div class="vm-dmt-filter-search-group vm-loan-create-toolbar-actions">
+                        <a href="@Url.Action("Details", "Loan", new { area = "RETAILER", id = Model.Application.Id })" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn saas-acc-btn--back" title="Back to application">
+                            <i class="fas fa-arrow-left" aria-hidden="true"></i><span>Back</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="vm-opr-main-card vm-retailer-loan-create-main">
+
+            <div class="vm-retailer-loan-create-head vm-dmt-table-panel__head vm-retailer-loan-edit-head">
+                <div class="vm-retailer-loan-create-head__title">
+                    <div class="vm-retailer-loan-create-head__icon vm-retailer-loan-edit-head__icon" aria-hidden="true"><i class="fas fa-pen"></i></div>
+                    <div>
+                        <h3>Correct &amp; Resubmit</h3>
+                        <p><strong>@Model.Application.ApplicationNo</strong> &bull; @Model.Application.LoanTypeName</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="loan-request-page">
+                <div class="loan-shell">
+                    <div class="loan-form-card">
+
+                        <div class="vm-retailer-loan-correction-note loan-edit-correction-note" role="note">
+                            <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                            <div>
+                                <strong>Correction requested by the reviewer</strong>
+                                <p>@(string.IsNullOrWhiteSpace(Model.CorrectionNote) ? "Some of the submitted information is incorrect. Please review and correct it." : Vastwebmulti.Areas.RETAILER.Models.LoanRemarkFormatter.FormatForDisplay(Model.CorrectionNote))</p>
+                            </div>
+                        </div>
+
+                        @using (Html.BeginForm("Edit", "Loan", new { area = "RETAILER", id = Model.Application.Id }, FormMethod.Post, new { @class = "loan-form", id = "loanEditForm", novalidate = "novalidate" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(false, "Please fix the following:", new { @class = "text-danger validation-summary-errors" })
+
+                            @Html.HiddenFor(m => m.Application.Id)
+                            @Html.HiddenFor(m => m.Application.LoanTypeId)
+                            @Html.HiddenFor(m => m.Application.LoanTypeName)
+                            @Html.HiddenFor(m => m.Application.ApplicationNo)
+
+                            <div class="loan-section">
+                                <div class="loan-section-heading">
+                                    <div>
+                                        <h4>Applicant Details</h4>
+                                        <span>Update the fields the reviewer flagged.</span>
+                                    </div>
+                                </div>
+                                <div class="loan-field-grid">
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.FullName)
+                                        <span class="required">*</span>
+                                        @Html.TextBoxFor(m => m.Application.FullName, new { @class = "form-control", placeholder = "Full name" })
+                                        @Html.ValidationMessageFor(m => m.Application.FullName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.Mobile)
+                                        <span class="required">*</span>
+                                        @Html.TextBoxFor(m => m.Application.Mobile, new { @class = "form-control", maxlength = "10", placeholder = "10-digit mobile" })
+                                        @Html.ValidationMessageFor(m => m.Application.Mobile, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.Email)
+                                        @Html.TextBoxFor(m => m.Application.Email, new { @class = "form-control", type = "email" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.DOB)
+                                        @Html.TextBoxFor(m => m.Application.DOB, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.Gender)
+                                        @Html.DropDownListFor(m => m.Application.Gender, new List<SelectListItem>
+                                        {
+                                            new SelectListItem { Text = "Male", Value = "Male" },
+                                            new SelectListItem { Text = "Female", Value = "Female" },
+                                            new SelectListItem { Text = "Other", Value = "Other" }
+                                        }, "-- Select --", new { @class = "form-control" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.PAN)
+                                        <span class="required">*</span>
+                                        @Html.TextBoxFor(m => m.Application.PAN, new { @class = "form-control", maxlength = "10", style = "text-transform:uppercase", placeholder = "ABCDE1234F" })
+                                        @Html.ValidationMessageFor(m => m.Application.PAN, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="loan-field">
+                                        <label>Aadhaar Number</label>
+                                        <span class="required">*</span>
+                                        @Html.TextBoxFor(m => m.Application.AadhaarNo, new { @class = "form-control", maxlength = "12", inputmode = "numeric", placeholder = "12-digit Aadhaar" })
+                                        @Html.ValidationMessageFor(m => m.Application.AadhaarNo, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="loan-section">
+                                <div class="loan-section-heading">
+                                    <div>
+                                        <h4>Address</h4>
+                                        <span>Current residential address.</span>
+                                    </div>
+                                </div>
+                                <div class="loan-field-grid">
+                                    <div class="loan-field wide">
+                                        @Html.LabelFor(m => m.Application.Address)
+                                        <span class="required">*</span>
+                                        @Html.TextAreaFor(m => m.Application.Address, new { @class = "form-control", rows = "3" })
+                                        @Html.ValidationMessageFor(m => m.Application.Address, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.City)
+                                        @Html.TextBoxFor(m => m.Application.City, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.Application.City, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.State)
+                                        @Html.TextBoxFor(m => m.Application.State, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.Application.State, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.Pincode)
+                                        @Html.TextBoxFor(m => m.Application.Pincode, new { @class = "form-control", maxlength = "10" })
+                                        @Html.ValidationMessageFor(m => m.Application.Pincode, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="loan-section">
+                                <div class="loan-section-heading">
+                                    <div>
+                                        <h4>Employment &amp; Income</h4>
+                                        <span>Income and employment information.</span>
+                                    </div>
+                                </div>
+                                <div class="loan-field-grid">
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.EmploymentType)
+                                        @Html.DropDownListFor(m => m.Application.EmploymentType, new List<SelectListItem>
+                                        {
+                                            new SelectListItem { Text = "Salaried", Value = "SALARIED" },
+                                            new SelectListItem { Text = "Self Employed", Value = "SELF_EMPLOYED", Disabled = isPersonal },
+                                            new SelectListItem { Text = "Business", Value = "BUSINESS", Disabled = isPersonal }
+                                        }, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.Application.EmploymentType, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.CompanyName)
+                                        @Html.TextBoxFor(m => m.Application.CompanyName, new { @class = "form-control" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.WorkExperienceYears)
+                                        @Html.TextBoxFor(m => m.Application.WorkExperienceYears, new { @class = "form-control", type = "number", min = "0", step = "0.5" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.MonthlyIncome)
+                                        @Html.TextBoxFor(m => m.Application.MonthlyIncome, new { @class = "form-control", type = "number", min = "0", step = "0.01" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.OtherMonthlyIncome)
+                                        @Html.TextBoxFor(m => m.Application.OtherMonthlyIncome, new { @class = "form-control", type = "number", min = "0", step = "0.01" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.ExistingEMI)
+                                        @Html.TextBoxFor(m => m.Application.ExistingEMI, new { @class = "form-control", type = "number", min = "0", step = "0.01" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.ExistingLoans)
+                                        @Html.TextBoxFor(m => m.Application.ExistingLoans, new { @class = "form-control", type = "number", min = "0" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            if (isCar)
+                            {
+                                @Html.HiddenFor(m => m.Vehicle.VehicleType)
+                                <div class="loan-section vehicle-panel">
+                                    <div class="loan-section-heading">
+                                        <div>
+                                            <h4>Vehicle Details</h4>
+                                            <span>Car information for this application.</span>
+                                        </div>
+                                    </div>
+                                    <div class="loan-field-grid">
+                                        if (isUsed)
+                                        {
+                                            <div class="loan-field">
+                                                @Html.LabelFor(m => m.Vehicle.RegistrationNo)
+                                                @Html.TextBoxFor(m => m.Vehicle.RegistrationNo, new { @class = "form-control", style = "text-transform:uppercase" })
+                                            </div>
+                                        }
+                                        <div class="loan-field">
+                                            <label>Manufacturer</label>
+                                            <span class="required">*</span>
+                                            @Html.DropDownListFor(m => m.Vehicle.Manufacturer, manufacturers, "-- Select --", new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.Vehicle.Manufacturer, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="loan-field">
+                                            @Html.LabelFor(m => m.Vehicle.Model)
+                                            <span class="required">*</span>
+                                            @Html.TextBoxFor(m => m.Vehicle.Model, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.Vehicle.Model, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="loan-field">
+                                            @Html.LabelFor(m => m.Vehicle.Variant)
+                                            <span class="required">*</span>
+                                            @Html.TextBoxFor(m => m.Vehicle.Variant, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.Vehicle.Variant, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="loan-field">
+                                            @Html.LabelFor(m => m.Vehicle.FuelType)
+                                            <span class="required">*</span>
+                                            @Html.DropDownListFor(m => m.Vehicle.FuelType, new List<SelectListItem>
+                                            {
+                                                new SelectListItem { Text = "Petrol", Value = "PETROL" },
+                                                new SelectListItem { Text = "Diesel", Value = "DIESEL" },
+                                                new SelectListItem { Text = "CNG", Value = "CNG" },
+                                                new SelectListItem { Text = "Electric", Value = "ELECTRIC" },
+                                                new SelectListItem { Text = "Hybrid", Value = "HYBRID" }
+                                            }, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.Vehicle.FuelType, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="loan-field">
+                                            @Html.LabelFor(m => m.Vehicle.Transmission)
+                                            <span class="required">*</span>
+                                            @Html.DropDownListFor(m => m.Vehicle.Transmission, new List<SelectListItem>
+                                            {
+                                                new SelectListItem { Text = "Manual", Value = "MANUAL" },
+                                                new SelectListItem { Text = "Automatic", Value = "AUTOMATIC" }
+                                            }, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.Vehicle.Transmission, "", new { @class = "text-danger" })
+                                        </div>
+                                        if (isUsed)
+                                        {
+                                            <div class="loan-field">
+                                                @Html.LabelFor(m => m.Vehicle.ManufacturingMonth)
+                                                @Html.TextBoxFor(m => m.Vehicle.ManufacturingMonth, new { @class = "form-control", type = "number", min = "1", max = "12" })
+                                            </div>
+                                            <div class="loan-field">
+                                                @Html.LabelFor(m => m.Vehicle.ManufacturingYear)
+                                                @Html.TextBoxFor(m => m.Vehicle.ManufacturingYear, new { @class = "form-control", type = "number", min = "1900", max = DateTime.Today.Year })
+                                            </div>
+                                            <div class="loan-field">
+                                                @Html.LabelFor(m => m.Vehicle.RegistrationDate)
+                                                @Html.TextBoxFor(m => m.Vehicle.RegistrationDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                                            </div>
+                                            <div class="loan-field">
+                                                @Html.LabelFor(m => m.Vehicle.OwnerNumber)
+                                                @Html.TextBoxFor(m => m.Vehicle.OwnerNumber, new { @class = "form-control" })
+                                            </div>
+                                            <div class="loan-field">
+                                                @Html.LabelFor(m => m.Vehicle.KMDriven)
+                                                @Html.TextBoxFor(m => m.Vehicle.KMDriven, new { @class = "form-control", type = "number", min = "0" })
+                                            </div>
+                                            <div class="loan-field">
+                                                @Html.LabelFor(m => m.Vehicle.MarketValue)
+                                                @Html.TextBoxFor(m => m.Vehicle.MarketValue, new { @class = "form-control", type = "number", min = "0", step = "0.01" })
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="loan-section">
+                                <div class="loan-section-heading">
+                                    <div>
+                                        <h4>Loan Requirement</h4>
+                                        <span>Amount and tenure requested.</span>
+                                    </div>
+                                </div>
+                                <div class="loan-field-grid">
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.LoanAmount)
+                                        <span class="required">*</span>
+                                        @Html.TextBoxFor(m => m.Application.LoanAmount, new { @class = "form-control", type = "number", min = "0", step = "0.01" })
+                                        @Html.ValidationMessageFor(m => m.Application.LoanAmount, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="loan-field">
+                                        @Html.LabelFor(m => m.Application.TenureMonths)
+                                        <span class="required">*</span>
+                                        @Html.DropDownListFor(m => m.Application.TenureMonths, tenureItems, "-- Select tenure --", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.Application.TenureMonths, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="loan-field wide">
+                                        @Html.LabelFor(m => m.Application.LoanPurpose)
+                                        <span class="required">*</span>
+                                        @Html.TextBoxFor(m => m.Application.LoanPurpose, new { @class = "form-control", placeholder = "Purpose of loan" })
+                                        @Html.ValidationMessageFor(m => m.Application.LoanPurpose, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="loan-actions loan-actions--edit">
+                                @Html.ActionLink("Cancel", "Details", "Loan", new { area = "RETAILER", id = Model.Application.Id }, new { @class = "btn btn-default" })
+                                <button type="submit" class="btn btn-primary btn-loan-resubmit" onclick="return confirm('Resubmit the corrected information for verification?');">
+                                    <i class="fas fa-paper-plane" aria-hidden="true"></i> Save &amp; Resubmit
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section PostVmScripts {
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    (function ($) {
+        if (!$) return;
+        $(function () {
+            var $form = $('#loanEditForm');
+            if ($form.length && $.validator && $.validator.unobtrusive) {
+                $.validator.unobtrusive.parse($form);
+            }
+            if (typeof window.applyAdminSelect2 === 'function') {
+                window.applyAdminSelect2($form.find('select.form-control'), { width: '100%', minimumResultsForSearch: 8 }, true);
+            } else if ($.fn.select2) {
+                $form.find('select.form-control').select2({ width: '100%', minimumResultsForSearch: 8 });
+            }
+        });
+    })(window.jQuery);
+</script>
+}

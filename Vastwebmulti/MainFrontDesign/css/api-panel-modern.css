@@ -1,0 +1,45 @@
+/* API portal shell — same SaaS layout as Retailer (layoutt-retailer + saas-admin-ui) */
+
+body.saas-admin-ui.saas-api-panel .api-legacy-chrome {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    left: -99999px !important;
+}
+
+body.saas-admin-ui.saas-api-panel .page-loader-wrapper {
+    display: none !important;
+}
+
+body.saas-admin-ui.saas-api-panel section.content {
+    margin-left: var(--admin-sidebar-width, 200px) !important;
+    margin-top: var(--admin-header-height, 58px) !important;
+}
+
+@media (max-width: 1199px) {
+    body.saas-admin-ui.saas-api-panel section.content {
+        margin-left: 0 !important;
+    }
+}
+
+body.saas-admin-ui.saas-api-panel.saas-sidebar-collapsed section.content {
+    margin-left: 0 !important;
+}
+
+/* API content pages: keep headers readable inside modern shell */
+body.saas-admin-ui.saas-api-panel section.content .post-api-header {
+    background: #f1f5f9;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+}
+
+body.saas-admin-ui.saas-api-panel section.content .post-api-header h2 {
+    color: #0f172a;
+    font-weight: 700;
+}

@@ -31,9 +31,7 @@ namespace Vastwebmulti.Models.Scheduling
                         .WithIdentity("ExecuteTaskServiceCallTrigger1", "group1")
                         .WithCronSchedule(ScheduleCronExpression)
                         .Build();
-
                     await scheduler.ScheduleJob(job1, trigger1);
-
                     var job2 = JobBuilder.Create<Task_Delete_data>()
                        .WithIdentity("ExecuteTaskServiceCallJob2", "group2")
                        .Build();
@@ -42,39 +40,30 @@ namespace Vastwebmulti.Models.Scheduling
                         .WithCronSchedule(ScheduleCronExpression)
                         .Build();
                     await scheduler.ScheduleJob(job2, trigger2);
-
                     var job3 = JobBuilder.Create<Phonepe>()
-          .WithIdentity("ExecuteTaskServiceCallJob3", "group3")
-          .Build();
+                               .WithIdentity("ExecuteTaskServiceCallJob3", "group3")
+                               .Build();
                     var trigger3 = TriggerBuilder.Create()
                         .WithIdentity("ExecuteTaskServiceCallTrigger3", "group3")
                         .WithCronSchedule(ScheduleCronExpression1)
                         .Build();
-
                     await scheduler.ScheduleJob(job3, trigger3);
-
-                    //            var job4 = JobBuilder.Create<Phonepe>()
+                    // var job4 = JobBuilder.Create<Phonepe>()
                     //.WithIdentity("ExecuteTaskServiceCallJob4", "group4")
                     //.Build();
-                    //            var trigger4 = TriggerBuilder.Create()
-                    //                .WithIdentity("ExecuteTaskServiceCallTrigger4", "group4")
-                    //                .WithCronSchedule(ScheduleCronExpression1)
-                    //                .Build();
-
-                    //            await scheduler.ScheduleJob(job4, trigger4); 
-
-
+                    // var trigger4 = TriggerBuilder.Create()
+                    //.WithIdentity("ExecuteTaskServiceCallTrigger4", "group4")
+                    //.WithCronSchedule(ScheduleCronExpression1)
+                    //.Build();
+                    //await scheduler.ScheduleJob(job4, trigger4); 
                     var job5 = JobBuilder.Create<upiresponsetask>()
-        .WithIdentity("ExecuteTaskServiceCallJob5", "group5")
-        .Build();
+                               .WithIdentity("ExecuteTaskServiceCallJob5", "group5")
+                               .Build();
                     var trigger5 = TriggerBuilder.Create()
                         .WithIdentity("ExecuteTaskServiceCallTrigger5", "group5")
                         .WithCronSchedule(ScheduleCronExpression2)
                         .Build();
-
                     await scheduler.ScheduleJob(job5, trigger5);
-
-
                     var job6 = JobBuilder.Create<Radaint>()
                                .WithIdentity("ExecuteTaskServiceCallJob6", "group6")
                                .Build();
@@ -82,7 +71,6 @@ namespace Vastwebmulti.Models.Scheduling
                         .WithIdentity("ExecuteTaskServiceCallTrigger6", "group6")
                         .WithCronSchedule(ScheduleCronExpression2)
                         .Build();
-
                     await scheduler.ScheduleJob(job6, trigger6);
                 }
             }

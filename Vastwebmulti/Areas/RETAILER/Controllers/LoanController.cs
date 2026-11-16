@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using Vastwebmulti.Areas.RETAILER.Models;
@@ -21,15 +22,90 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
     {
         private readonly LoanRepository _repo = new LoanRepository();
         string VastbazaarBaseUrl = "http://api.vastbazaar.com/";
+
+        // ---------------------------------------------------------------
+        // PERSONAL LOAN CONSTANTS
+        // ---------------------------------------------------------------
+        private static readonly int[] PersonalTenures = { 24, 36, 48, 72 };
+        private static readonly int[] CarTenures = { 24, 36, 48 };
+
+        private const int MinCibil = 650;
+        private static readonly string[] CommonDocCodes = { "PAN_CARD", "AADHAAR_FRONT", "AADHAAR_BACK" };
+
+        private static readonly Dictionary<string, string> DocLabels = new Dictionary<string, string>
+        {
+            { "PAN_CARD",                "PAN card" },
+            { "AADHAAR_FRONT",           "Aadhaar card (front)" },
+            { "AADHAAR_BACK",            "Aadhaar card (back)" },
+            { "SALARY_SLIP_1",           "Salary slip (month 1)" },
+            { "SALARY_SLIP_2",           "Salary slip (month 2)" },
+            { "SALARY_SLIP_3",           "Salary slip (month 3)" },
+            { "FORM_16",                 "Form 16" },
+            { "BANK_STATEMENT_6M",       "6-month bank statement" },
+            { "EXISTING_LOAN_STATEMENT", "Existing loan statement" },
+            { "GA55",                    "GA55" },
+            { "ITR_YEAR_1",              "ITR with computation (latest year)" },
+            { "ITR_YEAR_2",              "ITR with computation (previous year)" },
+            { "ITR_YEAR_3",              "ITR with computation (year before)" },
+            { "CONSULTATION_FORM",       "Consultation form" },
+            { "RC_COPY",                 "RC (registration certificate)" },
+            { "INSURANCE_COPY",          "Insurance" }
+        };
+
+        // Documents for the submitted application: code -> required?
+        private Dictionary<string, bool> GetDocRules(LoanApplicationCreateVM vm, string typeCode)
+        {
+            var d = new Dictionary<string, bool>();
+            foreach (var c in CommonDocCodes) d[c] = true;
+
+            var emp = vm.Application.EmploymentType;
+
+            if (emp == "SALARIED")
+            {
+                d["SALARY_SLIP_1"] = true;
+                d["SALARY_SLIP_2"] = true;
+                d["SALARY_SLIP_3"] = true;
+                d["FORM_16"] = true;
+            }
+
+            if (typeCode == "PERSONAL")
+            {
+                d["BANK_STATEMENT_6M"] = true;
+                d["EXISTING_LOAN_STATEMENT"] = false;
+            }
+            else
+            {
+                if (emp == "SELF_EMPLOYED" || emp == "BUSINESS") d["GA55"] = true;
+                if (emp == "BUSINESS")
+                {
+                    d["ITR_YEAR_1"] = true;
+                    d["ITR_YEAR_2"] = true;
+                    d["ITR_YEAR_3"] = true;
+                }
+
+                if (typeCode == "NEW_CAR") d["CONSULTATION_FORM"] = true;
+
+                if (typeCode == "USED_CAR")
+                {
+                    d["RC_COPY"] = true;
+                    d["INSURANCE_COPY"] = true;
+                    if (vm.Application.CaseType == "REFINANCE") d["EXISTING_LOAN_STATEMENT"] = true;
+                }
+            }
+
+            return d;
+        }
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
         }
+
         public LoanController()
         {
             // cert = db.cyberplate_info.Select(aa => aa.certcode).FirstOrDefault() ?? "";
         }
-        // GET: RETAILER/Loan
+
         // GET: Loan/Create
         public ActionResult Create()
         {
@@ -41,7 +117,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         }
 
         // POST: Loan/Create
-        // POST: Loan/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(LoanApplicationCreateVM vm)
@@ -51,14 +126,15 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var typeCode = vm.Application.LoanTypeId > 0 ? _repo.GetLoanTypeCode(vm.Application.LoanTypeId) : null;
             bool isCarLoan = typeCode == "NEW_CAR" || typeCode == "USED_CAR";
             bool isUsedCar = typeCode == "USED_CAR";
+            bool isPersonal = typeCode == "PERSONAL";
 
             // ---- Tenure validation (per loan type) ----
-            int minTenure = 3;
+            int minTenure = isPersonal ? 24 : 3;
             int maxTenure;
             switch (typeCode)
             {
                 case "PERSONAL":
-                    maxTenure = 60;
+                    maxTenure = 72;
                     break;
                 case "NEW_CAR":
                     maxTenure = 84;
@@ -71,11 +147,23 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     break;
             }
 
-            if (vm.Application.TenureMonths.HasValue &&
+            if (isCarLoan && (!vm.Application.TenureMonths.HasValue || !CarTenures.Contains(vm.Application.TenureMonths.Value)))
+            {
+                ModelState.AddModelError("Application.TenureMonths", "Select a tenure of 24, 36 or 48 months");
+            }
+            else if (!isCarLoan && vm.Application.TenureMonths.HasValue &&
                 (vm.Application.TenureMonths.Value < minTenure || vm.Application.TenureMonths.Value > maxTenure))
             {
                 ModelState.AddModelError("Application.TenureMonths",
                     string.Format("Tenure for this loan type must be between {0} and {1} months", minTenure, maxTenure));
+            }
+
+            // ---- Common validation: CIBIL, PAN, Aadhaar, employment documents ----
+            var docRules = new Dictionary<string, bool>();
+            if (isPersonal || isCarLoan)
+            {
+                docRules = GetDocRules(vm, typeCode);
+                ValidateGatedLoan(vm, typeCode, docRules);
             }
 
             // ---- Vehicle validation (only when Car loan types selected) ----
@@ -100,25 +188,25 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 //{
                 //    if (!vm.Vehicle.ManufacturingYear.HasValue)
                 //        ModelState.AddModelError("Vehicle.ManufacturingYear", "Manufacturing year is required");
-
+                //
                 //    if (!vm.Vehicle.OnRoadPrice.HasValue || vm.Vehicle.OnRoadPrice <= 0)
                 //        ModelState.AddModelError("Vehicle.OnRoadPrice", "On-road price is required");
-
+                //
                 //    if (!vm.Vehicle.DownPayment.HasValue || vm.Vehicle.DownPayment < 0)
                 //        ModelState.AddModelError("Vehicle.DownPayment", "Down payment is required");
-
+                //
                 //    if (vm.Vehicle.DownPayment.HasValue && vm.Vehicle.OnRoadPrice.HasValue &&
                 //        vm.Vehicle.DownPayment.Value >= vm.Vehicle.OnRoadPrice.Value)
                 //        ModelState.AddModelError("Vehicle.DownPayment", "Down payment cannot be greater than or equal to on-road price");
-
+                //
                 //    if (string.IsNullOrWhiteSpace(vm.Vehicle.DealerName))
                 //        ModelState.AddModelError("Vehicle.DealerName", "Dealer name is required");
-
+                //
                 //    if (string.IsNullOrWhiteSpace(vm.Vehicle.DealerMobile))
                 //        ModelState.AddModelError("Vehicle.DealerMobile", "Dealer mobile is required");
-                //    else if (!System.Text.RegularExpressions.Regex.IsMatch(vm.Vehicle.DealerMobile, @"^[6-9]\d{9}$"))
+                //    else if (!Regex.IsMatch(vm.Vehicle.DealerMobile, @"^[6-9]\d{9}$"))
                 //        ModelState.AddModelError("Vehicle.DealerMobile", "Enter a valid 10-digit mobile number");
-
+                //
                 //    if (string.IsNullOrWhiteSpace(vm.Vehicle.DealerLocation))
                 //        ModelState.AddModelError("Vehicle.DealerLocation", "Dealer location is required");
                 //}
@@ -153,8 +241,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     }
                     else if (vm.Application.CaseType == "REFINANCE")
                     {
-                        if (string.IsNullOrWhiteSpace(vm.Application.RefinanceType))
-                            ModelState.AddModelError("Application.RefinanceType", "Please select a refinance type");
+                        if (vm.Application.RefinanceType != "CLOSE_BT" && vm.Application.RefinanceType != "BT_TOPUP")
+                            ModelState.AddModelError("Application.RefinanceType", "Please select Close BT or BT + Top-Up");
 
                         if (string.IsNullOrWhiteSpace(vm.ExistingLoan.FinanceCompany))
                             ModelState.AddModelError("ExistingLoan.FinanceCompany", "Finance company is required");
@@ -169,7 +257,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             else if (vm.ExistingLoan.LoanClosureDate.Value < DateTime.Today.AddMonths(-6))
                                 ModelState.AddModelError("ExistingLoan.LoanClosureDate", "Previous loan must have been closed within the last 6 months");
                         }
-                        else if (vm.Application.RefinanceType == "NORMAL_REFINANCE" || vm.Application.RefinanceType == "BT_TOPUP")
+                        else if (vm.Application.RefinanceType == "BT_TOPUP")
                         {
                             if (!vm.ExistingLoan.CurrentOutstanding.HasValue || vm.ExistingLoan.CurrentOutstanding < 0)
                                 ModelState.AddModelError("ExistingLoan.CurrentOutstanding", "Current outstanding is required");
@@ -204,10 +292,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             ModelState.AddModelError("Vehicle.ManufacturingYear",
                                 string.Format("Vehicle age is {0} years. Maximum allowed age for this case is {1} years.", ageYears, maxAge));
                     }
-
-                    // ---- Eligibility ----
-                    if (!vm.Application.CIBILScore.HasValue || vm.Application.CIBILScore < 650)
-                        ModelState.AddModelError("Application.CIBILScore", "Minimum CIBIL score of 650 is required");
                 }
             }
             else
@@ -242,10 +326,34 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
             _repo.AddStatusHistory(loanId, null, "NEW", "Application submitted by retailer", null);
 
-            // ---- Send to partner API ----
-            // ---- Send to partner API ----
+            // ---- Save the uploaded documents locally ----
+            var personalDocsSaved = new List<string>();
+            var personalDocErrors = new List<string>();
+            if (isPersonal || isCarLoan)
+            {
+                SaveApplicationDocuments(loanId, vm.Application.ApplicationNo, docRules, personalDocsSaved, personalDocErrors);
+            }
+
+            // ---- Send application to partner API ----
             var existingLoanToSend = (isUsedCar && vm.Application.CaseType == "REFINANCE") ? vm.ExistingLoan : null;
             var apiResponse = SendToApiWebsite(vm.Application, isCarLoan ? vm.Vehicle : null, existingLoanToSend);
+
+            // ---- Push saved documents to partner API ----
+            if (personalDocsSaved.Any())
+            {
+                try
+                {
+                    var docs = _repo.GetDocumentsByLoanApplicationId(loanId)
+                        .Where(d => personalDocsSaved.Contains(d.DocumentType))
+                        .ToList();
+
+                    SendDocumentsToApiWebsite(vm.Application.ApplicationNo, docs, null);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.TraceError("Personal loan document push exception: " + ex.Message);
+                }
+            }
 
             if (apiResponse != null && apiResponse.Status == "RECEIVED")
             {
@@ -257,17 +365,161 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 TempData["Success"] = "Loan application submitted successfully. (Processing may be delayed.)";
             }
 
+            if (personalDocErrors.Any())
+            {
+                TempData["Error"] = "Some documents could not be saved, please upload them again from the application: " +
+                                    string.Join("; ", personalDocErrors);
+            }
+
             return RedirectToAction("Index");
         }
 
-        private LoanApiSubmitResponse SendToApiWebsite(LoanApplicationVm app, LoanVehicleVm vehicle, ExistingLoanVm existingLoan)
+        // ---------------------------------------------------------------
+        // PERSONAL LOAN: VALIDATION
+        // ---------------------------------------------------------------
+        private void ValidateGatedLoan(LoanApplicationCreateVM vm, string typeCode, Dictionary<string, bool> docRules)
+        {
+            var a = vm.Application;
+
+            // CIBIL gate
+            if (!a.CIBILScore.HasValue)
+                ModelState.AddModelError("Application.CIBILScore", "CIBIL score is required");
+            else if (a.CIBILScore.Value < MinCibil)
+                ModelState.AddModelError("Application.CIBILScore", "Not eligible for loan. Minimum CIBIL score required is " + MinCibil + ".");
+
+            // PAN
+            if (!string.IsNullOrWhiteSpace(a.PAN))
+                a.PAN = a.PAN.Trim().ToUpperInvariant();
+
+            if (string.IsNullOrWhiteSpace(a.PAN) || !Regex.IsMatch(a.PAN, @"^[A-Z]{5}[0-9]{4}[A-Z]$"))
+                ModelState.AddModelError("Application.PAN", "Enter a valid PAN (e.g. ABCDE1234F)");
+
+            // Aadhaar (12 digits + Verhoeff checksum)
+            if (!IsValidAadhaar(a.AadhaarNo))
+                ModelState.AddModelError("Application.AadhaarNo", "Enter a valid 12-digit Aadhaar number");
+
+            // Employment
+            if (typeCode == "PERSONAL")
+            {
+                if (a.EmploymentType != "SALARIED")
+                    ModelState.AddModelError("Application.EmploymentType", "Only salaried applicants are eligible for a personal loan");
+
+                if (!a.TenureMonths.HasValue || !PersonalTenures.Contains(a.TenureMonths.Value))
+                    ModelState.AddModelError("Application.TenureMonths", "Select a tenure of 24, 36, 48 or 72 months");
+            }
+            else if (a.EmploymentType != "SALARIED" && a.EmploymentType != "SELF_EMPLOYED" && a.EmploymentType != "BUSINESS")
+            {
+                ModelState.AddModelError("Application.EmploymentType", "Select an employment type");
+            }
+
+            // Documents
+            foreach (var d in docRules)
+            {
+                var err = CheckUploadedFile(d.Key, DocLabels[d.Key], d.Value);
+                if (err != null) ModelState.AddModelError("", err);
+            }
+        }
+
+        private string CheckUploadedFile(string code, string label, bool required)
+        {
+            var f = Request.Files[code];
+
+            if (f == null || f.ContentLength == 0)
+                return required ? label + " is required" : null;
+
+            var ext = Path.GetExtension(Path.GetFileName(f.FileName) ?? string.Empty).ToLowerInvariant();
+
+            if (ext != ".pdf" && ext != ".jpg" && ext != ".jpeg" && ext != ".png")
+                return label + ": only PDF, JPG, PNG files are allowed";
+
+            if (f.ContentLength > 5 * 1024 * 1024)
+                return label + ": file size must be under 5 MB";
+
+            if (!HasValidSignature(f, ext))
+                return label + ": file content does not match its type";
+
+            return null;
+        }
+
+        // ---------------------------------------------------------------
+        // PERSONAL LOAN: SAVE DOCUMENTS
+        // ---------------------------------------------------------------
+        private void SaveApplicationDocuments(long loanId, string applicationNo, Dictionary<string, bool> docRules, List<string> saved, List<string> errors)
+        {
+            foreach (var d in docRules)
+            {
+                var f = Request.Files[d.Key];
+                if (f == null || f.ContentLength == 0) continue;
+
+                try
+                {
+                    var originalName = Path.GetFileName(f.FileName);
+                    var path = SaveUploadedDocument(f, applicationNo, d.Key);
+                    _repo.SaveDocument(loanId, d.Key, originalName, path, null);
+                    saved.Add(d.Key);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.TraceError("Loan document save failed (" + d.Key + "): " + ex.Message);
+                    errors.Add(DocLabels[d.Key]);
+                }
+            }
+        }
+
+        // ---------------------------------------------------------------
+        // AADHAAR: VERHOEFF CHECKSUM
+        // ---------------------------------------------------------------
+        private static readonly int[,] VerhoeffD =
+        {
+            {0,1,2,3,4,5,6,7,8,9},
+            {1,2,3,4,0,6,7,8,9,5},
+            {2,3,4,0,1,7,8,9,5,6},
+            {3,4,0,1,2,8,9,5,6,7},
+            {4,0,1,2,3,9,5,6,7,8},
+            {5,9,8,7,6,0,4,3,2,1},
+            {6,5,9,8,7,1,0,4,3,2},
+            {7,6,5,9,8,2,1,0,4,3},
+            {8,7,6,5,9,3,2,1,0,4},
+            {9,8,7,6,5,4,3,2,1,0}
+        };
+
+        private static readonly int[,] VerhoeffP =
+        {
+            {0,1,2,3,4,5,6,7,8,9},
+            {1,5,7,6,2,8,3,0,9,4},
+            {5,8,0,3,7,9,6,1,4,2},
+            {8,9,1,6,0,4,3,5,2,7},
+            {9,4,5,3,1,2,6,8,7,0},
+            {4,2,8,6,5,7,3,9,0,1},
+            {2,7,9,3,8,0,6,4,1,5},
+            {7,0,4,6,9,1,3,2,5,8}
+        };
+
+        public static bool IsValidAadhaar(string aadhaar)
+        {
+            if (string.IsNullOrEmpty(aadhaar) || !Regex.IsMatch(aadhaar, @"^[2-9][0-9]{11}$"))
+                return false;
+
+            int c = 0;
+            for (int i = 0; i < aadhaar.Length; i++)
+            {
+                int digit = aadhaar[aadhaar.Length - 1 - i] - '0';
+                c = VerhoeffD[c, VerhoeffP[i % 8, digit]];
+            }
+            return c == 0;
+        }
+
+        // ---------------------------------------------------------------
+        // PARTNER API
+        // ---------------------------------------------------------------
+        private LoanApiSubmitResponse SendToApiWebsite(LoanApplicationVm app, LoanVehicleVm vehicle, ExistingLoanVm existingLoan, string endpoint = "api/loan/submit")
         {
             try
             {
                 var typeCode = _repo.GetLoanTypeCode(app.LoanTypeId);
                 var token = getAuthToken();
                 var client = new RestClient(VastbazaarBaseUrl);
-                var request = new RestRequest("api/loan/submit", Method.POST);
+                var request = new RestRequest(endpoint, Method.POST);
                 request.RequestFormat = DataFormat.Json;
                 request.AddHeader("authorization", "bearer " + token + "");
                 request.AddHeader("Content-Type", "application/json");
@@ -282,6 +534,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     DOB = app.DOB,
                     Gender = app.Gender,
                     PAN = app.PAN,
+                    AadhaarNo = app.AadhaarNo,
 
                     Address = app.Address,
                     City = app.City,
@@ -337,7 +590,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         SellerMobile = vehicle.SellerMobile
                     },
 
-                    // NEW
                     ExistingLoan = existingLoan == null ? null : new
                     {
                         FinanceCompany = existingLoan.FinanceCompany,
@@ -358,8 +610,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 if (response.StatusCode == HttpStatusCode.OK && !string.IsNullOrEmpty(response.Content))
                 {
-                    var result = Newtonsoft.Json.JsonConvert.DeserializeObject<LoanApiSubmitResponse>(response.Content);
-                    return result;
+                    var result = ParseApiResponse(response.Content);
+                    if (result != null) return result;
                 }
 
                 System.Diagnostics.Trace.TraceError(
@@ -375,11 +627,22 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return null;
             }
         }
+
+        // The partner API wraps its result: { "Version":"1.0", "StatusCode":200, "Content": { "Status":"RECEIVED", ... } }
+        // Plain { "Status":..., "ApplicationNo":... } is accepted too.
+        private static LoanApiSubmitResponse ParseApiResponse(string json)
+        {
+            var root = Newtonsoft.Json.Linq.JObject.Parse(json);
+            var node = root["Content"] as Newtonsoft.Json.Linq.JObject ?? root;
+            return node.ToObject<LoanApiSubmitResponse>();
+        }
+
         public class LoanApiSubmitResponse
         {
             public string Status { get; set; }
             public string ApplicationNo { get; set; }
         }
+
         // GET: Loan/Index (Report)
         public ActionResult Index(LoanReportFilterVM filter)
         {
@@ -390,6 +653,118 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
             return View(filter);
         }
+
+        // GET: Loan/Edit/5  (only while the reviewer has asked for corrections)
+        public ActionResult Edit(long id)
+        {
+            var details = _repo.GetLoanApplicationDetails(id, User.Identity.GetUserId());
+            if (details == null) return HttpNotFound();
+
+            if (details.Application.Status != "CORRECTION_REQUIRED")
+            {
+                TempData["Error"] = "This application is not open for correction.";
+                return RedirectToAction("Details", new { id });
+            }
+
+            return View(new LoanEditVm
+            {
+                Application = details.Application,
+                Vehicle = details.Vehicle,
+                LoanTypeCode = _repo.GetLoanTypeCode(details.Application.LoanTypeId),
+                CorrectionNote = details.Application.Remarks
+            });
+        }
+
+        // POST: Loan/Edit/5  -> save, set status back to VERIFICATION, push to the API for re-verification
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(long id, LoanEditVm vm)
+        {
+            var retailerId = User.Identity.GetUserId();
+            var current = _repo.GetLoanApplicationDetails(id, retailerId);
+            if (current == null) return HttpNotFound();
+
+            if (current.Application.Status != "CORRECTION_REQUIRED")
+            {
+                TempData["Error"] = "This application is not open for correction.";
+                return RedirectToAction("Details", new { id });
+            }
+
+            var typeCode = _repo.GetLoanTypeCode(current.Application.LoanTypeId);
+            bool isCar = typeCode == "NEW_CAR" || typeCode == "USED_CAR";
+            var a = vm.Application;
+
+            // Fields the retailer cannot change
+            vm.LoanTypeCode = typeCode;
+            vm.CorrectionNote = current.Application.Remarks;
+
+            // The posted model only carries editable fields; drop validation noise for the rest
+            foreach (var key in ModelState.Keys.Where(k => !k.StartsWith("Application.") && !k.StartsWith("Vehicle.")).ToList())
+                ModelState.Remove(key);
+
+            if (string.IsNullOrWhiteSpace(a.FullName)) ModelState.AddModelError("Application.FullName", "Full name is required");
+            if (string.IsNullOrWhiteSpace(a.Mobile) || !Regex.IsMatch(a.Mobile.Trim(), @"^[6-9]\d{9}$"))
+                ModelState.AddModelError("Application.Mobile", "Enter a valid 10-digit mobile number");
+
+            a.PAN = (a.PAN ?? "").Trim().ToUpperInvariant();
+            if (!Regex.IsMatch(a.PAN, @"^[A-Z]{5}[0-9]{4}[A-Z]$"))
+                ModelState.AddModelError("Application.PAN", "Enter a valid PAN (e.g. ABCDE1234F)");
+
+            if (!IsValidAadhaar(a.AadhaarNo))
+                ModelState.AddModelError("Application.AadhaarNo", "Enter a valid 12-digit Aadhaar number");
+
+            if (string.IsNullOrWhiteSpace(a.Address)) ModelState.AddModelError("Application.Address", "Address is required");
+            if (string.IsNullOrWhiteSpace(a.City)) ModelState.AddModelError("Application.City", "City is required");
+            if (string.IsNullOrWhiteSpace(a.State)) ModelState.AddModelError("Application.State", "State is required");
+            if (string.IsNullOrWhiteSpace(a.Pincode)) ModelState.AddModelError("Application.Pincode", "Pincode is required");
+
+            if (typeCode == "PERSONAL" && a.EmploymentType != "SALARIED")
+                ModelState.AddModelError("Application.EmploymentType", "Only salaried applicants are eligible for a personal loan");
+
+            if (a.LoanAmount <= 0) ModelState.AddModelError("Application.LoanAmount", "Enter the loan amount");
+
+            var allowedTenures = typeCode == "PERSONAL" ? PersonalTenures : CarTenures;
+            if (!a.TenureMonths.HasValue || !allowedTenures.Contains(a.TenureMonths.Value))
+                ModelState.AddModelError("Application.TenureMonths", "Select a valid tenure");
+
+            if (isCar)
+            {
+                if (vm.Vehicle == null)
+                    ModelState.AddModelError("", "Vehicle details are required");
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(vm.Vehicle.Manufacturer)) ModelState.AddModelError("Vehicle.Manufacturer", "Manufacturer is required");
+                    if (string.IsNullOrWhiteSpace(vm.Vehicle.Model)) ModelState.AddModelError("Vehicle.Model", "Model is required");
+                    if (string.IsNullOrWhiteSpace(vm.Vehicle.Variant)) ModelState.AddModelError("Vehicle.Variant", "Variant is required");
+                }
+            }
+
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            _repo.UpdateApplicantInfo(id, retailerId, a);
+            if (isCar && vm.Vehicle != null) _repo.UpdateVehicleInfo(id, vm.Vehicle);
+
+            var appNo = current.Application.ApplicationNo;
+
+            // Push the corrected data to the API portal. The status becomes RESUBMITTED only after the
+            // API has accepted it, so the reviewer knows the entry changed and must be verified again.
+            var fresh = _repo.GetLoanApplicationDetails(id, retailerId);
+            var resp = SendToApiWebsite(fresh.Application, fresh.Vehicle, fresh.ExistingLoan, "api/loan/resubmit");
+
+            if (resp == null || resp.Status != "RECEIVED")
+            {
+                TempData["Error"] = "Your changes are saved, but they could not be sent to the reviewer right now. Please click Save & Resubmit again.";
+                return RedirectToAction("Edit", new { id });
+            }
+
+            _repo.UpdateStatusByApplicationNo(appNo, "RESUBMITTED", "Information corrected by retailer and sent for re-verification");
+
+            TempData["Success"] = "Corrected information sent to the reviewer for re-verification.";
+
+            return RedirectToAction("Details", new { id });
+        }
+
         // GET: Loan/Details/5
         public ActionResult Details(long id)
         {
@@ -399,9 +774,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             if (details == null)
                 return HttpNotFound();
 
-            ViewBag.Documents = _repo.GetDocumentsByLoanApplicationId(id);
             return View(details);
         }
+
         public string getAuthToken()
         {
             using (var db = new VastwebmultiEntities())
@@ -416,7 +791,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         var responsecode = response.StatusCode.ToString();
                         if (responsecode == "OK")
                         {
-                            Models.Vastbillpay vb = new Models.Vastbillpay();
                             dynamic json = JsonConvert.DeserializeObject(responsechk);
                             var token = json.access_token.ToString();
                             var expire = json[".expires"].ToString();
@@ -426,7 +800,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             vast.exptime = exp;
                             db.vastbazzartokens.Add(vast);
                             db.SaveChanges();
-                            return tokn.apitoken;
+                            return token;   // was: tokn.apitoken (tokn is null here -> NullReferenceException)
                         }
                         else
                         {
@@ -470,6 +844,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 }
             }
         }
+
         public IRestResponse tokencheck()
         {
             using (var db = new VastwebmultiEntities())
@@ -487,6 +862,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return response;
             }
         }
+
         // GET: Loan/UploadDocuments/5
         public ActionResult UploadDocuments(long id)
         {
@@ -517,6 +893,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
             return View(vm);
         }
+
         public static string GetFullPath(string relativePath)
         {
             var root = Path.GetFullPath(@"D:\");   // normalized -> D:\
@@ -531,6 +908,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
             return full;
         }
+
         public ActionResult ViewDocument(long id)
         {
             var retailerId = User.Identity.GetUserId();
@@ -581,6 +959,65 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 case ".png": return "image/png";
                 default: return "application/octet-stream";
             }
+        }
+
+        // POST: Loan/ReuploadDocument/5   (id = document id, only for REJECTED documents)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReuploadDocument(long id)
+        {
+            var retailerId = User.Identity.GetUserId();
+
+            var doc = _repo.GetDocumentById(id);
+            if (doc == null) return HttpNotFound();
+
+            var app = _repo.GetById(doc.LoanApplicationId);
+            if (app == null || app.RetailerId != retailerId) return HttpNotFound();
+
+            if (doc.VerificationStatus != "REJECTED")
+            {
+                TempData["Error"] = "Only rejected documents can be re-uploaded.";
+                return RedirectToAction("Details", new { id = app.Id });
+            }
+
+            var label = doc.DocumentType.Replace("_", " ");
+            var err = CheckUploadedFile("ReuploadFile", label, true);
+            if (err != null)
+            {
+                TempData["Error"] = err;
+                return RedirectToAction("Details", new { id = app.Id });
+            }
+
+            try
+            {
+                var file = Request.Files["ReuploadFile"];
+                var originalName = Path.GetFileName(file.FileName);
+                var savedPath = SaveUploadedDocument(file, app.ApplicationNo, doc.DocumentType);
+
+                // SaveDocument replaces the existing row and resets it to PENDING
+                _repo.SaveDocument(app.Id, doc.DocumentType, originalName, savedPath, null);
+
+                try
+                {
+                    var fresh = _repo.GetDocumentsByLoanApplicationId(app.Id)
+                        .Where(d => d.DocumentType == doc.DocumentType)
+                        .ToList();
+                    SendDocumentsToApiWebsite(app.ApplicationNo, fresh, null);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.TraceError("Re-upload push failed: " + ex.Message);
+                }
+
+                TempData["Success"] = label + " re-uploaded successfully. It will be verified again.";
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.TraceError("Re-upload failed: " + ex.Message);
+                TempData["Error"] = label + " could not be saved, please try again.";
+            }
+
+            return RedirectToAction("Details", new { id = app.Id });
         }
 
         // POST: Loan/UploadDocuments/5
@@ -716,6 +1153,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 default: return false;
             }
         }
+
         public static string GetSiteKeyFromUrl(string url)
         {
             if (string.IsNullOrWhiteSpace(url)) return null;
@@ -730,12 +1168,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             // keep only safe folder characters
             return string.Concat(host.Where(c => char.IsLetterOrDigit(c) || c == '.' || c == '-'));
         }
+
         public static string GetFolder(string relativeFolder)
         {
             var full = GetFullPath(relativeFolder);
             Directory.CreateDirectory(full);
             return full;
         }
+
         private string SaveUploadedDocument(HttpPostedFileBase file, string applicationNo, string docCode)
         {
             if (file == null || file.ContentLength == 0)
@@ -772,8 +1212,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
         private void SendDocumentsToApiWebsite(string applicationNo, List<LoanDocumentVm> documents, string newStatus)
         {
-
-
             for (int i = 0; i < documents.Count; i++)
             {
                 var doc = documents[i];
@@ -782,7 +1220,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 try
                 {
-                    var physicalPath = Server.MapPath(doc.FilePath);
+                    // Files are stored under D:\ (see SaveUploadedDocument) - Server.MapPath would point to the wrong place
+                    var physicalPath = GetFullPath(doc.FilePath);
                     if (!System.IO.File.Exists(physicalPath)) continue;
 
                     var fileBytes = System.IO.File.ReadAllBytes(physicalPath);
@@ -821,6 +1260,5 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 }
             }
         }
-        // GET: LoanApiAdmin/Documents/5
     }
 }

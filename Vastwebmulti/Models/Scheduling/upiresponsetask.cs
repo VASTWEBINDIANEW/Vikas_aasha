@@ -14,24 +14,26 @@ namespace Vastwebmulti.Models.Scheduling
             {
                 using (VastwebmultiEntities db = new VastwebmultiEntities())
                 {
-                    var paytmlist = db.Upi_txn_details.Where(s => s.AppName == "Paytm" && s.status.ToUpper() == "PENDING").ToList();
-                    var phonepelist = db.Upi_txn_details.Where(s => s.AppName == "Phonepe" && s.status.ToUpper() == "PENDING").ToList();
+                    var from = DateTime.Now.Date;
+
+                    var paytmlist = db.Upi_txn_details.Where(s => s.AppName == "Paytm" && s.status.ToUpper() == "PENDING" && s.txndate >= from).ToList();
+                    var phonepelist = db.Upi_txn_details.Where(s => s.AppName == "Phonepe" && s.status.ToUpper() == "PENDING" && s.txndate >= from).ToList();
                     Vastwebmulti.Areas.RETAILER.Controllers.HomeController d2 = new HomeController();
                     foreach (var i in paytmlist)
                     {
-                       
+
                         dynamic s = d2.Paytmqrresponse(i.refid);
                         var jsonData = s.Data;
                         WriteLogUPI("Response Time: " + DateTime.Now + "\n" + "Response: " + jsonData);
-                    }   
+                    }
 
-                    foreach(var i in phonepelist)
+                    foreach (var i in phonepelist)
                     {
                         dynamic s = d2.phonepeqrresponse(i.refid);
                         var jsonData = s.Data;
                         WriteLogUPI("Response Time: " + DateTime.Now + "\n" + "Response: " + jsonData);
                     }
-               }
+                }
 
             });
             return task;

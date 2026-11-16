@@ -5,7 +5,7 @@
 
     var statuses = new[]
     {
-        "NEW", "UNDER_PROCESS", "DOCUMENT_REQUIRED", "VERIFICATION",
+        "NEW", "UNDER_PROCESS", "DOCUMENT_REQUIRED", "CORRECTION_REQUIRED", "RESUBMITTED", "VERIFICATION",
         "ON_HOLD", "APPROVED", "REJECTED", "DISBURSED", "CANCELLED"
     };
     var retailerList = Model.Retailers ?? new List<SelectListItem>();
@@ -23,8 +23,6 @@
 
     var frmDate = (Model.FromDate ?? "").Trim();
     var toDate = (Model.ToDate ?? "").Trim();
-    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); Model.FromDate = frmDate; }
-    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); Model.ToDate = toDate; }
     var dateMode = "get";
 }
 
@@ -84,6 +82,8 @@
     .saas-loan-report-page .vm-loan-status.is-disbursed { background: #d1fae5; color: #047857; border-color: #a7f3d0; }
     .saas-loan-report-page .vm-loan-status.is-rejected { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
     .saas-loan-report-page .vm-loan-status.is-hold { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+    .saas-loan-report-page .vm-loan-status.is-correction { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
+    .saas-loan-report-page .vm-loan-status.is-resubmitted { background: #ecfdf5; color: #0f766e; border-color: #99f6e4; }
     /* filter bar font 14px - All Retailers / Status / Loan Types / From / To / Search / Reset */
     .saas-loan-report-page .saas-acc-filter-bar .vm-opr-select,
     .saas-loan-report-page .saas-acc-filter-bar .form-control,
@@ -212,10 +212,10 @@
 
                         <div class="vm-dmt-filter-search-group vm-loan-simple-group">
                             <div class="vm-loan-simple-wrap">
-                                <input type="date" id="txt_frm_date" name="FromDate" value="@frmDate" class="vm-loan-simple-date" required="required" autocomplete="off" title="From date" />
+                                <input type="date" id="txt_frm_date" name="FromDate" value="@frmDate" class="vm-loan-simple-date" autocomplete="off" title="From date" />
                             </div>
                             <div class="vm-loan-simple-wrap">
-                                <input type="date" id="txt_to_date" name="ToDate" value="@toDate" class="vm-loan-simple-date" required="required" autocomplete="off" title="To date" />
+                                <input type="date" id="txt_to_date" name="ToDate" value="@toDate" class="vm-loan-simple-date" autocomplete="off" title="To date" />
                             </div>
                             <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
                                 <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
@@ -313,11 +313,17 @@
                                         else if (statusUpper == "DISBURSED") { statusCls = "is-disbursed"; }
                                         else if (statusUpper == "REJECTED" || statusUpper == "CANCELLED") { statusCls = "is-rejected"; }
                                         else if (statusUpper == "NEW") { statusCls = "is-new"; }
+                                        else if (statusUpper == "CORRECTION_REQUIRED") { statusCls = "is-correction"; }
+                                        else if (statusUpper == "RESUBMITTED") { statusCls = "is-resubmitted"; }
                                         else if (statusUpper == "UNDER_PROCESS" || statusUpper == "VERIFICATION" || statusUpper == "DOCUMENT_REQUIRED" || statusUpper == "ON_HOLD") { statusCls = "is-process"; }
                                         var statusText = (item.Status ?? "-").Replace("_", " ");
                                         <tr>
                                             <td>
                                                 <span class="vm-loan-status @statusCls"><span class="vm-loan-dot"></span>@statusText</span>
+                                                @if (item.RejectedDocCount > 0)
+                                                {
+                                                    <span class="vm-loan-status is-correction" style="margin-left:4px;" title="Documents rejected"><span class="vm-loan-dot"></span>@item.RejectedDocCount doc</span>
+                                                }
                                             </td>
                                             <td>@item.ApplicationNo</td>
                                             <td>@(retailerNames.TryGetValue(item.RetailerId ?? "", out rName) ? rName : "-")</td>

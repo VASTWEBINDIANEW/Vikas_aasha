@@ -1,0 +1,115 @@
+@using Microsoft.AspNet.Identity
+@{
+    var logoImage = ViewBag.AdminLogoImage as string ?? "";
+    var logoBgColor = ViewBag.AdminLogoBgColor as string ?? "";
+    var remainBalance = ViewBag.ApiRemainBalance ?? 0;
+    var notificount = ViewBag.notificount ?? 0;
+    var purchaseorder = ViewBag.ApiPurchaseOrder ?? 0;
+}
+
+<header class="admin-top-header" id="admin-top-header">
+    <div class="admin-header-v2 saas-admin-topbar admin-header-row saas-admin-topbar-inner">
+        <div class="admin-header-brand saas-admin-brand">
+            <a href="#" id="sidebar-open" class="admin-header-toggle" title="Navigation menu" aria-label="Navigation menu">
+                <i class="fas fa-bars admin-topbar-icon" aria-hidden="true"></i>
+            </a>
+            <button type="button" id="admin-topmenu-open" class="admin-topmenu-toggle admin-header-toggle" title="Quick menu" aria-label="Open quick menu" aria-controls="navbar-collapse" aria-expanded="false">
+                <i class="fas fa-th admin-topbar-icon" aria-hidden="true"></i>
+            </button>
+            <a href="@Url.Action("Dashboard", "Home", new { area = "API" })" class="admin-header-logo-link saas-admin-logo-link">
+                @if (string.IsNullOrEmpty(logoImage))
+                {
+                    <img src="~/img/Default_Logo.png" class="admin-header-logo saas-admin-logo img-responsive" alt="Logo" style="background-color:@logoBgColor;" />
+                }
+                else
+                {
+                    <img src="@Url.Content("~/" + logoImage)" class="admin-header-logo saas-admin-logo img-responsive" alt="Logo" style="background-color:@logoBgColor;" />
+                }
+            </a>
+        </div>
+        <div class="admin-topmenu-panel admin-header-menu" id="navbar-collapse" role="navigation" aria-label="API quick menu" aria-hidden="true">
+            <div class="admin-mobile-topmenu-head">
+                <span class="admin-mobile-topmenu-title"><i class="fas fa-th" aria-hidden="true"></i> Quick Menu</span>
+                <button type="button" class="admin-topmenu-close" id="admin-topmenu-close" aria-label="Close quick menu">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="admin-topmenu-scroll">
+                <ul class="admin-header-actions saas-admin-topnav" id="leftulbar">
+                    <li class="admin-topbar-item saas-topbar-item dropdown">
+                        <a href="javascript:void(0);" class="admin-topbar-btn dropdown-toggle" title="Transfer" data-toggle="dropdown" role="button" aria-expanded="false" onclick="showtransferbal()">
+                            <i class="fas fa-right-left admin-topbar-icon" aria-hidden="true"></i>
+                            <span class="admin-topbar-label">Transfer</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end admin-header-dropdown" id="showtransfer">
+                            <li class="admin-header-dropdown-title">Today Fund Transfer</li>
+                            <li class="body">
+                                <div class="table-responsive">
+                                    <table class="table" style="margin-bottom:0;">
+                                        <tbody id="showtransferbalancetableid"></tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="admin-topbar-item saas-topbar-item dropdown">
+                        <a href="javascript:void(0);" class="admin-topbar-btn dropdown-toggle" title="Due List" data-toggle="dropdown" role="button" aria-expanded="false" onclick="showoutstandingbal()">
+                            <i class="fas fa-chart-pie admin-topbar-icon" aria-hidden="true"></i>
+                            <span class="admin-topbar-label">Due List</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end admin-header-dropdown" id="showpp">
+                            <li class="admin-header-dropdown-title">Due List / Outstanding</li>
+                            <li class="body">
+                                <div class="table-responsive">
+                                    <table class="table" style="margin-bottom:0;">
+                                        <tbody id="showoutstandingbalance"></tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="admin-topbar-item saas-topbar-item">
+                        <a href="@Url.Action("Complaint", "Home", new { area = "API" })" class="admin-topbar-btn" title="Chat's">
+                            <i class="fas fa-comments admin-topbar-icon" aria-hidden="true"></i>
+                            @if (Convert.ToDecimal(notificount) != 0)
+                            {
+                                <span class="admin-topbar-badge">@notificount</span>
+                            }
+                            <span class="admin-topbar-label">Chat's</span>
+                        </a>
+                    </li>
+                    <li class="admin-topbar-item saas-topbar-item">
+                        <a href="@Url.Action("SendPurchaseOrder", "Home", new { area = "API" })" class="admin-topbar-btn" title="Fund-Q">
+                            <i class="fas fa-file-invoice admin-topbar-icon" aria-hidden="true"></i>
+                            @if (Convert.ToDecimal(purchaseorder) != 0)
+                            {
+                                <span class="admin-topbar-badge">@purchaseorder</span>
+                            }
+                            <span class="admin-topbar-label">Fund-Q</span>
+                        </a>
+                    </li>
+                    <li class="admin-topbar-sep" role="separator" aria-hidden="true"></li>
+                    <li class="admin-topbar-item saas-topbar-item dropdown">
+                        <a href="javascript:void(0);" class="admin-topbar-btn dropdown-toggle" title="Wallet Balance" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <i class="fas fa-wallet admin-topbar-icon" aria-hidden="true"></i>
+                            <span class="admin-topbar-label">Wallet</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end admin-header-dropdown">
+                            <li class="admin-header-dropdown-title">Wallet Balance: &#8377; @remainBalance</li>
+                        </ul>
+                    </li>
+                    <li class="admin-topbar-item saas-topbar-item admin-topbar-logout">
+                        @using (Html.BeginForm("LogOff", "Account", new { Area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "admin-logout-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="admin-topbar-btn admin-topbar-logout-btn" title="Logout">
+                                <i class="fas fa-right-from-bracket admin-topbar-icon" aria-hidden="true"></i>
+                                <span class="admin-topbar-label">Logout</span>
+                            </button>
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

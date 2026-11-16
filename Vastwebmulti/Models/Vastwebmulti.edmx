@@ -4613,6 +4613,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.LapuDetails' does not have a
           <Property Name="Last3MonthsBounceCount" Type="int" />
           <Property Name="BankStatementMonths" Type="int" />
           <Property Name="InterestRate" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="AadhaarNo" Type="nvarchar" MaxLength="12" />
         </EntityType>
         <EntityType Name="LoanDocument">
           <Key>
@@ -58859,6 +58860,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <Property Name="BankStatementMonths" Type="Int32" />
           <Property Name="InterestRate" Type="Decimal" Precision="5" Scale="2" />
           <NavigationProperty Name="LoanExistingDetails" Relationship="VastwebmultiModel.FK_LoanExistingDetails_LoanApplication" FromRole="LoanApplication" ToRole="LoanExistingDetail" />
+          <Property Name="AadhaarNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="LoanFollowUp">
           <Key>
@@ -89048,6 +89050,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <EntitySetMapping Name="LoanApplications">
             <EntityTypeMapping TypeName="VastwebmultiModel.LoanApplication">
               <MappingFragment StoreEntitySet="LoanApplication">
+                <ScalarProperty Name="AadhaarNo" ColumnName="AadhaarNo" />
                 <ScalarProperty Name="InterestRate" ColumnName="InterestRate" />
                 <ScalarProperty Name="BankStatementMonths" ColumnName="BankStatementMonths" />
                 <ScalarProperty Name="Last3MonthsBounceCount" ColumnName="Last3MonthsBounceCount" />

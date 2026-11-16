@@ -13782,6 +13782,35 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var chk = db.report_cash_deposit(txt_frm_date, to, ddl_status, "Retailer", userid).ToList();
             return View(chk);
         }
+
+        [HttpPost]
+        public JsonResult UpdateTransactionStatus(string reqid, string status, string remarks)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(reqid))
+                    return Json(new { success = false, message = "Invalid Request ID." });
+
+                if (status != "Success" && status != "Failed")
+                    return Json(new { success = false, message = "Invalid status." });
+
+                if (string.IsNullOrWhiteSpace(remarks))
+                    return Json(new { success = false, message = "Please enter required details." });
+
+                db.update_cash_deposit(reqid, status, remarks, "");
+
+                return Json(new
+                {
+                    success = true,
+                    message = "Transaction updated successfully."
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
         public ActionResult PDF_CashDepositReport(string ddl_status, DateTime txt_frm_date, DateTime txt_to_date)
         {
             ViewBag.chk = "post";
@@ -34264,7 +34293,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     {
                         ViewBag.UPIaepsenabled = "Green";
                     }
-                    else                     if (apiinfochk.UPIStatus2 == true)
+                    else if (apiinfochk.UPIStatus2 == true)
                     {
                         ViewBag.UPIaepsenabled = "Yellow";
                     }
@@ -34366,7 +34395,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         ViewBag.aepsapinm = "NO";
                     }
                 }
-                if (info == "A1")
+                if (string.IsNullOrEmpty(info))
+                {
+                    info = "A1";
+                }
+
+                if (info == "A1" || string.IsNullOrEmpty(info))
                 {
                     ViewBag.aepsapinm = "A1";
                     if ((api1 == "Nifi" && api1sts == true)&& (api1local == "Nifi" && api1stslocal == true))
@@ -34540,46 +34574,53 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     {
 
                         var Requestinfo = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
-                        string ouletid = Requestinfo.merchantid;
-                        var client = new RestClient(VastbazaarBaseUrl + "api/AEPSChagan/LoginStatus?Merchantid=" + ouletid + "");
-                        var request = new RestRequest(Method.POST);
-                        request.AddHeader("content-type", "application/json");
-                        request.AddHeader("cache-control", "no-cache");
-                        request.AddHeader("authorization", "bearer " + token);//OAUTH token
-                        var response = client.Execute(request);
-                        dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
+                        if (Requestinfo != null)
+                        {
+                            string ouletid = Requestinfo.merchantid;
+                            var client = new RestClient(VastbazaarBaseUrl + "api/AEPSChagan/LoginStatus?Merchantid=" + ouletid + "");
+                            var request = new RestRequest(Method.POST);
+                            request.AddHeader("content-type", "application/json");
+                            request.AddHeader("cache-control", "no-cache");
+                            request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                            var response = client.Execute(request);
+                            dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
 
-                        ViewBag.aepsapinm = "chagans";
-                        var check = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
-                        if (check == null)
+                            ViewBag.aepsapinm = "chagans";
+                            var check = db.AEPSCHMerchantinfoes.Where(aa => aa.Userid == userid).SingleOrDefault();
+                            if (check == null)
+                            {
+                                ViewBag.req = "REQUIREDEKYC";
+                            }
+                            else if (check.kycStatus == "PENDING")
+                            {
+                                ViewBag.req = "REQUIREDSCAN";
+                            }
+                            else if (check.kycStatus == "APPROVED")
+                            {
+                                string twofastatus = check.twofastatus;
+                                DateTime? twofatime = check.twofatime;
+
+                                if (string.IsNullOrEmpty(twofastatus)
+                                    || twofastatus == "Pending"
+                                    || (twofastatus == "Success"
+                                        && twofatime.HasValue
+                                        && twofatime.Value.Date < DateTime.Today))
+                                {
+                                    ViewBag.req = "2FAREQUIRED";
+                                }
+                                else
+                                {
+                                    ViewBag.req = "DONE";
+                                }
+                            }
+                            else if (check.kycStatus == "APPROVAL-PENDING")
+                            {
+                                ViewBag.req = "APPROVAL-PENDING";
+                            }
+                        }
+                        else
                         {
                             ViewBag.req = "REQUIREDEKYC";
-                        }
-                        else if (check.kycStatus == "PENDING")
-                        {
-                            ViewBag.req = "REQUIREDSCAN";
-                        }
-                        else if (check.kycStatus == "APPROVED")
-                        {
-                            string twofastatus = check.twofastatus;
-                            DateTime? twofatime = check.twofatime;
-
-                            if (string.IsNullOrEmpty(twofastatus)
-                                || twofastatus == "Pending"
-                                || (twofastatus == "Success"
-                                    && twofatime.HasValue
-                                    && twofatime.Value.Date < DateTime.Today))
-                            {
-                                ViewBag.req = "2FAREQUIRED";
-                            }
-                            else
-                            {
-                                ViewBag.req = "DONE";
-                            }
-                        }
-                        else if (check.kycStatus == "APPROVAL-PENDING")
-                        {
-                            ViewBag.req = "APPROVAL-PENDING";
                         }
                     }
                     else

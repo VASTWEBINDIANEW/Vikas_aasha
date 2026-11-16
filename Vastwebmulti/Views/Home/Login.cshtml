@@ -166,13 +166,14 @@
     <link href="~/MainFrontDesign/css/Custom-style.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/public-login-modern.css?v=46" rel="stylesheet" />
-    <script src="~/MainFrontDesign/js/public-login-modern.js?v=6"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="~/MainFrontDesign/js/public-login-modern.js?v=7"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="~/Scripts/owl.carousel.min.js"></script>
+    <script defer src="~/Scripts/owl.carousel.js"></script>
 
     @if (!HttpContext.Current.Request.IsLocal)
     {
@@ -188,6 +189,65 @@
             --vm-login-visual-bg: @themeSidebar;
             --vm-login-panel-bg: @themeTopbar;
             --vm-login-surface: @themeTopbar;
+        }
+
+        /* Legacy login helpers (aligned with old Vastwebmulti Login.cshtml) */
+        #signupform .for-border-effect {
+            margin-bottom: 8px;
+        }
+
+        #CaptchaInput:valid {
+            font-size: 22px;
+            letter-spacing: 4px !important;
+            font-family: monospace;
+        }
+
+        .for-border-effect.custom-district::before {
+            display: none;
+        }
+
+        .vm-login-page .hidden {
+            display: none !important;
+        }
+
+        .vm-login-page .spinner-border {
+            border: 2px solid gray;
+            border-radius: 99px;
+        }
+
+        .vm-login-page .locationafterbefore i {
+            font-size: 22px;
+            position: relative;
+            top: 6px;
+            line-height: normal;
+            left: 4px;
+        }
+
+        .vm-login-page span#login-error1 {
+            font-size: 14px;
+            color: #16a34a;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            float: left;
+            margin-top: 10px;
+        }
+
+        .vm-login-page small#mobile_err,
+        .vm-login-page small#email_err {
+            display: block;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .vm-login-page .loadingio-spinner-gear-94vo528ab8 {
+            width: 100%;
+            height: 34px;
+            overflow: hidden;
+            float: right;
+            border: 3px solid var(--main-bg-lcolor);
+            text-align: center;
+            position: relative;
         }
     </style>
 </head>
@@ -311,7 +371,7 @@
                                                             <label>@Html.CheckBoxFor(m => m.RememberMe)&nbsp;Remember Me&nbsp;?</label>
                                                         </li>
                                                         <li>
-                                                            <a href="#" onclick="show(this.id)" id="forgetpass">Forgot password&nbsp;?</a>
+                                                            <a href="#" onclick="return show('forgetpass');" id="forgetpass-link">Forgot password&nbsp;?</a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -464,7 +524,11 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+                                                    @* KYC sub-panels: same commented blocks as legacy Login.cshtml — uncomment in old project when enabling ZERO/DIGITAL/PHYSICAL flows *@
+                                                    <div id="ZeroDiv" style="display:none;"></div>
+                                                    <div id="DigitalDiv" style="display:none;"></div>
+                                                    <div id="PhysicalDiv" style="display:none;"></div>
+                                                    <div id="DigitalPhysicalDiv" style="display:none;"></div>
 
                                                     <div class="row vm-login-signup-pair-row">
                                                         <div class="col-md-12">
@@ -593,7 +657,7 @@
                                                             if (asd != null && asd != "0" && asd != "")
                                                             {
 
-                                                                <a href="#" onclick="otpsend('12')" id="forgetpass" class="hide_otp1 vm-login-forget-otp-link">Send OTP</a>
+                                                                <a href="#" onclick="otpsend('12'); return false;" id="forgetpass-send-otp" class="hide_otp1 vm-login-forget-otp-link">Send OTP</a>
 
                                                                 <div class="hide_otp vm-login-forget-otp-wrap">
                                                                     <label class="required vm-login-forget-otp-label" for="forgetOtp1">Enter OTP</label>
@@ -722,6 +786,14 @@
             window.vmLoginBindOtpBoxes();
         }
 
+        $(document).on('click', '.hide_otp1', function () {
+            var $otpWrap = $(this).closest('.vm-login-forget-email-wrap').find('.hide_otp, .vm-login-forget-otp-wrap');
+            $otpWrap.removeClass('hidden').show();
+            if (typeof window.vmLoginBindOtpBoxes === 'function') {
+                window.vmLoginBindOtpBoxes();
+            }
+        });
+
         $("#UpdateForm").submit(function (e) {
 
             if ($("#UpdateForm").valid()) {
@@ -834,17 +906,15 @@
         });
     </script>
 
-
-
-</body>
-</html>
-
-
-<script>
+    <script>
 
     function otpsend() {
 
         var id = $('#yes').val();
+        $('.hide_otp, .vm-login-forget-otp-wrap').removeClass('hidden').show();
+        if (typeof window.vmLoginBindOtpBoxes === 'function') {
+            window.vmLoginBindOtpBoxes();
+        }
         $.ajax({
             url:   '@Url.Action("Passcode", "Home")',
 
@@ -906,24 +976,22 @@
 
     function showError(error) {
         $('#lblerrormsg').text('')
+        var $locErr = $('#login-error2');
         switch (error.code) {
             case error.PERMISSION_DENIED:
-                // alert("User denied the request for Geolocation.")
-                $('#login-error2').html("<i class='material-icons'>add_location</i> User denied the request for Geolocation.");
+                $locErr.html("<i class='material-icons'>add_location</i> User denied the request for Geolocation.");
                 break;
             case error.POSITION_UNAVAILABLE:
-                //  alert("Location information is unavailable.")
-                $('#login-error2').html("<i class='material-icons'>add_location</i> Location information is unavailable.")
+                $locErr.html("<i class='material-icons'>add_location</i> Location information is unavailable.")
                 break;
             case error.TIMEOUT:
-                // alert("The request to get user location timed out.")
-                $('#login-error2').html("<i class='material-icons'>add_location</i> The request to get user location timed out.")
+                $locErr.html("<i class='material-icons'>add_location</i> The request to get user location timed out.")
                 break;
             case error.UNKNOWN_ERROR:
-                $('#login-error2').text("An unknown error occurred.")
-                // alert("An unknown error occurred.")
+                $locErr.text("An unknown error occurred.")
                 break;
         }
+        $locErr.removeClass('hidden').show();
     }
   
 
@@ -934,6 +1002,7 @@
                 if ($('#login-error2').text() == "") {
                     $('#login-error2').html("<i class='material-icons'>add_location</i> Please allow the Location access");
                 }
+                $('#login-error2').removeClass('hidden').show();
                 $('#login-error').html($('#login-error2').html())
                 $('.loadingio-spinner-gear-94vo528ab8.first-login').hide();
 
@@ -1206,10 +1275,10 @@
         cspShowMobileOtp(false);
         cspShowEmailOtp(false);
 
-        $('#Mobile').on('keyup input', function (e) {
+        var bindMobileOtpKeyup = function (e) {
             $('#mobile_err').text('');
             if (mobile_loading) return;
-            var mobileno = String($(this).val() || '').replace(/\D/g, '');
+            var mobileno = String((e && e.target ? e.target.value : '') || '').replace(/\D/g, '');
 
             if (mobileno.length < 10) {
                 cspShowMobileOtp(false);
@@ -1247,7 +1316,9 @@
                         cspShowMobileOtp(false);
                     });
             }
-        });
+        };
+
+        $('#Mobile, input[name="Mobile"]').on('keyup input', bindMobileOtpKeyup);
 
         $('#btnsendOTP_Email').click(function () {
             $('#email_err').text('');
@@ -1422,51 +1493,51 @@
 
 
 <script>
-    var inputs = document.getElementById('frmsignup').querySelectorAll('input[type="text"], input[type="password"], input[type="email"], select');
-    var mobile_ref = document.getElementsByName('Mobile')[0];
-    var email_ref = document.querySelector('input[type="email"]');
-
-    $('#btnsendOTP_Email').hide();
-    disable_inputs();
-
-    
-
-
-
-
-    function disable_inputs() {
-        for (i = 0; i < inputs.length; i++) {
-            var el = inputs[i];
-            var fieldId = el.getAttribute('id') || '';
-            if (['Mobile', 'CaptchaInput'].includes(fieldId) || cspIsSignupOtpInput(el)) {
-                continue;
-            }
-            el.setAttribute('disabled', true);
-            el.value = '';
+    (function () {
+        var frm = document.getElementById('frmsignup');
+        if (!frm) {
+            return;
         }
-    }
 
-    function block_inputs(email_verify = false) {
-        var omit_field = ['Mobile'];
-        if (email_verify) {
-            omit_field.push('Email');
-        }
-        for (i = 0; i < inputs.length; i++) {
-            var el = inputs[i];
-            var fieldId = el.getAttribute('id') || '';
-            if (cspIsSignupOtpInput(el)) {
-                continue;
-            }
-            if (!omit_field.includes(fieldId)) {
-                el.removeAttribute('disabled');
+        var inputs = frm.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], select');
+
+        $('#btnsendOTP_Email').hide();
+        disable_inputs();
+
+        function disable_inputs() {
+            for (var i = 0; i < inputs.length; i++) {
+                var el = inputs[i];
+                var fieldId = el.getAttribute('id') || '';
+                if (['Mobile', 'CaptchaInput'].includes(fieldId) || (typeof cspIsSignupOtpInput === 'function' && cspIsSignupOtpInput(el))) {
+                    continue;
+                }
+                el.setAttribute('disabled', 'disabled');
                 el.value = '';
             }
         }
-    }
 
+        function block_inputs(email_verify) {
+            email_verify = !!email_verify;
+            var omit_field = ['Mobile'];
+            if (email_verify) {
+                omit_field.push('Email');
+            }
+            for (var j = 0; j < inputs.length; j++) {
+                var el2 = inputs[j];
+                var fieldId2 = el2.getAttribute('id') || '';
+                if (typeof cspIsSignupOtpInput === 'function' && cspIsSignupOtpInput(el2)) {
+                    continue;
+                }
+                if (!omit_field.includes(fieldId2)) {
+                    el2.removeAttribute('disabled');
+                    el2.value = '';
+                }
+            }
+        }
 
-
-
+        window.disable_inputs = disable_inputs;
+        window.block_inputs = block_inputs;
+    })();
 </script>
 
 
@@ -1513,12 +1584,6 @@
                         $("#captcha_success_img").removeClass("d-none"); // ✅ Tick image show
 
                         $("#Mobile").prop("disabled", false).focus();
-                        $("#verifyCaptchaBtn").prop("disabled", true);
-                        captchaInput.prop("disabled", true);
-
-                        setTimeout(function () {
-                            cspShowCaptchaSection(false);
-                        }, 350);
                     } else {
                         $("#captcha_msg").removeClass("text-success")
                             .addClass("text-danger")
@@ -1539,19 +1604,14 @@
         // 🔄 Captcha Refresh
         $("#refreshCaptcha").click(function () {
             $.get('@Url.Action("RefreshCaptcha", "Home")', function (data) {
-                cspShowCaptchaSection(true);
+                if (typeof cspShowCaptchaSection === 'function') {
+                    cspShowCaptchaSection(true);
+                }
                 $("#captcha-text").text(data.Captcha);
                 $("#CaptchaInput").val("").prop("disabled", false);
                 $("#verifyCaptchaBtn").prop("disabled", false);
                 $("#captcha_msg").text("").removeClass("text-success text-danger");
                 $("#captcha_success_img").addClass("d-none");
-                $("#Mobile").val("").prop("disabled", true);
-                cspShowMobileOtp(false);
-                cspShowEmailOtp(false);
-                cspResetMobileOtpBoxes();
-                cspResetEmailOtpBoxes();
-                mobile_clientId = null;
-                mobile_verify = false;
             });
         });
 
@@ -1559,4 +1619,7 @@
 
 
     </script>
+
+</body>
+</html>
 

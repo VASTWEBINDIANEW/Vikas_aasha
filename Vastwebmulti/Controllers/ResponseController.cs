@@ -5503,6 +5503,10 @@ namespace Vastwebmulti.Controllers
                         long Reqidno = long.Parse(Reqid);
                         var updated = repo.UpdateDocumentVerification(Reqidno, Status, MSG);
                     }
+                    else if(Type== "AEPSCASHDEPOSIT")
+                    {
+                        dbsrs.update_cash_deposit(Reqid, Status, Transid, "");
+                    }
                 }
                 catch
                 {

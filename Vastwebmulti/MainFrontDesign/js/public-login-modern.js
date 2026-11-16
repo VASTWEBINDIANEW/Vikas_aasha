@@ -54,6 +54,9 @@
             }
         } else if (key === "forgetpass" || key === "forget") {
             setHidden(forget, false);
+            if (typeof window.vmLoginBindOtpBoxes === "function") {
+                window.vmLoginBindOtpBoxes();
+            }
         } else {
             setHidden(signIn, false);
             if (btnIn) {

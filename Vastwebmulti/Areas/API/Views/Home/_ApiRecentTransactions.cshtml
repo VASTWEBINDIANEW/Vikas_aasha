@@ -1,0 +1,41 @@
+@model IEnumerable<Vastwebmulti.Models.DashBoard_Report_top_Result>
+@{
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.DashBoard_Report_top_Result>();
+}
+@if (rows.Count == 0)
+{
+    <tr class="saas-dt-empty-row">
+        <td colspan="5">
+            <div class="saas-dt-empty">
+                <i class="fas fa-inbox" aria-hidden="true"></i>
+                <p>No recent transactions</p>
+            </div>
+        </td>
+    </tr>
+}
+else
+{
+    foreach (var item in rows)
+    {
+        if (item.Date == null) { continue; }
+        DateTime date = item.Date.Value;
+        var isDr = (item.Cr ?? 0) == 0 && (item.Dr ?? 0) != 0;
+        var amt = isDr ? item.Dr : item.Cr;
+        <tr>
+            <td><span class="vm-txn-type">@(item.Operator_type ?? "")</span></td>
+            <td class="vm-txn-desc">@(item.Description ?? "")</td>
+            <td class="vm-txn-date">@date.ToString("d-MMM-yyyy") <small>@date.ToString("HH:mm:ss")</small></td>
+            <td>
+                @if (isDr)
+                {
+                    <span class="vm-txn-amt vm-txn-dr">- @(amt ?? 0)</span>
+                }
+                else
+                {
+                    <span class="vm-txn-amt vm-txn-cr">+ @(amt ?? 0)</span>
+                }
+            </td>
+            <td class="vm-txn-bal">&#8377; @(item.UserPost ?? 0)</td>
+        </tr>
+    }
+}

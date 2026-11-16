@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using Vastwebmulti.Models;
 
@@ -26,6 +27,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         public long Id { get; set; }
         public string ApplicationNo { get; set; }
         public string RetailerId { get; set; }
+        public string AadhaarNo { get; set; }
 
         [Required(ErrorMessage = "Please select a loan type")]
         [Range(1, int.MaxValue, ErrorMessage = "Please select a loan type")]
@@ -140,6 +142,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         public DateTime? DisbursedDate { get; set; }
 
         public DateTime CreatedDate { get; set; }
+        public int RejectedDocCount { get; set; }
     }
 
     public class LoanVehicleVm
@@ -268,6 +271,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 
     public class LoanApplicationDetailsVm
     {
+        public List<LoanDocumentVm> Documents { get; set; }
         public LoanApplicationVm Application { get; set; }
         public LoanVehicleVm Vehicle { get; set; }           // null if not a car loan
         public ExistingLoanVm ExistingLoan { get; set; }     // NEW — null unless Used Car + Refinance
@@ -330,6 +334,67 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         public string Status { get; set; }
         public string VehicleType { get; set; }
         public List<LoanDocumentVm> Documents { get; set; } = new List<LoanDocumentVm>();
+    }
+
+    /// <summary>
+    /// Normalises reviewer correction notes (often mixed Hindi/English from API) for retailer-facing UI.
+    /// </summary>
+    public static class LoanRemarkFormatter
+    {
+        private struct RemarkPhrase
+        {
+            public string Pattern;
+            public string Replacement;
+        }
+
+        private static readonly RemarkPhrase[] PhraseFixes = new[]
+        {
+            new RemarkPhrase { Pattern = "pan\\s+card\\s+shi\\s+karo", Replacement = "please correct the PAN card details" },
+            new RemarkPhrase { Pattern = "pan\\s+card\\s+sahi\\s+karo", Replacement = "please correct the PAN card details" },
+            new RemarkPhrase { Pattern = "aadhaar\\s+card\\s+shi\\s+karo", Replacement = "please correct the Aadhaar card details" },
+            new RemarkPhrase { Pattern = "aadhaar\\s+card\\s+sahi\\s+karo", Replacement = "please correct the Aadhaar card details" },
+            new RemarkPhrase { Pattern = "fir\\s+se\\s+dekho", Replacement = "please review the details again" },
+            new RemarkPhrase { Pattern = "phir\\s+se\\s+dekho", Replacement = "please review the details again" },
+            new RemarkPhrase { Pattern = "dobara\\s+check\\s+karo", Replacement = "please review again" },
+            new RemarkPhrase { Pattern = "check\\s+karo", Replacement = "please verify" },
+            new RemarkPhrase { Pattern = "shi\\s+karo", Replacement = "please correct" },
+            new RemarkPhrase { Pattern = "sahi\\s+karo", Replacement = "please correct" },
+            new RemarkPhrase { Pattern = "thik\\s+karo", Replacement = "please correct" },
+            new RemarkPhrase { Pattern = "dekho", Replacement = "please review" },
+        };
+
+        public static string FormatForDisplay(string remarks)
+        {
+            if (string.IsNullOrWhiteSpace(remarks))
+                return remarks;
+
+            var s = remarks.Trim();
+
+            s = Regex.Replace(s, @"Aadhaar\s*/\s*PAN", "Aadhaar and PAN", RegexOptions.IgnoreCase);
+            s = Regex.Replace(s, @"PAN\s*/\s*Aadhaar", "PAN and Aadhaar", RegexOptions.IgnoreCase);
+            s = Regex.Replace(s, @"\s+", " ");
+
+            foreach (var fix in PhraseFixes)
+            {
+                s = Regex.Replace(s, fix.Pattern, fix.Replacement, RegexOptions.IgnoreCase);
+            }
+
+            s = Regex.Replace(s, @"\s+([.,])", "$1");
+            s = Regex.Replace(s, @"\.(\S)", ". $1");
+            s = Regex.Replace(s, @",(\S)", ", $1");
+
+            if (s.Length > 0)
+            {
+                s = char.ToUpperInvariant(s[0]) + (s.Length > 1 ? s.Substring(1) : string.Empty);
+            }
+
+            if (!s.EndsWith(".", StringComparison.Ordinal) && !s.EndsWith("!", StringComparison.Ordinal) && !s.EndsWith("?", StringComparison.Ordinal))
+            {
+                s += ".";
+            }
+
+            return s;
+        }
     }
 
 }

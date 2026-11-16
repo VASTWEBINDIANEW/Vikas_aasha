@@ -20,6 +20,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                     .ToList();
             }
         }
+
         public LoanDocumentVm GetDocumentById(long id)
         {
             using (var db = new VastwebmultiEntities())
@@ -41,6 +42,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 };
             }
         }
+
         public string GetLoanTypeCode(int loanTypeId)
         {
             using (var db = new VastwebmultiEntities())
@@ -48,6 +50,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 return db.LoanTypes.Where(t => t.Id == loanTypeId).Select(t => t.Code).FirstOrDefault();
             }
         }
+
         public string Websiteurl()
         {
             using (var db = new VastwebmultiEntities())
@@ -71,6 +74,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                     DOB = a.DOB,
                     Gender = a.Gender,
                     PAN = a.PAN,
+                    AadhaarNo = a.AadhaarNo,          // NEW (personal loan)
                     Address = a.Address,
                     City = a.City,
                     State = a.State,
@@ -86,7 +90,6 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                     TenureMonths = a.TenureMonths,
                     LoanPurpose = a.LoanPurpose,
 
-                    // NEW
                     CaseType = a.CaseType,
                     RefinanceType = a.RefinanceType,
                     CIBILScore = a.CIBILScore,
@@ -122,7 +125,6 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                     Variant = v.Variant,
                     RegistrationNo = v.RegistrationNo,
 
-                    // NEW
                     ManufacturingMonth = v.ManufacturingMonth,
                     RegistrationDate = v.RegistrationDate,
                     KMDriven = v.KMDriven,
@@ -153,7 +155,6 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             using (var db = new VastwebmultiEntities())
             {
-               
                 var entity = new LoanExistingDetail // adjust to your actual entity/table name
                 {
                     LoanApplicationId = e.LoanApplicationId,
@@ -199,18 +200,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             {
                 retailerId = "";
             }
-            //if(status==null)
-            //{
-            //    status = "";
-            //}
 
             DateTime? from = ParseDate(fromDate);
             DateTime? to = ParseDate(toDate);
-            //if(from==null)
-            //{
-            //    from = DateTime.Now.Date;
-            //    to = from.Value.AddDays(1);
-            //}
 
             using (var db = new VastwebmultiEntities())
             {
@@ -251,7 +243,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                         RejectedDate = la.RejectedDate,
                         DisbursedDate = la.DisbursedDate,
                         RejectionReason = la.RejectionReason,
-                        CreatedDate = la.CreatedDate
+                        Remarks = la.Remarks,
+                        CreatedDate = la.CreatedDate,
+                        RejectedDocCount = db.LoanDocuments.Count(d => d.LoanApplicationId == la.Id && d.VerificationStatus == "REJECTED")
                     })
                     .ToList();
             }
@@ -273,7 +267,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 
         public LoanApplicationDetailsVm GetLoanApplicationDetails(long id, string retailerId)
         {
-            if(retailerId==null)
+            if (retailerId == null)
             {
                 retailerId = "";
             }
@@ -290,6 +284,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                     Application = new LoanApplicationVm
                     {
                         Id = la.Id,
+                        AadhaarNo = la.AadhaarNo,
                         ApplicationNo = la.ApplicationNo,
                         RetailerId = la.Retailerid,
                         LoanTypeId = la.LoanTypeId,
@@ -315,7 +310,6 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                         TenureMonths = la.TenureMonths,
                         LoanPurpose = la.LoanPurpose,
 
-                        // NEW
                         InterestRate = la.InterestRate,
                         CaseType = la.CaseType,
                         RefinanceType = la.RefinanceType,
@@ -351,7 +345,6 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                         Variant = vehicle.Variant,
                         RegistrationNo = vehicle.RegistrationNo,
 
-                        // NEW
                         ManufacturingMonth = vehicle.ManufacturingMonth,
                         RegistrationDate = vehicle.RegistrationDate,
                         KMDriven = vehicle.KMDriven,
@@ -373,7 +366,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                     };
                 }
 
-                // NEW — Existing loan (Used Car + Refinance only)
+                // Existing loan (Used Car + Refinance only)
                 var existingLoan = db.LoanExistingDetails
                     .Where(e => e.LoanApplicationId == id)
                     .FirstOrDefault();
@@ -407,9 +400,92 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                     })
                     .ToList();
 
+                // NEW — uploaded documents (personal loan saves them at Create)
+                result.Documents = db.LoanDocuments
+                    .Where(d => d.LoanApplicationId == id)
+                    .OrderBy(d => d.UploadedDate)
+                    .Select(d => new LoanDocumentVm
+                    {
+                        Id = d.Id,
+                        LoanApplicationId = d.LoanApplicationId,
+                        DocumentType = d.DocumentType,
+                        FileName = d.FileName,
+                        FilePath = d.FilePath,
+                        VerificationStatus = d.VerificationStatus,
+                        VerificationRemarks = d.VerificationRemarks,
+                        UploadedDate = d.UploadedDate,
+                        VerifiedDate = d.VerifiedDate
+                    })
+                    .ToList();
+
                 return result;
             }
         }
+
+        // Retailer corrects the information the reviewer flagged
+        public bool UpdateApplicantInfo(long id, string retailerId, LoanApplicationVm a)
+        {
+            using (var db = new VastwebmultiEntities())
+            {
+                var la = db.LoanApplications.FirstOrDefault(x => x.Id == id && x.Retailerid == retailerId);
+                if (la == null) return false;
+
+                la.FullName = a.FullName;
+                la.Mobile = a.Mobile;
+                la.Email = a.Email;
+                la.DOB = a.DOB;
+                la.Gender = a.Gender;
+                la.PAN = a.PAN;
+                la.AadhaarNo = a.AadhaarNo;
+                la.Address = a.Address;
+                la.City = a.City;
+                la.State = a.State;
+                la.Pincode = a.Pincode;
+                la.EmploymentType = a.EmploymentType;
+                la.CompanyName = a.CompanyName;
+                la.WorkExperienceYears = a.WorkExperienceYears;
+                la.MonthlyIncome = a.MonthlyIncome;
+                la.OtherMonthlyIncome = a.OtherMonthlyIncome;
+                la.ExistingEMI = a.ExistingEMI;
+                la.ExistingLoans = a.ExistingLoans;
+                la.LoanAmount = a.LoanAmount;
+                la.TenureMonths = a.TenureMonths;
+                la.LoanPurpose = a.LoanPurpose;
+                la.UpdatedDate = DateTime.Now;
+
+                db.SaveChanges();
+                return true;
+            }
+        }
+
+        public void UpdateVehicleInfo(long loanApplicationId, LoanVehicleVm v)
+        {
+            using (var db = new VastwebmultiEntities())
+            {
+                var e = db.LoanVehicles.FirstOrDefault(x => x.LoanApplicationId == loanApplicationId);
+                if (e == null) return;
+
+                e.Manufacturer = v.Manufacturer;
+                e.Model = v.Model;
+                e.Variant = v.Variant;
+                e.FuelType = v.FuelType;
+                e.Transmission = v.Transmission;
+
+                if (e.VehicleType == "USED")
+                {
+                    e.RegistrationNo = v.RegistrationNo;
+                    e.ManufacturingMonth = v.ManufacturingMonth;
+                    e.ManufacturingYear = v.ManufacturingYear;
+                    e.RegistrationDate = v.RegistrationDate;
+                    e.OwnerNumber = v.OwnerNumber;
+                    e.KMDriven = v.KMDriven;
+                    e.MarketValue = v.MarketValue;
+                }
+
+                db.SaveChanges();
+            }
+        }
+
         public bool UpdateStatusByApplicationNo(string applicationNo, string newStatus, string remarks)
         {
             using (var db = new VastwebmultiEntities())
@@ -439,6 +515,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 return true;
             }
         }
+
         public List<LoanDocumentVm> GetDocumentsByLoanApplicationId(long loanApplicationId)
         {
             using (var db = new VastwebmultiEntities())

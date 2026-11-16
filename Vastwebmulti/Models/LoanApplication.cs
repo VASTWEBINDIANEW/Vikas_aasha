@@ -69,6 +69,7 @@ namespace Vastwebmulti.Models
         public Nullable<int> Last3MonthsBounceCount { get; set; }
         public Nullable<int> BankStatementMonths { get; set; }
         public Nullable<decimal> InterestRate { get; set; }
+        public string AadhaarNo { get; set; }
     
         public virtual LoanType LoanType { get; set; }
         public virtual Retailer_Details Retailer_Details { get; set; }

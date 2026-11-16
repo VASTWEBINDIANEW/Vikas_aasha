@@ -3,13 +3,24 @@
     ViewBag.Title = "Loan Application Details";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
     var a = Model.Application;
-    var docs = ViewBag.Documents as IEnumerable<Vastwebmulti.Areas.RETAILER.Models.LoanDocumentVm>;
+    IEnumerable<Vastwebmulti.Areas.RETAILER.Models.LoanDocumentVm> docs = Model.Documents;
+    if (docs == null)
+    {
+        docs = ViewBag.Documents as IEnumerable<Vastwebmulti.Areas.RETAILER.Models.LoanDocumentVm>;
+    }
+    string maskedAadhaar = "-";
+    if (a != null && !string.IsNullOrEmpty(a.AadhaarNo) && a.AadhaarNo.Length >= 4)
+    {
+        maskedAadhaar = "XXXX XXXX " + a.AadhaarNo.Substring(a.AadhaarNo.Length - 4);
+    }
     var statusUpper = ((a != null && a.Status != null) ? a.Status : "").ToUpper();
     var statusCls = "is-hold";
     if (statusUpper == "APPROVED") { statusCls = "is-approved"; }
     else if (statusUpper == "DISBURSED") { statusCls = "is-disbursed"; }
     else if (statusUpper == "REJECTED" || statusUpper == "CANCELLED") { statusCls = "is-rejected"; }
     else if (statusUpper == "NEW") { statusCls = "is-new"; }
+    else if (statusUpper == "CORRECTION_REQUIRED") { statusCls = "is-correction"; }
+    else if (statusUpper == "RESUBMITTED") { statusCls = "is-resubmitted"; }
     else if (statusUpper == "UNDER_PROCESS" || statusUpper == "VERIFICATION" || statusUpper == "DOCUMENT_REQUIRED" || statusUpper == "ON_HOLD") { statusCls = "is-process"; }
     var statusText = ((a != null && a.Status != null) ? a.Status : "-").Replace("_", " ");
     var applicantInitial = (!string.IsNullOrEmpty(a.FullName) ? a.FullName.Trim().Substring(0, 1).ToUpper() : "L");
@@ -34,6 +45,11 @@
     .saas-loan-details-page .vm-loan-status.is-disbursed { background: #d1fae5; color: #047857; border-color: #a7f3d0; }
     .saas-loan-details-page .vm-loan-status.is-rejected { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
     .saas-loan-details-page .vm-loan-status.is-hold { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+    .saas-loan-details-page .vm-loan-status.is-correction { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
+    .saas-loan-details-page .vm-loan-status.is-resubmitted { background: #ecfdf5; color: #0f766e; border-color: #99f6e4; }
+    .saas-loan-details-page .vm-loan-doc-status { display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; background: #f1f5f9; color: #475569; }
+    .saas-loan-details-page .vm-loan-doc-status.is-rejected { background: #fee2e2; color: #b91c1c; }
+    .saas-loan-details-page .vm-loan-doc-status.is-approved { background: #dcfce7; color: #15803d; }
     /* hero */
     .saas-loan-details-page .vm-loan-hero { position: relative; overflow: hidden; border-radius: 14px; background: linear-gradient(120deg,#1e3a8a 0%,#2867c9 55%,#0ea5e9 100%); color: #fff; padding: 22px 24px; margin-bottom: 16px; box-shadow: 0 12px 32px rgba(30,58,138,.28); }
     .saas-loan-details-page .vm-loan-hero:before { content: ""; position: absolute; right: -70px; top: -70px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,.10); }
@@ -132,6 +148,26 @@
                 </div>
             </div>
         }
+        @if (string.Equals(a.Status, "CORRECTION_REQUIRED", StringComparison.OrdinalIgnoreCase))
+        {
+            <div class="vm-loan-banner">
+                <i class="fa fa-edit" aria-hidden="true"></i>
+                <div>
+                    <strong>Correction required</strong>
+                    <p>@(string.IsNullOrWhiteSpace(a.Remarks) ? "Retailer must correct submitted information." : Vastwebmulti.Areas.RETAILER.Models.LoanRemarkFormatter.FormatForDisplay(a.Remarks))</p>
+                </div>
+            </div>
+        }
+        @if (string.Equals(a.Status, "RESUBMITTED", StringComparison.OrdinalIgnoreCase))
+        {
+            <div class="vm-loan-banner" style="background:#ecfdf5;border-color:#a7f3d0;">
+                <i class="fa fa-paper-plane" aria-hidden="true" style="color:#047857;"></i>
+                <div>
+                    <strong style="color:#047857;">Resubmitted for review</strong>
+                    <p style="color:#065f46;">Application was corrected and sent again by the retailer.</p>
+                </div>
+            </div>
+        }
         @if (!string.IsNullOrEmpty(a.RejectionReason))
         {
             <div class="vm-loan-banner" style="background:#fef2f2;border-color:#fecaca;">
@@ -158,6 +194,10 @@
                             <div><label>Date of Birth</label><div class="val">@(a.DOB.HasValue ? a.DOB.Value.ToString("dd MMM yyyy") : "-")</div></div>
                             <div><label>Gender</label><div class="val">@(a.Gender ?? "-")</div></div>
                             <div><label>PAN</label><div class="val">@(a.PAN ?? "-")</div></div>
+                            @if (!string.IsNullOrEmpty(a.AadhaarNo))
+                            {
+                                <div><label>Aadhaar</label><div class="val">@maskedAadhaar</div></div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -332,9 +372,20 @@
                                 @foreach (var d in docs)
                                 {
                                     <li>
-                                        <div class="tl-status">@d.DocumentType.Replace("_", " ")</div>
+                                        <div class="tl-status">
+                                            @d.DocumentType.Replace("_", " ")
+                                            @{
+                                                var vs = string.IsNullOrEmpty(d.VerificationStatus) ? "PENDING" : d.VerificationStatus;
+                                                var vsCls = vs == "REJECTED" ? "is-rejected" : (vs == "APPROVED" ? "is-approved" : "");
+                                            }
+                                            <span class="vm-loan-doc-status @vsCls">@vs</span>
+                                        </div>
                                         <div class="tl-remarks">
                                             <a href="@Url.Action("ViewDocument", "AdminLoan", new { area = "ADMIN", id = d.Id })" target="_blank">@d.FileName</a>
+                                            @if (!string.IsNullOrWhiteSpace(d.VerificationRemarks))
+                                            {
+                                                <div style="margin-top:4px;color:#64748b;font-size:12px;">@Vastwebmulti.Areas.RETAILER.Models.LoanRemarkFormatter.FormatForDisplay(d.VerificationRemarks)</div>
+                                            }
                                         </div>
                                     </li>
                                 }
@@ -363,7 +414,7 @@
                                         <div class="tl-date">@h.ChangedDate.ToString("dd MMM yyyy, hh:mm tt")</div>
                                         @if (!string.IsNullOrEmpty(h.Remarks))
                                         {
-                                            <div class="tl-remarks">@h.Remarks</div>
+                                            <div class="tl-remarks">@Vastwebmulti.Areas.RETAILER.Models.LoanRemarkFormatter.FormatForDisplay(h.Remarks)</div>
                                         }
                                     </li>
                                 }

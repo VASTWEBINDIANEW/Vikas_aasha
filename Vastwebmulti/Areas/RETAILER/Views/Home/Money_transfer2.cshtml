@@ -3,7 +3,10 @@
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
 }
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/retailer-money-transfer-modern.css?v=45" rel="stylesheet" />
+<link href="~/CSS/bootstrap-combobox.css" rel="stylesheet" />
+<link href="~/AdminDesign/css/sp.css" rel="stylesheet" />
+<link href="~/AdminDesign/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-money-transfer-modern.css?v=46" rel="stylesheet" />
 <script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js"></script>
 <section class="vm-rmt-page content">
@@ -164,23 +167,13 @@
                         {
                             @Html.Partial("_EKYC_Update")
                         }
-                        else
-                        {
-                            @Html.Partial("_Aeps")
-                        }
-                    }
-                    @*}
                         else if (ViewBag.aepsapinm == "Nifi")
                         {
                             if (ViewBag.req == "REQUIREDOTP" || ViewBag.req == "REQUIREDSCAN")
                             {
                                 @Html.Partial("_EKYC_1")
                             }
-                            else if (ViewBag.req == "2FAREQUIRED")
-                            {
-                                @Html.Partial("_2FA_1")
-                            }
-                            else if (ViewBag.daily2fa_AEPS == false)
+                            else if (ViewBag.req == "2FAREQUIRED" || ViewBag.daily2fa_AEPS == false)
                             {
                                 @Html.Partial("_2FA_1")
                             }
@@ -191,8 +184,10 @@
                         }
                         else
                         {
-                            <label>No API open </label>
-                        }*@
+                            @Html.Partial("_Aeps")
+                        }
+                    }
+                    @* legacy fallback kept above for Nifi vs default AEPS *@
 
                 </div>
             </div>

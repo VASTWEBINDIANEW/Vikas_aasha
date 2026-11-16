@@ -5,12 +5,13 @@
 
     var statuses = new[]
     {
-        "NEW", "UNDER_PROCESS", "DOCUMENT_REQUIRED", "VERIFICATION",
+        "NEW", "UNDER_PROCESS", "CORRECTION_REQUIRED", "RESUBMITTED", "DOCUMENT_REQUIRED", "VERIFICATION",
         "ON_HOLD", "APPROVED", "REJECTED", "DISBURSED", "CANCELLED"
     };
 
     var results = Model.Results ?? new List<Vastwebmulti.Areas.RETAILER.Models.LoanApplicationVm>();
     var rowCount = results.Count;
+    var correctionCount = results.Count(r => string.Equals(r.Status, "CORRECTION_REQUIRED", StringComparison.OrdinalIgnoreCase));
 
     decimal totalAmount = results.Any() ? results.Sum(i => i.LoanAmount) : 0m;
     decimal approvedAmount = results.Where(i => string.Equals(i.Status, "APPROVED", StringComparison.OrdinalIgnoreCase)).Sum(i => i.LoanAmount);
@@ -34,7 +35,7 @@
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/retailer-loan-report-modern.css?v=12" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-loan-report-modern.css?v=15" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-report-page saas-dmt-report-page saas-security-report-page saas-loan-report-page saas-retailer-loan-report-page">
@@ -45,6 +46,19 @@
         {
             <div class="vm-retailer-loan-alert" role="status">
                 <i class="fas fa-check-circle" aria-hidden="true"></i> @TempData["Success"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="vm-retailer-loan-alert vm-retailer-loan-alert--error" role="alert">
+                <i class="fas fa-exclamation-circle" aria-hidden="true"></i> @TempData["Error"]
+            </div>
+        }
+        @if (correctionCount > 0)
+        {
+            <div class="vm-retailer-loan-correction-note" role="note">
+                <i class="fas fa-bell" aria-hidden="true"></i>
+                @correctionCount application(s) need correction. Open them, fix the highlighted information and resubmit.
             </div>
         }
 
@@ -210,11 +224,25 @@
                                         else if (statusUpper == "DISBURSED") { statusCls = "is-disbursed"; }
                                         else if (statusUpper == "REJECTED" || statusUpper == "CANCELLED") { statusCls = "is-rejected"; }
                                         else if (statusUpper == "NEW") { statusCls = "is-new"; }
+                                        else if (statusUpper == "CORRECTION_REQUIRED") { statusCls = "is-correction"; }
+                                        else if (statusUpper == "RESUBMITTED") { statusCls = "is-resubmitted"; }
                                         else if (statusUpper == "UNDER_PROCESS" || statusUpper == "VERIFICATION" || statusUpper == "DOCUMENT_REQUIRED" || statusUpper == "ON_HOLD") { statusCls = "is-process"; }
                                         var statusText = (item.Status ?? "-").Replace("_", " ");
                                         <tr>
-                                            <td>
-                                                <span class="vm-loan-status @statusCls"><span class="vm-loan-dot"></span>@statusText</span>
+                                            <td class="vm-retailer-loan-status-cell">
+                                                <div class="vm-retailer-loan-status-stack">
+                                                    <span class="vm-loan-status @statusCls"><span class="vm-loan-dot"></span>@statusText</span>
+                                                    @if (statusUpper == "CORRECTION_REQUIRED" && !string.IsNullOrWhiteSpace(item.Remarks))
+                                                    {
+                                                        <p class="vm-retailer-loan-row-note">@Vastwebmulti.Areas.RETAILER.Models.LoanRemarkFormatter.FormatForDisplay(item.Remarks)</p>
+                                                    }
+                                                    @if (item.RejectedDocCount > 0)
+                                                    {
+                                                        <p class="vm-retailer-loan-row-note vm-retailer-loan-row-note--danger">
+                                                            <a href="@Url.Action("Details", "Loan", new { area = "RETAILER", id = item.Id })#documents">@item.RejectedDocCount document(s) rejected</a>
+                                                        </p>
+                                                    }
+                                                </div>
                                             </td>
                                             <td>@item.ApplicationNo</td>
                                             <td>@item.LoanTypeName</td>
@@ -223,16 +251,30 @@
                                             <td>@item.LoanAmount.ToString("N2")</td>
                                             <td>@(item.TenureMonths.HasValue ? item.TenureMonths + " mo" : "-")</td>
                                             <td>@item.CreatedDate.ToString("dd MMM yyyy")</td>
-                                            <td>
-                                                <a href="@Url.Action("Details", "Loan", new { area = "RETAILER", id = item.Id })" title="View Details" style="color:#ffc107;background:transparent;border:none;">
-                                                    <img src="~/ashok-images/rightaeps.svg" alt="" style="border:1px solid var(--border-color,#e2e8f0);padding:3px;font-size:10px;height:20px !important;" />
-                                                </a>
-                                                @if (string.Equals(item.Status, "DOCUMENT_REQUIRED", StringComparison.OrdinalIgnoreCase))
-                                                {
-                                                    <a href="@Url.Action("UploadDocuments", "Loan", new { area = "RETAILER", id = item.Id })" class="vm-retailer-loan-upload-link" title="Upload documents">
-                                                        <i class="fas fa-upload" aria-hidden="true"></i> Upload
+                                            <td class="vm-retailer-loan-actions-cell">
+                                                <div class="vm-retailer-loan-actions">
+                                                    <a href="@Url.Action("Details", "Loan", new { area = "RETAILER", id = item.Id })" class="vm-retailer-loan-action-btn vm-retailer-loan-action-btn--view" title="View details" aria-label="View details">
+                                                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
                                                     </a>
-                                                }
+                                                    @if (string.Equals(item.Status, "CORRECTION_REQUIRED", StringComparison.OrdinalIgnoreCase))
+                                                    {
+                                                        <a href="@Url.Action("Edit", "Loan", new { area = "RETAILER", id = item.Id })" class="vm-retailer-loan-action-btn vm-retailer-loan-action-btn--edit" title="Edit &amp; Resubmit" aria-label="Edit and resubmit">
+                                                            <i class="fas fa-pen" aria-hidden="true"></i>
+                                                        </a>
+                                                    }
+                                                    @if (item.RejectedDocCount > 0)
+                                                    {
+                                                        <a href="@Url.Action("Details", "Loan", new { area = "RETAILER", id = item.Id })#documents" class="vm-retailer-loan-action-btn vm-retailer-loan-action-btn--warn" title="Re-upload documents" aria-label="Re-upload documents">
+                                                            <i class="fas fa-upload" aria-hidden="true"></i>
+                                                        </a>
+                                                    }
+                                                    @if (string.Equals(item.Status, "DOCUMENT_REQUIRED", StringComparison.OrdinalIgnoreCase))
+                                                    {
+                                                        <a href="@Url.Action("UploadDocuments", "Loan", new { area = "RETAILER", id = item.Id })" class="vm-retailer-loan-action-btn vm-retailer-loan-action-btn--warn" title="Upload documents" aria-label="Upload documents">
+                                                            <i class="fas fa-upload" aria-hidden="true"></i>
+                                                        </a>
+                                                    }
+                                                </div>
                                             </td>
                                         </tr>
                                     }

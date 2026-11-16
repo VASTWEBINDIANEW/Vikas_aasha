@@ -14,5 +14,6 @@ namespace Vastwebmulti.Areas.ADMIN.Models
         public decimal t1 { get; set; }
         public decimal t2 { get; set; }
         public decimal t3 { get; set; }
+        public decimal t4 { get; set; }
     }
 }

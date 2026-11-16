@@ -157,6 +157,7 @@
                                     <th>GST &#8377;</th>
                                     <th>TDS &#8377;</th>
                                     <th>Remain Post &#8377;</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="retailerCashDepRows">
@@ -198,13 +199,32 @@
                                             <td class="vm-dmt-amt-cell">@item.rem_gst</td>
                                             <td class="vm-dmt-amt-cell">@item.rem_tds</td>
                                             <td class="vm-dmt-amt-cell">@item.rem_post</td>
+                                            <td class="vm-dmt-action-cell">
+                                                @if (upper == "PENDING")
+                                                {
+                                                    <span class="vm-cashdep-actions">
+                                                        <button type="button" class="vm-opr-icon-btn vm-cashdep-act vm-cashdep-act--ok" title="Mark success"
+                                                                onclick="UpdateCashDepositStatus('@item.reqid', 'Success')">
+                                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                                        </button>
+                                                        <button type="button" class="vm-opr-icon-btn vm-cashdep-act vm-cashdep-act--fail" title="Mark failed"
+                                                                onclick="UpdateCashDepositStatus('@item.reqid', 'Failed')">
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                        </button>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="vm-cashdep-act-none">—</span>
+                                                }
+                                            </td>
                                         </tr>
                                     }
                                 }
                                 else
                                 {
                                     <tr class="vm-opr-table-empty-row">
-                                        <td colspan="13" class="vm-opr-table-empty vm-dmt-table-empty">
+                                        <td colspan="14" class="vm-opr-table-empty vm-dmt-table-empty">
                                             <div class="vm-opr-empty-state">
                                                 <i class="fas fa-inbox" aria-hidden="true"></i>
                                                 <h3>Data not found</h3>
@@ -225,6 +245,75 @@
 
 @section PostVmScripts {
 <script src="~/Swalalert/sweetalert-dev.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    .saas-retailer-cashdeposit-report-page .vm-cashdep-actions {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        white-space: nowrap;
+    }
+    .saas-retailer-cashdeposit-report-page .vm-cashdep-act--ok { color: #16a34a; }
+    .saas-retailer-cashdeposit-report-page .vm-cashdep-act--fail { color: #dc2626; }
+    .saas-retailer-cashdeposit-report-page .vm-cashdep-act-none { color: #94a3b8; }
+</style>
+<script>
+    function UpdateCashDepositStatus(reqid, status) {
+        var isSuccess = status === "Success";
+        Swal.fire({
+            title: isSuccess ? 'Transaction Success' : 'Transaction Failed',
+            input: 'text',
+            inputLabel: isSuccess ? 'Enter Bank RRN Number' : 'Enter Failure Message',
+            inputPlaceholder: isSuccess ? 'Enter Bank RRN' : 'Enter Failure Reason',
+            inputAttributes: {
+                maxlength: isSuccess ? 50 : 250,
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            cancelButtonText: 'Cancel',
+            inputValidator: function (value) {
+                if (!value || !String(value).trim()) {
+                    return isSuccess ? 'Please enter Bank RRN Number' : 'Please enter Failure Message';
+                }
+            }
+        }).then(function (result) {
+            if (!result.isConfirmed) { return; }
+            jQuery.ajax({
+                url: '@Url.Action("UpdateTransactionStatus", "Home")',
+                type: 'POST',
+                data: {
+                    reqid: reqid,
+                    status: status,
+                    remarks: String(result.value).trim()
+                },
+                beforeSend: function () {
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: function () { Swal.showLoading(); }
+                    });
+                },
+                success: function (response) {
+                    if (response && response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message
+                        }).then(function () { location.reload(); });
+                    } else {
+                        Swal.fire('Failed', (response && response.message) || 'Update failed.', 'error');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    var msg = error || 'Something went wrong.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) { msg = xhr.responseJSON.message; }
+                    Swal.fire('Error', msg, 'error');
+                }
+            });
+        });
+    }
+</script>
 <script>
     function retailerCashDepFilters() {
         return {
