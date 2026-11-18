@@ -4615,6 +4615,28 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.LapuDetails' does not have a
           <Property Name="InterestRate" Type="decimal" Precision="5" Scale="2" />
           <Property Name="AadhaarNo" Type="nvarchar" MaxLength="12" />
         </EntityType>
+        <EntityType Name="LoanCommissions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoanApplicationId" Type="bigint" Nullable="false" />
+          <Property Name="ApplicationNo" Type="varchar" MaxLength="50" />
+          <Property Name="Userid" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoanType" Type="varchar" MaxLength="50" />
+          <Property Name="DisbursedAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="CommissionPercent" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Commission" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="GstPercent" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Gst" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TotalCommission" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TdsPercent" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Tds" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="NetAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="RemainPre" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="RemainPost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="LoanDocument">
           <Key>
             <PropertyRef Name="Id" />
@@ -4705,6 +4727,15 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.LapuDetails' does not have a
           <Property Name="remainpayment" Type="decimal" Precision="18" Scale="4" />
           <Property Name="loanstatus" Type="varchar" MaxLength="100" />
           <Property Name="status" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="LoanSlabs">
+          <Key>
+            <PropertyRef Name="idno" />
+          </Key>
+          <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Userid" Type="varchar" MaxLength="50" />
+          <Property Name="LoanType" Type="int" />
+          <Property Name="Commission" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="LoanStatusHistory">
           <Key>
@@ -9962,6 +9993,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
           <Property Name="prepaidtype" Type="varchar" MaxLength="50" />
           <Property Name="Circle" Type="varchar" MaxLength="100" />
           <Property Name="exclusive_gst" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="Recharge_info_Failed_TO_Success_Reports">
           <Key>
@@ -10085,6 +10117,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
           <Property Name="prepaidtype" Type="varchar" MaxLength="50" />
           <Property Name="Circle" Type="varchar" MaxLength="100" />
           <Property Name="exclusive_gst" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="Recharge_sell_by_dealer">
           <Key>
@@ -17649,6 +17682,14 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <Parameter Name="virtualvalue" Type="decimal" Mode="In" />
           <Parameter Name="output" Type="varchar(max)" Mode="InOut" />
         </Function>
+        <Function Name="InsertLoanApplication_Comm" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userid" Type="varchar" Mode="In" />
+          <Parameter Name="loantype" Type="int" Mode="In" />
+          <Parameter Name="amount" Type="decimal" Mode="In" />
+          <Parameter Name="LoanApplicationId" Type="int" Mode="In" />
+          <Parameter Name="ApplicationNo" Type="varchar" Mode="In" />
+          <Parameter Name="output" Type="varchar" Mode="InOut" />
+        </Function>
         <Function Name="loanrequestRepayment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="idno" Type="varchar" Mode="In" />
           <Parameter Name="Loanid" Type="varchar" Mode="In" />
@@ -23254,6 +23295,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <EntitySet Name="Loan_retailer_comm" EntityType="Self.Loan_retailer_comm" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Loan_whitelabel_comm" EntityType="Self.Loan_whitelabel_comm" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoanApplication" EntityType="Self.LoanApplication" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanCommissions" EntityType="Self.LoanCommissions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoanDocument" EntityType="Self.LoanDocument" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoanExistingDetails" EntityType="Self.LoanExistingDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoanFollowUp" EntityType="Self.LoanFollowUp" Schema="dbo" store:Type="Tables" />
@@ -23261,6 +23303,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <EntitySet Name="LoanNote" EntityType="Self.LoanNote" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="loanpermission" EntityType="Self.loanpermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="loanrequest" EntityType="Self.loanrequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoanSlabs" EntityType="Self.LoanSlabs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoanStatusHistory" EntityType="Self.LoanStatusHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoanType" EntityType="Self.LoanType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoanVehicle" EntityType="Self.LoanVehicle" Schema="dbo" store:Type="Tables" />
@@ -32043,6 +32086,16 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
             <End Role="LoanApplication" EntitySet="LoanApplications" />
             <End Role="LoanExistingDetail" EntitySet="LoanExistingDetails" />
           </AssociationSet>
+          <EntitySet Name="LoanSlabs" EntityType="VastwebmultiModel.LoanSlab" />
+          <FunctionImport Name="InsertLoanApplication_Comm" ReturnType="Collection(String)">
+            <Parameter Name="userid" Mode="In" Type="String" />
+            <Parameter Name="loantype" Mode="In" Type="Int32" />
+            <Parameter Name="amount" Mode="In" Type="Decimal" />
+            <Parameter Name="LoanApplicationId" Mode="In" Type="Int32" />
+            <Parameter Name="ApplicationNo" Mode="In" Type="String" />
+            <Parameter Name="output" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="LoanCommissions" EntityType="VastwebmultiModel.LoanCommission" />
           </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -54061,6 +54114,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <Property Name="prepaidtype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Circle" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="exclusive_gst" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="CustomerName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Recharge_info_old">
           <Key>
@@ -54143,6 +54197,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <Property Name="prepaidtype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Circle" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="exclusive_gst" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="CustomerName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="Select_Retailer_Details_all_paging_Result">
           <Property Type="String" Name="DealerId" Nullable="true" MaxLength="50" />
@@ -59074,6 +59129,37 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="LoanSlab">
+          <Key>
+            <PropertyRef Name="idno" />
+          </Key>
+          <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LoanType" Type="Int32" />
+          <Property Name="Commission" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="LoanCommission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoanApplicationId" Type="Int64" Nullable="false" />
+          <Property Name="ApplicationNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Userid" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LoanType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DisbursedAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CommissionPercent" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <Property Name="Commission" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="GstPercent" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <Property Name="Gst" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="TotalCommission" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="TdsPercent" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <Property Name="Tds" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="NetAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="RemainPre" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="RemainPost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -84192,6 +84278,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <EntitySetMapping Name="Recharge_info">
             <EntityTypeMapping TypeName="VastwebmultiModel.Recharge_info">
               <MappingFragment StoreEntitySet="Recharge_info">
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="exclusive_gst" ColumnName="exclusive_gst" />
                 <ScalarProperty Name="Circle" ColumnName="Circle" />
                 <ScalarProperty Name="prepaidtype" ColumnName="prepaidtype" />
@@ -84275,6 +84362,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
           <EntitySetMapping Name="Recharge_info_old">
             <EntityTypeMapping TypeName="VastwebmultiModel.Recharge_info_old">
               <MappingFragment StoreEntitySet="Recharge_info_old">
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="exclusive_gst" ColumnName="exclusive_gst" />
                 <ScalarProperty Name="Circle" ColumnName="Circle" />
                 <ScalarProperty Name="prepaidtype" ColumnName="prepaidtype" />
@@ -89209,6 +89297,40 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
                 <ScalarProperty Name="CurrentOutstanding" ColumnName="CurrentOutstanding" />
                 <ScalarProperty Name="LoanAccountNo" ColumnName="LoanAccountNo" />
                 <ScalarProperty Name="FinanceCompany" ColumnName="FinanceCompany" />
+                <ScalarProperty Name="LoanApplicationId" ColumnName="LoanApplicationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanSlabs">
+            <EntityTypeMapping TypeName="VastwebmultiModel.LoanSlab">
+              <MappingFragment StoreEntitySet="LoanSlabs">
+                <ScalarProperty Name="Commission" ColumnName="Commission" />
+                <ScalarProperty Name="LoanType" ColumnName="LoanType" />
+                <ScalarProperty Name="Userid" ColumnName="Userid" />
+                <ScalarProperty Name="idno" ColumnName="idno" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="InsertLoanApplication_Comm" FunctionName="VastwebmultiModel.Store.InsertLoanApplication_Comm" />
+          <EntitySetMapping Name="LoanCommissions">
+            <EntityTypeMapping TypeName="VastwebmultiModel.LoanCommission">
+              <MappingFragment StoreEntitySet="LoanCommissions">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="RemainPost" ColumnName="RemainPost" />
+                <ScalarProperty Name="RemainPre" ColumnName="RemainPre" />
+                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+                <ScalarProperty Name="Tds" ColumnName="Tds" />
+                <ScalarProperty Name="TdsPercent" ColumnName="TdsPercent" />
+                <ScalarProperty Name="TotalCommission" ColumnName="TotalCommission" />
+                <ScalarProperty Name="Gst" ColumnName="Gst" />
+                <ScalarProperty Name="GstPercent" ColumnName="GstPercent" />
+                <ScalarProperty Name="Commission" ColumnName="Commission" />
+                <ScalarProperty Name="CommissionPercent" ColumnName="CommissionPercent" />
+                <ScalarProperty Name="DisbursedAmount" ColumnName="DisbursedAmount" />
+                <ScalarProperty Name="LoanType" ColumnName="LoanType" />
+                <ScalarProperty Name="Userid" ColumnName="Userid" />
+                <ScalarProperty Name="ApplicationNo" ColumnName="ApplicationNo" />
                 <ScalarProperty Name="LoanApplicationId" ColumnName="LoanApplicationId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

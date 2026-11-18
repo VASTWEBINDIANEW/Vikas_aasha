@@ -1,0 +1,106 @@
+/* Retailer loan commission report — aligned with retailer-loan-report-modern */
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  text-decoration: none;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-filters {
+  flex: 1 1 auto;
+  min-width: 0;
+  justify-content: flex-end;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-stat {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-stat.is-net {
+  border-color: #86efac;
+  background: linear-gradient(180deg, #f0fdf4 0%, #fff 100%);
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-stat__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-stat__value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 4px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page #loanCommissionTable .vm-loan-amount {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page #loanCommissionTable .vm-loan-sub {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-scroll {
+  overflow-x: auto !important;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-table {
+  min-width: 980px;
+  font-size: 12px;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-amt,
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-th-amt {
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-pct-cell {
+  text-align: center;
+  vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-amt-inline {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+body.saas-admin-ui .saas-retailer-loan-commission-page #loanCommissionTable tfoot .vm-retailer-loan-commission-tfoot td {
+  background: #f1f5f9;
+  border-top: 2px solid #cbd5e1;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+@media (max-width: 991px) {
+  body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  body.saas-admin-ui .saas-retailer-loan-commission-page .vm-retailer-loan-commission-summary {
+    grid-template-columns: 1fr;
+  }
+}

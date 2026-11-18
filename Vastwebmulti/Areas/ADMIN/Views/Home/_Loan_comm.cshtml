@@ -1,0 +1,77 @@
+﻿
+@model Vastwebmulti.Areas.ADMIN.Models.LoanModelSlab
+
+@{ var rows = Model.common ??
+                    new List<Vastwebmulti.Areas.ADMIN.Models.LoanModelCommon>(); }
+
+@using (Html.BeginForm(
+    "_Loan_comm",
+    "Home",
+    FormMethod.Post,
+    new { id = "EditFormComm" }))
+{
+@Html.AntiForgeryToken()
+
+                <table class="table table-bordered table-striped" style="max-width:640px;">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Loan Type</th>
+                            <th>Commission (%)</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbodyshow">
+                        @foreach (var item in rows)
+                        {
+        <tr>
+            <td>All</td>
+            <td>@item.LoanTypeName</td>
+            <td>@((item.retailercomm ?? 0).ToString("0.###"))%</td>
+        </tr>}
+                    </tbody>
+
+                    <tbody id="tbodyedit" style="display:none;">
+                        @for (int i = 0; i < rows.Count; i++)
+                        {
+        <tr>
+            <td>
+                All
+                <input type="hidden"
+                       name="common[@i].LoanType"
+                       value="@rows[i].LoanType" />
+            </td>
+
+            <td>@rows[i].LoanTypeName</td>
+
+            <td>
+                <input type="number"
+                       name="common[@i].retailercomm"
+                       value="@(rows[i].retailercomm.HasValue
+                                   ? rows[i].retailercomm.Value.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture)
+                                   : "")"
+                       step="0.001"
+                       min="0"
+                       max="100"
+                       class="form-control"
+                       style="width:140px;" />
+            </td>
+        </tr>}
+                    </tbody>
+                </table>
+
+                                <button type="button"
+                                        id="btnSaveCommon"
+                                        class="btn btn-success"
+                                        style="display:none;"
+                                        onclick="funcSave()">
+                                    Save Common Slab
+                                </button>
+
+                                                <button type="button"
+                                                        id="btnCancelCommon"
+                                                        class="btn btn-default"
+                                                        style="display:none;"
+                                                        onclick="funcCancel()">
+                                                    Cancel
+                                                </button>}

@@ -3,12 +3,104 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using Vastwebmulti.Models;
 
 namespace Vastwebmulti.Areas.RETAILER.Models
 {
     public class LoanRepository
     {
+        public List<SelectListItem> GetActiveRetailers()
+        {
+            using (var db = new VastwebmultiEntities())
+            {
+                return db.Retailer_Details.Where(aa => aa.ISDeleteuser == false)
+                    .OrderBy(r => r.Frm_Name)
+                    .Select(r => new SelectListItem
+                    {
+                        Value = r.RetailerId,
+                        Text = r.Frm_Name
+                    })
+                    .ToList();
+            }
+        }
+
+        public List<CommissionReportRowVM> GetCommissionReport(
+            string retailerId,
+            string fromDate,
+            string toDate)
+        {
+            retailerId = string.IsNullOrWhiteSpace(retailerId) ? "" : retailerId;
+            DateTime? from = ParseDate(fromDate);
+            DateTime? to = ParseDate(toDate);
+
+            using (var db = new VastwebmultiEntities())
+            {
+                var query =
+                    from c in db.LoanCommissions
+                    join r in db.Retailer_Details
+                        on c.Userid equals r.RetailerId into retailerJoin
+                    from retailer in retailerJoin.DefaultIfEmpty()
+                    where (string.IsNullOrEmpty(retailerId) || c.Userid == retailerId)
+                    select new
+                    {
+                        Commission = c,
+                        FirmName = retailer != null
+                            ? retailer.Frm_Name
+                            : "N/A"
+                    };
+
+                if (from.HasValue)
+                {
+                    query = query.Where(x =>
+                        x.Commission.CreatedDate >= from.Value);
+                }
+
+                if (to.HasValue)
+                {
+                    DateTime toExclusive = to.Value.AddDays(1);
+
+                    query = query.Where(x =>
+                        x.Commission.CreatedDate < toExclusive);
+                }
+
+                return query
+                    .OrderByDescending(x => x.Commission.CreatedDate)
+                    .Select(x => new CommissionReportRowVM
+                    {
+                        Id = x.Commission.Id,
+                        LoanApplicationId = x.Commission.LoanApplicationId,
+
+                        ApplicationNo = x.Commission.ApplicationNo,
+                        Userid = x.Commission.Userid,
+                        RetailerFirmName = x.FirmName,
+
+                        LoanType = x.Commission.LoanType,
+
+                        DisbursedAmount = x.Commission.DisbursedAmount,
+
+                        CommissionPercent = x.Commission.CommissionPercent,
+                        Commission = x.Commission.Commission,
+
+                        GstPercent = x.Commission.GstPercent,
+                        Gst = x.Commission.Gst,
+
+                        TotalCommission = x.Commission.TotalCommission,
+
+                        TdsPercent = x.Commission.TdsPercent,
+                        Tds = x.Commission.Tds,
+
+                        NetAmount = x.Commission.NetAmount,
+
+                        RemainPre = x.Commission.RemainPre,
+                        RemainPost = x.Commission.RemainPost,
+
+                        CreatedDate = x.Commission.CreatedDate
+                    })
+                    .ToList();
+            }
+        }
+
         public List<LoanTypeVm> GetActiveLoanTypes()
         {
             using (var db = new VastwebmultiEntities())
@@ -196,56 +288,83 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 
         public List<LoanApplicationVm> GetLoanApplicationsByRetailer(string retailerId, string status, int? loanTypeId, string fromDate, string toDate)
         {
-            if (retailerId == null)
-            {
-                retailerId = "";
-            }
+            retailerId = retailerId ?? "";
 
             DateTime? from = ParseDate(fromDate);
             DateTime? to = ParseDate(toDate);
 
             using (var db = new VastwebmultiEntities())
             {
-                var query = db.LoanApplications.Where(la => la.Retailerid.Contains(retailerId));
+                var query =
+                    from la in db.LoanApplications
+                    join r in db.Retailer_Details
+                        on la.Retailerid equals r.RetailerId into retailerJoin
+                    from retailer in retailerJoin.DefaultIfEmpty()
+                    select new
+                    {
+                        Loan = la,
+                        FirmName = retailer != null ? retailer.Frm_Name : "N/A"
+                    };
 
-                if (!string.IsNullOrEmpty(status)) query = query.Where(la => la.Status == status);
-                if (loanTypeId.HasValue) query = query.Where(la => la.LoanTypeId == loanTypeId.Value);
+                if (!string.IsNullOrEmpty(retailerId))
+                {
+                    query = query.Where(x => x.Loan.Retailerid == retailerId);
+                }
+
+                if (!string.IsNullOrEmpty(status))
+                {
+                    query = query.Where(x => x.Loan.Status == status);
+                }
+
+                if (loanTypeId.HasValue)
+                {
+                    query = query.Where(x => x.Loan.LoanTypeId == loanTypeId.Value);
+                }
 
                 if (from.HasValue)
                 {
-                    var fromValue = from.Value; // already midnight — parsed from yyyy-MM-dd with no time part
-                    query = query.Where(la => la.CreatedDate >= fromValue);
+                    query = query.Where(x => x.Loan.CreatedDate >= from.Value);
                 }
 
                 if (to.HasValue)
                 {
-                    var toExclusive = to.Value.AddDays(1); // no .Date needed — already midnight
-                    query = query.Where(la => la.CreatedDate < toExclusive);
+                    DateTime toExclusive = to.Value.AddDays(1);
+                    query = query.Where(x => x.Loan.CreatedDate < toExclusive);
                 }
 
                 return query
-                    .OrderByDescending(la => la.CreatedDate)
-                    .Select(la => new LoanApplicationVm
+                    .OrderByDescending(x => x.Loan.CreatedDate)
+                    .Select(x => new LoanApplicationVm
                     {
-                        Id = la.Id,
-                        ApplicationNo = la.ApplicationNo,
-                        RetailerId = la.Retailerid,
-                        LoanTypeId = la.LoanTypeId,
-                        LoanTypeName = la.LoanType.Name,
-                        FullName = la.FullName,
-                        Mobile = la.Mobile,
-                        Email = la.Email,
-                        LoanAmount = la.LoanAmount,
-                        TenureMonths = la.TenureMonths,
-                        Status = la.Status,
-                        ApprovedAmount = la.ApprovedAmount,
-                        ApprovedDate = la.ApprovedDate,
-                        RejectedDate = la.RejectedDate,
-                        DisbursedDate = la.DisbursedDate,
-                        RejectionReason = la.RejectionReason,
-                        Remarks = la.Remarks,
-                        CreatedDate = la.CreatedDate,
-                        RejectedDocCount = db.LoanDocuments.Count(d => d.LoanApplicationId == la.Id && d.VerificationStatus == "REJECTED")
+                        Id = x.Loan.Id,
+                        ApplicationNo = x.Loan.ApplicationNo,
+
+                        RetailerId = x.Loan.Retailerid,
+                        RetailerFirmName = x.FirmName,
+
+                        LoanTypeId = x.Loan.LoanTypeId,
+                        LoanTypeName = x.Loan.LoanType.Name,
+
+                        FullName = x.Loan.FullName,
+                        Mobile = x.Loan.Mobile,
+                        Email = x.Loan.Email,
+
+                        LoanAmount = x.Loan.LoanAmount,
+                        TenureMonths = x.Loan.TenureMonths,
+
+                        Status = x.Loan.Status,
+                        ApprovedAmount = x.Loan.ApprovedAmount,
+                        ApprovedDate = x.Loan.ApprovedDate,
+                        RejectedDate = x.Loan.RejectedDate,
+                        DisbursedDate = x.Loan.DisbursedDate,
+
+                        RejectionReason = x.Loan.RejectionReason,
+                        Remarks = x.Loan.Remarks,
+                        CreatedDate = x.Loan.CreatedDate,
+
+                        RejectedDocCount = db.LoanDocuments.Count(d =>
+                            d.LoanApplicationId == x.Loan.Id &&
+                            d.VerificationStatus == "REJECTED")
                     })
                     .ToList();
             }

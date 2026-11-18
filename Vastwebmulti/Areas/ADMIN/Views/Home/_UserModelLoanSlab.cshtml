@@ -1,0 +1,192 @@
+﻿
+@model Vastwebmulti.Areas.ADMIN.Models.LoanModelSlab
+
+@using (Html.BeginForm(
+    "_UserModelLoanSlab",
+    "Home",
+    FormMethod.Post,
+    new { id = "EditFormUserWise" }))
+{
+@Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.role)
+
+                                <div class="row clearfix" style="margin-bottom:15px;">
+                                    <div class="col-md-4">
+                                        <label>Select Retailer</label>
+
+                                        @Html.DropDownList(
+                                                 "ddlUserId",
+                                                 Model.UserId,
+                                                 "All Retailers",
+                                                 new
+                                                 {
+                                                     @class = "form-control for-select2",
+                                                     onchange = "ddlUserIdChange()"
+                                                 })
+                                    </div>
+
+                                    @if (!string.IsNullOrWhiteSpace(Model.SelectedUserId))
+                                    {
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Name</label>
+                                <input class="form-control"
+                                       value="@Model.Name"
+                                       readonly />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Mobile</label>
+                                <input class="form-control"
+                                       value="@Model.Phone"
+                                       readonly />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Email</label>
+                                <input class="form-control"
+                                       value="@Model.Email"
+                                       readonly />
+                            </div>
+                        </div>
+                    </div>}
+                                </div>
+
+                                                <table class="table table-bordered table-striped third-design-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>User ID</th>
+                                                            <th>Loan Type</th>
+                                                            <th>Commission (%)</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    @* Display Mode *@
+                                                    <tbody id="tbodyshow">
+
+                                                        @if (string.IsNullOrWhiteSpace(Model.SelectedUserId))
+                                                        {
+                                                            foreach (var item in Model.common ?? new List<Vastwebmulti.Areas.ADMIN.Models.LoanModelCommon>())
+                                                            {
+                                        <tr>
+                                            <td>All Retailers</td>
+                                            <td>@item.LoanTypeName</td>
+                                            <td>@((item.retailercomm ?? 0).ToString("0.###"))%</td>
+                                        </tr> }
+                                                        }
+                                                        else
+                                                        {
+                                                            foreach (var item in Model.Users ?? new List<Vastwebmulti.Areas.ADMIN.Models.LoanModelRetailer>())
+                                                            {
+                                        <tr>
+                                            <td>@item.Email</td>
+                                            <td>@item.LoanTypeName</td>
+                                            <td>@((item.comm ?? 0).ToString("0.###"))%</td>
+                                        </tr>}
+                                                        }
+                                                    </tbody>
+
+                                                    @* Edit Selected Retailer *@
+                                                    <tbody id="tbodyedit" style="display:none;">
+                                                        @if (!string.IsNullOrWhiteSpace(Model.SelectedUserId))
+                                                        {
+                                                            for (int i = 0; i < Model.Users.Count; i++)
+                                                            {
+                                        <tr>
+                                            @Html.HiddenFor(m => m.Users[i].idno)
+                                            @Html.HiddenFor(m => m.Users[i].userid)
+                                            @Html.HiddenFor(m => m.Users[i].LoanType)
+                                            @Html.HiddenFor(m => m.Users[i].LoanTypeName)
+                                            @Html.HiddenFor(m => m.Users[i].Email)
+
+                                            <td>@Model.Users[i].Email</td>
+                                            <td>@Model.Users[i].LoanTypeName</td>
+                                            <td>
+                                                @Html.TextBoxFor(
+                                                         m => m.Users[i].comm,
+                                                         new
+                                                         {
+                                                             @class = "form-control",
+                                                             type = "number",
+                                                             step = "0.001",
+                                                             min = "0",
+                                                             max = "100"
+                                                         })
+                                            </td>
+                                        </tr>}
+                                                        }
+                                                    </tbody>
+
+                                                    @* Edit All Retailers *@
+                                                    <tbody id="tbodyeditAll" style="display:none;">
+                                                        @if (string.IsNullOrWhiteSpace(Model.SelectedUserId))
+                                                        {
+                                                            for (int i = 0; i < Model.UpdateAll.Count; i++)
+                                                            {
+                                        <tr>
+                                            @Html.HiddenFor(m => m.UpdateAll[i].idno)
+                                            @Html.HiddenFor(m => m.UpdateAll[i].LoanType)
+                                            @Html.HiddenFor(m => m.UpdateAll[i].LoanTypeName)
+
+                                            <td>All Retailers</td>
+                                            <td>@Model.UpdateAll[i].LoanTypeName</td>
+                                            <td>
+                                                @Html.TextBoxFor(
+                                                         m => m.UpdateAll[i].comm,
+                                                         new
+                                                         {
+                                                             @class = "form-control",
+                                                             type = "number",
+                                                             step = "0.001",
+                                                             min = "0",
+                                                             max = "100"
+                                                         })
+                                            </td>
+                                        </tr>}
+                                                        }
+                                                    </tbody>
+                                                </table>
+
+                                                                if (!string.IsNullOrWhiteSpace(Model.SelectedUserId))
+                                                                {
+                                                <p class="text-muted">
+                                                    Enter 0 to remove the retailer override and use the common slab.
+                                                </p>
+
+                                                                    <button type="button"
+                                                                            id="btnSaveRetailer"
+                                                                            class="btn btn-success"
+                                                                            style="display:none;"
+                                                                            onclick="funcSave('Update For Existing Users')">
+                                                                        Save Retailer Slab
+                                                                    </button> }
+                                                                                    else
+                                                                                    {
+                                                                    <button type="button"
+                                                                            id="btnSaveExisting"
+                                                                            class="btn btn-success"
+                                                                            style="display:none;"
+                                                                            onclick="funcSave('Update For Existing Users')">
+                                                                        Update Existing Users
+                                                                    </button>
+
+                                                                                        <button type="button"
+                                                                                                id="btnSaveExistingNew"
+                                                                                                class="btn btn-primary"
+                                                                                                style="display:none;"
+                                                                                                onclick="funcSave('Update Existing & New Users')">
+                                                                                            Update Existing & New Users
+                                                                                        </button>}
+
+                                                                                <button type="button"
+                                                                                        id="btnCancelRetailer"
+                                                                                        class="btn btn-default"
+                                                                                        style="display:none;"
+                                                                                        onclick="funcCancel()">
+                                                                                    Cancel
+                                                                                </button>}
+
+@*<script>
+    $('.for-select2').select2();
+</script>*@

@@ -91,5 +91,6 @@ namespace Vastwebmulti.Models
         public string prepaidtype { get; set; }
         public string Circle { get; set; }
         public Nullable<decimal> exclusive_gst { get; set; }
+        public string CustomerName { get; set; }
     }
 }

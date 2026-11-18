@@ -27,6 +27,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         public long Id { get; set; }
         public string ApplicationNo { get; set; }
         public string RetailerId { get; set; }
+        public string RetailerFirmName { get; set; }
         public string AadhaarNo { get; set; }
 
         [Required(ErrorMessage = "Please select a loan type")]
@@ -248,6 +249,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 
     public class LoanReportFilterVM
     {
+        public string RetailerId { get; set; }
+        public List<System.Web.Mvc.SelectListItem> Retailers { get; set; } = new List<System.Web.Mvc.SelectListItem>();
         public string Status { get; set; }
         public int? LoanTypeId { get; set; }
 

@@ -1,0 +1,187 @@
+﻿@model Vastwebmulti.Areas.RETAILER.Models.CommissionReportVM
+@using System
+@using System.Linq
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "Commission Report";
+    Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
+
+    var rows = Model.Results ?? new List<Vastwebmulti.Areas.RETAILER.Models.CommissionReportRowVM>();
+    int sr = 1;
+    decimal totalBaseCommission = rows.Sum(x => x.Commission);
+    var frmDate = (Model.FromDate ?? "").Trim();
+    var toDate = (Model.ToDate ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+}
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-loan-report-modern.css?v=16" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/retailer-loan-commission-modern.css?v=3" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-dmt-report-page saas-loan-report-page saas-retailer-loan-report-page saas-retailer-loan-commission-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+            @using (Html.BeginForm("CommissionReport", "Loan", new { area = "RETAILER" }, FormMethod.Get, new { id = "loanCommissionForm", @class = "vm-rpt-filters-panel__form vm-retailer-loan-filters-form" }))
+            {
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-retailer-loan-toolbar-one-line">
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home", new { area = "RETAILER" })"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li><a href="@Url.Action("Index", "Loan", new { area = "RETAILER" })">Loan</a></li>
+                        <li>Commission Report</li>
+                    </ol>
+
+                    <div class="saas-acc-filter-bar vm-retailer-loan-filter-row vm-retailer-loan-commission-filters">
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--date">
+                            <input type="date" id="txt_commission_frm" name="FromDate" value="@frmDate" class="vm-loan-native-date" required="required" autocomplete="off" title="From date" aria-label="From date" />
+                        </div>
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--date">
+                            <input type="date" id="txt_commission_to" name="ToDate" value="@toDate" class="vm-loan-native-date" required="required" autocomplete="off" title="To date" aria-label="To date" />
+                        </div>
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--action">
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--action">
+                            <a href="@Url.Action("CommissionReport", "Loan", new { area = "RETAILER" })" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn vm-retailer-loan-reset-btn" title="Reset filters" style="background:#64748b;border-color:#64748b;text-decoration:none;">
+                                <i class="fas fa-undo" aria-hidden="true"></i><span>Reset</span>
+                            </a>
+                        </div>
+
+                        <div class="vm-retailer-loan-filter-cell vm-retailer-loan-filter-cell--new">
+                            <a href="@Url.Action("Index", "Loan", new { area = "RETAILER" })" class="vm-retailer-loan-new-btn vm-retailer-loan-commission-btn" title="Back to loan applications" style="background:linear-gradient(135deg,#475569,#64748b);">
+                                <i class="fas fa-arrow-left" aria-hidden="true"></i><span>Back to Loans</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="vm-retailer-loan-commission-summary" aria-label="Commission totals">
+            <article class="vm-retailer-loan-commission-stat">
+                <div class="vm-retailer-loan-commission-stat__label">Total Disbursed</div>
+                <div class="vm-retailer-loan-commission-stat__value">&#8377; @Model.TotalDisbursedAmount.ToString("N2")</div>
+            </article>
+            <article class="vm-retailer-loan-commission-stat is-net">
+                <div class="vm-retailer-loan-commission-stat__label">Total Commission</div>
+                <div class="vm-retailer-loan-commission-stat__value">&#8377; @Model.TotalCommission.ToString("N2")</div>
+            </article>
+            <article class="vm-retailer-loan-commission-stat">
+                <div class="vm-retailer-loan-commission-stat__label">Total GST</div>
+                <div class="vm-retailer-loan-commission-stat__value">&#8377; @Model.TotalGst.ToString("N2")</div>
+            </article>
+            <article class="vm-retailer-loan-commission-stat">
+                <div class="vm-retailer-loan-commission-stat__label">Total TDS</div>
+                <div class="vm-retailer-loan-commission-stat__value">&#8377; @Model.TotalTds.ToString("N2")</div>
+            </article>
+        </div>
+
+        <div class="vm-opr-main-card vm-security-report-main-card vm-loan-report-main-card vm-retailer-loan-commission-table-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-list-alt" aria-hidden="true"></i>
+                        <span>Commission Transactions</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rows.Count</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll vm-retailer-loan-commission-scroll">
+                        <table id="loanCommissionTable" class="table vm-opr-data-table vm-retailer-loan-commission-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Application No</th>
+                                    <th>Loan Type</th>
+                                    <th class="vm-retailer-loan-commission-th-amt">Disbursed Amount</th>
+                                    <th>Commission</th>
+                                    <th>GST</th>
+                                    <th>Total Commission</th>
+                                    <th>TDS</th>
+                                    <th class="vm-retailer-loan-commission-th-amt">Remain Pre</th>
+                                    <th class="vm-retailer-loan-commission-th-amt">Remain Post</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (rows.Any())
+                                {
+                                    foreach (var item in rows)
+                                    {
+                                        <tr>
+                                            <td>@sr</td>
+                                            <td>@item.CreatedDate.ToString("dd-MM-yyyy HH:mm")</td>
+                                            <td>@item.ApplicationNo</td>
+                                            <td>@item.LoanType</td>
+                                            <td class="vm-loan-amount vm-retailer-loan-commission-amt">&#8377; @item.DisbursedAmount.ToString("N2")</td>
+                                            <td class="vm-retailer-loan-commission-pct-cell">
+                                                <span class="vm-retailer-loan-commission-amt-inline">&#8377; @item.Commission.ToString("N2")</span>
+                                                <span class="vm-loan-sub">@item.CommissionPercent.ToString("N2")%</span>
+                                            </td>
+                                            <td class="vm-retailer-loan-commission-pct-cell">
+                                                <span class="vm-retailer-loan-commission-amt-inline">&#8377; @item.Gst.ToString("N2")</span>
+                                                <span class="vm-loan-sub">@item.GstPercent.ToString("N2")%</span>
+                                            </td>
+                                            <td class="vm-loan-amount vm-retailer-loan-commission-amt">&#8377; @item.TotalCommission.ToString("N2")</td>
+                                            <td class="vm-retailer-loan-commission-pct-cell">
+                                                <span class="vm-retailer-loan-commission-amt-inline">&#8377; @item.Tds.ToString("N2")</span>
+                                                <span class="vm-loan-sub">@item.TdsPercent.ToString("N2")%</span>
+                                            </td>
+                                            <td class="vm-loan-amount vm-retailer-loan-commission-amt">&#8377; @item.RemainPre.ToString("N2")</td>
+                                            <td class="vm-loan-amount vm-retailer-loan-commission-amt">&#8377; @item.RemainPost.ToString("N2")</td>
+                                        </tr>
+                                        sr++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="11" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                            <span>No commission transactions found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            @if (rows.Any())
+                            {
+                                <tfoot>
+                                    <tr class="vm-retailer-loan-commission-tfoot">
+                                        <td colspan="4"><strong>GRAND TOTAL</strong></td>
+                                        <td class="vm-loan-amount vm-retailer-loan-commission-amt"><strong>&#8377; @Model.TotalDisbursedAmount.ToString("N2")</strong></td>
+                                        <td class="vm-loan-amount"><strong>&#8377; @totalBaseCommission.ToString("N2")</strong></td>
+                                        <td class="vm-loan-amount"><strong>&#8377; @Model.TotalGst.ToString("N2")</strong></td>
+                                        <td class="vm-loan-amount vm-retailer-loan-commission-amt"><strong>&#8377; @Model.TotalCommission.ToString("N2")</strong></td>
+                                        <td class="vm-loan-amount"><strong>&#8377; @Model.TotalTds.ToString("N2")</strong></td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                </tfoot>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

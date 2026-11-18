@@ -1,0 +1,715 @@
+﻿
+@model Vastwebmulti.Areas.RETAILER.Models.CommissionReportVM
+
+@using System
+@using System.Linq
+@using System.Collections.Generic
+
+@{ ViewBag.Title = "Commission Report";
+
+    var rows = Model.Results ?? new List<Vastwebmulti.Areas.RETAILER.Models.CommissionReportRowVM>();
+
+    int sr = 1;
+
+    decimal totalBaseCommission = rows.Sum(x => x.Commission);
+
+    string fromDate = string.IsNullOrEmpty(Model.FromDate)
+        ? DateTime.Today.ToString("yyyy-MM-dd")
+        : Model.FromDate;
+
+    string toDate = string.IsNullOrEmpty(Model.ToDate)
+        ? DateTime.Today.ToString("yyyy-MM-dd")
+        : Model.ToDate; }
+
+
+<style>
+    /* ==============================
+       MAIN PAGE
+    ============================== */
+
+    .commission-page {
+        width: 100%;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+
+    /* ==============================
+       PAGE HEADER
+    ============================== */
+
+    .commission-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+        .commission-header h2 {
+            margin: 0 0 5px;
+            color: #263238;
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .commission-header p {
+            margin: 0;
+            color: #718096;
+            font-size: 13px;
+        }
+
+    .commission-back {
+        color: #263238;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .commission-back:hover {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+    /* ==============================
+       FILTER CARD
+    ============================== */
+
+    .commission-card {
+        width: 100%;
+        padding: 18px;
+        margin-bottom: 20px;
+        background: #fff;
+        border: 1px solid #dce3ed;
+        border-radius: 11px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.025);
+        box-sizing: border-box;
+    }
+
+    /* Desktop: All filters in one line */
+
+    .commission-filter {
+        display: grid !important;
+        grid-template-columns: minmax(200px, 1.5fr) minmax(150px, 1fr) minmax(150px, 1fr) auto;
+        align-items: end;
+        gap: 12px;
+        width: 100%;
+    }
+
+        .commission-filter .form-group {
+            width: 100%;
+            min-width: 0;
+            margin: 0 !important;
+        }
+
+        .commission-filter label {
+            display: block;
+            margin-bottom: 8px;
+            color: #344054;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .commission-filter .form-control {
+            display: block;
+            width: 100%;
+            height: 40px;
+            padding: 7px 10px;
+            color: #344054;
+            background-color: #fff;
+            border: 1px solid #d5dce7;
+            border-radius: 6px;
+            box-shadow: none;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+
+            .commission-filter .form-control:focus {
+                border-color: #2563eb;
+                outline: none;
+                box-shadow: 0 0 0 2px rgba(37,99,235,0.08);
+            }
+
+        /* Select2 styling */
+
+        .commission-filter .select2-container {
+            width: 100% !important;
+        }
+
+            .commission-filter .select2-container .select2-selection--single {
+                height: 40px !important;
+                border: 1px solid #d5dce7 !important;
+                border-radius: 6px !important;
+            }
+
+            .commission-filter .select2-container .select2-selection__rendered {
+                line-height: 38px !important;
+                padding-left: 10px !important;
+                font-size: 13px;
+                color: #344054;
+            }
+
+            .commission-filter .select2-container .select2-selection__arrow {
+                height: 38px !important;
+            }
+
+    /* ==============================
+       FILTER BUTTONS
+    ============================== */
+
+    .filter-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        white-space: nowrap;
+    }
+
+        .filter-buttons .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+
+    .btn-search {
+        color: #fff;
+        background: #2563eb;
+        border: 1px solid #2563eb;
+    }
+
+        .btn-search:hover,
+        .btn-search:focus {
+            color: #fff;
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+
+    .btn-reset {
+        display: inline-flex;
+        align-items: center;
+        color: #344054;
+        background: #fff;
+        border: 1px solid #d5dce7;
+    }
+
+        .btn-reset:hover,
+        .btn-reset:focus {
+            color: #111827;
+            background: #f3f4f6;
+            border-color: #cbd5e1;
+        }
+
+    /* ==============================
+       SUMMARY CARDS
+    ============================== */
+
+    .commission-summary {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .summary-box {
+        min-width: 0;
+        padding: 18px;
+        background: #fff;
+        border: 1px solid #dce3ed;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+
+    .summary-title {
+        margin-bottom: 10px;
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .summary-value {
+        color: #1e293b;
+        font-size: 20px;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+    .summary-box.net-box {
+        background: #f8fbff;
+        border-color: #86b7fe;
+    }
+
+    .net-box .summary-value {
+        color: #15803d;
+    }
+
+    /* ==============================
+       COMMISSION TABLE CARD
+    ============================== */
+
+    .commission-table-card {
+        width: 100%;
+        padding: 15px;
+        background: #fff;
+        border: 1px solid #dce3ed;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+
+    .commission-table-heading {
+        margin: 0 0 15px;
+        color: #263238;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .commission-table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* ==============================
+       COMMISSION TABLE
+    ============================== */
+
+    .commission-table {
+        width: 100% !important;
+        min-width: 1100px;
+        table-layout: auto;
+        border-collapse: collapse;
+        font-size: 12px;
+    }
+
+        .commission-table thead th {
+            padding: 10px 7px;
+            color: #344054;
+            background: #f3f6fa;
+            border: 1px solid #e2e8f0;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            vertical-align: middle;
+            white-space: normal;
+        }
+
+        .commission-table tbody td {
+            padding: 9px 7px;
+            color: #475569;
+            background: #fff;
+            border: 1px solid #e8edf3;
+            font-size: 12px;
+            text-align: center;
+            vertical-align: middle;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
+        .commission-table tbody tr:hover td {
+            background: #f8fafc;
+        }
+
+        .commission-table tfoot td {
+            padding: 10px 7px;
+            color: #1e293b;
+            background: #f1f5f9;
+            border: 1px solid #dce3ed;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .commission-table .amount {
+            text-align: right !important;
+            white-space: nowrap;
+        }
+
+        .commission-table .net-amount {
+            color: #15803d !important;
+            font-weight: 700;
+        }
+
+        .commission-table .sub-value {
+            display: block;
+            margin-top: 3px;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+    .empty-row {
+        padding: 35px !important;
+        color: #94a3b8 !important;
+        font-size: 14px !important;
+        text-align: center !important;
+    }
+
+    /* ==============================
+       RESPONSIVE DESIGN
+    ============================== */
+
+    /* Smaller desktop and tablets */
+
+    @@media (max-width: 1100px) {
+        .commission-filter {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .filter-buttons {
+            grid-column: 1 / -1;
+        }
+
+        .commission-summary {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    /* Mobile */
+
+    @@media (max-width: 600px) {
+        .commission-page {
+            padding: 10px;
+        }
+
+        .commission-card {
+            padding: 12px;
+        }
+
+        .commission-header {
+            align-items: flex-start;
+        }
+
+            .commission-header h2 {
+                font-size: 20px;
+            }
+
+        .commission-filter {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .filter-buttons {
+            grid-column: auto;
+            width: 100%;
+            margin-top: 3px;
+        }
+
+            .filter-buttons .btn {
+                flex: 1;
+            }
+
+        .commission-summary {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .summary-box {
+            padding: 13px;
+        }
+
+        .summary-value {
+            font-size: 17px;
+        }
+
+        .commission-table-card {
+            padding: 10px;
+        }
+    }
+
+    /* Very small mobile */
+
+    @@media (max-width: 420px) {
+        .commission-summary {
+            grid-template-columns: 1fr;
+        }
+
+        .filter-buttons {
+            gap: 6px;
+        }
+
+            .filter-buttons .btn {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+    }
+</style>
+
+
+<section class="newpagecustom newpagecustomertyui newpagecustomertyui-second content-fourdesign-page allpage-four-design-section widthinherit-four">
+
+    <div class="commission-page">
+
+        <!-- PAGE HEADER -->
+
+        <div class="commission-header">
+
+            <div>
+                <h2>Commission Report</h2>
+                <p>Loan commission transaction details</p>
+            </div>
+
+            <a href="@Url.Action("Index", "Loan", new { area = "Admin" })"
+               class="commission-back">
+                <i class="fa fa-arrow-left"></i> Back to Loans
+            </a>
+
+        </div>
+
+
+        <!-- DATE FILTER -->
+
+        <div class="commission-card">
+
+            @using (Html.BeginForm(
+                "CommissionReport",
+                "Loan",
+                new { area = "Admin" },
+                FormMethod.Get))
+            {
+<div class="commission-filter">
+
+    <div class="form-group">
+        <label>Retailer</label>
+
+        @Html.DropDownListFor(
+                           m => m.RetailerId,
+                           Model.Retailers,
+                           "-- Select Retailer --",
+                           new { @class = "form-control" }
+                       )
+    </div>
+
+    <div class="form-group">
+        <label>From Date</label>
+        <input type="date"
+               name="FromDate"
+               class="form-control"
+               value="@fromDate" />
+    </div>
+
+    <div class="form-group">
+        <label>To Date</label>
+        <input type="date"
+               name="ToDate"
+               class="form-control"
+               value="@toDate" />
+    </div>
+
+    <div class="filter-buttons">
+        <button type="submit" class="btn btn-search">
+            <i class="fa fa-filter"></i> Search
+        </button>
+
+        <a href="@Url.Action("CommissionReport", "Loan", new { area = "Admin" })"
+           class="btn btn-reset">
+            <i class="fa fa-refresh"></i> Reset
+        </a>
+    </div>
+
+</div>      }
+
+        </div>
+
+
+        <!-- SUMMARY CARDS -->
+
+        <div class="commission-summary">
+
+            <div class="summary-box">
+                <div class="summary-title">Total Disbursed</div>
+                <div class="summary-value">
+                    ₹@Model.TotalDisbursedAmount.ToString("N2")
+                </div>
+            </div>
+
+            <div class="summary-box net-box">
+                <div class="summary-title">Total Commission</div>
+                <div class="summary-value">
+                    ₹@Model.TotalCommission.ToString("N2")
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-title">Total GST</div>
+                <div class="summary-value">
+                    ₹@Model.TotalGst.ToString("N2")
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-title">Total TDS</div>
+                <div class="summary-value">
+                    ₹@Model.TotalTds.ToString("N2")
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+        <!-- COMMISSION TABLE -->
+
+        <div class="commission-table-card">
+
+            <h4 class="commission-table-heading">
+                <i class="fa fa-list-alt"></i>
+                Commission Transactions
+            </h4>
+
+            <div class="commission-table-responsive">
+
+                <table class="commission-table">
+
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Application No</th>
+                            <th>Retailer Firm</th>
+                            <th>Loan Type</th>
+                            <th>Disbursed Amount</th>
+                            <th>Commission</th>
+                            <th>GST</th>
+                            <th>Total Commission</th>
+                            <th>TDS</th>
+                            @*  <th>Net Amount</th>*@
+                            <th>Remain Pre</th>
+                            <th>Remain Post</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @if (rows.Any())
+                        {
+                            foreach (var item in rows)
+                            {
+            <tr>
+                <td>@sr</td>
+
+                <td>
+                    @item.CreatedDate.ToString("dd-MM-yyyy HH:mm")
+                </td>
+
+                <td>@item.ApplicationNo</td>
+
+                <td>@item.RetailerFirmName</td>
+
+                <td>@item.LoanType</td>
+
+                <td class="amount">
+                    ₹@item.DisbursedAmount.ToString("N2")
+                </td>
+
+                <td>
+                    ₹@item.Commission.ToString("N2")
+                    <span class="sub-value">
+                        @item.CommissionPercent.ToString("N2")%
+                    </span>
+                </td>
+
+                <td>
+                    ₹@item.Gst.ToString("N2")
+                    <span class="sub-value">
+                        @item.GstPercent.ToString("N2")%
+                    </span>
+                </td>
+
+                <td class="amount">
+                    ₹@item.TotalCommission.ToString("N2")
+                </td>
+
+                <td>
+                    ₹@item.Tds.ToString("N2")
+                    <span class="sub-value">
+                        @item.TdsPercent.ToString("N2")%
+                    </span>
+                </td>
+
+                @*<td class="amount net-amount">
+                        ₹@item.NetAmount.ToString("N2")
+                    </td>*@
+
+                <td class="amount">
+                    ₹@item.RemainPre.ToString("N2")
+                </td>
+
+                <td class="amount">
+                    ₹@item.RemainPost.ToString("N2")
+                </td>
+            </tr>
+ sr++;
+        }
+    }
+    else
+    {
+<tr>
+    <td colspan="11" class="empty-row">
+        <i class="fa fa-info-circle"></i>
+        No commission transactions found.
+    </td>
+</tr>
+}
+
+                    </tbody>
+
+                    @if (rows.Any())
+                    {
+        <tfoot>
+            <tr>
+                <td colspan="5">GRAND TOTAL</td>
+
+                <td class="amount">
+                    ₹@Model.TotalDisbursedAmount.ToString("N2")
+                </td>
+
+                <td class="amount">
+                    ₹@totalBaseCommission.ToString("N2")
+                </td>
+
+                <td class="amount">
+                    ₹@Model.TotalGst.ToString("N2")
+                </td>
+
+                <td class="amount">
+                    ₹@Model.TotalCommission.ToString("N2")
+                </td>
+
+                <td class="amount">
+                    ₹@Model.TotalTds.ToString("N2")
+                </td>
+
+
+
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </tfoot>
+}
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+<script>
+
+    $('#RetailerId').select2();
+
+
+</script>

@@ -654,6 +654,44 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return View(filter);
         }
 
+        // GET: Loan/CommissionReport
+        [HttpGet]
+        public ActionResult CommissionReport(CommissionReportVM filter)
+        {
+            string currentRetailerId = User.Identity.GetUserId();
+
+            // Retailer can only view their own commission rows
+            filter.RetailerId = currentRetailerId;
+
+            if (string.IsNullOrWhiteSpace(filter.FromDate))
+                filter.FromDate = DateTime.Today.ToString("yyyy-MM-dd");
+            if (string.IsNullOrWhiteSpace(filter.ToDate))
+                filter.ToDate = DateTime.Today.ToString("yyyy-MM-dd");
+
+            filter.Retailers = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = "My Firm",
+                    Value = currentRetailerId,
+                    Selected = true
+                }
+            };
+
+            filter.Results = _repo.GetCommissionReport(
+                currentRetailerId,
+                filter.FromDate,
+                filter.ToDate);
+
+            filter.TotalDisbursedAmount = filter.Results.Sum(x => x.DisbursedAmount);
+            filter.TotalCommission = filter.Results.Sum(x => x.TotalCommission);
+            filter.TotalGst = filter.Results.Sum(x => x.Gst);
+            filter.TotalTds = filter.Results.Sum(x => x.Tds);
+            filter.TotalNetAmount = filter.Results.Sum(x => x.NetAmount);
+
+            return View(filter);
+        }
+
         // GET: Loan/Edit/5  (only while the reviewer has asked for corrections)
         public ActionResult Edit(long id)
         {

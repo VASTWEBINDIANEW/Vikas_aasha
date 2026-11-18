@@ -934,6 +934,8 @@ namespace Vastwebmulti.Models
         public virtual DbSet<LoanVehicle> LoanVehicles { get; set; }
         public virtual DbSet<LoanDocument> LoanDocuments { get; set; }
         public virtual DbSet<LoanExistingDetail> LoanExistingDetails { get; set; }
+        public virtual DbSet<LoanSlab> LoanSlabs { get; set; }
+        public virtual DbSet<LoanCommission> LoanCommissions { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -24533,6 +24535,31 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("Idno", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_InsertWalletToBankAmountTransferRefund_CMS_Result>("proc_InsertWalletToBankAmountTransferRefund_CMS", idnoParameter, status, message);
+        }
+    
+        public virtual ObjectResult<string> InsertLoanApplication_Comm(string userid, Nullable<int> loantype, Nullable<decimal> amount, Nullable<int> loanApplicationId, string applicationNo, ObjectParameter output)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var loantypeParameter = loantype.HasValue ?
+                new ObjectParameter("loantype", loantype) :
+                new ObjectParameter("loantype", typeof(int));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var loanApplicationIdParameter = loanApplicationId.HasValue ?
+                new ObjectParameter("LoanApplicationId", loanApplicationId) :
+                new ObjectParameter("LoanApplicationId", typeof(int));
+    
+            var applicationNoParameter = applicationNo != null ?
+                new ObjectParameter("ApplicationNo", applicationNo) :
+                new ObjectParameter("ApplicationNo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("InsertLoanApplication_Comm", useridParameter, loantypeParameter, amountParameter, loanApplicationIdParameter, applicationNoParameter, output);
         }
     }
 }

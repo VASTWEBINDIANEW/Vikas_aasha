@@ -481,6 +481,7 @@
     <Compile Include="Areas\ADMIN\Controllers\HomeController.cs" />
     <Compile Include="Areas\ADMIN\Controllers\HotelController.cs" />
     <Compile Include="Areas\ADMIN\Controllers\LoanController.cs" />
+    <Compile Include="Areas\ADMIN\Controllers\AdminLoanController.cs" />
     <Compile Include="Areas\ADMIN\Models\AchiveHistory.cs" />
     <Compile Include="Areas\ADMIN\Models\activeinactive.cs" />
     <Compile Include="Areas\ADMIN\Models\AdminLoanReportFilterVM.cs" />
@@ -538,6 +539,7 @@
     <Compile Include="Areas\ADMIN\Models\InsuranceSlab.cs" />
     <Compile Include="Areas\ADMIN\Models\IRCTCSlabModel.cs" />
     <Compile Include="Areas\ADMIN\Models\LoanModel.cs" />
+    <Compile Include="Areas\ADMIN\Models\LoanModelSlab.cs" />
     <Compile Include="Areas\ADMIN\Models\LoginImg.cs" />
     <Compile Include="Areas\ADMIN\Models\LoginImgModel.cs" />
     <Compile Include="Areas\ADMIN\Models\MasterDistributerModel.cs" />
@@ -585,6 +587,7 @@
     <Compile Include="Areas\RETAILER\Models\LoanModels.cs" />
     <Compile Include="Areas\RETAILER\Models\LoanEditVm.cs" />
     <Compile Include="Areas\RETAILER\Models\LoanRepository.cs" />
+    <Compile Include="Areas\RETAILER\Models\CommissionReportVM.cs" />
     <Compile Include="Areas\RETAILER\Models\microATM.cs" />
     <Compile Include="Areas\ADMIN\Models\Money_transfer_all.cs" />
     <Compile Include="Areas\ADMIN\Models\Multiview.cs" />
@@ -1518,6 +1521,12 @@
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LoanVehicle.cs">
+      <DependentUpon>Vastwebmulti.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LoanSlab.cs">
+      <DependentUpon>Vastwebmulti.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LoanCommission.cs">
       <DependentUpon>Vastwebmulti.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Login_to_sim.cs">
@@ -12351,6 +12360,9 @@
     <Content Include="Areas\WRetailer\Views\Home\RechargePDF.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Loan_Slab_setting.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\_UserLoanSlab.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Home\Loan_model_Slab_setting.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Home\_Loan_comm.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Home\_UserModelLoanSlab.cshtml" />
     <Content Include="Areas\ADMIN\Views\Home\Paidservicepaymentreport.cshtml" />
     <Content Include="Areas\VENDOR\Views\Home\Product_details.cshtml" />
     <Content Include="Areas\WDealer\Views\Home\m_Possreport.cshtml" />
@@ -13781,6 +13793,13 @@
     <Content Include="Areas\RETAILER\Views\Loan\ViewDocument.cshtml" />
     <Content Include="Areas\ADMIN\Views\AdminLoan\Index.cshtml" />
     <Content Include="Areas\ADMIN\Views\AdminLoan\Details.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Loan\Index.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Loan\Details.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Loan\ViewDocument.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Loan\UploadDocuments.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Loan\_DocumentRow.cshtml" />
+    <Content Include="Areas\ADMIN\Views\Loan\CommissionReport.cshtml" />
+    <Content Include="Areas\RETAILER\Views\Loan\CommissionReport.cshtml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -15142,7 +15161,6 @@
     <Folder Include="AepsVideos\" />
     <Folder Include="AEPS\files\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\ADMIN\Views\Loan\" />
     <Folder Include="Areas\RETAILER\Newsslider\" />
     <Folder Include="Areas\WRetailer\Newsslider\" />
     <Folder Include="Card_Images\" />
@@ -15329,6 +15347,7 @@
     <Content Include="MainFrontDesign\css\retailer-loan-create-modern.css" />
     <Content Include="MainFrontDesign\css\retailer-loan-details-modern.css" />
     <Content Include="MainFrontDesign\css\retailer-loan-report-modern.css" />
+    <Content Include="MainFrontDesign\css\retailer-loan-commission-modern.css" />
     <Content Include="MainFrontDesign\css\retailer-money-transfer-modern.css" />
     <Content Include="MainFrontDesign\css\retailer-panel-modern.css" />
     <Content Include="MainFrontDesign\css\retailer-profile-modern.css" />

@@ -25070,6 +25070,7 @@
     <EntitySetMapping Name="Recharge_info">
       <EntityTypeMapping TypeName="VastwebmultiModel.Recharge_info">
         <MappingFragment StoreEntitySet="Recharge_info">
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
           <ScalarProperty Name="exclusive_gst" ColumnName="exclusive_gst" />
           <ScalarProperty Name="Circle" ColumnName="Circle" />
           <ScalarProperty Name="prepaidtype" ColumnName="prepaidtype" />
@@ -25153,6 +25154,7 @@
     <EntitySetMapping Name="Recharge_info_old">
       <EntityTypeMapping TypeName="VastwebmultiModel.Recharge_info_old">
         <MappingFragment StoreEntitySet="Recharge_info_old">
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
           <ScalarProperty Name="exclusive_gst" ColumnName="exclusive_gst" />
           <ScalarProperty Name="Circle" ColumnName="Circle" />
           <ScalarProperty Name="prepaidtype" ColumnName="prepaidtype" />
@@ -30085,6 +30087,40 @@
           <ScalarProperty Name="CurrentOutstanding" ColumnName="CurrentOutstanding" />
           <ScalarProperty Name="LoanAccountNo" ColumnName="LoanAccountNo" />
           <ScalarProperty Name="FinanceCompany" ColumnName="FinanceCompany" />
+          <ScalarProperty Name="LoanApplicationId" ColumnName="LoanApplicationId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LoanSlabs">
+      <EntityTypeMapping TypeName="VastwebmultiModel.LoanSlab">
+        <MappingFragment StoreEntitySet="LoanSlabs">
+          <ScalarProperty Name="Commission" ColumnName="Commission" />
+          <ScalarProperty Name="LoanType" ColumnName="LoanType" />
+          <ScalarProperty Name="Userid" ColumnName="Userid" />
+          <ScalarProperty Name="idno" ColumnName="idno" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="InsertLoanApplication_Comm" FunctionName="VastwebmultiModel.Store.InsertLoanApplication_Comm" />
+    <EntitySetMapping Name="LoanCommissions">
+      <EntityTypeMapping TypeName="VastwebmultiModel.LoanCommission">
+        <MappingFragment StoreEntitySet="LoanCommissions">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="RemainPost" ColumnName="RemainPost" />
+          <ScalarProperty Name="RemainPre" ColumnName="RemainPre" />
+          <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+          <ScalarProperty Name="Tds" ColumnName="Tds" />
+          <ScalarProperty Name="TdsPercent" ColumnName="TdsPercent" />
+          <ScalarProperty Name="TotalCommission" ColumnName="TotalCommission" />
+          <ScalarProperty Name="Gst" ColumnName="Gst" />
+          <ScalarProperty Name="GstPercent" ColumnName="GstPercent" />
+          <ScalarProperty Name="Commission" ColumnName="Commission" />
+          <ScalarProperty Name="CommissionPercent" ColumnName="CommissionPercent" />
+          <ScalarProperty Name="DisbursedAmount" ColumnName="DisbursedAmount" />
+          <ScalarProperty Name="LoanType" ColumnName="LoanType" />
+          <ScalarProperty Name="Userid" ColumnName="Userid" />
+          <ScalarProperty Name="ApplicationNo" ColumnName="ApplicationNo" />
           <ScalarProperty Name="LoanApplicationId" ColumnName="LoanApplicationId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>

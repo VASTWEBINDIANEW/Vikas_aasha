@@ -7857,6 +7857,16 @@
       <End Role="LoanApplication" EntitySet="LoanApplications" />
       <End Role="LoanExistingDetail" EntitySet="LoanExistingDetails" />
     </AssociationSet>
+    <EntitySet Name="LoanSlabs" EntityType="VastwebmultiModel.LoanSlab" />
+    <FunctionImport Name="InsertLoanApplication_Comm" ReturnType="Collection(String)">
+      <Parameter Name="userid" Mode="In" Type="String" />
+      <Parameter Name="loantype" Mode="In" Type="Int32" />
+      <Parameter Name="amount" Mode="In" Type="Decimal" />
+      <Parameter Name="LoanApplicationId" Mode="In" Type="Int32" />
+      <Parameter Name="ApplicationNo" Mode="In" Type="String" />
+      <Parameter Name="output" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="LoanCommissions" EntityType="VastwebmultiModel.LoanCommission" />
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -29859,6 +29869,7 @@
     <Property Name="prepaidtype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Circle" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="exclusive_gst" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="CustomerName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Recharge_info_old">
     <Key>
@@ -29941,6 +29952,7 @@
     <Property Name="prepaidtype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Circle" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="exclusive_gst" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="CustomerName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
   </EntityType>
   <ComplexType Name="Select_Retailer_Details_all_paging_Result">
     <Property Type="String" Name="DealerId" Nullable="true" MaxLength="50" />
@@ -34871,4 +34883,35 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="LoanSlab">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LoanType" Type="Int32" />
+    <Property Name="Commission" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="LoanCommission">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LoanApplicationId" Type="Int64" Nullable="false" />
+    <Property Name="ApplicationNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Userid" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LoanType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DisbursedAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="CommissionPercent" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+    <Property Name="Commission" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="GstPercent" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+    <Property Name="Gst" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="TotalCommission" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="TdsPercent" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+    <Property Name="Tds" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="NetAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="RemainPre" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="RemainPost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
 </Schema>
