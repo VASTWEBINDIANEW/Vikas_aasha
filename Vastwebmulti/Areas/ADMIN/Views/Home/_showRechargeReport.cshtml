@@ -182,13 +182,31 @@
 
 
 
-        if (item.rch_type.ToUpper() == "ONLINE") { faicon = "WEB"; }
-
-        if (item.rch_type.ToUpper() == "APPS") { faicon = "APP"; }
-
-        if (item.rch_type.ToUpper() == "OFFLINE") { faicon = "OFF"; }
-
-        if (item.rch_type.ToUpper() == "API") { faicon = "API"; }
+        var rchTypeIcon = "";
+        var rchChannelBadge = "REF";
+        var rchTypeUpper = (item.rch_type ?? "").ToUpperInvariant();
+        if (rchTypeUpper == "ONLINE")
+        {
+            rchChannelBadge = "WEB";
+            rchTypeIcon = "<i class=\"fa fa-dribbble vm-opr-rch-type-ico\" aria-hidden=\"true\"></i>";
+        }
+        else if (rchTypeUpper == "API")
+        {
+            rchChannelBadge = "API";
+            rchTypeIcon = "<i class=\"fa fa-dribbble vm-opr-rch-type-ico\" aria-hidden=\"true\"></i>";
+        }
+        else if (rchTypeUpper == "APPS")
+        {
+            rchChannelBadge = "APP";
+            rchTypeIcon = string.Format(
+                "<img class=\"vm-opr-rch-type-img\" src=\"{0}\" alt=\"\" />",
+                Url.Content("~/images/android-logo.svg"));
+        }
+        else if (rchTypeUpper == "OFFLINE")
+        {
+            rchChannelBadge = "OFF";
+            rchTypeIcon = "<i class=\"fa fa-envelope vm-opr-rch-type-ico\" aria-hidden=\"true\"></i>";
+        }
 
 
 
@@ -326,7 +344,7 @@
 
             <td class="vm-opr-operator-cell">
 
-                <span class="vm-opr-opr-tag">@faicon</span>@item.Operator_name
+                <span class="vm-opr-operator-name-wrap"><span class="vm-opr-opr-tag" title="Recharge channel">@rchChannelBadge</span>@Html.Raw(rchTypeIcon)<span class="vm-opr-operator-name-text">@item.Operator_name</span></span>
 
                 @if (!string.IsNullOrWhiteSpace(duedate))
 

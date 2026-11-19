@@ -775,8 +775,57 @@
         }
     }
 
+    function resolveRchIconSrc(path) {
+        var p = (path || '').trim();
+        if (!p) {
+            return '';
+        }
+        if (/^(https?:)?\/\//i.test(p)) {
+            return p;
+        }
+        if (p.indexOf('android-logo') >= 0 && window.vmOprAndroidLogoUrl) {
+            return window.vmOprAndroidLogoUrl;
+        }
+        if (p.indexOf('../') === 0) {
+            return p;
+        }
+        var root = (window.vmOprAppRoot || '').replace(/\/$/, '');
+        if (p.charAt(0) === '/') {
+            return root ? root + p : p;
+        }
+        return root ? root + '/' + p.replace(/^\/+/, '') : p;
+    }
+
+    function rchChannelBadge(rchType) {
+        var t = (rchType || '').trim().toUpperCase();
+        if (t === 'ONLINE') { return 'WEB'; }
+        if (t === 'APPS') { return 'APP'; }
+        if (t === 'OFFLINE') { return 'OFF'; }
+        if (t === 'API') { return 'API'; }
+        return 'REF';
+    }
+
+    function buildOperatorCellHtml(faicon, operatorName, rchBadge) {
+        var name = operatorName == null ? '' : String(operatorName);
+        var f = (faicon || '').trim();
+        var badge = (rchBadge || '').trim();
+        var badgeHtml = badge ? '<span class="vm-opr-opr-tag" title="Recharge channel">' + badge + '</span>' : '';
+        var iconHtml = '';
+
+        if (f.indexOf('fa ') === 0 || f.indexOf('fa-') === 0) {
+            iconHtml = '<i class="' + f + ' vm-opr-rch-type-ico" aria-hidden="true"></i>';
+        } else if (f.indexOf('.') >= 0 || f.indexOf('/') >= 0) {
+            iconHtml = '<img class="vm-opr-rch-type-img" src="' + resolveRchIconSrc(f) + '" alt="" />';
+        }
+
+        return '<td class="vm-opr-operator-cell"><span class="vm-opr-operator-name-wrap">' +
+            badgeHtml + iconHtml + '<span class="vm-opr-operator-name-text">' + name + '</span></span></td>';
+    }
+
     window.vmOprEnhanceTable = enhanceMobileTable;
     window.vmOprBuildStatusBadge = buildStatusBadge;
+    window.vmOprBuildOperatorCellHtml = buildOperatorCellHtml;
+    window.vmOprRchChannelBadge = rchChannelBadge;
     window.vmOprGetFilterPayload = function () {
         var payload = collectFilterPayload(null);
         var mob = $.trim($('#txtmob').val() || '');

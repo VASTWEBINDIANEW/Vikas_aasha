@@ -27,7 +27,7 @@
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=66" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=70" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-operator-report-page">
@@ -1304,7 +1304,12 @@
                         mdtblHtml += "<tr style='font-weight: 500; color:" + Pcolor + "'><td class=\"vm-opr-sb-cell\"></td>";
                     }
                     mdtblHtml += "<td class=\"vm-opr-user-cell\"><div class=\"vm-opr-user-row\"><span class=\"vm-opr-sb-inline\">" + StatusImg + "</span><div class=\"vm-opr-user-stack\"><div class=\"vm-opr-user-line\"><strong class=\"vm-opr-user-role\">" + rolename + "</strong><span class=\"vm-opr-user-sep\" aria-hidden=\"true\"></span><span class=\"vm-opr-user-name\">" + b.Frm_Name + "</span></div></div></div></td>";
-                    mdtblHtml += "<td class='ttup vm-opr-operator-cell'><p class='" + faicon + "'>" + b.operator_Name + "</p></td>";
+                    var rchBadge = (typeof window.vmOprRchChannelBadge === 'function')
+                        ? window.vmOprRchChannelBadge(b.rch_type)
+                        : '';
+                    mdtblHtml += (typeof window.vmOprBuildOperatorCellHtml === 'function')
+                        ? window.vmOprBuildOperatorCellHtml(faicon, b.operator_Name, rchBadge)
+                        : ("<td class=\"vm-opr-operator-cell\"><p class=\"" + faicon + "\">" + b.operator_Name + "</p></td>");
                     mdtblHtml += "<td class=\"vm-opr-consumer-cell\"><div class=\"vm-opr-consumer-no\">" + b.mobile + "</div></td>";
                     mdtblHtml += "<td>" + b.amount + "</td>";
                     mdtblHtml += "<td>" + b.user_remain_pre + "</td>";
@@ -2220,5 +2225,9 @@ url,
 </script>
 <script src="~/MainFrontDesign/js/admin-report-datepicker.js"></script>
 <script src="~/MainFrontDesign/js/admin-operator-report-nav.js?v=3"></script>
-<script src="~/MainFrontDesign/js/admin-operator-report.js?v=25"></script>
+<script>
+    window.vmOprAppRoot = '@Url.Content("~/")'.replace(/\/$/, '');
+    window.vmOprAndroidLogoUrl = '@Url.Content("~/images/android-logo.svg")';
+</script>
+<script src="~/MainFrontDesign/js/admin-operator-report.js?v=28"></script>
 }
